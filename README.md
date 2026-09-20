@@ -14,8 +14,9 @@ quasistatischen Feldgleichungen. Diese Einschränkung schafft eine überprüfbar
 Basis, auf der transiente, dynamische und nichtlineare Modelle später aufgebaut
 werden können.
 
-> Projektstatus: Forschungs- und Implementierungsplanung. Es existiert noch kein
-> freigegebener numerischer Solver.
+> Projektstatus: `v0.1.0` stellt das installierbare Projektfundament mit aktiven
+> Qualitätsprüfungen und ausführbaren Kernkonventionen bereit. Es existiert noch
+> kein freigegebener numerischer Solver.
 
 ## Wissenschaftlicher Anspruch
 
@@ -103,8 +104,10 @@ python -m ruff format --check .
 python -m mypy src/fem_toolbox
 ```
 
-Das Paket stellt derzeit nur den importierbaren Namensraum `fem_toolbox` bereit.
-Numerische APIs werden in den folgenden Milestones testgetrieben ergänzt.
+Das Paket stellt die installierte Version, mathematische und SI-Konventionen,
+spezifische Validierungsfehler sowie das deterministische Provenienzmodell
+`RunProvenance` bereit. Numerische APIs werden in den folgenden Milestones
+testgetrieben ergänzt.
 
 GitHub Actions führt Tests auf Python 3.11, 3.12 und 3.13 aus. Linting,
 Formatprüfung und Typprüfung laufen auf Python 3.13. Der Workflow besitzt nur
@@ -113,16 +116,16 @@ Commit-SHAs fixiert.
 
 ## Entwicklung
 
-Die Projektstruktur wird in Meilenstein M0 angelegt. Danach liefert jeder
-Meilenstein ein ausführbares Referenzproblem und dokumentierte
-Verifikationsdaten. Eine Kopplung gilt erst als implementiert, wenn beide
-Einzelfelder zuvor ihre Tests bestehen.
+Die Projektstruktur und Qualitätsinfrastruktur wurden in Meilenstein M0
+angelegt. Die folgenden Meilensteine liefern jeweils ein ausführbares
+Referenzproblem und dokumentierte Verifikationsdaten. Eine Kopplung gilt erst
+als implementiert, wenn beide Einzelfelder zuvor ihre Tests bestehen.
 
 Die Umsetzung wird in [GitHub-Milestones und Issues](https://github.com/maschin96/FEM-Toolbox/milestones)
 verfolgt. Jeder abgeschlossene Milestone erzeugt genau eine freigegebene Version
-und einen annotierten Git-Tag. Der aktuelle Planungsstand wird nach Integration
-des Versionsprozesses als `v0.0.1` markiert; der vollständige stationäre Workflow
-ist für `v1.0.0` vorgesehen.
+und einen annotierten Git-Tag. Der Planungsstand ist als `v0.0.1` markiert, das
+Projektfundament als `v0.1.0`; der vollständige stationäre Workflow ist für
+`v1.0.0` vorgesehen.
 
 ## Quellenbasis
 

@@ -68,7 +68,7 @@ def test_invalid_provenance_raises_specific_error(
         "input_sha256": "0" * 64,
         "solver_name": "reference",
         "solver_parameters": {},
-        "toolbox_version": "0.1.0.dev0",
+        "toolbox_version": "0.1.0",
     }
     valid.update(kwargs)
 

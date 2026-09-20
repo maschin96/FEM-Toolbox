@@ -17,6 +17,10 @@ Eintrag im Entscheidungsprotokoll.
 8. [08_REFERENCES.md](08_REFERENCES.md)
 9. [09_RELEASE_PROCESS.md](09_RELEASE_PROCESS.md)
 
+## Veröffentlichungen
+
+- [v0.1.0 — Projektfundament](releases/v0.1.0.md)
+
 ## Statuskonvention
 
 - **Entwurf**: fachlich geplant, Implementierung noch offen
