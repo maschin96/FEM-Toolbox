@@ -96,12 +96,20 @@ aus dem Repository inklusive Smoke-Test installiert:
 python -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
-python -m pip install -e '.[test]'
+python -m pip install -e '.[dev]'
 python -m pytest
+python -m ruff check .
+python -m ruff format --check .
+python -m mypy src/fem_toolbox
 ```
 
 Das Paket stellt derzeit nur den importierbaren Namensraum `fem_toolbox` bereit.
 Numerische APIs werden in den folgenden Milestones testgetrieben ergänzt.
+
+GitHub Actions führt Tests auf Python 3.11, 3.12 und 3.13 aus. Linting,
+Formatprüfung und Typprüfung laufen auf Python 3.13. Der Workflow besitzt nur
+Leserechte auf Repository-Inhalte; verwendete Actions sind auf vollständige
+Commit-SHAs fixiert.
 
 ## Entwicklung
 

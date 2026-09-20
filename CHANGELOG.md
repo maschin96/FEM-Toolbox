@@ -12,3 +12,5 @@ Versionierung an [Semantic Versioning](https://semver.org/).
 - Dokumentierter Versionszyklus von der Planungsbaseline `v0.0.1` bis `v1.2.0`.
 - Installierbares Python-Paketgerüst mit `src`-Layout, Teststruktur und
   Entwicklungsinstallation für den M0-Zyklus.
+- Lokale Qualitätsprüfungen mit pytest, Ruff und mypy sowie eine
+  sicherheitsbeschränkte GitHub-Actions-Matrix für Python 3.11 bis 3.13.
