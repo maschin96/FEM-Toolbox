@@ -6,6 +6,8 @@ Versionierung an [Semantic Versioning](https://semver.org/).
 
 ## Unreleased
 
+## [0.1.0] - 2026-09-20
+
 ### Added
 
 - GitHub-Milestones M0–M7 mit überprüfbaren Arbeitspaketen und Release-Gates.
@@ -16,3 +18,6 @@ Versionierung an [Semantic Versioning](https://semver.org/).
   sicherheitsbeschränkte GitHub-Actions-Matrix für Python 3.11 bis 3.13.
 - Typisierte SI-/Voigt-Konventionen, konkrete Validierungsfehler sowie ein
   deterministisches Provenienzschema mit installierter Paketversion.
+
+[Unreleased]: https://github.com/maschin96/FEM-Toolbox/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/maschin96/FEM-Toolbox/compare/v0.0.1...v0.1.0
