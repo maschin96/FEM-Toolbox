@@ -4,4 +4,8 @@ The package is in its project-foundation phase. Public numerical APIs are added
 only after their governing equations and verification criteria are documented.
 """
 
-__all__: tuple[str, ...] = ()
+from importlib.metadata import version
+
+__version__ = version("fem-toolbox")
+
+__all__ = ("__version__",)

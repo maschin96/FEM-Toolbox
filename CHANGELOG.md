@@ -14,3 +14,5 @@ Versionierung an [Semantic Versioning](https://semver.org/).
   Entwicklungsinstallation für den M0-Zyklus.
 - Lokale Qualitätsprüfungen mit pytest, Ruff und mypy sowie eine
   sicherheitsbeschränkte GitHub-Actions-Matrix für Python 3.11 bis 3.13.
+- Typisierte SI-/Voigt-Konventionen, konkrete Validierungsfehler sowie ein
+  deterministisches Provenienzschema mit installierter Paketversion.
