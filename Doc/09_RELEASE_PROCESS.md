@@ -1,0 +1,107 @@
+# Versions- und Release-Prozess
+
+Status: Entwurf
+
+## 1. Zweck
+
+Der Versionszyklus verbindet wissenschaftliche Reife, GitHub-Milestones,
+Paketversionen und unveränderliche Git-Tags. Eine Versionsnummer bezeichnet einen
+reproduzierbaren Stand mit dokumentierten Fähigkeiten und Nachweisen. Ein
+Milestone gilt deshalb nicht allein durch implementierten Code als abgeschlossen.
+
+## 2. Versionsschema
+
+Das Projekt verwendet [Semantic Versioning](https://semver.org/) in der Form
+`MAJOR.MINOR.PATCH` und Tags mit vorangestelltem `v`.
+
+- Vor `1.0.0` erhöht jeder fachliche Milestone die Minor-Version. Die öffentliche
+  API darf sich noch ändern, Änderungen werden dennoch in den Release Notes
+  beschrieben.
+- Ab `1.0.0` erhöht eine rückwärtsinkompatible öffentliche Änderung `MAJOR`, eine
+  kompatible Funktionserweiterung `MINOR` und eine kompatible Fehlerkorrektur
+  `PATCH`.
+- Release-Kandidaten dürfen als `vX.Y.Z-rc.N` markiert werden. Sie erfüllen das
+  finale Milestone-Tag nicht und werden durch das endgültige Tag nicht bewegt.
+- Ein veröffentlichter Tag ist unveränderlich. Nachträgliche Korrekturen erhalten
+  eine neue Patch-Version; Tags werden niemals umgehängt oder force-gepusht.
+
+## 3. Geplanter Zyklus
+
+| Zustand/Milestone | Version | Freigabebedeutung |
+|---|---:|---|
+| Planungsbaseline | `v0.0.1` | dokumentierte Architektur, Backlog und Release-Prozess |
+| M0 — Projektfundament | `v0.1.0` | installierbares Paket und aktive Qualitätsinfrastruktur |
+| M1 — Netz und Tet4-Geometrie | `v0.2.0` | verifizierte Geometrie- und Netzgrundlage |
+| M2 — Ungekoppelte Einzelfelder | `v0.3.0` | verifizierte Mechanik, Wärme und Elektrostatik |
+| M3 — Thermische Ausdehnung | `v0.4.0` | verifizierte sequenzielle Thermomechanik |
+| M4 — Piezoelektrizität | `v0.5.0` | verifizierte quasistatische Piezoelektrizität |
+| M5 — Vollständiger stationärer Workflow | `v1.0.0` | erste stabile stationäre Forschungs-API |
+| M6 — Transiente und dynamische Erweiterung | `v1.1.0` | transiente Wärme und lineare gekoppelte Dynamik |
+| M7 — Skalierung und weitere Elemente | `v1.2.0` | PETSc-Option, Tet10 und Genauigkeitserweiterungen |
+
+Die Zuordnung ist die Ausgangsplanung. Falls der tatsächliche Umfang eine
+inkompatible API-Änderung verlangt, wird die SemVer-Nummer vor Freigabe in einem
+Issue und in diesem Dokument korrigiert. Eine niedrigere Version als nach SemVer
+erforderlich ist nicht zulässig.
+
+## 4. Release-Gate
+
+Jeder GitHub-Milestone enthält ein `release:`-Issue. Dieses Issue wird zuletzt
+geschlossen. Vor dem Tag müssen alle folgenden Bedingungen erfüllt sein:
+
+1. Alle verpflichtenden Issues des Milestones sind abgeschlossen und durch
+   integrierte Pull Requests nachvollziehbar.
+2. Die Definition of Done aus `AGENTS.md` und der Roadmap ist erfüllt.
+3. Alle anwendbaren CI-Prüfungen laufen auf dem Zielcommit erfolgreich.
+4. Patch-, Bilanz-, Benchmark- und Konvergenztests sind entsprechend dem
+   Milestone dokumentiert; nicht anwendbare Prüfungen sind begründet.
+5. Paketversion, Dokumentation, Beispiele und `CHANGELOG.md` nennen dieselbe
+   Version und denselben Funktionsumfang.
+6. Ein Release-Kandidat wurde aus einer frischen Umgebung installiert und die
+   vorgesehenen Referenzbeispiele wurden daraus ausgeführt.
+7. Der freizugebende Commit befindet sich auf `main` und enthält keine
+   unbeabsichtigten oder geheimen Dateien.
+
+Fehlende unabhängige Reviewer werden im Release-Issue genannt. Sie werden nicht
+als erteilte Freigabe behandelt.
+
+## 5. Tagging-Ablauf
+
+Nach bestandenem Gate:
+
+```sh
+git switch main
+git pull --ff-only
+git tag -a vX.Y.Z -m "Release vX.Y.Z"
+git push origin vX.Y.Z
+gh release create vX.Y.Z --verify-tag --title "vX.Y.Z" --notes-file RELEASE_NOTES.md
+```
+
+Der konkrete Release-PR erzeugt die endgültigen Release Notes. Die temporäre
+Datei `RELEASE_NOTES.md` muss nicht Teil des Repositories sein. Vor `git push`
+wird geprüft, dass `git rev-parse vX.Y.Z^{commit}` dem freigegebenen
+`origin/main`-Commit entspricht.
+
+## 6. Planungsbaseline `v0.0.1`
+
+Der Tag `v0.0.1` wird nach Integration von
+[Issue #2](https://github.com/maschin96/FEM-Toolbox/issues/2) auf dem zugehörigen
+`main`-Commit gesetzt. Er bestätigt nur die dokumentierte Planung, das GitHub-
+Backlog und diesen Release-Prozess. Er bezeichnet keinen implementierten oder
+verifizierten FEM-Solver.
+
+## 7. Patch- und Notfallversionen
+
+Ein Fehler in einer veröffentlichten Version erhält ein eigenes Bug-Issue mit
+Regressionstest. Der Fix wird vom aktuellen unterstützten Stand abgeleitet,
+regulär geprüft und als nächste Patch-Version veröffentlicht. Sicherheitskritische
+Details und Zugangsdaten gehören nicht in öffentliche Issues. Eine Rückportierung
+auf ältere Minor-Versionen wird je Issue ausdrücklich entschieden.
+
+## 8. Versionsquelle im Python-Paket
+
+Ab M0 besitzt das Paket genau eine kanonische Versionsquelle. Build-Metadaten und
+`fem_toolbox.__version__` werden daraus erzeugt oder gelesen. Tests prüfen die
+Übereinstimmung von Paketversion, erwartetem Release-Tag und Release-Metadaten.
+Entwicklungsstände zwischen Releases werden als `X.Y.Z.devN` oder über lokale
+Build-Metadaten kenntlich gemacht und nicht als finale Version veröffentlicht.

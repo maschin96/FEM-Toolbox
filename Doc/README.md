@@ -15,6 +15,7 @@ Eintrag im Entscheidungsprotokoll.
 6. [06_ROADMAP.md](06_ROADMAP.md)
 7. [07_RISKS_AND_DECISIONS.md](07_RISKS_AND_DECISIONS.md)
 8. [08_REFERENCES.md](08_REFERENCES.md)
+9. [09_RELEASE_PROCESS.md](09_RELEASE_PROCESS.md)
 
 ## Statuskonvention
 

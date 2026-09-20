@@ -56,6 +56,8 @@ Der Einstiegspunkt ist [Doc/README.md](Doc/README.md). Besonders wichtig sind:
 - [Doc/06_ROADMAP.md](Doc/06_ROADMAP.md) — implementierbare Arbeitspakete
 - [Doc/07_RISKS_AND_DECISIONS.md](Doc/07_RISKS_AND_DECISIONS.md) — Risiken und
   Architekturentscheidungen
+- [Doc/09_RELEASE_PROCESS.md](Doc/09_RELEASE_PROCESS.md) — Versionszyklus,
+  Release-Gates und Tagging-Regeln
 
 ## Geplante Nutzung
 
@@ -91,6 +93,12 @@ Die Projektstruktur wird in Meilenstein M0 angelegt. Danach liefert jeder
 Meilenstein ein ausführbares Referenzproblem und dokumentierte
 Verifikationsdaten. Eine Kopplung gilt erst als implementiert, wenn beide
 Einzelfelder zuvor ihre Tests bestehen.
+
+Die Umsetzung wird in [GitHub-Milestones und Issues](https://github.com/maschin96/FEM-Toolbox/milestones)
+verfolgt. Jeder abgeschlossene Milestone erzeugt genau eine freigegebene Version
+und einen annotierten Git-Tag. Der aktuelle Planungsstand wird nach Integration
+des Versionsprozesses als `v0.0.1` markiert; der vollständige stationäre Workflow
+ist für `v1.0.0` vorgesehen.
 
 ## Quellenbasis
 
