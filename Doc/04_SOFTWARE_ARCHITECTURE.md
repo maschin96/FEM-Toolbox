@@ -151,3 +151,17 @@ Zwingend: NumPy, SciPy. Standardadapter: meshio. Entwicklungsabhängigkeiten:
 pytest, ruff, mypy. SymPy darf Testdaten für Manufactured Solutions erzeugen,
 aber keine Laufzeitabhängigkeit des Solvers sein. Visualisierung erfolgt extern
 über ParaView oder optionales PyVista.
+
+## 9. Ausführbare Konventionen und Provenienz
+
+`fem_toolbox.conventions` ist die ausführbare Quelle für räumliche Komponenten,
+Voigt-Reihenfolge, technische Schubverzerrungen, Vorzeichen des elektrischen
+Feldes und interne SI-Einheiten. Änderungen müssen gleichzeitig mit
+`02_MATHEMATICAL_MODEL.md` und den zugehörigen Vertragstests erfolgen.
+
+Jeder Solverlauf erhält eine `RunProvenance` mit Schema-Version,
+Toolbox-Version, SHA-256 der kanonischen Modelleingabe, Solverkennung und allen
+ergebniswirksamen Solverparametern. Die Parameter sind tief kopiert,
+JSON-kompatibel und frei von nichtendlichen Gleitkommawerten. Zeitstempel und
+lokale Dateipfade gehören nicht in den deterministischen Kern; sie können in
+einer späteren äußeren Ausführungshülle ergänzt werden.
