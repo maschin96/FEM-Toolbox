@@ -1,0 +1,12 @@
+# Changelog
+
+Alle wesentlichen Änderungen dieses Projekts werden hier dokumentiert. Das
+Format orientiert sich an [Keep a Changelog](https://keepachangelog.com/) und die
+Versionierung an [Semantic Versioning](https://semver.org/).
+
+## Unreleased
+
+### Added
+
+- GitHub-Milestones M0–M7 mit überprüfbaren Arbeitspaketen und Release-Gates.
+- Dokumentierter Versionszyklus von der Planungsbaseline `v0.0.1` bis `v1.2.0`.
