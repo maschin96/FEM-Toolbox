@@ -87,6 +87,22 @@ Python-APIs, damit wissenschaftliche Experimente ohne Dateiformat möglich sind.
 Die Kernformulierung soll NumPy/SciPy als einzige zwingende numerische
 Abhängigkeiten haben. Meshing und Visualisierung bleiben austauschbare Adapter.
 
+## Lokale Installation
+
+Voraussetzung ist Python 3.11 oder neuer. Der aktuelle Entwicklungsstand wird
+aus dem Repository inklusive Smoke-Test installiert:
+
+```sh
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -e '.[test]'
+python -m pytest
+```
+
+Das Paket stellt derzeit nur den importierbaren Namensraum `fem_toolbox` bereit.
+Numerische APIs werden in den folgenden Milestones testgetrieben ergänzt.
+
 ## Entwicklung
 
 Die Projektstruktur wird in Meilenstein M0 angelegt. Danach liefert jeder

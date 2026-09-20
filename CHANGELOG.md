@@ -10,3 +10,5 @@ Versionierung an [Semantic Versioning](https://semver.org/).
 
 - GitHub-Milestones M0–M7 mit überprüfbaren Arbeitspaketen und Release-Gates.
 - Dokumentierter Versionszyklus von der Planungsbaseline `v0.0.1` bis `v1.2.0`.
+- Installierbares Python-Paketgerüst mit `src`-Layout, Teststruktur und
+  Entwicklungsinstallation für den M0-Zyklus.
