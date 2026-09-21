@@ -31,6 +31,8 @@ def test_read_gmsh_preserves_tet4_triangle3_and_overlapping_groups() -> None:
     np.testing.assert_array_equal(mesh.triangle3, np.array([[0, 1, 2]]))
     assert mesh.cell_tags is not None
     assert mesh.facet_tags is not None
+    assert set(mesh.volume_sets) == {"active", "ceramic"}
+    assert set(mesh.facet_sets) == {"electrode", "ground"}
     np.testing.assert_array_equal(mesh.cell_tags, np.array([21, 21]))
     np.testing.assert_array_equal(mesh.facet_tags, np.array([11]))
     np.testing.assert_array_equal(mesh.volume_sets["ceramic"], np.array([0, 1]))

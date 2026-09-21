@@ -14,9 +14,8 @@ quasistatischen Feldgleichungen. Diese Einschränkung schafft eine überprüfbar
 Basis, auf der transiente, dynamische und nichtlineare Modelle später aufgebaut
 werden können.
 
-> Projektstatus: `v0.1.0` stellt das installierbare Projektfundament bereit. Auf
-> `main` entsteht im Entwicklungszyklus `0.2.0.dev0` die Netz- und
-> Tet4-Geometriebasis. Es existiert noch kein freigegebener numerischer Solver.
+> Projektstatus: `v0.2.0` stellt die verifizierte Netz- und Tet4-Geometriebasis
+> bereit. Es existiert noch kein freigegebener numerischer Feldsolver.
 
 ## Wissenschaftlicher Anspruch
 
@@ -106,9 +105,9 @@ python -m mypy src/fem_toolbox
 
 Das Paket stellt die installierte Version, mathematische und SI-Konventionen,
 spezifische Validierungsfehler sowie das deterministische Provenienzmodell
-`RunProvenance` bereit. Der M1-Entwicklungsstand ergänzt ein validiertes
-Mesh-Datenmodell. Numerische Solver werden in den folgenden Milestones
-testgetrieben ergänzt.
+`RunProvenance` bereit. Die M1-Freigabe ergänzt ein validiertes Mesh-Datenmodell,
+Tet4-Geometrieoperatoren sowie Gmsh- und VTU-Adapter. Numerische Feldsolver
+werden in den folgenden Milestones testgetrieben ergänzt.
 
 ## Mesh-Datenmodell
 
@@ -204,8 +203,8 @@ als implementiert, wenn beide Einzelfelder zuvor ihre Tests bestehen.
 Die Umsetzung wird in [GitHub-Milestones und Issues](https://github.com/maschin96/FEM-Toolbox/milestones)
 verfolgt. Jeder abgeschlossene Milestone erzeugt genau eine freigegebene Version
 und einen annotierten Git-Tag. Der Planungsstand ist als `v0.0.1` markiert, das
-Projektfundament als `v0.1.0`; der vollständige stationäre Workflow ist für
-`v1.0.0` vorgesehen.
+Projektfundament als `v0.1.0` und die Netz- und Geometriebasis als `v0.2.0`;
+der vollständige stationäre Workflow ist für `v1.0.0` vorgesehen.
 
 ## Quellenbasis
 
