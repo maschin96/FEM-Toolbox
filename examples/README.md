@@ -16,3 +16,8 @@ Toleranzen: [Lineare Elastizität](../Doc/10_LINEAR_ELASTICITY.md).
 `python examples/steady_heat.py` berechnet einen Quader mit Temperaturvorgabe
 und Konvektion und schreibt `steady_heat.vtu`. Parameter, analytische
 Wärmeleistungen und Toleranzen: [Stationäre Wärmeleitung](../Doc/11_STEADY_HEAT.md).
+
+## Elektrostatik
+
+`python examples/parallel_plate.py` berechnet einen idealen Plattenkondensator
+und exportiert `parallel_plate.vtu`. [Referenz und Toleranzen](../Doc/12_ELECTROSTATICS.md).

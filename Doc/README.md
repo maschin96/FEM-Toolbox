@@ -22,6 +22,8 @@ Eintrag im Entscheidungsprotokoll.
 - [Lineare statische Elastizität: API, Grenzen und Verifikation](10_LINEAR_ELASTICITY.md)
 - [Stationäre Wärmeleitung: API, Bilanzen und Verifikation](11_STEADY_HEAT.md)
 
+- [Elektrostatik: API, Ladungsbilanz und Verifikation](12_ELECTROSTATICS.md)
+
 ## Veröffentlichungen
 
 - [v0.2.0 — Netz und Tet4-Geometrie](releases/v0.2.0.md)

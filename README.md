@@ -12,8 +12,9 @@ Der Entwicklungsstand nach diesem Release ergänzt die gemeinsame Assembly und
 [lineare statische Elastizität](Doc/10_LINEAR_ELASTICITY.md) mit einem
 [ausführbaren Zugbeispiel](examples/elastic_tension.py) sowie
 [stationäre Wärmeleitung](Doc/11_STEADY_HEAT.md) mit
-[Konvektionsbeispiel](examples/steady_heat.py). Elektrostatik folgt als nächstes
-M2-Arbeitspaket.
+[Konvektionsbeispiel](examples/steady_heat.py) und
+[Elektrostatik](Doc/12_ELECTROSTATICS.md) mit
+[Plattenkondensator](examples/parallel_plate.py). Das M2-Release-Gate steht noch aus.
 Details zum freigegebenen Umfang stehen in den [Release Notes](Doc/releases/v0.2.0.md).
 
 [Installation](#installation) · [Schnellstart](#schnellstart) ·

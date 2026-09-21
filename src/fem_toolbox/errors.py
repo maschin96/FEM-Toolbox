@@ -171,3 +171,28 @@ class ThermalNullspaceError(ValidationError):
             f"component {component}: {reason}; net power={net_power:.6e} W",
             field="thermal_nullspace",
         )
+
+
+class ElectricGaugeError(ValidationError):
+    """Unreferenced electrical component: compatible free gauge or charge defect.
+
+    net_charge = volume charge minus prescribed outward D-flux, in C.
+    tolerance is in C; component is the zero-based connected-component index.
+    """
+
+    def __init__(
+        self, *, component: int, compatible: bool, net_charge: float, tolerance: float
+    ) -> None:
+        self.component = component
+        self.compatible = compatible
+        self.net_charge = net_charge
+        self.tolerance = tolerance
+        reason = (
+            "compatible charge problem: potential gauge missing"
+            if compatible
+            else "incompatible charge balance without potential reference"
+        )
+        super().__init__(
+            f"component {component}: {reason}; net charge={net_charge:.6e} C",
+            field="electric_gauge",
+        )
