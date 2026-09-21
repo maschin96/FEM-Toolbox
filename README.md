@@ -6,8 +6,12 @@ Festkörpermechanik, Wärmeleitung, Elektrostatik und deren thermomechanische un
 piezoelektrische Kopplungen auf Basis linearer Vierknoten-Tetraeder (**Tet4**).
 
 **Aktueller Stand: v0.2.0 — Netz und Tet4-Geometrie.** Verfügbar sind das
-Netzmodell, Geometrieoperatoren und Netzimport/-export. Numerische Feldsolver,
-Materialmodelle und die geplante `Model`-API sind noch nicht implementiert.
+Netzmodell, Geometrieoperatoren und Netzimport/-export. Die geplante `Model`-API
+ist noch nicht implementiert.
+Der Entwicklungsstand nach diesem Release ergänzt die gemeinsame Assembly und
+[lineare statische Elastizität](Doc/10_LINEAR_ELASTICITY.md) mit einem
+[ausführbaren Zugbeispiel](examples/elastic_tension.py). Wärmeleitung und
+Elektrostatik folgen in weiteren M2-Arbeitspaketen.
 Details zum freigegebenen Umfang stehen in den [Release Notes](Doc/releases/v0.2.0.md).
 
 [Installation](#installation) · [Schnellstart](#schnellstart) ·
