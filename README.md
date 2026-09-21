@@ -1,123 +1,80 @@
 # FEM Toolbox
 
-Eine wissenschaftlich ausgerichtete Python-Toolbox für lineare, dreidimensionale
-Finite-Elemente-Simulationen mit gekoppelter
+Eine wissenschaftlich ausgerichtete Python-Toolbox im Aufbau für lineare,
+dreidimensionale Finite-Elemente-Simulationen. Ziel sind verifizierte Modelle für
+Festkörpermechanik, Wärmeleitung, Elektrostatik und deren thermomechanische und
+piezoelektrische Kopplungen auf Basis linearer Vierknoten-Tetraeder (**Tet4**).
 
-- Festkörpermechanik,
-- Wärmeleitung,
-- Elektrostatik und
-- Piezoelektrizität.
+**Aktueller Stand: v0.2.0 — Netz und Tet4-Geometrie.** Verfügbar sind das
+Netzmodell, Geometrieoperatoren und Netzimport/-export. Numerische Feldsolver,
+Materialmodelle und die geplante `Model`-API sind noch nicht implementiert.
+Details zum freigegebenen Umfang stehen in den [Release Notes](Doc/releases/v0.2.0.md).
 
-Der erste Elementtyp ist der lineare Vierknoten-Tetraeder **Tet4**. Das Projekt
-beginnt bewusst mit kleinen Deformationen, linearen Materialien und
-quasistatischen Feldgleichungen. Diese Einschränkung schafft eine überprüfbare
-Basis, auf der transiente, dynamische und nichtlineare Modelle später aufgebaut
-werden können.
+[Installation](#installation) · [Schnellstart](#schnellstart) ·
+[Dokumentation](#dokumentation) · [Entwicklung](#entwicklung) ·
+[Roadmap](#roadmap)
 
-> Projektstatus: `v0.2.0` stellt die verifizierte Netz- und Tet4-Geometriebasis
-> bereit. Es existiert noch kein freigegebener numerischer Feldsolver.
+## Verfügbare Funktionen
 
-## Wissenschaftlicher Anspruch
+| Bereich | Umfang in v0.2.0 |
+|---|---|
+| Netzmodell | Unveränderliche NumPy-Arrays für 3D-Punkte, Tet4-Zellen und Triangle3-Flächen; validierte Indizes, externe IDs und Tags |
+| Auswahlsätze | Benannte Volumen- und Flächensätze, auch mit überlappenden Mitgliedschaften |
+| Tet4-Geometrie | Volumen, Formfunktionen, Gradienten, positive lokale Orientierung, Flächen und äußere Normalen |
+| Netzqualität | Skalierungsunabhängige Qualitätsindikatoren und Erkennung entarteter Tetraeder |
+| Ein- und Ausgabe | Gmsh-2.2/4.1-Import und VTU-Export über `meshio`, einschließlich Feldern und Auswahlsätzen |
+| Projektbasis | Mathematische und SI-Konventionen, spezifische Validierungsfehler und deterministische Laufprovenienz mit `RunProvenance` |
 
-Die Toolbox soll nicht nur Ergebnisse erzeugen, sondern deren Vertrauenswürdigkeit
-nachweisbar machen. Jede Physik wird deshalb zunächst separat verifiziert. Erst
-danach werden Kopplungsterme aktiviert. Dimensionsanalyse, Energie- und
-Reziprozitätsprüfungen, Patch-Tests, analytische Vergleichsfälle und
-Netzkonvergenz sind Teil der Definition of Done.
+## Installation
 
-## Geplanter Funktionsumfang der ersten Version
-
-| Gebiet | Modell | Primärvariable |
-|---|---|---|
-| Mechanik | kleine Verzerrungen, linear isotrop/anisotrop, statisch | Verschiebung `u = (u_x,u_y,u_z)` |
-| Wärme | lineare stationäre Wärmeleitung | Temperatur `T` |
-| Elektrostatik | lineares Dielektrikum, freie Ladung | Potential `phi` |
-| Piezoelektrizität | lineare Stress-Charge-Form | `u`, `phi` |
-| Thermomechanik | thermische Dehnung, zunächst einseitig gekoppelt | `T -> u` |
-
-Jeder Knoten besitzt im vollständig belegten Modell fünf Freiheitsgrade:
-`[u_x, u_y, u_z, T, phi]`. Die Implementierung soll jedoch feldweise DOF-Tabellen
-verwenden, damit Teilmodelle keine unbenutzten Freiheitsgrade tragen.
-
-## Dokumentation
-
-Der Einstiegspunkt ist [Doc/README.md](Doc/README.md). Besonders wichtig sind:
-
-- [Doc/01_SCOPE_AND_REQUIREMENTS.md](Doc/01_SCOPE_AND_REQUIREMENTS.md) — Ziele,
-  Nichtziele und Abnahmekriterien
-- [Doc/02_MATHEMATICAL_MODEL.md](Doc/02_MATHEMATICAL_MODEL.md) — Kontinuumsmodell,
-  Konventionen und schwache Form
-- [Doc/03_TET4_FORMULATION.md](Doc/03_TET4_FORMULATION.md) — diskrete
-  Tet4-Gleichungen
-- [Doc/04_SOFTWARE_ARCHITECTURE.md](Doc/04_SOFTWARE_ARCHITECTURE.md) — Python-
-  Architektur und Datenmodell
-- [Doc/05_VERIFICATION_AND_VALIDATION.md](Doc/05_VERIFICATION_AND_VALIDATION.md) —
-  V&V-Programm
-- [Doc/06_ROADMAP.md](Doc/06_ROADMAP.md) — implementierbare Arbeitspakete
-- [Doc/07_RISKS_AND_DECISIONS.md](Doc/07_RISKS_AND_DECISIONS.md) — Risiken und
-  Architekturentscheidungen
-- [Doc/09_RELEASE_PROCESS.md](Doc/09_RELEASE_PROCESS.md) — Versionszyklus,
-  Release-Gates und Tagging-Regeln
-
-## Geplante Nutzung
-
-Die angestrebte öffentliche API soll deklarativ und reproduzierbar sein:
-
-```python
-from fem_toolbox import Model
-
-model = Model.from_file("cantilever.yaml")
-result = model.solve()
-result.write("cantilever.vtu")
-```
-
-Die Eingabedatei beschreibt Netz, Materialien, Gebiete, Randbedingungen,
-Lasten, Analyseart und Solveroptionen. Intern bleiben Netz- und Physikobjekte
-Python-APIs, damit wissenschaftliche Experimente ohne Dateiformat möglich sind.
-
-## Vorgesehener Technologie-Stack
-
-- Python 3.11 oder neuer
-- NumPy für Elementalgebra und Feldspeicher
-- SciPy für Sparse-Matrizen und Referenzsolver
-- meshio für Gmsh-/VTK-Ein- und Ausgabe
-- pytest für Verifikationstests
-- optional später PETSc/petsc4py für große gekoppelte Systeme
-
-Die Kernformulierung soll NumPy/SciPy als einzige zwingende numerische
-Abhängigkeiten haben. Meshing und Visualisierung bleiben austauschbare Adapter.
-
-## Lokale Installation
-
-Voraussetzung ist Python 3.11 oder neuer. Der aktuelle Entwicklungsstand wird
-aus dem Repository inklusive Smoke-Test installiert:
+Voraussetzungen sind **Python 3.11 oder neuer** und Git. Die CI prüft Python
+3.11, 3.12 und 3.13 unter Linux. NumPy, SciPy und meshio werden als
+Paketabhängigkeiten automatisch installiert; die Entwicklungsoption `dev`
+ergänzt pytest, Ruff und mypy. Maßgeblich ist die [Projektkonfiguration](pyproject.toml).
 
 ```sh
+git clone https://github.com/maschin96/FEM-Toolbox.git
+cd FEM-Toolbox
 python -m venv .venv
+```
+
+Virtuelle Umgebung aktivieren — unter macOS/Linux:
+
+```sh
 source .venv/bin/activate
+```
+
+Unter Windows mit PowerShell:
+
+```powershell
+.venv\Scripts\Activate.ps1
+```
+
+Anschließend das Paket samt Entwicklungswerkzeugen installieren:
+
+```sh
 python -m pip install --upgrade pip
 python -m pip install -e '.[dev]'
 python -m pytest
-python -m ruff check .
-python -m ruff format --check .
-python -m mypy src/fem_toolbox
 ```
 
-Das Paket stellt die installierte Version, mathematische und SI-Konventionen,
-spezifische Validierungsfehler sowie das deterministische Provenienzmodell
-`RunProvenance` bereit. Die M1-Freigabe ergänzt ein validiertes Mesh-Datenmodell,
-Tet4-Geometrieoperatoren sowie Gmsh- und VTU-Adapter. Numerische Feldsolver
-werden in den folgenden Milestones testgetrieben ergänzt.
+Die editierbare Installation verwendet den aktuellen Repository-Stand. Zum
+Einlesen vorhandener `.msh`-Dateien ist keine separate Gmsh-Installation nötig.
+Die Erstellung neuer Netze erfolgt außerhalb der Toolbox; eine vollständige
+Anleitung einschließlich Gmsh-Einrichtung wird in
+[Issue #46](https://github.com/maschin96/FEM-Toolbox/issues/46) verfolgt.
 
-## Mesh-Datenmodell
+## Schnellstart
 
-`Mesh` kopiert seine Eingaben in unveränderliche NumPy-Arrays. Konnektivitäten
-und Auswahlsätze verwenden ausschließlich nullbasierte interne Indizes; IDs aus
-externen Netzformaten bleiben getrennte Metadaten.
+Dieses vollständige Beispiel erzeugt einen Tetraeder mit Kanten entlang der
+Koordinatenachsen von jeweils einem Meter, berechnet sein Volumen und exportiert
+das Netz. Nach der Installation lässt es sich als Python-Skript ausführen:
 
 ```python
 import numpy as np
 
+from fem_toolbox.elements import Tet4Geometry
+from fem_toolbox.io import write_vtu
 from fem_toolbox.mesh import Mesh
 
 mesh = Mesh(
@@ -131,83 +88,131 @@ mesh = Mesh(
     ),
     tetra4=np.array([[0, 1, 2, 3]]),
     tetra4_ids=np.array([101]),
-    cell_tags=np.array([7]),
-    volume_sets={"ceramic": np.array([0]), "active": np.array([0])},
+    volume_sets={"specimen": np.array([0])},
 )
+
+geometry = Tet4Geometry(mesh.points[mesh.tetra4[0]], entity_id=101)
+print(f"Volumen: {geometry.volume:.6f} m³")
+write_vtu("tetrahedron.vtu", mesh)
 ```
 
-Verschiedene benannte Sätze dürfen sich überschneiden. Doppelte Indizes im
-selben Satz, ungültige Formen, nichtganzzahlige Konnektivitäten, Indexüberläufe
-und topologisch doppelte Entitäten werden beim Erzeugen des Objekts abgelehnt.
+Erwartete Ausgabe: `Volumen: 0.166667 m³`. Die Datei `tetrahedron.vtu` wird im
+aktuellen Arbeitsverzeichnis erstellt und kann beispielsweise in ParaView
+geöffnet werden.
 
-## Gmsh-Import und VTU-Export
+### Gmsh-Netz importieren
 
-Die `meshio`-Adapter lesen lineare Tetraeder und Dreiecksflächen aus Gmsh 4.1
-oder 2.2. Physische Namen werden getrennt als Volumen- und Flächensätze
-übernommen. Das erhält auch mehrere physische Gruppen pro Gmsh-Entität. Der
-einzelne numerische Kompatibilitätstag entspricht dagegen dem ersten von Gmsh
-gemeldeten Tag. Andere Zelltypen führen zu einem `UnsupportedCellTypeError`.
-
-Gmsh speichert keine verbindliche Längeneinheit. Der Faktor
-`length_scale_to_m` macht die Umrechnung in die intern vorausgesetzten Meter
-explizit; ohne Angabe werden Eingabekoordinaten als Meter interpretiert.
+Aus dem Repository-Root kann das mitgelieferte Referenznetz direkt eingelesen
+und mit einem beispielhaften Punktfeld exportiert werden:
 
 ```python
 import numpy as np
 
 from fem_toolbox.io import read_gmsh, write_vtu
 
-mesh = read_gmsh("specimen.msh", length_scale_to_m=1.0e-3)  # Millimeter -> Meter
+mesh = read_gmsh("tests/fixtures/overlapping_groups.msh", length_scale_to_m=1.0)
 write_vtu(
-    "result.vtu",
+    "mesh_with_temperature.vtu",
     mesh,
     point_data={"temperature_K": np.full(mesh.n_points, 293.15)},
 )
 ```
 
-`write_vtu` schreibt Punktdaten und Zellfelder. Ein Zellfeld muss für jeden im
-Netz vorhandenen Zelltyp ein Array unter `tetra4` beziehungsweise `triangle3`
-enthalten. Benannte Auswahlsätze werden als voneinander unabhängige
-`fem_toolbox:set:<name>`-Masken exportiert und bleiben daher auch bei
-Überlappung erhalten.
+Das Temperaturfeld ist vorgegeben und dient ausschließlich als Exportbeispiel.
+Gmsh legt keine verbindliche Längeneinheit fest: `length_scale_to_m=1.0`
+interpretiert Koordinaten als Meter, `1.0e-3` rechnet Millimeter in Meter um.
 
-## Tet4-Geometrie
+### Konventionen und Grenzen
 
-`Tet4Geometry` berechnet das signierte und positive Volumen, konstante
-Formfunktionsgradienten, eine positive lokale Orientierung, alle äußeren
-Flächennormalen sowie skalierungsunabhängige Qualitätsindikatoren:
+- Interne Konnektivitäten und Auswahlsätze verwenden **nullbasierte Indizes**.
+  Externe Entitäts-IDs bleiben getrennte Metadaten.
+- `Mesh` kopiert seine Eingaben und prüft unter anderem Array-Formen,
+  Indexgrenzen und topologisch doppelte Entitäten. Geometrische Entartung wird
+  durch `Tet4Geometry` und beim Gmsh-Import geprüft.
+- Der Import unterstützt ausschließlich lineare Tetraeder und Dreiecksflächen;
+  andere Zelltypen führen zu einem `UnsupportedCellTypeError`.
+- Mehrfache physische Gmsh-Gruppen bleiben als benannte Auswahlsätze erhalten.
+  Der einzelne numerische Tag bildet nur die erste gemeldete Mitgliedschaft ab.
+- VTU-Zellfelder benötigen für jeden vorhandenen Zelltyp ein Array unter
+  `tetra4` beziehungsweise `triangle3`. Auswahlsätze werden als separate
+  `fem_toolbox:set:<name>`-Masken exportiert.
+- Sehr flache oder entartete Tetraeder werden abgelehnt. Definition und
+  Standardgrenze der Qualitätsprüfung stehen in der
+  [Tet4-Formulierung](Doc/03_TET4_FORMULATION.md).
 
-```python
-from fem_toolbox.elements import Tet4Geometry
+## Wissenschaftlicher Anspruch
 
-geometry = Tet4Geometry(mesh.points[mesh.tetra4[0]], entity_id=101)
-print(geometry.volume, geometry.quality.scaled_volume)
-```
+Jedes physikalische Einzelfeld soll vor seiner Kopplung separat verifiziert
+werden. Dazu gehören analytische Vergleichsfälle, Patch-Tests, Energie- und
+Reziprozitätsprüfungen, globale Bilanzen und Netzkonvergenz.
 
-Entartete oder extrem abgeflachte Tetraeder werden vor einem linearen Lösevorgang
-mit ihrer Entitäts-ID abgelehnt. Die Standardgrenze und ihre mathematische
-Definition stehen in [Doc/03_TET4_FORMULATION.md](Doc/03_TET4_FORMULATION.md).
+Für v0.2.0 umfasst der Nachweis geometrische Invarianten, affine Reproduktion,
+Datenvalidierung und die Gmsh–VTU-Rundreise. Physikalische Patch-, Bilanz- und
+Konvergenztests folgen mit den jeweiligen Feldsolvern. **Verifikation** prüft die
+korrekte Umsetzung des mathematischen Modells; **Validierung** prüft dessen
+Eignung gegenüber geeigneten Referenz- oder experimentellen Daten. Das
+[V&V-Konzept](Doc/05_VERIFICATION_AND_VALIDATION.md) legt die Anforderungen fest.
 
-GitHub Actions führt Tests auf Python 3.11, 3.12 und 3.13 aus. Linting,
-Formatprüfung und Typprüfung laufen auf Python 3.13. Der Workflow besitzt nur
-Leserechte auf Repository-Inhalte; verwendete Actions sind auf vollständige
-Commit-SHAs fixiert.
+## Roadmap
+
+Der erste stationäre Workflow beschränkt sich auf kleine Deformationen und
+lineare Materialien. Vorgesehen sind Verschiebung `u`, Temperatur `T` und
+elektrisches Potential `phi` mit feldweiser Freiheitsgradverwaltung.
+
+| Meilenstein | Zielversion | Inhalt | Stand |
+|---|---|---|---|
+| M0 | v0.1.0 | Paket, Konventionen, Provenienz und Qualitätsinfrastruktur | Freigegeben |
+| M1 | v0.2.0 | Netz und Tet4-Geometrie | Freigegeben |
+| M2 | v0.3.0 | Stationäre Elastizität, Wärmeleitung und Elektrostatik | Geplant |
+| M3 | v0.4.0 | Sequenzielle Thermomechanik `T → u` | Geplant |
+| M4 | v0.5.0 | Monolithische Piezoelektrizität `u–phi` | Geplant |
+| M5 | v1.0.0 | Elektroden, Modellformat und vollständiger stationärer Workflow | Geplant |
+| M6 | v1.1.0 | Transiente Wärmeleitung und lineare Dynamik | Geplant |
+| M7 | v1.2.0 | PETSc-Backend, Tet10 und Skalierung | Geplant |
+
+Die deklarative API `Model.from_file(...).solve()` gehört zum geplanten
+Modellworkflow. Arbeitspakete und Abnahmekriterien stehen in der
+[Roadmap](Doc/06_ROADMAP.md); die Umsetzung wird über
+[GitHub-Milestones](https://github.com/maschin96/FEM-Toolbox/milestones) verfolgt.
+
+## Dokumentation
+
+Der [Dokumentationsindex](Doc/README.md) führt durch die fachlichen und
+technischen Entwurfsdokumente.
+
+| Thema | Dokument |
+|---|---|
+| Ziele, Umfang und Nichtziele | [Anforderungen](Doc/01_SCOPE_AND_REQUIREMENTS.md) |
+| SI-Einheiten, Vorzeichen und schwache Formen | [Mathematisches Modell](Doc/02_MATHEMATICAL_MODEL.md) |
+| Elementgleichungen und Geometrie | [Tet4-Formulierung](Doc/03_TET4_FORMULATION.md) |
+| Modulgrenzen, Datenmodelle und Ziel-API | [Softwarearchitektur](Doc/04_SOFTWARE_ARCHITECTURE.md) |
+| Wissenschaftliche Nachweise | [Verifikation und Validierung](Doc/05_VERIFICATION_AND_VALIDATION.md) |
+| Fachliche und technische Entscheidungen | [Risiken und Entscheidungen](Doc/07_RISKS_AND_DECISIONS.md) |
+| Literatur und Referenzdokumentation | [Quellen](Doc/08_REFERENCES.md) |
+| Versionierung und Freigaben | [Release-Prozess](Doc/09_RELEASE_PROCESS.md) |
 
 ## Entwicklung
 
-Die Projektstruktur und Qualitätsinfrastruktur wurden in Meilenstein M0
-angelegt. Die folgenden Meilensteine liefern jeweils ein ausführbares
-Referenzproblem und dokumentierte Verifikationsdaten. Eine Kopplung gilt erst
-als implementiert, wenn beide Einzelfelder zuvor ihre Tests bestehen.
+Der Python-Code liegt unter `src/fem_toolbox/`. Die [Teststruktur](tests/README.md)
+unterscheidet Unit-, Patch-, Konvergenz- und Regressionstests;
+[examples/](examples/README.md) ist für spätere reproduzierbare Solverbeispiele
+vorgesehen.
 
-Die Umsetzung wird in [GitHub-Milestones und Issues](https://github.com/maschin96/FEM-Toolbox/milestones)
-verfolgt. Jeder abgeschlossene Milestone erzeugt genau eine freigegebene Version
-und einen annotierten Git-Tag. Der Planungsstand ist als `v0.0.1` markiert, das
-Projektfundament als `v0.1.0` und die Netz- und Geometriebasis als `v0.2.0`;
-der vollständige stationäre Workflow ist für `v1.0.0` vorgesehen.
+Aus dem Repository-Root mit aktivierter Entwicklungsumgebung prüfen:
 
-## Quellenbasis
+```sh
+python -m pytest
+python -m ruff check .
+python -m ruff format --check .
+python -m mypy src/fem_toolbox
+git diff --check
+```
 
-Die Planung stützt sich auf etablierte Kontinuums- und FEM-Formulierungen sowie
-offizielle Referenzdokumentation. Die annotierte Liste steht in
-[Doc/08_REFERENCES.md](Doc/08_REFERENCES.md).
+GitHub Actions führt die Tests auf Python 3.11, 3.12 und 3.13 aus; Linting,
+Formatierung und Typprüfung laufen auf Python 3.13.
+
+Beiträge folgen den [Entwicklungsrichtlinien](AGENTS.md): zuerst ein passendes
+Issue, anschließend ein fokussierter Branch und Pull Request. Ausführbare
+Änderungen entstehen testgetrieben; reine Dokumentationsänderungen werden auf
+Inhalt, Links und Konsistenz geprüft. Jeder abgeschlossene Meilenstein erhält
+nach bestandenem Release-Gate eine eigene Version und einen annotierten Git-Tag.
