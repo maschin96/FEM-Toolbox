@@ -6,6 +6,11 @@ Versionierung an [Semantic Versioning](https://semver.org/).
 
 ## Unreleased
 
+### Added
+
+- Unveränderliches, validiertes Mesh-Datenmodell für Punkte, Tet4-Zellen,
+  Triangle3-Flächen, Tags, externe IDs und überlappende Auswahlsätze.
+
 ## [0.1.0] - 2026-09-20
 
 ### Added

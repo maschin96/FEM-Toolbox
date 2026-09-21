@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fem-toolbox"
-version = "0.1.0"
+version = "0.2.0.dev0"
 description = "Verified 3D multiphysics finite-element research toolbox"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -28,6 +28,7 @@ test = [
 ]
 dev = [
   "mypy>=1.13",
+  "numpy<2.5",
   "pytest>=8.3",
   "ruff>=0.9",
 ]

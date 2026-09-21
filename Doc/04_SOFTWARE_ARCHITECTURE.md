@@ -62,6 +62,20 @@ gespeichert. Tags adressieren Gebiete; überlappende semantische Gruppen werden
 nicht durch stilles Überschreiben eines einzelnen Tags modelliert, sondern durch
 benannte Auswahlsätze.
 
+Die ausführbare Referenz ist `fem_toolbox.mesh.Mesh`. Koordinaten werden als
+unveränderliches `float64`-Array, Konnektivitäten, IDs, Tags und Auswahlsätze als
+unveränderliche `int64`-Arrays gespeichert. Der Konstruktor kopiert Eingaben und
+prüft Formen, endliche Koordinaten, ganzzahlige Indizes, Indexgrenzen, eindeutige
+externe IDs sowie wiederholte Knoten und topologisch doppelte Entitäten. Eine
+Fehlermeldung für eine Konnektivitätszeile nennt deren externe ID, falls diese
+vorliegt, andernfalls ihren nullbasierten internen Index.
+
+`volume_sets` referenziert Tet4-Zeilen, `facet_sets` Triangle3-Zeilen. Indizes
+innerhalb eines Satzes sind eindeutig; verschiedene benannte Sätze dürfen sich
+bewusst überschneiden. Geometrische Qualitätsmerkmale wie Volumen, Orientierung
+und Entartung gehören zu den Tet4-Operatoren des folgenden Arbeitspakets und
+nicht in dieses reine Topologiemodell.
+
 ### Field und DofMap
 
 Ein `Field` enthält Namen, Komponenten, Trägerknoten und physikalische Dimension.
@@ -148,9 +162,12 @@ Keine dieser Ebenen soll versteckte globale Solveroptionen besitzen.
 ## 8. Abhängigkeitsstrategie
 
 Zwingend: NumPy, SciPy. Standardadapter: meshio. Entwicklungsabhängigkeiten:
-pytest, ruff, mypy. SymPy darf Testdaten für Manufactured Solutions erzeugen,
-aber keine Laufzeitabhängigkeit des Solvers sein. Visualisierung erfolgt extern
-über ParaView oder optionales PyVista.
+pytest, ruff, mypy. Die Entwicklungsumgebung begrenzt NumPy derzeit auf Versionen
+vor 2.5, weil die NumPy-2.5-Typstubs mindestens Python 3.12 voraussetzen, während
+mypy den unterstützten Python-3.11-Vertrag prüft; die Laufzeitabhängigkeit bleibt
+davon unberührt. SymPy darf Testdaten für Manufactured Solutions erzeugen, aber
+keine Laufzeitabhängigkeit des Solvers sein. Visualisierung erfolgt extern über
+ParaView oder optionales PyVista.
 
 ## 9. Ausführbare Konventionen und Provenienz
 
