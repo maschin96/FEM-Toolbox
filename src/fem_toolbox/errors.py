@@ -88,6 +88,30 @@ class SelectionError(MeshValidationError):
         super().__init__(field=field, reason=f"selection {label}: {reason}")
 
 
+class MeshIOError(FEMToolboxError):
+    """A mesh could not be converted at an external-format boundary."""
+
+    def __init__(self, *, operation: str, reason: str) -> None:
+        self.operation = operation
+        self.reason = reason
+        super().__init__(f"mesh {operation} failed: {reason}")
+
+
+class UnsupportedCellTypeError(MeshIOError):
+    """An input mesh contains cell types outside the Tet4/Triangle3 contract."""
+
+    def __init__(self, cell_types: tuple[str, ...]) -> None:
+        self.cell_types = cell_types
+        names = ", ".join(cell_types)
+        super().__init__(
+            operation="import",
+            reason=(
+                f"unsupported cell type(s): {names}; expected only "
+                "'tetra' (Tet4) and 'triangle' (Triangle3)"
+            ),
+        )
+
+
 class ElementGeometryError(ValidationError):
     """Element coordinates or geometry settings are numerically invalid."""
 

@@ -149,6 +149,16 @@ Der Importer prüft Zelltypen, Einheitenmetadaten, Tags und Orientierung. Wegen
 der uneinheitlichen Behandlung mehrfacher physischer Gmsh-Gruppen wird das
 Mapping in eigenen Tests mit repräsentativen Netzen abgesichert.
 
+Der ausführbare Adapter `fem_toolbox.io.read_gmsh` akzeptiert ausschließlich
+`tetra` (Tet4) und `triangle` (Triangle3), normiert die Orientierung der
+Volumenelemente und verlangt einen expliziten Skalierungsfaktor, wenn die
+Gmsh-Koordinaten nicht in Metern vorliegen. `meshio` liefert bei Gmsh 4.1 alle
+physischen Mitgliedschaften als Cell-Sets; der Adapter vereinigt diese mit den
+aus Physical-Tags ableitbaren Sätzen. Der VTU-Adapter schreibt jeden Satz als
+eigene binäre Zellmaske. Der einzelne `cell_tags`- beziehungsweise
+`facet_tags`-Wert bleibt eine Kompatibilitätsdarstellung und ersetzt keine
+überlappenden Auswahlsätze.
+
 ## 7. Öffentliche API
 
 Die API soll drei Ebenen bieten:
@@ -161,8 +171,9 @@ Keine dieser Ebenen soll versteckte globale Solveroptionen besitzen.
 
 ## 8. Abhängigkeitsstrategie
 
-Zwingend: NumPy, SciPy. Standardadapter: meshio. Entwicklungsabhängigkeiten:
-pytest, ruff, mypy. Die Entwicklungsumgebung begrenzt NumPy derzeit auf Versionen
+Zwingend: NumPy, SciPy. Standardadapter: meshio ab Version 5.3 (MIT-Lizenz).
+Entwicklungsabhängigkeiten: pytest, ruff, mypy. Die Entwicklungsumgebung begrenzt
+NumPy derzeit auf Versionen
 vor 2.5, weil die NumPy-2.5-Typstubs mindestens Python 3.12 voraussetzen, während
 mypy den unterstützten Python-3.11-Vertrag prüft; die Laufzeitabhängigkeit bleibt
 davon unberührt. SymPy darf Testdaten für Manufactured Solutions erzeugen, aber

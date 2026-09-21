@@ -8,6 +8,8 @@ Versionierung an [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- Gmsh-Import für Tet4/Triangle3 mit überlappenden physischen Gruppen und
+  VTU-Export für Punkt-, Zell- und Auswahldaten.
 - Unveränderliches, validiertes Mesh-Datenmodell für Punkte, Tet4-Zellen,
   Triangle3-Flächen, Tags, externe IDs und überlappende Auswahlsätze.
 - Verifizierte Tet4-Volumina, Formfunktionsgradienten, Orientierungskorrektur,
