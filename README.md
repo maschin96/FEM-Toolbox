@@ -5,17 +5,12 @@ dreidimensionale Finite-Elemente-Simulationen. Ziel sind verifizierte Modelle f�
 Festkörpermechanik, Wärmeleitung, Elektrostatik und deren thermomechanische und
 piezoelektrische Kopplungen auf Basis linearer Vierknoten-Tetraeder (**Tet4**).
 
-**Aktueller Stand: v0.2.0 — Netz und Tet4-Geometrie.** Verfügbar sind das
-Netzmodell, Geometrieoperatoren und Netzimport/-export. Die geplante `Model`-API
-ist noch nicht implementiert.
-Der Entwicklungsstand nach diesem Release ergänzt die gemeinsame Assembly und
-[lineare statische Elastizität](Doc/10_LINEAR_ELASTICITY.md) mit einem
-[ausführbaren Zugbeispiel](examples/elastic_tension.py) sowie
-[stationäre Wärmeleitung](Doc/11_STEADY_HEAT.md) mit
-[Konvektionsbeispiel](examples/steady_heat.py) und
-[Elektrostatik](Doc/12_ELECTROSTATICS.md) mit
-[Plattenkondensator](examples/parallel_plate.py). Das M2-Release-Gate steht noch aus.
-Details zum freigegebenen Umfang stehen in den [Release Notes](Doc/releases/v0.2.0.md).
+**Aktueller Stand: v0.3.0 — verifizierte ungekoppelte Einzelfelder.** Verfügbar
+sind das Netzmodell, Tet4-Geometrie sowie stationäre lineare Elastizität,
+Wärmeleitung und Elektrostatik. Die geplante `Model`-API und gekoppelte Felder
+sind noch nicht implementiert. Details stehen in den
+[Release Notes](Doc/releases/v0.3.0.md).
+Details zum freigegebenen Umfang stehen in den [Release Notes](Doc/releases/v0.3.0.md).
 
 [Installation](#installation) · [Schnellstart](#schnellstart) ·
 [Dokumentation](#dokumentation) · [Entwicklung](#entwicklung) ·
@@ -23,7 +18,7 @@ Details zum freigegebenen Umfang stehen in den [Release Notes](Doc/releases/v0.2
 
 ## Verfügbare Funktionen
 
-| Bereich | Umfang in v0.2.0 |
+| Bereich | Umfang in v0.3.0 |
 |---|---|
 | Netzmodell | Unveränderliche NumPy-Arrays für 3D-Punkte, Tet4-Zellen und Triangle3-Flächen; validierte Indizes, externe IDs und Tags |
 | Auswahlsätze | Benannte Volumen- und Flächensätze, auch mit überlappenden Mitgliedschaften |
@@ -31,6 +26,9 @@ Details zum freigegebenen Umfang stehen in den [Release Notes](Doc/releases/v0.2
 | Netzqualität | Skalierungsunabhängige Qualitätsindikatoren und Erkennung entarteter Tetraeder |
 | Ein- und Ausgabe | Gmsh-2.2/4.1-Import und VTU-Export über `meshio`, einschließlich Feldern und Auswahlsätzen |
 | Projektbasis | Mathematische und SI-Konventionen, spezifische Validierungsfehler und deterministische Laufprovenienz mit `RunProvenance` |
+| Elastizität | Kleine lineare Tet4-Verformungen, anisotrope Materialien, Volumen-/Flächen-/Punktlasten sowie Spannungs-, Energie- und Reaktionsauswertung |
+| Wärme | Stationäre Tet4-Wärmeleitung mit anisotroper Leitfähigkeit, Quellen, äußerem Wärmestrom, Konvektion und Leistungsbilanz |
+| Elektrostatik | Stationäres Tet4-Potential mit anisotroper Permittivität, freien Ladungen, Gauge-Diagnostik, E-/D-Feldern und Ladungsbilanz |
 
 ## Installation
 
@@ -153,11 +151,11 @@ Jedes physikalische Einzelfeld soll vor seiner Kopplung separat verifiziert
 werden. Dazu gehören analytische Vergleichsfälle, Patch-Tests, Energie- und
 Reziprozitätsprüfungen, globale Bilanzen und Netzkonvergenz.
 
-Für v0.2.0 umfasst der Nachweis geometrische Invarianten, affine Reproduktion,
-Datenvalidierung und die Gmsh–VTU-Rundreise. Physikalische Patch-, Bilanz- und
-Konvergenztests folgen mit den jeweiligen Feldsolvern. **Verifikation** prüft die
-korrekte Umsetzung des mathematischen Modells; **Validierung** prüft dessen
-Eignung gegenüber geeigneten Referenz- oder experimentellen Daten. Das
+Für v0.3.0 umfasst der Nachweis zusätzlich Patch-, Bilanz-, analytische Benchmark-
+und vierstufige Konvergenztests für Mechanik, Wärme und Elektrostatik.
+**Verifikation** prüft die korrekte Umsetzung des mathematischen Modells;
+**Validierung** prüft dessen Eignung gegenüber geeigneten Referenz- oder
+experimentellen Daten und ist für diese Freigabe noch nicht beansprucht. Das
 [V&V-Konzept](Doc/05_VERIFICATION_AND_VALIDATION.md) legt die Anforderungen fest.
 
 ## Roadmap
@@ -170,7 +168,7 @@ elektrisches Potential `phi` mit feldweiser Freiheitsgradverwaltung.
 |---|---|---|---|
 | M0 | v0.1.0 | Paket, Konventionen, Provenienz und Qualitätsinfrastruktur | Freigegeben |
 | M1 | v0.2.0 | Netz und Tet4-Geometrie | Freigegeben |
-| M2 | v0.3.0 | Stationäre Elastizität, Wärmeleitung und Elektrostatik | Geplant |
+| M2 | v0.3.0 | Stationäre Elastizität, Wärmeleitung und Elektrostatik | Freigegeben |
 | M3 | v0.4.0 | Sequenzielle Thermomechanik `T → u` | Geplant |
 | M4 | v0.5.0 | Monolithische Piezoelektrizität `u–phi` | Geplant |
 | M5 | v1.0.0 | Elektroden, Modellformat und vollständiger stationärer Workflow | Geplant |
