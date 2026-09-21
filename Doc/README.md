@@ -17,6 +17,10 @@ Eintrag im Entscheidungsprotokoll.
 8. [08_REFERENCES.md](08_REFERENCES.md)
 9. [09_RELEASE_PROCESS.md](09_RELEASE_PROCESS.md)
 
+## Implementierte Einzelfelder
+
+- [Lineare statische Elastizität: API, Grenzen und Verifikation](10_LINEAR_ELASTICITY.md)
+
 ## Veröffentlichungen
 
 - [v0.2.0 — Netz und Tet4-Geometrie](releases/v0.2.0.md)
@@ -30,4 +34,5 @@ Eintrag im Entscheidungsprotokoll.
 - **Validiert**: gegen geeignete experimentelle oder hochvertrauenswürdige
   Referenzdaten geprüft
 
-Alle Dokumente sind derzeit **Entwurf**.
+Die Planungsdokumente 01–09 sind Entwürfe. Implementierungs- und
+Verifikationsdokumente benennen ihren jeweiligen Nachweisumfang ausdrücklich.

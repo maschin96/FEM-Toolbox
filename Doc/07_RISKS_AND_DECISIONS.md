@@ -57,6 +57,19 @@ Begründung: Für Verifikation ist geringe Komplexität wertvoller als frühe
 Skalierung. Die Blockstruktur und Feldindizes werden dennoch von Anfang an
 erhalten.
 
+### ADR-007: Referenzumfang der linearen Elastizität (#12)
+
+Isotrope Tet4-Materialien mit `nu >= 0.49` werden abgelehnt; anisotrope
+Steifigkeiten werden in Globalachsen geliefert und auf Symmetrie und positive
+Definitheit geprüft. Die Grenze operationalisiert ADR-001 ohne eine gemischte
+Inkompressibilitätsformulierung einzuführen. Lasten sind globale Vektoren;
+Druck-/Normalenadapter und Materialachsenrotation bleiben spätere Erweiterungen.
+Der Referenzsolver verwendet diagonale Gleichgewichtung, Starrkörperprüfung und
+LU-Pivotkontrolle. Residuen werden über `|| |K| |u| + |f| ||` normiert, damit
+vorgegebene starre Bewegungen keinen künstlichen relativen Fehler erzeugen.
+Einheiten, Grenzen und Nachweise stehen in [Lineare Elastizität](10_LINEAR_ELASTICITY.md).
+
+
 ## 2. Technisches Risikoregister
 
 | Risiko | Wirkung | Früher Nachweis | Gegenmaßnahme |
