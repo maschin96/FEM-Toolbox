@@ -86,3 +86,38 @@ class SelectionError(MeshValidationError):
         self.selection_name = selection_name
         label = repr(selection_name) if selection_name else "<empty>"
         super().__init__(field=field, reason=f"selection {label}: {reason}")
+
+
+class ElementGeometryError(ValidationError):
+    """Element coordinates or geometry settings are numerically invalid."""
+
+    def __init__(self, *, field: str, reason: str) -> None:
+        super().__init__(
+            f"invalid element geometry field {field!r}: {reason}", field=field
+        )
+
+
+class DegenerateElementError(ElementGeometryError):
+    """A Tet4 has insufficient dimensionless volume for stable operators."""
+
+    def __init__(
+        self,
+        *,
+        entity_id: int | None,
+        signed_volume: float,
+        scaled_volume: float,
+        tolerance: float,
+    ) -> None:
+        self.entity_id = entity_id
+        self.signed_volume = signed_volume
+        self.scaled_volume = scaled_volume
+        self.tolerance = tolerance
+        label = "<unspecified>" if entity_id is None else str(entity_id)
+        super().__init__(
+            field="coordinates",
+            reason=(
+                f"Tet4 entity {label} is degenerate: scaled volume "
+                f"{scaled_volume:.6e} <= tolerance {tolerance:.6e} "
+                f"(signed volume {signed_volume:.6e} m^3)"
+            ),
+        )

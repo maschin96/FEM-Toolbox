@@ -10,6 +10,8 @@ Versionierung an [Semantic Versioning](https://semver.org/).
 
 - Unveränderliches, validiertes Mesh-Datenmodell für Punkte, Tet4-Zellen,
   Triangle3-Flächen, Tags, externe IDs und überlappende Auswahlsätze.
+- Verifizierte Tet4-Volumina, Formfunktionsgradienten, Orientierungskorrektur,
+  Flächengeometrie und dimensionslose Qualitätsindikatoren.
 
 ## [0.1.0] - 2026-09-20
 

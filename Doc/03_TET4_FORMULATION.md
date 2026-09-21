@@ -30,6 +30,30 @@ Die Implementierung soll keine explizite Matrixinverse bilden, sondern die
 Koeffizienten mit einem linearen Löser bestimmen. Zusätzlich werden
 Determinante, Kantenmaß und Konditionsindikator geprüft.
 
+Die ausführbare Referenz ist `fem_toolbox.elements.Tet4Geometry`. Mit
+
+```text
+J = [x_2-x_1, x_3-x_1, x_4-x_1]
+```
+
+berechnet sie `det(J)/6` als signiertes und dessen Betrag als physikalisches
+Volumen. Bei negativer Orientierung vertauscht die zurückgegebene korrigierte
+lokale Reihenfolge die Knoten 2 und 3; Eingabekoordinaten und Rohvorzeichen
+bleiben für Diagnosen erhalten.
+
+Die Entartungsprüfung verwendet die dimensionslose Volumenqualität
+
+```text
+q_V = 6 sqrt(2) V / l_max^3,
+```
+
+die für den regulären Tetraeder eins ist. Standardmäßig wird `q_V <= 10^-12`
+abgelehnt. Diese relative Grenze ist unter Translation, Rotation und Skalierung
+invariant. Als zusätzlicher Konditionsindikator dient die 2-Norm-Kondition der
+um den Schwerpunkt zentrierten `4 x 3`-Koordinatenmatrix. Anders als die
+Kondition eines an einem willkürlichen Knoten verankerten Jacobians ist dieser
+Wert auch unter Knotenumordnung invariant.
+
 ## 2. Operatoren
 
 Für skalare Felder ist
@@ -37,6 +61,24 @@ Für skalare Felder ist
 ```text
 G = [grad N_1, grad N_2, grad N_3, grad N_4] in R^(3x4).
 ```
+
+Die Gradienten werden durch Lösen von
+
+```text
+J^T grad_x(N_a) = grad_xi(N_a)
+```
+
+bestimmt; eine explizite Inverse wird nicht gebildet. Vertragstests prüfen
+`sum N_a = 1`, `sum grad N_a = 0` und die affine Reproduktion.
+
+Analytische Tests auf Geometrien mit charakteristischer Länge nahe eins verwenden
+`atol = 2e-14`; Tests nach linearen Lösevorgängen und starren Transformationen
+verwenden zusätzlich `rtol = 2e-13`. Das entspricht ungefähr 90 beziehungsweise
+900 Maschinen-Epsilon in doppelter Genauigkeit und lässt Rundungsfehler aus
+Determinante, QR-Zerlegung und linearem Lösen zu, ohne geometrische Fehler zu
+verdecken. Bei dimensionsbehafteten Gradienten skaliert eine absolute Toleranz
+mit dem Kehrwert der charakteristischen Länge; die Skalierungsinvarianz der
+Entartungsprüfung wird deshalb separat dimensionslos getestet.
 
 Die mechanische `B`-Matrix in der festgelegten Voigt-Konvention hat Größe
 `6 x 12`. Für jeden Knoten mit `grad N_a = [N_x,N_y,N_z]^T` ist der Block
@@ -105,6 +147,8 @@ werden mit einer Dreiecksquadratur passender Ordnung integriert.
 Die Flächennormale wird aus der Elementtopologie bestimmt und gegen den
 gegenüberliegenden Tetraederknoten nach außen orientiert. Dadurch ist die
 Vorzeichenkonvention unabhängig von der Reihenfolge importierter Dreiecke.
+`Tet4Geometry.faces` liefert dazu lokale Knotentripel, gegenüberliegenden
+Knoten, Schwerpunkt, Flächenmaß und äußere Einheitsnormale für alle vier Flächen.
 
 ## 5. Massen- und Kapazitätsmatrizen für spätere Transienten
 
