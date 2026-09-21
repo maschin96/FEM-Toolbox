@@ -70,6 +70,22 @@ vorgegebene starre Bewegungen keinen künstlichen relativen Fehler erzeugen.
 Einheiten, Grenzen und Nachweise stehen in [Lineare Elastizität](10_LINEAR_ELASTICITY.md).
 
 
+### ADR-008: Äußerer Wärmestrom und thermischer Nullraum (#13)
+
+Der vorgegebene Wärmestrom `q_bar = -k grad T dot n` ist positiv nach außen.
+Damit lautet die schwache rechte Seite `integral w Q - integral w q_bar`.
+Das frühere Pluszeichen in Abschnitt 4 des mathematischen Modells widersprach
+seiner starken Form und Randdefinition und wird vor der Wärmeimplementierung
+korrigiert. Konvektion `q dot n = h (T - T_inf)` liefert eine positive Randmatrix
+und einen positiven Umgebungstemperatur-Lastterm. Bilanztests sichern diese
+Konvention unabhängig durch analytische Wärmeleistungen ab.
+
+Jede unverbundene thermische Komponente benötigt eine Dirichlet-Temperatur oder
+Konvektion mit positivem h. Reine Neumann-Probleme werden vor Faktorisierung
+mit ihrer Komponenten-Leistungsbilanz als kompatibel (additive Konstante frei)
+oder inkompatibel diagnostiziert. Es wird keine automatische Referenztemperatur
+erfunden. Anisotrope Leitfähigkeiten liegen in globalen Achsen vor.
+
 ## 2. Technisches Risikoregister
 
 | Risiko | Wirkung | Früher Nachweis | Gegenmaßnahme |

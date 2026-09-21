@@ -1,4 +1,4 @@
-"""Validated, immutable linear elastic material parameters in global axes."""
+"""Validated, immutable material parameters in global axes."""
 
 from dataclasses import dataclass
 
@@ -7,6 +7,7 @@ from numpy.typing import ArrayLike, NDArray
 
 from fem_toolbox.assembly import real_array
 from fem_toolbox.errors import ValidationError
+from fem_toolbox.materials.heat import ThermalMaterial as ThermalMaterial
 
 
 @dataclass(frozen=True, init=False, eq=False)

@@ -10,8 +10,10 @@ Netzmodell, Geometrieoperatoren und Netzimport/-export. Die geplante `Model`-API
 ist noch nicht implementiert.
 Der Entwicklungsstand nach diesem Release ergänzt die gemeinsame Assembly und
 [lineare statische Elastizität](Doc/10_LINEAR_ELASTICITY.md) mit einem
-[ausführbaren Zugbeispiel](examples/elastic_tension.py). Wärmeleitung und
-Elektrostatik folgen in weiteren M2-Arbeitspaketen.
+[ausführbaren Zugbeispiel](examples/elastic_tension.py) sowie
+[stationäre Wärmeleitung](Doc/11_STEADY_HEAT.md) mit
+[Konvektionsbeispiel](examples/steady_heat.py). Elektrostatik folgt als nächstes
+M2-Arbeitspaket.
 Details zum freigegebenen Umfang stehen in den [Release Notes](Doc/releases/v0.2.0.md).
 
 [Installation](#installation) · [Schnellstart](#schnellstart) ·
