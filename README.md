@@ -141,6 +141,37 @@ Verschiedene benannte Sätze dürfen sich überschneiden. Doppelte Indizes im
 selben Satz, ungültige Formen, nichtganzzahlige Konnektivitäten, Indexüberläufe
 und topologisch doppelte Entitäten werden beim Erzeugen des Objekts abgelehnt.
 
+## Gmsh-Import und VTU-Export
+
+Die `meshio`-Adapter lesen lineare Tetraeder und Dreiecksflächen aus Gmsh 4.1
+oder 2.2. Physische Namen werden getrennt als Volumen- und Flächensätze
+übernommen. Das erhält auch mehrere physische Gruppen pro Gmsh-Entität. Der
+einzelne numerische Kompatibilitätstag entspricht dagegen dem ersten von Gmsh
+gemeldeten Tag. Andere Zelltypen führen zu einem `UnsupportedCellTypeError`.
+
+Gmsh speichert keine verbindliche Längeneinheit. Der Faktor
+`length_scale_to_m` macht die Umrechnung in die intern vorausgesetzten Meter
+explizit; ohne Angabe werden Eingabekoordinaten als Meter interpretiert.
+
+```python
+import numpy as np
+
+from fem_toolbox.io import read_gmsh, write_vtu
+
+mesh = read_gmsh("specimen.msh", length_scale_to_m=1.0e-3)  # Millimeter -> Meter
+write_vtu(
+    "result.vtu",
+    mesh,
+    point_data={"temperature_K": np.full(mesh.n_points, 293.15)},
+)
+```
+
+`write_vtu` schreibt Punktdaten und Zellfelder. Ein Zellfeld muss für jeden im
+Netz vorhandenen Zelltyp ein Array unter `tetra4` beziehungsweise `triangle3`
+enthalten. Benannte Auswahlsätze werden als voneinander unabhängige
+`fem_toolbox:set:<name>`-Masken exportiert und bleiben daher auch bei
+Überlappung erhalten.
+
 ## Tet4-Geometrie
 
 `Tet4Geometry` berechnet das signierte und positive Volumen, konstante
