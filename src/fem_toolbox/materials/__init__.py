@@ -7,6 +7,9 @@ from numpy.typing import ArrayLike, NDArray
 
 from fem_toolbox.assembly import real_array
 from fem_toolbox.errors import ValidationError
+from fem_toolbox.materials.electrostatics import (
+    DielectricMaterial as DielectricMaterial,
+)
 from fem_toolbox.materials.heat import ThermalMaterial as ThermalMaterial
 
 

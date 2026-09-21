@@ -86,6 +86,19 @@ mit ihrer Komponenten-Leistungsbilanz als kompatibel (additive Konstante frei)
 oder inkompatibel diagnostiziert. Es wird keine automatische Referenztemperatur
 erfunden. Anisotrope Leitfähigkeiten liegen in globalen Achsen vor.
 
+### ADR-009: Elektrische Reaktionen und Einzelfeldsolver (#14)
+
+Die bestehende negative elektrische Zeile bleibt erhalten: `-K_phi phi =
+surface(D.n) - volume(rho)`. Der positive Baustein K_phi wird separat angeboten;
+der freie Löseblock wird nur gemeinsam mit seiner rechten Seite vorzeicheninvertiert.
+Residual und Reaktionen werden am negativen Originalsystem berechnet. Eine
+Dirichlet-Reaktion beschreibt den äußeren D-Fluss des Dielektrikums; die freie
+Ladung der angrenzenden ideal leitenden Elektrode hat das entgegengesetzte
+Vorzeichen. Positive gespeicherte Feldenergie ist von elektrischer Enthalpie
+zu unterscheiden. Die Gauge wird pro unverbundener Komponente geprüft und
+niemals automatisch gewählt. Details und unabhängige Nachweise stehen in
+[Elektrostatik](12_ELECTROSTATICS.md).
+
 ## 2. Technisches Risikoregister
 
 | Risiko | Wirkung | Früher Nachweis | Gegenmaßnahme |
