@@ -193,3 +193,45 @@ ergebniswirksamen Solverparametern. Die Parameter sind tief kopiert,
 JSON-kompatibel und frei von nichtendlichen Gleitkommawerten. Zeitstempel und
 lokale Dateipfade gehören nicht in den deterministischen Kern; sie können in
 einer späteren äußeren Ausführungshülle ergänzt werden.
+
+## 10. Algebraische Referenzbasis (Issue #11)
+
+`fem_toolbox.fields.Field(name, components, nodes, unit)` beschreibt ausschließlich
+aktive Trägerknoten. `unit` ist verpflichtende SI-Metainformation, kein automatischer
+Einheitenkonverter. `DofMap` nummeriert Felder in Eingabereihenfolge und innerhalb
+eines Feldes zuerst Knoten, dann Komponenten; für das volle Modell sind die Felder
+als `[u, T, phi]` zu übergeben. Knoten- und Komponentenreihenfolgen bleiben erhalten.
+`block(name)` liefert den zusammenhängenden Feldblock für spätere Blocksolver.
+Leere Träger erzeugen keine DOFs. Die Zugehörigkeit der Träger zum konkreten Netz
+muss der aufrufende Modelladapter prüfen.
+
+`fem_toolbox.assembly.assemble(size, matrices, vectors, format="csr")` summiert
+`MatrixBlock(rows, columns, values)` über COO-Tripletts zu CSR oder CSC. Separate
+Zeilen- und Spaltenindizes erlauben rechteckige Kopplungsblöcke. Wiederholte Indizes
+werden auch in `VectorBlock(dofs, values)` addiert. Formen, endliche reelle Werte
+und Indexgrenzen werden geprüft. `LinearSystem` besitzt eigene Kopien; seine
+Matrix- und Lastzugriffe liefern Kopien zum Schutz des Originalsystems.
+
+`fem_toolbox.boundary.Dirichlet(dofs, values)` arbeitet auf aufgelösten globalen
+DOFs. Räumliche oder zeitliche Funktionen werden vorab im jeweiligen Adapter
+ausgewertet. `eliminate_dirichlet` setzt mit der Freiselektion `P` und dem Vektor
+vorgegebener Werte `g` das System `P K P + I_fixed`, `P (f - K g) + g` auf.
+Identische doppelte Vorgaben sind zulässig; unterschiedliche Werte werden ohne
+implizite, einheitenabhängige Toleranz abgelehnt. Das ursprüngliche System bleibt
+für `original.residual(solution) = K solution - f` erhalten. An freien DOFs steht
+das Gleichgewichtsresiduum, an gebundenen DOFs die algebraische Reaktion in der
+jeweiligen Gleichungskonvention.
+
+Die Protokolle `fem_toolbox.physics.VolumeLoad` und `SurfaceLoad` definieren
+`integrate(mesh, cell/facet, dofs) -> VectorBlock`. Zell- bzw. Flächenindizes sind
+nullbasiert; die konkrete Physik verantwortet Quadratur, äußere Orientierung und
+Lastvorzeichen. Die Infrastruktur legt keine Wärme- oder Ladungskonvention neu
+fest. Konkrete Integratoren und Feldsolver folgen in #12–#14.
+
+Die algebraischen Tests verwenden unabhängig aufgestellte Mini-Matrizen und ein
+Zwei-Feder-System mit vorgeschriebener Verschiebung 2 und Endlast 3: Lösung
+`[2, 5, 8]`, Reaktion `[-3, 0, 0]`. Ganzzahlige Zuordnungen und exakt darstellbare
+Assembly-Summen werden exakt verglichen; für Lösung und Residuum gilt bei diesen
+gut konditionierten Größen der Ordnung eins `atol=1e-14, rtol=0` als
+Rundungstoleranz. Physikalische Patch- und Netzkonvergenztests sind erst mit den
+konkreten Elementoperatoren anwendbar.
