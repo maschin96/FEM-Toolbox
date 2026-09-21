@@ -17,6 +17,7 @@ from fem_toolbox.mesh import Mesh
 _INTERNAL_TO_MESHIO = {"tetra4": "tetra", "triangle3": "triangle"}
 _SUPPORTED_MESHIO_TYPES = frozenset(_INTERNAL_TO_MESHIO.values())
 _RESERVED_DATA_PREFIX = "fem_toolbox:"
+_MESHIO_METADATA_CELL_SETS = frozenset({"gmsh:bounding_entities"})
 
 
 def _concatenated_cells(
@@ -45,6 +46,8 @@ def _selection_sets(
     selections: dict[str, NDArray[np.int64]] = {}
 
     for name, cell_types in source.cell_sets_dict.items():
+        if name in _MESHIO_METADATA_CELL_SETS:
+            continue
         indices = cell_types.get(cell_type)
         if indices is not None:
             selections[name] = np.unique(np.asarray(indices, dtype=np.int64))
