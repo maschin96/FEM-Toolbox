@@ -14,9 +14,9 @@ quasistatischen Feldgleichungen. Diese Einschränkung schafft eine überprüfbar
 Basis, auf der transiente, dynamische und nichtlineare Modelle später aufgebaut
 werden können.
 
-> Projektstatus: `v0.1.0` stellt das installierbare Projektfundament mit aktiven
-> Qualitätsprüfungen und ausführbaren Kernkonventionen bereit. Es existiert noch
-> kein freigegebener numerischer Solver.
+> Projektstatus: `v0.1.0` stellt das installierbare Projektfundament bereit. Auf
+> `main` entsteht im Entwicklungszyklus `0.2.0.dev0` die Netz- und
+> Tet4-Geometriebasis. Es existiert noch kein freigegebener numerischer Solver.
 
 ## Wissenschaftlicher Anspruch
 
@@ -106,8 +106,40 @@ python -m mypy src/fem_toolbox
 
 Das Paket stellt die installierte Version, mathematische und SI-Konventionen,
 spezifische Validierungsfehler sowie das deterministische Provenienzmodell
-`RunProvenance` bereit. Numerische APIs werden in den folgenden Milestones
+`RunProvenance` bereit. Der M1-Entwicklungsstand ergänzt ein validiertes
+Mesh-Datenmodell. Numerische Solver werden in den folgenden Milestones
 testgetrieben ergänzt.
+
+## Mesh-Datenmodell
+
+`Mesh` kopiert seine Eingaben in unveränderliche NumPy-Arrays. Konnektivitäten
+und Auswahlsätze verwenden ausschließlich nullbasierte interne Indizes; IDs aus
+externen Netzformaten bleiben getrennte Metadaten.
+
+```python
+import numpy as np
+
+from fem_toolbox.mesh import Mesh
+
+mesh = Mesh(
+    points=np.array(
+        [
+            [0.0, 0.0, 0.0],
+            [1.0, 0.0, 0.0],
+            [0.0, 1.0, 0.0],
+            [0.0, 0.0, 1.0],
+        ]
+    ),
+    tetra4=np.array([[0, 1, 2, 3]]),
+    tetra4_ids=np.array([101]),
+    cell_tags=np.array([7]),
+    volume_sets={"ceramic": np.array([0]), "active": np.array([0])},
+)
+```
+
+Verschiedene benannte Sätze dürfen sich überschneiden. Doppelte Indizes im
+selben Satz, ungültige Formen, nichtganzzahlige Konnektivitäten, Indexüberläufe
+und topologisch doppelte Entitäten werden beim Erzeugen des Objekts abgelehnt.
 
 GitHub Actions führt Tests auf Python 3.11, 3.12 und 3.13 aus. Linting,
 Formatprüfung und Typprüfung laufen auf Python 3.13. Der Workflow besitzt nur

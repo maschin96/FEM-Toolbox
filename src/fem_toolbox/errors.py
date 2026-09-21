@@ -46,3 +46,43 @@ class ProvenanceError(ValidationError):
 
     def __init__(self, *, field: str, reason: str) -> None:
         super().__init__(f"invalid provenance field {field!r}: {reason}", field=field)
+
+
+class MeshValidationError(ValidationError):
+    """Mesh topology or metadata violates the in-memory data contract."""
+
+    def __init__(self, *, field: str, reason: str) -> None:
+        super().__init__(f"invalid mesh field {field!r}: {reason}", field=field)
+
+
+class ConnectivityError(MeshValidationError):
+    """A cell or facet connectivity row is invalid.
+
+    ``entity_id`` is the external entity ID when supplied and otherwise the
+    zero-based internal row index. ``duplicate_of`` follows the same rule.
+    """
+
+    def __init__(
+        self,
+        *,
+        entity_kind: str,
+        entity_id: int,
+        reason: str,
+        duplicate_of: int | None = None,
+    ) -> None:
+        self.entity_kind = entity_kind
+        self.entity_id = entity_id
+        self.duplicate_of = duplicate_of
+        detail = f"entity {entity_id}: {reason}"
+        if duplicate_of is not None:
+            detail += f"; duplicates entity {duplicate_of}"
+        super().__init__(field=entity_kind, reason=detail)
+
+
+class SelectionError(MeshValidationError):
+    """A named volume or facet selection contains invalid internal indices."""
+
+    def __init__(self, *, field: str, selection_name: str, reason: str) -> None:
+        self.selection_name = selection_name
+        label = repr(selection_name) if selection_name else "<empty>"
+        super().__init__(field=field, reason=f"selection {label}: {reason}")
