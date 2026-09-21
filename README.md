@@ -141,6 +141,23 @@ Verschiedene benannte Sätze dürfen sich überschneiden. Doppelte Indizes im
 selben Satz, ungültige Formen, nichtganzzahlige Konnektivitäten, Indexüberläufe
 und topologisch doppelte Entitäten werden beim Erzeugen des Objekts abgelehnt.
 
+## Tet4-Geometrie
+
+`Tet4Geometry` berechnet das signierte und positive Volumen, konstante
+Formfunktionsgradienten, eine positive lokale Orientierung, alle äußeren
+Flächennormalen sowie skalierungsunabhängige Qualitätsindikatoren:
+
+```python
+from fem_toolbox.elements import Tet4Geometry
+
+geometry = Tet4Geometry(mesh.points[mesh.tetra4[0]], entity_id=101)
+print(geometry.volume, geometry.quality.scaled_volume)
+```
+
+Entartete oder extrem abgeflachte Tetraeder werden vor einem linearen Lösevorgang
+mit ihrer Entitäts-ID abgelehnt. Die Standardgrenze und ihre mathematische
+Definition stehen in [Doc/03_TET4_FORMULATION.md](Doc/03_TET4_FORMULATION.md).
+
 GitHub Actions führt Tests auf Python 3.11, 3.12 und 3.13 aus. Linting,
 Formatprüfung und Typprüfung laufen auf Python 3.13. Der Workflow besitzt nur
 Leserechte auf Repository-Inhalte; verwendete Actions sind auf vollständige
