@@ -19,6 +19,7 @@ Eintrag im Entscheidungsprotokoll.
 
 ## Veröffentlichungen
 
+- [v0.2.0 — Netz und Tet4-Geometrie](releases/v0.2.0.md)
 - [v0.1.0 — Projektfundament](releases/v0.1.0.md)
 
 ## Statuskonvention

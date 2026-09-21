@@ -6,6 +6,8 @@ Versionierung an [Semantic Versioning](https://semver.org/).
 
 ## Unreleased
 
+## [0.2.0] - 2026-09-21
+
 ### Added
 
 - Gmsh-Import für Tet4/Triangle3 mit überlappenden physischen Gruppen und
@@ -14,6 +16,10 @@ Versionierung an [Semantic Versioning](https://semver.org/).
   Triangle3-Flächen, Tags, externe IDs und überlappende Auswahlsätze.
 - Verifizierte Tet4-Volumina, Formfunktionsgradienten, Orientierungskorrektur,
   Flächengeometrie und dimensionslose Qualitätsindikatoren.
+
+### Fixed
+
+- Interne Gmsh-Metadaten werden nicht als fachliche Auswahlsätze importiert.
 
 ## [0.1.0] - 2026-09-20
 
@@ -28,5 +34,6 @@ Versionierung an [Semantic Versioning](https://semver.org/).
 - Typisierte SI-/Voigt-Konventionen, konkrete Validierungsfehler sowie ein
   deterministisches Provenienzschema mit installierter Paketversion.
 
-[Unreleased]: https://github.com/maschin96/FEM-Toolbox/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/maschin96/FEM-Toolbox/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/maschin96/FEM-Toolbox/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/maschin96/FEM-Toolbox/compare/v0.0.1...v0.1.0
