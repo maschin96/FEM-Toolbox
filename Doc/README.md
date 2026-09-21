@@ -20,6 +20,7 @@ Eintrag im Entscheidungsprotokoll.
 ## Implementierte Einzelfelder
 
 - [Lineare statische Elastizität: API, Grenzen und Verifikation](10_LINEAR_ELASTICITY.md)
+- [Stationäre Wärmeleitung: API, Bilanzen und Verifikation](11_STEADY_HEAT.md)
 
 ## Veröffentlichungen
 

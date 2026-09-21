@@ -145,3 +145,29 @@ class DegenerateElementError(ElementGeometryError):
                 f"(signed volume {signed_volume:.6e} m^3)"
             ),
         )
+
+
+class ThermalNullspaceError(ValidationError):
+    """An unanchored connected thermal component has a constant null mode.
+
+    compatible identifies a balanced Neumann problem with an undetermined
+    temperature offset; otherwise no steady solution exists. net_power and
+    tolerance are in W; component is its zero-based connected-component index.
+    """
+
+    def __init__(
+        self, *, component: int, compatible: bool, net_power: float, tolerance: float
+    ) -> None:
+        self.component = component
+        self.compatible = compatible
+        self.net_power = net_power
+        self.tolerance = tolerance
+        reason = (
+            "compatible Neumann problem: temperature reference missing"
+            if compatible
+            else "incompatible Neumann power balance"
+        )
+        super().__init__(
+            f"component {component}: {reason}; net power={net_power:.6e} W",
+            field="thermal_nullspace",
+        )

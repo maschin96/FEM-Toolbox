@@ -102,8 +102,14 @@ Für Wärme:
 
 ```text
 integral_Omega grad(w) dot k grad(T) dOmega
-= integral_Omega w Q dOmega + integral_Gamma_q w q_bar dGamma
+= integral_Omega w Q dOmega - integral_Gamma_q w q_bar dGamma
 ```
+
+Hier ist `q_bar = q dot n` positiv nach außen. Partielle Integration von
+`-div(k grad T)=Q` liefert den Randterm `k grad T dot n = -q_bar`.
+Für Konvektion `q dot n = h (T - T_inf)` steht daher
+`+ integral_Gamma_h w h T` links und `+ integral_Gamma_h w h T_inf` rechts.
+Diese Korrektur des früheren Pluszeichens ist in ADR-008 dokumentiert.
 
 Für Elektrostatik verwenden wir die mit `-1` multiplizierte Gauß-Gleichung. Das
 liefert zusammen mit der Mechanik eine symmetrische Sattelpunktstruktur:
