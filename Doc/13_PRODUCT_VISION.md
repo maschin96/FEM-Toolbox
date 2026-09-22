@@ -79,9 +79,10 @@ Nutzerrezepten gemessen. Es gibt noch keine Nutzungs- oder Zeitersparnisdaten;
 solche Zahlen werden nicht als Produktnachweis erfunden. Laufzeit- und
 Speicherziele entstehen erst aus gemessenen repräsentativen Fällen in #37.
 
-GUI, CAD-Kern, Cloud-Betrieb, automatische Optimierung, Kontakt, Plastizität,
-Hysterese und allgemeine industrielle Zertifizierung bleiben außerhalb dieser
-Roadmap. Ein neuer Physikbereich benötigt einen eigenen Anwendungsfall,
+GUI, CAD-Kern, Cloud-Betrieb, Kontakt, Plastizität, Hysterese und allgemeine
+industrielle Zertifizierung bleiben außerhalb dieser Roadmap. Topologieoptimierung
+und RANS-CFD/FSI ergänzen sie als grobe Horizonte M11–M12; sie gehören nicht
+zum zugesagten Umfang von M0–M10. Ein neuer Physikbereich benötigt einen eigenen Anwendungsfall,
 mathematischen Entwurf und unabhängigen V&V-Plan.
 
 ## 4. Lücken vor der stabilen Version
@@ -153,6 +154,47 @@ lokalisierter Fall mit geringerem DOF-Bedarf für dieselbe Fehlergrenze als unif
 Verfeinerung. Rand-/Materialgruppen und Bilanzen bleiben gültig; jede Stufe ist
 rekonstruierbar. Keine dynamische Zustandsübertragung, hängenden Knoten oder
 gekoppelte Adaptivität. #36 liefert Indikatoren; M10 ergänzt den Regelkreis.
+
+## M11–M12 — Langfristige Erweiterungshorizonte
+
+Ergänzung vom 2026-09-22 auf ausdrücklichen Produktwunsch. Diese beiden
+Milestones enthalten zunächst nur Beschreibungen; keine neuen Einzel- oder
+Release-Issues, Versionsnummern oder Termine.
+
+### M11 — Topologieoptimierung
+
+[GitHub-Milestone](https://github.com/maschin96/FEM-Toolbox/milestone/12).
+
+#### Zielbild
+Die Toolbox erhält einen reproduzierbaren Topologie-Optimierer auf Basis ihrer verifizierten FEM-Solver. Einstieg ist die strukturelle Optimierung linear-elastischer Bauteile, etwa minimale Nachgiebigkeit bei vorgegebenem Materialvolumen; weitere thermische und gekoppelte Zielgrößen werden erst in einer späteren Detailplanung bewertet.
+
+#### Grober Umfang
+Design- und Nichtdesigngebiete, Volumenrestriktionen, mehrere Lastfälle, Sensitivitäten sowie ein geeigneter gradientenbasierter Optimierungsablauf. Dichtebasierte Verfahren wie SIMP mit Filterung/Projektion sind ein zu bewertender Ausgangspunkt; Mindestlängenskalen, Netzabhängigkeit und der Umgang mit Zwischenmaterial werden ausdrücklich berücksichtigt. Optimierungshistorie, Abbruchkriterien, Provenienz und exportierbare Ergebnisse gehören zum Workflow.
+
+#### Abhängigkeiten und Nachweis
+Aufbau auf verifizierter Mechanik, stabiler Model-API, Parameterstudien und skalierbaren Solvern. Vor Umsetzung werden Optimierungsverfahren und Sensitivitätsstrategie entschieden. Grobe Abnahme: unabhängig geprüfte Gradienten, reproduzierbare Referenzoptimierung, eingehaltene Restriktionen und erneute FEM-Prüfung der aus dem Dichtefeld abgeleiteten Geometrie; Netz- und Filtereinfluss dokumentieren.
+
+#### Abgrenzung und Planungsreife
+Keine automatische Fertigungsfreigabe und zunächst keine CFD-/FSI-Topologieoptimierung. Langfristiger Horizont nach M10, ohne feste Version oder Termin. Noch keine Einzel- oder Release-Issues; Detaillierung und Release-Gate folgen vor Umsetzung.
+
+### M12 — RANS-CFD und Fluid-Struktur-Kopplung
+
+[GitHub-Milestone](https://github.com/maschin96/FEM-Toolbox/milestone/13).
+
+#### Zielbild
+Erweiterung um dreidimensionale Strömungsmechanik auf Basis ausschließlich Reynolds-gemittelter Navier–Stokes-Gleichungen (RANS), einschließlich einer von Beginn an vorgesehenen bidirektionalen Fluid-Struktur-Kopplung (FSI). Zunächst stationäre, inkompressible, isotherme Strömungen mit dokumentierter Turbulenzschließung und Wandbehandlung; zeitabhängige gemittelte Modelle (URANS) und dynamische FSI bleiben eine explizite spätere Umfangsentscheidung innerhalb der RANS-Familie.
+
+#### Grober Umfang
+Geschwindigkeit, Druck, Turbulenzgrößen und Fluidmaterialien; Ein-/Auslass- und Wandbedingungen, Druck-Geschwindigkeits-Kopplung, nichtlineare Iteration, Konvergenzdiagnostik und Massen-/Impulsbilanzen. Diskretisierung, Stabilisierung, Grenzschichtnetze und geeignete Turbulenzmodelle werden vor Umsetzung bewertet; die vorhandene Festkörper-Tet4-Formulierung wird nicht ungeprüft als CFD-Diskretisierung übernommen.
+
+#### Strukturkopplung
+Stufenweise vom verifizierten Strömungssolver über einseitige Druck-/Schubspannungsübertragung zur bidirektionalen stationären FSI: Fluidlasten verformen die Struktur, die veränderte Geometrie wirkt auf die Strömung zurück. Konservative Lastübertragung, Verschiebungsübertragung auch zwischen unterschiedlichen Netzen, Schnittstellen-Gleichgewicht und Arbeitskonsistenz sowie Netzanpassung und robuste Kopplungsiteration sind einzuplanen. Zulässige Strukturverformungen bleiben explizit begrenzt. Für mögliche spätere dynamische FSI sind bewegte Netze (z. B. ALE), Zeitsynchronisation und Kopplungsstabilität gesondert zu entscheiden.
+
+#### Abhängigkeiten und Nachweis
+Aufbau auf Netz-/I/O-Infrastruktur, Strukturmechanik, Model-API und skalierbaren Solvern; dynamische FSI zusätzlich auf M6. Keine fachliche Abhängigkeit vom Topologie-Optimierer. Grobe Abnahme: getrennte CFD-Verifikation und Turbulenzmodell-Validierung mit unabhängigen Referenzen, Netz-/Wandsensitivität, Lastübertragungstest und bidirektionaler FSI-Benchmark mit Schnittstellenbilanzen. NASA Turbulence Modeling Resource bietet einen Ausgangspunkt für die Auswahl von RANS-Referenzfällen: [Turbulence Modeling Resource](https://tmbwg.github.io/turbmodels/).
+
+#### Abgrenzung und Planungsreife
+Keine DNS, LES oder hybriden RANS/LES-Verfahren. Kompressible Strömung, Mehrphasenmodelle, Verbrennung und gekoppelte Strömungs-Topologieoptimierung gehören nicht zum ersten Umfang. Langfristiger Horizont nach M11, ohne feste Version oder Termin; die Erweiterung benötigt einen eigenen mathematischen und architektonischen Entwurf. Noch keine Einzel- oder Release-Issues; Detaillierung und Release-Gate folgen vor Umsetzung.
 
 ## 6. Reihenfolge und Entscheidungen
 

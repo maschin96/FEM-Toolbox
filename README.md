@@ -176,6 +176,8 @@ elektrisches Potential `phi` mit feldweiser Freiheitsgradverwaltung.
 | M8 | v1.3.0* | Reproduzierbare Parameterstudien | Geplant |
 | M9 | v1.4.0* | Experimentelle Validierung und Unsicherheit | Geplant |
 | M10 | v1.5.0* | Kontrollierte adaptive Netzstudien | Geplant |
+| M11 | Offen | Topologieoptimierung | Grober Horizont |
+| M12 | Offen | RANS-CFD mit Fluid-Struktur-Kopplung | Grober Horizont |
 
 *Vorläufige Zielversionen ohne Terminzusage. Produktvision, Bestandsanalyse,
 Abhängigkeiten und Abnahmegates stehen in der
