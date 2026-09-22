@@ -29,3 +29,11 @@ daraus folgende freie anisotrope Ausdehnung eines Einheitswürfels. Erwartet
 werden 313.15 K, `u=(0.0002x,0.0004y,0)` m, Nullspannung und Nullbilanz.
 Das Skript prüft diese Kennwerte und schreibt `thermal_expansion.vtu`.
 [Modell und Verifikation](../Doc/14_THERMOMECHANICS.md).
+
+## Quasistatische Piezoelektrizität
+
+`python examples/piezo_d33.py` demonstriert am 20-mm-Block den direkten
+Effekt bei 100 V (`u_top=-0,5 µm`, `Q_top=17,5 nC`) und den inversen Effekt
+bei 10 N Kurzschlusslast (`u_top=2 µm`, `Q_top=-50 nC`). Das Skript prüft
+Reziprozität und Bilanzen und schreibt `piezo_d33.vtu`.
+[Herleitung, Randannahmen und Toleranzen](../Doc/18_PIEZO_D33_VERIFICATION.md).

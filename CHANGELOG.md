@@ -6,6 +6,35 @@ Versionierung an [Semantic Versioning](https://semver.org/).
 
 ## Unreleased
 
+## [0.5.0] - 2026-09-22
+
+### Added
+
+- Piezoelektrisches Stress-Charge-Materialmodell mit Strain-Charge-Konversion,
+  Achsrotation, SI-/Voigt-Validierung und erhaltener Eingangsdatenprovenienz.
+- Gekoppelte symmetrisch-indefinite Tet4-Elementoperatoren, thermische
+  Eigendehnung mit explizitem elektrischen Modellschalter sowie rohe Feld- und
+  Enthalpieauswertung.
+- Monolithischer quasistatischer `u-φ`-Referenzsolver mit feldweiser
+  Kongruenzskalierung, Sparse LU, Lagerungs- und Gauge-Prüfung, getrennten
+  Residuen und globalen Kraft-, Moment- und Ladungsbilanzen.
+- Analytischer direkter/inverser d₃₃-Benchmark, einfacher 1D-Leerlauf,
+  eigenständiger 1D-FE-Vergleich, Reziprozitäts- und Energietests sowie
+  vierstufige gekoppelte Konvergenz.
+- Ausführbares Piezo-Beispiel mit direkter und inverser Wirkung und VTU-Export.
+
+### Fixed
+
+- Die Rundungstoleranz der globalen Piezo-Ladungsbilanz berücksichtigt bei
+  physikalisch verschwindender Nettoladung die ungekürzten elektrischen
+  Matrixbeiträge.
+
+### Limitations
+
+- Nur quasistatische lineare Tet4-Modelle und ein direkter Sparse-LU-Solver;
+  allgemeine leitende Floating Electrodes, Transienten, PETSc und
+  experimentelle Validierung sind nicht enthalten.
+
 ## [0.4.0] - 2026-09-22
 
 ### Added
@@ -76,7 +105,8 @@ Versionierung an [Semantic Versioning](https://semver.org/).
 - Typisierte SI-/Voigt-Konventionen, konkrete Validierungsfehler sowie ein
   deterministisches Provenienzschema mit installierter Paketversion.
 
-[Unreleased]: https://github.com/maschin96/FEM-Toolbox/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/maschin96/FEM-Toolbox/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/maschin96/FEM-Toolbox/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/maschin96/FEM-Toolbox/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/maschin96/FEM-Toolbox/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/maschin96/FEM-Toolbox/compare/v0.1.0...v0.2.0

@@ -5,13 +5,12 @@ dreidimensionale Finite-Elemente-Simulationen. Ziel sind verifizierte Modelle f�
 Festkörpermechanik, Wärmeleitung, Elektrostatik und deren thermomechanische und
 piezoelektrische Kopplungen auf Basis linearer Vierknoten-Tetraeder (**Tet4**).
 
-**Aktueller Stand: v0.4.0 — verifizierte sequenzielle Thermomechanik.** Verfügbar
-sind das Netzmodell, Tet4-Geometrie, drei stationäre Einzelfelder sowie die
-einseitige Kopplung `T → u`. Im Entwicklungsstand sind außerdem die
-piezoelektrischen Tet4-Operatoren und ein monolithischer Referenzsolver
-vorhanden; sie gehören noch nicht zum v0.4.0-Release. Die geplante `Model`-API
-ist noch nicht implementiert. Details zum Release stehen in den
-[Release Notes](Doc/releases/v0.4.0.md).
+**Aktueller Stand: v0.5.0 — verifizierte quasistatische Piezoelektrizität.**
+Verfügbar sind das Netzmodell, Tet4-Geometrie, drei stationäre Einzelfelder,
+die einseitige Kopplung `T → u` sowie ein monolithischer piezoelektrischer
+`u-φ`-Referenzsolver. Die geplante `Model`-API und allgemeine Floating
+Electrodes sind noch nicht implementiert. Details stehen in den
+[Release Notes](Doc/releases/v0.5.0.md).
 
 [Installation](#installation) · [Schnellstart](#schnellstart) ·
 [Dokumentation](#dokumentation) · [Entwicklung](#entwicklung) ·
@@ -19,7 +18,7 @@ ist noch nicht implementiert. Details zum Release stehen in den
 
 ## Verfügbare Funktionen
 
-| Bereich | Umfang in v0.4.0 |
+| Bereich | Umfang in v0.5.0 |
 |---|---|
 | Netzmodell | Unveränderliche NumPy-Arrays für 3D-Punkte, Tet4-Zellen und Triangle3-Flächen; validierte Indizes, externe IDs und Tags |
 | Auswahlsätze | Benannte Volumen- und Flächensätze, auch mit überlappenden Mitgliedschaften |
@@ -31,6 +30,7 @@ ist noch nicht implementiert. Details zum Release stehen in den
 | Wärme | Stationäre Tet4-Wärmeleitung mit anisotroper Leitfähigkeit, Quellen, äußerem Wärmestrom, Konvektion und Leistungsbilanz |
 | Elektrostatik | Stationäres Tet4-Potential mit anisotroper Permittivität, freien Ladungen, Gauge-Diagnostik, E-/D-Feldern und Ladungsbilanz |
 | Thermomechanik | Sequenzielle stationäre Wärme-zu-Mechanik-Kopplung mit anisotroper thermischer Expansion und regionsweisen Referenztemperaturen |
+| Piezoelektrizität | Stress-Charge-Materialdaten, Konversion und Achsrotation; gekoppelte Tet4-Operatoren und monolithische Sparse-LU-Lösung mit feldweiser Skalierung, Reaktionen, Ladungs- und Energiebilanzen |
 
 ## Installation
 
@@ -153,9 +153,10 @@ Jedes physikalische Einzelfeld soll vor seiner Kopplung separat verifiziert
 werden. Dazu gehören analytische Vergleichsfälle, Patch-Tests, Energie- und
 Reziprozitätsprüfungen, globale Bilanzen und Netzkonvergenz.
 
-Für v0.4.0 umfasst der Nachweis zusätzlich Patch-, Bilanz-, analytische Benchmark-
-und vierstufige Konvergenztests für Mechanik, Wärme, Elektrostatik und die
-sequenzielle Thermomechanik.
+Für v0.5.0 umfasst der Nachweis Patch-, Bilanz-, analytische Benchmark- und
+vierstufige Konvergenztests für Mechanik, Wärme, Elektrostatik,
+Thermomechanik und Piezoelektrizität. Direkter und inverser Piezoeffekt
+werden zusätzlich gegen eine unabhängige 1D-FE-Implementierung geprüft.
 **Verifikation** prüft die korrekte Umsetzung des mathematischen Modells;
 **Validierung** prüft dessen Eignung gegenüber geeigneten Referenz- oder
 experimentellen Daten und ist für diese Freigabe noch nicht beansprucht. Das
@@ -173,7 +174,7 @@ elektrisches Potential `phi` mit feldweiser Freiheitsgradverwaltung.
 | M1 | v0.2.0 | Netz und Tet4-Geometrie | Freigegeben |
 | M2 | v0.3.0 | Stationäre Elastizität, Wärmeleitung und Elektrostatik | Freigegeben |
 | M3 | v0.4.0 | Sequenzielle Thermomechanik `T → u` | Freigegeben |
-| M4 | v0.5.0 | Monolithische Piezoelektrizität `u–phi` | Geplant |
+| M4 | v0.5.0 | Monolithische Piezoelektrizität `u–phi` | Freigegeben |
 | M5 | v1.0.0 | Elektroden, Modellformat und vollständiger stationärer Workflow | Geplant |
 | M6 | v1.1.0 | Transiente Wärmeleitung und lineare Dynamik | Geplant |
 | M7 | v1.2.0 | PETSc-Backend, Tet10 und Skalierung | Geplant |
