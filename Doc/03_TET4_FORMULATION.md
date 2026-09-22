@@ -114,7 +114,14 @@ Das gekoppelte piezoelektrische Element wird als
 [ K_phiu -K_phiphi]
 ```
 
-assembliert. Die thermische Expansionskopplung lautet
+assembliert.
+
+Die lokalen Blöcke, Felder und Enthalpiebeiträge sind in
+[Gekoppeltes piezoelektrisches Tet4-Element](16_PIEZOELECTRIC_ELEMENT.md)
+implementiert und mit einem affinen Patch nachgewiesen. Die globale
+Assembly folgt in #21.
+
+Die thermische Expansionskopplung lautet
 
 ```text
 K_uT = - integral_Omega_e B^T C^E alpha N dOmega.

@@ -113,6 +113,18 @@ Eingabetensoren und globale Ergebnistensoren bleiben für die spätere
 Solverprovenienz verfügbar. Details und algebraische Referenzen stehen in
 [Piezo-Materialdaten](15_PIEZOELECTRIC_MATERIAL.md).
 
+### ADR-011: Gekoppelte Elemententhalpie und thermischer D-Term (#20)
+
+Das lokale Piezoelement verwendet die symmetrisch-indefinite Matrix mit
+`K_phiu=K_uphi^T` und negativem dielektrischen Block. Mechanische thermische
+Eigendehnung ist stets explizit; der Beitrag `-e epsilon_th` in `D` ist
+standardmäßig **aus** und kann nur mit
+`electric_thermal_strain=True` aktiviert werden. Die zugehörige elektrische
+rechte Seite wird zusammen mit der mechanischen aus der gleichen
+Enthalpieformulierung abgeleitet. Die lokale Energie- und Patch-Verifikation
+steht in [Doc/16](16_PIEZOELECTRIC_ELEMENT.md); die globale Assembly und
+Gauge-Behandlung bleiben Aufgabe von #21.
+
 ## 2. Technisches Risikoregister
 
 | Risiko | Wirkung | Früher Nachweis | Gegenmaßnahme |
