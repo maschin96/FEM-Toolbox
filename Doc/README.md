@@ -17,6 +17,10 @@ Eintrag im Entscheidungsprotokoll.
 8. [08_REFERENCES.md](08_REFERENCES.md)
 9. [09_RELEASE_PROCESS.md](09_RELEASE_PROCESS.md)
 
+## Produktplanung
+
+- [Bestandsanalyse, Produktvision und Planungswelle 2](13_PRODUCT_VISION.md)
+
 ## Implementierte Einzelfelder
 
 - [Lineare statische Elastizität: API, Grenzen und Verifikation](10_LINEAR_ELASTICITY.md)

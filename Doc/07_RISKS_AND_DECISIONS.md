@@ -33,8 +33,8 @@ und bewahrt die Blocksymmetrie.
 
 ### ADR-004: Wärme zunächst einseitig gekoppelt
 
-Entscheidung: Version 0.1 löst Wärme unabhängig und übergibt `T` an Mechanik und
-optional das explizite thermo-piezoelektrische Materialmodell.
+Entscheidung: Der stationäre Ausbau M3–M5 löst Wärme unabhängig und übergibt `T`
+an Mechanik und optional das explizite thermo-piezoelektrische Materialmodell.
 
 Begründung: Stationäre thermische Ausdehnung deckt den ersten Anwendungsfall ab.
 Vollständige reziproke Thermoelastizität ist eine transiente thermodynamische
@@ -130,3 +130,15 @@ Vor M6 sind festzulegen:
   thermo-piezoelektrischen Transienten
 - Integrationsschema und numerische Dämpfung für Elastodynamik
 - Behandlung elektrischer Freiheitsgrade im dynamischen DAE-System
+
+## 4. Planungswelle 2 (2026-09-21, #56)
+
+Die [Produktvision](13_PRODUCT_VISION.md) ergänzt M8–M10. Die alten
+Versionsverweise „0.1“ auf den stationären Zielumfang werden zu M3–M5/bis v1.0
+präzisiert; Gleichungen und Vorzeichen bleiben unverändert. Der ursprüngliche
+M0-Release v0.1.0 bezeichnet ausschließlich das Projektfundament.
+
+Neue Entscheidungsbedarfe: API-/Kompatibilitätsvertrag (#57), Messdaten und
+Validierungsgrenzen vor Auswertung (#63), konforme adaptive Wärme mit
+Remeshing-Go/no-go (#67). Diese Planung nimmt die späteren Architektur- und
+Methodenentscheidungen nicht vorweg.

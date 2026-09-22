@@ -96,9 +96,9 @@ reziproke Thermoelastizität folgen erst nach diesen sechs Analysen.
 Diese Punkte dürfen die Architektur beeinflussen, aber den ersten verifizierten
 Solver nicht verzögern.
 
-## 6. Abnahmekriterien für Version 0.1
+## 6. Abnahmekriterien für den stationären Ausbau bis v1.0
 
-Version 0.1 ist erreicht, wenn:
+Der stationäre Zielumfang bis v1.0 ist erreicht, wenn:
 
 1. alle drei Einzelfeldsolver Patch- und Bilanztests bestehen;
 2. der piezoelektrische Blockoperator bis auf die dokumentierte
@@ -109,3 +109,8 @@ Version 0.1 ist erreicht, wenn:
 5. ein vollständiges Beispiel von Gmsh-Datei bis VTU-Ergebnis reproduzierbar
    läuft;
 6. alle Annahmen, Einheiten und Materialkonventionen im Ergebnisbericht stehen.
+
+Die ursprüngliche Bezeichnung „Version 0.1“ meinte diesen fachlichen Zielumfang.
+Im eingeführten Release-Zyklus ist v0.1.0 dagegen M0 (Projektfundament).
+Die Kriterien werden schrittweise in M2–M5 erfüllt. Langfristige Erweiterungen
+und ihre Nichtziele beschreibt die [Produktvision](13_PRODUCT_VISION.md).

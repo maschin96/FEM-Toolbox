@@ -72,8 +72,9 @@ q         = -k grad T
 
 `C^E` ist die Steifigkeit bei konstantem elektrischen Feld, `e` die
 piezoelektrische Spannungs-Ladungs-Matrix, `kappa^S` die Permittivität bei
-konstanter Verzerrung und `p` ein optionaler pyroelektrischer Vektor. In Version
-0.1 gilt `p = 0`. Auch der Beitrag `-e alpha theta` in `D` wird nur aktiviert,
+konstanter Verzerrung und `p` ein optionaler pyroelektrischer Vektor. Im
+stationären Basismodell bis v1.0 gilt `p = 0`. Auch der Beitrag
+`-e alpha theta` in `D` wird nur aktiviert,
 wenn das Materialmodell ihn explizit vorsieht; diese Entscheidung wird durch
 einen Materialmodelltyp sichtbar gemacht und niemals implizit getroffen.
 
@@ -85,8 +86,8 @@ mu     = E_young / (2(1 + nu))
 ```
 
 mit `E_young > 0` und `-1 < nu < 0.5`. Nahezu inkompressible Materialien sind
-für den reinen Verschiebungs-Tet4 ungeeignet und werden in Version 0.1 mit einer
-Warnung beziehungsweise einer Grenzwertprüfung behandelt.
+für den reinen Verschiebungs-Tet4 ungeeignet. Isotrope Eingaben mit `nu >= 0.49`
+werden im implementierten Einzelfeldsolver ab v0.3.0 abgelehnt (ADR-007).
 
 ## 4. Schwache Formen
 
@@ -140,8 +141,8 @@ symmetrisch-indefinit. Deshalb ist Conjugate Gradient für das monolithische
 Gesamtsystem nicht zulässig. Ein direkter Sparse-Solver ist die Referenz;
 MINRES mit geeignetem Blockpräconditioner ist eine spätere Option.
 
-Die thermische Zeile ist in Version 0.1 unabhängig. Das entspricht stationärer
-Wärmeleitung mit thermischer Ausdehnung, nicht vollständig reziproker
+Die thermische Zeile ist im stationären Ausbau M3–M5 unabhängig. Das entspricht
+stationärer Wärmeleitung mit thermischer Ausdehnung, nicht vollständig reziproker
 Thermoelastizität. Für letztere muss im transienten Modell der thermomechanische
 Entropieterm konsistent ergänzt werden.
 

@@ -1,6 +1,6 @@
 # Roadmap
 
-Status: Entwurf
+Status: M0–M2 freigegeben; M3–M10 geplant (Stand 2026-09-21)
 
 Die Roadmap priorisiert wissenschaftliches Risiko vor Funktionsmenge. Jeder
 Meilenstein endet mit einer ausführbaren Demonstration und einem V&V-Nachweis.
@@ -144,13 +144,38 @@ Ergebnis: größere Forschungsmodelle und Genauigkeitsverbesserung.
 
 Abnahme: reproduzierbarer Skalierungstest und elementübergreifende Benchmarks.
 
+## M8–M10 — Zweite Produktplanungswelle
+
+Die [Bestandsanalyse und Produktvision](13_PRODUCT_VISION.md) dokumentiert
+Restumfang, Abhängigkeiten und detaillierte Abnahme. M0–M7 behalten ihren Umfang;
+M5 erhält zusätzlich API-Vertrag #57 und Release-/Repository-Absicherung #58.
+
+| Milestone | Zielversion (vorläufig) | Ergebnis | Issues / Release-Gate |
+|---|---|---|---|
+| [M8](https://github.com/maschin96/FEM-Toolbox/milestone/9) | v1.3.0 | reproduzierbare Parameterstudien und Kennwertberichte | #59–#61 / #62 |
+| [M9](https://github.com/maschin96/FEM-Toolbox/milestone/10) | v1.4.0 | abgegrenzte experimentelle Validierung mit Unsicherheit | #63–#65 / #66 |
+| [M10](https://github.com/maschin96/FEM-Toolbox/milestone/11) | v1.5.0 | kontrollierte adaptive stationäre Wärme auf Tet4 | #67–#69 / #70 |
+
+M8 setzt M5 voraus; M9 zusätzlich M8 und geeignete Messdaten. M10 setzt #36,
+M8 und ein positives Remeshing-Machbarkeitsgate voraus. Die Releasefolge bleibt
+vorläufig M7 → M8 → M9 → M10; fachlich unabhängige Vorbereitung ist möglich.
+Es werden keine Kalendertermine oder noch nicht belegten Validierungen zugesagt.
+
 ## Definition of Done für jedes Arbeitspaket
+
+Die folgenden Implementierungsnachweise gelten, soweit auf das Arbeitspaket
+anwendbar. Reine Planung/Dokumentation prüft Inhalt, Links und Konsistenz;
+nicht anwendbare numerische Nachweise werden begründet.
 
 - öffentliche API und Annahmen dokumentiert
 - Typen, Einheiten und Fehlersituationen definiert
 - gezielte Unit-Tests vorhanden
-- mindestens ein physikalischer Test vorhanden
+- mindestens ein physikalischer Test für numerisches Verhalten vorhanden; bei
+  reiner Dokumentation stattdessen Inhalt, Links und Konsistenz geprüft
 - Bilanz-/Residualausgabe implementiert
 - Beispiel ohne interne Kenntnisse ausführbar
 - keine Optimierung ohne vorheriges Profiling
-- Release-Issue abgeschlossen und Zielcommit auf `main` annotiert getaggt
+
+Zusätzlich auf Milestone-Ebene: Release-Issue abgeschlossen und Zielcommit auf
+`main` annotiert getaggt. Ein einzelnes Arbeitspaket benötigt keinen eigenen
+Milestone-Release.
