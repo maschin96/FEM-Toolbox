@@ -21,3 +21,11 @@ Wärmeleistungen und Toleranzen: [Stationäre Wärmeleitung](../Doc/11_STEADY_HE
 
 `python examples/parallel_plate.py` berechnet einen idealen Plattenkondensator
 und exportiert `parallel_plate.vtu`. [Referenz und Toleranzen](../Doc/12_ELECTROSTATICS.md).
+
+## Sequenzielle Thermomechanik
+
+`python examples/thermal_expansion.py` löst stationäre Wärmeleitung und die
+daraus folgende freie anisotrope Ausdehnung eines Einheitswürfels. Erwartet
+werden 313.15 K, `u=(0.0002x,0.0004y,0)` m, Nullspannung und Nullbilanz.
+Das Skript prüft diese Kennwerte und schreibt `thermal_expansion.vtu`.
+[Modell und Verifikation](../Doc/14_THERMOMECHANICS.md).

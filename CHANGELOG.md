@@ -6,6 +6,24 @@ Versionierung an [Semantic Versioning](https://semver.org/).
 
 ## Unreleased
 
+## [0.4.0] - 2026-09-22
+
+### Added
+
+- Sequenzielle stationäre Thermomechanik: ein Wärmefeld wird auf demselben
+  Tet4-Netz an den Elastizitätssolver übergeben.
+- Anisotrope thermische Eigendehnung mit Referenztemperatur, regionsweisen
+  Parametern und Rotation aus orthonormalen Materialhauptachsen.
+- Thermischer Elementlastterm, mechanische Spannung und Energie sowie
+  deterministische Provenienz des Temperatur- und Expansionsmodells.
+- Ein ausführbares Thermomechanik-Beispiel und unabhängige Patch-, Bilanz-
+  und vierstufige Konvergenznachweise.
+
+### Limitations
+
+- Die stationäre Kopplung verläuft ausschließlich `T → u`; reziproke
+  Wärmequellen, Transienten und experimentelle Validierung sind nicht enthalten.
+
 ## [0.3.0] - 2026-09-21
 
 ### Added
@@ -58,7 +76,8 @@ Versionierung an [Semantic Versioning](https://semver.org/).
 - Typisierte SI-/Voigt-Konventionen, konkrete Validierungsfehler sowie ein
   deterministisches Provenienzschema mit installierter Paketversion.
 
-[Unreleased]: https://github.com/maschin96/FEM-Toolbox/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/maschin96/FEM-Toolbox/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/maschin96/FEM-Toolbox/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/maschin96/FEM-Toolbox/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/maschin96/FEM-Toolbox/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/maschin96/FEM-Toolbox/compare/v0.0.1...v0.1.0

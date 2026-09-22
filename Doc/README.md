@@ -31,6 +31,7 @@ Eintrag im Entscheidungsprotokoll.
 
 ## Veröffentlichungen
 
+- [v0.4.0 — Sequenzielle Thermomechanik](releases/v0.4.0.md)
 - [v0.3.0 — Ungekoppelte Einzelfelder](releases/v0.3.0.md)
 - [v0.2.0 — Netz und Tet4-Geometrie](releases/v0.2.0.md)
 - [v0.1.0 — Projektfundament](releases/v0.1.0.md)
