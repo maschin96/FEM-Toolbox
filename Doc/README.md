@@ -34,6 +34,7 @@ Eintrag im Entscheidungsprotokoll.
 - [Direkter und inverser d₃₃-Nachweis](18_PIEZO_D33_VERIFICATION.md)
 - [Materialregionen und perfekte Grenzflächen](19_MATERIAL_REGIONS.md)
 - [Equipotential- und Floating-Electrode-Randbedingungen](20_ELECTRODES.md)
+- [Versioniertes TOML-Modellformat und Model-API](21_MODEL_SCHEMA.md)
 
 ## Veröffentlichungen
 
