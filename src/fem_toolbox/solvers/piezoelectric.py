@@ -411,8 +411,15 @@ def solve_piezoelectric(
         + np.abs(reactions_phi).sum()
         + np.abs(volume_vector).sum()
     )
+    # In open circuit, net charge and fixed reactions can vanish by physical
+    # cancellation. Roundoff still scales with the un-cancelled electric row
+    # products, even when the prescribed electric RHS is exactly zero.
+    electric_action = np.asarray(
+        abs(matrix[phi_offset:]) @ np.abs(solution) + np.abs(rhs[phi_offset:]),
+        dtype=np.float64,
+    )
     charge_tolerance = 1e-9 * charge_scale + 100 * np.finfo(float).eps * float(
-        np.abs(rhs[phi_offset:]).sum()
+        electric_action.sum()
     )
     if abs(charge_balance) > charge_tolerance:
         raise ValidationError(

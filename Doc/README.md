@@ -31,6 +31,7 @@ Eintrag im Entscheidungsprotokoll.
 - [Piezoelektrische Materialdaten, Konversion und Achsrotation](15_PIEZOELECTRIC_MATERIAL.md)
 - [Gekoppeltes piezoelektrisches Tet4-Element](16_PIEZOELECTRIC_ELEMENT.md)
 - [Monolithischer piezoelektrischer Referenzsolver](17_PIEZOELECTRIC_SOLVER.md)
+- [Direkter und inverser d₃₃-Nachweis](18_PIEZO_D33_VERIFICATION.md)
 
 ## Veröffentlichungen
 
