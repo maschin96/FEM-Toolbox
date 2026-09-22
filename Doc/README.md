@@ -38,6 +38,7 @@ Eintrag im Entscheidungsprotokoll.
 - [Stationärer Ablauf T → (u, φ)](22_THERMOPIEZOELECTRIC.md)
 - [Modellweite Randbedingungs- und Nullraumprüfung](23_MODEL_PREFLIGHT.md)
 - [Versioniertes stationäres Ergebnisbündel](24_RESULT_BUNDLE.md)
+- [Vier-Netze-Nachweis des stationären Mehrmaterialmodells](25_THERMOPIEZO_CONVERGENCE.md)
 
 ## Veröffentlichungen
 

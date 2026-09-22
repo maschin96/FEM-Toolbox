@@ -108,8 +108,8 @@ Ergebnis: praxistaugliche Randbedingungen für Piezoaufbauten.
 - YAML/TOML-Modellformat und dokumentierte Beispiele
 - vollständiger Ergebnis- und Provenienzexport
 
-Abnahme: Open-Circuit-/Short-Circuit-Benchmark und reproduzierbares End-to-End-
-Beispiel.
+Abnahme: Open-Circuit-/Short-Circuit-Benchmark, reproduzierbares End-to-End-
+Beispiel und der [Vier-Netze-Konvergenznachweis mit Materialgrenze](25_THERMOPIEZO_CONVERGENCE.md).
 
 ## M6 — Transiente und dynamische Erweiterung
 

@@ -55,7 +55,9 @@ Ersatz für eine leitende Equipotential-Elektrode.
 
 Der implementierte [d₃₃-Nachweis](18_PIEZO_D33_VERIFICATION.md) verifiziert
 direkte und inverse Wirkung sowie einen 1D-invarianten Leerlaufgrenzfall.
-Eine allgemeine leitende Floating Electrode bleibt M5 vorbehalten.
+Die leitende Floating Electrode ist im M5-Solver implementiert. Der
+[Vier-Netze-Nachweis des vollständigen stationären Modells](25_THERMOPIEZO_CONVERGENCE.md)
+prüft sie zusätzlich bei Materialgrenze und thermischer Anregung.
 
 ### 2.4 Manufactured Solutions und Konvergenz
 

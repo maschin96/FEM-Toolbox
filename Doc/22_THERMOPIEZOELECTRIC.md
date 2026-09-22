@@ -57,4 +57,5 @@ dem Stoffgesetz berechnete `sigma_x=1 Pa` und `D_x=-4.2 C/m²`.
 Die Einzelfeldgrenzen werden gegen die bestehenden Wärme- und
 Piezo-Solver geprüft. Leistung, Kraft, Moment und Ladung behalten getrennte
 Bilanzen. Diese Tests sind Code- und Lösungsverifikation eines linearen
-Grenzfalls; 3D-Konvergenz und Mehrmaterial-Bilanzen sind Gegenstand von #141.
+Grenzfalls. Der ergänzende 3D-Vier-Netze-Nachweis mit Materialgrenze und
+leitenden Elektroden steht in [Doc/25](25_THERMOPIEZO_CONVERGENCE.md).
