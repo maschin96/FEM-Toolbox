@@ -11,6 +11,9 @@ from fem_toolbox.materials.electrostatics import (
     DielectricMaterial as DielectricMaterial,
 )
 from fem_toolbox.materials.heat import ThermalMaterial as ThermalMaterial
+from fem_toolbox.materials.piezoelectric import (
+    PiezoelectricMaterial as PiezoelectricMaterial,
+)
 
 
 @dataclass(frozen=True, init=False, eq=False)

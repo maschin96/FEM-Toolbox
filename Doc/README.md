@@ -28,6 +28,7 @@ Eintrag im Entscheidungsprotokoll.
 
 - [Elektrostatik: API, Ladungsbilanz und Verifikation](12_ELECTROSTATICS.md)
 - [Stationäre sequenzielle Thermomechanik](14_THERMOMECHANICS.md)
+- [Piezoelektrische Materialdaten, Konversion und Achsrotation](15_PIEZOELECTRIC_MATERIAL.md)
 
 ## Veröffentlichungen
 
