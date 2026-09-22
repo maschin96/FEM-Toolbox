@@ -88,6 +88,32 @@ class SelectionError(MeshValidationError):
         super().__init__(field=field, reason=f"selection {label}: {reason}")
 
 
+class BoundaryTopologyError(MeshValidationError):
+    """A Triangle3 is not a unique exterior Tet4 face, or a face is missing."""
+
+    def __init__(
+        self,
+        *,
+        kind: str,
+        entity_id: int | None,
+        cell_id: int | None,
+        groups: tuple[str, ...],
+        nodes: tuple[int, int, int],
+    ) -> None:
+        self.kind = kind
+        self.entity_id = entity_id
+        self.cell_id = cell_id
+        self.groups = groups
+        self.nodes = nodes
+        super().__init__(
+            field="boundary_topology",
+            reason=(
+                f"{kind} face {nodes}; triangle ID {entity_id}, "
+                f"Tet4 ID {cell_id}, physical groups {groups}"
+            ),
+        )
+
+
 class MeshIOError(FEMToolboxError):
     """A mesh could not be converted at an external-format boundary."""
 

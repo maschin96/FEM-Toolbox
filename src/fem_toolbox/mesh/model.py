@@ -98,6 +98,7 @@ def _validate_connectivity(
     field: str,
     point_count: int,
     external_ids: IndexArray | None,
+    selections: SelectionMap | None = None,
 ) -> None:
     canonical_rows: dict[tuple[int, ...], int] = {}
     for internal_index, row in enumerate(connectivity):
@@ -123,10 +124,21 @@ def _validate_connectivity(
             )
         duplicate_index = canonical_rows.get(canonical)
         if duplicate_index is not None:
+            groups = (
+                tuple(
+                    sorted(
+                        name
+                        for name, rows in selections.items()
+                        if internal_index in rows
+                    )
+                )
+                if selections is not None
+                else ()
+            )
             raise ConnectivityError(
                 entity_kind=field,
                 entity_id=entity_id,
-                reason="connectivity is topologically duplicated",
+                reason=f"connectivity is topologically duplicated; physical groups {groups}",
                 duplicate_of=_reported_id(external_ids, duplicate_index),
             )
         canonical_rows[canonical] = internal_index
@@ -233,6 +245,12 @@ class Mesh:
         facet_tags_array = _entity_tags(
             facet_tags, size=len(triangle3_array), field="facet_tags"
         )
+        volume_set_map = _selection_map(
+            volume_sets, field="volume_sets", entity_count=len(tetra4_array)
+        )
+        facet_set_map = _selection_map(
+            facet_sets, field="facet_sets", entity_count=len(triangle3_array)
+        )
         _validate_connectivity(
             tetra4_array,
             field="tetra4",
@@ -244,12 +262,7 @@ class Mesh:
             field="triangle3",
             point_count=len(points_array),
             external_ids=triangle3_ids_array,
-        )
-        volume_set_map = _selection_map(
-            volume_sets, field="volume_sets", entity_count=len(tetra4_array)
-        )
-        facet_set_map = _selection_map(
-            facet_sets, field="facet_sets", entity_count=len(triangle3_array)
+            selections=facet_set_map,
         )
 
         self._points = points_array
