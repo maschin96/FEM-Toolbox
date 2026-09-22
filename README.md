@@ -200,6 +200,7 @@ technischen Entwurfsdokumente.
 | Elementgleichungen und Geometrie | [Tet4-Formulierung](Doc/03_TET4_FORMULATION.md) |
 | Modulgrenzen, Datenmodelle und Ziel-API | [Softwarearchitektur](Doc/04_SOFTWARE_ARCHITECTURE.md) |
 | Wissenschaftliche Nachweise | [Verifikation und Validierung](Doc/05_VERIFICATION_AND_VALIDATION.md) |
+| Stationäre thermische Ausdehnung | [Thermomechanik](Doc/14_THERMOMECHANICS.md) |
 | Fachliche und technische Entscheidungen | [Risiken und Entscheidungen](Doc/07_RISKS_AND_DECISIONS.md) |
 | Literatur und Referenzdokumentation | [Quellen](Doc/08_REFERENCES.md) |
 | Versionierung und Freigaben | [Release-Prozess](Doc/09_RELEASE_PROCESS.md) |

@@ -63,3 +63,50 @@ class ElasticMaterial:
         c = np.diag([2 * mu] * 3 + [mu] * 3)
         c[:3, :3] += lam
         return cls(c)
+
+
+@dataclass(frozen=True, init=False, eq=False)
+class ThermalExpansion:
+    """Global engineering-Voigt expansion (6,) in 1/K and reference T in K.
+
+    Material-axis tensors must be rotated into global axes by the caller.
+    """
+
+    alpha: NDArray[np.float64]
+    reference_temperature: float
+
+    def __init__(self, alpha: ArrayLike, reference_temperature: float) -> None:
+        a = real_array(alpha, (6,))
+        reference = float(real_array(reference_temperature, ()))
+        if reference < 0:
+            raise ValidationError(
+                "reference temperature must be nonnegative K", field="temperature"
+            )
+        object.__setattr__(self, "alpha", np.frombuffer(a.tobytes(), dtype=np.float64))
+        object.__setattr__(self, "reference_temperature", reference)
+
+    @classmethod
+    def from_principal(
+        cls, principal_alpha: ArrayLike, reference_temperature: float, axes: ArrayLike
+    ) -> "ThermalExpansion":
+        """Rotate principal expansion (3,) in 1/K; axes columns are local axes."""
+        values = real_array(principal_alpha, (3,))
+        rotation = real_array(axes, (3, 3))
+        if not np.allclose(
+            rotation.T @ rotation, np.eye(3), rtol=0, atol=1e-12
+        ) or not np.isclose(np.linalg.det(rotation), 1, rtol=0, atol=1e-12):
+            raise ValidationError(
+                "material axes must form a proper orthonormal frame", field="axes"
+            )
+        tensor = rotation @ np.diag(values) @ rotation.T
+        return cls(
+            [
+                tensor[0, 0],
+                tensor[1, 1],
+                tensor[2, 2],
+                2 * tensor[1, 2],
+                2 * tensor[0, 2],
+                2 * tensor[0, 1],
+            ],
+            reference_temperature,
+        )
