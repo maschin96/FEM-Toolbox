@@ -20,7 +20,7 @@ from fem_toolbox.elements import Tet4Geometry
 from fem_toolbox.elements.elasticity import stiffness_matrix, strain_matrix
 from fem_toolbox.errors import ValidationError
 from fem_toolbox.fields import DofMap, Field
-from fem_toolbox.materials import ElasticMaterial
+from fem_toolbox.materials import ElasticMaterial, ThermalExpansion
 from fem_toolbox.mesh import Mesh
 from fem_toolbox.physics.elasticity import VectorField, body_load, traction_load
 from fem_toolbox.provenance import RunProvenance
@@ -45,8 +45,9 @@ class ElasticResult:
     """Raw, immutable results in active-node / input-cell order.
 
     node_ids: (nactive,) mesh indices; displacement: (nactive,3) m;
-    strain/stress: (ncells,6), engineering Voigt, dimensionless/Pa;
-    element_energy: (ncells,) J; reactions/applied_loads/residual: (nactive,3) N.
+    strain/stress: (ncells,6), total engineering Voigt strain and Pa stress;
+    element_energy: (ncells,) mechanical-strain energy J;
+    reactions/applied_loads/residual: (nactive,3) N.
     Reactions are zero at free DOFs; residual retains their equilibrium error.
     force_balance (3,) N and moment_balance (3,) N m include external loads and
     reactions. relative_residual is the free residual norm divided by
@@ -125,6 +126,8 @@ def solve_elasticity(
     body_force: VectorField = (0.0, 0.0, 0.0),
     tractions: Mapping[int, VectorField] | None = None,
     point_loads: Mapping[int, ArrayLike] | None = None,
+    expansion: ThermalExpansion | Sequence[ThermalExpansion] | None = None,
+    temperature: ArrayLike | None = None,
 ) -> ElasticResult:
     """Solve static linear elasticity on all Tet4 cells, in SI units.
 
@@ -135,7 +138,9 @@ def solve_elasticity(
     add, including loads on prescribed DOFs. No pressure or follower loads.
 
     Invalid materials, loads, conflicting conditions, missing supports and
-    numerically singular systems raise ValidationError. No thermal coupling.
+    numerically singular systems raise ValidationError. Optional temperature is
+    nodal absolute K; expansion may be homogeneous or per input cell. The thermal
+    eigenstrain is alpha times the cell-average temperature difference.
     Diagonally equilibrated LU rejects relative pivots <= 1e-12; very poorly
     conditioned models require reformulation rather than a silent solution.
     """
@@ -150,6 +155,29 @@ def solve_elasticity(
         not isinstance(m, ElasticMaterial) for m in materials
     ):
         raise ValidationError("one ElasticMaterial required per cell", field="material")
+    if (expansion is None) != (temperature is None):
+        raise ValidationError(
+            "expansion and temperature must be supplied together", field="temperature"
+        )
+    expansions: list[ThermalExpansion] | None = None
+    temperatures: NDArray[np.float64] | None = None
+    if expansion is not None and temperature is not None:
+        expansions = (
+            [expansion] * mesh.n_tetra4
+            if isinstance(expansion, ThermalExpansion)
+            else list(expansion)
+        )
+        if len(expansions) != mesh.n_tetra4 or any(
+            not isinstance(item, ThermalExpansion) for item in expansions
+        ):
+            raise ValidationError(
+                "one ThermalExpansion required per cell", field="expansion"
+            )
+        temperatures = real_array(temperature, (mesh.n_points,))
+        if np.any(temperatures < 0):
+            raise ValidationError(
+                "absolute temperature must be nonnegative K", field="temperature"
+            )
     dofs = mechanical_dofs(mesh)
     active = np.unique(mesh.tetra4)
     geometries = [
@@ -160,10 +188,26 @@ def solve_elasticity(
         for i, cell in enumerate(mesh.tetra4)
     ]
     matrices, loads = [], []
-    for cell, geometry, mat in zip(mesh.tetra4, geometries, materials, strict=True):
+    eigenstrains = np.zeros((mesh.n_tetra4, 6))
+    for i, (cell, geometry, mat) in enumerate(
+        zip(mesh.tetra4, geometries, materials, strict=True)
+    ):
         ids = dofs.indices("u", cell)
         matrices.append(MatrixBlock(ids, ids, stiffness_matrix(geometry, mat)))
         loads.append(VectorBlock(ids, body_load(geometry, body_force)))
+        if expansions is not None and temperatures is not None:
+            eigenstrains[i] = expansions[i].alpha * (
+                float(np.mean(temperatures[cell])) - expansions[i].reference_temperature
+            )
+            loads.append(
+                VectorBlock(
+                    ids,
+                    geometry.volume
+                    * strain_matrix(geometry).T
+                    @ mat.stiffness
+                    @ eigenstrains[i],
+                )
+            )
     if tractions:
         faces = Counter(
             tuple(sorted(int(n) for n in face))
@@ -236,11 +280,14 @@ def solve_elasticity(
             for cell, g in zip(mesh.tetra4, geometries, strict=True)
         ]
     )
-    stress = np.array([m.stiffness @ e for m, e in zip(materials, strain, strict=True)])
+    mechanical_strain = strain - eigenstrains
+    stress = np.array(
+        [m.stiffness @ e for m, e in zip(materials, mechanical_strain, strict=True)]
+    )
     energy = np.array(
         [
             0.5 * g.volume * e @ s
-            for g, e, s in zip(geometries, strain, stress, strict=True)
+            for g, e, s in zip(geometries, mechanical_strain, stress, strict=True)
         ]
     )
     external = (applied + reaction).reshape(-1, 3)
@@ -250,6 +297,15 @@ def solve_elasticity(
                 "points": mesh.points.tolist(),
                 "tetra4": mesh.tetra4.tolist(),
                 "materials": [m.stiffness.tolist() for m in materials],
+                "thermal_eigenstrain": eigenstrains.tolist(),
+                "temperature": temperatures.tolist()
+                if temperatures is not None
+                else None,
+                "expansion": [
+                    (e.alpha.tolist(), e.reference_temperature) for e in expansions
+                ]
+                if expansions is not None
+                else None,
                 "loads": applied.tolist(),
                 "fixed_dofs": fixed.tolist(),
                 "fixed_values": solution[fixed].tolist(),

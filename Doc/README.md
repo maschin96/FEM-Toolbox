@@ -27,6 +27,7 @@ Eintrag im Entscheidungsprotokoll.
 - [Stationäre Wärmeleitung: API, Bilanzen und Verifikation](11_STEADY_HEAT.md)
 
 - [Elektrostatik: API, Ladungsbilanz und Verifikation](12_ELECTROSTATICS.md)
+- [Stationäre sequenzielle Thermomechanik](14_THERMOMECHANICS.md)
 
 ## Veröffentlichungen
 
