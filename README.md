@@ -7,8 +7,10 @@ piezoelektrische Kopplungen auf Basis linearer Vierknoten-Tetraeder (**Tet4**).
 
 **Aktueller Stand: v0.4.0 — verifizierte sequenzielle Thermomechanik.** Verfügbar
 sind das Netzmodell, Tet4-Geometrie, drei stationäre Einzelfelder sowie die
-einseitige Kopplung `T → u`. Die geplante `Model`-API und piezoelektrische
-Kopplung sind noch nicht implementiert. Details stehen in den
+einseitige Kopplung `T → u`. Im Entwicklungsstand sind außerdem die
+piezoelektrischen Tet4-Operatoren und ein monolithischer Referenzsolver
+vorhanden; sie gehören noch nicht zum v0.4.0-Release. Die geplante `Model`-API
+ist noch nicht implementiert. Details zum Release stehen in den
 [Release Notes](Doc/releases/v0.4.0.md).
 
 [Installation](#installation) · [Schnellstart](#schnellstart) ·
