@@ -8,6 +8,8 @@ from numpy.typing import ArrayLike
 from scipy import sparse  # type: ignore[import-untyped]
 
 from fem_toolbox.assembly import LinearSystem, indices, real_array
+from fem_toolbox.boundary.electrodes import Electrode as Electrode
+from fem_toolbox.boundary.electrodes import ElectrodeState as ElectrodeState
 from fem_toolbox.errors import ValidationError
 
 

@@ -122,6 +122,11 @@ vor der Assembly auf. Vertrag und Zweimaterialnachweis stehen in
 Dirichlet-Bedingungen werden als `(field, components, selection, value)`
 repräsentiert. Werte dürfen konstant oder räumlich/zeitlich auswertbare Callables
 sein. Widersprüchliche Zuweisungen an denselben DOF führen zu einem Fehler.
+Der piezoelektrische Referenzsolver unterstützt zusätzlich feste und
+schwebende `Electrode`-Randbedingungen über benannte Triangle3-Sätze oder
+Zeilenindizes. Schwebende Elektroden werden auf je einen elektrischen DOF
+kondensiert; der Gesamtladungsvektor folgt der negativen elektrischen
+Residualkonvention. [Doc/20](20_ELECTRODES.md) beschreibt API und Nachweis.
 
 ## 4. Assembly-Pipeline
 

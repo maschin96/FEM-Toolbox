@@ -147,6 +147,18 @@ Tet4-Zeilenfolge mit Quellgruppen berichtet. Gemeinsame Netzknoten erzwingen
 stetige Primärvariablen; die schwache Form liefert das Flussgleichgewicht
 ohne gesonderte Grenzflächenoperatoren. Details und Grenzen in [Doc/19](19_MATERIAL_REGIONS.md).
 
+### ADR-014: Floating Electrode durch Potentialkondensation (#24)
+
+Alle elektrischen Knoten einer schwebenden Elektrode teilen einen reduzierten
+Potentialfreiheitsgrad. Eine Projektionsmatrix `P` bildet die ursprüngliche
+symmetrische Matrix auf `Pᵀ A P` ab. Wegen des negativen elektrischen Blocks
+und der Leiterladungsdefinition `Q=-sum(r_phi)` lautet die reduzierte rechte
+Seite auf der Elektrode `Pᵀ b-Q`. Eine feste Elektrode verwendet dieselbe
+Knotenauswahl mit Dirichlet-Werten. Ein Potentialbezug bleibt pro
+elektrischer Komponente nötig; keine implizite Gauge-Fixierung. Alternative
+Lagrange-Multiplikatoren sind für den Referenzpfad nicht erforderlich.
+Herleitung und 1D-Verifikation stehen in [Doc/20](20_ELECTRODES.md).
+
 ## 2. Technisches Risikoregister
 
 | Risiko | Wirkung | Früher Nachweis | Gegenmaßnahme |

@@ -8,8 +8,9 @@ piezoelektrische Kopplungen auf Basis linearer Vierknoten-Tetraeder (**Tet4**).
 **Aktueller Stand: v0.5.0 — verifizierte quasistatische Piezoelektrizität.**
 Verfügbar sind das Netzmodell, Tet4-Geometrie, drei stationäre Einzelfelder,
 die einseitige Kopplung `T → u` sowie ein monolithischer piezoelektrischer
-`u-φ`-Referenzsolver. Die geplante `Model`-API und allgemeine Floating
-Electrodes sind noch nicht implementiert. Details stehen in den
+`u-φ`-Referenzsolver. Der aktuelle Quellstand ergänzt feste und schwebende
+Elektroden für diesen Solver; die deklarative `Model`-API ist noch geplant.
+Der Umfang der veröffentlichten Version steht in den
 [Release Notes](Doc/releases/v0.5.0.md).
 
 [Installation](#installation) · [Schnellstart](#schnellstart) ·

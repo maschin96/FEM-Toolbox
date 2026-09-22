@@ -33,6 +33,7 @@ Eintrag im Entscheidungsprotokoll.
 - [Monolithischer piezoelektrischer Referenzsolver](17_PIEZOELECTRIC_SOLVER.md)
 - [Direkter und inverser d₃₃-Nachweis](18_PIEZO_D33_VERIFICATION.md)
 - [Materialregionen und perfekte Grenzflächen](19_MATERIAL_REGIONS.md)
+- [Equipotential- und Floating-Electrode-Randbedingungen](20_ELECTRODES.md)
 
 ## Veröffentlichungen
 

@@ -13,8 +13,20 @@ from numpy.typing import ArrayLike, NDArray
 from scipy import sparse  # type: ignore[import-untyped]
 from scipy.sparse.linalg import splu  # type: ignore[import-untyped]
 
-from fem_toolbox.assembly import MatrixBlock, VectorBlock, assemble, indices, real_array
-from fem_toolbox.boundary import Dirichlet, eliminate_dirichlet
+from fem_toolbox.assembly import (
+    LinearSystem,
+    MatrixBlock,
+    VectorBlock,
+    assemble,
+    indices,
+    real_array,
+)
+from fem_toolbox.boundary import (
+    Dirichlet,
+    Electrode,
+    ElectrodeState,
+    eliminate_dirichlet,
+)
 from fem_toolbox.elements import Tet4Geometry
 from fem_toolbox.elements.piezoelectric import (
     piezoelectric_matrix,
@@ -24,7 +36,7 @@ from fem_toolbox.elements.piezoelectric import (
 from fem_toolbox.errors import ValidationError
 from fem_toolbox.fields import DofMap, Field
 from fem_toolbox.materials import PiezoelectricMaterial, ThermalExpansion
-from fem_toolbox.mesh import Mesh
+from fem_toolbox.mesh import Mesh, inspect_boundary_topology
 from fem_toolbox.physics.elasticity import VectorField, body_load, traction_load
 from fem_toolbox.physics.electrostatics import (
     ChargeDensity,
@@ -54,7 +66,8 @@ class PiezoelectricResult:
     Nodal displacement is (nactive,3) m and potential (nactive,) V; cell fields
     follow stress-charge SI units. Reactions and residuals belong to the
     original signed equations, with mechanical rows in N and electric rows in
-    C. ``electrode_charges`` is the negative of fixed electric reactions.
+    C. ``electrode_charges`` is the negative electric residual on fixed and
+    floating electrode nodes; ``electrode_states`` sums these by conductor.
     Fieldwise relative residuals use independent backward-error denominators.
     ``mechanical_scale`` and ``electric_scale`` are positive characteristic
     diagonal block values in N/m and C/V; they equal 1 when scaling is off.
@@ -84,6 +97,7 @@ class PiezoelectricResult:
     relative_residual_phi: float
     mechanical_scale: float
     electric_scale: float
+    electrode_states: tuple[ElectrodeState, ...]
     provenance: RunProvenance
 
     def __post_init__(self) -> None:
@@ -222,6 +236,7 @@ def solve_piezoelectric(
     point_loads: Mapping[int, ArrayLike] | None = None,
     volume_charge: ChargeDensity = 0.0,
     surface_charges: Mapping[int, ChargeDensity] | None = None,
+    electrodes: Sequence[Electrode] | None = None,
     expansion: ThermalExpansion | Sequence[ThermalExpansion] | None = None,
     temperature: ArrayLike | None = None,
     electric_thermal_strain: bool = False,
@@ -236,6 +251,8 @@ def solve_piezoelectric(
     in C/m² on exterior triangle rows. A potential reference and sufficient
     mechanical supports are required on every disconnected component.
     ``expansion`` and nodal absolute temperature must be supplied together.
+    Fixed electrodes share a prescribed potential; floating electrodes share
+    an unknown potential and prescribe their total adjacent conductor charge.
     The optional thermal-electric contribution to D is explicitly selected.
     The only supported method is direct LU: CG is invalid for this saddle
     system; MINRES awaits a verified block preconditioner. Invalid inputs,
@@ -332,8 +349,105 @@ def solve_piezoelectric(
             )
     loads.append(VectorBlock(np.arange(dofs.size), volume_vector + surface_vector))
     original = assemble(dofs.size, matrices, loads)
-    bcs = tuple(conditions)
-    constrained = eliminate_dirichlet(original, bcs)
+    user_bcs = tuple(conditions)
+    bcs = list(user_bcs)
+    electrode_data: list[tuple[str, NDArray[np.int64], float | None, float | None]] = []
+    occupied: set[int] = set()
+    names: set[str] = set()
+    representative = np.arange(dofs.size)
+    if electrodes:
+        inspect_boundary_topology(mesh)
+    user_fixed = (
+        np.concatenate([indices(bc.dofs, dofs.size) for bc in user_bcs])
+        if user_bcs
+        else np.empty(0, dtype=np.int64)
+    )
+    for electrode in electrodes or ():
+        if not isinstance(electrode, Electrode):
+            raise ValidationError("expected Electrode", field="electrodes")
+        if (
+            not isinstance(electrode.name, str)
+            or not electrode.name
+            or electrode.name.strip() != electrode.name
+            or electrode.name in names
+        ):
+            raise ValidationError(
+                "electrode names must be unique and nonempty", field="electrodes"
+            )
+        names.add(electrode.name)
+        if (electrode.potential is None) == (electrode.charge is None):
+            raise ValidationError(
+                "electrode requires either potential or charge", field="electrodes"
+            )
+        if isinstance(electrode.facets, str):
+            if electrode.facets not in mesh.facet_sets:
+                raise ValidationError(
+                    f"unknown electrode facet set {electrode.facets!r}",
+                    field="electrodes",
+                )
+            facets = mesh.facet_sets[electrode.facets]
+        else:
+            facets = indices(electrode.facets, mesh.n_triangle3)
+        if not len(facets) or len(np.unique(facets)) != len(facets):
+            raise ValidationError(
+                "electrode facets must be nonempty and unique", field="electrodes"
+            )
+        nodes = np.unique(mesh.triangle3[facets])
+        if occupied.intersection(int(node) for node in nodes):
+            raise ValidationError("electrode node overlap", field="electrodes")
+        occupied.update(int(node) for node in nodes)
+        phi_dofs = dofs.indices("phi", nodes)
+        potential_value = (
+            None
+            if electrode.potential is None
+            else float(real_array(electrode.potential, ()))
+        )
+        charge_value = (
+            None
+            if electrode.charge is None
+            else float(real_array(electrode.charge, ()))
+        )
+        if charge_value is not None:
+            if np.intersect1d(phi_dofs, user_fixed).size:
+                raise ValidationError(
+                    "floating electrode conflicts with Dirichlet potential",
+                    field="electrodes",
+                )
+            representative[phi_dofs] = int(phi_dofs[0])
+        else:
+            bcs.append(Dirichlet(phi_dofs, np.full(len(phi_dofs), potential_value)))
+        electrode_data.append((electrode.name, phi_dofs, potential_value, charge_value))
+
+    unique_representatives = np.unique(representative)
+    reduced_index = np.searchsorted(unique_representatives, representative)
+    has_floating = any(charge is not None for _, _, _, charge in electrode_data)
+    if has_floating:
+        projection = sparse.coo_matrix(
+            (np.ones(dofs.size), (np.arange(dofs.size), reduced_index)),
+            shape=(dofs.size, len(unique_representatives)),
+        ).tocsr()
+        reduced_rhs = np.asarray(projection.T @ original.rhs, dtype=np.float64)
+        for _, electrode_dofs, _, charge in electrode_data:
+            if charge is not None:
+                reduced_rhs[reduced_index[electrode_dofs[0]]] -= charge
+        reduced_system = LinearSystem(
+            projection.T @ original.matrix @ projection, reduced_rhs
+        )
+    else:
+        reduced_system = original
+    reduced_bcs = tuple(
+        Dirichlet(reduced_index[indices(bc.dofs, dofs.size)], bc.values) for bc in bcs
+    )
+    constrained = eliminate_dirichlet(reduced_system, reduced_bcs)
+    fixed_reduced = (
+        np.unique(
+            np.concatenate(
+                [indices(bc.dofs, reduced_system.size) for bc in reduced_bcs]
+            )
+        )
+        if reduced_bcs
+        else np.empty(0, dtype=np.int64)
+    )
     fixed = (
         np.unique(np.concatenate([indices(bc.dofs, dofs.size) for bc in bcs]))
         if bcs
@@ -342,14 +456,17 @@ def solve_piezoelectric(
     _check_supports(mesh, dofs, fixed)
     fixed_phi = fixed[fixed >= phi_offset] - phi_offset
     _check_gauge(mesh, active, fixed_phi, original.rhs[phi_offset:])
-    free = np.setdiff1d(np.arange(dofs.size), fixed)
-    solution = np.zeros(dofs.size)
-    solution[fixed] = constrained.rhs[fixed]
+    free_reduced = np.setdiff1d(np.arange(reduced_system.size), fixed_reduced)
+    reduced_solution = np.zeros(reduced_system.size)
+    reduced_solution[fixed_reduced] = constrained.rhs[fixed_reduced]
     mechanical_scale, electric_scale = 1.0, 1.0
-    if len(free):
-        reduced = constrained.matrix.tocsr()[free][:, free].tocsc()
+    if len(free_reduced):
+        reduced = constrained.matrix.tocsr()[free_reduced][:, free_reduced].tocsc()
         scale, mechanical_scale, electric_scale = _block_scales(
-            reduced, free, phi_offset, block_scaling
+            reduced,
+            free_reduced,
+            int(np.count_nonzero(unique_representatives < phi_offset)),
+            block_scaling,
         )
         scaling = sparse.diags(scale)
         try:
@@ -361,16 +478,31 @@ def solve_piezoelectric(
                 raise ValidationError(
                     "singular or ill-conditioned piezoelectric system", field="solver"
                 )
-            solution[free] = scale * factor.solve(scale * constrained.rhs[free])
+            reduced_solution[free_reduced] = scale * factor.solve(
+                scale * constrained.rhs[free_reduced]
+            )
         except RuntimeError as error:
             raise ValidationError(
                 "singular piezoelectric system", field="solver"
             ) from error
+    solution = reduced_solution[reduced_index]
     if not np.isfinite(solution).all():
         raise ValidationError("nonfinite piezoelectric solution", field="solver")
     residual = original.residual(solution)
     rhs = original.rhs
     matrix = original.matrix
+    floating_dofs = (
+        np.concatenate(
+            [
+                electrode_dofs
+                for _, electrode_dofs, _, charge in electrode_data
+                if charge is not None
+            ]
+        )
+        if has_floating
+        else np.empty(0, dtype=np.int64)
+    )
+    free = np.setdiff1d(np.arange(dofs.size), np.union1d(fixed, floating_dofs))
     free_u = free[free < phi_offset]
     free_phi = free[free >= phi_offset]
     relative_u = _relative_residual(residual, matrix, solution, rhs, free_u)
@@ -381,6 +513,25 @@ def solve_piezoelectric(
         )
     reaction = np.zeros(dofs.size)
     reaction[fixed] = residual[fixed]
+    electrode_states = tuple(
+        ElectrodeState(
+            name=name,
+            potential=float(solution[electrode_dofs[0]]),
+            charge=-float(residual[electrode_dofs].sum()),
+            prescribed_charge=charge,
+        )
+        for name, electrode_dofs, _, charge in electrode_data
+    )
+    for state in electrode_states:
+        if state.prescribed_charge is not None:
+            tolerance = (
+                1e-9 * max(abs(state.prescribed_charge), abs(state.charge)) + 1e-12
+            )
+            if abs(state.charge - state.prescribed_charge) > tolerance:
+                raise ValidationError(
+                    f"electrode {state.name!r} total charge exceeds tolerance",
+                    field="electrodes",
+                )
     displacement = solution[:phi_offset].reshape(-1, 3)
     potential = solution[phi_offset:]
     responses = [
@@ -404,12 +555,16 @@ def solve_piezoelectric(
         axis=0
     )
     charge_balance = float(
-        surface_vector.sum() + reactions_phi.sum() + volume_vector.sum()
+        surface_vector.sum()
+        + reactions_phi.sum()
+        + volume_vector.sum()
+        + residual[floating_dofs].sum()
     )
     charge_scale = float(
         np.abs(surface_vector).sum()
         + np.abs(reactions_phi).sum()
         + np.abs(volume_vector).sum()
+        + np.abs(residual[floating_dofs]).sum()
     )
     # In open circuit, net charge and fixed reactions can vanish by physical
     # cancellation. Roundoff still scales with the un-cancelled electric row
@@ -425,25 +580,35 @@ def solve_piezoelectric(
         raise ValidationError(
             "electric charge balance exceeds tolerance", field="solver"
         )
+    provenance_input = {
+        "points": mesh.points.tolist(),
+        "tetra4": mesh.tetra4.tolist(),
+        "materials": [item.to_provenance_dict() for item in materials],
+        "thermal_eigenstrain": eigenstrains.tolist(),
+        "electric_thermal_strain": electric_thermal_strain,
+        "loads": rhs.tolist(),
+        "fixed_dofs": fixed.tolist(),
+        "fixed_values": solution[fixed].tolist(),
+    }
+    if electrode_data:
+        provenance_input["electrodes"] = [
+            (name, electrode_dofs.tolist(), potential, charge)
+            for name, electrode_dofs, potential, charge in electrode_data
+        ]
     provenance = RunProvenance.from_input_bytes(
         json.dumps(
-            {
-                "points": mesh.points.tolist(),
-                "tetra4": mesh.tetra4.tolist(),
-                "materials": [item.to_provenance_dict() for item in materials],
-                "thermal_eigenstrain": eigenstrains.tolist(),
-                "electric_thermal_strain": electric_thermal_strain,
-                "loads": rhs.tolist(),
-                "fixed_dofs": fixed.tolist(),
-                "fixed_values": solution[fixed].tolist(),
-            },
+            provenance_input,
             sort_keys=True,
             separators=(",", ":"),
             allow_nan=False,
         ).encode("utf-8"),
         solver_name="fem_toolbox.solvers.piezoelectric.solve_piezoelectric",
         solver_parameters={
-            "input_schema": "piezoelectric-discrete-v1",
+            "input_schema": (
+                "piezoelectric-discrete-v2"
+                if electrode_data
+                else "piezoelectric-discrete-v1"
+            ),
             "backend": "scipy.sparse.linalg.splu",
             "block_scaling": block_scaling,
             "mechanical_scale": mechanical_scale,
@@ -470,7 +635,12 @@ def solve_piezoelectric(
         residual_phi=residual[phi_offset:],
         reactions_u=reactions_u,
         reactions_phi=reactions_phi,
-        electrode_charges=-reactions_phi,
+        electrode_charges=-reactions_phi
+        - np.where(
+            np.isin(np.arange(phi_offset, dofs.size), floating_dofs),
+            residual[phi_offset:],
+            0.0,
+        ),
         applied_force=applied_force,
         applied_electric_load=rhs[phi_offset:],
         force_balance=force_balance,
@@ -480,5 +650,6 @@ def solve_piezoelectric(
         relative_residual_phi=relative_phi,
         mechanical_scale=mechanical_scale,
         electric_scale=electric_scale,
+        electrode_states=electrode_states,
         provenance=provenance,
     )
