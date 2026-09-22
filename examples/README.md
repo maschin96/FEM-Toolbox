@@ -37,3 +37,10 @@ Effekt bei 100 V (`u_top=-0,5 µm`, `Q_top=17,5 nC`) und den inversen Effekt
 bei 10 N Kurzschlusslast (`u_top=2 µm`, `Q_top=-50 nC`). Das Skript prüft
 Reziprozität und Bilanzen und schreibt `piezo_d33.vtu`.
 [Herleitung, Randannahmen und Toleranzen](../Doc/18_PIEZO_D33_VERIFICATION.md).
+
+## Deklarativer thermopiezoelektrischer End-to-End-Fall
+
+`python examples/thermopiezoelectric/run.py --output /tmp/fem-thermopiezo-example`
+lädt ein Gmsh-Netz und eine TOML-Modelldatei, berechnet `T → (u, φ)` und
+schreibt rohe VTU-Felder sowie einen JSON-Bericht mit Provenienz und Bilanzen.
+[Eingaben, unabhängige Referenz und Grenzen](thermopiezoelectric/README.md).
