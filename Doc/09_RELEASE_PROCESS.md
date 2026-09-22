@@ -52,9 +52,14 @@ inkompatible API-Änderung verlangt, wird die SemVer-Nummer vor Freigabe in eine
 Issue und in diesem Dokument korrigiert. Eine niedrigere Version als nach SemVer
 erforderlich ist nicht zulässig.
 
+M11 (Topologieoptimierung) und M12 (RANS-CFD mit Fluid-Struktur-Kopplung)
+sind zunächst reine Milestone-Beschreibungen ohne Zielversion oder Einzelissues.
+Für diese beiden Horizonte wird das Release-Issue erst bei der Detaillierung
+vor Umsetzung angelegt; vor einer Freigabe gelten alle folgenden Gates.
+
 ## 4. Release-Gate
 
-Jeder GitHub-Milestone enthält ein `release:`-Issue. Dieses Issue wird zuletzt
+Jeder zur Umsetzung detaillierte GitHub-Milestone enthält ein `release:`-Issue. Dieses Issue wird zuletzt
 geschlossen. Vor dem Tag müssen alle folgenden Bedingungen erfüllt sein:
 
 1. Alle verpflichtenden Issues des Milestones sind abgeschlossen und durch
