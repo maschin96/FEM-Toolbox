@@ -101,6 +101,9 @@ Beitrag zu `D` (Standard `false`). Sonst gelten die Solver-Defaults.
 Unbekannte Schlüssel und falsche Einheiten führen mit Feldpfad zu
 `ModelSchemaError`. Physikalisch unzulässige oder singuläre Fälle liefern die
 diagnostischen Fehler der zugrunde liegenden Solver.
+Bereits bei der Modellkonstruktion werden außerdem feldweise Referenzen,
+Starrkörperlagerungen und kollidierende Randbedingungen geprüft
+([Doc/23](23_MODEL_PREFLIGHT.md)).
 
 Ein vollständiger Kombinationsfall enthält beispielsweise zusätzlich zum
 oben gezeigten Wärmeteil folgende Tabellen (die Matrizen sind hier nur wegen

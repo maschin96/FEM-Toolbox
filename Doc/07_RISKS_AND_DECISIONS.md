@@ -181,6 +181,18 @@ als getrennte Teilergebnisse erhalten. Reziproke Wärme-Rückkopplung und
 Zeitabhängigkeit gehören nicht zu diesem Modell. Nachweis in
 [Doc/22](22_THERMOPIEZOELECTRIC.md).
 
+### ADR-017: Struktureller Modell-Preflight vor Assembly (#138)
+
+Der deklarative `Model`-Adapter prüft pro Tet4-Knotenkomponente feste
+Temperatur-/Potentialbezüge und den Rang mechanischer Lagerungen, bevor ein
+Feldsystem assembliert wird. Identische Dirichlet-Werte sind redundant, aber
+zulässig; unterschiedliche Werte bleiben ein Fehler. Eine Elektrode und ein
+vorgegebener D-Fluss auf derselben Facette sind als alternative elektrische
+Randgesetze unvereinbar und werden auch im direkten Solver abgelehnt.
+Lastabhängige Neumann-Kompatibilität und Kondition bleiben Diagnose der
+direkten Solver. Der Preflight setzt niemals eine Gauge oder Lagerung selbst.
+Vertrag und Tests stehen in [Doc/23](23_MODEL_PREFLIGHT.md).
+
 ## 2. Technisches Risikoregister
 
 | Risiko | Wirkung | Früher Nachweis | Gegenmaßnahme |

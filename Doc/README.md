@@ -36,6 +36,7 @@ Eintrag im Entscheidungsprotokoll.
 - [Equipotential- und Floating-Electrode-Randbedingungen](20_ELECTRODES.md)
 - [Versioniertes TOML-Modellformat und Model-API](21_MODEL_SCHEMA.md)
 - [Stationärer Ablauf T → (u, φ)](22_THERMOPIEZOELECTRIC.md)
+- [Modellweite Randbedingungs- und Nullraumprüfung](23_MODEL_PREFLIGHT.md)
 
 ## Veröffentlichungen
 
