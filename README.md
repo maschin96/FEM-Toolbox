@@ -10,7 +10,6 @@ sind das Netzmodell, Tet4-Geometrie sowie stationäre lineare Elastizität,
 Wärmeleitung und Elektrostatik. Die geplante `Model`-API und gekoppelte Felder
 sind noch nicht implementiert. Details stehen in den
 [Release Notes](Doc/releases/v0.3.0.md).
-Details zum freigegebenen Umfang stehen in den [Release Notes](Doc/releases/v0.3.0.md).
 
 [Installation](#installation) · [Schnellstart](#schnellstart) ·
 [Dokumentation](#dokumentation) · [Entwicklung](#entwicklung) ·
@@ -174,6 +173,13 @@ elektrisches Potential `phi` mit feldweiser Freiheitsgradverwaltung.
 | M5 | v1.0.0 | Elektroden, Modellformat und vollständiger stationärer Workflow | Geplant |
 | M6 | v1.1.0 | Transiente Wärmeleitung und lineare Dynamik | Geplant |
 | M7 | v1.2.0 | PETSc-Backend, Tet10 und Skalierung | Geplant |
+| M8 | v1.3.0* | Reproduzierbare Parameterstudien | Geplant |
+| M9 | v1.4.0* | Experimentelle Validierung und Unsicherheit | Geplant |
+| M10 | v1.5.0* | Kontrollierte adaptive Netzstudien | Geplant |
+
+*Vorläufige Zielversionen ohne Terminzusage. Produktvision, Bestandsanalyse,
+Abhängigkeiten und Abnahmegates stehen in der
+[zweiten Planungswelle](Doc/13_PRODUCT_VISION.md).
 
 Die deklarative API `Model.from_file(...).solve()` gehört zum geplanten
 Modellworkflow. Arbeitspakete und Abnahmekriterien stehen in der
@@ -200,8 +206,7 @@ technischen Entwurfsdokumente.
 
 Der Python-Code liegt unter `src/fem_toolbox/`. Die [Teststruktur](tests/README.md)
 unterscheidet Unit-, Patch-, Konvergenz- und Regressionstests;
-[examples/](examples/README.md) ist für spätere reproduzierbare Solverbeispiele
-vorgesehen.
+[examples/](examples/README.md) enthält drei reproduzierbare Einzelfeldbeispiele.
 
 Aus dem Repository-Root mit aktivierter Entwicklungsumgebung prüfen:
 
