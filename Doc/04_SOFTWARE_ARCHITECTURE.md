@@ -109,6 +109,14 @@ projektweiten Konvention. Jede Instanz validiert:
 Die gekoppelte Stabilität wird zusätzlich über die elektrische Enthalpie und
 geeignete Schur-Komplemente getestet.
 
+`assign_region_materials` ist der Preflight für benannte `volume_sets`: Es
+ordnet jedem aktiven Tet4 pro Feld genau ein typisiertes Material zu und
+liefert die zellweise Herkunft für Ergebnis und Provenienz. Identische
+Überlappungen sind zulässig, widersprüchliche Zuordnungen, Lücken und
+ungenutzte Definitionen nicht. Der geplante `Model`-Adapter (#25) ruft ihn
+vor der Assembly auf. Vertrag und Zweimaterialnachweis stehen in
+[Doc/19](19_MATERIAL_REGIONS.md).
+
 ### BoundaryCondition
 
 Dirichlet-Bedingungen werden als `(field, components, selection, value)`

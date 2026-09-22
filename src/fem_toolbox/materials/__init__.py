@@ -73,10 +73,13 @@ class ThermalExpansion:
     """Global engineering-Voigt expansion (6,) in 1/K and reference T in K.
 
     Material-axis tensors must be rotated into global axes by the caller.
+    ``source_axes`` records the local-to-global rotation only for values
+    constructed through ``from_principal``; direct inputs are already global.
     """
 
     alpha: NDArray[np.float64]
     reference_temperature: float
+    source_axes: NDArray[np.float64] | None
 
     def __init__(self, alpha: ArrayLike, reference_temperature: float) -> None:
         a = real_array(alpha, (6,))
@@ -87,6 +90,7 @@ class ThermalExpansion:
             )
         object.__setattr__(self, "alpha", np.frombuffer(a.tobytes(), dtype=np.float64))
         object.__setattr__(self, "reference_temperature", reference)
+        object.__setattr__(self, "source_axes", None)
 
     @classmethod
     def from_principal(
@@ -102,7 +106,7 @@ class ThermalExpansion:
                 "material axes must form a proper orthonormal frame", field="axes"
             )
         tensor = rotation @ np.diag(values) @ rotation.T
-        return cls(
+        material = cls(
             [
                 tensor[0, 0],
                 tensor[1, 1],
@@ -113,3 +117,15 @@ class ThermalExpansion:
             ],
             reference_temperature,
         )
+        object.__setattr__(
+            material,
+            "source_axes",
+            np.frombuffer(rotation.tobytes(), dtype=np.float64).reshape(3, 3),
+        )
+        return material
+
+
+from fem_toolbox.materials import regions as _regions  # noqa: E402
+
+MaterialAssignment = _regions.MaterialAssignment
+assign_region_materials = _regions.assign_region_materials

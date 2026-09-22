@@ -114,6 +114,28 @@ class BoundaryTopologyError(MeshValidationError):
         )
 
 
+class MaterialAssignmentError(ValidationError):
+    """A named volume region does not yield one valid material per active cell."""
+
+    def __init__(
+        self,
+        *,
+        kind: str,
+        field: str,
+        reason: str,
+        cell_id: int | None = None,
+        regions: tuple[str, ...] = (),
+    ) -> None:
+        self.kind = kind
+        self.cell_id = cell_id
+        self.regions = regions
+        super().__init__(
+            f"material assignment for {field}: {kind}: {reason}; "
+            f"Tet4 ID {cell_id}, regions {regions}",
+            field="material_assignment",
+        )
+
+
 class MeshIOError(FEMToolboxError):
     """A mesh could not be converted at an external-format boundary."""
 
