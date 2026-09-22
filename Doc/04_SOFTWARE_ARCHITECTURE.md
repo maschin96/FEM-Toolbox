@@ -203,6 +203,9 @@ Die API bietet drei Ebenen:
 Keine dieser Ebenen soll versteckte globale Solveroptionen besitzen.
 Der Stand des versionierten TOML-Adapters und seine Grenzen stehen in
 [Doc/21](21_MODEL_SCHEMA.md).
+Der stationäre Kombinationsmodus löst Wärme zuerst und übergibt absolute
+Knotentemperaturen an den monolithischen Piezo-Solver; seine beiden Ergebnisse
+und feldweisen Bilanzen bleiben getrennt ([Doc/22](22_THERMOPIEZOELECTRIC.md)).
 
 ## 8. Abhängigkeitsstrategie
 

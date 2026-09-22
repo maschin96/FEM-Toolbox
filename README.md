@@ -9,8 +9,8 @@ piezoelektrische Kopplungen auf Basis linearer Vierknoten-Tetraeder (**Tet4**).
 Verfügbar sind das Netzmodell, Tet4-Geometrie, drei stationäre Einzelfelder,
 die einseitige Kopplung `T → u` sowie ein monolithischer piezoelektrischer
 `u-φ`-Referenzsolver. Der aktuelle Quellstand ergänzt feste und schwebende
-Elektroden für diesen Solver und eine versionierte TOML-`Model`-API für vier
-stationäre Solver. Der kombinierte thermisch-piezoelektrische Ablauf folgt in #26.
+Elektroden für diesen Solver, eine versionierte TOML-`Model`-API und den
+einseitigen stationären Ablauf `T → (u, φ)`.
 Der Umfang der veröffentlichten Version steht in den
 [Release Notes](Doc/releases/v0.5.0.md).
 
@@ -33,6 +33,7 @@ Der Umfang der veröffentlichten Version steht in den
 | Elektrostatik | Stationäres Tet4-Potential mit anisotroper Permittivität, freien Ladungen, Gauge-Diagnostik, E-/D-Feldern und Ladungsbilanz |
 | Thermomechanik | Sequenzielle stationäre Wärme-zu-Mechanik-Kopplung mit anisotroper thermischer Expansion und regionsweisen Referenztemperaturen |
 | Piezoelektrizität | Stress-Charge-Materialdaten, Konversion und Achsrotation; gekoppelte Tet4-Operatoren und monolithische Sparse-LU-Lösung mit feldweiser Skalierung, Reaktionen, Ladungs- und Energiebilanzen |
+| Thermopiezoelektrizität | Einseitiger stationärer Ablauf `T → (u, φ)` mit regionsweiser thermischer Eigenverzerrung und getrennten Wärme-, Kraft- und Ladungsbilanzen im aktuellen Quellstand |
 
 ## Installation
 
@@ -191,7 +192,7 @@ Abhängigkeiten und Abnahmegates stehen in der
 [zweiten Planungswelle](Doc/13_PRODUCT_VISION.md).
 
 Die deklarative API `Model.from_file(...).solve()` ist für Wärme, Elastizität,
-Elektrostatik und Piezoelektrizität verfügbar. Das [TOML-Schema](Doc/21_MODEL_SCHEMA.md)
+Elektrostatik, Piezoelektrizität und den Ablauf `T → (u, φ)` verfügbar. Das [TOML-Schema](Doc/21_MODEL_SCHEMA.md)
 enthält ein ausführbares Beispiel, Einheiten und Migrationsregeln. Weitere
 Arbeitspakete und Abnahmekriterien stehen in der
 [Roadmap](Doc/06_ROADMAP.md); die Umsetzung wird über
