@@ -19,6 +19,8 @@ ab. Ein Floating-Electrode-Knoten darf keine separate Dirichlet-Vorgabe
 tragen. Eine feste Elektrode darf eine gleiche explizite Potentialvorgabe
 überlagern; unterschiedliche Werte sind ein Fehler. Eine rein schwebende
 elektrische Komponente benötigt weiterhin einen Potentialbezug.
+Ein vorgeschriebener `surface_charge`-Fluss auf derselben Facette wie eine
+Elektrode wird als widersprüchliche zweite elektrische Randbedingung abgelehnt.
 
 Im bestehenden negativen elektrischen Block ist das ursprüngliche Residuum
 `r=A x-b` auf einem Potential-Dirichlet-DOF die nach außen gerichtete
@@ -68,6 +70,7 @@ vorgegebenen nodalen Dirichlet-Werten verglichen. Globale Ladungsbilanz und
 feldweise Solverresiduen werden geprüft. Tests:
 `tests/patch/test_electrodes.py`.
 
-Die allgemeine Modellkonfiguration und Konfliktdiagnostik folgen in #25
-und #138. Externe Schaltungen und zeitabhängige Leitfähigkeit sind nicht
+Die allgemeine Modellkonfiguration und Konfliktdiagnostik stehen in
+[Doc/21](21_MODEL_SCHEMA.md) und [Doc/23](23_MODEL_PREFLIGHT.md).
+Externe Schaltungen und zeitabhängige Leitfähigkeit sind nicht
 Teil dieser Formulierung.

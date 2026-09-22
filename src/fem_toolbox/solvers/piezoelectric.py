@@ -392,6 +392,13 @@ def solve_piezoelectric(
             raise ValidationError(
                 "electrode facets must be nonempty and unique", field="electrodes"
             )
+        if surface_charges and set(int(face) for face in facets).intersection(
+            surface_charges
+        ):
+            raise ValidationError(
+                f"electrode {electrode.name!r} conflicts with prescribed surface charge",
+                field="electrodes",
+            )
         nodes = np.unique(mesh.triangle3[facets])
         if occupied.intersection(int(node) for node in nodes):
             raise ValidationError("electrode node overlap", field="electrodes")

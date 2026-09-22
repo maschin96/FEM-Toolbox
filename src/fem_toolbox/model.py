@@ -27,6 +27,7 @@ from fem_toolbox.materials import (
 )
 from fem_toolbox.materials.regions import Material
 from fem_toolbox.mesh import Mesh, inspect_boundary_topology
+from fem_toolbox.model_preflight import PrescribedDof, validate_model_constraints
 from fem_toolbox.physics.heat import Convection
 from fem_toolbox.provenance import RunProvenance
 from fem_toolbox.solvers.elasticity import (
@@ -352,10 +353,19 @@ class Model:
             ),
         )
         inspect_boundary_topology(mesh)
+        self._prescribed: list[PrescribedDof] = []
         self._conditions, self._thermal_conditions = self._parse_dirichlet()
         self._surface = self._parse_surfaces()
         self._electrodes = self._parse_electrodes()
         self._validate_loads()
+        validate_model_constraints(
+            self.mesh,
+            self.physics,
+            tuple(self._prescribed),
+            self._surface["convection"],
+            self._electrodes,
+            self._surface["surface_charge"],
+        )
 
     @classmethod
     def from_file(cls, path: str | Path) -> Model:
@@ -518,6 +528,19 @@ class Model:
                     reason=f"expected scalar, ({per_node},) or ({len(ids)},)",
                 )
             condition = Dirichlet(ids, values)
+            for node, dof, prescribed_value in zip(
+                np.repeat(nodes, per_node), ids, values, strict=True
+            ):
+                self._prescribed.append(
+                    PrescribedDof(
+                        cast(Literal["T", "u", "phi"], field),
+                        int(dof),
+                        int(node),
+                        float(prescribed_value),
+                        path,
+                        cast(str | None, entry.get("set")),
+                    )
+                )
             if self.physics == "thermopiezoelectric" and field == "T":
                 thermal_conditions.append(condition)
             else:
@@ -557,6 +580,7 @@ class Model:
                     path=f"boundary.{kind}", reason="not valid for physics mode"
                 )
             values: dict[int, Any] = {}
+            origins: dict[int, str] = {}
             for i, raw in enumerate(entries):
                 path = f"boundary.{kind}[{i}]"
                 allowed = (
@@ -577,27 +601,38 @@ class Model:
                         raise ModelSchemaError(
                             path=f"{path}.ambient_unit", reason="expected 'K'"
                         )
-                    value: Any = Convection(
-                        _number(
-                            _required(entry, "coefficient", path), f"{path}.coefficient"
-                        ),
-                        _number(
-                            _required(entry, "ambient_temperature", path),
-                            f"{path}.ambient_temperature",
-                        ),
-                    )
+                    try:
+                        value: Any = Convection(
+                            _number(
+                                _required(entry, "coefficient", path),
+                                f"{path}.coefficient",
+                            ),
+                            _number(
+                                _required(entry, "ambient_temperature", path),
+                                f"{path}.ambient_temperature",
+                            ),
+                        )
+                    except ValidationError as error:
+                        if isinstance(error, ModelSchemaError):
+                            raise
+                        raise ModelSchemaError(
+                            path=f"{path}.coefficient", reason=str(error)
+                        ) from error
                 elif kind == "traction":
                     value = _array(
                         _required(entry, "value", path), (3,), f"{path}.value"
                     )
                 else:
                     value = _number(_required(entry, "value", path), f"{path}.value")
-                for face in self._facets(_required(entry, "set", path), f"{path}.set"):
+                set_name = _required(entry, "set", path)
+                for face in self._facets(set_name, f"{path}.set"):
                     if int(face) in values:
                         raise ModelSchemaError(
-                            path=path, reason=f"facet {face} assigned twice"
+                            path=path,
+                            reason=f"facet {face} in set {set_name!r} assigned twice; previous {origins[int(face)]}",
                         )
                     values[int(face)] = value
+                    origins[int(face)] = path
             result[kind] = values
         return result
 
