@@ -35,6 +35,9 @@ Der Umfang der veröffentlichten Version steht in den
 | Piezoelektrizität | Stress-Charge-Materialdaten, Konversion und Achsrotation; gekoppelte Tet4-Operatoren und monolithische Sparse-LU-Lösung mit feldweiser Skalierung, Reaktionen, Ladungs- und Energiebilanzen |
 | Thermopiezoelektrizität | Einseitiger stationärer Ablauf `T → (u, φ)` mit regionsweiser thermischer Eigenverzerrung und getrennten Wärme-, Kraft- und Ladungsbilanzen im aktuellen Quellstand |
 
+Ein vollständiger deklarativer Lauf mit Gmsh-Eingabe, VTU-Feldern und
+Provenienzbericht steht unter [examples/thermopiezoelectric](examples/thermopiezoelectric/README.md).
+
 ## Installation
 
 Voraussetzungen sind **Python 3.11 oder neuer** und Git. Die CI prüft Python

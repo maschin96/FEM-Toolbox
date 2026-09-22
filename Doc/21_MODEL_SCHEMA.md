@@ -130,6 +130,8 @@ Beispiel mit analytischen Referenzen ist in
 [`tests/unit/test_thermopiezoelectric_model.py`](../tests/unit/test_thermopiezoelectric_model.py)
 enthalten. Die feldweisen Ergebnisse liegen unter
 `run.field_result.heat` und `run.field_result.piezoelectric`.
+Ein direkt ausführbarer Fall von Netzdatei bis Ergebnisbericht liegt unter
+[examples/thermopiezoelectric](../examples/thermopiezoelectric/README.md).
 
 ## Versions- und Migrationsregel
 
