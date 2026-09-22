@@ -193,6 +193,21 @@ Lastabhängige Neumann-Kompatibilität und Kondition bleiben Diagnose der
 direkten Solver. Der Preflight setzt niemals eine Gauge oder Lagerung selbst.
 Vertrag und Tests stehen in [Doc/23](23_MODEL_PREFLIGHT.md).
 
+### ADR-018: Explizite Datenblatt-Einheiten im Model-Schema (#139)
+
+Version 1 behält `units = "SI"` als Aussage über den Solverzustand. Für
+Materialtabellen sind wenige benannte, explizite Datenblatt-Einheiten
+zugelassen; die Umrechnung erfolgt beim Modellaufbau vor der Assembly.
+Relative Permittivität verwendet den festgelegten Wert
+`ε₀ = 8.8541878188e-12 F/m`, damit ein Lauf nicht durch eine spätere
+Konstantenbibliothek geändert wird. Absolute Celsius-Temperaturen erhalten
+den Offset `273.15`; Temperaturdifferenzen haben keinen Offset. Beide Fälle
+besitzen verschiedene Einheitenzeichen. Piezo-Tensoren werden nach der
+Konversion in die bestehenden globalen Stress-Charge-Tensoren überführt.
+Originalwerte, Faktoren, lokale Achsen und globale SI-Tensoren bleiben in der
+Laufprovenienz nachvollziehbar. Der vollständige Vertrag steht in
+[Doc/21](21_MODEL_SCHEMA.md).
+
 ## 2. Technisches Risikoregister
 
 | Risiko | Wirkung | Früher Nachweis | Gegenmaßnahme |

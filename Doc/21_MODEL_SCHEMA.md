@@ -45,8 +45,11 @@ print(run.provenance.input_sha256)
 ```
 
 `from_file` importiert nur `.toml`. Der Gmsh-Pfad muss relativ sein und innerhalb
-des Modellverzeichnisses liegen. `length_scale_to_m` ist ein positiver Faktor;
-alle anderen Eingaben sind explizite SI-Werte. `Model(mesh=mesh,
+des Modellverzeichnisses liegen. `length_scale_to_m` ist ein positiver Faktor.
+Optional kann `length_unit = "m"` oder `"mm"` angegeben werden; dann muss der
+Faktor genau `1.0` beziehungsweise `0.001` sein. Materialwerte werden mit
+expliziten Einheiten in SI umgerechnet; Lasten und die übrigen Randbedingungen
+verwenden die unten genannten SI-Einheiten. `Model(mesh=mesh,
 document=mapping)` erlaubt denselben Schema-Vertrag mit einem bereits
 eingelesenen `Mesh`. `to_document()` liefert eine unabhängige Kopie für
 Bearbeitung oder Roundtrip. Die Provenienz enthält Toolbox-Version,
@@ -66,10 +69,29 @@ widersprüchliche Zuordnungen und ungenutzte Materialien sind Fehler.
 | Material | Werte | Einheit |
 |---|---|---|
 | `T` | `conductivity`: Skalar oder 3×3 | `W/(m K)` |
-| `u` | `young` und `poisson` oder `stiffness`: 6×6 | `Pa` |
-| `phi` | `permittivity`: Skalar oder 3×3 | `F/m` |
-| `piezo` | `stiffness`: 6×6, `stress_coupling`: 3×6, `permittivity`: 3×3; optional `axes`: 3×3 | `[materials.piezo.<name>.units]` mit `stiffness = "Pa"`, `stress_coupling = "C/m^2"`, `permittivity = "F/m"` |
-| `expansion` | `alpha`: Engineering-Voigt-6-Vektor oder `principal_alpha`: 3-Vektor mit `axes`: 3×3; `reference_temperature` | `alpha_unit = "1/K"`, `reference_temperature_unit = "K"` |
+| `u` | `young` und `poisson` oder `stiffness`: 6×6 | `Pa` oder `GPa` für Druckwerte; `poisson` dimensionslos |
+| `phi` | `permittivity`: Skalar oder 3×3 | `F/m` oder `relative` |
+| `piezo`, Stress-Charge | `stiffness`: 6×6, `stress_coupling`: 3×6, `permittivity`: 3×3; optional `axes`: 3×3 | `units`: `stiffness` in `Pa` oder `GPa`, `stress_coupling` in `C/m^2`, `permittivity` in `F/m` oder `relative` |
+| `piezo`, Strain-Charge | `form = "strain_charge"`, `compliance`: 6×6, `strain_coupling`: 3×6, `permittivity_at_stress`: 3×3; optional `axes`: 3×3 | `units`: `compliance` in `1/Pa` oder `1/GPa`, `strain_coupling` in `C/N` oder `pC/N`, `permittivity_at_stress` in `F/m` oder `relative` |
+| `expansion` | `alpha`: Engineering-Voigt-6-Vektor oder `principal_alpha`: 3-Vektor mit `axes`: 3×3; `reference_temperature` | `alpha_unit = "1/K"` oder `"1/delta_degC"`; `reference_temperature_unit = "K"` oder `"degC"` |
+
+Für Piezo gilt die Stress-Charge-Form als Standard. In der Strain-Charge-Form
+werden `s^E`, `d` und `κ^T` vor dem Solve in `C^E`, `e` und `κ^S` überführt.
+`relative` bedeutet Multiplikation mit der für dieses Schema festgelegten
+Vakuumpermittivität `ε₀ = 8.8541878188e-12 F/m` (CODATA 2022); eine relative
+Zahl darf nicht als `F/m` deklariert werden.
+Die mechanische Voigt-Reihenfolge ist `xx, yy, zz, yz, xz, xy`, mit
+Engineering-Schubdehnungen. Die Zeilen der Kopplungsmatrix entsprechen den
+lokalen elektrischen Achsen `x, y, z`; `axes` enthält diese lokalen Achsen als
+Spalten im globalen Koordinatensystem. Die dritte lokale Achse ist damit die
+übliche Polarisationsrichtung eines `d33`-Datensatzes. Ohne `axes` sind die
+Eingabetensoren bereits global. Die Laufprovenienz enthält Originalwerte und
+Einheiten, Umrechnungsfaktoren, Achsen sowie effektive globale SI-Tensoren.
+
+`degC` bezeichnet ausschließlich eine absolute Temperatur und wird durch
+Addition von `273.15` in Kelvin umgerechnet. `1/delta_degC` bezeichnet den
+Kehrwert einer Temperaturdifferenz und hat denselben Zahlenwert wie `1/K`;
+`1/degC` ist absichtlich unzulässig.
 
 Randbedingungen stehen als Arrays von Tabellen unter `boundary`. Ein
 Dirichlet-Eintrag benötigt `field`, `value`, `unit` und entweder `nodes`
@@ -79,7 +101,7 @@ ist ein Skalar, ein Wert pro Komponente oder ein Wert pro ausgewähltem DOF.
 
 | Randbedingung | Modi | Werte und Einheiten |
 |---|---|---|
-| `dirichlet` | alle | `T` in `K`, `u` in `m`, `phi` in `V` |
+| `dirichlet` | alle | `T` in `K` oder `degC`, `u` in `m`, `phi` in `V` |
 | `flux` | Wärme/Kombinationsmodus | `set`, `value` in `W/m^2`; positiv nach außen |
 | `convection` | Wärme/Kombinationsmodus | `set`, `coefficient` in `W/(m^2 K)`, `ambient_temperature` in `K` und `ambient_unit = "K"` |
 | `traction` | Elastizität/Piezo/Kombinationsmodus | `set`, Vektor `value` in `N/m^2` |
