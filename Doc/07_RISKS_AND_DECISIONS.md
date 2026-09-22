@@ -136,6 +136,17 @@ Kraft (N) und Ladung (C) berechnet. Starrkörpermoden und Potential-Gauge
 werden pro Netzkomponente vor der Faktorisierung geprüft. Dies definiert den
 verifizierbaren Referenzpfad, keine Skalierungszusage für große Modelle.
 
+### ADR-013: Eindeutige Materialnamen auf konformen Tet4-Zellen (#137)
+
+Benannte Volumensätze dürfen sich überlappen, wenn sie für ein aktives Feld
+denselben Materialnamen zuweisen. Unterschiedliche Namen bleiben ein Fehler,
+selbst bei derzeit gleichen Tensorwerten: Materialidentität und Herkunft
+werden so nicht aus zufälliger Zahlenwertgleichheit abgeleitet. Die
+Materialbelegung wird pro Feld vollständig vor Assembly geprüft und in
+Tet4-Zeilenfolge mit Quellgruppen berichtet. Gemeinsame Netzknoten erzwingen
+stetige Primärvariablen; die schwache Form liefert das Flussgleichgewicht
+ohne gesonderte Grenzflächenoperatoren. Details und Grenzen in [Doc/19](19_MATERIAL_REGIONS.md).
+
 ## 2. Technisches Risikoregister
 
 | Risiko | Wirkung | Früher Nachweis | Gegenmaßnahme |
