@@ -5,6 +5,8 @@ haben ihre eigenständigen Verifikationsnachweise in Doc/10–20. Das Format
 beschreibt jeweils **einen** stationären Modus: `heat`, `elasticity`,
 `electrostatics`, `piezoelectric` oder `thermopiezoelectric`. Der letzte Modus
 löst zuerst `T` und anschließend monolithisch `(u, phi)` auf demselben Netz.
+Die physikalischen und numerischen Einsatzgrenzen für diesen geplanten
+v1.0-Umfang stehen in der [Gültigkeitsübersicht](26_VALIDITY_AND_LIMITS.md).
 
 ## Vollständiger Wärmefall
 
