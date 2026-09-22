@@ -99,6 +99,20 @@ zu unterscheiden. Die Gauge wird pro unverbundener Komponente geprüft und
 niemals automatisch gewählt. Details und unabhängige Nachweise stehen in
 [Elektrostatik](12_ELECTROSTATICS.md).
 
+### ADR-010: Piezoelektrische Materialkonversion und Rotation (#19)
+
+Intern werden `C^E`, `e` und `kappa^S` in globalen Achsen und der festgelegten
+Engineering-Voigt-Reihenfolge gespeichert. Strain-Charge-Eingaben werden mit
+`C^E=(s^E)^-1`, `e=d C^E` und `kappa^S=kappa^T-d C^E d^T` konvertiert.
+Positive Definitheit von `s^E`, `C^E` und `kappa^S` wird geprüft; die
+Permittivitätsdifferenz darf nicht stillschweigend begrenzt werden.
+Materialachsen werden als Spalten einer eigentlichen orthonormalen Rotation
+verstanden. Unterschiedliche Spannungs- und technische
+Verzerrungstransformationen verhindern einen Schubfaktorfehler. Lokale
+Eingabetensoren und globale Ergebnistensoren bleiben für die spätere
+Solverprovenienz verfügbar. Details und algebraische Referenzen stehen in
+[Piezo-Materialdaten](15_PIEZOELECTRIC_MATERIAL.md).
+
 ## 2. Technisches Risikoregister
 
 | Risiko | Wirkung | Früher Nachweis | Gegenmaßnahme |
