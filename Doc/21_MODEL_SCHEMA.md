@@ -3,7 +3,8 @@
 Status: Implementiert und durch Adaptertests geprüft. Die physikalischen Solver
 haben ihre eigenständigen Verifikationsnachweise in Doc/10–20. Das Format
 beschreibt jeweils **einen** stationären Modus: `heat`, `elasticity`,
-`electrostatics` oder `piezoelectric`. Der Ablauf `T → (u, phi)` ist #26.
+`electrostatics`, `piezoelectric` oder `thermopiezoelectric`. Der letzte Modus
+löst zuerst `T` und anschließend monolithisch `(u, phi)` auf demselben Netz.
 
 ## Vollständiger Wärmefall
 
@@ -56,7 +57,9 @@ Materialzuordnung und Solver-Eingaben.
 
 `materials.<field>.<name>` definiert einen Materialkatalog;
 `regions.<field>.<volume_set> = "<name>"` ordnet jedem aktiven Tet4 genau ein
-Material zu. Die Feldnamen sind `T`, `u`, `phi` und `piezo` für die vier Modi.
+Material zu. Die Feldnamen sind `T`, `u`, `phi` und `piezo` für die Einzelmodi.
+`thermopiezoelectric` benötigt getrennte `T`-, `piezo`- und
+`expansion`-Kataloge und Regionszuordnungen.
 Überlappende Volumensätze müssen dieselbe Zuordnung ergeben. Lücken,
 widersprüchliche Zuordnungen und ungenutzte Materialien sind Fehler.
 
@@ -66,6 +69,7 @@ widersprüchliche Zuordnungen und ungenutzte Materialien sind Fehler.
 | `u` | `young` und `poisson` oder `stiffness`: 6×6 | `Pa` |
 | `phi` | `permittivity`: Skalar oder 3×3 | `F/m` |
 | `piezo` | `stiffness`: 6×6, `stress_coupling`: 3×6, `permittivity`: 3×3; optional `axes`: 3×3 | `[materials.piezo.<name>.units]` mit `stiffness = "Pa"`, `stress_coupling = "C/m^2"`, `permittivity = "F/m"` |
+| `expansion` | `alpha`: Engineering-Voigt-6-Vektor oder `principal_alpha`: 3-Vektor mit `axes`: 3×3; `reference_temperature` | `alpha_unit = "1/K"`, `reference_temperature_unit = "K"` |
 
 Randbedingungen stehen als Arrays von Tabellen unter `boundary`. Ein
 Dirichlet-Eintrag benötigt `field`, `value`, `unit` und entweder `nodes`
@@ -76,20 +80,56 @@ ist ein Skalar, ein Wert pro Komponente oder ein Wert pro ausgewähltem DOF.
 | Randbedingung | Modi | Werte und Einheiten |
 |---|---|---|
 | `dirichlet` | alle | `T` in `K`, `u` in `m`, `phi` in `V` |
-| `flux` | Wärme | `set`, `value` in `W/m^2`; positiv nach außen |
-| `convection` | Wärme | `set`, `coefficient` in `W/(m^2 K)`, `ambient_temperature` in `K` und `ambient_unit = "K"` |
-| `traction` | Elastizität/Piezo | `set`, Vektor `value` in `N/m^2` |
-| `surface_charge` | Elektrostatik/Piezo | `set`, `value` in `C/m^2` |
-| `electrodes` | Piezo | `name`, `set`, entweder `potential` mit `potential_unit = "V"` oder `charge` mit `charge_unit = "C"` |
+| `flux` | Wärme/Kombinationsmodus | `set`, `value` in `W/m^2`; positiv nach außen |
+| `convection` | Wärme/Kombinationsmodus | `set`, `coefficient` in `W/(m^2 K)`, `ambient_temperature` in `K` und `ambient_unit = "K"` |
+| `traction` | Elastizität/Piezo/Kombinationsmodus | `set`, Vektor `value` in `N/m^2` |
+| `surface_charge` | Elektrostatik/Piezo/Kombinationsmodus | `set`, `value` in `C/m^2` |
+| `electrodes` | Piezo/Kombinationsmodus | `name`, `set`, entweder `potential` mit `potential_unit = "V"` oder `charge` mit `charge_unit = "C"` |
 
-`[loads.source]` (Wärme) verwendet `value` in `W/m^3`,
-`[loads.body_force]` (Elastizität/Piezo) einen 3-Vektor in `N/m^3` und
-`[loads.volume_charge]` (Elektrostatik/Piezo) `value` in `C/m^3`.
-`[solver]` ist nur bei Piezo zulässig: `method = "direct"` und
-`block_scaling = true/false`; sonst gelten die dokumentierten Solver-Defaults.
+Im Kombinationsmodus gelten Wärme-Randbedingungen für den ersten Solve und
+Mechanik-/Elektro-Randbedingungen für den zweiten. `T`-Dirichlet-Indizes sind
+von den `u`-/`phi`-DOFs getrennt; gleichnamige Knoten referenzieren denselben
+geometrischen Punkt.
+
+`[loads.source]` (Wärme/Kombination) verwendet `value` in `W/m^3`,
+`[loads.body_force]` (Elastizität/Piezo/Kombination) einen 3-Vektor in `N/m^3` und
+`[loads.volume_charge]` (Elektrostatik/Piezo/Kombination) `value` in `C/m^3`.
+`[solver]` ist bei Piezo und im Kombinationsmodus zulässig:
+`method = "direct"` und `block_scaling = true/false`. Im Kombinationsmodus
+steuert `electric_thermal_strain = true/false` explizit den thermischen
+Beitrag zu `D` (Standard `false`). Sonst gelten die Solver-Defaults.
 Unbekannte Schlüssel und falsche Einheiten führen mit Feldpfad zu
 `ModelSchemaError`. Physikalisch unzulässige oder singuläre Fälle liefern die
 diagnostischen Fehler der zugrunde liegenden Solver.
+
+Ein vollständiger Kombinationsfall enthält beispielsweise zusätzlich zum
+oben gezeigten Wärmeteil folgende Tabellen (die Matrizen sind hier nur wegen
+der Kürze durch Platzhalter beschrieben; gültige Dateien enthalten alle
+Zahlenwerte):
+
+```toml
+physics = "thermopiezoelectric"
+
+[materials.expansion.solid]
+alpha = [0.01, 0, 0, 0, 0, 0]
+alpha_unit = "1/K"
+reference_temperature = 300.0
+reference_temperature_unit = "K"
+
+[regions.expansion]
+ceramic = "solid"
+
+[solver]
+electric_thermal_strain = true
+block_scaling = true
+```
+
+Hinzu kommen `[materials.piezo.solid]`, `[regions.piezo]` und passende
+`u`-/`phi`-Dirichlet-Einträge. Das ausführbare Python- und TOML-End-to-End-
+Beispiel mit analytischen Referenzen ist in
+[`tests/unit/test_thermopiezoelectric_model.py`](../tests/unit/test_thermopiezoelectric_model.py)
+enthalten. Die feldweisen Ergebnisse liegen unter
+`run.field_result.heat` und `run.field_result.piezoelectric`.
 
 ## Versions- und Migrationsregel
 

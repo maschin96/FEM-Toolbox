@@ -1,4 +1,4 @@
-"""Strict versioned TOML/Python model adapter for stationary single-field solves."""
+"""Strict versioned TOML/Python adapter for stationary field workflows."""
 
 from __future__ import annotations
 
@@ -21,6 +21,7 @@ from fem_toolbox.materials import (
     ElasticMaterial,
     MaterialAssignment,
     PiezoelectricMaterial,
+    ThermalExpansion,
     ThermalMaterial,
     assign_region_materials,
 )
@@ -44,14 +45,27 @@ from fem_toolbox.solvers.piezoelectric import (
     piezoelectric_dofs,
     solve_piezoelectric,
 )
+from fem_toolbox.solvers.thermopiezoelectric import (
+    ThermopiezoelectricResult,
+    solve_thermopiezoelectric,
+)
 
-Physics = Literal["heat", "elasticity", "electrostatics", "piezoelectric"]
-FieldResult = HeatResult | ElasticResult | ElectrostaticResult | PiezoelectricResult
+Physics = Literal[
+    "heat", "elasticity", "electrostatics", "piezoelectric", "thermopiezoelectric"
+]
+FieldResult = (
+    HeatResult
+    | ElasticResult
+    | ElectrostaticResult
+    | PiezoelectricResult
+    | ThermopiezoelectricResult
+)
 _FIELDS: dict[str, str] = {
     "heat": "T",
     "elasticity": "u",
     "electrostatics": "phi",
     "piezoelectric": "piezo",
+    "thermopiezoelectric": "piezo",
 }
 _BOUNDARY_KEYS = {
     "dirichlet",
@@ -142,6 +156,48 @@ def _material(field: str, value: object, path: str) -> Material:
                 DielectricMaterial.isotropic(_number(raw, f"{path}.permittivity"))
                 if np.asarray(raw).ndim == 0
                 else DielectricMaterial(_array(raw, (3, 3), f"{path}.permittivity"))
+            )
+        if field == "expansion":
+            _mapping(
+                table,
+                path,
+                {
+                    "alpha",
+                    "alpha_unit",
+                    "principal_alpha",
+                    "axes",
+                    "reference_temperature",
+                    "reference_temperature_unit",
+                },
+            )
+            if table.get("alpha_unit") != "1/K":
+                raise ModelSchemaError(
+                    path=f"{path}.alpha_unit", reason="expected '1/K'"
+                )
+            if table.get("reference_temperature_unit") != "K":
+                raise ModelSchemaError(
+                    path=f"{path}.reference_temperature_unit", reason="expected 'K'"
+                )
+            reference = _number(
+                _required(table, "reference_temperature", path),
+                f"{path}.reference_temperature",
+            )
+            if "alpha" in table:
+                if "principal_alpha" in table or "axes" in table:
+                    raise ModelSchemaError(
+                        path=path, reason="choose alpha or principal_alpha with axes"
+                    )
+                return ThermalExpansion(
+                    _array(table["alpha"], (6,), f"{path}.alpha"), reference
+                )
+            return ThermalExpansion.from_principal(
+                _array(
+                    _required(table, "principal_alpha", path),
+                    (3,),
+                    f"{path}.principal_alpha",
+                ),
+                reference,
+                _array(_required(table, "axes", path), (3, 3), f"{path}.axes"),
             )
         _mapping(
             table,
@@ -243,33 +299,42 @@ class Model:
         self.mesh = mesh
         if "mesh" in table:
             _mapping(table["mesh"], "mesh", {"path", "length_scale_to_m"})
-        field = _FIELDS[self.physics]
+        fields = (
+            ("T", "piezo", "expansion")
+            if self.physics == "thermopiezoelectric"
+            else (_FIELDS[self.physics],)
+        )
         material_tables = _mapping(
-            _required(table, "materials", "document"), "materials", {field}
+            _required(table, "materials", "document"), "materials", set(fields)
         )
-        catalog = _mapping(
-            _required(material_tables, field, "materials"), f"materials.{field}"
-        )
-        materials = {
-            name: _material(field, value, f"materials.{field}.{name}")
-            for name, value in catalog.items()
-        }
         region_tables = _mapping(
-            _required(table, "regions", "document"), "regions", {field}
+            _required(table, "regions", "document"), "regions", set(fields)
         )
-        region_map = _mapping(
-            _required(region_tables, field, "regions"), f"regions.{field}"
-        )
-        if any(not isinstance(name, str) for name in region_map.values()):
-            raise ModelSchemaError(
-                path=f"regions.{field}", reason="material names must be strings"
+        self.assignments: dict[str, MaterialAssignment] = {}
+        for field in fields:
+            catalog = _mapping(
+                _required(material_tables, field, "materials"), f"materials.{field}"
             )
-        try:
-            self.assignment: MaterialAssignment = assign_region_materials(
-                mesh, field, region_map, materials
+            materials = {
+                name: _material(field, value, f"materials.{field}.{name}")
+                for name, value in catalog.items()
+            }
+            region_map = _mapping(
+                _required(region_tables, field, "regions"), f"regions.{field}"
             )
-        except ValidationError as error:
-            raise ModelSchemaError(path="regions", reason=str(error)) from error
+            if any(not isinstance(name, str) for name in region_map.values()):
+                raise ModelSchemaError(
+                    path=f"regions.{field}", reason="material names must be strings"
+                )
+            try:
+                self.assignments[field] = assign_region_materials(
+                    mesh, field, region_map, materials
+                )
+            except ValidationError as error:
+                raise ModelSchemaError(
+                    path=f"regions.{field}", reason=str(error)
+                ) from error
+        self.assignment = self.assignments[_FIELDS[self.physics]]
         self._document = raw
         self._boundary = _mapping(table.get("boundary", {}), "boundary", _BOUNDARY_KEYS)
         self._loads = _mapping(
@@ -278,10 +343,16 @@ class Model:
         self._solver = _mapping(
             table.get("solver", {}),
             "solver",
-            {"block_scaling", "method"} if self.physics == "piezoelectric" else set(),
+            (
+                {"block_scaling", "method", "electric_thermal_strain"}
+                if self.physics == "thermopiezoelectric"
+                else {"block_scaling", "method"}
+                if self.physics == "piezoelectric"
+                else set()
+            ),
         )
         inspect_boundary_topology(mesh)
-        self._conditions = self._parse_dirichlet()
+        self._conditions, self._thermal_conditions = self._parse_dirichlet()
         self._surface = self._parse_surfaces()
         self._electrodes = self._parse_electrodes()
         self._validate_loads()
@@ -370,16 +441,21 @@ class Model:
             )
         return array.astype(np.int64)
 
-    def _parse_dirichlet(self) -> tuple[Dirichlet, ...]:
+    def _parse_dirichlet(self) -> tuple[tuple[Dirichlet, ...], tuple[Dirichlet, ...]]:
         entries = self._boundary.get("dirichlet", [])
         if not isinstance(entries, list):
             raise ModelSchemaError(
                 path="boundary.dirichlet", reason="expected array of tables"
             )
         conditions: list[Dirichlet] = []
-        dofs = self._dofs()
+        thermal_conditions: list[Dirichlet] = []
+        dofs = None if self.physics == "thermopiezoelectric" else self._dofs()
         allowed_fields = (
-            {"u", "phi"} if self.physics == "piezoelectric" else {_FIELDS[self.physics]}
+            {"T", "u", "phi"}
+            if self.physics == "thermopiezoelectric"
+            else {"u", "phi"}
+            if self.physics == "piezoelectric"
+            else {_FIELDS[self.physics]}
         )
         for i, raw in enumerate(entries):
             path = f"boundary.dirichlet[{i}]"
@@ -406,7 +482,17 @@ class Model:
                 )
             selected = None if components is None else tuple(components)
             try:
-                ids = dofs.indices(field, nodes, selected)
+                field_dofs = (
+                    (
+                        thermal_dofs(self.mesh)
+                        if field == "T"
+                        else piezoelectric_dofs(self.mesh)
+                    )
+                    if self.physics == "thermopiezoelectric"
+                    else dofs
+                )
+                assert field_dofs is not None
+                ids = field_dofs.indices(field, nodes, selected)
             except ValidationError as error:
                 raise ModelSchemaError(
                     path=f"{path}.nodes", reason=str(error)
@@ -431,8 +517,12 @@ class Model:
                     path=f"{path}.value",
                     reason=f"expected scalar, ({per_node},) or ({len(ids)},)",
                 )
-            conditions.append(Dirichlet(ids, values))
-        return tuple(conditions)
+            condition = Dirichlet(ids, values)
+            if self.physics == "thermopiezoelectric" and field == "T":
+                thermal_conditions.append(condition)
+            else:
+                conditions.append(condition)
+        return tuple(conditions), tuple(thermal_conditions)
 
     def _facets(self, name: object, path: str) -> np.ndarray:
         if not isinstance(name, str) or name not in self.mesh.facet_sets:
@@ -445,10 +535,16 @@ class Model:
     def _parse_surfaces(self) -> dict[str, dict[int, Any]]:
         result: dict[str, dict[int, Any]] = {}
         contracts = {
-            "flux": ({"heat"}, "W/m^2"),
-            "convection": ({"heat"}, "W/(m^2 K)"),
-            "traction": ({"elasticity", "piezoelectric"}, "N/m^2"),
-            "surface_charge": ({"electrostatics", "piezoelectric"}, "C/m^2"),
+            "flux": ({"heat", "thermopiezoelectric"}, "W/m^2"),
+            "convection": ({"heat", "thermopiezoelectric"}, "W/(m^2 K)"),
+            "traction": (
+                {"elasticity", "piezoelectric", "thermopiezoelectric"},
+                "N/m^2",
+            ),
+            "surface_charge": (
+                {"electrostatics", "piezoelectric", "thermopiezoelectric"},
+                "C/m^2",
+            ),
         }
         for kind, (modes, unit) in contracts.items():
             entries = self._boundary.get(kind, [])
@@ -511,7 +607,7 @@ class Model:
             raise ModelSchemaError(
                 path="boundary.electrodes", reason="expected array of tables"
             )
-        if entries and self.physics != "piezoelectric":
+        if entries and self.physics not in ("piezoelectric", "thermopiezoelectric"):
             raise ModelSchemaError(
                 path="boundary.electrodes", reason="requires piezoelectric mode"
             )
@@ -560,9 +656,17 @@ class Model:
 
     def _validate_loads(self) -> None:
         contracts = {
-            "source": ({"heat"}, "W/m^3", ()),
-            "body_force": ({"elasticity", "piezoelectric"}, "N/m^3", (3,)),
-            "volume_charge": ({"electrostatics", "piezoelectric"}, "C/m^3", ()),
+            "source": ({"heat", "thermopiezoelectric"}, "W/m^3", ()),
+            "body_force": (
+                {"elasticity", "piezoelectric", "thermopiezoelectric"},
+                "N/m^3",
+                (3,),
+            ),
+            "volume_charge": (
+                {"electrostatics", "piezoelectric", "thermopiezoelectric"},
+                "C/m^3",
+                (),
+            ),
         }
         for name, raw in self._loads.items():
             modes, unit, shape = contracts[name]
@@ -575,7 +679,7 @@ class Model:
             _array(
                 _required(table, "value", f"loads.{name}"), shape, f"loads.{name}.value"
             )
-        if self.physics == "piezoelectric":
+        if self.physics in ("piezoelectric", "thermopiezoelectric"):
             if "block_scaling" in self._solver and not isinstance(
                 self._solver["block_scaling"], bool
             ):
@@ -586,6 +690,14 @@ class Model:
                 raise ModelSchemaError(
                     path="solver.method", reason="only direct is supported"
                 )
+        if (
+            self.physics == "thermopiezoelectric"
+            and "electric_thermal_strain" in self._solver
+            and not isinstance(self._solver["electric_thermal_strain"], bool)
+        ):
+            raise ModelSchemaError(
+                path="solver.electric_thermal_strain", reason="expected boolean"
+            )
 
     def _load_value(self, name: str, default: Any) -> Any:
         return self._loads[name]["value"] if name in self._loads else default
@@ -618,7 +730,7 @@ class Model:
                 volume_charge=self._load_value("volume_charge", 0.0),
                 surface_charges=self._surface["surface_charge"],
             )
-        else:
+        elif self.physics == "piezoelectric":
             result = solve_piezoelectric(
                 self.mesh,
                 cast(Sequence[PiezoelectricMaterial], mats),
@@ -631,17 +743,61 @@ class Model:
                 block_scaling=self._solver.get("block_scaling", True),
                 method=self._solver.get("method", "direct"),
             )
-        canonical = json.dumps(
-            {
-                "document": self._document,
-                "mesh": {
-                    "points": self.mesh.points.tolist(),
-                    "tetra4": self.mesh.tetra4.tolist(),
-                    "triangle3": self.mesh.triangle3.tolist(),
-                },
-                "assignment": self.assignment.to_provenance_dict(),
-                "solver_input_sha256": result.provenance.input_sha256,
+        else:
+            result = solve_thermopiezoelectric(
+                self.mesh,
+                cast(Sequence[ThermalMaterial], self.assignments["T"].cell_materials),
+                cast(Sequence[PiezoelectricMaterial], mats),
+                cast(
+                    Sequence[ThermalExpansion],
+                    self.assignments["expansion"].cell_materials,
+                ),
+                self._thermal_conditions,
+                self._conditions,
+                source=self._load_value("source", 0.0),
+                outward_fluxes=self._surface["flux"],
+                convection=self._surface["convection"],
+                body_force=self._load_value("body_force", (0.0, 0.0, 0.0)),
+                volume_charge=self._load_value("volume_charge", 0.0),
+                tractions=self._surface["traction"],
+                surface_charges=self._surface["surface_charge"],
+                electrodes=self._electrodes,
+                electric_thermal_strain=self._solver.get(
+                    "electric_thermal_strain", False
+                ),
+                block_scaling=self._solver.get("block_scaling", True),
+                method=self._solver.get("method", "direct"),
+            )
+        if isinstance(result, ThermopiezoelectricResult):
+            solver_hashes: str | dict[str, str] = {
+                "heat": result.heat.provenance.input_sha256,
+                "piezoelectric": result.piezoelectric.provenance.input_sha256,
+            }
+            solver_names: str | list[str] = [
+                result.heat.provenance.solver_name,
+                result.piezoelectric.provenance.solver_name,
+            ]
+        else:
+            solver_hashes = result.provenance.input_sha256
+            solver_names = result.provenance.solver_name
+        canonical_input = {
+            "document": self._document,
+            "mesh": {
+                "points": self.mesh.points.tolist(),
+                "tetra4": self.mesh.tetra4.tolist(),
+                "triangle3": self.mesh.triangle3.tolist(),
             },
+            "solver_input_sha256": solver_hashes,
+        }
+        if isinstance(result, ThermopiezoelectricResult):
+            canonical_input["assignments"] = {
+                field: assignment.to_provenance_dict()
+                for field, assignment in sorted(self.assignments.items())
+            }
+        else:
+            canonical_input["assignment"] = self.assignment.to_provenance_dict()
+        canonical = json.dumps(
+            canonical_input,
             sort_keys=True,
             separators=(",", ":"),
             allow_nan=False,
@@ -652,8 +808,8 @@ class Model:
             solver_parameters={
                 "model_schema_version": 1,
                 "units": "SI",
-                "field_solver": result.provenance.solver_name,
-                "field_solver_input_sha256": result.provenance.input_sha256,
+                "field_solver": solver_names,
+                "field_solver_input_sha256": solver_hashes,
             },
         )
         return ModelResult(self.physics, result, provenance)

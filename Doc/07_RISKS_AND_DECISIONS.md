@@ -166,9 +166,20 @@ ohne zusätzliche Laufzeitabhängigkeit. Unbekannte Schlüssel und andere
 Schemaversionen werden abgelehnt; inkompatible Änderungen erhalten eine neue
 Version mit expliziter Migration. Der Adapter ordnet benannte Materialien und
 Randbedingungen zu und übergibt sie an die verifizierten Referenzsolver.
-Die vier bestehenden stationären Modi sind einzeln auswählbar; die kombinierte
-thermisch-piezoelektrische Orchestrierung bleibt #26. Format und API stehen in
+Die vier bestehenden stationären Einzelmodi sind auswählbar; die kombinierte
+thermisch-piezoelektrische Orchestrierung wurde mit #26 ergänzt. Format und API stehen in
 [Doc/21](21_MODEL_SCHEMA.md).
+
+### ADR-016: Einseitiger T-Transfer in den monolithischen Piezo-Solver (#26)
+
+Der stationäre Ablauf löst Wärme zuerst und übergibt absolute Knotenwerte an
+den vorhandenen monolithischen `u-φ`-Referenzsolver. Die thermische
+Eigenverzerrung wird je Zelle aus einem explizit zugeordneten
+`ThermalExpansion`-Material berechnet; der elektrische thermische Beitrag
+bleibt ein ausdrücklicher Schalter. Feldweise Residuen und Bilanzen werden
+als getrennte Teilergebnisse erhalten. Reziproke Wärme-Rückkopplung und
+Zeitabhängigkeit gehören nicht zu diesem Modell. Nachweis in
+[Doc/22](22_THERMOPIEZOELECTRIC.md).
 
 ## 2. Technisches Risikoregister
 
