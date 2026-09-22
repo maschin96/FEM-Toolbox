@@ -76,6 +76,7 @@ _BOUNDARY_KEYS = {
     "surface_charge",
     "electrodes",
 }
+_VACUUM_PERMITTIVITY_F_PER_M = 8.8541878188e-12
 
 
 def _mapping(
@@ -122,6 +123,59 @@ def _unit(table: Mapping[str, Any], expected: str, path: str) -> None:
         )
 
 
+def _factor(
+    units: Mapping[str, Any], key: str, choices: Mapping[str, float], path: str
+) -> float:
+    unit = _required(units, key, path)
+    if not isinstance(unit, str) or unit not in choices:
+        raise ModelSchemaError(
+            path=f"{path}.{key}", reason=f"expected one of {sorted(choices)}"
+        )
+    return choices[unit]
+
+
+def _material_factors(field: str, value: Mapping[str, Any]) -> dict[str, float]:
+    """Record scalar conversions after material validation has succeeded."""
+    if field == "T":
+        return {"conductivity": 1.0}
+    if field == "u":
+        return {
+            "stiffness" if "stiffness" in value else "young": {"Pa": 1.0, "GPa": 1e9}[
+                value["unit"]
+            ]
+        }
+    if field == "phi":
+        return {
+            "permittivity": {"F/m": 1.0, "relative": _VACUUM_PERMITTIVITY_F_PER_M}[
+                value["unit"]
+            ]
+        }
+    if field == "expansion":
+        return {
+            "alpha": 1.0,
+            "reference_temperature_offset_K": 273.15
+            if value["reference_temperature_unit"] == "degC"
+            else 0.0,
+        }
+    units = value["units"]
+    if value.get("form") == "strain_charge":
+        return {
+            "compliance": {"1/Pa": 1.0, "1/GPa": 1e-9}[units["compliance"]],
+            "strain_coupling": {"C/N": 1.0, "pC/N": 1e-12}[units["strain_coupling"]],
+            "permittivity_at_stress": {
+                "F/m": 1.0,
+                "relative": _VACUUM_PERMITTIVITY_F_PER_M,
+            }[units["permittivity_at_stress"]],
+        }
+    return {
+        "stiffness": {"Pa": 1.0, "GPa": 1e9}[units["stiffness"]],
+        "stress_coupling": 1.0,
+        "permittivity": {"F/m": 1.0, "relative": _VACUUM_PERMITTIVITY_F_PER_M}[
+            units["permittivity"]
+        ],
+    }
+
+
 def _material(field: str, value: object, path: str) -> Material:
     table = _mapping(value, path)
     try:
@@ -136,7 +190,7 @@ def _material(field: str, value: object, path: str) -> Material:
             )
         if field == "u":
             _mapping(table, path, {"stiffness", "young", "poisson", "unit"})
-            _unit(table, "Pa", path)
+            pressure_factor = _factor(table, "unit", {"Pa": 1.0, "GPa": 1e9}, path)
             if "stiffness" in table and ("young" in table or "poisson" in table):
                 raise ModelSchemaError(
                     path=path, reason="choose stiffness or young/poisson"
@@ -144,19 +198,30 @@ def _material(field: str, value: object, path: str) -> Material:
             if "stiffness" in table:
                 return ElasticMaterial(
                     _array(table["stiffness"], (6, 6), f"{path}.stiffness")
+                    * pressure_factor
                 )
             return ElasticMaterial.isotropic(
-                _number(_required(table, "young", path), f"{path}.young"),
+                _number(_required(table, "young", path), f"{path}.young")
+                * pressure_factor,
                 _number(_required(table, "poisson", path), f"{path}.poisson"),
             )
         if field == "phi":
             _mapping(table, path, {"permittivity", "unit"})
-            _unit(table, "F/m", path)
+            dielectric_factor = _factor(
+                table,
+                "unit",
+                {"F/m": 1.0, "relative": _VACUUM_PERMITTIVITY_F_PER_M},
+                path,
+            )
             raw = _required(table, "permittivity", path)
             return (
-                DielectricMaterial.isotropic(_number(raw, f"{path}.permittivity"))
+                DielectricMaterial.isotropic(
+                    _number(raw, f"{path}.permittivity") * dielectric_factor
+                )
                 if np.asarray(raw).ndim == 0
-                else DielectricMaterial(_array(raw, (3, 3), f"{path}.permittivity"))
+                else DielectricMaterial(
+                    _array(raw, (3, 3), f"{path}.permittivity") * dielectric_factor
+                )
             )
         if field == "expansion":
             _mapping(
@@ -171,18 +236,21 @@ def _material(field: str, value: object, path: str) -> Material:
                     "reference_temperature_unit",
                 },
             )
-            if table.get("alpha_unit") != "1/K":
+            if table.get("alpha_unit") not in ("1/K", "1/delta_degC"):
                 raise ModelSchemaError(
-                    path=f"{path}.alpha_unit", reason="expected '1/K'"
+                    path=f"{path}.alpha_unit", reason="expected '1/K' or '1/delta_degC'"
                 )
-            if table.get("reference_temperature_unit") != "K":
+            if table.get("reference_temperature_unit") not in ("K", "degC"):
                 raise ModelSchemaError(
-                    path=f"{path}.reference_temperature_unit", reason="expected 'K'"
+                    path=f"{path}.reference_temperature_unit",
+                    reason="expected 'K' or 'degC'",
                 )
             reference = _number(
                 _required(table, "reference_temperature", path),
                 f"{path}.reference_temperature",
             )
+            if table["reference_temperature_unit"] == "degC":
+                reference += 273.15
             if "alpha" in table:
                 if "principal_alpha" in table or "axes" in table:
                     raise ModelSchemaError(
@@ -200,40 +268,102 @@ def _material(field: str, value: object, path: str) -> Material:
                 reference,
                 _array(_required(table, "axes", path), (3, 3), f"{path}.axes"),
             )
+        form = table.get("form", "stress_charge")
+        if not isinstance(form, str) or form not in ("stress_charge", "strain_charge"):
+            raise ModelSchemaError(
+                path=f"{path}.form", reason="expected stress_charge or strain_charge"
+            )
+        if form == "strain_charge":
+            _mapping(
+                table,
+                path,
+                {
+                    "form",
+                    "compliance",
+                    "strain_coupling",
+                    "permittivity_at_stress",
+                    "axes",
+                    "units",
+                },
+            )
+            units = _mapping(
+                _required(table, "units", path),
+                f"{path}.units",
+                {"compliance", "strain_coupling", "permittivity_at_stress"},
+            )
+            unit_path = f"{path}.units"
+            s_factor = _factor(
+                units, "compliance", {"1/Pa": 1.0, "1/GPa": 1e-9}, unit_path
+            )
+            d_factor = _factor(
+                units, "strain_coupling", {"C/N": 1.0, "pC/N": 1e-12}, unit_path
+            )
+            k_factor = _factor(
+                units,
+                "permittivity_at_stress",
+                {"F/m": 1.0, "relative": _VACUUM_PERMITTIVITY_F_PER_M},
+                unit_path,
+            )
+            axes = (
+                None
+                if "axes" not in table
+                else _array(table["axes"], (3, 3), f"{path}.axes")
+            )
+            return PiezoelectricMaterial.from_strain_charge(
+                _array(
+                    _required(table, "compliance", path), (6, 6), f"{path}.compliance"
+                )
+                * s_factor,
+                _array(
+                    _required(table, "strain_coupling", path),
+                    (3, 6),
+                    f"{path}.strain_coupling",
+                )
+                * d_factor,
+                _array(
+                    _required(table, "permittivity_at_stress", path),
+                    (3, 3),
+                    f"{path}.permittivity_at_stress",
+                )
+                * k_factor,
+                axes=axes,
+            )
         _mapping(
             table,
             path,
-            {"stiffness", "stress_coupling", "permittivity", "axes", "units"},
+            {"form", "stiffness", "stress_coupling", "permittivity", "axes", "units"},
         )
         units = _mapping(
             _required(table, "units", path),
             f"{path}.units",
             {"stiffness", "stress_coupling", "permittivity"},
         )
-        for key, expected in {
-            "stiffness": "Pa",
-            "stress_coupling": "C/m^2",
-            "permittivity": "F/m",
-        }.items():
-            if _required(units, key, f"{path}.units") != expected:
-                raise ModelSchemaError(
-                    path=f"{path}.units.{key}", reason=f"expected {expected}"
-                )
+        c_factor = _factor(units, "stiffness", {"Pa": 1.0, "GPa": 1e9}, f"{path}.units")
+        e_factor = _factor(units, "stress_coupling", {"C/m^2": 1.0}, f"{path}.units")
+        k_factor = _factor(
+            units,
+            "permittivity",
+            {"F/m": 1.0, "relative": _VACUUM_PERMITTIVITY_F_PER_M},
+            f"{path}.units",
+        )
         axes = (
             None
             if "axes" not in table
             else _array(table["axes"], (3, 3), f"{path}.axes")
         )
         return PiezoelectricMaterial(
-            _array(_required(table, "stiffness", path), (6, 6), f"{path}.stiffness"),
+            _array(_required(table, "stiffness", path), (6, 6), f"{path}.stiffness")
+            * c_factor,
             _array(
                 _required(table, "stress_coupling", path),
                 (3, 6),
                 f"{path}.stress_coupling",
-            ),
+            )
+            * e_factor,
             _array(
                 _required(table, "permittivity", path), (3, 3), f"{path}.permittivity"
-            ),
+            )
+            * k_factor,
             axes=axes,
         )
     except ValidationError as error:
@@ -299,7 +429,22 @@ class Model:
         self.physics = cast(Physics, physics)
         self.mesh = mesh
         if "mesh" in table:
-            _mapping(table["mesh"], "mesh", {"path", "length_scale_to_m"})
+            mesh_spec = _mapping(
+                table["mesh"], "mesh", {"path", "length_scale_to_m", "length_unit"}
+            )
+            if "length_unit" in mesh_spec:
+                expected_scale = _factor(
+                    mesh_spec, "length_unit", {"m": 1.0, "mm": 1e-3}, "mesh"
+                )
+                actual_scale = _number(
+                    _required(mesh_spec, "length_scale_to_m", "mesh"),
+                    "mesh.length_scale_to_m",
+                )
+                if actual_scale != expected_scale:
+                    raise ModelSchemaError(
+                        path="mesh.length_scale_to_m",
+                        reason="inconsistent with length_unit",
+                    )
         fields = (
             ("T", "piezo", "expansion")
             if self.physics == "thermopiezoelectric"
@@ -337,6 +482,17 @@ class Model:
                 ) from error
         self.assignment = self.assignments[_FIELDS[self.physics]]
         self._document = raw
+        self._material_inputs = {
+            field: {
+                name: {
+                    "source": value,
+                    "units": value.get("units", {"unit": value.get("unit")}),
+                    "si_factors": _material_factors(field, value),
+                }
+                for name, value in catalog.items()
+            }
+            for field, catalog in material_tables.items()
+        }
         self._boundary = _mapping(table.get("boundary", {}), "boundary", _BOUNDARY_KEYS)
         self._loads = _mapping(
             table.get("loads", {}), "loads", {"source", "body_force", "volume_charge"}
@@ -381,7 +537,7 @@ class Model:
         mesh_table = _mapping(
             _required(document, "mesh", "document"),
             "mesh",
-            {"path", "length_scale_to_m"},
+            {"path", "length_scale_to_m", "length_unit"},
         )
         mesh_name = _required(mesh_table, "path", "mesh")
         if (
@@ -477,7 +633,10 @@ class Model:
                 raise ModelSchemaError(
                     path=f"{path}.field", reason=f"inactive field {field!r}"
                 )
-            _unit(entry, {"u": "m", "T": "K", "phi": "V"}[field], path)
+            if field == "T" and entry.get("unit") == "degC":
+                pass
+            else:
+                _unit(entry, {"u": "m", "T": "K", "phi": "V"}[field], path)
             nodes = self._nodes(entry, path)
             components = entry.get("components")
             if components is not None and (
@@ -527,6 +686,8 @@ class Model:
                     path=f"{path}.value",
                     reason=f"expected scalar, ({per_node},) or ({len(ids)},)",
                 )
+            if field == "T" and entry["unit"] == "degC":
+                values = values + 273.15
             condition = Dirichlet(ids, values)
             for node, dof, prescribed_value in zip(
                 np.repeat(nodes, per_node), ids, values, strict=True
@@ -845,6 +1006,11 @@ class Model:
                 "units": "SI",
                 "field_solver": solver_names,
                 "field_solver_input_sha256": solver_hashes,
+                "material_inputs": self._material_inputs,
+                "effective_materials": {
+                    field: assignment.to_provenance_dict()
+                    for field, assignment in sorted(self.assignments.items())
+                },
             },
         )
         return ModelResult(self.physics, result, provenance)
