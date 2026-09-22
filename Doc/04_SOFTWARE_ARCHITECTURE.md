@@ -113,7 +113,7 @@ geeignete Schur-Komplemente getestet.
 ordnet jedem aktiven Tet4 pro Feld genau ein typisiertes Material zu und
 liefert die zellweise Herkunft für Ergebnis und Provenienz. Identische
 Überlappungen sind zulässig, widersprüchliche Zuordnungen, Lücken und
-ungenutzte Definitionen nicht. Der geplante `Model`-Adapter (#25) ruft ihn
+ungenutzte Definitionen nicht. Der `Model`-Adapter (#25) ruft ihn
 vor der Assembly auf. Vertrag und Zweimaterialnachweis stehen in
 [Doc/19](19_MATERIAL_REGIONS.md).
 
@@ -194,13 +194,15 @@ eigene binäre Zellmaske. Der einzelne `cell_tags`- beziehungsweise
 
 ## 7. Öffentliche API
 
-Die API soll drei Ebenen bieten:
+Die API bietet drei Ebenen:
 
 1. `Model.from_file(...)` für reproduzierbare Fälle,
 2. `Model(...)` für Python-Skripte,
 3. reine Element- und Assemblyfunktionen für Forschung und Tests.
 
 Keine dieser Ebenen soll versteckte globale Solveroptionen besitzen.
+Der Stand des versionierten TOML-Adapters und seine Grenzen stehen in
+[Doc/21](21_MODEL_SCHEMA.md).
 
 ## 8. Abhängigkeitsstrategie
 

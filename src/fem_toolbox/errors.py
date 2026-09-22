@@ -136,6 +136,15 @@ class MaterialAssignmentError(ValidationError):
         )
 
 
+class ModelSchemaError(ValidationError):
+    """A versioned declarative model contains invalid or unsupported data."""
+
+    def __init__(self, *, path: str, reason: str) -> None:
+        self.path = path
+        self.reason = reason
+        super().__init__(f"invalid model {path}: {reason}", field=path)
+
+
 class MeshIOError(FEMToolboxError):
     """A mesh could not be converted at an external-format boundary."""
 

@@ -9,7 +9,8 @@ piezoelektrische Kopplungen auf Basis linearer Vierknoten-Tetraeder (**Tet4**).
 Verfügbar sind das Netzmodell, Tet4-Geometrie, drei stationäre Einzelfelder,
 die einseitige Kopplung `T → u` sowie ein monolithischer piezoelektrischer
 `u-φ`-Referenzsolver. Der aktuelle Quellstand ergänzt feste und schwebende
-Elektroden für diesen Solver; die deklarative `Model`-API ist noch geplant.
+Elektroden für diesen Solver und eine versionierte TOML-`Model`-API für vier
+stationäre Solver. Der kombinierte thermisch-piezoelektrische Ablauf folgt in #26.
 Der Umfang der veröffentlichten Version steht in den
 [Release Notes](Doc/releases/v0.5.0.md).
 
@@ -189,8 +190,10 @@ elektrisches Potential `phi` mit feldweiser Freiheitsgradverwaltung.
 Abhängigkeiten und Abnahmegates stehen in der
 [zweiten Planungswelle](Doc/13_PRODUCT_VISION.md).
 
-Die deklarative API `Model.from_file(...).solve()` gehört zum geplanten
-Modellworkflow. Arbeitspakete und Abnahmekriterien stehen in der
+Die deklarative API `Model.from_file(...).solve()` ist für Wärme, Elastizität,
+Elektrostatik und Piezoelektrizität verfügbar. Das [TOML-Schema](Doc/21_MODEL_SCHEMA.md)
+enthält ein ausführbares Beispiel, Einheiten und Migrationsregeln. Weitere
+Arbeitspakete und Abnahmekriterien stehen in der
 [Roadmap](Doc/06_ROADMAP.md); die Umsetzung wird über
 [GitHub-Milestones](https://github.com/maschin96/FEM-Toolbox/milestones) verfolgt.
 

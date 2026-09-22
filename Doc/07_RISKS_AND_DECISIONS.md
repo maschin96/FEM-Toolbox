@@ -159,6 +159,17 @@ elektrischer Komponente nötig; keine implizite Gauge-Fixierung. Alternative
 Lagrange-Multiplikatoren sind für den Referenzpfad nicht erforderlich.
 Herleitung und 1D-Verifikation stehen in [Doc/20](20_ELECTRODES.md).
 
+### ADR-015: TOML-Schema für stationäre Model-Fälle (#25)
+
+Version 1 verwendet TOML und explizite SI-Einheiten. Python 3.11 liest TOML
+ohne zusätzliche Laufzeitabhängigkeit. Unbekannte Schlüssel und andere
+Schemaversionen werden abgelehnt; inkompatible Änderungen erhalten eine neue
+Version mit expliziter Migration. Der Adapter ordnet benannte Materialien und
+Randbedingungen zu und übergibt sie an die verifizierten Referenzsolver.
+Die vier bestehenden stationären Modi sind einzeln auswählbar; die kombinierte
+thermisch-piezoelektrische Orchestrierung bleibt #26. Format und API stehen in
+[Doc/21](21_MODEL_SCHEMA.md).
+
 ## 2. Technisches Risikoregister
 
 | Risiko | Wirkung | Früher Nachweis | Gegenmaßnahme |
