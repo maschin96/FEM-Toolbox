@@ -208,6 +208,16 @@ Originalwerte, Faktoren, lokale Achsen und globale SI-Tensoren bleiben in der
 Laufprovenienz nachvollziehbar. Der vollständige Vertrag steht in
 [Doc/21](21_MODEL_SCHEMA.md).
 
+### ADR-019: Rohfelder und Manifest als stationäres Ergebnisbündel (#140)
+
+Die VTU-Datei enthält unveränderte numerische Solverfelder; das zugehörige
+JSON-Manifest hält Einheiten, Entitätsbezug, Bilanzen, Einschränkungen und
+Provenienz fest. Der VTU-Prüfwert koppelt beide Dateien. Ungenutzte Netzknoten
+und Triangle3-Zellen bekommen explizit dokumentierte Nullfüllung, statt
+scheinbar interpolierte Werte. Der Export weist vorhandene Zieldateien ab und
+veröffentlicht das Manifest zuletzt. Vertrag und unabhängiger Leser stehen in
+[Doc/24](24_RESULT_BUNDLE.md).
+
 ## 2. Technisches Risikoregister
 
 | Risiko | Wirkung | Früher Nachweis | Gegenmaßnahme |

@@ -1,5 +1,18 @@
 """External mesh-format adapters."""
 
-from fem_toolbox.io.meshio_adapter import read_gmsh, write_vtu
+from pathlib import Path
 
-__all__ = ("read_gmsh", "write_vtu")
+from fem_toolbox.io.meshio_adapter import read_gmsh, write_vtu
+from fem_toolbox.mesh import Mesh
+
+
+def export_result_bundle(
+    path: str | Path, mesh: Mesh, result: object
+) -> tuple[Path, Path]:
+    """Export raw SI fields and a versioned JSON manifest beside a VTU file."""
+    from fem_toolbox.io.result_bundle import export_result_bundle as export
+
+    return export(path, mesh, result)
+
+
+__all__ = ("export_result_bundle", "read_gmsh", "write_vtu")

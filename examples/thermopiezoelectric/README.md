@@ -20,8 +20,8 @@ in Engineering-Voigt-Reihenfolge sowie `electric_displacement_C_m2`. Die
 Datei lässt sich in ParaView öffnen. `report.json` enthält Modell-/Toolbox-
 Version, SHA-256 der effektiven Modelleingabe, beide Solverprovenienzen,
 feldweise Residuen und Wärme-, Kraft-, Moment- und Ladungsbilanz. Der Bericht
-ist ein **beispielspezifischer** Vertrag; der allgemeine Export wird in #140
-festgelegt. Die Ausgabedateien werden bei erneutem Lauf im gewählten Ordner
+ist ein **beispielspezifischer** Vertrag; der allgemeine Export ist in
+[Doc/24](../../Doc/24_RESULT_BUNDLE.md) beschrieben. Die Ausgabedateien werden bei erneutem Lauf im gewählten Ordner
 ersetzt. `run.py` benötigt keine Änderungen an Paket- oder Netzdateien.
 
 ## Unabhängige Referenz
