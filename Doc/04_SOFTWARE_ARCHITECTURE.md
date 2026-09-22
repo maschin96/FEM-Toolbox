@@ -134,6 +134,12 @@ gekoppelten Systemen Pflicht: mechanische und elektrische Koeffizienten können
 viele Größenordnungen auseinanderliegen. Abbruchkriterien werden zusätzlich in
 feldweisen physikalischen Residuen ausgewertet.
 
+Der implementierte piezoelektrische Referenzsolver verwendet eine kongruente
+Skalierung der beiden Feldblöcke nach ihrer medianen positiven Diagonale und
+SciPy Sparse LU. CG ist für diesen indefiniten Operator gesperrt; MINRES bleibt
+geplant, bis ein geeigneter symmetrischer Präconditioner verifiziert ist.
+Details und Nachweise stehen in [Doc/17](17_PIEZOELECTRIC_SOLVER.md).
+
 Für große Modelle ist ein optionales petsc4py-Backend mit FieldSplit- und
 Schur-Komplement-Präconditionierung vorgesehen. Dieses Backend darf die
 Element- oder Material-API nicht verändern.

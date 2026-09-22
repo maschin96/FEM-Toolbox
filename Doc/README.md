@@ -30,6 +30,7 @@ Eintrag im Entscheidungsprotokoll.
 - [Stationäre sequenzielle Thermomechanik](14_THERMOMECHANICS.md)
 - [Piezoelektrische Materialdaten, Konversion und Achsrotation](15_PIEZOELECTRIC_MATERIAL.md)
 - [Gekoppeltes piezoelektrisches Tet4-Element](16_PIEZOELECTRIC_ELEMENT.md)
+- [Monolithischer piezoelektrischer Referenzsolver](17_PIEZOELECTRIC_SOLVER.md)
 
 ## Veröffentlichungen
 

@@ -123,7 +123,18 @@ standardmäßig **aus** und kann nur mit
 rechte Seite wird zusammen mit der mechanischen aus der gleichen
 Enthalpieformulierung abgeleitet. Die lokale Energie- und Patch-Verifikation
 steht in [Doc/16](16_PIEZOELECTRIC_ELEMENT.md); die globale Assembly und
-Gauge-Behandlung bleiben Aufgabe von #21.
+Gauge-Behandlung sind in [Doc/17](17_PIEZOELECTRIC_SOLVER.md) umgesetzt.
+
+### ADR-012: Feldweise Kongruenzskalierung und LU für den Piezo-Referenzsolver (#21)
+
+Der symmetrisch-indefinite Blockoperator wird mit einer positiven diagonalen
+Kongruenzskalierung aus den medianen mechanischen und elektrischen
+Blockdiagonalen äquilibriert und per SciPy Sparse LU gelöst. CG wird nicht
+angeboten; MINRES folgt erst mit geeignetem symmetrischem Präconditioner.
+Residuen und Reaktionen werden am unskalierten Originalsystem getrennt für
+Kraft (N) und Ladung (C) berechnet. Starrkörpermoden und Potential-Gauge
+werden pro Netzkomponente vor der Faktorisierung geprüft. Dies definiert den
+verifizierbaren Referenzpfad, keine Skalierungszusage für große Modelle.
 
 ## 2. Technisches Risikoregister
 
