@@ -76,6 +76,20 @@ bewusst überschneiden. Geometrische Qualitätsmerkmale wie Volumen, Orientierun
 und Entartung gehören zu den Tet4-Operatoren des folgenden Arbeitspakets und
 nicht in dieses reine Topologiemodell.
 
+Vor Randintegralen prüft `fem_toolbox.mesh.inspect_boundary_topology(mesh)`
+die Triangle3-Zeilen gegen die Tet4-Facetteninzidenz. Jede eingetragene
+Dreiecksfläche muss genau einem Tet4 gehören. Der Bericht liefert je
+kanonischer Facette die Eigentümer-IDs und je Randfläche Volumenelement,
+externe IDs, nach außen orientierte Knoten,
+Flächeninhalt und Normale; die Zuordnung `triangle_faces` folgt der
+Triangle3-Zeilenfolge. Innere, fremde und nichtmannigfaltige Flächen werden
+mit Entitäts-ID und physischer Gruppe diagnostiziert. Topologisch doppelte
+Triangle3-Zeilen lehnt bereits `Mesh` ab. Nicht aufgeführte äußere Flächen
+sind für Teilrandnetze zulässig; `require_complete=True` verlangt eine
+vollständige Triangle3-Abdeckung und meldet fehlende Facetten. Überlappende
+Sätze bleiben zulässig. Erst die spätere `Model`-Validierung bewertet, ob
+die auf denselben Flächen verlangten Randbedingungen fachlich kollidieren.
+
 ### Field und DofMap
 
 Ein `Field` enthält Namen, Komponenten, Trägerknoten und physikalische Dimension.
