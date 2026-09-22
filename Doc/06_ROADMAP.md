@@ -1,6 +1,6 @@
 # Roadmap
 
-Status: M0–M2 freigegeben; M3–M10 geplant; M11–M12 grobe Horizonte (Stand 2026-09-22)
+Status: M0–M3 freigegeben; M4–M10 geplant; M11–M12 grobe Horizonte (Stand 2026-09-22)
 
 Die Roadmap priorisiert wissenschaftliches Risiko vor Funktionsmenge. Jeder
 Meilenstein endet mit einer ausführbaren Demonstration und einem V&V-Nachweis.

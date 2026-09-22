@@ -5,11 +5,11 @@ dreidimensionale Finite-Elemente-Simulationen. Ziel sind verifizierte Modelle f�
 Festkörpermechanik, Wärmeleitung, Elektrostatik und deren thermomechanische und
 piezoelektrische Kopplungen auf Basis linearer Vierknoten-Tetraeder (**Tet4**).
 
-**Aktueller Stand: v0.3.0 — verifizierte ungekoppelte Einzelfelder.** Verfügbar
-sind das Netzmodell, Tet4-Geometrie sowie stationäre lineare Elastizität,
-Wärmeleitung und Elektrostatik. Die geplante `Model`-API und gekoppelte Felder
-sind noch nicht implementiert. Details stehen in den
-[Release Notes](Doc/releases/v0.3.0.md).
+**Aktueller Stand: v0.4.0 — verifizierte sequenzielle Thermomechanik.** Verfügbar
+sind das Netzmodell, Tet4-Geometrie, drei stationäre Einzelfelder sowie die
+einseitige Kopplung `T → u`. Die geplante `Model`-API und piezoelektrische
+Kopplung sind noch nicht implementiert. Details stehen in den
+[Release Notes](Doc/releases/v0.4.0.md).
 
 [Installation](#installation) · [Schnellstart](#schnellstart) ·
 [Dokumentation](#dokumentation) · [Entwicklung](#entwicklung) ·
@@ -17,7 +17,7 @@ sind noch nicht implementiert. Details stehen in den
 
 ## Verfügbare Funktionen
 
-| Bereich | Umfang in v0.3.0 |
+| Bereich | Umfang in v0.4.0 |
 |---|---|
 | Netzmodell | Unveränderliche NumPy-Arrays für 3D-Punkte, Tet4-Zellen und Triangle3-Flächen; validierte Indizes, externe IDs und Tags |
 | Auswahlsätze | Benannte Volumen- und Flächensätze, auch mit überlappenden Mitgliedschaften |
@@ -28,6 +28,7 @@ sind noch nicht implementiert. Details stehen in den
 | Elastizität | Kleine lineare Tet4-Verformungen, anisotrope Materialien, Volumen-/Flächen-/Punktlasten sowie Spannungs-, Energie- und Reaktionsauswertung |
 | Wärme | Stationäre Tet4-Wärmeleitung mit anisotroper Leitfähigkeit, Quellen, äußerem Wärmestrom, Konvektion und Leistungsbilanz |
 | Elektrostatik | Stationäres Tet4-Potential mit anisotroper Permittivität, freien Ladungen, Gauge-Diagnostik, E-/D-Feldern und Ladungsbilanz |
+| Thermomechanik | Sequenzielle stationäre Wärme-zu-Mechanik-Kopplung mit anisotroper thermischer Expansion und regionsweisen Referenztemperaturen |
 
 ## Installation
 
@@ -150,8 +151,9 @@ Jedes physikalische Einzelfeld soll vor seiner Kopplung separat verifiziert
 werden. Dazu gehören analytische Vergleichsfälle, Patch-Tests, Energie- und
 Reziprozitätsprüfungen, globale Bilanzen und Netzkonvergenz.
 
-Für v0.3.0 umfasst der Nachweis zusätzlich Patch-, Bilanz-, analytische Benchmark-
-und vierstufige Konvergenztests für Mechanik, Wärme und Elektrostatik.
+Für v0.4.0 umfasst der Nachweis zusätzlich Patch-, Bilanz-, analytische Benchmark-
+und vierstufige Konvergenztests für Mechanik, Wärme, Elektrostatik und die
+sequenzielle Thermomechanik.
 **Verifikation** prüft die korrekte Umsetzung des mathematischen Modells;
 **Validierung** prüft dessen Eignung gegenüber geeigneten Referenz- oder
 experimentellen Daten und ist für diese Freigabe noch nicht beansprucht. Das
@@ -168,7 +170,7 @@ elektrisches Potential `phi` mit feldweiser Freiheitsgradverwaltung.
 | M0 | v0.1.0 | Paket, Konventionen, Provenienz und Qualitätsinfrastruktur | Freigegeben |
 | M1 | v0.2.0 | Netz und Tet4-Geometrie | Freigegeben |
 | M2 | v0.3.0 | Stationäre Elastizität, Wärmeleitung und Elektrostatik | Freigegeben |
-| M3 | v0.4.0 | Sequenzielle Thermomechanik `T → u` | Geplant |
+| M3 | v0.4.0 | Sequenzielle Thermomechanik `T → u` | Freigegeben |
 | M4 | v0.5.0 | Monolithische Piezoelektrizität `u–phi` | Geplant |
 | M5 | v1.0.0 | Elektroden, Modellformat und vollständiger stationärer Workflow | Geplant |
 | M6 | v1.1.0 | Transiente Wärmeleitung und lineare Dynamik | Geplant |
@@ -209,7 +211,8 @@ technischen Entwurfsdokumente.
 
 Der Python-Code liegt unter `src/fem_toolbox/`. Die [Teststruktur](tests/README.md)
 unterscheidet Unit-, Patch-, Konvergenz- und Regressionstests;
-[examples/](examples/README.md) enthält drei reproduzierbare Einzelfeldbeispiele.
+[examples/](examples/README.md) enthält drei Einzelfeldbeispiele und ein
+reproduzierbares Thermomechanik-Beispiel.
 
 Aus dem Repository-Root mit aktivierter Entwicklungsumgebung prüfen:
 

@@ -12,8 +12,8 @@ def test_package_can_be_imported() -> None:
 
 
 def test_distribution_exposes_release_version() -> None:
-    """Installed metadata identifies the M2 release."""
+    """Installed metadata identifies the M3 release."""
     distribution = metadata("fem-toolbox")
 
     assert distribution["Name"] == "fem-toolbox"
-    assert version("fem-toolbox") == "0.3.0"
+    assert version("fem-toolbox") == "0.4.0"
