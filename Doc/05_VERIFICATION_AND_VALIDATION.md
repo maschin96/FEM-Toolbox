@@ -53,6 +53,10 @@ Elektroden) und Leerlauf (eine Referenzelektrode, andere Elektrode mit
 vorgegebener Gesamtladung null) unterschieden. Punktweise `D dot n = 0` ist kein
 Ersatz für eine leitende Equipotential-Elektrode.
 
+Der implementierte [d₃₃-Nachweis](18_PIEZO_D33_VERIFICATION.md) verifiziert
+direkte und inverse Wirkung sowie einen 1D-invarianten Leerlaufgrenzfall.
+Eine allgemeine leitende Floating Electrode bleibt M5 vorbehalten.
+
 ### 2.4 Manufactured Solutions und Konvergenz
 
 Glatte vorgegebene Felder `u*(x)`, `T*(x)`, `phi*(x)` werden in die starken

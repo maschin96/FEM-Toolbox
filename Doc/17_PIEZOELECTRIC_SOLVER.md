@@ -99,3 +99,9 @@ Randwerten und einmal mit unabhängig berechneten Traktionen und D-Flüssen.
 Diese Nachweise decken den linearen stationären Tet4-Referenzumfang ab;
 Floating Electrodes, transiente Effekte und große parallele Modelle folgen
 in separaten Arbeitspaketen.
+
+Der anschließende [d₃₃-Benchmark](18_PIEZO_D33_VERIFICATION.md) prüft
+direkten/inversen Effekt, Kurzschluss, einfachen Leerlauf, Reziprozität und
+vierstufige Konvergenz. Der Leerlauf-Benchmark präzisiert die
+Rundungstoleranz der globalen Ladungsbilanz bei physikalisch verschwindender
+Nettoladung.
