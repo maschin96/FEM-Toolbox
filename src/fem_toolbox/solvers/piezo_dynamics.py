@@ -266,6 +266,8 @@ def solve_piezoelectric_modes(
     if not np.isfinite(eigenvalues).all() or np.any(eigenvalues <= 0):
         raise ValidationError("nonpositive or nonfinite eigenvalues", field="solver")
     omega = np.sqrt(eigenvalues * kscale / mscale)
+    if not np.isfinite(omega).all():
+        raise ValidationError("unrepresentable modal spectrum", field="solver")
     vectors /= np.sqrt(mscale)
     for j in range(count):
         if vectors[np.argmax(np.abs(vectors[:, j])), j] < 0:
@@ -287,7 +289,9 @@ def solve_piezoelectric_modes(
         relative.append(
             np.divide(num, den, out=np.where(num == 0, 0.0, np.inf), where=den != 0)
         )
-    if any(np.any(r > 1e-9) for r in relative):
+    if not np.isfinite(modes).all() or any(
+        not np.isfinite(r).all() or np.any(r > 1e-9) for r in relative
+    ):
         raise ValidationError("modal field residual exceeds 1e-9", field="solver")
     electric_residual = system.matrix[nu:] @ modes
     electrode_potentials = np.empty((count, len(system.electrodes)))

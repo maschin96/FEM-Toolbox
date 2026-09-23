@@ -1,7 +1,7 @@
 # Lineare Piezoelastodynamik — #31
 
-Entwicklungsstand: 31a (Modalanalyse), 31b (Newmark) und 31c (Harmonik),
-additive Forschungs-API, kein Release. 31d (Model/Export) folgt separat.
+Entwicklungsstand: 31a–d (Modalanalyse, Newmark, Harmonik, Model/Export),
+additive Forschungs-API in getrennten Review-PRs, kein Release.
 Keine Rückwirkung der Verformung auf die Temperatur, keine experimentelle Validierung.
 
 ## DAE- und Elektrodenvertrag
@@ -164,3 +164,73 @@ unrepräsentierbare Frequenzen und explizite Resonanz. Mit harmonisch passenden
 Anfangswerten konvergiert Newmark auf einem festen Raummodell quadratisch gegen
 das harmonische Ergebnis (100/200 Schritte). Ein Frequenzrasterfehler ist davon
 getrennt: hier wird eine einzelne, identische Frequenz in beiden Pfaden verglichen.
+
+## Model-Schema 3 und Export (31d)
+
+`Model(mesh=..., document=...)` und `Model.from_file(...)` akzeptieren additiv
+`schema_version=3`, `units="SI"` und `physics` gleich `piezo_modes`,
+`transient_piezoelectric` oder `harmonic_piezoelectric`. Schema 1 und 2 behalten
+ihre Bedeutung. Ein vollständiges TOML-/CSV-Beispiel mit ausführbarem Skript
+steht unter [examples/piezo_dynamics](../examples/piezo_dynamics/README.md).
+
+Das Dokument enthält:
+
+- `base`: ein vollständiges Schema-1-Modell mit `physics="piezoelectric"`,
+  Material-/Regionszuordnung, **homogenen** mechanischen/elektrischen Randwerten
+  und optionalen Volumen-/Flächenlasten. Ein Netzpfad steht nur im Schema-3-Root.
+  Der stationäre Referenzpfad bereitet das integrierte Lastmuster vor. Dessen
+  Löseroptionen gelten nur für diese Vorbereitung; dynamische Verfahren sind
+  die hier festgelegten Referenzen. Modalanalyse verlangt ein lastfreies Basismodell.
+- `density={value=..., unit="kg/m^3"}`: positive Dichte, homogen oder pro Tet4.
+- `analysis` mit den nachfolgend beschriebenen Optionen; unbekannte Schlüssel
+  und abweichende Einheiten werden zurückgewiesen.
+
+Modal: `count` legt die Anzahl Moden fest. Transient: `times={values=[...],unit="s"}`
+und optional `load_factor` als Zahl, Step/Ramp/Series oder CSV-Profil skalieren das
+Basismuster. CSV-Proben werden bei `from_file` ins kanonische Dokument übernommen;
+alle Profilknoten werden automatisch eingefügt. `initial_displacement` und
+`initial_velocity` sind optional, in m bzw. m/s und aktiver Knotenreihenfolge.
+
+`analysis.prescribed` ist eine Liste mit globalen `dofs` aus
+`piezoelectric_dofs(mesh)`. Transiente Spannungen verwenden `unit="V"` und
+`value` als Profil. Mechanische Bewegungen verwenden `unit="m"` und
+`coefficients=[c0,c1,...]` für `u(t)=sum(cj*t^j)`; Geschwindigkeit und
+Beschleunigung werden exakt abgeleitet. Die Koeffizienten haben entsprechend
+Einheiten m/s^j. Die DOFs müssen in der Basistopologie bereits vorgeschrieben
+sein. Die erste Modellversion erlaubt hier glatte Polynome; allgemeinere
+kinematische Vorgaben stehen über die Python-Solver-API bereit.
+
+Harmonisch: `frequencies={values=[...],unit="Hz"}` muss nichtnegativ und streng
+aufsteigend sein. `load_factor={real=...,imag=...}` skaliert das Basismuster.
+Vorgeschriebene Phasoren verwenden `dofs`, `unit` und `real`/`imag`. Für mehrere
+unabhängige Lastmuster oder zeitlich veränderliche Leiter-Gesamtladung steht die
+vollständige vorzeichenbehaftete Lastvektor-Schnittstelle der Solver zur Verfügung.
+
+`export_piezo_series(path, model_result, probes={...})` aus
+`fem_toolbox.io.piezo_series` schreibt in einen **neuen** Ordner:
+
+- `piezo.pvd` und VTU-Dateien mit u/phi, bei transienter/harmonischer Analyse
+  außerdem v/a und ursprünglichen mechanischen/elektrischen Residuen.
+- Tet4-Zellfelder: Dehnung, Spannung, elektrisches Feld und elektrische
+  Verschiebung, ohne Glättung. Inaktive Knoten und Dreiecks-Zellfelder sind
+  nullgefüllt und mit Gültigkeitsmasken versehen.
+- Harmonische Felder: `_real`, `_imag`, `_amplitude`, `_phase_rad`,
+  `_phase_valid`. Amplitude/Phase sind komponentenweise; bei Amplitude null
+  wird Phase null mit ungültiger Maske gespeichert. Reelle Zeit-/Modalfelder
+  erhalten nur `_real`, ohne künstliche Phase.
+- `probes.csv` für benannte Knotenindizes oder `(x,y,z)` in m im Tet4-Gebiet.
+  Komplexe Felder werden **vor** der Amplituden-/Phasenbildung interpoliert.
+- `manifest.json` mit Achsenbedeutung, Hz/rad/s, SI-Einheiten, Energie pro
+  Zeitrahmen, feldweisen Residuen, Datei-Hashes und vollständiger Model-Provenienz.
+
+Der ParaView-Slider ist je nach Analyse Zeit in s, Frequenz in Hz oder
+Modenindex, kein impliziter Wechsel der Einheit. Die Daten bleiben ans
+berechnete Netz und die effektiven Zellmaterialien gebunden. Vorhandene
+Verzeichnisse werden nicht überschrieben; bei Schreibabbruch bleiben PVD und
+Manifest mit abgeschlossenen Frames und Status `incomplete` lesbar.
+
+Nachweise: alle drei Model-Pfade, Einheit-/Schemafehler, CSV-Auflösung,
+analytisch abgeleitete Lagerbewegung, VTU-Roundtrip einschließlich komplexer
+Zellfelder, Messpunktinterpolation und kontrollierter Schreibabbruch.
+CI führt das Beispiel zusätzlich aus frisch installierten Wheels und sdists
+unter Python 3.11–3.13 aus.

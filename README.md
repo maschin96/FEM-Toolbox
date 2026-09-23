@@ -10,8 +10,9 @@ piezoelektrische Kopplungen auf Basis linearer Vierknoten-Tetraeder (**Tet4**).
 M6-Entwicklungsstand `1.1.0.dev0`: [transiente Wärmeleitung](Doc/33_TRANSIENT_HEAT.md)
 mit [Materialbibliothek](Doc/32_MATERIAL_LIBRARY.md), Sprüngen/Rampen/CSV,
 ParaView-Zeitserie und Messpunkten. [Ausführbares Beispiel](examples/transient_heat/README.md).
-Zusätzlich: [piezoelektrische Modalanalyse](Doc/34_PIEZO_DYNAMICS.md) mit
-mechanischer Masse und algebraischer Elektrodenkondensation. Noch kein M6-Release.
+Zusätzlich: [Piezo-Dynamik](Doc/34_PIEZO_DYNAMICS.md) mit Modalanalyse, Newmark,
+komplexer Harmonik und Model-/ParaView-Export.
+[Ausführbares Beispiel](examples/piezo_dynamics/README.md). Noch kein M6-Release.
 Verfügbar sind das Netzmodell, Tet4-Geometrie, drei stationäre Einzelfelder,
 die einseitige Kopplung `T → u`, der monolithische piezoelektrische
 `u–φ`-Solver mit festen und schwebenden Elektroden sowie `T → (u, φ)`.

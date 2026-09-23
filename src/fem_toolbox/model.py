@@ -13,6 +13,7 @@ import numpy as np
 
 from fem_toolbox.assembly import real_array
 from fem_toolbox.boundary import Dirichlet, Electrode
+from fem_toolbox.dynamic_result import PiezoDynamicResult
 from fem_toolbox.errors import ModelSchemaError, ValidationError
 from fem_toolbox.fields import DofMap
 from fem_toolbox.io import read_gmsh
@@ -59,6 +60,9 @@ Physics = Literal[
     "piezoelectric",
     "thermopiezoelectric",
     "transient_heat",
+    "piezo_modes",
+    "transient_piezoelectric",
+    "harmonic_piezoelectric",
 ]
 FieldResult = (
     HeatResult
@@ -67,6 +71,7 @@ FieldResult = (
     | PiezoelectricResult
     | ThermopiezoelectricResult
     | TransientHeatResult
+    | PiezoDynamicResult
 )
 _FIELDS: dict[str, str] = {
     "heat": "T",
@@ -392,7 +397,7 @@ class Model:
     """Validated Model from a Gmsh-backed TOML file or Python mapping.
 
     ``document`` has SI units: schema 1 for stationary fields, schema 2 for
-    heat transients. The Python constructor
+    heat transients and schema 3 for piezo dynamics. The Python constructor
     takes an already validated ``Mesh``; ``from_file`` imports the declared
     relative Gmsh path. No global settings or implicit material assignments.
     """
@@ -406,11 +411,23 @@ class Model:
             raise ModelSchemaError(
                 path="document", reason="expected JSON-safe finite TOML values"
             ) from error
+        from fem_toolbox.piezo_dynamic_model import PiezoDynamicModel
         from fem_toolbox.transient_model import TransientHeatModel
 
+        self._dynamic: PiezoDynamicModel | None = None
         self.physics: Physics
         self._transient: TransientHeatModel | None = None
         _mapping(raw, "document")
+        if raw.get("physics") in (
+            "piezo_modes",
+            "transient_piezoelectric",
+            "harmonic_piezoelectric",
+        ):
+            self._dynamic = PiezoDynamicModel(mesh, raw)
+            self.mesh = mesh
+            self.physics = cast(Physics, raw["physics"])
+            self._document = raw
+            return
         if raw.get("physics") == "transient_heat":
             self._transient = TransientHeatModel(mesh, raw)
             self.mesh = mesh
@@ -580,7 +597,7 @@ class Model:
             raise ModelSchemaError(
                 path="mesh.length_scale_to_m", reason="must be positive"
             )
-        if document.get("physics") == "transient_heat":
+        if document.get("physics") in ("transient_heat", "transient_piezoelectric"):
             from fem_toolbox.transient_model import resolve_csv_profiles
 
             document = resolve_csv_profiles(document, root)
@@ -923,6 +940,9 @@ class Model:
 
     def solve(self) -> ModelResult:
         """Run the selected validated stationary or transient reference solver."""
+        if self._dynamic is not None:
+            dynamic_result = self._dynamic.solve()
+            return ModelResult(self.physics, dynamic_result, dynamic_result.provenance)
         if self._transient is not None:
             transient_result = self._transient.solve()
             return ModelResult(
