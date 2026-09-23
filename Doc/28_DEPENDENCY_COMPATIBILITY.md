@@ -60,6 +60,18 @@ erst im Release-Gate aus dem freizugebenden Commit gebaut und erneut geprüft.
 
 ## Sicherheitsupdates
 
+Die Datei `ci/oldest-constraints.txt` ist über `exclude-paths` gezielt von
+Dependabot-Updates ausgenommen. Ihre Pins definieren den Mindestversionsnachweis
+und dürfen nicht automatisch auf aktuelle Releases angehoben werden. Die PRs
+#158 und #159 zeigten dies: Einzelupdates von SciPy beziehungsweise NumPy
+erzeugten inkompatible Mischungen und scheiterten bereits bei der Installation.
+Änderungen dieser Untergrenzen erfolgen bewusst und gemeinsam mit den
+Paketmetadaten, dieser Tabelle und dem vollständigen Kompatibilitätsnachweis;
+das gilt auch bei relevanten Sicherheitsbefunden. Der `latest`-CI-Zweig prüft
+weiterhin aktuelle auflösbare Versionen. Python-Paketmetadaten und GitHub Actions
+bleiben von Dependabot überwacht. Die pfadbezogene Ausnahme folgt der
+[GitHub-Konfigurationsreferenz](https://docs.github.com/en/code-security/reference/supply-chain-security/dependabot-options-reference#exclude-paths).
+
 `.github/dependabot.yml` konfiguriert wöchentliche Versionschecks für Python-
 und GitHub-Actions-Abhängigkeiten mit höchstens fünf Update-PRs je Ökosystem;
 die tatsächliche Ausführung ist nach der Integration zu kontrollieren. Vor jedem
