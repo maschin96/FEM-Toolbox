@@ -30,8 +30,9 @@ jobs:
           python -m pip install --disable-pip-version-check 'pip>=26.2' build
           python -m build
           cp examples/steady_heat.py dist/steady_heat.py
+          cp -R examples/transient_heat dist/transient_heat
           cd dist
-          sha256sum *.whl *.tar.gz steady_heat.py > SHA256SUMS
+          sha256sum *.whl *.tar.gz steady_heat.py transient_heat/* > SHA256SUMS
       - name: Transfer artifacts and standalone solver example
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
@@ -82,6 +83,10 @@ jobs:
           cd "$RUNNER_TEMP"
           "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/steady_heat.py"
           test -s steady_heat.vtu
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/transient_heat/run.py"
+          test -s transient_heat_results/heat.pvd
+          test -s transient_heat_results/probes.csv
+          test -s transient_heat_results/balance.csv
 
   quality:
     name: Quality / Python 3.13
