@@ -43,12 +43,10 @@ Provenienzbericht steht unter [examples/thermopiezoelectric](examples/thermopiez
 
 ## Installation
 
-Voraussetzungen sind **CPython 3.11 bis 3.13** und Git. Die CI prüft diese
-Versionen unter Linux. Die geprüften minimalen und aktuellen
-[Abhängigkeitskombinationen](Doc/28_DEPENDENCY_COMPATIBILITY.md) sind dokumentiert.
-NumPy, SciPy und meshio werden als Paketabhängigkeiten automatisch installiert;
-die Entwicklungsoption `dev` ergänzt pytest, Ruff und mypy. Maßgeblich ist die
-[Projektkonfiguration](pyproject.toml).
+Die vollständige [Installationsanleitung](INSTALL.md) beschreibt die geprüften
+Plattformen, CPython 3.11–3.13, virtuelle Umgebungen, Projektabhängigkeiten,
+die optionale Gmsh-Installation, einen ersten Solverlauf und Fehlerbehebung.
+Zum Einlesen der mitgelieferten `.msh`-Dateien ist Gmsh nicht erforderlich.
 
 ```sh
 git clone https://github.com/maschin96/FEM-Toolbox.git
@@ -76,11 +74,9 @@ python -m pip install -e '.[dev]'
 python -m pytest
 ```
 
-Die editierbare Installation verwendet den aktuellen Repository-Stand. Zum
-Einlesen vorhandener `.msh`-Dateien ist keine separate Gmsh-Installation nötig.
-Die Erstellung neuer Netze erfolgt außerhalb der Toolbox; eine vollständige
-Anleitung einschließlich Gmsh-Einrichtung wird in
-[Issue #46](https://github.com/maschin96/FEM-Toolbox/issues/46) verfolgt.
+Die editierbare Installation verwendet den aktuellen Repository-Stand. Die
+[Installationsanleitung](INSTALL.md) enthält zusätzlich eine Prüfung in einer
+sauberen Umgebung und den Gmsh-Aufruf für ein eigenes Testnetz.
 
 ## Schnellstart
 
