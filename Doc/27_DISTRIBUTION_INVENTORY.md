@@ -24,8 +24,9 @@ und ein sdist mit 62 Einträgen. Beide enthalten den identischen Lizenztext
 (SHA-256-Präfix `5ed34c5214b8`) und die Metadaten `License-Expression: MIT`
 sowie `License-File: LICENSE`. Im Wheel liegt die Datei unter
 `fem_toolbox-0.5.0.dist-info/licenses/LICENSE`, im sdist an der Wurzel.
-Die Paketversion bleibt bis zum Release-Gate `0.5.0`; der Build dieses
-Quellstands ändert frühere veröffentlichte Archive nicht.
+Diese historische Prüfung verwendete Paketversion `0.5.0`; sie ändert frühere
+veröffentlichte Archive nicht. Die finalen v1.0-Artefakte werden gemäß
+[Release Notes](releases/v1.0.0.md) erneut geprüft.
 
 ## Direkt deklarierte Abhängigkeiten
 

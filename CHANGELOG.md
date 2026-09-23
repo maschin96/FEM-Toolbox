@@ -6,6 +6,34 @@ Versionierung an [Semantic Versioning](https://semver.org/).
 
 ## Unreleased
 
+## [1.0.0] - 2026-09-23
+
+### Added
+
+- Feste und schwebende Equipotential-Elektroden mit Gesamtladungsvorgabe.
+- Versioniertes SI-TOML-Modell und stabile stationäre Model-/Solver-API mit
+  explizitem Kompatibilitätsvertrag und Migration von direkten Solveraufrufen.
+- Einseitiger stationärer Ablauf `T → (u, φ)`, regionsweise Materialien und
+  perfekte Grenzflächen; explizite elektrisch-thermische Modelloption.
+- Modellweiter Preflight für Topologie, Randbedingungen, Lagerung und Gauges.
+- Versioniertes VTU-/JSON-Ergebnisbündel mit Rohfeldern, Einheiten, Bilanzen,
+  Provenienz und Dateiprüfsumme; reproduzierbares End-to-End-Beispiel.
+- Vier-Netze-Mehrmaterialnachweis, dokumentierte Nutzungsgrenzen und
+  Abhängigkeitsmatrix; isolierte Wheel-/sdist-Prüfungen auf Python 3.11–3.13.
+- MIT-Lizenz und Lizenzmetadaten für die aktuellen Distributionsarchive.
+
+### Compatibility
+
+- Direkte Solveraufrufe bleiben erhalten; Model-Schema und Ergebnisbündel stehen
+  jeweils auf Version 1. Der [API-Vertrag](Doc/29_PUBLIC_API_CONTRACT.md) definiert
+  die stabile Oberfläche und die Regeln für spätere inkompatible Änderungen.
+
+### Limitations
+
+- Kleine lineare stationäre Tet4-Modelle mit SciPy Sparse Direct; keine
+  Transienten, PETSc, Tet10, reziproke Wärmekopplung oder experimentelle Validierung.
+
+
 ## [0.5.0] - 2026-09-22
 
 ### Added
@@ -105,7 +133,8 @@ Versionierung an [Semantic Versioning](https://semver.org/).
 - Typisierte SI-/Voigt-Konventionen, konkrete Validierungsfehler sowie ein
   deterministisches Provenienzschema mit installierter Paketversion.
 
-[Unreleased]: https://github.com/maschin96/FEM-Toolbox/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/maschin96/FEM-Toolbox/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/maschin96/FEM-Toolbox/compare/v0.5.0...v1.0.0
 [0.5.0]: https://github.com/maschin96/FEM-Toolbox/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/maschin96/FEM-Toolbox/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/maschin96/FEM-Toolbox/compare/v0.2.0...v0.3.0
