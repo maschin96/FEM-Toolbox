@@ -1,8 +1,8 @@
 # Materialregionen und perfekte Grenzflächen (#137)
 
-Status: Regionenzuordnung implementiert und an den bestehenden stationären
-Tet4-Solvern verifiziert. Die deklarative `Model`-API aus #25 kann diesen
-Preflight vor ihrer Assembly aufrufen.
+Status: Regionenzuordnung ist in die deklarative `Model`-API integriert und
+an den stationären Tet4-Solvern sowie am vollständigen thermopiezoelektrischen
+Modell verifiziert. `Model` prüft die Belegung vor der Assembly.
 
 ## Vertrag
 
@@ -26,8 +26,9 @@ Piezo-Materialien Eingabeform, lokale Eingaben, globale Tensoren und Achsen.
 Bei `ThermalExpansion.from_principal` bleiben die verwendeten lokalen Achsen
 zusätzlich erhalten; direkt eingegebene globale Voigt-Koeffizienten erhalten
 keine behauptete lokale Orientierung. Die Option
-`electric_thermal_strain` ist eine **globale Solveroption** und wird bereits in
-der Provenienz des Piezo-Solvers festgehalten.
+`electric_thermal_strain` ist eine **globale Solveroption** und wird in den
+Solverparametern des Piezo-Solvers im Ergebnisbericht festgehalten. Der
+Bericht enthält auch die wirksamen Materialkataloge und Achsen pro Region.
 
 ## Konforme Grenzfläche
 
@@ -76,6 +77,8 @@ Spannung `2·10⁻⁷ Pa` und `2·10⁻¹¹`. Sie lassen lediglich Rundung
 bei Sparse-LU und Elementrekonstruktion zu. Globale Kraft-, Wärme- und
 Ladungsbilanzen werden zusätzlich in ihren jeweiligen SI-Einheiten geprüft.
 
-Die Belege liegen in `tests/unit/test_material_regions.py` und
-`tests/patch/test_material_interfaces.py`. Eine meshunabhängige 3D-
-Konvergenzstudie des vollständigen `Model` gehört zu #141.
+Die Belege liegen in `tests/unit/test_material_regions.py`,
+`tests/unit/test_thermopiezoelectric_model.py` und
+`tests/patch/test_material_interfaces.py`. Die meshunabhängige 3D-
+Konvergenzstudie des vollständigen `Model` liegt in
+`tests/convergence/test_thermopiezo_model_convergence.py` (#141).

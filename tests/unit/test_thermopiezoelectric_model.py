@@ -9,6 +9,7 @@ import pytest
 from numpy.testing import assert_allclose
 
 from fem_toolbox.errors import ModelSchemaError
+from fem_toolbox.io import export_result_bundle
 from fem_toolbox.mesh import Mesh
 from fem_toolbox.model import Model
 
@@ -102,6 +103,50 @@ def test_principal_expansion_and_thermal_option_validation() -> None:
     document["solver"]["electric_thermal_strain"] = "yes"
     with pytest.raises(ModelSchemaError, match=r"solver\.electric_thermal_strain"):
         Model(mesh=mesh, document=document)
+
+
+def test_model_rejects_material_gaps_and_conflicts_before_solve() -> None:
+    mesh, document = _case()
+    document["regions"]["T"] = {}
+    with pytest.raises(ModelSchemaError, match=r"regions\.T.*missing"):
+        Model(mesh=mesh, document=document)
+
+    mesh = Mesh(
+        points=mesh.points,
+        tetra4=mesh.tetra4,
+        volume_sets={"body": np.array([0]), "overlap": np.array([0])},
+    )
+    document["regions"]["T"] = {"body": "heat", "overlap": "other"}
+    document["materials"]["T"]["other"] = {
+        "conductivity": 3,
+        "unit": "W/(m K)",
+    }
+    with pytest.raises(ModelSchemaError, match=r"regions\.T.*conflict"):
+        Model(mesh=mesh, document=document)
+
+
+def test_bundle_reports_material_axes_and_thermal_solver_option(tmp_path: Path) -> None:
+    mesh, document = _case()
+    expansion = document["materials"]["expansion"]["solid"]
+    del expansion["alpha"]
+    expansion["principal_alpha"] = [0.01, 0, 0]
+    expansion["axes"] = np.eye(3).tolist()
+    solved = Model(mesh=mesh, document=document).solve()
+    _, manifest = export_result_bundle(tmp_path / "result", mesh, solved)
+    report = json.loads(manifest.read_text(encoding="utf-8"))
+    parameters = report["provenance"]["solver"]["parameters"]
+    assert (
+        parameters["effective_materials"]["expansion"]["catalog"]["solid"][
+            "axes_local_to_global"
+        ]
+        == np.eye(3).tolist()
+    )
+    assert (
+        report["solver_provenance"]["piezoelectric"]["solver"]["parameters"][
+            "electric_thermal_strain"
+        ]
+        is True
+    )
 
 
 def test_from_toml_file_transfers_temperature_on_imported_mesh(tmp_path: Path) -> None:

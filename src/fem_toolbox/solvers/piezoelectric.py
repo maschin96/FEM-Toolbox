@@ -618,6 +618,7 @@ def solve_piezoelectric(
             ),
             "backend": "scipy.sparse.linalg.splu",
             "block_scaling": block_scaling,
+            "electric_thermal_strain": electric_thermal_strain,
             "mechanical_scale": mechanical_scale,
             "electric_scale": electric_scale,
             "pivot_relative_tolerance": 1e-12,
