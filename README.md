@@ -201,7 +201,9 @@ Abhängigkeiten und Abnahmegates stehen in der
 
 Die deklarative API `Model.from_file(...).solve()` ist für Wärme, Elastizität,
 Elektrostatik, Piezoelektrizität und den Ablauf `T → (u, φ)` verfügbar. Das [TOML-Schema](Doc/21_MODEL_SCHEMA.md)
-enthält ein ausführbares Beispiel, Einheiten und Migrationsregeln. Weitere
+enthält ein ausführbares Beispiel und die Format-Migrationsregeln. Die
+[API-Referenz](Doc/29_PUBLIC_API_CONTRACT.md) beschreibt öffentliche Python-
+Einstiegspunkte und den Kompatibilitätsvertrag für v1.0. Weitere
 Arbeitspakete und Abnahmekriterien stehen in der
 [Roadmap](Doc/06_ROADMAP.md); die Umsetzung wird über
 [GitHub-Milestones](https://github.com/maschin96/FEM-Toolbox/milestones) verfolgt.
