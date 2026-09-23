@@ -294,3 +294,22 @@ Phasorvertrag (#31), thermodynamisches Potential (#32), Backend-/Scalarvertrag
 (#34) sowie additive Netztopologie und Auswerteorte (#35). Die alten
 M5-Entscheidungsbedarfe oben sind historisch; implementierte Entscheidungen
 stehen in den Material-, Elektroden- und Solver-ADRs und Dokumenten 15–24.
+
+
+## ADR-021 — M6 ohne reziproke thermomechanische Rückwirkung
+
+Datum: 23.09.2026. Status: Nutzerentscheidung.
+
+Der Nutzer hat die Rückwirkung von Verformung auf Temperatur ausdrücklich
+aus dem aktuellen Umfang genommen. #32 bleibt als zurückgestellter Backlog
+offen und wird aus dem M6-Milestone entfernt. #33 verlangt deshalb keine
+reziproke Thermoelastizität und keinen Thermoelastic-Damping-Nachweis mehr.
+Bestehende einseitige T→u und T→(u,phi)-Pfade behalten ihre Semantik.
+
+Transiente Wärme verwendet konstante positive rho/c-Daten und Backward Euler
+als Referenz. Vorgegebene Signalereignisse werden ins Raster eingefügt;
+Quellen/Flüsse/Robin-Daten werden am linken Grenzwert des rechten
+Intervallendes ausgewertet, damit ein Sprung keine frühzeitige Energie
+einträgt. Dirichlet-Werte sind rechtsstetig; ihr diskreter Speicherbeitrag
+wird als Reservoirreaktion bilanziert. Physikalische Dirichlet-Sprünge
+benötigen zeitliche Verfeinerung oder eine endliche Anstiegsrampe.

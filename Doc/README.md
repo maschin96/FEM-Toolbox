@@ -48,6 +48,11 @@ Eintrag im Entscheidungsprotokoll.
 - [Gültigkeitsbereich und numerische Nutzungsgrenzen für v1.0](26_VALIDITY_AND_LIMITS.md)
 - [Öffentliche stationäre Python-API und Migration ab v0.3](29_PUBLIC_API_CONTRACT.md)
 
+## M6-Entwicklung
+
+- [Tet4-Masse und Wärmekapazität](31_TET4_STORAGE.md)
+- [Quellenbelegte thermische Parameterbibliothek](32_MATERIAL_LIBRARY.md)
+
 ## Veröffentlichungen
 
 - [v1.0.0 — Vollständiger stationärer Workflow](releases/v1.0.0.md)

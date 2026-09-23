@@ -181,7 +181,7 @@ elektrisches Potential `phi` mit feldweiser Freiheitsgradverwaltung.
 | M3 | v0.4.0 | Sequenzielle Thermomechanik `T → u` | Freigegeben |
 | M4 | v0.5.0 | Monolithische Piezoelektrizität `u–phi` | Freigegeben |
 | M5 | v1.0.0 | Elektroden, Modellformat und vollständiger stationärer Workflow | Freigegeben |
-| M6 | v1.1.0 | Transiente Wärme, Piezo-Dynamik/Harmonik und reziproke Thermoelastizität | Konkretisiert |
+| M6 | v1.1.0 | Transiente Wärme, Piezo-Dynamik/Harmonik (reziproke Thermoelastizität zurückgestellt) | Konkretisiert |
 | M7 | v1.2.0 | PETSc-Backend, Tet10, Wärmeindikatoren und gemessene Skalierung | Konkretisiert |
 | M8 | v1.3.0* | Reproduzierbare Parameterstudien | Geplant |
 | M9 | v1.4.0* | Experimentelle Validierung und Unsicherheit | Geplant |
