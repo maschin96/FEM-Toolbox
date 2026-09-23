@@ -211,7 +211,9 @@ läuft vor der Assembly ([Doc/23](23_MODEL_PREFLIGHT.md)).
 
 ## 8. Abhängigkeitsstrategie
 
-Zwingend: NumPy, SciPy. Standardadapter: meshio ab Version 5.3 (MIT-Lizenz).
+Zwingend: NumPy, SciPy. Standardadapter: meshio ab Version 5.3.5 (MIT-Lizenz);
+ältere 5.3-Versionen scheitern mit NumPy 2 beim Import
+([Verträglichkeitsnachweis](28_DEPENDENCY_COMPATIBILITY.md)).
 Entwicklungsabhängigkeiten: pytest, ruff, mypy. Die Entwicklungsumgebung begrenzt
 NumPy derzeit auf Versionen
 vor 2.5, weil die NumPy-2.5-Typstubs mindestens Python 3.12 voraussetzen, während
