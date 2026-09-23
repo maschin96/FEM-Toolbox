@@ -120,12 +120,13 @@ GitHub: [Milestone M6](https://github.com/maschin96/FEM-Toolbox/milestone/7) ·
 [Release-Issue #33](https://github.com/maschin96/FEM-Toolbox/issues/33)
 
 Ergebnis: reproduzierbare transiente Wärmeleitung, lineare Piezoelastodynamik,
-Modal-/Harmonik-Analyse und reziproke lineare Thermoelastizität.
+Modal-/Harmonik-Analyse. Reziproke Thermoelastizität wurde am 23.09.2026
+auf Nutzerwunsch zurückgestellt.
 
 1. #29: Masse/Kapazität, Materialdaten, Zeit-/Anfangswert- und Serienvertrag.
 2. #30: Backward-Euler-Wärme samt zeitabhängigen Randwerten und Speicherbilanz.
 3. #31: getrennte PRs für DAE/Modalanalyse, Newmark, Harmonik und Model/Export.
-4. #32: reziproke u–T-Kopplung nach Potential-/Referenzentscheidung.
+4. #32: auf Nutzerwunsch zurückgestellt; kein M6-Pflichtumfang.
 5. #33: kompatibles Release mit ausführbaren Artefaktbeispielen.
 
 Abnahme: getrennte Raum-/Zeitkonvergenz, Frequenzreferenzen, Energie-/

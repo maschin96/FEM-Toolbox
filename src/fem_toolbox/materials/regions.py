@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from typing import Any, TypeAlias
 
 from fem_toolbox.errors import MaterialAssignmentError
@@ -32,7 +32,20 @@ _FIELD_TYPES: dict[str, type[Material]] = {
 
 def _material_data(material: Material) -> dict[str, Any]:
     if isinstance(material, ThermalMaterial):
-        return {"conductivity": material.conductivity.tolist(), "unit": "W/(m K)"}
+        data: dict[str, Any] = {
+            "conductivity": material.conductivity.tolist(),
+            "unit": "W/(m K)",
+        }
+        if material.density is not None:
+            data.update(
+                density=material.density,
+                specific_heat=material.specific_heat,
+                density_unit="kg/m^3",
+                specific_heat_unit="J/(kg K)",
+            )
+        if material.source is not None:
+            data["source"] = asdict(material.source)
+        return data
     if isinstance(material, DielectricMaterial):
         return {"permittivity": material.permittivity.tolist(), "unit": "F/m"}
     if isinstance(material, ElasticMaterial):
