@@ -81,6 +81,11 @@ geschlossen. Vor dem Tag müssen alle folgenden Bedingungen erfüllt sein:
 Fehlende unabhängige Reviewer werden im Release-Issue genannt. Sie werden nicht
 als erteilte Freigabe behandelt.
 
+Für v1.0 ist zusätzlich das [Artefakt- und Schutzgate aus Issue #58](29_RELEASE_ARTIFACTS_AND_PROTECTION.md)
+zu erfüllen: isolierte Wheel-/sdist-Installation, aktive erforderliche Checks
+und unabhängiges Review. Der dort dokumentierte administrative Blocker bleibt
+bis zu einem neuen API-Nachweis offen.
+
 ## 5. Tagging-Ablauf
 
 Nach bestandenem Gate:
