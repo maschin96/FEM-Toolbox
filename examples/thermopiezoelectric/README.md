@@ -62,5 +62,8 @@ ohne Vorzeichen- oder Kopplungsfehler zu verschleiern.
 
 Die Geometrie ist nur ein Element groß und alle Temperaturen sind
 vorgeschrieben. Daraus folgt kein Nachweis für Netzkonvergenz,
-Mehrmaterial-Grenzflächen oder reale Bauteilgrößen; diese Prüfungen werden
-in #141 behandelt.
+Mehrmaterial-Grenzflächen oder reale Bauteilgrößen. Der
+[Vier-Netze-Nachweis](../../Doc/25_THERMOPIEZO_CONVERGENCE.md) prüft den
+synthetischen Mehrmaterialfall separat. Vor der Übertragung auf einen eigenen
+Fall sind die [v1.0-Nutzungsgrenzen](../../Doc/26_VALIDITY_AND_LIMITS.md)
+zu prüfen.

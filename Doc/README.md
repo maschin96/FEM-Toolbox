@@ -39,9 +39,11 @@ Eintrag im Entscheidungsprotokoll.
 - [Modellweite Randbedingungs- und Nullraumprüfung](23_MODEL_PREFLIGHT.md)
 - [Versioniertes stationäres Ergebnisbündel](24_RESULT_BUNDLE.md)
 - [Vier-Netze-Nachweis des stationären Mehrmaterialmodells](25_THERMOPIEZO_CONVERGENCE.md)
+- [Gültigkeitsbereich und numerische Nutzungsgrenzen für v1.0](26_VALIDITY_AND_LIMITS.md)
 
 ## Veröffentlichungen
 
+- [v1.0.0 — Entwurf, nicht veröffentlicht](releases/v1.0.0-draft.md)
 - [v0.5.0 — Piezoelektrizität](releases/v0.5.0.md)
 - [v0.4.0 — Sequenzielle Thermomechanik](releases/v0.4.0.md)
 - [v0.3.0 — Ungekoppelte Einzelfelder](releases/v0.3.0.md)
