@@ -5,13 +5,22 @@ dreidimensionale Finite-Elemente-Simulationen. Ziel sind verifizierte Modelle f�
 Festkörpermechanik, Wärmeleitung, Elektrostatik und deren thermomechanische und
 piezoelektrische Kopplungen auf Basis linearer Vierknoten-Tetraeder (**Tet4**).
 
-**Aktueller Stand: v1.0.0 — vollständiger stationärer Workflow.**
+**Stabile Freigabe: v1.1.0 — transiente Wärme und Piezo-Dynamik.**
+
+Neu gegenüber v1.0: [transiente Wärmeleitung](Doc/33_TRANSIENT_HEAT.md) mit
+[Materialbibliothek](Doc/32_MATERIAL_LIBRARY.md), Sprüngen/Rampen/CSV,
+ParaView-Zeitserie und Messpunkten sowie [Piezo-Dynamik](Doc/34_PIEZO_DYNAMICS.md)
+mit Modalanalyse, Newmark und komplexer Harmonik.
+Ausführbare Beispiele: [Wärme](examples/transient_heat/README.md) und
+[Piezo-Dynamik](examples/piezo_dynamics/README.md).
+[Release-Nachweis und Grenzen](Doc/35_M6_RELEASE_VERIFICATION.md).
+
 Verfügbar sind das Netzmodell, Tet4-Geometrie, drei stationäre Einzelfelder,
 die einseitige Kopplung `T → u`, der monolithische piezoelektrische
 `u–φ`-Solver mit festen und schwebenden Elektroden sowie `T → (u, φ)`.
 Die versionierte TOML-`Model`-API ergänzt Materialregionen, Preflight und
 Ergebnisbündel mit Provenienz. Umfang und Migration stehen in den
-[Release Notes](Doc/releases/v1.0.0.md). Die
+[Release Notes](Doc/releases/v1.1.0.md). Die
 [Gültigkeitsübersicht](Doc/26_VALIDITY_AND_LIMITS.md) beschreibt die
 verifizierten Annahmen und numerischen Grenzen.
 
@@ -21,7 +30,7 @@ verifizierten Annahmen und numerischen Grenzen.
 
 ## Verfügbare Funktionen
 
-| Bereich | Umfang in v1.0.0 |
+| Bereich | Umfang in v1.1.0 |
 |---|---|
 | Netzmodell | Unveränderliche NumPy-Arrays für 3D-Punkte, Tet4-Zellen und Triangle3-Flächen; validierte Indizes, externe IDs und Tags |
 | Auswahlsätze | Benannte Volumen- und Flächensätze, auch mit überlappenden Mitgliedschaften |
@@ -35,6 +44,8 @@ verifizierten Annahmen und numerischen Grenzen.
 | Thermomechanik | Sequenzielle stationäre Wärme-zu-Mechanik-Kopplung mit anisotroper thermischer Expansion und regionsweisen Referenztemperaturen |
 | Piezoelektrizität | Stress-Charge-Materialdaten, Konversion und Achsrotation; gekoppelte Tet4-Operatoren und monolithische Sparse-LU-Lösung mit feldweiser Skalierung, Reaktionen, Ladungs- und Energiebilanzen |
 | Thermopiezoelektrizität | Einseitiger stationärer Ablauf `T → (u, φ)` mit regionsweiser thermischer Eigenverzerrung und getrennten Wärme-, Kraft- und Ladungsbilanzen in v1.0.0 |
+| Transiente Wärme | Konstante rho/c-Daten, Backward Euler, Model-Schema 2, Zeitprofile, Speicherbilanz und PVD-/Messpunktserien |
+| Piezo-Dynamik | Mechanische konsistente Masse, algebraisches Potential, Modal-/Newmark-/Harmonikanalyse, Model-Schema 3 und komplexe Feld-/Messpunktausgabe |
 
 Ein vollständiger deklarativer Lauf mit Gmsh-Eingabe, VTU-Feldern und
 Provenienzbericht steht unter [examples/thermopiezoelectric](examples/thermopiezoelectric/README.md).
@@ -158,7 +169,7 @@ Jedes physikalische Einzelfeld soll vor seiner Kopplung separat verifiziert
 werden. Dazu gehören analytische Vergleichsfälle, Patch-Tests, Energie- und
 Reziprozitätsprüfungen, globale Bilanzen und Netzkonvergenz.
 
-Für v1.0.0 umfasst der Nachweis Patch-, Bilanz-, analytische Benchmark- und
+Für den stationären Umfang umfasst der Nachweis Patch-, Bilanz-, analytische Benchmark- und
 vierstufige Konvergenztests für Mechanik, Wärme, Elektrostatik,
 Thermomechanik und Piezoelektrizität. Direkter und inverser Piezoeffekt
 werden zusätzlich gegen eine unabhängige 1D-FE-Implementierung geprüft.
@@ -181,7 +192,7 @@ elektrisches Potential `phi` mit feldweiser Freiheitsgradverwaltung.
 | M3 | v0.4.0 | Sequenzielle Thermomechanik `T → u` | Freigegeben |
 | M4 | v0.5.0 | Monolithische Piezoelektrizität `u–phi` | Freigegeben |
 | M5 | v1.0.0 | Elektroden, Modellformat und vollständiger stationärer Workflow | Freigegeben |
-| M6 | v1.1.0 | Transiente Wärme, Piezo-Dynamik/Harmonik und reziproke Thermoelastizität | Konkretisiert |
+| M6 | v1.1.0 | Transiente Wärme, Piezo-Dynamik/Harmonik (reziproke Thermoelastizität zurückgestellt) | Freigegeben |
 | M7 | v1.2.0 | PETSc-Backend, Tet10, Wärmeindikatoren und gemessene Skalierung | Konkretisiert |
 | M8 | v1.3.0* | Reproduzierbare Parameterstudien | Geplant |
 | M9 | v1.4.0* | Experimentelle Validierung und Unsicherheit | Geplant |

@@ -35,6 +35,29 @@ einschließlich `ThermomechanicalResult`; er besitzt keinen eigenen
 temperature=...)` und `solve_heat(...)` ist ebenfalls möglich. Dieser
 Einstiegspunkt bleibt in v1.0 kompatibel erhalten.
 
+## Additive öffentliche Erweiterungen ab v1.1.0
+
+Der stationäre Vertrag bleibt unverändert. Folgende dokumentierte Einstiegspunkte
+kommen hinzu; Schemata und Ergebnisformen werden nicht mit v1 gleichgesetzt:
+
+| Importpfad | Einstiegspunkte | Vertrag |
+|---|---|---|
+| `fem_toolbox.materials.catalog` | `thermal_material`, `material_catalog` | Quellenbelegte konstante thermische Kennwerte; siehe Dokument 32 |
+| `fem_toolbox.time` | `Step`, `Ramp`, `TimeSeries`, `integration_times` | SI-Zeitprofile, explizite Interpolation/Ereignisse |
+| `fem_toolbox.solvers.transient_heat` | `TemperatureBC`, `TransientConvection`, `solve_transient_heat`, `TransientHeatResult` | Wärmezeitverlauf und Bilanz, Dokument 33 |
+| `fem_toolbox.solvers.piezo_dynamics` | `solve_piezoelectric_modes`, `PiezoelectricModes` | Massennormierte Moden und Frequenzen, Dokument 34 |
+| `fem_toolbox.solvers.piezo_transient` | `KinematicValues`, `solve_transient_piezoelectric`, `TransientPiezoelectricResult` | Newmark und u/v/a/phi, Dokument 34 |
+| `fem_toolbox.solvers.piezo_harmonic` | `solve_harmonic_piezoelectric`, `HarmonicPiezoelectricResult` | Komplexe Spitzenwertphasoren, Dokument 34 |
+| `fem_toolbox.io.heat_series` | `HeatSeriesWriter`, `export_heat_series` | Netzgebundene Wärmezeitserie mit CSV/Manifest |
+| `fem_toolbox.io.piezo_series` | `export_piezo_series` | Schema-3-ModelResult nach PVD/VTU/CSV, komplexe Komponenten bleiben erhalten |
+| `fem_toolbox.dynamic_result` | `PiezoDynamicResult` | Netz-/materialgebundener Schema-3-Wrapper mit `solution` und Provenienz |
+
+`Model` ergänzt Schema 2 und 3. `ModelResult.field_result` ist bei Wärme
+`TransientHeatResult`, bei den drei neuen Piezo-Modi `PiezoDynamicResult`.
+Die detaillierten Einheiten, Formen, Grenzen und Migration sind in
+[Dokument 33](33_TRANSIENT_HEAT.md), [Dokument 34](34_PIEZO_DYNAMICS.md)
+und [Dokument 35](35_M6_RELEASE_VERIFICATION.md) festgelegt.
+
 ## Formen, Reihenfolge und Einheiten
 
 `Mesh` verwendet nullbasierte Knoten-/Zellindizes. Aktive Knoten stehen in
@@ -67,7 +90,7 @@ versionierte [TOML-/Python-Dokument](21_MODEL_SCHEMA.md) erlaubt die dort
 explizit aufgezählten Eingabeeinheiten und konvertiert sie vor dem Solve in
 SI. Die `Model`-API prüft Materialregionen, Randbedingungskonflikte und
 Nullräume vor der Assembly. Direkte Solver prüfen ihre jeweiligen
-Voraussetzungen selbst. `ModelResult.field_result` ist derselbe Ergebnistyp
+Voraussetzungen selbst. Bei den stationären Modi ist `ModelResult.field_result` derselbe Ergebnistyp
 wie beim passenden direkten Solver; nur die modellweite Provenienz kommt
 hinzu. Der kombinierte Modus gibt ein Paar aus `heat` und `piezoelectric`
 zurück. Gemeinsame Fälle müssen dieselben Rohfelder und physikalischen

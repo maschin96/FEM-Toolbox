@@ -1,6 +1,6 @@
 # Roadmap
 
-Status: M0–M5 freigegeben; M6/M7 neu konkretisiert (Stand 2026-09-23).
+Status: M0–M6 freigegeben; M7 konkretisiert (Stand 2026-09-23).
 Spätere Meilensteine: siehe historische Produktvision und aktuelles GitHub-Backlog.
 
 Die Roadmap priorisiert wissenschaftliches Risiko vor Funktionsmenge. Jeder
@@ -114,22 +114,25 @@ Beispiel und der [Vier-Netze-Konvergenznachweis mit Materialgrenze](25_THERMOPIE
 
 ## M6 — Transiente und dynamische Erweiterung
 
+Freigegeben als v1.1.0; [Release-Nachweis](35_M6_RELEASE_VERIFICATION.md).
+
 Zielversion: `v1.1.0`
 
 GitHub: [Milestone M6](https://github.com/maschin96/FEM-Toolbox/milestone/7) ·
 [Release-Issue #33](https://github.com/maschin96/FEM-Toolbox/issues/33)
 
 Ergebnis: reproduzierbare transiente Wärmeleitung, lineare Piezoelastodynamik,
-Modal-/Harmonik-Analyse und reziproke lineare Thermoelastizität.
+Modal-/Harmonik-Analyse. Reziproke Thermoelastizität wurde am 23.09.2026
+auf Nutzerwunsch zurückgestellt.
 
 1. #29: Masse/Kapazität, Materialdaten, Zeit-/Anfangswert- und Serienvertrag.
 2. #30: Backward-Euler-Wärme samt zeitabhängigen Randwerten und Speicherbilanz.
 3. #31: getrennte PRs für DAE/Modalanalyse, Newmark, Harmonik und Model/Export.
-4. #32: reziproke u–T-Kopplung nach Potential-/Referenzentscheidung.
+4. #32: auf Nutzerwunsch zurückgestellt; kein M6-Pflichtumfang.
 5. #33: kompatibles Release mit ausführbaren Artefaktbeispielen.
 
-Abnahme: getrennte Raum-/Zeitkonvergenz, Frequenzreferenzen, Energie-/
-Entropiebilanzen, konsistente elektrische Zwangsbedingungen und lauffähige
+Abnahme: getrennte Raum-/Zeitkonvergenz, Frequenzreferenzen, Energiebilanzen,
+konsistente elektrische Zwangsbedingungen und lauffähige
 v1.0-Beispiele. Model, Preflight, Provenienz und Zeit-/Frequenzexport gehören
 zum Pflichtumfang. Der GitHub-Zieltermin 14.10.2026 ist ohne Kapazitätsplanung
 nicht bestätigt. Details und PR-Schnitte: [Entwicklungsplan](30_M6_M7_DEVELOPMENT_PLAN.md).

@@ -4,6 +4,9 @@ Stand: 23.09.2026. Tracking: [#167](https://github.com/maschin96/FEM-Toolbox/iss
 Diese Planung ersetzt für M6/M7 die ältere Baseline aus Dokument 13.
 Sie beschreibt geplante Arbeit, keine bereits implementierten Fähigkeiten.
 
+M6 ist mit v1.1.0 abgeschlossen; [Release-Nachweis](35_M6_RELEASE_VERIFICATION.md).
+Die nachfolgende Bestandsaufnahme ist die historische v1.0-Planungsbaseline.
+
 ## Bestandsaufnahme und Bewertung
 
 Geprüfte Basis: `origin/main` und Release v1.0.0 bei
@@ -38,7 +41,8 @@ höhere Elemente**. Beide sind mehrere Entwicklungsschritte, keine einzelnen
 Feature-PRs. Bestehende Issues werden als Arbeitspakete weiterverwendet;
 Unterabschnitte a–d sind getrennte PR-Schnitte, keine duplizierten Backlogs.
 
-M6: #29 → #30 und #31 → #32 → #33. Der mathematische Vertrag für #32 kann
+M6: #29 → #30 und #31 → #33. #32 ist seit der Nutzerentscheidung
+vom 23.09.2026 zurückgestellt und kein v1.1-Release-Gate. Der mathematische Vertrag für #32 kann
 früh vorbereitet werden; die Implementierung wartet auf die verifizierten
 Einzelfelder. M7: #37a zuerst, danach #34 und #35; #36 ist fachlich unabhängig
 von PETSc. Optimierung #37b/c und Release #38 folgen den Referenznachweisen.
@@ -96,7 +100,10 @@ Abhängigkeit: Nach #29; Reihenfolge 31a → 31b → 31c → 31d, jeweils separa
 
 - Abnahme: unabhängige Eigenfrequenzreferenz, Open-/Short-Circuit-Vergleich, ungedämpfte Energie, zweite zeitliche Ordnung bei glatten Daten, Zeit-/Frequenzvergleich abseits Resonanz und statischer Niederfrequenzgrenzfall. Raum-, Zeit- und Frequenzrasterfehler getrennt berichten.
 
-### #32 — Reziproke lineare Thermoelastizität
+### #32 — Reziproke lineare Thermoelastizität (zurückgestellt)
+
+Nutzerentscheidung 23.09.2026: Verformung wirkt derzeit nicht auf Temperatur
+zurück. Der folgende Abschnitt ist zukünftiger Backlog, kein M6-Pflichtumfang.
 
 Abhängigkeit: Nach #30 und mechanischer Zeitintegration aus #31b; Potential-/Referenzklärung vor Implementierung.
 
@@ -110,13 +117,13 @@ Abhängigkeit: Nach #30 und mechanischer Zeitintegration aus #31b; Potential-/Re
 
 ### #33 — M6-Release-Gate
 
-Abhängigkeit: Nach #29–#32 einschließlich ihrer Integrationsschritte.
+Abhängigkeit: Nach #29–#31 einschließlich ihrer Integrationsschritte. #32 ist zurückgestellt.
 
 - Alle M6-Pflichtkriterien einschließlich Model-/Serien-/Frequenzexport nachweisen; alte v1.0-Python- und TOML-Beispiele bleiben unverändert lauffähig.
 
-- Thermische Zeitordnung, mechanische Zeitordnung, Eigenfrequenzen, feldweise Residuen und Energie-/Entropiebilanzen mit vorab begründeten Toleranzen dokumentieren; Raum- und Zeitfehler getrennt.
+- Thermische Zeitordnung, mechanische Zeitordnung, Eigenfrequenzen, feldweise Residuen und Energiebilanzen mit vorab begründeten Toleranzen dokumentieren; Raum- und Zeitfehler getrennt.
 
-- Wärme-, Piezo-Dynamik-/Harmonik- und Thermoelastik-Beispiele aus frischen Wheel-/sdist-Installationen prüfen. Vollständige CI am Integrationscommit, Reviewstatus, Migration und Grenzen dokumentieren.
+- Wärme- und Piezo-Dynamik-/Harmonik-Beispiele aus frischen Wheel-/sdist-Installationen prüfen. Vollständige CI am Integrationscommit, Reviewstatus, Migration und Grenzen dokumentieren.
 
 - v1.1.0 erst nach Gate, konsistenter Paketversion und annotiertem Tag freigeben. Bestehender Zieltermin 14.10.2026 ist ungeprüft: Aufwand und verfügbare Kapazität vor einer Terminzusage erheben.
 
@@ -197,3 +204,14 @@ Abhängigkeit: Nach #34–#37; M6-Kompatibilität bleibt Pflicht.
 - Reine Dokumentations-/Planungsänderung: kein Red-Test oder neuer numerischer
   Nachweis erforderlich. Relative Dokumentationslinks und `git diff --check` geprüft.
 - Kein unabhängiger Reviewer in diesem Auftrag; keine Reviewfreigabe behauptet.
+
+
+## Umsetzung begonnen (23.09.2026)
+
+#29: Tet4-Speicheroperatoren, optionale thermische rho/c-Daten, kleine
+quellenbelegte Bibliothek und Sprung-/Rampen-/CSV-Zeitverläufe sind implementiert.
+#30: Backward Euler, Model-Schema 2, Speicherbilanz, ParaView-Serie und
+Messpunkt-CSV sind implementiert und lokal verifiziert; Nachweise in [Doc/33](33_TRANSIENT_HEAT.md).
+Issue-Abnahme, PR-Integration und M6-Freigabe sind davon getrennte Schritte.
+Der dynamische u/v/a-/Frequenzvertrag und #31 bleiben ausstehend.
+#32 ist auf Nutzerwunsch zurückgestellt (ADR-021).

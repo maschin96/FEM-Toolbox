@@ -294,3 +294,45 @@ Phasorvertrag (#31), thermodynamisches Potential (#32), Backend-/Scalarvertrag
 (#34) sowie additive Netztopologie und Auswerteorte (#35). Die alten
 M5-Entscheidungsbedarfe oben sind historisch; implementierte Entscheidungen
 stehen in den Material-, Elektroden- und Solver-ADRs und Dokumenten 15–24.
+
+
+## ADR-021 — M6 ohne reziproke thermomechanische Rückwirkung
+
+Datum: 23.09.2026. Status: Nutzerentscheidung.
+
+Der Nutzer hat die Rückwirkung von Verformung auf Temperatur ausdrücklich
+aus dem aktuellen Umfang genommen. #32 bleibt als zurückgestellter Backlog
+offen und wird aus dem M6-Milestone entfernt. #33 verlangt deshalb keine
+reziproke Thermoelastizität und keinen Thermoelastic-Damping-Nachweis mehr.
+Bestehende einseitige T→u und T→(u,phi)-Pfade behalten ihre Semantik.
+
+Transiente Wärme verwendet konstante positive rho/c-Daten und Backward Euler
+als Referenz. Vorgegebene Signalereignisse werden ins Raster eingefügt;
+Quellen/Flüsse/Robin-Daten werden am linken Grenzwert des rechten
+Intervallendes ausgewertet, damit ein Sprung keine frühzeitige Energie
+einträgt. Dirichlet-Werte sind rechtsstetig; ihr diskreter Speicherbeitrag
+wird als Reservoirreaktion bilanziert. Physikalische Dirichlet-Sprünge
+benötigen zeitliche Verfeinerung oder eine endliche Anstiegsrampe.
+
+## ADR-022 — Piezoelektrische DAE und mechanisches Eigenproblem (#31a)
+
+Datum: 23.09.2026. Status: implementiert im M6-Arbeitsbranch.
+
+Elektrische Freiheitsgrade bleiben masselos und werden nach Anwendung des
+bestehenden Elektroden-/Gaugevertrags kondensiert. Der positive Schur-Operator
+`K+B D⁻¹ Bᵀ` und ausschließlich mechanische konsistente Masse definieren die
+Moden. Homogene Störungen, explizite Lager/Gauge und ein Größenlimit von 2048
+aktiven Gesamt-DOFs begrenzen die erste dichte Referenz. Anfangspotential und
+-beschleunigung sind abhängige DAE-Größen. Einzelheiten und unabhängige
+Referenzen stehen in [Dokument 34](34_PIEZO_DYNAMICS.md).
+
+## ADR-023 — Komplexer Phasorpfad ohne Änderung von LinearSystem (#31c)
+
+Datum: 23.09.2026. Status: implementiert im M6-Arbeitsbranch.
+
+Harmonische Felder verwenden Spitzenwertphasoren `Re(x_hat*exp(+i*omega*t))`.
+Ein additiver komplexwertiger Solver hält Lasten, Randwerte und Ergebnisse
+komplex; der bestehende `LinearSystem`-Vertrag bleibt reell. Frequenzen werden
+explizit in Hz eingegeben, rad/s separat ausgewiesen. Der ungedämpfte Pfad
+weist numerische Resonanz/Nähe zur Singularität zurück statt Dämpfung zu erfinden.
+Skalierung, Grenzwert und Nachweise: [Dokument 34](34_PIEZO_DYNAMICS.md).

@@ -1,7 +1,7 @@
 # Installation und erster Lauf
 
 Stand: 23. September 2026. Diese Anleitung richtet eine **Entwicklungsumgebung
-aus dem Repository** ein. Die stabile stationäre Version ist v1.0.0; ein späterer Checkout kann bereits
+aus dem Repository** ein. Die stabile Version ist v1.1.0 (stationär, transiente Wärme und Piezo-Dynamik); ein späterer Checkout kann bereits
 weitere Entwicklungsänderungen enthalten.
 Ein PyPI-Release des aktuellen Checkouts wird hier nicht vorausgesetzt.
 
@@ -15,7 +15,7 @@ Ein PyPI-Release des aktuellen Checkouts wird hier nicht vorausgesetzt.
   keine eigene Projekt-CI-Zusage. Details stehen in der
   [Kompatibilitätsmatrix](Doc/28_DEPENDENCY_COMPATIBILITY.md).
 - Wheel und sdist werden zusätzlich ohne Repository-Checkout installiert und
-  mit einem analytischen Solverbeispiel geprüft; Umfang und Freigabegrenzen
+  mit stationären und transienten/dynamischen Referenzbeispielen geprüft; Umfang und Freigabegrenzen
   stehen im [Artefaktnachweis](Doc/29_RELEASE_ARTIFACTS_AND_PROTECTION.md).
 - Internetzugriff für den ersten Paketdownload; ungefähr 1 GB freier Platz
   für Python-Umgebung, numerische Wheels und optional Gmsh ist sinnvoll.
