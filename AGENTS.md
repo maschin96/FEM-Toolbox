@@ -137,9 +137,10 @@ Bei Einrichtung oder Änderung der CI:
   Tests, Linting, Formatierung und Typprüfung automatisieren.
 - Langsame Konvergenztests gesondert ausführen, aber für relevante numerische
   Änderungen vor Integration nachweisen. Ausgelassene Tests sichtbar machen.
-- Branchschutz beziehungsweise Rulesets mit erforderlichen Checks und Review
-  als Repository-Ziel vorsehen. Deren Aktivierung separat prüfen; diese Datei
-  allein konfiguriert keine GitHub-Einstellungen.
+- Branchschutz/Rulesets sind gemäß Eigentümerentscheidung vom 23.09.2026
+  (ADR-020) keine Pflicht und kein Integrations- oder Release-Gate. Die
+  Integrationsverantwortlichen prüfen die anwendbaren CI-Ergebnisse am aktuellen
+  Commit selbst; die oben beschriebenen PR- und Reviewregeln gelten weiterhin.
 - GitHub Actions auf vollständige Commit-SHAs fixieren und Updates nachvollziehbar
   pflegen. `GITHUB_TOKEN` standardmäßig auf minimale Leserechte begrenzen und
   Schreibrechte nur gezielt für erforderliche Jobs vergeben.

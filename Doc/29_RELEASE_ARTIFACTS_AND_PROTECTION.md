@@ -1,8 +1,9 @@
-# Release-Artefakte und Repository-Schutz (#58)
+# Release-Artefakte und Integrationsregeln (#58)
 
 Stand: 23. September 2026. Die technische Artefaktprüfung ist in
-[CI](../.github/workflows/ci.yml) eingerichtet. **Das administrative Gate ist
-offen:** Diese Konfiguration allein schützt `main` nicht und gibt v1.0 nicht frei.
+[CI](../.github/workflows/ci.yml) eingerichtet. Branchschutz ist gemäß der
+Entscheidung des Repository-Eigentümers vom 23.09.2026 keine Voraussetzung für
+Integration oder Freigabe (ADR-020). Die übrigen Release-Gates gelten weiterhin.
 
 ## Installation ohne Quellbaum
 
@@ -35,7 +36,7 @@ bleiben ungeprüft, siehe [Installation](../INSTALL.md). Änderungen an numerisc
 Operatoren erfolgen hier nicht; die bestehende Gesamtsuite einschließlich
 Konvergenztests bleibt separat erforderlich.
 
-## Schutzstatus und erforderliche Integrationseinstellungen
+## Historischer Schutzstatus
 
 Am 23.09.2026 wurden folgende API-Abfragen durchgeführt:
 
@@ -51,24 +52,28 @@ antwortet HTTP 403: `Upgrade to GitHub Pro or make this repository public to ena
 this feature.` Fehlende Administratorrechte sind damit nicht die beobachtete
 Ursache. Sichtbarkeit und Tarif wurden nicht geändert.
 
-Nach Bereitstellung der GitHub-Funktion muss ein Administrator Schutz für `main`
-aktivieren und per API erneut belegen:
+## Entscheidung: Branchschutz entfällt als Pflicht
 
-- Pull Request mit mindestens einer unabhängigen Freigabe; veraltete Freigaben
-  nach neuen Commits verwerfen, offene Review-Diskussionen vor Merge klären.
-- Aktueller Branch und erfolgreiche erforderliche Checks: `Quality / Python 3.13`,
-  `Tests / Python 3.11`, `Tests / Python 3.12`, `Tests / Python 3.13`, alle sechs
-  `Compatibility / Python <Version> / <oldest|latest>` und alle sechs
-  `Artifacts / Python <Version> / <wheel|sdist>` sowie `Build release artifacts`.
-- Force-Push und Branchlöschung unterbinden; Administrator-Bypass nicht als
-  regulären Integrationsweg zulassen.
+Am 23.09.2026 hat der Repository-Eigentümer ausdrücklich entschieden, den
+Branchschutz aus den Anforderungen zu streichen. Damit entfallen die Pflicht
+zur Aktivierung von Branchschutz/Rulesets, der API-Nachweis aktiver Regeln und
+der administrative Negativtest eines technisch blockierten Merges. Ein
+Tarifupgrade oder eine Änderung der Repository-Sichtbarkeit ist dafür nicht
+vorgesehen. Der oben erfasste API-Status bleibt als historische Beobachtung
+stehen und stellt keinen offenen Freigabeblocker dar.
 
-Der Nachweis muss die tatsächlich zurückgegebenen Checknamen und aktiven Regeln
-enthalten. Ein unabhängiger Reviewer ist bislang nicht nachgewiesen.
-Ein absichtlich fehlschlagender Check auf einem temporären PR muss nach Aktivierung
-nachweislich den Merge blockieren. Diesen administrativen Negativtest kann ein
-ungeschützter Branch nicht erfüllen; er bleibt offen. Anschließend Teständerung
-entfernen und alle Checks am endgültigen Commit erneut bestehen lassen.
+Die Integration erfolgt weiterhin per Pull Request. Vor dem Merge werden die
+anwendbaren CI-Ergebnisse am aktuellen Commit geprüft: Quality, Tests,
+Compatibility sowie Build release artifacts und alle sechs Artifacts-Jobs.
+Review-Anmerkungen müssen geklärt sein; unabhängiges Review wird gemäß
+`AGENTS.md` angestrebt, fehlende Reviewer werden transparent benannt. Eine
+technisch erzwungene Reviewfreigabe wird nicht verlangt. Ein unabhängiger
+Reviewer ist für diesen Beitrag bislang nicht nachgewiesen.
+
+Die Einhaltung liegt damit bei den integrierenden Personen; GitHub verhindert
+abweichende Integrationen nicht automatisch. Die Pflicht zu erfolgreichen
+Checks und die bestehenden Regeln gegen unaufgeforderte History-Rewrites
+bleiben bestehen. Siehe [ADR-020](07_RISKS_AND_DECISIONS.md).
 
 Die CI nutzt SHA-fixierte Actions, `contents: read` und `pull_request`, ohne
 Secrets oder privilegierte PR-Ausführung. Matrixwerte sind statisch; PR-Titel
@@ -86,6 +91,9 @@ Das anschließende Installieren des Wheels ließ denselben Test bestehen.
 Dies ist ein Installationstest; es wird kein neuer physikalischer TDD-Zyklus
 beansprucht.
 
-Issue #58 und damit die Freigabe in #28 bleiben bis zum aktivierten, per API
-belegten Schutz und zum nachgewiesenen Review-/Negativtest offen. Erfolgreiche
-Artefaktjobs allein schließen dieses Gate nicht.
+Die 17 CI-Jobs des [PR-Laufs](https://github.com/maschin96/FEM-Toolbox/actions/runs/35830968433)
+bestanden am Commit `7e0da81`, darunter alle sechs Artefaktinstallationen.
+Issue #58 kann nach Integration des PRs mit den angepassten Akzeptanzkriterien
+abgeschlossen werden. Für #28 bleiben die übrigen Kriterien des
+[Release-Prozesses](09_RELEASE_PROCESS.md) erforderlich; ein ungeschützter
+Branch ist kein eigenständiger Blocker mehr.

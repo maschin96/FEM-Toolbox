@@ -23,7 +23,7 @@ Eintrag im Entscheidungsprotokoll.
 - [Bestandsanalyse, Produktvision und Planungswelle 2](13_PRODUCT_VISION.md)
 - [Weitergabe und Drittbestandteile](27_DISTRIBUTION_INVENTORY.md)
 - [Abhängigkeitsverträglichkeit und Sicherheitsupdates](28_DEPENDENCY_COMPATIBILITY.md)
-- [Release-Artefakte und offenes Repository-Schutzgate](29_RELEASE_ARTIFACTS_AND_PROTECTION.md)
+- [Release-Artefakte und Integrationsregeln](29_RELEASE_ARTIFACTS_AND_PROTECTION.md)
 
 ## Implementierte Einzelfelder
 

@@ -218,6 +218,24 @@ scheinbar interpolierte Werte. Der Export weist vorhandene Zieldateien ab und
 veröffentlicht das Manifest zuletzt. Vertrag und unabhängiger Leser stehen in
 [Doc/24](24_RESULT_BUNDLE.md).
 
+### ADR-020: Branchschutz nicht als Integrations- oder Release-Gate (#58)
+
+Am 23.09.2026 entscheidet der Repository-Eigentümer, Branchschutz aus den
+Projektanforderungen zu streichen. Die GitHub-API meldete für das private
+Repository fehlenden Schutz und einen tarifbedingten HTTP 403 beim Ruleset-Abruf.
+Ein Tarifupgrade oder eine Änderung der Sichtbarkeit wird nicht vorausgesetzt.
+
+Die Aktivierung von Branchschutz/Rulesets, der Nachweis aktiver Regeln und ein
+administrativer Negativtest mit blockiertem Merge entfallen als Pflicht.
+Erfolgreiche anwendbare CI-Prüfungen am Zielcommit, Pull Requests und die
+bestehenden Reviewregeln bleiben bestehen. Integrationsverantwortliche prüfen
+sie selbst; GitHub erzwingt sie nicht. Fehlende unabhängige Reviewer werden
+weiterhin genannt und nicht als erteilte Freigabe dargestellt.
+
+Diese Entscheidung ersetzt das zuvor in #58 dokumentierte administrative Gate.
+Sie schließt keinen PR und gibt keine Version frei. Nachweise und Konsequenzen
+stehen in [Doc/29](29_RELEASE_ARTIFACTS_AND_PROTECTION.md).
+
 ## 2. Technisches Risikoregister
 
 | Risiko | Wirkung | Früher Nachweis | Gegenmaßnahme |

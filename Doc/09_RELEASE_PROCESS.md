@@ -81,10 +81,11 @@ geschlossen. Vor dem Tag müssen alle folgenden Bedingungen erfüllt sein:
 Fehlende unabhängige Reviewer werden im Release-Issue genannt. Sie werden nicht
 als erteilte Freigabe behandelt.
 
-Für v1.0 ist zusätzlich das [Artefakt- und Schutzgate aus Issue #58](29_RELEASE_ARTIFACTS_AND_PROTECTION.md)
-zu erfüllen: isolierte Wheel-/sdist-Installation, aktive erforderliche Checks
-und unabhängiges Review. Der dort dokumentierte administrative Blocker bleibt
-bis zu einem neuen API-Nachweis offen.
+Für v1.0 ist zusätzlich der [Artefaktnachweis aus Issue #58](29_RELEASE_ARTIFACTS_AND_PROTECTION.md)
+zu erfüllen: isolierte Wheel-/sdist-Installation und erfolgreiche CI-Prüfungen.
+Branchschutz/Rulesets und deren administrativer Negativtest sind gemäß
+Eigentümerentscheidung vom 23.09.2026 (ADR-020) keine Freigabekriterien.
+Die Integrationsverantwortlichen prüfen die CI-Ergebnisse am Zielcommit selbst.
 
 ## 5. Tagging-Ablauf
 
