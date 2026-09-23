@@ -1,6 +1,7 @@
 # Roadmap
 
-Status: M0–M3 freigegeben; M4–M10 geplant; M11–M12 grobe Horizonte (Stand 2026-09-22)
+Status: M0–M5 freigegeben; M6/M7 neu konkretisiert (Stand 2026-09-23).
+Spätere Meilensteine: siehe historische Produktvision und aktuelles GitHub-Backlog.
 
 Die Roadmap priorisiert wissenschaftliches Risiko vor Funktionsmenge. Jeder
 Meilenstein endet mit einer ausführbaren Demonstration und einem V&V-Nachweis.
@@ -105,7 +106,7 @@ Ergebnis: praxistaugliche Randbedingungen für Piezoaufbauten.
 - Equipotential-Zwang über DOF-Kondensation oder Nebenbedingungen
 - vorgegebene Gesamtladung und Floating Electrode
 - kombinierter Workflow `T -> (u, phi)`
-- YAML/TOML-Modellformat und dokumentierte Beispiele
+- Versioniertes TOML-Modellformat und dokumentierte Beispiele
 - vollständiger Ergebnis- und Provenienzexport
 
 Abnahme: Open-Circuit-/Short-Circuit-Benchmark, reproduzierbares End-to-End-
@@ -118,15 +119,20 @@ Zielversion: `v1.1.0`
 GitHub: [Milestone M6](https://github.com/maschin96/FEM-Toolbox/milestone/7) ·
 [Release-Issue #33](https://github.com/maschin96/FEM-Toolbox/issues/33)
 
-Ergebnis: zeitabhängige Wärmeleitung und lineare Piezoelastodynamik.
+Ergebnis: reproduzierbare transiente Wärmeleitung, lineare Piezoelastodynamik,
+Modal-/Harmonik-Analyse und reziproke lineare Thermoelastizität.
 
-- konsistente/lumped Massen- und Kapazitätsmatrizen
-- Newmark- oder generalized-alpha-Verfahren
-- implizite Wärmeintegration
-- harmonische Analyse
-- vollständig reziproke lineare Thermoelastizität
+1. #29: Masse/Kapazität, Materialdaten, Zeit-/Anfangswert- und Serienvertrag.
+2. #30: Backward-Euler-Wärme samt zeitabhängigen Randwerten und Speicherbilanz.
+3. #31: getrennte PRs für DAE/Modalanalyse, Newmark, Harmonik und Model/Export.
+4. #32: reziproke u–T-Kopplung nach Potential-/Referenzentscheidung.
+5. #33: kompatibles Release mit ausführbaren Artefaktbeispielen.
 
-Abnahme: Eigenfrequenzen, Energiebilanz und Zeitschritt-Konvergenz.
+Abnahme: getrennte Raum-/Zeitkonvergenz, Frequenzreferenzen, Energie-/
+Entropiebilanzen, konsistente elektrische Zwangsbedingungen und lauffähige
+v1.0-Beispiele. Model, Preflight, Provenienz und Zeit-/Frequenzexport gehören
+zum Pflichtumfang. Der GitHub-Zieltermin 14.10.2026 ist ohne Kapazitätsplanung
+nicht bestätigt. Details und PR-Schnitte: [Entwicklungsplan](30_M6_M7_DEVELOPMENT_PLAN.md).
 
 ## M7 — Skalierung und weitere Elemente
 
@@ -135,20 +141,25 @@ Zielversion: `v1.2.0`
 GitHub: [Milestone M7](https://github.com/maschin96/FEM-Toolbox/milestone/8) ·
 [Release-Issue #38](https://github.com/maschin96/FEM-Toolbox/issues/38)
 
-Ergebnis: größere Forschungsmodelle und Genauigkeitsverbesserung.
+Ergebnis: nachweisbar skalierbare Solverpfade und verifizierte Tet10-Genauigkeit.
 
-- petsc4py-Backend und Blockpräconditioner
-- parallele Assembly nach Profiling
-- Tet10 als nächstes Volumenelement
-- Fehlerindikatoren und perspektivisch Adaptivität
+1. #37a: Laufzeit-/Speicherbaseline vor Architektur- und Optimierungsentscheidungen.
+2. #34: SciPy-Backend-Vertrag, optionales PETSc, FieldSplit und echte Backend-CI.
+3. #35: geradkantige Tet10/Triangle6 durch Netz, Operatoren, M6, Model und Export.
+4. #36: Fehlerindikator und Markierung zunächst für stationäre Tet4-Wärme.
+5. #37b/c und #38: gemessene Optimierung, Supportmatrix und Release-Abnahme.
 
-Abnahme: reproduzierbarer Skalierungstest und elementübergreifende Benchmarks.
+Abnahme: Backend-Parität, Tet10-Patch-/Konvergenztests, dokumentierter
+Indikatornachweis und reproduzierbare Leistungs-/Speichermessungen bei
+vergleichbarem Fehler. MPI, gekrümmte Tet10 und gekoppelte Adaptivität sind
+keine impliziten Zusagen. Details: [Entwicklungsplan](30_M6_M7_DEVELOPMENT_PLAN.md).
 
 ## M8–M10 — Zweite Produktplanungswelle
 
 Die [Bestandsanalyse und Produktvision](13_PRODUCT_VISION.md) dokumentiert
-Restumfang, Abhängigkeiten und detaillierte Abnahme. M0–M7 behalten ihren Umfang;
-M5 erhält zusätzlich API-Vertrag #57 und Release-/Repository-Absicherung #58.
+Restumfang, Abhängigkeiten und detaillierte Abnahme. Die damalige Baseline
+ist historisch; M5 einschließlich #57/#58 ist abgeschlossen.
+Für M6/M7 gilt nun der Entwicklungsplan vom 23.09.2026.
 
 | Milestone | Zielversion (vorläufig) | Ergebnis | Issues / Release-Gate |
 |---|---|---|---|

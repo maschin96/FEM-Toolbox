@@ -3,6 +3,10 @@
 Status: Planungsbaseline, keine Implementierungszusage für künftige Funktionen.
 Bestandsaufnahme: 2026-09-21; Abschlussprüfung: 2026-09-22. Tracking: [#56](https://github.com/maschin96/FEM-Toolbox/issues/56).
 
+> Historische Bestandsaufnahme: Aussagen zu offenen M3–M5-Arbeiten beziehen
+> sich auf September 2026 vor v1.0. Den aktuellen Stand und die verbindliche
+> Konkretisierung von M6/M7 enthält [Dokument 30](30_M6_M7_DEVELOPMENT_PLAN.md).
+
 ## 1. Evidenz und aktueller Stand
 
 Analysiert wurde `origin/main` bei `e3382a1a84a11221c34e18c64271249784ee9b87`

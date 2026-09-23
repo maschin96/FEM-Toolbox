@@ -181,8 +181,8 @@ elektrisches Potential `phi` mit feldweiser Freiheitsgradverwaltung.
 | M3 | v0.4.0 | Sequenzielle Thermomechanik `T → u` | Freigegeben |
 | M4 | v0.5.0 | Monolithische Piezoelektrizität `u–phi` | Freigegeben |
 | M5 | v1.0.0 | Elektroden, Modellformat und vollständiger stationärer Workflow | Freigegeben |
-| M6 | v1.1.0 | Transiente Wärmeleitung und lineare Dynamik | Geplant |
-| M7 | v1.2.0 | PETSc-Backend, Tet10 und Skalierung | Geplant |
+| M6 | v1.1.0 | Transiente Wärme, Piezo-Dynamik/Harmonik und reziproke Thermoelastizität | Konkretisiert |
+| M7 | v1.2.0 | PETSc-Backend, Tet10, Wärmeindikatoren und gemessene Skalierung | Konkretisiert |
 | M8 | v1.3.0* | Reproduzierbare Parameterstudien | Geplant |
 | M9 | v1.4.0* | Experimentelle Validierung und Unsicherheit | Geplant |
 | M10 | v1.5.0* | Kontrollierte adaptive Netzstudien | Geplant |
@@ -192,6 +192,9 @@ elektrisches Potential `phi` mit feldweiser Freiheitsgradverwaltung.
 *Vorläufige Zielversionen ohne Terminzusage. Produktvision, Bestandsanalyse,
 Abhängigkeiten und Abnahmegates stehen in der
 [zweiten Planungswelle](Doc/13_PRODUCT_VISION.md).
+
+Die [M6/M7-Planung](Doc/30_M6_M7_DEVELOPMENT_PLAN.md) beschreibt den aktuellen
+Entwicklungsstand, die Reihenfolge und die überprüfbaren Releasegates.
 
 Die deklarative API `Model.from_file(...).solve()` ist für Wärme, Elastizität,
 Elektrostatik, Piezoelektrizität und den Ablauf `T → (u, φ)` verfügbar. Das [TOML-Schema](Doc/21_MODEL_SCHEMA.md)

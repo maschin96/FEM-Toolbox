@@ -19,6 +19,8 @@ Eintrag im Entscheidungsprotokoll.
 
 ## Produktplanung
 
+- [Aktueller Entwicklungsstand und konkrete M6/M7-Planung](30_M6_M7_DEVELOPMENT_PLAN.md)
+
 - [Installation, Gmsh-Einrichtung und erster Lauf](../INSTALL.md)
 - [Bestandsanalyse, Produktvision und Planungswelle 2](13_PRODUCT_VISION.md)
 - [Weitergabe und Drittbestandteile](27_DISTRIBUTION_INVENTORY.md)
