@@ -226,6 +226,133 @@ def _relative_residual(
     )
 
 
+@dataclass(frozen=True)
+class _ElectrodeReduction:
+    system: LinearSystem
+    conditions: tuple[Dirichlet, ...]
+    original_conditions: tuple[Dirichlet, ...]
+    index: NDArray[np.int64]
+    data: list[tuple[str, NDArray[np.int64], float | None, float | None]]
+    floating: bool
+    representatives: NDArray[np.int64]
+
+
+def _electrode_reduction(
+    mesh: Mesh,
+    dofs: DofMap,
+    original: LinearSystem,
+    conditions: Iterable[Dirichlet],
+    electrodes: Sequence[Electrode] | None,
+    surface_charges: Mapping[int, ChargeDensity] | None = None,
+) -> _ElectrodeReduction:
+    """Apply the shared static/dynamic conducting-boundary contract."""
+    user_bcs = tuple(conditions)
+    bcs = list(user_bcs)
+    electrode_data: list[tuple[str, NDArray[np.int64], float | None, float | None]] = []
+    occupied: set[int] = set()
+    names: set[str] = set()
+    representative = np.arange(dofs.size)
+    if electrodes:
+        inspect_boundary_topology(mesh)
+    user_fixed = (
+        np.concatenate([indices(bc.dofs, dofs.size) for bc in user_bcs])
+        if user_bcs
+        else np.empty(0, dtype=np.int64)
+    )
+    for electrode in electrodes or ():
+        if not isinstance(electrode, Electrode):
+            raise ValidationError("expected Electrode", field="electrodes")
+        if (
+            not isinstance(electrode.name, str)
+            or not electrode.name
+            or electrode.name.strip() != electrode.name
+            or electrode.name in names
+        ):
+            raise ValidationError(
+                "electrode names must be unique and nonempty", field="electrodes"
+            )
+        names.add(electrode.name)
+        if (electrode.potential is None) == (electrode.charge is None):
+            raise ValidationError(
+                "electrode requires either potential or charge", field="electrodes"
+            )
+        if isinstance(electrode.facets, str):
+            if electrode.facets not in mesh.facet_sets:
+                raise ValidationError(
+                    f"unknown electrode facet set {electrode.facets!r}",
+                    field="electrodes",
+                )
+            facets = mesh.facet_sets[electrode.facets]
+        else:
+            facets = indices(electrode.facets, mesh.n_triangle3)
+        if not len(facets) or len(np.unique(facets)) != len(facets):
+            raise ValidationError(
+                "electrode facets must be nonempty and unique", field="electrodes"
+            )
+        if surface_charges and set(int(face) for face in facets).intersection(
+            surface_charges
+        ):
+            raise ValidationError(
+                f"electrode {electrode.name!r} conflicts with prescribed surface charge",
+                field="electrodes",
+            )
+        nodes = np.unique(mesh.triangle3[facets])
+        if occupied.intersection(int(node) for node in nodes):
+            raise ValidationError("electrode node overlap", field="electrodes")
+        occupied.update(int(node) for node in nodes)
+        phi_dofs = dofs.indices("phi", nodes)
+        potential_value = (
+            None
+            if electrode.potential is None
+            else float(real_array(electrode.potential, ()))
+        )
+        charge_value = (
+            None
+            if electrode.charge is None
+            else float(real_array(electrode.charge, ()))
+        )
+        if charge_value is not None:
+            if np.intersect1d(phi_dofs, user_fixed).size:
+                raise ValidationError(
+                    "floating electrode conflicts with Dirichlet potential",
+                    field="electrodes",
+                )
+            representative[phi_dofs] = int(phi_dofs[0])
+        else:
+            bcs.append(Dirichlet(phi_dofs, np.full(len(phi_dofs), potential_value)))
+        electrode_data.append((electrode.name, phi_dofs, potential_value, charge_value))
+
+    unique_representatives = np.unique(representative)
+    reduced_index = np.searchsorted(unique_representatives, representative)
+    has_floating = any(charge is not None for _, _, _, charge in electrode_data)
+    if has_floating:
+        projection = sparse.coo_matrix(
+            (np.ones(dofs.size), (np.arange(dofs.size), reduced_index)),
+            shape=(dofs.size, len(unique_representatives)),
+        ).tocsr()
+        reduced_rhs = np.asarray(projection.T @ original.rhs, dtype=np.float64)
+        for _, electrode_dofs, _, charge in electrode_data:
+            if charge is not None:
+                reduced_rhs[reduced_index[electrode_dofs[0]]] -= charge
+        reduced_system = LinearSystem(
+            projection.T @ original.matrix @ projection, reduced_rhs
+        )
+    else:
+        reduced_system = original
+    reduced_bcs = tuple(
+        Dirichlet(reduced_index[indices(bc.dofs, dofs.size)], bc.values) for bc in bcs
+    )
+    return _ElectrodeReduction(
+        reduced_system,
+        reduced_bcs,
+        tuple(bcs),
+        reduced_index,
+        electrode_data,
+        has_floating,
+        unique_representatives,
+    )
+
+
 def solve_piezoelectric(
     mesh: Mesh,
     material: PiezoelectricMaterial | Sequence[PiezoelectricMaterial],
@@ -349,102 +476,16 @@ def solve_piezoelectric(
             )
     loads.append(VectorBlock(np.arange(dofs.size), volume_vector + surface_vector))
     original = assemble(dofs.size, matrices, loads)
-    user_bcs = tuple(conditions)
-    bcs = list(user_bcs)
-    electrode_data: list[tuple[str, NDArray[np.int64], float | None, float | None]] = []
-    occupied: set[int] = set()
-    names: set[str] = set()
-    representative = np.arange(dofs.size)
-    if electrodes:
-        inspect_boundary_topology(mesh)
-    user_fixed = (
-        np.concatenate([indices(bc.dofs, dofs.size) for bc in user_bcs])
-        if user_bcs
-        else np.empty(0, dtype=np.int64)
+    reduction = _electrode_reduction(
+        mesh, dofs, original, conditions, electrodes, surface_charges
     )
-    for electrode in electrodes or ():
-        if not isinstance(electrode, Electrode):
-            raise ValidationError("expected Electrode", field="electrodes")
-        if (
-            not isinstance(electrode.name, str)
-            or not electrode.name
-            or electrode.name.strip() != electrode.name
-            or electrode.name in names
-        ):
-            raise ValidationError(
-                "electrode names must be unique and nonempty", field="electrodes"
-            )
-        names.add(electrode.name)
-        if (electrode.potential is None) == (electrode.charge is None):
-            raise ValidationError(
-                "electrode requires either potential or charge", field="electrodes"
-            )
-        if isinstance(electrode.facets, str):
-            if electrode.facets not in mesh.facet_sets:
-                raise ValidationError(
-                    f"unknown electrode facet set {electrode.facets!r}",
-                    field="electrodes",
-                )
-            facets = mesh.facet_sets[electrode.facets]
-        else:
-            facets = indices(electrode.facets, mesh.n_triangle3)
-        if not len(facets) or len(np.unique(facets)) != len(facets):
-            raise ValidationError(
-                "electrode facets must be nonempty and unique", field="electrodes"
-            )
-        if surface_charges and set(int(face) for face in facets).intersection(
-            surface_charges
-        ):
-            raise ValidationError(
-                f"electrode {electrode.name!r} conflicts with prescribed surface charge",
-                field="electrodes",
-            )
-        nodes = np.unique(mesh.triangle3[facets])
-        if occupied.intersection(int(node) for node in nodes):
-            raise ValidationError("electrode node overlap", field="electrodes")
-        occupied.update(int(node) for node in nodes)
-        phi_dofs = dofs.indices("phi", nodes)
-        potential_value = (
-            None
-            if electrode.potential is None
-            else float(real_array(electrode.potential, ()))
-        )
-        charge_value = (
-            None
-            if electrode.charge is None
-            else float(real_array(electrode.charge, ()))
-        )
-        if charge_value is not None:
-            if np.intersect1d(phi_dofs, user_fixed).size:
-                raise ValidationError(
-                    "floating electrode conflicts with Dirichlet potential",
-                    field="electrodes",
-                )
-            representative[phi_dofs] = int(phi_dofs[0])
-        else:
-            bcs.append(Dirichlet(phi_dofs, np.full(len(phi_dofs), potential_value)))
-        electrode_data.append((electrode.name, phi_dofs, potential_value, charge_value))
-
-    unique_representatives = np.unique(representative)
-    reduced_index = np.searchsorted(unique_representatives, representative)
-    has_floating = any(charge is not None for _, _, _, charge in electrode_data)
-    if has_floating:
-        projection = sparse.coo_matrix(
-            (np.ones(dofs.size), (np.arange(dofs.size), reduced_index)),
-            shape=(dofs.size, len(unique_representatives)),
-        ).tocsr()
-        reduced_rhs = np.asarray(projection.T @ original.rhs, dtype=np.float64)
-        for _, electrode_dofs, _, charge in electrode_data:
-            if charge is not None:
-                reduced_rhs[reduced_index[electrode_dofs[0]]] -= charge
-        reduced_system = LinearSystem(
-            projection.T @ original.matrix @ projection, reduced_rhs
-        )
-    else:
-        reduced_system = original
-    reduced_bcs = tuple(
-        Dirichlet(reduced_index[indices(bc.dofs, dofs.size)], bc.values) for bc in bcs
-    )
+    reduced_system = reduction.system
+    reduced_bcs = reduction.conditions
+    bcs = reduction.original_conditions
+    reduced_index = reduction.index
+    electrode_data = reduction.data
+    has_floating = reduction.floating
+    unique_representatives = reduction.representatives
     constrained = eliminate_dirichlet(reduced_system, reduced_bcs)
     fixed_reduced = (
         np.unique(

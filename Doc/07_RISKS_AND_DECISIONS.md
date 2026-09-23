@@ -313,3 +313,15 @@ Intervallendes ausgewertet, damit ein Sprung keine frühzeitige Energie
 einträgt. Dirichlet-Werte sind rechtsstetig; ihr diskreter Speicherbeitrag
 wird als Reservoirreaktion bilanziert. Physikalische Dirichlet-Sprünge
 benötigen zeitliche Verfeinerung oder eine endliche Anstiegsrampe.
+
+## ADR-022 — Piezoelektrische DAE und mechanisches Eigenproblem (#31a)
+
+Datum: 23.09.2026. Status: implementiert im M6-Arbeitsbranch.
+
+Elektrische Freiheitsgrade bleiben masselos und werden nach Anwendung des
+bestehenden Elektroden-/Gaugevertrags kondensiert. Der positive Schur-Operator
+`K+B D⁻¹ Bᵀ` und ausschließlich mechanische konsistente Masse definieren die
+Moden. Homogene Störungen, explizite Lager/Gauge und ein Größenlimit von 2048
+aktiven Gesamt-DOFs begrenzen die erste dichte Referenz. Anfangspotential und
+-beschleunigung sind abhängige DAE-Größen. Einzelheiten und unabhängige
+Referenzen stehen in [Dokument 34](34_PIEZO_DYNAMICS.md).

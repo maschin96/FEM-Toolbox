@@ -53,6 +53,7 @@ Eintrag im Entscheidungsprotokoll.
 - [Tet4-Masse und Wärmekapazität](31_TET4_STORAGE.md)
 - [Quellenbelegte thermische Parameterbibliothek](32_MATERIAL_LIBRARY.md)
 - [Transiente Wärme, Model-Schema 2 und Zeitserien](33_TRANSIENT_HEAT.md)
+- [Piezoelastodynamik und Modalanalyse](34_PIEZO_DYNAMICS.md)
 
 ## Veröffentlichungen
 
