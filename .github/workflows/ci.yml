@@ -29,6 +29,9 @@ jobs:
           cache: pip
           cache-dependency-path: pyproject.toml
 
+      - name: Update installer
+        run: python -m pip install --disable-pip-version-check --upgrade 'pip>=26.2'
+
       - name: Install project and quality tools
         run: python -m pip install --disable-pip-version-check -e '.[dev]'
 
@@ -63,6 +66,9 @@ jobs:
           cache: pip
           cache-dependency-path: pyproject.toml
 
+      - name: Update installer
+        run: python -m pip install --disable-pip-version-check --upgrade 'pip>=26.2'
+
       - name: Install project and test tools
         run: python -m pip install --disable-pip-version-check -e '.[test]'
 
@@ -96,6 +102,9 @@ jobs:
             pyproject.toml
             ci/oldest-constraints.txt
 
+      - name: Update installer
+        run: python -m pip install --disable-pip-version-check --upgrade 'pip>=26.2'
+
       - name: Install oldest supported combination
         if: matrix.dependency_set == 'oldest'
         run: |
@@ -109,6 +118,8 @@ jobs:
       - name: Check dependency metadata and installed import
         run: |
           python -m pip check
+          python -m pip freeze
+          python -c 'from importlib.metadata import metadata; m = metadata("fem-toolbox"); print("Requires-Python:", m["Requires-Python"]); print("License-Expression:", m["License-Expression"]); print("Requires-Dist:", m.get_all("Requires-Dist"))'
           cd "$RUNNER_TEMP"
           python -c 'import fem_toolbox, meshio, numpy, scipy; print(f"fem_toolbox={fem_toolbox.__file__} meshio={meshio.__version__} numpy={numpy.__version__} scipy={scipy.__version__}")'
 

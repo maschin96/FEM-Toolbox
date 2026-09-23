@@ -21,6 +21,7 @@ Eintrag im Entscheidungsprotokoll.
 
 - [Bestandsanalyse, Produktvision und Planungswelle 2](13_PRODUCT_VISION.md)
 - [Weitergabe und Drittbestandteile](27_DISTRIBUTION_INVENTORY.md)
+- [Abhängigkeitsverträglichkeit und Sicherheitsupdates](28_DEPENDENCY_COMPATIBILITY.md)
 
 ## Implementierte Einzelfelder
 

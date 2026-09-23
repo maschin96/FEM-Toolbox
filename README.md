@@ -43,10 +43,12 @@ Provenienzbericht steht unter [examples/thermopiezoelectric](examples/thermopiez
 
 ## Installation
 
-Voraussetzungen sind **Python 3.11 oder neuer** und Git. Die CI prüft Python
-3.11, 3.12 und 3.13 unter Linux. NumPy, SciPy und meshio werden als
-Paketabhängigkeiten automatisch installiert; die Entwicklungsoption `dev`
-ergänzt pytest, Ruff und mypy. Maßgeblich ist die [Projektkonfiguration](pyproject.toml).
+Voraussetzungen sind **CPython 3.11 bis 3.13** und Git. Die CI prüft diese
+Versionen unter Linux. Die geprüften minimalen und aktuellen
+[Abhängigkeitskombinationen](Doc/28_DEPENDENCY_COMPATIBILITY.md) sind dokumentiert.
+NumPy, SciPy und meshio werden als Paketabhängigkeiten automatisch installiert;
+die Entwicklungsoption `dev` ergänzt pytest, Ruff und mypy. Maßgeblich ist die
+[Projektkonfiguration](pyproject.toml).
 
 ```sh
 git clone https://github.com/maschin96/FEM-Toolbox.git
