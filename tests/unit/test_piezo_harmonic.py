@@ -108,3 +108,11 @@ def test_unrepresentable_frequency_is_validation_error():
     mesh, mat, bc = problem()
     with pytest.raises(ValidationError, match="representable"):
         solve_harmonic_piezoelectric(mesh, mat, 6.0, bc, 1e200)
+
+
+def test_unrepresentable_residual_metric_is_rejected():
+    mesh, mat, bc = problem()
+    force = np.zeros(16, dtype=complex)
+    force[3] = 1e200 + 2e200j
+    with np.errstate(over="ignore", invalid="ignore"), pytest.raises(ValidationError):
+        solve_harmonic_piezoelectric(mesh, mat, 6.0, bc, 0.2, loads=force)

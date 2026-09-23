@@ -186,3 +186,13 @@ def test_quadratic_rigid_translation_manufactured_solution():
     assert_allclose(result.velocity[:, 1, 0], 0.006 * result.times, atol=3e-15)
     assert_allclose(result.acceleration[:, 1, 0], 0.006, atol=3e-14)
     assert_allclose(result.potential, 0, atol=3e-15)
+
+
+def test_unrepresentable_energy_or_residual_is_rejected():
+    mesh, mat, bc = problem()
+    initial = np.zeros((4, 3))
+    initial[1, 0] = 1e200
+    with np.errstate(over="ignore", invalid="ignore"), pytest.raises(ValidationError):
+        solve_transient_piezoelectric(
+            mesh, mat, 6.0, bc, [0, 0.1], initial_displacement=initial
+        )

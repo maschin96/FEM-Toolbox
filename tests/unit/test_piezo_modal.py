@@ -133,3 +133,9 @@ def test_nonzero_electrode_perturbation_rejected(cube_mesh):
             electrodes=[Electrode("bias", [0], potential=1)],
             count=1,
         )
+
+
+def test_unrepresentable_modal_spectrum_is_rejected():
+    mesh, mat, bc = oscillator()
+    with np.errstate(over="ignore", invalid="ignore"), pytest.raises(ValidationError):
+        solve_piezoelectric_modes(mesh, mat, 1e-310, bc, count=1)

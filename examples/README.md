@@ -48,3 +48,5 @@ schreibt rohe VTU-Felder sowie einen JSON-Bericht mit Provenienz und Bilanzen.
 ## M6-Entwicklung
 
 [Transiente Wärme aus TOML/CSV mit ParaView und Messpunkten](transient_heat/README.md).
+
+- [Piezo-Dynamik: Moden, Newmark, Harmonik, CSV und ParaView](piezo_dynamics/README.md)

@@ -273,6 +273,7 @@ def solve_transient_piezoelectric(
         if (
             not np.isfinite(state).all()
             or not np.isfinite(acceleration).all()
+            or not np.isfinite(relative).all()
             or max(relative) > 1e-9
         ):
             raise ValidationError(
@@ -283,6 +284,8 @@ def solve_transient_piezoelectric(
             + state[:nu] @ system.matrix[:nu, :nu] @ state[:nu]
             - state[nu:] @ system.matrix[nu:, nu:] @ state[nu:]
         )
+        if not np.isfinite(energy):
+            raise ValidationError("unrepresentable total energy", field="solver")
         displacements.append(state[:nu].reshape(n, 3))
         potentials.append(state[nu:])
         velocities.append(velocity.reshape(n, 3))

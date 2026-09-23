@@ -176,7 +176,11 @@ def solve_harmonic_piezoelectric(
         relative.append(
             numerator / norm if norm else (0.0 if numerator == 0 else np.inf)
         )
-    if not np.isfinite(state).all() or max(relative) > 1e-9:
+    if (
+        not np.isfinite(state).all()
+        or not np.isfinite(relative).all()
+        or max(relative) > 1e-9
+    ):
         raise ValidationError(
             "nonfinite state or harmonic field residual exceeds 1e-9", field="solver"
         )

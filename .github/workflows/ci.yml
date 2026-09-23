@@ -31,8 +31,9 @@ jobs:
           python -m build
           cp examples/steady_heat.py dist/steady_heat.py
           cp -R examples/transient_heat dist/transient_heat
+          cp -R examples/piezo_dynamics dist/piezo_dynamics
           cd dist
-          sha256sum *.whl *.tar.gz steady_heat.py transient_heat/* > SHA256SUMS
+          sha256sum *.whl *.tar.gz steady_heat.py transient_heat/* piezo_dynamics/* > SHA256SUMS
       - name: Transfer artifacts and standalone solver example
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
@@ -87,6 +88,10 @@ jobs:
           test -s transient_heat_results/heat.pvd
           test -s transient_heat_results/probes.csv
           test -s transient_heat_results/balance.csv
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/piezo_dynamics/run.py"
+          test -s piezo_dynamic_results/transient/piezo.pvd
+          test -s piezo_dynamic_results/harmonic/probes.csv
+          test -s piezo_dynamic_results/modes/manifest.json
 
   quality:
     name: Quality / Python 3.13
