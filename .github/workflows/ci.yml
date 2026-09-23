@@ -70,7 +70,7 @@ jobs:
         run: python -m pytest
 
   compatibility:
-    name: Compatibility / Python ${{ matrix.python-version }} / ${{ matrix.dependency-set }}
+    name: Compatibility / Python ${{ matrix.python-version }} / ${{ matrix.dependency_set }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     strategy:
@@ -80,7 +80,7 @@ jobs:
           - "3.11"
           - "3.12"
           - "3.13"
-        dependency-set:
+        dependency_set:
           - oldest
           - latest
     steps:
@@ -97,11 +97,11 @@ jobs:
             ci/oldest-constraints.txt
 
       - name: Install oldest supported combination
-        if: matrix.dependency-set == 'oldest'
+        if: matrix.dependency_set == 'oldest'
         run: python -m pip install --disable-pip-version-check --only-binary=:all: -c ci/oldest-constraints.txt '.[test]'
 
       - name: Install latest resolvable combination
-        if: matrix.dependency-set == 'latest'
+        if: matrix.dependency_set == 'latest'
         run: python -m pip install --disable-pip-version-check --only-binary=:all: '.[test]'
 
       - name: Check dependency metadata and installed import
