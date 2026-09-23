@@ -1,8 +1,9 @@
 # Tet4-Masse und Wärmekapazität
 
 Status: Implementierter erster Teil von [#29](https://github.com/maschin96/FEM-Toolbox/issues/29), M6.
-Noch kein transienter Solver; Materialregionen, Zeitbasis und Serienvertrag aus
-#29 sind weiterhin offen. Die stationären Materialkonstruktoren bleiben unverändert.
+Die darauf aufbauende [transiente Wärmeleitung](33_TRANSIENT_HEAT.md) ergänzt
+Materialregionen, Zeitbasis und thermischen Serienvertrag. Die stationären
+Materialkonstruktoren bleiben ohne Speicherparameter verwendbar.
 
 ## Direkte Element-API
 

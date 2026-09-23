@@ -201,3 +201,14 @@ Abhängigkeit: Nach #34–#37; M6-Kompatibilität bleibt Pflicht.
 - Reine Dokumentations-/Planungsänderung: kein Red-Test oder neuer numerischer
   Nachweis erforderlich. Relative Dokumentationslinks und `git diff --check` geprüft.
 - Kein unabhängiger Reviewer in diesem Auftrag; keine Reviewfreigabe behauptet.
+
+
+## Umsetzung begonnen (23.09.2026)
+
+#29: Tet4-Speicheroperatoren, optionale thermische rho/c-Daten, kleine
+quellenbelegte Bibliothek und Sprung-/Rampen-/CSV-Zeitverläufe sind implementiert.
+#30: Backward Euler, Model-Schema 2, Speicherbilanz, ParaView-Serie und
+Messpunkt-CSV sind implementiert und lokal verifiziert; Nachweise in [Doc/33](33_TRANSIENT_HEAT.md).
+Issue-Abnahme, PR-Integration und M6-Freigabe sind davon getrennte Schritte.
+Der dynamische u/v/a-/Frequenzvertrag und #31 bleiben ausstehend.
+#32 ist auf Nutzerwunsch zurückgestellt (ADR-021).

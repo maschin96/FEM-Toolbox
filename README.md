@@ -5,7 +5,12 @@ dreidimensionale Finite-Elemente-Simulationen. Ziel sind verifizierte Modelle f�
 Festkörpermechanik, Wärmeleitung, Elektrostatik und deren thermomechanische und
 piezoelektrische Kopplungen auf Basis linearer Vierknoten-Tetraeder (**Tet4**).
 
-**Aktueller Stand: v1.0.0 — vollständiger stationärer Workflow.**
+**Stabile Freigabe: v1.0.0 — vollständiger stationärer Workflow.**
+
+M6-Entwicklungsstand `1.1.0.dev0`: [transiente Wärmeleitung](Doc/33_TRANSIENT_HEAT.md)
+mit [Materialbibliothek](Doc/32_MATERIAL_LIBRARY.md), Sprüngen/Rampen/CSV,
+ParaView-Zeitserie und Messpunkten. [Ausführbares Beispiel](examples/transient_heat/README.md).
+Noch kein M6-Release.
 Verfügbar sind das Netzmodell, Tet4-Geometrie, drei stationäre Einzelfelder,
 die einseitige Kopplung `T → u`, der monolithische piezoelektrische
 `u–φ`-Solver mit festen und schwebenden Elektroden sowie `T → (u, φ)`.

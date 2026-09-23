@@ -1,0 +1,48 @@
+schema_version = 2
+units = "SI"
+physics = "transient_heat"
+
+[mesh]
+path = "body.msh"
+length_scale_to_m = 1.0
+length_unit = "m"
+
+[materials.aluminium]
+preset = "aluminium_6060_t6_20c"
+
+[regions]
+body = "aluminium"
+
+[time]
+values = [0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0,
+          5.5, 6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0, 9.5, 10.0]
+unit = "s"
+
+[initial_temperature]
+value = 293.15
+unit = "K"
+
+[loads.source]
+unit = "W/m^3"
+value = { kind = "csv", path = "source.csv", value_column = "source_W_m3", unit = "W/m^3", interpolation = "linear" }
+
+[[boundary.convection]]
+set = "surface"
+coefficient = 20.0
+ambient_temperature = { kind = "step", time = 5.0, before = 293.15, after = 298.15 }
+unit = "W/(m^2 K)"
+ambient_unit = "K"
+
+[probes.center]
+point = [0.0025, 0.0025, 0.0025]
+
+[probes.corner]
+node = 0
+
+[solver]
+method = "backward_euler"
+lumped = false
+
+[output]
+every = 2
+max_history_bytes = 16777216

@@ -6,6 +6,18 @@ Versionierung an [Semantic Versioning](https://semver.org/).
 
 ## Unreleased
 
+### Added
+
+- M6-Entwicklungsstand `1.1.0.dev0`: Tet4-Masse/Kapazität, quellenbelegte
+  thermische Materialbibliothek und Sprung-/Rampen-/CSV-Zeitverläufe (#29).
+- Backward-Euler-Wärmeleitung, Model-Schema 2, Speicher-/Leistungsbilanz,
+  ParaView-Zeitserie und Messpunkt-CSV (#30).
+
+### Changed
+
+- Reziproke thermoelastische Rückwirkung (#32) auf Nutzerwunsch zurückgestellt;
+  bestehende einseitige Kopplungen behalten ihre Semantik.
+
 ## [1.0.0] - 2026-09-23
 
 ### Added

@@ -129,8 +129,8 @@ auf Nutzerwunsch zurückgestellt.
 4. #32: auf Nutzerwunsch zurückgestellt; kein M6-Pflichtumfang.
 5. #33: kompatibles Release mit ausführbaren Artefaktbeispielen.
 
-Abnahme: getrennte Raum-/Zeitkonvergenz, Frequenzreferenzen, Energie-/
-Entropiebilanzen, konsistente elektrische Zwangsbedingungen und lauffähige
+Abnahme: getrennte Raum-/Zeitkonvergenz, Frequenzreferenzen, Energiebilanzen,
+konsistente elektrische Zwangsbedingungen und lauffähige
 v1.0-Beispiele. Model, Preflight, Provenienz und Zeit-/Frequenzexport gehören
 zum Pflichtumfang. Der GitHub-Zieltermin 14.10.2026 ist ohne Kapazitätsplanung
 nicht bestätigt. Details und PR-Schnitte: [Entwicklungsplan](30_M6_M7_DEVELOPMENT_PLAN.md).

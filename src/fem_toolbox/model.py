@@ -1,4 +1,4 @@
-"""Strict versioned TOML/Python adapter for stationary field workflows."""
+"""Strict TOML/Python adapter for stationary and transient heat workflows."""
 
 from __future__ import annotations
 
@@ -50,9 +50,15 @@ from fem_toolbox.solvers.thermopiezoelectric import (
     ThermopiezoelectricResult,
     solve_thermopiezoelectric,
 )
+from fem_toolbox.solvers.transient_heat import TransientHeatResult
 
 Physics = Literal[
-    "heat", "elasticity", "electrostatics", "piezoelectric", "thermopiezoelectric"
+    "heat",
+    "elasticity",
+    "electrostatics",
+    "piezoelectric",
+    "thermopiezoelectric",
+    "transient_heat",
 ]
 FieldResult = (
     HeatResult
@@ -60,6 +66,7 @@ FieldResult = (
     | ElectrostaticResult
     | PiezoelectricResult
     | ThermopiezoelectricResult
+    | TransientHeatResult
 )
 _FIELDS: dict[str, str] = {
     "heat": "T",
@@ -382,9 +389,10 @@ class ModelResult:
 
 
 class Model:
-    """Validated stationary Model from a Gmsh-backed TOML file or Python mapping.
+    """Validated Model from a Gmsh-backed TOML file or Python mapping.
 
-    ``document`` has schema version 1 and SI units. The Python constructor
+    ``document`` has SI units: schema 1 for stationary fields, schema 2 for
+    heat transients. The Python constructor
     takes an already validated ``Mesh``; ``from_file`` imports the declared
     relative Gmsh path. No global settings or implicit material assignments.
     """
@@ -398,6 +406,17 @@ class Model:
             raise ModelSchemaError(
                 path="document", reason="expected JSON-safe finite TOML values"
             ) from error
+        from fem_toolbox.transient_model import TransientHeatModel
+
+        self.physics: Physics
+        self._transient: TransientHeatModel | None = None
+        _mapping(raw, "document")
+        if raw.get("physics") == "transient_heat":
+            self._transient = TransientHeatModel(mesh, raw)
+            self.mesh = mesh
+            self.physics = "transient_heat"
+            self._document = raw
+            return
         table = _mapping(
             raw,
             "document",
@@ -561,6 +580,10 @@ class Model:
             raise ModelSchemaError(
                 path="mesh.length_scale_to_m", reason="must be positive"
             )
+        if document.get("physics") == "transient_heat":
+            from fem_toolbox.transient_model import resolve_csv_profiles
+
+            document = resolve_csv_profiles(document, root)
         return cls(
             mesh=read_gmsh(mesh_path, length_scale_to_m=scale), document=document
         )
@@ -899,7 +922,12 @@ class Model:
         return self._loads[name]["value"] if name in self._loads else default
 
     def solve(self) -> ModelResult:
-        """Run the selected validated stationary reference solver."""
+        """Run the selected validated stationary or transient reference solver."""
+        if self._transient is not None:
+            transient_result = self._transient.solve()
+            return ModelResult(
+                self.physics, transient_result, transient_result.provenance
+            )
         mats = self.assignment.cell_materials
         if self.physics == "heat":
             result: FieldResult = solve_heat(

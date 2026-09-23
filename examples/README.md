@@ -44,3 +44,7 @@ Reziprozität und Bilanzen und schreibt `piezo_d33.vtu`.
 lädt ein Gmsh-Netz und eine TOML-Modelldatei, berechnet `T → (u, φ)` und
 schreibt rohe VTU-Felder sowie einen JSON-Bericht mit Provenienz und Bilanzen.
 [Eingaben, unabhängige Referenz und Grenzen](thermopiezoelectric/README.md).
+
+## M6-Entwicklung
+
+[Transiente Wärme aus TOML/CSV mit ParaView und Messpunkten](transient_heat/README.md).
