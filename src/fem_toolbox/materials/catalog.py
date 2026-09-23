@@ -45,10 +45,10 @@ _PRESETS = (
         901.0,
         200.0,
         293.15,
-        "https://www.hydro.com/globalassets/08-about-hydro/hydro-worldwide/germany/"
-        "extrusion-germany/alloy-data-sheets/hydro-en-aw-6060.pdf",
-        "Hydro 6060 Rev.2, 01/2019, p.2: typical properties at 20°C; "
-        "T6 conductivity. Source indexed 2026-09-23; direct URL returned 404.",
+        "https://www.hydro.com/globalassets/08-about-hydro/hydro-worldwide/austria/"
+        "nenzing/alloy-data-sheets/hydro-en-aw-6060.pdf",
+        "Hydro 6060 Rev.4, 03/2023, p.2: typical properties at 20°C; "
+        "T6 conductivity. Source accessed 2026-09-23.",
     ),
     ThermalPreset(
         "copper_cda_20c",

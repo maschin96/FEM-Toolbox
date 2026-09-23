@@ -4,14 +4,13 @@ Stand: 23.09.2026; Katalogversion 1; Teil von #29. Die Bibliothek arbeitet offli
 
 | Schlüssel | Material/Zustand | Dichte kg/m³ | c J/(kg K) | k W/(m K) | Quelle |
 |---|---|---:|---:|---:|---|
-| `aluminium_6060_t6_20c` | EN AW-6060, T6, 20 °C | 2700 | 901 | 200 | [Hydro, Rev.2 01/2019, S.2](https://www.hydro.com/globalassets/08-about-hydro/hydro-worldwide/germany/extrusion-germany/alloy-data-sheets/hydro-en-aw-6060.pdf) |
+| `aluminium_6060_t6_20c` | EN AW-6060, T6, 20 °C | 2700 | 901 | 200 | [Hydro, Rev.4 03/2023, S.2](https://www.hydro.com/globalassets/08-about-hydro/hydro-worldwide/austria/nenzing/alloy-data-sheets/hydro-en-aw-6060.pdf) |
 | `copper_cda_20c` | generisches Referenzkupfer, 20 °C | 8920 | 386 | 394 | [CDA, The Copper Advantage, Tabelle 3, S.9](https://www.copper.org/publications/pub_list/pdf/a1360.pdf) |
 | `stainless_14301_rt` | EN 1.4301 / 304, Raumtemperatur | 7900 | 500 | 15 | [Outokumpu, Steel Grades, Properties and Global Standards, Tabelle 13, S.13](https://www.outokumpu.com/-/media/from-sharepoint/documents/product/outokumpu-steel-grades-properties-global-standards.pdf) |
 
 Hydro nennt typische Kennwerte bei 20 °C und den T6-Zustand für die
-Wärmeleitfähigkeit. Der am Recherchetag indizierte Herstellertext enthält
-2,70 g/cm³, 901 J/(kg K), 200 W/(m K). Der direkte PDF-Abruf ergab 404;
-diese eingeschränkte Quellenverfügbarkeit ist auch im Katalogeintrag vermerkt.
+Wärmeleitfähigkeit. Die am Recherchetag direkt geprüfte Hersteller-PDF enthält
+2,70 g/cm³, 901 J/(kg K), 200 W/(m K).
 Die Dichte wird mit Faktor 1000 in kg/m³ umgerechnet.
 
 CDA Tabelle 3 nennt in metrischer Darstellung 8,92 g/cm³, 0,386 J/(g °C)
