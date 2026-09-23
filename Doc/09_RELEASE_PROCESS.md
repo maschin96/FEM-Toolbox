@@ -59,6 +59,19 @@ vor Umsetzung angelegt; vor einer Freigabe gelten alle folgenden Gates.
 
 ## 4. Release-Gate
 
+Die Entwicklung folgt dem Milestone-Branch-Workflow aus [AGENTS.md](../AGENTS.md):
+Ein `codex/milestone-m<N>` wird vom stabilen `main` abgeleitet. Jeder Issue-Branch
+entsteht aus diesem Milestone-Branch und wird per geprüftem PR dorthin integriert.
+`main` behält während der Entwicklung den freigegebenen Funktionsumfang.
+
+Kurz vor Abschluss führt ein Release-PR den freigabefähigen Milestone nach `main`.
+Vor diesem Merge müssen Umfang, Verifikation, Dokumentation, Installation des
+Release-Kandidaten und die anwendbaren CI-/Reviewprüfungen erfüllt sein. Aktuelle
+Änderungen aus `main` werden zuvor im Milestone-Branch integriert und geprüft.
+Offen bleiben dürfen nur abschließende Veröffentlichungsarbeiten, keine unfertigen
+Funktionen. Nach dem Merge werden die CI-Ergebnisse am tatsächlichen Zielcommit
+geprüft; anschließend folgen Tag und Veröffentlichung.
+
 Jeder zur Umsetzung detaillierte GitHub-Milestone enthält ein `release:`-Issue. Dieses Issue wird zuletzt
 geschlossen. Vor dem Tag müssen alle folgenden Bedingungen erfüllt sein:
 

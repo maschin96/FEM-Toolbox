@@ -27,9 +27,14 @@ AGENTS.md-Dateien ergänzen diese Regeln in ihren Unterverzeichnissen.
    festhalten. Passende vorhandene Labels und Meilensteine verwenden.
 3. Größere Aufgaben in unabhängig prüfbare Arbeitspakete zerlegen. Fachliche
    Unklarheiten vor der davon abhängigen Implementierung auflösen.
-4. Einen kurzen Branch verwenden, standardmäßig
-   `codex/<issue-nummer>-<kurzbeschreibung>`. Änderungen regulär per Pull Request
-   integrieren; ausdrücklich beauftragte direkte Commits bleiben möglich.
+4. Pro Milestone einen eigenen Integrationsbranch `codex/milestone-m<N>` vom
+   aktuellen stabilen `main` anlegen, beispielsweise `codex/milestone-m6`.
+   Für jedes Issue einen eigenen Branch
+   `codex/<issue-nummer>-<kurzbeschreibung>` vom zugehörigen Milestone-Branch
+   ableiten. Issue-Branches per Pull Request zurück in diesen Milestone-Branch
+   integrieren; das PR-Ziel ausdrücklich prüfen. Milestone-Entwicklung wird
+   nicht direkt nach `main` gemergt. Ausdrücklich beauftragte direkte Commits
+   ändern diese Integrationsziele nicht.
 5. Commits fokussiert halten und nach dem Muster
    `test: ...`, `feat: ...`, `fix: ...`, `refactor: ...`, `docs: ...` oder
    `ci: ...` mit Issue-Referenz formulieren, beispielsweise `docs: add workflow (#1)`.
@@ -41,6 +46,33 @@ AGENTS.md-Dateien ergänzen diese Regeln in ihren Unterverzeichnissen.
    Review-Anmerkungen geklärt sein. Unabhängiges Review anstreben; fehlende
    Reviewer transparent benennen und niemals eine Freigabe behaupten.
    Ein lokaler Commit allein schließt das Issue nicht ab.
+
+### Milestone-Abschluss und stabiler Hauptbranch
+
+- `main` enthält stets den aktuellen stabilen, freigegebenen Funktionsumfang.
+  Neue Milestone-Funktionalität bleibt bis zur Freigabereife auf dem jeweiligen
+  Milestone-Branch. Weitere Milestone-Branches werden erst bei Arbeitsbeginn
+  angelegt; benötigte Vorgänger müssen zuvor stabil in `main` integriert sein.
+- Der Ablauf ist `main → Milestone-Branch → Issue-Branch → Milestone-Branch`.
+  Jeder Issue-PR muss vor dem Merge die anwendbaren CI- und Reviewregeln erfüllen.
+  Vollständig integrierte und geprüfte Issues können nach dem Merge in den
+  Milestone-Branch mit Verweis auf den PR explizit geschlossen werden; nicht
+  allein auf automatische Schließung durch `Closes` vertrauen. Das Release-Issue
+  bleibt bis zum vollständigen Release-Abschluss offen.
+- Erst kurz vor Fertigstellung wird der Milestone als Release-PR nach `main`
+  integriert. Voraussetzung sind der vollständige verpflichtende Funktionsumfang,
+  abgeschlossene Verifikation, aktuelle Dokumentation sowie erfolgreiche
+  anwendbare CI-Prüfungen und geklärte Review-Anmerkungen am aktuellen PR-Stand.
+  „Kurz vor Fertigstellung“ erlaubt offene Veröffentlichungsarbeiten wie Tag und
+  Release-Artefakte, aber keine unfertige oder ungeprüfte Funktionalität auf `main`.
+- Vor dem Release-Merge Änderungen aus `main` in den Milestone-Branch übernehmen,
+  Konflikte dort lösen und den resultierenden Stand erneut prüfen. Nach dem Merge
+  die CI am tatsächlichen `main`-Zielcommit prüfen; erst danach gemäß
+  [Release-Prozess](Doc/09_RELEASE_PROCESS.md) taggen und veröffentlichen.
+- Milestone-unabhängige Repository-/Workflow-Pflege und notwendige Bugfixes der
+  stabilen Version verwenden eigene Issue-Branches von `main` mit PR nach `main`.
+  Relevante Korrekturen anschließend in aktive Milestone-Branches übernehmen.
+  Diese Ausnahme dient nicht zur vorzeitigen Integration neuer Milestone-Funktionen.
 
 Wenn GitHub nicht erreichbar ist, Issue-Inhalt lokal vorbereiten, die Einschränkung
 melden und unabhängige lokale Arbeit fortsetzen. Keine Issue-Nummern erfinden.

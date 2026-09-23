@@ -244,7 +244,10 @@ GitHub Actions führt die Tests auf Python 3.11, 3.12 und 3.13 aus; Linting,
 Formatierung und Typprüfung laufen auf Python 3.13.
 
 Beiträge folgen den [Entwicklungsrichtlinien](AGENTS.md): zuerst ein passendes
-Issue, anschließend ein fokussierter Branch und Pull Request. Ausführbare
+Issue, anschließend ein eigener Issue-Branch vom zugehörigen Milestone-Branch
+(`codex/milestone-m<N>`) und ein Pull Request zurück in diesen Branch. Erst der
+freigabefähige Milestone wird kurz vor Abschluss per Release-PR nach `main`
+integriert; `main` behält bis dahin den stabilen Funktionsumfang. Ausführbare
 Änderungen entstehen testgetrieben; reine Dokumentationsänderungen werden auf
 Inhalt, Links und Konsistenz geprüft. Jeder abgeschlossene Meilenstein erhält
 nach bestandenem Release-Gate eine eigene Version und einen annotierten Git-Tag.
