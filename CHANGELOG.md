@@ -6,17 +6,33 @@ Versionierung an [Semantic Versioning](https://semver.org/).
 
 ## Unreleased
 
+## [1.1.0] - 2026-09-23
+
 ### Added
 
-- M6-Entwicklungsstand `1.1.0.dev0`: Tet4-Masse/Kapazität, quellenbelegte
-  thermische Materialbibliothek und Sprung-/Rampen-/CSV-Zeitverläufe (#29).
-- Backward-Euler-Wärmeleitung, Model-Schema 2, Speicher-/Leistungsbilanz,
+- Konsistente und gelumpte Tet4-Masse/Kapazität, quellenbelegte thermische
+  Parameterbibliothek sowie Sprung-, Rampen- und CSV-Zeitprofile (#29).
+- Backward-Euler-Wärmeleitung mit Model-Schema 2, Speicher-/Randbilanz,
   ParaView-Zeitserie und Messpunkt-CSV (#30).
+- Piezoelektrische Modalanalyse mit mechanischer Masse und algebraischer
+  Elektrodenkondensation; ungedämpftes Newmark und komplexe Harmonik (#31).
+- Model-Schema 3, vollständige dynamische Feld-/Frequenzserien mit
+  Real-/Imaginärteil, Amplitude/Phase und deterministischer Provenienz (#31).
+- Release-Nachweis mit getrennten Raum-/Zeitfehlern, Energie- und
+  Frequenzreferenzen; frische Wheel-/sdist-Prüfung aller alten und neuen Beispiele (#33).
 
-### Changed
+### Compatibility
 
-- Reziproke thermoelastische Rückwirkung (#32) auf Nutzerwunsch zurückgestellt;
-  bestehende einseitige Kopplungen behalten ihre Semantik.
+- Stationäre Python-API, Model-Schema 1 und Ergebnisbündel 1 bleiben erhalten.
+  Neue Analysearten verwenden additive Schemata 2 und 3, keine Umdeutung alter Dateien.
+- CPython 3.11–3.13; unveränderte NumPy/SciPy/meshio-Abhängigkeiten und MIT-Lizenz.
+
+### Limitations
+
+- Keine Rückwirkung von Verformung auf Temperatur (#32 zurückgestellt), keine
+  Dämpfung im Piezo-Dynamikpfad und keine experimentelle Validierung.
+- Dichte Piezo-Referenz bis 2048 aktive Gesamt-DOFs; gespeicherte Zeitverläufe
+  begrenzt. Tet10/PETSc und allgemeine Großmodell-Skalierung folgen später.
 
 ## [1.0.0] - 2026-09-23
 

@@ -1,7 +1,7 @@
 # Transiente Wärmeleitung und Zeitserien
 
-Status: Implementiert und lokal verifiziert auf Python 3.13; Teil von #29/#30.
-M6 ist noch nicht freigegeben. Keine reziproke thermomechanische Rückwirkung
+Status: Bestandteil von v1.1.0; Verifikation und Release-Gate siehe
+[Dokument 35](35_M6_RELEASE_VERIFICATION.md). Keine reziproke thermomechanische Rückwirkung
 (ADR-021), keine nichtlinearen/temperaturabhängigen Materialien, kein Phasenwechsel.
 
 ## Modell und Bilanz
@@ -92,8 +92,8 @@ result = solve_transient_heat(
 `Model.from_file("model.toml").solve()` unterstützt zusätzlich
 `physics="transient_heat"`, `schema_version=2`, `units="SI"`.
 Schema 1 und der stationäre Bündelvertrag bleiben unverändert. Schema 2 ist
-hier ausschließlich der transiente Wärmevertrag; u/v/a und Frequenzen erhalten
-später ihre eigenen expliziten Zustands-/Ausgabeverträge, keine elektrischen Massen.
+hier ausschließlich der transiente Wärmevertrag; u/v/a und Frequenzen verwenden
+[Schema 3](34_PIEZO_DYNAMICS.md), ohne elektrische Massen.
 
 Das vollständige Beispiel steht unter
 [examples/transient_heat](../examples/transient_heat/README.md).

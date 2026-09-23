@@ -8,8 +8,8 @@ AGENTS.md-Dateien ergänzen diese Regeln in ihren Unterverzeichnissen.
 
 - Vor Änderungen [README.md](README.md), die relevanten Dokumente unter
   [Doc/](Doc/README.md), den Git-Status und vorhandene Änderungen prüfen.
-- Das Repository hat M0–M5 als v1.0.0 abgeschlossen (Stand 23.09.2026).
-  Python-Paket, Tests und CI sind vorhanden; M6/M7 sind die nächsten Ausbaustufen.
+- Das Repository hat M0–M6 als v1.1.0 abgeschlossen (Stand 23.09.2026).
+  Python-Paket, Tests und CI sind vorhanden; M7 ist die nächste Ausbaustufe.
   Fehlende Werkzeuge oder Prüfungen offen benennen; keine Testresultate erfinden.
 - Architektur und Zielstruktur aus [Doc/04_SOFTWARE_ARCHITECTURE.md](Doc/04_SOFTWARE_ARCHITECTURE.md)
   beachten. Mathematische Konventionen aus

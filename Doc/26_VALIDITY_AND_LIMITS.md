@@ -1,5 +1,9 @@
 # Gültigkeitsbereich und numerische Nutzungsgrenzen für v1.0 (#142)
 
+Die stationären Grenzen bleiben in v1.1.0 gültig. Für die additiven transienten
+und dynamischen Modi gilt [Dokument 35](35_M6_RELEASE_VERIFICATION.md).
+Die folgende Tabelle beschreibt ausdrücklich den stationären v1.0-Umfang.
+
 Status: Gültigkeitsbereich der **stabilen stationären Forschungs-API v1.0.0**.
 Vor einem Lauf sind Modellannahmen, Randbedingungen und die unten genannten
 Prüfungen gegen den konkreten Anwendungsfall abzugleichen. Die
