@@ -1,7 +1,7 @@
 # Lineare Piezoelastodynamik — #31
 
-Entwicklungsstand: 31a (Modalanalyse) und 31b (Newmark), additive Forschungs-API, kein Release.
-31c (Harmonik) und 31d (Model/Export) folgen in separaten PRs.
+Entwicklungsstand: 31a (Modalanalyse), 31b (Newmark) und 31c (Harmonik),
+additive Forschungs-API, kein Release. 31d (Model/Export) folgt separat.
 Keine Rückwirkung der Verformung auf die Temperatur, keine experimentelle Validierung.
 
 ## DAE- und Elektrodenvertrag
@@ -134,3 +134,33 @@ Ränder, Anfangsbeschleunigung und Massenterme bis `3e-14` absolut in SI.
 Ein vorbelasteter statischer Zustand bleibt stationär, einschließlich
 nichtverschwindender elektrischer Ladung. Diese Kontrollen sind numerische
 Verifikation, keine Messdatenvalidierung.
+
+## Harmonische Analyse (31c)
+
+`solve_harmonic_piezoelectric(..., frequency_hz, loads=..., prescribed=...)`
+aus `fem_toolbox.solvers.piezo_harmonic` löst eine Frequenz einschließlich
+DC (`frequency_hz=0`). Konvention: `x(t)=Re(x_hat*exp(+i*omega*t))`,
+`omega=2*pi*frequency_hz`. Amplituden sind Spitzenwerte, keine RMS-Werte;
+`v_hat=i*omega*u_hat`, `a_hat=-omega²*u_hat`.
+
+Last- und Randwertvektoren haben Länge `4*nactive` in derselben Reihenfolge
+wie Newmark, dürfen aber komplex sein. Die additive komplexe Infrastruktur
+ändert **nicht** den reellen Vertrag von `LinearSystem`. Imaginärteile werden
+weder durch Casts noch beim Rückrechnen elektrischer DOFs verworfen.
+Die dynamische Steifigkeit ist `K_eff-omega²*M`; bewegte Ränder tragen
+`+omega²*M_fc*u_c` zur rechten Seite bei.
+
+Es gibt keine Dämpfung. Zur Resonanzdiagnose wird die Matrix beidseitig mit
+`diag(K_eff+omega²*M)^(-1/2)` skaliert. Beträge ihrer dimensionslosen Eigenwerte
+unter oder gleich `1e-10` führen zu einem ausdrücklichen Resonanz-/Konditionsfehler,
+auch bei verschwindender Last. Das ist eine numerische Nutzungsgrenze, keine
+physikalische Resonanzbreite. Die Funktion liefert keine künstlich begrenzten
+Resonanzamplituden. Ein Frequenzsweep enthält nur die ausdrücklich berechneten
+Frequenzen und findet dazwischenliegende Resonanzen nicht automatisch.
+
+Verifikation: komplexer skalarer Oszillator ober- und unterhalb der Eigenfrequenz,
+DC-Grenzfall, komplexe Spannung, bewegter Rand mit konsistenter Masse, negative/
+unrepräsentierbare Frequenzen und explizite Resonanz. Mit harmonisch passenden
+Anfangswerten konvergiert Newmark auf einem festen Raummodell quadratisch gegen
+das harmonische Ergebnis (100/200 Schritte). Ein Frequenzrasterfehler ist davon
+getrennt: hier wird eine einzelne, identische Frequenz in beiden Pfaden verglichen.

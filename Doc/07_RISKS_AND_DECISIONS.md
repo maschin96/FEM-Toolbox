@@ -325,3 +325,14 @@ Moden. Homogene Störungen, explizite Lager/Gauge und ein Größenlimit von 2048
 aktiven Gesamt-DOFs begrenzen die erste dichte Referenz. Anfangspotential und
 -beschleunigung sind abhängige DAE-Größen. Einzelheiten und unabhängige
 Referenzen stehen in [Dokument 34](34_PIEZO_DYNAMICS.md).
+
+## ADR-023 — Komplexer Phasorpfad ohne Änderung von LinearSystem (#31c)
+
+Datum: 23.09.2026. Status: implementiert im M6-Arbeitsbranch.
+
+Harmonische Felder verwenden Spitzenwertphasoren `Re(x_hat*exp(+i*omega*t))`.
+Ein additiver komplexwertiger Solver hält Lasten, Randwerte und Ergebnisse
+komplex; der bestehende `LinearSystem`-Vertrag bleibt reell. Frequenzen werden
+explizit in Hz eingegeben, rad/s separat ausgewiesen. Der ungedämpfte Pfad
+weist numerische Resonanz/Nähe zur Singularität zurück statt Dämpfung zu erfinden.
+Skalierung, Grenzwert und Nachweise: [Dokument 34](34_PIEZO_DYNAMICS.md).
