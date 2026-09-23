@@ -1,9 +1,9 @@
 # Gültigkeitsbereich und numerische Nutzungsgrenzen für v1.0 (#142)
 
-Status: dokumentierter **Zielumfang** der ersten stabilen stationären Forschungs-API.
-Die veröffentlichte Version ist weiterhin v0.5.0; dieses Dokument ist keine
-Freigabe von v1.0. Vor einem Lauf sind Modellannahmen, Randbedingungen und die
-unten genannten Prüfungen gegen den konkreten Anwendungsfall abzugleichen.
+Status: Gültigkeitsbereich der **stabilen stationären Forschungs-API v1.0.0**.
+Vor einem Lauf sind Modellannahmen, Randbedingungen und die unten genannten
+Prüfungen gegen den konkreten Anwendungsfall abzugleichen. Die
+[Release Notes](releases/v1.0.0.md) benennen den Freigabenachweis.
 
 ## Entscheidungsübersicht
 

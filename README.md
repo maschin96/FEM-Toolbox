@@ -5,17 +5,15 @@ dreidimensionale Finite-Elemente-Simulationen. Ziel sind verifizierte Modelle f�
 Festkörpermechanik, Wärmeleitung, Elektrostatik und deren thermomechanische und
 piezoelektrische Kopplungen auf Basis linearer Vierknoten-Tetraeder (**Tet4**).
 
-**Aktueller Stand: v0.5.0 — verifizierte quasistatische Piezoelektrizität.**
+**Aktueller Stand: v1.0.0 — vollständiger stationärer Workflow.**
 Verfügbar sind das Netzmodell, Tet4-Geometrie, drei stationäre Einzelfelder,
-die einseitige Kopplung `T → u` sowie ein monolithischer piezoelektrischer
-`u-φ`-Referenzsolver. Der aktuelle Quellstand ergänzt feste und schwebende
-Elektroden für diesen Solver, eine versionierte TOML-`Model`-API und den
-einseitigen stationären Ablauf `T → (u, φ)`.
-Der Umfang der veröffentlichten Version steht in den
-[Release Notes](Doc/releases/v0.5.0.md).
-Für den geplanten v1.0-Umfang erläutert die
-[Gültigkeitsübersicht](Doc/26_VALIDITY_AND_LIMITS.md), wann ein Fall innerhalb
-der verifizierten Annahmen liegt und welche numerischen Grenzen zu prüfen sind.
+die einseitige Kopplung `T → u`, der monolithische piezoelektrische
+`u–φ`-Solver mit festen und schwebenden Elektroden sowie `T → (u, φ)`.
+Die versionierte TOML-`Model`-API ergänzt Materialregionen, Preflight und
+Ergebnisbündel mit Provenienz. Umfang und Migration stehen in den
+[Release Notes](Doc/releases/v1.0.0.md). Die
+[Gültigkeitsübersicht](Doc/26_VALIDITY_AND_LIMITS.md) beschreibt die
+verifizierten Annahmen und numerischen Grenzen.
 
 [Installation](#installation) · [Schnellstart](#schnellstart) ·
 [Dokumentation](#dokumentation) · [Entwicklung](#entwicklung) ·
@@ -23,7 +21,7 @@ der verifizierten Annahmen liegt und welche numerischen Grenzen zu prüfen sind.
 
 ## Verfügbare Funktionen
 
-| Bereich | Umfang in v0.5.0 |
+| Bereich | Umfang in v1.0.0 |
 |---|---|
 | Netzmodell | Unveränderliche NumPy-Arrays für 3D-Punkte, Tet4-Zellen und Triangle3-Flächen; validierte Indizes, externe IDs und Tags |
 | Auswahlsätze | Benannte Volumen- und Flächensätze, auch mit überlappenden Mitgliedschaften |
@@ -36,7 +34,7 @@ der verifizierten Annahmen liegt und welche numerischen Grenzen zu prüfen sind.
 | Elektrostatik | Stationäres Tet4-Potential mit anisotroper Permittivität, freien Ladungen, Gauge-Diagnostik, E-/D-Feldern und Ladungsbilanz |
 | Thermomechanik | Sequenzielle stationäre Wärme-zu-Mechanik-Kopplung mit anisotroper thermischer Expansion und regionsweisen Referenztemperaturen |
 | Piezoelektrizität | Stress-Charge-Materialdaten, Konversion und Achsrotation; gekoppelte Tet4-Operatoren und monolithische Sparse-LU-Lösung mit feldweiser Skalierung, Reaktionen, Ladungs- und Energiebilanzen |
-| Thermopiezoelektrizität | Einseitiger stationärer Ablauf `T → (u, φ)` mit regionsweiser thermischer Eigenverzerrung und getrennten Wärme-, Kraft- und Ladungsbilanzen im aktuellen Quellstand |
+| Thermopiezoelektrizität | Einseitiger stationärer Ablauf `T → (u, φ)` mit regionsweiser thermischer Eigenverzerrung und getrennten Wärme-, Kraft- und Ladungsbilanzen in v1.0.0 |
 
 Ein vollständiger deklarativer Lauf mit Gmsh-Eingabe, VTU-Feldern und
 Provenienzbericht steht unter [examples/thermopiezoelectric](examples/thermopiezoelectric/README.md).
@@ -160,7 +158,7 @@ Jedes physikalische Einzelfeld soll vor seiner Kopplung separat verifiziert
 werden. Dazu gehören analytische Vergleichsfälle, Patch-Tests, Energie- und
 Reziprozitätsprüfungen, globale Bilanzen und Netzkonvergenz.
 
-Für v0.5.0 umfasst der Nachweis Patch-, Bilanz-, analytische Benchmark- und
+Für v1.0.0 umfasst der Nachweis Patch-, Bilanz-, analytische Benchmark- und
 vierstufige Konvergenztests für Mechanik, Wärme, Elektrostatik,
 Thermomechanik und Piezoelektrizität. Direkter und inverser Piezoeffekt
 werden zusätzlich gegen eine unabhängige 1D-FE-Implementierung geprüft.
@@ -182,7 +180,7 @@ elektrisches Potential `phi` mit feldweiser Freiheitsgradverwaltung.
 | M2 | v0.3.0 | Stationäre Elastizität, Wärmeleitung und Elektrostatik | Freigegeben |
 | M3 | v0.4.0 | Sequenzielle Thermomechanik `T → u` | Freigegeben |
 | M4 | v0.5.0 | Monolithische Piezoelektrizität `u–phi` | Freigegeben |
-| M5 | v1.0.0 | Elektroden, Modellformat und vollständiger stationärer Workflow | Geplant |
+| M5 | v1.0.0 | Elektroden, Modellformat und vollständiger stationärer Workflow | Freigegeben |
 | M6 | v1.1.0 | Transiente Wärmeleitung und lineare Dynamik | Geplant |
 | M7 | v1.2.0 | PETSc-Backend, Tet10 und Skalierung | Geplant |
 | M8 | v1.3.0* | Reproduzierbare Parameterstudien | Geplant |
@@ -256,5 +254,5 @@ weitergegeben werden. Die früher veröffentlichten Tags und Artefakte erhalten
 durch diese Änderung nicht nachträglich neue Lizenzmetadaten. Laufzeitpakete
 wie NumPy, SciPy und meshio behalten ihre eigenen Bedingungen; die
 [Bestandsaufnahme](Doc/27_DISTRIBUTION_INVENTORY.md) nennt die geprüften
-Drittbestandteile und den Umfang der Paketarchive. Ein öffentlicher Paket-Upload
-oder die Freigabe von v1.0 ist damit nicht erfolgt.
+Drittbestandteile und den Umfang der Paketarchive. Wheel und sdist werden als GitHub-Release-Artefakte bereitgestellt. Ein
+öffentlicher PyPI-Upload ist damit nicht verbunden.

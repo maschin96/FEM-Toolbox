@@ -1,8 +1,8 @@
 # Installation und erster Lauf
 
 Stand: 23. September 2026. Diese Anleitung richtet eine **Entwicklungsumgebung
-aus dem Repository** ein. Das veröffentlichte Paket steht noch bei v0.5.0;
-der Checkout kann bereits weitere, für v1.0 geplante Funktionen enthalten.
+aus dem Repository** ein. Die stabile stationäre Version ist v1.0.0; ein späterer Checkout kann bereits
+weitere Entwicklungsänderungen enthalten.
 Ein PyPI-Release des aktuellen Checkouts wird hier nicht vorausgesetzt.
 
 ## Voraussetzungen und geprüfte Plattformen

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fem-toolbox"
-version = "0.5.0"
+version = "1.0.0"
 description = "Verified 3D multiphysics finite-element research toolbox"
 readme = "README.md"
 license = "MIT"
@@ -18,7 +18,7 @@ dependencies = [
   "scipy>=1.14.1; python_version >= '3.13'",
 ]
 classifiers = [
-  "Development Status :: 2 - Pre-Alpha",
+  "Development Status :: 5 - Production/Stable",
   "Intended Audience :: Science/Research",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.11",

@@ -1,9 +1,8 @@
 # Öffentliche stationäre Python-API und Kompatibilität (#57)
 
-Status: **Vertragsentwurf für v1.0.0** auf Basis des aktuellen Quellstands.
-Die veröffentlichte Version ist weiterhin v0.5.0. Die hier genannten
-Einstiegspunkte sind die für v1.0 vorgesehenen stabilen Oberflächen; die
-Release-Freigabe erfolgt erst über #28. Der Vertrag umfasst lineare,
+Status: **Stabiler Vertrag ab v1.0.0** (Release #28).
+Die hier genannten Einstiegspunkte sind die stabilen Oberflächen. Der Vertrag
+umfasst lineare,
 stationäre Tet4-Modelle in SI-Einheiten. Numerische Gültigkeitsgrenzen stehen
 in [Doc/26](26_VALIDITY_AND_LIMITS.md).
 
@@ -34,7 +33,7 @@ hier nicht als stabile Anwender-API ausgewiesen.
 einschließlich `ThermomechanicalResult`; er besitzt keinen eigenen
 `Model.physics`-Modus. Der Weg über `solve_elasticity(..., expansion=...,
 temperature=...)` und `solve_heat(...)` ist ebenfalls möglich. Dieser
-Sonderfall wird vor v1.0 nicht stillschweigend entfernt.
+Einstiegspunkt bleibt in v1.0 kompatibel erhalten.
 
 ## Formen, Reihenfolge und Einheiten
 
@@ -96,15 +95,14 @@ keinen Bilanz- oder Konvergenznachweis.
 
 ## Migration ab v0.3 und spätere Änderungen
 
-| Anwendung ab v0.3.0 | Weg zum vorgesehenen v1.0-Vertrag |
+| Anwendung ab v0.3.0 | Weg zum v1.0-Vertrag |
 |---|---|
 | `Mesh`, Materialobjekte, `Dirichlet` und `solve_heat`/`solve_elasticity`/`solve_electrostatics` | Direkte Aufrufe bleiben möglich. Eingaben bleiben SI; DOF-Indizes weiter mit der feldspezifischen `*_dofs`-Funktion bilden. |
 | Die drei veröffentlichten Referenzbeispiele | Weiter als direkte Solver-Beispiele nutzbar; `Model` ist ein zusätzlicher deklarativer Weg. |
 | Wiederholbare Konfiguration als Python-Skript | Auf `Model(mesh=..., document=...)` oder TOML mit `schema_version = 1` umstellen. Materialkatalog, `regions`, Einheiten und Randbedingungen explizit angeben; keine automatische Konversion alter Skripte behaupten. |
 | Eigenes VTU-Postprocessing | Für maschinenlesbare Kennwerte und Provenienz `export_result_bundle` nutzen; rohe Ergebnisarrays bleiben für eigenes Postprocessing zugänglich. |
 
-Bis v1.0.0 können sich noch nicht freigegebene Oberflächen ändern; jede
-Änderung an bereits veröffentlichtem Verhalten erhält Release Notes und
+Änderungen an veröffentlichtem Verhalten erhalten Release Notes und
 Kompatibilitätstests. Ab v1.0.0 gilt die
 [SemVer-Regel](09_RELEASE_PROCESS.md): eine inkompatible Änderung der
 stabilen Oberfläche benötigt eine neue Major-Version. Eine geplante
