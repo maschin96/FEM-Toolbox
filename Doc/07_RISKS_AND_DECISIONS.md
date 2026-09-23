@@ -279,3 +279,18 @@ Neue Entscheidungsbedarfe: API-/Kompatibilitätsvertrag (#57), Messdaten und
 Validierungsgrenzen vor Auswertung (#63), konforme adaptive Wärme mit
 Remeshing-Go/no-go (#67). Diese Planung nimmt die späteren Architektur- und
 Methodenentscheidungen nicht vorweg.
+
+## 5. M6/M7-Planung nach v1.0 (2026-09-23, #167)
+
+Der [Entwicklungsplan](30_M6_M7_DEVELOPMENT_PLAN.md) konkretisiert die nächsten
+zwei Meilensteine. Planungsentscheidungen: Backward Euler und Newmark als
+erste Referenzen; geradkantige Tet10/Triangle6 als erste höherwertige Familie;
+Fehlerindikatoren zunächst für stationäre Tet4-Wärme. MPI, gekrümmte Geometrie
+und allgemeine gekoppelte Adaptivität benötigen spätere Entscheidungen.
+Dies ändert keine implementierte Gleichung oder bestehende API.
+
+Vor Implementierung bleiben explizite ADRs erforderlich: DAE-/Elektroden- und
+Phasorvertrag (#31), thermodynamisches Potential (#32), Backend-/Scalarvertrag
+(#34) sowie additive Netztopologie und Auswerteorte (#35). Die alten
+M5-Entscheidungsbedarfe oben sind historisch; implementierte Entscheidungen
+stehen in den Material-, Elektroden- und Solver-ADRs und Dokumenten 15–24.

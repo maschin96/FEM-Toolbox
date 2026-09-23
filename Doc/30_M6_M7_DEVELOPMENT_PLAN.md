@@ -1,0 +1,199 @@
+# Entwicklungsstand und nächste Meilensteine M6/M7
+
+Stand: 23.09.2026. Tracking: [#167](https://github.com/maschin96/FEM-Toolbox/issues/167).
+Diese Planung ersetzt für M6/M7 die ältere Baseline aus Dokument 13.
+Sie beschreibt geplante Arbeit, keine bereits implementierten Fähigkeiten.
+
+## Bestandsaufnahme und Bewertung
+
+Geprüfte Basis: `origin/main` und Release v1.0.0 bei
+`c723312b63c2e5301ce39807b10e7b3fc893915a`. Der anfängliche lokale
+Release-Branch hatte denselben Dateiinhalt. M0–M5 sind abgeschlossen;
+M6 (#29–#33) und M7 (#34–#38) hatten jeweils fünf offene Issues ohne
+abgeschlossene Arbeitspakete. Der veröffentlichte Release enthält Wheel,
+sdist und Prüfsummen; die main-CI war mit 17 Jobs erfolgreich.
+
+| Vorhanden | Beleg | Konsequenz für die nächsten Schritte |
+|---|---|---|
+| Stationäre Einzelfelder und Kopplungen einschließlich Elektroden | `solvers/`, Patch-/Konvergenztests, v1.0-Release | Belastbare Referenz bewahren; keine Neuentwicklung des stationären Kerns |
+| Unveränderliche Materialien, Regionen, DOFs und COO-Assembly | `materials/`, `fields/`, `assembly/` | Ergänzbar, aber Masse/Kapazität und Zeitstatus fehlen |
+| Strikt reelle lineare Systeme und Ergebnisarrays | `assembly/LinearSystem`, `io/result_bundle.py` | Harmonische Analyse benötigt expliziten komplexen Datenvertrag |
+| Direkte SciPy-LU-Aufrufe in Feldsolvern | `solvers/heat.py`, `elasticity.py`, `piezoelectric.py` | Vor PETSc echte Backend-Grenze schaffen |
+| Tet4-/Triangle3-spezifische Netze und Exporte | `mesh/model.py`, `mesh/topology.py`, `io/` | Tet10 betrifft Topologie, Randintegration, Model und Postprocessing zugleich |
+| Stationäres TOML-Modell, Preflight und Ergebnisbündel v1 | `model.py`, `model_preflight.py`, Dokumente 21/23/24/29 | Transienten ergänzen statt bestehende Formate umzudeuten |
+| Python 3.11–3.13, Qualitäts-, Kompatibilitäts- und Artefakt-CI | `pyproject.toml`, `.github/workflows/ci.yml` | Gute Basis; echte PETSc-Tests fehlen noch |
+
+Die Toolbox ist eine verifizierte stationäre Forschungsbasis. Experimentelle
+Validierung, belastbare Großmodell-Skalierung, Transienten, PETSc und Tet10
+sind nicht nachgewiesen. Tests allein belegen keine allgemeine Einsatzreife.
+Die alten Aussagen „Planungsphase“ in AGENTS.md und M0–M3-Status in der
+Roadmap waren überholt; Dokument 13 bleibt als historische Analyse erhalten.
+GitHub enthält inzwischen auch detaillierte spätere Horizonte bis M14;
+deren Neuplanung ist nicht Teil dieses Auftrags.
+
+## Planungsprinzip und Reihenfolge
+
+Der Fokus bleibt erhalten: **M6 Zeit/Dynamik**, danach **M7 Skalierung und
+höhere Elemente**. Beide sind mehrere Entwicklungsschritte, keine einzelnen
+Feature-PRs. Bestehende Issues werden als Arbeitspakete weiterverwendet;
+Unterabschnitte a–d sind getrennte PR-Schnitte, keine duplizierten Backlogs.
+
+M6: #29 → #30 und #31 → #32 → #33. Der mathematische Vertrag für #32 kann
+früh vorbereitet werden; die Implementierung wartet auf die verifizierten
+Einzelfelder. M7: #37a zuerst, danach #34 und #35; #36 ist fachlich unabhängig
+von PETSc. Optimierung #37b/c und Release #38 folgen den Referenznachweisen.
+
+Wichtigste Ergänzungen sind Model-/Exportintegration **innerhalb** der jeweiligen
+Issues, frühe DAE-/Phasorentscheidungen und eine durchgängige Supportmatrix.
+#36 wird bewusst auf Tet4-Wärme begrenzt: Das erfüllt die Voraussetzung für
+M10, ohne M7 zusätzlich mit allgemeiner gekoppelter Adaptivität zu überladen.
+Die erste Tet10-Freigabe verwendet geradkantige Geometrie; gekrümmte und
+hybride Netze benötigen eigene Nachweise.
+
+M6 trägt auf GitHub weiterhin den Zieltermin 14.10.2026. Ohne Kapazitäts- und
+Aufwandsschätzung ist dieser nicht belastbar; er wird hier weder bestätigt
+noch eigenmächtig verschoben. Zielversionen bleiben v1.1.0 und v1.2.0.
+Releasegates haben Vorrang vor Kalenderdaten. Fehlende Referenzen oder
+unerfüllte Gates erfordern eine sichtbare Neuplanung, keine stillen Kürzungen.
+
+## Konkrete Arbeitspakete
+
+### #29 — Zeitbasis, Materialien und Serienvertrag
+
+Abhängigkeit: M5 abgeschlossen; erster M6-Schritt.
+
+- Dichte rho [kg/m³] und spezifische Wärmekapazität c [J/(kg K)] regionsweise validieren; stationäre Materialkonstruktoren bleiben verwendbar. Konsistente und explizit gewählte gelumpte Tet4-Masse/Kapazität gegen analytische Integrale prüfen.
+
+- Zeitachse, Anfangswerte und Last-/Randwertverläufe definieren: endliche streng steigende Zeiten, Interpolation, Sprungstellen und Auswertezeitpunkte. TOML verwendet deklarative Zeitreihen, keine ausführbaren Ausdrücke.
+
+- Vor konkreten Solvern den additiven Model-/Ergebnisvertrag festlegen: Zustand T bzw. u/v/a, Zeitindex, SI-Einheiten, Ausgabeintervall, Provenienz und Speicherbudget. Schemas getrennt versionieren; Model-v1 und stationäres Bündel bleiben lesbar.
+
+- Abnahme: Elementintegrale erhalten Gesamtmasse/Kapazität; ungültige Material-, Zeit- und Anfangsdaten werden deterministisch abgelehnt. Serienexport mit unabhängiger Leserprüfung einschließlich unvollständiger Läufe.
+
+### #30 — Transiente Wärmeleitung
+
+Abhängigkeit: Nach #29; liefert thermische Referenz für #32.
+
+- Backward Euler als verpflichtende Referenz implementieren; Crank–Nicolson bleibt optionale Folgearbeit. Anfangstemperatur, zeitabhängige Quellen, Flüsse, Konvektion und Dirichlet-Werte berücksichtigen.
+
+- Wärmespeicherung und Randreaktionen aus dem ursprünglichen zeitdiskreten System bilanzieren. Isolierte Körper ohne Temperaturreferenz sind bei positiver Kapazität zulässig; stationären Nullraum-Preflight nicht ungeprüft übernehmen.
+
+- Abnahme: analytische Abkühlung und Diffusion, isolierter Körper, Mehrmaterialfall und zeitabhängiger Dirichlet-Rand. Raum- und Zeitfehler getrennt verfeinern; zeitlich erste Ordnung und stationären Grenzfall nachweisen.
+
+- Ausführbares TOML-Beispiel mit Zeitserie und schrittweiser Energiebilanz aus installierter Distribution bereitstellen.
+
+### #31 — Modal-, Zeit- und harmonische Piezoelastodynamik
+
+Abhängigkeit: Nach #29; Reihenfolge 31a → 31b → 31c → 31d, jeweils separat prüfbarer PR.
+
+- 31a: DAE-/Elektrodenvertrag und modale Analyse. Nur mechanische DOFs tragen Masse; elektrische DOFs bleiben algebraisch. Open-/Short-Circuit, Gauge, Floating-Charge und konsistente Anfangswerte festlegen. Keine künstliche elektrische Masse; keine ungeprüfte Eigenwertlösung des singulären Gesamtmassenproblems.
+
+- 31b: Newmark mit beta=1/4, gamma=1/2 als ungedämpfte Referenz; bewegte Dirichlet-Ränder samt Geschwindigkeit/Beschleunigung und deren Trägheitsbeiträge konsistent behandeln. Numerische/physikalische Dämpfung getrennt ausweisen; generalized-alpha nicht verpflichtend.
+
+- 31c: harmonischen Pfad mit expliziter Phasorkonvention und komplexwertigen Lasten/Ergebnissen entwickeln. Bestehendes LinearSystem akzeptiert nur reelle Werte: additive komplexe Infrastruktur oder äquivalente reelle Blockform vorab entscheiden; kein stiller Verlust imaginärer Anteile. Resonanz/Singularität diagnostizieren.
+
+- 31d: Model-Einstieg und Zeit-/Frequenzexport einschließlich Real-/Imaginärteil, Amplitude/Phase und Provenienz integrieren. Frequenz in Hz und Kreisfrequenz eindeutig unterscheiden.
+
+- Abnahme: unabhängige Eigenfrequenzreferenz, Open-/Short-Circuit-Vergleich, ungedämpfte Energie, zweite zeitliche Ordnung bei glatten Daten, Zeit-/Frequenzvergleich abseits Resonanz und statischer Niederfrequenzgrenzfall. Raum-, Zeit- und Frequenzrasterfehler getrennt berichten.
+
+### #32 — Reziproke lineare Thermoelastizität
+
+Abhängigkeit: Nach #30 und mechanischer Zeitintegration aus #31b; Potential-/Referenzklärung vor Implementierung.
+
+- Thermodynamisches Potential, Referenztemperatur, Entropieterm, Vorzeichen und zulässige Materialparameter im ADR und mathematischen Modell herleiten. Erste Freigabe auf mechanisch-thermische Reziprozität begrenzen; allgemeine reziproke Thermopiezo-/Pyrokopplung bleibt außerhalb.
+
+- Gekoppelten transienten u–T-Pfad samt Model-Konfiguration, Anfangs-/Randbedingungen und Energie-/Entropiebericht implementieren. Bestehendes einseitiges T→u und T→(u,phi) behält seine Semantik.
+
+- Abnahme: entkoppelter, quasistatischer und adiabatischer Grenzfall, unabhängige Referenz sowie konvergenter Thermoelastic-Damping-Fall. Physikalische Wärmeleitungsdämpfung von Integratordämpfung und Netzfehler trennen.
+
+- Gate bleibt offen, wenn Potential oder unabhängige Referenz ungeklärt sind; Umfang nicht stillschweigend aus v1.1 entfernen.
+
+### #33 — M6-Release-Gate
+
+Abhängigkeit: Nach #29–#32 einschließlich ihrer Integrationsschritte.
+
+- Alle M6-Pflichtkriterien einschließlich Model-/Serien-/Frequenzexport nachweisen; alte v1.0-Python- und TOML-Beispiele bleiben unverändert lauffähig.
+
+- Thermische Zeitordnung, mechanische Zeitordnung, Eigenfrequenzen, feldweise Residuen und Energie-/Entropiebilanzen mit vorab begründeten Toleranzen dokumentieren; Raum- und Zeitfehler getrennt.
+
+- Wärme-, Piezo-Dynamik-/Harmonik- und Thermoelastik-Beispiele aus frischen Wheel-/sdist-Installationen prüfen. Vollständige CI am Integrationscommit, Reviewstatus, Migration und Grenzen dokumentieren.
+
+- v1.1.0 erst nach Gate, konsistenter Paketversion und annotiertem Tag freigeben. Bestehender Zieltermin 14.10.2026 ist ungeprüft: Aufwand und verfügbare Kapazität vor einer Terminzusage erheben.
+
+### #34 — Optionales PETSc-Backend
+
+Abhängigkeit: Vertrag und SciPy-Referenz zuerst; M6-Analyseverträge berücksichtigen. #37 liefert frühe Baseline.
+
+- 34a: interne Backend-Schnittstelle für Operator, RHS, Feldindexmengen nach Randbedingungs-/Elektrodenkondensation, Skalierung und SolveReport mit SciPy implementieren. Bestehende splu-Aufrufe sind noch kein austauschbares Backend.
+
+- 34b: optionales petsc4py mit dokumentierter getesteter PETSc-/Python-/Scalar-Konfiguration anbinden; reelle und komplexe Analysepfade explizit abdecken oder komplexe Systeme äquivalent reell darstellen. Core-Import darf kein PETSc benötigen.
+
+- 34c: FieldSplit-/Schur-Verfahren, Nullräume, physikalische Residuen, Iterationslimit und Nichtkonvergenz diagnostizieren. Kein stiller Fallback, der Backend-Fehler verdeckt. Mindestens ein echter PETSc-CI-Job; übersprungene optionale Tests allein sind kein Nachweis.
+
+- Abnahme: SciPy/PETSc-Parität für Einzelfelder, gekoppelte feste/schwebende Elektroden und unterstützte M6-Systeme einschließlich Harmonik. Residuen am ursprünglichen unskalierten System prüfen; DOF-Indizes nach Kondensation testen.
+
+- Einprozess-PETSc ist Mindestumfang. MPI-/verteilte Assembly erst nach Profiling und explizitem Architekturentscheid; keine verteilte Skalierung aus einem Backendwechsel ableiten.
+
+### #35 — Tet10 durch alle Schichten
+
+Abhängigkeit: Nach M6-Verträgen; 35a → 35b → 35c → 35d. PETSc ist keine Voraussetzung der Elementverifikation.
+
+- 35a: additive Tet10-/Triangle6-Topologie, Knotenordnung, Gmsh-/VTU-Rundreise, Auswahlsätze, Randtopologie und Materialregionen. Tet4-Konstruktoren und bestehende Model-Dateien kompatibel halten; hybride Tet4/Tet10-Übergänge zunächst explizit ablehnen.
+
+- 35b: quadratische Formfunktionen, Volumen-/Flächenquadratur, Ableitungen und Orientierung. Erste Freigabe auf geradkantige Tet10 mit mittigen Kantenknoten beschränken; gekrümmte Geometrie gezielt ablehnen und dokumentieren. Kein ungeprüfter Wechsel des Geometriemodells.
+
+- 35c: mechanische, thermische, elektrische und piezoelektrische Operatoren einschließlich M6-Masse/Kapazität, thermischer Kopplung und Randintegralen. Elektroden müssen alle sechs Flächenknoten berücksichtigen.
+
+- 35d: Preflight, Model-Auswahl, Backend-Anbindung und Ergebnisexport integrieren. Spannungen/Flüsse sind bei Tet10 nicht elementweise konstant: Auswerteorte und Quadratur-/Roh-/Projektionswerte eindeutig kennzeichnen.
+
+- Abnahme: Partition der Eins, Ableitungssummen, unabhängige Quadraturintegrale, Patch- und Bilanztests; glatte Manufactured Solutions mit erwarteter H1-Ordnung 2/L2-Ordnung 3 auf mindestens vier Netzen. Singularitäten nicht für Ordnungszusagen verwenden. Biegungs-/Gradientenvergleich bei gleichem Fehler und Kostenbudget; Tet10 behebt Inkompressibilitätslocking nicht automatisch.
+
+### #36 — Fehlerindikatoren als begrenzte Forschungsbasis
+
+Abhängigkeit: Nach verifizierter stationärer Wärme; kann unabhängig von PETSc beginnen. Anschluss an M10 #67–#69.
+
+- Ersten residual- oder recovery-basierten Indikator ausschließlich für stationäre skalare Wärme auf Tet4 liefern. Norm, Einheiten, Randterme und Materialflusssprünge definieren; bei Tet4 nicht nur den oft verschwindenden Zellresidualterm auswerten.
+
+- Lokale Indikatoren und deterministische Markierung als Forschungs-API exportieren; Abgrenzung zwischen heuristischem Indikator und garantiertem Fehlerschätzer dokumentieren.
+
+- Abnahme: mindestens vier Netze mit bekannter glatter Lösung, Effektivitätsindex und lokalisierter Gradientenfall, zusätzlich Materialgrenze. Vorab vereinbarte Norm-/Trendkriterien prüfen; bloße optische Korrelation reicht nicht.
+
+- Gekoppelte Indikatoren, Tet10-Indikatoren und automatisches Remeshing sind Folgearbeit nach eigenem Gate. M10 erhält damit seine benötigte Tet4-Wärmebasis; kein allgemeiner Adaptivitätsanspruch.
+
+### #37 — Profiling und nachgewiesene Skalierung
+
+Abhängigkeit: 37a als M7-Einstieg; Optimierung erst nach Messung, Abschluss nach #34/#35.
+
+- 37a: reproduzierbare Baseline auf festgelegter Hardware erfassen: Tet4-Einzelfeld, gekoppeltes Elektrodenmodell und wiederholte M6-Schritte. Geometrie, Assembly, Randbehandlung, Faktorisierung/Solve und Export getrennt messen; Peak-Speicher, DOFs, nnz, Threads und Bibliotheksversionen angeben.
+
+- 37b: aus Profilen Engpass und vorab messbares Verbesserungsziel wählen; Matrixkopien, COO-Speicher und Wiederverwendung konstanter Operatoren/Faktorisierungen prüfen. Ungültigmachung bei geänderten Randwertstrukturen/Zeitschritten testen. Vektorisierung/Parallelisierung nur bei belegtem Nutzen.
+
+- 37c: Tet4/Tet10 und SciPy/PETSc bei vergleichbarer Fehlergrenze sowie mehreren Problemgrößen vergleichen. Wiederholungen und Streuung berichten; keine Hardware-Zeitgrenze als instabiles Unit-Test-Gate.
+
+- Abnahme: numerische Parität, belegte Verbesserung im gewählten Ziel, dokumentierte Regressionen und Speichergrenzen. Ohne MPI-Nachweis nur Problemgrößenskalierung behaupten; optimierte Pfade behalten eine prüfbare Referenz.
+
+### #38 — M7-Release-Gate
+
+Abhängigkeit: Nach #34–#37; M6-Kompatibilität bleibt Pflicht.
+
+- Tet4/Tet10 × SciPy/PETSc × freigegebene stationäre/M6-Analysearten als Supportmatrix dokumentieren und prüfen; nicht unterstützte Kombinationen werden früh mit konkretem Fehler abgelehnt, nicht implizit freigegeben.
+
+- Tet10-Patch-/Konvergenz-/Bilanztests, Backend-Parität und Wärmeindikatornachweise sowie reproduzierbarer Performancebericht liegen vor. Echte PETSc-Ausführung einschließlich komplexer Konfiguration dokumentieren.
+
+- Wheel/sdist ohne PETSc und dokumentierte optionale Installation mit PETSc testen; v1.0/v1.1-Beispiele und Model-Schemas regressionssicher. Qualitätschecks und anwendbare CI am Zielcommit grün; Reviewstatus offenlegen.
+
+- v1.2.0 erst nach vollständig erfülltem Gate und annotiertem Tag. Keine unbelegte Leistungs-, MPI-, Adaptivitäts- oder experimentelle Validierungszusage.
+
+## Prüfprotokoll dieser Bestandsaufnahme
+
+- Lokale Quelltests: `PYTHONPATH=src .venv/bin/python -m pytest -q`: **286 bestanden**.
+- Ruff-Lint und Formatprüfung bestanden (136 Dateien); mypy bestanden (38 Quelldateien).
+- Der direkte pytest-Aufruf scheiterte lokal am Paketimport, auch nach erneuter
+  editierbarer Installation. Deshalb ist der lokale Lauf ausdrücklich ein
+  Quelltest mit gesetztem Importpfad, kein frischer Installationsnachweis.
+  Die Ursache der lokalen Umgebung wurde in diesem Planungsauftrag nicht behoben.
+- Der veröffentlichte v1.0-Artefaktnachweis und die erfolgreiche main-CI sind
+  vorhandene Release-Evidenz; Artefaktinstallationen wurden hier nicht erneut geprüft.
+- Reine Dokumentations-/Planungsänderung: kein Red-Test oder neuer numerischer
+  Nachweis erforderlich. Relative Dokumentationslinks und `git diff --check` geprüft.
+- Kein unabhängiger Reviewer in diesem Auftrag; keine Reviewfreigabe behauptet.
