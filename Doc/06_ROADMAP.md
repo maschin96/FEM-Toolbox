@@ -1,6 +1,6 @@
 # Roadmap
 
-Status: M0–M5 freigegeben; M6/M7 neu konkretisiert (Stand 2026-09-23).
+Status: M0–M6 freigegeben; M7 konkretisiert (Stand 2026-09-23).
 Spätere Meilensteine: siehe historische Produktvision und aktuelles GitHub-Backlog.
 
 Die Roadmap priorisiert wissenschaftliches Risiko vor Funktionsmenge. Jeder
@@ -113,6 +113,8 @@ Abnahme: Open-Circuit-/Short-Circuit-Benchmark, reproduzierbares End-to-End-
 Beispiel und der [Vier-Netze-Konvergenznachweis mit Materialgrenze](25_THERMOPIEZO_CONVERGENCE.md).
 
 ## M6 — Transiente und dynamische Erweiterung
+
+Freigegeben als v1.1.0; [Release-Nachweis](35_M6_RELEASE_VERIFICATION.md).
 
 Zielversion: `v1.1.0`
 

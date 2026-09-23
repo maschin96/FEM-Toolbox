@@ -1,7 +1,7 @@
 # Lineare Piezoelastodynamik — #31
 
-Entwicklungsstand: 31a–d (Modalanalyse, Newmark, Harmonik, Model/Export),
-additive Forschungs-API in getrennten Review-PRs, kein Release.
+Status: 31a–d (Modalanalyse, Newmark, Harmonik, Model/Export) in v1.1.0.
+[Release-Nachweis und Nutzungsgrenzen](35_M6_RELEASE_VERIFICATION.md).
 Keine Rückwirkung der Verformung auf die Temperatur, keine experimentelle Validierung.
 
 ## DAE- und Elektrodenvertrag

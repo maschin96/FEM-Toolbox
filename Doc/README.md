@@ -48,14 +48,18 @@ Eintrag im Entscheidungsprotokoll.
 - [Gültigkeitsbereich und numerische Nutzungsgrenzen für v1.0](26_VALIDITY_AND_LIMITS.md)
 - [Öffentliche stationäre Python-API und Migration ab v0.3](29_PUBLIC_API_CONTRACT.md)
 
-## M6-Entwicklung
+## M6 — v1.1.0
 
 - [Tet4-Masse und Wärmekapazität](31_TET4_STORAGE.md)
 - [Quellenbelegte thermische Parameterbibliothek](32_MATERIAL_LIBRARY.md)
 - [Transiente Wärme, Model-Schema 2 und Zeitserien](33_TRANSIENT_HEAT.md)
 - [Piezoelastodynamik und Modalanalyse](34_PIEZO_DYNAMICS.md)
 
+- [M6-Release-Verifikation, Migration und Grenzen](35_M6_RELEASE_VERIFICATION.md)
+
 ## Veröffentlichungen
+
+- [v1.1.0 — Transiente Wärme und Piezo-Dynamik](releases/v1.1.0.md)
 
 - [v1.0.0 — Vollständiger stationärer Workflow](releases/v1.0.0.md)
 - [v0.5.0 — Piezoelektrizität](releases/v0.5.0.md)

@@ -4,6 +4,9 @@ Stand: 23.09.2026. Tracking: [#167](https://github.com/maschin96/FEM-Toolbox/iss
 Diese Planung ersetzt für M6/M7 die ältere Baseline aus Dokument 13.
 Sie beschreibt geplante Arbeit, keine bereits implementierten Fähigkeiten.
 
+M6 ist mit v1.1.0 abgeschlossen; [Release-Nachweis](35_M6_RELEASE_VERIFICATION.md).
+Die nachfolgende Bestandsaufnahme ist die historische v1.0-Planungsbaseline.
+
 ## Bestandsaufnahme und Bewertung
 
 Geprüfte Basis: `origin/main` und Release v1.0.0 bei
