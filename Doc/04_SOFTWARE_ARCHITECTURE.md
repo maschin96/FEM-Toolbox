@@ -206,6 +206,8 @@ Der Stand des versionierten TOML-Adapters und seine Grenzen stehen in
 Der stationäre Kombinationsmodus löst Wärme zuerst und übergibt absolute
 Knotentemperaturen an den monolithischen Piezo-Solver; seine beiden Ergebnisse
 und feldweisen Bilanzen bleiben getrennt ([Doc/22](22_THERMOPIEZOELECTRIC.md)).
+Der vorgesehene stabile v1.0-Umfang, Formen, Einheiten, Fehler und Migration
+der direkten Solver- und Model-API stehen in [Doc/29](29_PUBLIC_API_CONTRACT.md).
 Die modellweite Prüfung von Randwertkonflikten und notwendigen Referenzen
 läuft vor der Assembly ([Doc/23](23_MODEL_PREFLIGHT.md)).
 

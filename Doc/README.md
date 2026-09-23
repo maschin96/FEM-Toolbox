@@ -42,6 +42,7 @@ Eintrag im Entscheidungsprotokoll.
 - [Versioniertes stationäres Ergebnisbündel](24_RESULT_BUNDLE.md)
 - [Vier-Netze-Nachweis des stationären Mehrmaterialmodells](25_THERMOPIEZO_CONVERGENCE.md)
 - [Gültigkeitsbereich und numerische Nutzungsgrenzen für v1.0](26_VALIDITY_AND_LIMITS.md)
+- [Öffentliche stationäre Python-API und Migration ab v0.3](29_PUBLIC_API_CONTRACT.md)
 
 ## Veröffentlichungen
 
