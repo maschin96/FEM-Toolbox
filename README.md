@@ -243,3 +243,14 @@ Issue, anschließend ein fokussierter Branch und Pull Request. Ausführbare
 Änderungen entstehen testgetrieben; reine Dokumentationsänderungen werden auf
 Inhalt, Links und Konsistenz geprüft. Jeder abgeschlossene Meilenstein erhält
 nach bestandenem Release-Gate eine eigene Version und einen annotierten Git-Tag.
+
+## Lizenz und Weitergabe
+
+Der aktuelle Quellstand steht unter der [MIT-Lizenz](LICENSE) und darf unter
+Beibehaltung des Copyright- und Lizenzhinweises verwendet, verändert und
+weitergegeben werden. Die früher veröffentlichten Tags und Artefakte erhalten
+durch diese Änderung nicht nachträglich neue Lizenzmetadaten. Laufzeitpakete
+wie NumPy, SciPy und meshio behalten ihre eigenen Bedingungen; die
+[Bestandsaufnahme](Doc/27_DISTRIBUTION_INVENTORY.md) nennt die geprüften
+Drittbestandteile und den Umfang der Paketarchive. Ein öffentlicher Paket-Upload
+oder die Freigabe von v1.0 ist damit nicht erfolgt.
