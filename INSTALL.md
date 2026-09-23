@@ -14,6 +14,9 @@ Ein PyPI-Release des aktuellen Checkouts wird hier nicht vorausgesetzt.
   geprüft. Windows und andere Plattform-/Python-Kombinationen haben derzeit
   keine eigene Projekt-CI-Zusage. Details stehen in der
   [Kompatibilitätsmatrix](Doc/28_DEPENDENCY_COMPATIBILITY.md).
+- Wheel und sdist werden zusätzlich ohne Repository-Checkout installiert und
+  mit einem analytischen Solverbeispiel geprüft; Umfang und Freigabegrenzen
+  stehen im [Artefaktnachweis](Doc/29_RELEASE_ARTIFACTS_AND_PROTECTION.md).
 - Internetzugriff für den ersten Paketdownload; ungefähr 1 GB freier Platz
   für Python-Umgebung, numerische Wheels und optional Gmsh ist sinnvoll.
   C/C++-Compiler und separate Gmsh-Installation sind für die bereitgestellten

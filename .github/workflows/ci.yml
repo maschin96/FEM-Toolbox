@@ -14,6 +14,75 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  artifact-build:
+    name: Build release artifacts
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.13"
+      - name: Build wheel and sdist with isolated build dependencies
+        run: |
+          python -m pip install --disable-pip-version-check 'pip>=26.2' build
+          python -m build
+          cp examples/steady_heat.py dist/steady_heat.py
+          cd dist
+          sha256sum *.whl *.tar.gz steady_heat.py > SHA256SUMS
+      - name: Transfer artifacts and standalone solver example
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: release-candidate
+          path: dist/
+          if-no-files-found: error
+          retention-days: 7
+
+  artifacts:
+    name: Artifacts / Python ${{ matrix.python-version }} / ${{ matrix.distribution }}
+    needs: artifact-build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+        distribution: [wheel, sdist]
+    # Deliberately no checkout: only the archives and one standalone example
+    # cross the job boundary, never src/, tests/, or an editable installation.
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Download candidate from this workflow run
+        uses: actions/download-artifact@484a0b528fb4d7bd804637ccb632e47a0e638317
+        with:
+          name: release-candidate
+          path: candidate
+      - name: Verify transfer and create fresh environment
+        run: |
+          cd candidate
+          sha256sum --check SHA256SUMS
+          python -m venv "$RUNNER_TEMP/artifact-env"
+          "$RUNNER_TEMP/artifact-env/bin/python" -m pip install --upgrade 'pip>=26.2'
+      - name: Install wheel
+        if: matrix.distribution == 'wheel'
+        run: '"$RUNNER_TEMP/artifact-env/bin/python" -m pip install candidate/*.whl'
+      - name: Install sdist with isolated build dependencies
+        if: matrix.distribution == 'sdist'
+        run: '"$RUNNER_TEMP/artifact-env/bin/python" -m pip install candidate/*.tar.gz'
+      - name: Verify installed metadata and numerical solver
+        run: |
+          "$RUNNER_TEMP/artifact-env/bin/python" -m pip check
+          "$RUNNER_TEMP/artifact-env/bin/python" -m pip freeze
+          "$RUNNER_TEMP/artifact-env/bin/python" -I -c 'import sys; from pathlib import Path; from importlib.metadata import metadata; import fem_toolbox; p = Path(fem_toolbox.__file__).resolve(); assert p.is_relative_to(Path(sys.prefix).resolve()), p; m = metadata("fem-toolbox"); assert m["License-Expression"] == "MIT"; print(p, m["Version"], m["Requires-Python"])'
+          cd "$RUNNER_TEMP"
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/steady_heat.py"
+          test -s steady_heat.vtu
+
   quality:
     name: Quality / Python 3.13
     runs-on: ubuntu-latest
