@@ -19,11 +19,17 @@ numerische Piezo-Benchmarks, das Gmsh-zu-VTU-Beispiel und Mesh-I/O-Tests sind
 für beide Ränder Pflicht. `pip freeze` und die Paketmetadaten im Job-Log
 halten die tatsächlich aufgelösten Versionen und `Requires-Dist` fest.
 
-| CPython | Älteste geprüfte NumPy/SciPy/meshio-Kombination | Neueste Kombination |
+| CPython | Älteste geprüfte NumPy/SciPy/meshio-Kombination | Am 23.09.2026 aufgelöste neueste Kombination |
 |---|---|---|
-| 3.11 | `1.26.0` / `1.12.0` / `5.3.5` | durch Resolver bei jedem CI-Lauf neu bestimmt und im Log ausgegeben |
-| 3.12 | `1.26.0` / `1.12.0` / `5.3.5` | ebenso |
-| 3.13 | `2.1.0` / `1.14.1` / `5.3.5` | ebenso |
+| 3.11 | `1.26.0` / `1.12.0` / `5.3.5` | `2.4.6` / `1.17.1` / `5.3.5` |
+| 3.12 | `1.26.0` / `1.12.0` / `5.3.5` | `2.5.3` / `1.18.1` / `5.3.5` |
+| 3.13 | `2.1.0` / `1.14.1` / `5.3.5` | `2.5.3` / `1.18.1` / `5.3.5` |
+
+Alle sechs Kombinationen, die vollständige Testsuite auf jeder Python-Version
+und der Qualitätsjob waren im
+[CI-Lauf 35825879531](https://github.com/maschin96/FEM-Toolbox/actions/runs/35825879531)
+grün. „Neueste“ ist eine aufgelöste Momentaufnahme, kein oberes Versionslimit
+und keine Sperrdatei; spätere CI-Läufe können andere Versionen wählen.
 
 Die Grenzen für 3.13 folgen aus den [NumPy-2.1-Release-Notizen](https://numpy.org/doc/2.2/release/2.1.0-notes.html)
 und [SciPy-1.14.1-Release-Notizen](https://docs.scipy.org/doc/scipy-1.14.1/release/1.14.1-notes.html).
@@ -54,8 +60,9 @@ erst im Release-Gate aus dem freizugebenden Commit gebaut und erneut geprüft.
 
 ## Sicherheitsupdates
 
-`.github/dependabot.yml` prüft Python- und GitHub-Actions-Versionen
-wöchentlich und eröffnet höchstens fünf Update-PRs je Ökosystem. Vor jedem
+`.github/dependabot.yml` konfiguriert wöchentliche Versionschecks für Python-
+und GitHub-Actions-Abhängigkeiten mit höchstens fünf Update-PRs je Ökosystem;
+die tatsächliche Ausführung ist nach der Integration zu kontrollieren. Vor jedem
 Release und nach einer relevanten Sicherheitsmeldung werden die für 3.11–3.13
 aufgelösten Umgebungen mit einem aktuellen Advisory-Scanner (zum Beispiel
 `pip-audit`) geprüft. Ein Fund wird mit Paket, Version, Advisory, betroffener
@@ -76,10 +83,12 @@ aktualisiert die CI das Installationswerkzeug vor dem Paketbezug auf
 ohne bekannten Befund geprüft. Für die Python-3.11/3.12-Untergrenze wurden
 NumPy 1.26.0, SciPy 1.12.0, meshio 5.3.5 und die lokal erfassten transitiven
 Versionen zusätzlich als gepinnte Liste geprüft; auch dort meldete
-`pip-audit` keinen bekannten Fund. Dieser zweite Scan löste keine
-Abhängigkeiten neu auf und ersetzt daher keinen Scan der tatsächlich
-installierten CI-Umgebung. Beide Ergebnisse sind Momentaufnahmen und kein
-Ersatz für den erneuten Scan des Release-Kandidaten.
+`pip-audit` keinen bekannten Fund. Auch die drei direkt deklarierten
+Laufzeitpakete der beiden neu aufgelösten CI-Kombinationen zeigten keinen
+bekannten Fund. Die gepinnten Scans lösten keine Abhängigkeiten neu auf und
+ersetzen daher keinen Scan der tatsächlich installierten CI-Umgebungen.
+Alle Ergebnisse sind Momentaufnahmen und kein Ersatz für den erneuten Scan
+des Release-Kandidaten.
 
 Bei einem Update wird zuerst die betroffene direkte oder transitive
 Abhängigkeit aktualisiert. Danach laufen beide Ränder der CI-Matrix, die
