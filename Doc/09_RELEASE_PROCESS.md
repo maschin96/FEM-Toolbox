@@ -74,6 +74,9 @@ geschlossen. Vor dem Tag müssen alle folgenden Bedingungen erfüllt sein:
    vorgesehenen Referenzbeispiele wurden daraus ausgeführt.
 7. Der freizugebende Commit befindet sich auf `main` und enthält keine
    unbeabsichtigten oder geheimen Dateien.
+8. Lizenzmetadaten und Lizenzdatei stimmen in Wheel, sdist, README und
+   Release Notes überein; Hinweise für tatsächlich mitgelieferte
+   Drittbestandteile sind geprüft.
 
 Fehlende unabhängige Reviewer werden im Release-Issue genannt. Sie werden nicht
 als erteilte Freigabe behandelt.
