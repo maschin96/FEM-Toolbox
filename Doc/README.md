@@ -66,6 +66,8 @@ Eintrag im Entscheidungsprotokoll.
 
 - [Tet10-/Triangle6-Topologie und I/O (#35a)](40_TET10_TOPOLOGY.md)
 
+- [Tet10-Formfunktionen, Geometrie und Quadratur (#35b)](41_TET10_GEOMETRY.md)
+
 ## Veröffentlichungen
 
 - [v1.1.0 — Transiente Wärme und Piezo-Dynamik](releases/v1.1.0.md)

@@ -152,7 +152,8 @@ interpretiert Koordinaten als Meter, `1.0e-3` rechnet Millimeter in Meter um.
 - `Mesh` kopiert seine Eingaben und prüft unter anderem Array-Formen,
   Indexgrenzen und topologisch doppelte Entitäten. Geometrische Entartung wird
   durch `Tet4Geometry` und beim Gmsh-Import geprüft.
-- M7 ergänzt geradkantige Tet10/Triangle6 für Topologie und I/O;
+- M7 ergänzt geradkantige Tet10/Triangle6 für Topologie und I/O sowie
+  [Formfunktionen, Geometrie und Quadratur](Doc/41_TET10_GEOMETRY.md);
   [Vertrag und Grenzen](Doc/40_TET10_TOPOLOGY.md). Tet10-Modelle und gemischte
   Elementordnungen sind noch nicht unterstützt. Andere Zelltypen führen zu
   einem `UnsupportedCellTypeError`.
