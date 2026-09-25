@@ -380,3 +380,27 @@ werden weitergereicht. Positive Definitheit der begrenzten dichten M6-Blöcke
 wird vor der nativen LU separat geprüft. FieldSplit, Schur-Präconditionierung,
 Nullraumübergabe und iterative Nichtkonvergenz folgen #34c. Keine MPI- oder
 Performancezusage aus diesem Schritt. Details: [Dokument 38](38_PETSC_BACKEND.md).
+
+
+## ADR-026 — FGMRES/Schur und unveränderte physikalische Nullraumprüfung (#34c)
+
+Datum: 25.09.2026. Status: Umsetzung im M7-Issue-Branch.
+
+Der optionale iterative Adapter verwendet Rechtspräkonditionierung mit PETSc
+FieldSplit: volle Blockfaktorisierung, A11 als Schur-Näherung und native LU für
+beide Teilinversen. Ein einzelnes verbleibendes Feld nutzt FGMRES/LU. Da dieser
+Präkonditionierer nicht symmetrisch-positiv sein muss, ist FGMRES auch beim
+symmetrisch-indefiniten Piezo-Operator angemessen; CG/MINRES werden nicht gewählt.
+Diese erste Referenz verspricht keinen Laufzeit- oder verteilten Skalierungsvorteil.
+
+Physikalische Nullräume werden weiterhin vor dem Backend diagnostiziert und
+müssen durch explizite Lager/Referenzen entfernt werden. Die frühere Planung
+einer Nullraumübergabe aus ADR-025 wird damit präzisiert: keine implizite
+Lastprojektion, kein zusätzlicher singulärer Solve-Vertrag. Algebraische Krylov-
+Konvergenz allein garantiert keine Eindeutigkeit beliebiger Eingabematrizen.
+
+Echte PETSc-Tests prüfen native Iterationsabbrüche, Originalresiduen, Scalar-
+Abbildung und Physikparität. Jeder Solver isoliert intern gelesene FieldSplit-
+Optionen mit einem privaten Präfix. Ein Bericht zählt äußere Iterationen je
+Solve-Aufruf; Grenzen gelten je nativer RHS. Details und Einschränkungen stehen
+in [Dokument 39](39_PETSC_FIELDSPLIT.md).

@@ -10,7 +10,7 @@ from fem_toolbox.materials import ThermalMaterial
 from fem_toolbox.solvers.heat import solve_heat, thermal_dofs
 
 
-def test_heat_l2_and_energy_convergence(cube_mesh):
+def test_heat_l2_and_energy_convergence(cube_mesh, backend=None):
     material = ThermalMaterial([[2, 0.3, 0.2], [0.3, 3, 0.1], [0.2, 0.1, 4]])
     weights_xyz = np.array([1.0, 0.5, 0.25])
 
@@ -44,6 +44,7 @@ def test_heat_l2_and_energy_convergence(cube_mesh):
                 )
             ],
             source=9.0,
+            backend=backend,
         )
         l2, energy = 0.0, 0.0
         for cell_id, nodes in enumerate(mesh.tetra4):

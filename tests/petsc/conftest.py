@@ -16,3 +16,10 @@ def petsc_backend():
         if os.environ.get("FEM_REQUIRE_PETSC") == "1":
             pytest.fail(str(error))
         pytest.skip(f"optional PETSc runtime unavailable: {error}")
+
+
+@pytest.fixture(params=["direct", "fieldsplit"])
+def physics_backend(petsc_backend, request):
+    from fem_toolbox.solvers.petsc_backend import PetscFieldSplitBackend
+
+    return petsc_backend if request.param == "direct" else PetscFieldSplitBackend()

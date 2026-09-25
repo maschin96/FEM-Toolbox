@@ -1,8 +1,8 @@
 # Optionaler PETSc-Direktbackend (#34b)
 
 Teilbeitrag zu [Issue #34](https://github.com/maschin96/FEM-Toolbox/issues/34)
-auf M7, kein Release. #34c (FieldSplit/Schur und iterative Verfahren) bleibt
-offen. Der [interne Vertrag](37_LINEAR_BACKEND.md) und die bestehenden
+auf M7, kein Release. [Dokument 39 (#34c)](39_PETSC_FIELDSPLIT.md) ergänzt
+FieldSplit/Schur und iterative Verfahren. Der [interne Vertrag](37_LINEAR_BACKEND.md) und die bestehenden
 physikalischen Einheiten, Randbedingungen und Residuen gelten unverändert.
 
 ## Auswahl und Installation
