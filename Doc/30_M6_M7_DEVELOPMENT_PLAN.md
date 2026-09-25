@@ -215,3 +215,11 @@ Messpunkt-CSV sind implementiert und lokal verifiziert; Nachweise in [Doc/33](33
 Issue-Abnahme, PR-Integration und M6-Freigabe sind davon getrennte Schritte.
 Der dynamische u/v/a-/Frequenzvertrag und #31 bleiben ausstehend.
 #32 ist auf Nutzerwunsch zurückgestellt (ADR-021).
+
+## M7 begonnen (25.09.2026)
+
+#37a: reproduzierbares Benchmarkwerkzeug und 27 lokale SciPy-/Tet4-Messläufe
+für stationäre Wärme, Floating-Elektrode und transiente Wärme liegen vor;
+[Messvertrag, Rohdaten und Grenzen](36_PERFORMANCE_BASELINE.md).
+#37b/c und Issue-Abschluss bleiben offen. Nächster geplanter Schritt ist die
+Backend-Grenze mit SciPy-Referenz (#34a).
