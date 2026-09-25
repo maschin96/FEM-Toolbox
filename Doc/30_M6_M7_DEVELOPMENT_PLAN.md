@@ -238,4 +238,7 @@ nach erfolgreicher CI, Review und Integration. Backend-Auswahl im Model bleibt
 eine spätere Erweiterung.
 #35a: Additive Tet10-/Triangle6-Topologie, Randzuordnung, Materialregionen und
 Gmsh-/VTU-I/O sind im Issue-Branch umgesetzt; [Vertrag und Grenzen](40_TET10_TOPOLOGY.md).
-Nächster geplanter Funktionsschritt: #35b (Formfunktionen und Quadratur).
+#35b: Quadratische Formfunktionen, Ableitungen, affine Tet10-/Triangle6-Geometrie
+und positive Quadratur sind im Issue-Branch umgesetzt;
+[Vertrag und Interpolationsnachweise](41_TET10_GEOMETRY.md).
+Nächster geplanter Funktionsschritt: #35c (quadratische Feldoperatoren).

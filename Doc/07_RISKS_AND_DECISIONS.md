@@ -418,3 +418,18 @@ bevor affine Eckgeometrie verwendet wird. Model lehnt Tet10 bis #35d explizit ab
 VTU-Präsenzmasken erhalten den Unterschied zwischen fehlenden und nullwertigen
 Metadaten. Mathematische Feldkonventionen bleiben unverändert.
 Details: [Tet10-Topologie](40_TET10_TOPOLOGY.md).
+
+
+## ADR-028: Affine Tet10-Interpolation und positive Referenzquadratur (#35b)
+
+Datum: 25.09.2026. Status: Umsetzung im M7-Issue-Branch.
+
+Die erste Tet10-Geometrie beschränkt sich auf mittige Kantenknoten. Quadratische
+Felder verwenden affine Eckgeometrie; gekrümmte Elemente werden nicht still
+linearisiert. Triangle6 liefert tangentiale Ableitungen und lehnt Auswertung
+außerhalb seiner Ebene ab. Positive kollabierte Gauss-Produkte integrieren
+Volumenpolynome bis Grad 5 und Flächenpolynome bis Grad 4; Gewichte enthalten
+Referenz- bzw. physische Maße und sind nicht auf eins normiert. Die vergleichsweise
+hohe Punktzahl priorisiert eine einfach unabhängig prüfbare Referenz. Keine
+neuen Abhängigkeiten, keine Änderung mathematischer Feldvorzeichen oder der
+Tet4-API. Nachweise und Grenzen: [Dokument 41](41_TET10_GEOMETRY.md).

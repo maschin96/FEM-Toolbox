@@ -2,7 +2,8 @@
 
 M7 erweitert das Netzmodell additiv um eine quadratische Simplex-Familie.
 Dieser Teil implementiert Topologie, Metadaten und I/O; quadratische
-Formfunktionen, Operatoren und die Model-Integration folgen in #35b–d.
+Formfunktionen und Quadratur ergänzt [#35b](41_TET10_GEOMETRY.md).
+Operatoren und die Model-Integration folgen in #35c/d.
 
 ## Datenvertrag
 
