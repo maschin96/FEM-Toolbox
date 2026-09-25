@@ -7,4 +7,7 @@ RUN python3 -m venv --system-site-packages /opt/petsc-test \
     && /opt/petsc-test/bin/pip install --no-cache-dir \
        'numpy==1.26.4' 'scipy==1.14.1' 'meshio==5.3.5' 'pytest==8.3.5'
 ENV PATH="/opt/petsc-test/bin:${PATH}"
+COPY pyproject.toml README.md LICENSE /opt/fem-toolbox/
+COPY src /opt/fem-toolbox/src
+RUN /opt/petsc-test/bin/pip install --no-cache-dir --no-deps /opt/fem-toolbox
 WORKDIR /work

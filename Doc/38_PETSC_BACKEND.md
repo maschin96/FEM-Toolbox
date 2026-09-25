@@ -29,14 +29,16 @@ NumPy oder einer vorhandenen PETSc-Installation festlegen. Getesteter Einstieg
 ist deshalb die separate Linux-Umgebung aus `ci/petsc.Dockerfile`:
 
 ```sh
-docker build -f ci/petsc.Dockerfile -t fem-toolbox-petsc:test ci
+docker build -f ci/petsc.Dockerfile -t fem-toolbox-petsc:test .
 docker run --rm -v "$PWD:/work:ro" fem-toolbox-petsc:test \
   python ci/run_petsc_tests.py --scalar real -q tests/petsc -p no:cacheprovider
 docker run --rm -v "$PWD:/work:ro" fem-toolbox-petsc:test \
   python ci/run_petsc_tests.py --scalar complex -q tests/petsc -p no:cacheprovider
 ```
 
-Der Runner wählt **vor dem ersten Import** genau einen der beiden Ubuntu-Builds
+Das Image installiert die Toolbox regulär; der Runner verlangt ihren Import aus
+der virtuellen Umgebung, ohne lokale Quellbaum-/egg-info-Metadaten zu verwenden.
+Nach Quelländerungen das Image neu bauen. Der Runner wählt **vor dem ersten Import** genau einen der beiden Ubuntu-Builds
 und prüft dessen tatsächlichen Scalar-Typ. Die native Umgebung darf nicht im
 laufenden Python-Prozess gewechselt werden. Eigene Installationen nach der
 [offiziellen petsc4py-Anleitung](https://petsc.org/release/petsc4py/install.html)

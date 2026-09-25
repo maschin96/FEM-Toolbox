@@ -224,7 +224,7 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Build native PETSc test environment
-        run: docker build -f ci/petsc.Dockerfile -t fem-toolbox-petsc:test ci
+        run: docker build -f ci/petsc.Dockerfile -t fem-toolbox-petsc:test .
       - name: Require native scalar build and run backend verification
         env:
           PETSC_SCALAR: ${{ matrix.scalar }}
