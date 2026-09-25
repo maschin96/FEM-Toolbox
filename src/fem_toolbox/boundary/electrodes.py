@@ -7,9 +7,9 @@ from numpy.typing import ArrayLike
 
 @dataclass(frozen=True)
 class Electrode:
-    """Named exterior Triangle3 set with fixed potential (V) or total charge (C).
+    """Named exterior Triangle3/Triangle6 set with fixed potential (V) or total charge (C).
 
-    ``facets`` is a named mesh facet set or Triangle3 row indices. Exactly one
+    ``facets`` is a named mesh facet set or active surface row indices. Exactly one
     of ``potential`` and ``charge`` must be supplied. A floating open-circuit
     electrode has ``charge=0``; no potential reference is inferred.
     """

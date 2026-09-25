@@ -2,8 +2,8 @@
 
 M7 ergänzt quadratische Lagrange-Interpolation für affine Tetraeder und ihre
 planaren Dreiecksflächen. Die [Knotenordnung aus #35a](40_TET10_TOPOLOGY.md)
-bleibt unverändert. Feldoperatoren, globale Tet10-Solver und Model-Integration
-sind weiterhin Gegenstand von #35c/d.
+bleibt unverändert. [Feldoperatoren ergänzt #35c](42_TET10_OPERATORS.md); globale Tet10-Solver
+und Model-Integration sind weiterhin Gegenstand von #35d.
 
 ## Formfunktionen und Ableitungen
 
