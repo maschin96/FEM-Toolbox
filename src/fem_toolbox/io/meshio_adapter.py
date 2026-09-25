@@ -5,6 +5,7 @@ from __future__ import annotations
 from collections.abc import Mapping
 from math import isfinite
 from pathlib import Path
+from typing import Any
 
 import meshio  # type: ignore[import-untyped]
 import numpy as np
@@ -13,8 +14,14 @@ from numpy.typing import ArrayLike, NDArray
 from fem_toolbox.elements import Tet4Geometry
 from fem_toolbox.errors import MeshIOError, UnsupportedCellTypeError
 from fem_toolbox.mesh import Mesh
+from fem_toolbox.mesh.quadratic import reordered_tet10, require_straight
 
-_INTERNAL_TO_MESHIO = {"tetra4": "tetra", "triangle3": "triangle"}
+_INTERNAL_TO_MESHIO = {
+    "tetra4": "tetra",
+    "triangle3": "triangle",
+    "tetra10": "tetra10",
+    "triangle6": "triangle6",
+}
 _SUPPORTED_MESHIO_TYPES = frozenset(_INTERNAL_TO_MESHIO.values())
 _RESERVED_DATA_PREFIX = "fem_toolbox:"
 _MESHIO_METADATA_CELL_SETS = frozenset({"gmsh:bounding_entities"})
@@ -80,7 +87,55 @@ def _orient_tetra4(
     return oriented
 
 
-def _mesh_from_meshio(source: meshio.Mesh, *, length_scale_to_m: float) -> Mesh:
+def _metadata(
+    source: meshio.Mesh, cell_type: str, name: str
+) -> NDArray[np.int64] | None:
+    data = source.cell_data_dict.get(f"fem_toolbox:{name}", {}).get(cell_type)
+    present = source.cell_data_dict.get(f"fem_toolbox:has_{name}", {}).get(cell_type)
+    if present is not None:
+        if np.all(present == 0):
+            return None
+        if not np.all(present == 1) or data is None:
+            raise MeshIOError(
+                operation="import", reason=f"invalid presence metadata for {name}"
+            )
+    return None if data is None else np.asarray(data)
+
+
+def _vtu_sets(source: meshio.Mesh, cell_type: str) -> dict[str, NDArray[np.int64]]:
+    result = {}
+    for key, by_type in source.cell_data_dict.items():
+        if key.startswith("fem_toolbox:set:") and cell_type in by_type:
+            name = key.removeprefix("fem_toolbox:set:")
+            mask = np.asarray(by_type[cell_type])
+            if mask.ndim != 1 or not np.isin(mask, [0, 1]).all():
+                raise MeshIOError(
+                    operation="import", reason=f"invalid selection mask {name}"
+                )
+            presence = source.cell_data_dict.get(
+                f"fem_toolbox:set-present:{name}", {}
+            ).get(cell_type)
+            if presence is not None:
+                if np.all(presence == 0):
+                    if np.any(mask):
+                        raise MeshIOError(
+                            operation="import",
+                            reason=f"absent selection {name} has members",
+                        )
+                    continue
+                if not np.all(presence == 1):
+                    raise MeshIOError(
+                        operation="import", reason=f"invalid selection presence {name}"
+                    )
+            elif not np.any(mask):
+                continue
+            result[name] = np.flatnonzero(mask).astype(np.int64)
+    return result
+
+
+def _mesh_from_meshio(
+    source: meshio.Mesh, *, length_scale_to_m: float, vtu: bool = False
+) -> Mesh:
     unsupported = tuple(
         sorted(
             cell_type
@@ -90,49 +145,62 @@ def _mesh_from_meshio(source: meshio.Mesh, *, length_scale_to_m: float) -> Mesh:
     )
     if unsupported:
         raise UnsupportedCellTypeError(unsupported)
-
     points = np.asarray(source.points, dtype=np.float64)
     if points.ndim != 2 or points.shape[1:] != (3,):
         raise MeshIOError(
             operation="import",
             reason=f"point coordinates have shape {points.shape}; expected (n, 3)",
         )
-    tetra4 = _concatenated_cells(source, "tetra", 4)
-    triangle3 = _concatenated_cells(source, "triangle", 3)
-    cell_tags = _physical_tags(source, "tetra")
-    facet_tags = _physical_tags(source, "triangle")
-
-    scaled_points = points * length_scale_to_m
-    oriented_tetra4 = _orient_tetra4(scaled_points, tetra4)
-    return Mesh(
-        points=scaled_points,
-        tetra4=oriented_tetra4,
-        triangle3=triangle3,
-        cell_tags=cell_tags,
-        facet_tags=facet_tags,
-        volume_sets=_selection_sets(
-            source,
-            cell_type="tetra",
-            dimension=3,
-            physical_tags=cell_tags,
-        ),
-        facet_sets=_selection_sets(
-            source,
-            cell_type="triangle",
-            dimension=2,
-            physical_tags=facet_tags,
-        ),
-    )
+    data: dict[str, Any] = {"points": points * length_scale_to_m}
+    for internal, external in _INTERNAL_TO_MESHIO.items():
+        width = {"tetra4": 4, "triangle3": 3, "tetra10": 10, "triangle6": 6}[internal]
+        data[internal] = _concatenated_cells(source, external, width)
+        if vtu:
+            data[f"{internal}_ids"] = _metadata(source, external, "external_id")
+    # Validate family, row indices and shared edge incidence before indexing points.
+    preliminary = Mesh(**data)
+    volume_type = _INTERNAL_TO_MESHIO[preliminary.cell_type]
+    facet_type = _INTERNAL_TO_MESHIO[preliminary.facet_type]
+    if vtu:
+        data["point_ids"] = source.point_data.get("fem_toolbox:external_id")
+        data["cell_tags"] = _metadata(source, volume_type, "physical_tag")
+        data["facet_tags"] = _metadata(source, facet_type, "physical_tag")
+        data["volume_sets"] = _vtu_sets(source, volume_type)
+        data["facet_sets"] = _vtu_sets(source, facet_type)
+    else:
+        data["cell_tags"] = _physical_tags(source, volume_type)
+        data["facet_tags"] = _physical_tags(source, facet_type)
+        data["volume_sets"] = _selection_sets(
+            source, cell_type=volume_type, dimension=3, physical_tags=data["cell_tags"]
+        )
+        data["facet_sets"] = _selection_sets(
+            source, cell_type=facet_type, dimension=2, physical_tags=data["facet_tags"]
+        )
+        data["tetra4"] = _orient_tetra4(preliminary.points, preliminary.tetra4)
+    if preliminary.n_tetra10:
+        oriented = preliminary.tetra10.copy()
+        for index, nodes in enumerate(preliminary.tetra10):
+            require_straight(preliminary.points, nodes)
+            geometry = Tet4Geometry(preliminary.points[nodes[:4]], entity_id=index)
+            if not vtu:
+                oriented[index] = reordered_tet10(
+                    nodes, geometry.oriented_connectivity(nodes[:4])
+                )
+        data["tetra10"] = oriented
+    for nodes in preliminary.triangle6:
+        require_straight(preliminary.points, nodes)
+    return Mesh(**data)
 
 
 def read_gmsh(path: str | Path, *, length_scale_to_m: float = 1.0) -> Mesh:
-    """Read a Gmsh mesh containing only Tet4 and Triangle3 entities.
+    """Read one Tet4/Triangle3 or straight Tet10/Triangle6 Gmsh family.
 
     Coordinates are multiplied by ``length_scale_to_m`` and stored in metres.
     Physical names become immutable volume or facet selection sets. Gmsh 4.1
     entities belonging to several physical groups remain in every corresponding
     set, while the singular compatibility tags retain meshio's first physical tag.
-    Negative Tet4 orientations are normalized and degenerate elements are rejected.
+    Negative volume orientations are normalized, including all Tet10 edge nodes.
+    Curved quadratic geometry and degenerate volume cells are rejected.
     """
     if not isfinite(length_scale_to_m) or length_scale_to_m <= 0.0:
         raise MeshIOError(
@@ -145,6 +213,19 @@ def read_gmsh(path: str | Path, *, length_scale_to_m: float = 1.0) -> Mesh:
     except (OSError, meshio.ReadError) as error:
         raise MeshIOError(operation="import", reason=str(error)) from error
     return _mesh_from_meshio(source, length_scale_to_m=length_scale_to_m)
+
+
+def read_vtu(path: str | Path) -> Mesh:
+    """Read mesh topology and Toolbox metadata from VTU, without changing ordering.
+
+    Restores optional IDs, tags and overlapping/empty sets written by write_vtu.
+    Result arrays remain accessible through meshio; this function returns Mesh.
+    """
+    try:
+        source = meshio.read(Path(path), file_format="vtu")
+    except (OSError, meshio.ReadError) as error:
+        raise MeshIOError(operation="import", reason=str(error)) from error
+    return _mesh_from_meshio(source, length_scale_to_m=1.0, vtu=True)
 
 
 def _result_array(
@@ -176,12 +257,11 @@ def _result_array(
 
 
 def _active_cell_types(mesh: Mesh) -> list[tuple[str, str, NDArray[np.int64]]]:
-    active: list[tuple[str, str, NDArray[np.int64]]] = []
-    if mesh.n_tetra4:
-        active.append(("tetra4", "tetra", mesh.tetra4))
-    if mesh.n_triangle3:
-        active.append(("triangle3", "triangle", mesh.triangle3))
-    return active
+    return [
+        (internal, external, getattr(mesh, internal))
+        for internal, external in _INTERNAL_TO_MESHIO.items()
+        if len(getattr(mesh, internal))
+    ]
 
 
 def _export_cell_data(
@@ -232,22 +312,47 @@ def _export_cell_data(
             mask = np.zeros(len(connectivity), dtype=np.uint8)
             selection = (
                 mesh.volume_sets.get(name)
-                if internal == "tetra4"
+                if internal.startswith("tetra")
                 else mesh.facet_sets.get(name)
             )
             if selection is not None:
                 mask[selection] = 1
             arrays.append(mask)
         result[f"{_RESERVED_DATA_PREFIX}set:{name}"] = arrays
-
-    if mesh.cell_tags is not None or mesh.facet_tags is not None:
-        tag_arrays: list[NDArray[np.generic]] = []
-        for internal, _, connectivity in active:
-            tags = mesh.cell_tags if internal == "tetra4" else mesh.facet_tags
-            tag_arrays.append(
-                np.zeros(len(connectivity), dtype=np.int64) if tags is None else tags
+        result[f"{_RESERVED_DATA_PREFIX}set-present:{name}"] = [
+            np.full(
+                len(connectivity),
+                int(
+                    name
+                    in (
+                        mesh.volume_sets
+                        if internal.startswith("tetra")
+                        else mesh.facet_sets
+                    )
+                ),
+                dtype=np.uint8,
             )
-        result[f"{_RESERVED_DATA_PREFIX}physical_tag"] = tag_arrays
+            for internal, _, connectivity in active
+        ]
+
+    for name, cell_value, facet_value in (
+        ("physical_tag", mesh.cell_tags, mesh.facet_tags),
+        ("external_id", mesh.cell_ids, mesh.facet_ids),
+    ):
+        if cell_value is None and facet_value is None:
+            continue
+        values: list[NDArray[np.generic]] = []
+        presence: list[NDArray[np.generic]] = []
+        for internal, _, connectivity in active:
+            value = cell_value if internal.startswith("tetra") else facet_value
+            values.append(
+                np.zeros(len(connectivity), dtype=np.int64) if value is None else value
+            )
+            presence.append(
+                np.full(len(connectivity), int(value is not None), dtype=np.uint8)
+            )
+        result[f"fem_toolbox:{name}"] = values
+        result[f"fem_toolbox:has_{name}"] = presence
 
     return result
 
@@ -263,7 +368,7 @@ def write_vtu(
     """Write a mesh and numeric result arrays to an unstructured VTK file.
 
     Every cell result field must provide arrays for all non-empty internal cell
-    types, keyed by ``"tetra4"`` and/or ``"triangle3"``. Selection sets are
+    types, keyed by the active ``tetra4``/``triangle3`` or ``tetra10``/``triangle6`` family. Selection sets are
     exported as independent ``fem_toolbox:set:<name>`` masks, so overlapping
     memberships remain lossless in the VTU output.
     """
@@ -271,10 +376,16 @@ def write_vtu(
     if not active:
         raise MeshIOError(operation="export", reason="mesh contains no cells")
 
+    if any(name.startswith(_RESERVED_DATA_PREFIX) for name in (point_data or {})):
+        raise MeshIOError(
+            operation="export", reason="point data uses the reserved fem_toolbox prefix"
+        )
     exported_point_data = {
         name: _result_array(value, field=name, expected_rows=mesh.n_points)
         for name, value in (point_data or {}).items()
     }
+    if mesh.point_ids is not None:
+        exported_point_data["fem_toolbox:external_id"] = mesh.point_ids
     exported_cell_data = _export_cell_data(mesh, active, cell_data or {})
     output = meshio.Mesh(
         points=mesh.points,

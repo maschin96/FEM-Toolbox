@@ -235,4 +235,7 @@ Grenzen stehen in [Dokument 38](38_PETSC_BACKEND.md).
 zusätzliche reale/komplexe Physik- und Konvergenznachweise sind im Issue-Branch
 umgesetzt; [Vertrag und Grenzen](39_PETSC_FIELDSPLIT.md). Issue-Abschluss erst
 nach erfolgreicher CI, Review und Integration. Backend-Auswahl im Model bleibt
-eine spätere Erweiterung. Nächster geplanter Funktionsschritt: #35a (Tet10-Vertrag).
+eine spätere Erweiterung.
+#35a: Additive Tet10-/Triangle6-Topologie, Randzuordnung, Materialregionen und
+Gmsh-/VTU-I/O sind im Issue-Branch umgesetzt; [Vertrag und Grenzen](40_TET10_TOPOLOGY.md).
+Nächster geplanter Funktionsschritt: #35b (Formfunktionen und Quadratur).

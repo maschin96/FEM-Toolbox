@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from fem_toolbox.io.meshio_adapter import read_gmsh, write_vtu
+from fem_toolbox.io.meshio_adapter import read_gmsh, read_vtu, write_vtu
 from fem_toolbox.mesh import Mesh
 
 
@@ -15,4 +15,4 @@ def export_result_bundle(
     return export(path, mesh, result)
 
 
-__all__ = ("export_result_bundle", "read_gmsh", "write_vtu")
+__all__ = ("export_result_bundle", "read_gmsh", "read_vtu", "write_vtu")
