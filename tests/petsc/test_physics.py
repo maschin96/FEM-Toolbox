@@ -1,0 +1,163 @@
+"""Native PETSc parity and independent patch/oscillator references in SI units."""
+
+import numpy as np
+import pytest
+from numpy.testing import assert_allclose
+
+from fem_toolbox.boundary import Dirichlet, Electrode
+from fem_toolbox.materials import (
+    DielectricMaterial,
+    ElasticMaterial,
+    PiezoelectricMaterial,
+    ThermalMaterial,
+)
+from fem_toolbox.mesh import Mesh
+from fem_toolbox.solvers.elasticity import mechanical_dofs, solve_elasticity
+from fem_toolbox.solvers.electrostatics import solve_electrostatics
+from fem_toolbox.solvers.heat import solve_heat
+from fem_toolbox.solvers.piezo_dynamics import solve_piezoelectric_modes
+from fem_toolbox.solvers.piezo_harmonic import solve_harmonic_piezoelectric
+from fem_toolbox.solvers.piezo_transient import solve_transient_piezoelectric
+from fem_toolbox.solvers.piezoelectric import piezoelectric_dofs, solve_piezoelectric
+from fem_toolbox.solvers.transient_heat import solve_transient_heat
+
+
+def test_single_field_patches_and_heat_storage(cube_mesh, petsc_backend):
+    mesh = cube_mesh(2)
+    boundary = np.flatnonzero(np.any((mesh.points == 0) | (mesh.points == 1), axis=1))
+    x = mesh.points[:, 0]
+    thermal = ThermalMaterial.isotropic(2, density=3, specific_heat=4)
+    for backend in (None, petsc_backend):
+        heat = solve_heat(
+            mesh, thermal, [Dirichlet(boundary, 300 + x[boundary])], backend=backend
+        )
+        assert_allclose(heat.temperature, 300 + x, rtol=0, atol=1e-10)
+        assert_allclose(
+            heat.heat_flux,
+            np.tile([-2, 0, 0], (len(mesh.tetra4), 1)),
+            rtol=0,
+            atol=1e-10,
+        )
+        electric = solve_electrostatics(
+            mesh,
+            DielectricMaterial.isotropic(2),
+            [Dirichlet(boundary, x[boundary])],
+            backend=backend,
+        )
+        assert_allclose(electric.potential, x, rtol=0, atol=1e-13)
+        u = 0.01 * mesh.points
+        bc = Dirichlet(
+            mechanical_dofs(mesh).indices("u", boundary), u[boundary].ravel()
+        )
+        elastic = solve_elasticity(
+            mesh, ElasticMaterial.isotropic(100, 0.25), [bc], backend=backend
+        )
+        assert_allclose(elastic.displacement, u, rtol=0, atol=1e-13)
+        history = solve_transient_heat(
+            mesh, thermal, [0, 0.5, 1], 300, source=12, backend=backend
+        )
+        for frame in history.frames:
+            assert_allclose(frame.temperature, 300 + frame.time, rtol=0, atol=1e-10)
+        for balance in history.balances:
+            assert abs(balance.balance) < 1e-10
+
+
+@pytest.mark.parametrize("floating", [False, True])
+def test_fixed_and_charged_floating_electrodes(cube_mesh, petsc_backend, floating):
+    mesh = cube_mesh(2)
+    x = mesh.points[:, 0]
+    left = np.flatnonzero(np.all(x[mesh.triangle3] == 0, axis=1))
+    right = np.flatnonzero(np.all(x[mesh.triangle3] == 1, axis=1))
+    fixed = piezoelectric_dofs(mesh).indices("u", np.flatnonzero(x == 0))
+    coupling = np.zeros((3, 6))
+    coupling[0, 0] = 0.5
+    material = PiezoelectricMaterial(np.eye(6) * 10, coupling, np.eye(3) * 2)
+    kwargs = dict(
+        electrodes=[
+            Electrode("left", left, potential=0),
+            Electrode("right", right, charge=0.3)
+            if floating
+            else Electrode("right", right, potential=1),
+        ]
+    )
+    bc = [Dirichlet(fixed, np.zeros(len(fixed)))]
+    reference = solve_piezoelectric(mesh, material, bc, **kwargs)
+    result = solve_piezoelectric(mesh, material, bc, backend=petsc_backend, **kwargs)
+    for field in (
+        "displacement",
+        "potential",
+        "stress",
+        "electric_displacement",
+        "electrode_charges",
+        "force_balance",
+        "moment_balance",
+        "mechanical_energy",
+        "coupling_energy",
+        "dielectric_enthalpy",
+    ):
+        assert_allclose(
+            getattr(result, field), getattr(reference, field), rtol=1e-11, atol=1e-12
+        )
+    assert max(result.relative_residual_u, result.relative_residual_phi) < 1e-10
+    assert abs(result.charge_balance) < 1e-12
+    assert result.provenance.solver_parameters["backend"] == petsc_backend.name
+
+
+def test_modal_newmark_and_complex_harmonic(petsc_backend):
+    mesh = Mesh(
+        points=[[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]], tetra4=[[0, 1, 2, 3]]
+    )
+    coupling = np.zeros((3, 6))
+    coupling[0, 0] = 2
+    material = PiezoelectricMaterial(
+        np.diag([10, 20, 30, 4, 5, 6]), coupling, np.diag([3, 4, 5])
+    )
+    fixed = np.setdiff1d(np.arange(16), [3, 13])
+    bc = [Dirichlet(fixed, np.zeros(len(fixed)))]
+    # V=1/6, M11=rho*V/10=0.1; open-circuit stiffness (10+2²/3)*V.
+    mass, stiffness = 0.1, (10 + 4 / 3) / 6
+    f = np.zeros(16, dtype=complex)
+    f[3] = 1 + 2j
+    histories = []
+    for backend in (None, petsc_backend):
+        modal = solve_piezoelectric_modes(
+            mesh, material, 6, bc, count=1, backend=backend
+        )
+        assert_allclose(
+            modal.angular_frequencies, [np.sqrt(stiffness / mass)], rtol=1e-12
+        )
+        harmonic = solve_harmonic_piezoelectric(
+            mesh, material, 6, bc, 0.1, loads=f, backend=backend
+        )
+        u = (1 + 2j) / (stiffness - (2 * np.pi * 0.1) ** 2 * mass)
+        assert_allclose(harmonic.displacement[1, 0], u, rtol=1e-12)
+        assert_allclose(harmonic.potential[1], 2 / 3 * u, rtol=1e-12)
+        initial = np.zeros((4, 3))
+        initial[1, 0] = 0.1
+        transient = solve_transient_piezoelectric(
+            mesh,
+            material,
+            6,
+            bc,
+            [0, 0.05, 0.1],
+            initial_displacement=initial,
+            backend=backend,
+        )
+        histories.append(transient)
+        assert_allclose(transient.total_energy, 0.5 * stiffness * 0.1**2, rtol=1e-12)
+        for result in (modal, harmonic, transient):
+            assert np.max(result.relative_residual_u) < 1e-10
+            assert np.max(result.relative_residual_phi) < 1e-10
+    for field in (
+        "displacement",
+        "velocity",
+        "acceleration",
+        "potential",
+        "total_energy",
+    ):
+        assert_allclose(
+            getattr(histories[1], field),
+            getattr(histories[0], field),
+            rtol=1e-11,
+            atol=1e-12,
+        )

@@ -3,7 +3,8 @@
 Status: implementiert und lokal geprüft im M7-Issue-Branch. Teilbeitrag zu
 [Issue #34](https://github.com/maschin96/FEM-Toolbox/issues/34), Entscheidung
 [ADR-024](07_RISKS_AND_DECISIONS.md#adr-024--interner-linearer-backend-scalarvertrag-34a).
-PETSc und FieldSplit sind noch nicht implementiert. Keine neue Abhängigkeit.
+PETSc-Direktlösen ergänzt [Dokument 38 (#34b)](38_PETSC_BACKEND.md).
+FieldSplit bleibt #34c. Die SciPy-Referenz benötigt keine neue Abhängigkeit.
 
 ## Verantwortlichkeiten und Schnittstelle
 
@@ -154,4 +155,4 @@ bestanden, mypy für 51 Quelldateien bestanden, Diff-Prüfung bestanden.
 Lokaler Import weiterhin über `PYTHONPATH=src`; dies ist ein Quelltest.
 CI/Artefakte und Reviewstatus werden am PR nachgewiesen. Kein unabhängiger
 Reviewer beteiligt; keine Reviewfreigabe behauptet. #34 bleibt bis zur
-PETSc-Implementierung und den echten Backend-Nachweisen offen.
+vollständigen Abnahme einschließlich FieldSplit (#34c) offen.

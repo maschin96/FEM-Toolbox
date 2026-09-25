@@ -1,0 +1,12 @@
+# Native PETSc verification image: only packaging inputs enter the context.
+**
+!ci/
+!ci/petsc.Dockerfile
+!pyproject.toml
+!README.md
+!LICENSE
+!src/
+!src/**
+src/**/*.egg-info
+src/**/__pycache__
+src/**/*.pyc

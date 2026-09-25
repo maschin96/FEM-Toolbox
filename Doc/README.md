@@ -61,6 +61,7 @@ Eintrag im Entscheidungsprotokoll.
 
 - [SciPy-/Tet4-Performance-Baseline (#37a)](36_PERFORMANCE_BASELINE.md)
 - [Interner linearer Backend-Vertrag und SciPy-Referenz (#34a)](37_LINEAR_BACKEND.md)
+- [Optionaler PETSc-Direktbackend und Scalar-Parität (#34b)](38_PETSC_BACKEND.md)
 
 ## Veröffentlichungen
 

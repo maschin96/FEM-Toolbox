@@ -360,3 +360,23 @@ Backendfehler werden nicht durch Fallback verdeckt. SolveReport nennt Backend,
 Verfahren, Konvergenzgrund und unskalierte feldweise Residuen. Physikalische
 Bilanzen/Einheiten und die globale Reaktionsauswertung bleiben im Adapter.
 PETSc, FieldSplit, iterative Nullräume und Model-Konfiguration folgen #34b/c.
+
+
+## ADR-025 — Optionaler einprozessiger PETSc-Direktadapter (#34b)
+
+Datum: 25.09.2026. Status: Umsetzung im M7-Issue-Branch.
+
+Die erste native Referenz verwendet PETSc PREONLY mit SeqAIJ-LU auf COMM_SELF.
+Sie teilt Datenvalidierung und Originalresiduen mit SciPy, aber keine
+Faktorisierung. PETSc wird erst bei expliziter Backend-Auswahl geladen.
+Ein reeller Build bildet komplexe Operatoren exakt als doppelt großes reelles
+Blocksystem ab; ein komplexer Build löst nativ. Beide Varianten erhalten echte
+CI-Nachweise. Die kontrollierte optionale Umgebung ist Ubuntu 24.04 mit
+Python 3.12 und PETSc/petsc4py 3.19.6; der Core behält Python 3.11–3.13.
+
+Diese Wahl liefert zunächst Scalar- und Physikparität ohne iterative Parameter
+oder stillen Fallback. LU-Pivotierung ist nicht mit SuperLU identisch; Fehler
+werden weitergereicht. Positive Definitheit der begrenzten dichten M6-Blöcke
+wird vor der nativen LU separat geprüft. FieldSplit, Schur-Präconditionierung,
+Nullraumübergabe und iterative Nichtkonvergenz folgen #34c. Keine MPI- oder
+Performancezusage aus diesem Schritt. Details: [Dokument 38](38_PETSC_BACKEND.md).
