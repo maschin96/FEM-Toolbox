@@ -12,7 +12,7 @@ from dataclasses import dataclass
 
 import numpy as np
 from numpy.typing import ArrayLike, NDArray
-from scipy.linalg import cho_factor, cho_solve, eigh  # type: ignore[import-untyped]
+from scipy.linalg import eigh  # type: ignore[import-untyped]
 
 from fem_toolbox.assembly import MatrixBlock, assemble, indices, real_array
 from fem_toolbox.boundary import Dirichlet, Electrode, eliminate_dirichlet
@@ -25,6 +25,7 @@ from fem_toolbox.mesh import Mesh
 from fem_toolbox.provenance import RunProvenance
 from fem_toolbox.solvers.elasticity import _check_supports
 from fem_toolbox.solvers.electrostatics import _check_gauge
+from fem_toolbox.solvers.linear_backend import LinearBackend, solve_linear
 from fem_toolbox.solvers.piezoelectric import (
     _electrode_reduction,
     _materials,
@@ -104,6 +105,7 @@ def _build_dynamic_system(
     density: ArrayLike,
     conditions: Iterable[Dirichlet],
     electrodes: Sequence[Electrode] | None,
+    backend: LinearBackend | None = None,
 ) -> _DynamicSystem:
     if mesh.n_tetra4 == 0:
         raise ValidationError("piezo dynamics requires Tet4 cells", field="mesh")
@@ -172,15 +174,17 @@ def _build_dynamic_system(
     coupling = reduced[np.ix_(free_phi, free_u)]
     if len(free_phi):
         dielectric = -reduced[np.ix_(free_phi, free_phi)]
-        scale = np.sqrt(np.diag(dielectric))
-        try:
-            factor = cho_factor(dielectric / scale[:, None] / scale[None, :])
-            electric_map = np.asarray(
-                cho_solve(factor, coupling / scale[:, None]) / scale[:, None],
-                dtype=np.float64,
-            )
-        except np.linalg.LinAlgError as error:
-            raise ValidationError("singular electric block", field="solver") from error
+        electric_map = np.asarray(
+            solve_linear(
+                dielectric,
+                coupling,
+                fields={"phi": np.arange(len(free_phi))},
+                scale=1 / np.sqrt(np.diag(dielectric)),
+                kind="positive_definite",
+                backend=backend,
+            ).values,
+            dtype=np.float64,
+        )
     else:
         electric_map = np.empty((0, len(free_u)))
     stiffness = reduced[np.ix_(free_u, free_u)] + coupling.T @ electric_map
@@ -222,10 +226,14 @@ def solve_piezoelectric_modes(
     density: ArrayLike,
     conditions: Iterable[Dirichlet],
     *,
+    backend: LinearBackend | None = None,
     count: int = 6,
     electrodes: Sequence[Electrode] | None = None,
 ) -> PiezoelectricModes:
     """Solve the lowest ``count`` supported, undamped natural modes.
+
+    ``backend`` is an experimental linear-backend hook; None selects SciPy.
+    Reduction, physical residuals and result units remain this solver's contract.
 
     Constant density: positive scalar or (ncells,) kg/m³. Dirichlet indices
     use piezoelectric_dofs(mesh); all prescribed values/charges must be zero
@@ -242,7 +250,9 @@ def solve_piezoelectric_modes(
     Invalid inputs, nonpositive eigenvalues or failed field residuals raise
     ValidationError; a missing gauge raises ElectricGaugeError.
     """
-    system = _build_dynamic_system(mesh, material, density, conditions, electrodes)
+    system = _build_dynamic_system(
+        mesh, material, density, conditions, electrodes, backend
+    )
     if (
         isinstance(count, bool)
         or not isinstance(count, int)
@@ -315,6 +325,7 @@ def solve_piezoelectric_modes(
             solver_name="fem_toolbox.solvers.piezo_dynamics.solve_piezoelectric_modes",
             solver_parameters={
                 "backend": "scipy.linalg.eigh",
+                "linear_backend": "scipy" if backend is None else backend.name,
                 "count": count,
                 "electrical_mass": 0,
                 "mass": "consistent",

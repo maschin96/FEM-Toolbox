@@ -12,7 +12,6 @@ import numpy as np
 from numpy.typing import ArrayLike, NDArray
 from scipy import sparse  # type: ignore[import-untyped]
 from scipy.sparse.csgraph import connected_components  # type: ignore[import-untyped]
-from scipy.sparse.linalg import splu  # type: ignore[import-untyped]
 
 from fem_toolbox.assembly import MatrixBlock, VectorBlock, assemble, indices, real_array
 from fem_toolbox.boundary import Dirichlet, eliminate_dirichlet
@@ -24,6 +23,7 @@ from fem_toolbox.materials import ElasticMaterial, ThermalExpansion
 from fem_toolbox.mesh import Mesh
 from fem_toolbox.physics.elasticity import VectorField, body_load, traction_load
 from fem_toolbox.provenance import RunProvenance
+from fem_toolbox.solvers.linear_backend import LinearBackend, solve_linear
 
 
 def mechanical_dofs(mesh: Mesh) -> DofMap:
@@ -123,6 +123,7 @@ def solve_elasticity(
     material: ElasticMaterial | Sequence[ElasticMaterial],
     conditions: Iterable[Dirichlet],
     *,
+    backend: LinearBackend | None = None,
     body_force: VectorField = (0.0, 0.0, 0.0),
     tractions: Mapping[int, VectorField] | None = None,
     point_loads: Mapping[int, ArrayLike] | None = None,
@@ -130,6 +131,9 @@ def solve_elasticity(
     temperature: ArrayLike | None = None,
 ) -> ElasticResult:
     """Solve static linear elasticity on all Tet4 cells, in SI units.
+
+    ``backend`` is an experimental linear-backend hook; None selects SciPy.
+    Reduction, physical residuals and result units remain this solver's contract.
 
     material is homogeneous or one material per input cell. conditions use
     mechanical_dofs(mesh); nonzero displacement values are allowed. tractions
@@ -252,16 +256,14 @@ def solve_elasticity(
                 "nonpositive elastic stiffness diagonal", field="solver"
             )
         scale = 1 / np.sqrt(diagonal)
-        scaling = sparse.diags(scale)
-        try:
-            factor = splu((scaling @ reduced @ scaling).tocsc())
-            if np.min(np.abs(factor.U.diagonal())) <= 1e-12:
-                raise ValidationError(
-                    "singular or ill-conditioned elastic system", field="solver"
-                )
-            solution[free] = scale * factor.solve(scale * constrained.rhs[free])
-        except RuntimeError as error:
-            raise ValidationError("singular elastic system", field="solver") from error
+        solution[free] = solve_linear(
+            reduced,
+            constrained.rhs[free],
+            fields={"u": np.arange(len(free))},
+            scale=scale,
+            pivot_tolerance=1e-12,
+            backend=backend,
+        ).values
     if not np.isfinite(solution).all():
         raise ValidationError("nonfinite elastic solution", field="solver")
     residual = original.residual(solution)
@@ -317,7 +319,7 @@ def solve_elasticity(
         solver_name="fem_toolbox.solvers.elasticity.solve_elasticity",
         solver_parameters={
             "input_schema": "elasticity-discrete-v1",
-            "backend": "scipy.sparse.linalg.splu",
+            "backend": "scipy.sparse.linalg.splu" if backend is None else backend.name,
             "scaling": "diagonal",
             "pivot_tolerance": 1e-12,
             "rigid_rank_tolerance": 1e-10,

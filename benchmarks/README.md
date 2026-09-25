@@ -26,6 +26,12 @@ NumPy-Buildkonfiguration, angeforderte Threadlimits, DOFs und Nichtnullzahlen.
 Eine gesperrte macOS-CPU-Abfrage wird als `cpu_probe_error` ausgewiesen.
 Unter Windows ohne `resource` ist der RSS-Wert ausdrücklich `null`.
 
+Seit #34a folgt die LU-Instrumentierung dem Modul `solvers.linear_backend`;
+die übrigen Messgrenzen bleiben gleich. Die archivierten 37a-Rohdaten beziehen
+sich weiterhin auf den dort ausgewiesenen alten Skripthash und Produktionsstand.
+Neue Läufe enthalten zusätzlich Validierung und Residuenbericht des Backends;
+eine Leistungsverbesserung wird durch #34a nicht behauptet.
+
 ## Drei kontrollierte Fälle
 
 Einheitswürfel mit `N³` kartesischen Zellen, je sechs konformen Tet4;

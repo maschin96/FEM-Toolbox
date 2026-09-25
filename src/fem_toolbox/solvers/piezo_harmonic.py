@@ -8,7 +8,6 @@ from dataclasses import dataclass
 
 import numpy as np
 from numpy.typing import ArrayLike, NDArray
-from scipy.linalg import cho_factor, cho_solve, solve  # type: ignore[import-untyped]
 
 from fem_toolbox.assembly import real_array
 from fem_toolbox.boundary import Dirichlet, Electrode
@@ -16,6 +15,7 @@ from fem_toolbox.errors import ValidationError
 from fem_toolbox.materials import PiezoelectricMaterial
 from fem_toolbox.mesh import Mesh
 from fem_toolbox.provenance import RunProvenance
+from fem_toolbox.solvers.linear_backend import LinearBackend, solve_linear
 from fem_toolbox.solvers.piezo_dynamics import _build_dynamic_system
 
 
@@ -78,11 +78,15 @@ def solve_harmonic_piezoelectric(
     conditions: Iterable[Dirichlet],
     frequency_hz: float,
     *,
+    backend: LinearBackend | None = None,
     electrodes: Sequence[Electrode] | None = None,
     loads: ArrayLike | None = None,
     prescribed: ArrayLike | None = None,
 ) -> HarmonicPiezoelectricResult:
     """Solve one undamped harmonic state, including DC (frequency_hz=0).
+
+    ``backend`` is an experimental linear-backend hook; None selects SciPy.
+    Reduction, physical residuals and result units remain this solver's contract.
 
     Topology uses homogeneous conditions/electrodes; loads and prescribed
     arrays are finite real/complex (4*nactive,) in [u,phi] DOF order. Loads
@@ -104,7 +108,9 @@ def solve_harmonic_piezoelectric(
     omega = 2 * np.pi * hz
     if not np.isfinite(omega) or omega > np.sqrt(np.finfo(np.float64).max):
         raise ValidationError("frequency is not representable", field="frequency_hz")
-    system = _build_dynamic_system(mesh, material, density, conditions, electrodes)
+    system = _build_dynamic_system(
+        mesh, material, density, conditions, electrodes, backend
+    )
     n = len(system.active)
     nu = 3 * n
     size = 4 * n
@@ -146,19 +152,26 @@ def solve_harmonic_piezoelectric(
         raise ValidationError(
             "resonance or ill-conditioned harmonic system", field="solver"
         )
-    try:
-        q = scale * solve(scaled, scale * effective, assume_a="sym")
-    except np.linalg.LinAlgError as error:
-        raise ValidationError("singular harmonic system", field="solver") from error
+    q = solve_linear(
+        dynamic,
+        effective,
+        fields={"u": np.arange(len(fu))},
+        scale=scale,
+        backend=backend,
+    ).values
     reduced_state = reduced_g.copy()
     reduced_state[fu] = q
     if len(fp):
         dielectric = -system.reduced[np.ix_(fp, fp)]
-        ds = np.sqrt(np.diag(dielectric))
-        factor = cho_factor(dielectric / ds[:, None] / ds[None, :])
-        reduced_state[fp] = (
-            system.electric_map @ q - cho_solve(factor, rhs[fp] / ds) / ds
-        )
+        electric = solve_linear(
+            dielectric,
+            rhs[fp],
+            fields={"phi": np.arange(len(fp))},
+            scale=1 / np.sqrt(np.diag(dielectric)),
+            kind="positive_definite",
+            backend=backend,
+        ).values
+        reduced_state[fp] = system.electric_map @ q - electric
     state = reduced_state[system.index]
     velocity = 1j * omega * state[:nu]
     acceleration = -(omega**2) * state[:nu]
@@ -199,6 +212,7 @@ def solve_harmonic_piezoelectric(
         ).encode(),
         solver_name="fem_toolbox.solvers.piezo_harmonic.solve_harmonic_piezoelectric",
         solver_parameters={
+            "linear_backend": "scipy" if backend is None else backend.name,
             "phasor": "Re(x_hat exp(+i omega t))",
             "frequency_hz": hz,
             "angular_frequency": omega,

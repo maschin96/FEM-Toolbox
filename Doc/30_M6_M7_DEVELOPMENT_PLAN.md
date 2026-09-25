@@ -221,5 +221,10 @@ Der dynamische u/v/a-/Frequenzvertrag und #31 bleiben ausstehend.
 #37a: reproduzierbares Benchmarkwerkzeug und 27 lokale SciPy-/Tet4-Messläufe
 für stationäre Wärme, Floating-Elektrode und transiente Wärme liegen vor;
 [Messvertrag, Rohdaten und Grenzen](36_PERFORMANCE_BASELINE.md).
-#37b/c und Issue-Abschluss bleiben offen. Nächster geplanter Schritt ist die
-Backend-Grenze mit SciPy-Referenz (#34a).
+#37b/c und Issue-Abschluss bleiben offen.
+
+#34a: Die interne Backend-Grenze mit SciPy-Referenz ist im Issue-Branch
+implementiert; [Vertrag und Nachweise](37_LINEAR_BACKEND.md). Einzelfelder,
+gekoppelte Elektroden und lineare M6-Teilprobleme nutzen sie. PETSc, FieldSplit,
+Backend-Konfiguration im Model und echte PETSc-CI bleiben #34b/c; das Issue
+bleibt offen. Nächster geplanter Backend-Schritt ist #34b.
