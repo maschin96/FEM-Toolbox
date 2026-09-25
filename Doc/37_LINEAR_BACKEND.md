@@ -4,7 +4,7 @@ Status: implementiert und lokal geprüft im M7-Issue-Branch. Teilbeitrag zu
 [Issue #34](https://github.com/maschin96/FEM-Toolbox/issues/34), Entscheidung
 [ADR-024](07_RISKS_AND_DECISIONS.md#adr-024--interner-linearer-backend-scalarvertrag-34a).
 PETSc-Direktlösen ergänzt [Dokument 38 (#34b)](38_PETSC_BACKEND.md).
-FieldSplit bleibt #34c. Die SciPy-Referenz benötigt keine neue Abhängigkeit.
+[FieldSplit ergänzt Dokument 39 (#34c)](39_PETSC_FIELDSPLIT.md). Die SciPy-Referenz benötigt keine neue Abhängigkeit.
 
 ## Verantwortlichkeiten und Schnittstelle
 
@@ -42,7 +42,7 @@ Der Faktor kopiert Matrix, Skala und Indexmengen. Änderungen an Eingaben
 verändern ihn nicht. Wiederverwendung ist explizit möglich, wenn Operator,
 Feldpartition und Skalierung unverändert sind; sonst neu faktorisieren.
 Eine leere `(0,0)`-Matrix liefert eine leere Lösung ohne Bibliotheksfaktorisierung.
-Ungültige Daten, Singularität, fehlende positive Definitheit, nichtendliche
+Ungültige Daten, erkannte Singularität, fehlende positive Definitheit, nichtendliche
 Zwischenwerte oder fehlgeschlagene Residuenprüfung führen zu `ValidationError`.
 Ein alternatives Backend muss diesen Vertrag einschließlich Validierung und
 Residuenprüfung erfüllen; der Hook vertraut seiner Implementierung.

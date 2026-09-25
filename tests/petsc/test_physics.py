@@ -22,12 +22,12 @@ from fem_toolbox.solvers.piezoelectric import piezoelectric_dofs, solve_piezoele
 from fem_toolbox.solvers.transient_heat import solve_transient_heat
 
 
-def test_single_field_patches_and_heat_storage(cube_mesh, petsc_backend):
+def test_single_field_patches_and_heat_storage(cube_mesh, physics_backend):
     mesh = cube_mesh(2)
     boundary = np.flatnonzero(np.any((mesh.points == 0) | (mesh.points == 1), axis=1))
     x = mesh.points[:, 0]
     thermal = ThermalMaterial.isotropic(2, density=3, specific_heat=4)
-    for backend in (None, petsc_backend):
+    for backend in (None, physics_backend):
         heat = solve_heat(
             mesh, thermal, [Dirichlet(boundary, 300 + x[boundary])], backend=backend
         )
@@ -63,7 +63,7 @@ def test_single_field_patches_and_heat_storage(cube_mesh, petsc_backend):
 
 
 @pytest.mark.parametrize("floating", [False, True])
-def test_fixed_and_charged_floating_electrodes(cube_mesh, petsc_backend, floating):
+def test_fixed_and_charged_floating_electrodes(cube_mesh, physics_backend, floating):
     mesh = cube_mesh(2)
     x = mesh.points[:, 0]
     left = np.flatnonzero(np.all(x[mesh.triangle3] == 0, axis=1))
@@ -82,7 +82,7 @@ def test_fixed_and_charged_floating_electrodes(cube_mesh, petsc_backend, floatin
     )
     bc = [Dirichlet(fixed, np.zeros(len(fixed)))]
     reference = solve_piezoelectric(mesh, material, bc, **kwargs)
-    result = solve_piezoelectric(mesh, material, bc, backend=petsc_backend, **kwargs)
+    result = solve_piezoelectric(mesh, material, bc, backend=physics_backend, **kwargs)
     for field in (
         "displacement",
         "potential",
@@ -100,10 +100,10 @@ def test_fixed_and_charged_floating_electrodes(cube_mesh, petsc_backend, floatin
         )
     assert max(result.relative_residual_u, result.relative_residual_phi) < 1e-10
     assert abs(result.charge_balance) < 1e-12
-    assert result.provenance.solver_parameters["backend"] == petsc_backend.name
+    assert result.provenance.solver_parameters["backend"] == physics_backend.name
 
 
-def test_modal_newmark_and_complex_harmonic(petsc_backend):
+def test_modal_newmark_and_complex_harmonic(physics_backend):
     mesh = Mesh(
         points=[[0, 0, 0], [1, 0, 0], [0, 1, 0], [0, 0, 1]], tetra4=[[0, 1, 2, 3]]
     )
@@ -119,7 +119,7 @@ def test_modal_newmark_and_complex_harmonic(petsc_backend):
     f = np.zeros(16, dtype=complex)
     f[3] = 1 + 2j
     histories = []
-    for backend in (None, petsc_backend):
+    for backend in (None, physics_backend):
         modal = solve_piezoelectric_modes(
             mesh, material, 6, bc, count=1, backend=backend
         )

@@ -14,15 +14,16 @@ class RejectPETSc:
             raise ModuleNotFoundError("test: PETSc unavailable")
 sys.meta_path.insert(0, RejectPETSc())
 from fem_toolbox.model import Model
-from fem_toolbox.solvers.petsc_backend import PetscBackend
+from fem_toolbox.solvers.petsc_backend import PetscBackend, PetscFieldSplitBackend
 from fem_toolbox.errors import ValidationError
 assert "petsc4py" not in sys.modules
-try:
-    PetscBackend()
-except ValidationError as error:
-    assert "petsc4py" in str(error)
-else:
-    raise AssertionError("missing optional runtime must be diagnosed")
+for backend in (PetscBackend, PetscFieldSplitBackend):
+    try:
+        backend()
+    except ValidationError as error:
+        assert "petsc4py" in str(error)
+    else:
+        raise AssertionError("missing optional runtime must be diagnosed")
 """
     subprocess.run(
         [sys.executable, "-c", code],

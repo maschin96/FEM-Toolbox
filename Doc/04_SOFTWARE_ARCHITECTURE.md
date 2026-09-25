@@ -154,7 +154,8 @@ Die erste Implementierung verwendet SciPy:
 - `spsolve` als Referenz für kleine und mittlere Probleme,
 - CG nur für nachweislich symmetrisch-positive Einzelfeldsysteme,
 - MINRES optional für das symmetrisch-indefinite piezoelektrische System,
-- GMRES nur, wenn eine spätere Formulierung tatsächlich unsymmetrisch ist.
+- GMRES/FGMRES auch für unsymmetrisch präkonditionierte Systeme, insbesondere
+  die approximative Schur-Blockfaktorisierung aus ADR-026.
 
 Eine dimensionsbasierte diagonale beziehungsweise blockweise Skalierung ist bei
 gekoppelten Systemen Pflicht: mechanische und elektrische Koeffizienten können
@@ -176,8 +177,9 @@ M6-Teilprobleme, Fehler und die Abgrenzung zum Eigenwertsolver (ADR-024).
 
 Der [optionale PETSc-Adapter (#34b)](38_PETSC_BACKEND.md) implementiert
 einprozessiges Direktlösen mit reellen und komplexen Scalar-Konfigurationen
-(ADR-025). Für große Modelle bleiben FieldSplit- und
-Schur-Komplement-Präconditionierung in #34c vorgesehen. Dieses Backend darf die
+(ADR-025). [FieldSplit/Schur mit FGMRES (#34c)](39_PETSC_FIELDSPLIT.md)
+ergänzt eine iterative Variante mit LU-Teilblöcken und expliziter
+Nichtkonvergenzdiagnose (ADR-026). Dieses Backend darf die
 Element- oder Material-API nicht verändern.
 
 ## 6. Eingabe und Ausgabe
