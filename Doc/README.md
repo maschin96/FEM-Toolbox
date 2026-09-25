@@ -57,6 +57,10 @@ Eintrag im Entscheidungsprotokoll.
 
 - [M6-Release-Verifikation, Migration und Grenzen](35_M6_RELEASE_VERIFICATION.md)
 
+## M7 — v1.2.0 (in Entwicklung)
+
+- [SciPy-/Tet4-Performance-Baseline (#37a)](36_PERFORMANCE_BASELINE.md)
+
 ## Veröffentlichungen
 
 - [v1.1.0 — Transiente Wärme und Piezo-Dynamik](releases/v1.1.0.md)
