@@ -99,7 +99,9 @@ class ScipyBackend:
         )
 
 
-class _ScipyFactor:
+class _LinearData:
+    """Owned validated data shared by backend implementations; no factorization."""
+
     def __init__(
         self,
         operator: Any,
@@ -165,11 +167,92 @@ class _ScipyFactor:
         self.kind = kind
         if kind not in ("general", "positive_definite"):
             raise ValidationError("unsupported factorization kind", field="solver")
-        self.factor: Any = None
         scaling = sparse.diags(self.scale)
-        scaled = (scaling @ self.a @ scaling).tocsc()
-        if not np.isfinite(scaled.data).all():
+        self.scaled = (scaling @ self.a @ scaling).tocsc()
+        if not np.isfinite(self.scaled.data).all():
             raise ValidationError("nonfinite scaled operator", field="scale")
+
+    def prepare_rhs(self, rhs: ArrayLike) -> tuple[Numeric, Numeric, Numeric]:
+        b = np.asarray(rhs)
+        if (
+            b.ndim not in (1, 2)
+            or b.shape[0] != self.a.shape[0]
+            or b.dtype.kind not in "iufc"
+            or not np.isfinite(b).all()
+        ):
+            raise ValidationError(
+                "expected finite backend RHS with operator row count", field="rhs"
+            )
+        b = np.array(b, dtype=np.result_type(self.a.dtype, b.dtype, np.float64))
+        scale = self.scale if b.ndim == 1 else self.scale[:, None]
+        scaled_rhs = scale * b
+        if not np.isfinite(scaled_rhs).all():
+            raise ValidationError("nonfinite scaled RHS", field="scale")
+        return b, scale, scaled_rhs
+
+    def solution(
+        self,
+        b: Numeric,
+        x: Numeric,
+        *,
+        backend: str,
+        method: str,
+        reason: str = "direct_solve",
+        iterations: int | None = None,
+    ) -> LinearSolution:
+        residual = np.asarray(self.a @ x - b)
+        denominator = np.asarray(abs(self.a) @ np.abs(x) + np.abs(b))
+        if (
+            not np.isfinite(x).all()
+            or not np.isfinite(residual).all()
+            or not np.isfinite(denominator).all()
+        ):
+            raise ValidationError(
+                "nonfinite backend solution or residual", field="solver"
+            )
+
+        def relative(ids: NDArray[np.int64]) -> float:
+            # Scale both norms to avoid overflow/underflow of squared SI magnitudes.
+            d = denominator[ids]
+            r = residual[ids]
+            maximum = float(np.max(d)) if d.size else 0.0
+            if maximum == 0:
+                return 0.0 if not np.any(r) else float("inf")
+            return float(np.linalg.norm(r / maximum) / np.linalg.norm(d / maximum))
+
+        ratios = {name: relative(ids) for name, ids in self.fields.items()}
+        total = relative(np.arange(len(b), dtype=np.int64))
+        if total > 1e-9 or any(value > 1e-9 for value in ratios.values()):
+            raise ValidationError(
+                "unscaled backend field residual exceeds 1e-9", field="solver"
+            )
+        report = SolveReport(
+            backend,
+            method,
+            True,
+            reason,
+            iterations,
+            total,
+            MappingProxyType(ratios),
+            _snapshot(residual),
+        )
+        return LinearSolution(_snapshot(x), report)
+
+
+class _ScipyFactor(_LinearData):
+    def __init__(
+        self,
+        operator: Any,
+        fields: Mapping[str, ArrayLike],
+        scale: ArrayLike | None,
+        kind: Kind,
+        pivot_tolerance: float,
+        relative_pivot: bool,
+    ) -> None:
+        super().__init__(operator, fields, scale, kind, pivot_tolerance, relative_pivot)
+        self.factor: Any = None
+        n = self.a.shape[0]
+        scaled = self.scaled
         if not n:
             return
         try:
@@ -199,21 +282,7 @@ class _ScipyFactor:
             raise ValidationError(message, field="solver") from error
 
     def solve(self, rhs: ArrayLike) -> LinearSolution:
-        b = np.asarray(rhs)
-        if (
-            b.ndim not in (1, 2)
-            or b.shape[0] != self.a.shape[0]
-            or b.dtype.kind not in "iufc"
-            or not np.isfinite(b).all()
-        ):
-            raise ValidationError(
-                "expected finite backend RHS with operator row count", field="rhs"
-            )
-        b = np.array(b, dtype=np.result_type(self.a.dtype, b.dtype, np.float64))
-        scale = self.scale if b.ndim == 1 else self.scale[:, None]
-        scaled_rhs = scale * b
-        if not np.isfinite(scaled_rhs).all():
-            raise ValidationError("nonfinite scaled RHS", field="scale")
+        b, scale, scaled_rhs = self.prepare_rhs(rhs)
         if not len(b):
             x = b.copy()
         else:
@@ -229,43 +298,12 @@ class _ScipyFactor:
                 x = np.asarray(scale * y)
             except (RuntimeError, np.linalg.LinAlgError) as error:
                 raise ValidationError("backend solve failed", field="solver") from error
-        residual = np.asarray(self.a @ x - b)
-        denominator = np.asarray(abs(self.a) @ np.abs(x) + np.abs(b))
-        if (
-            not np.isfinite(x).all()
-            or not np.isfinite(residual).all()
-            or not np.isfinite(denominator).all()
-        ):
-            raise ValidationError(
-                "nonfinite backend solution or residual", field="solver"
-            )
-
-        def relative(ids: NDArray[np.int64]) -> float:
-            # Scale both norms to avoid overflow/underflow of squared SI magnitudes.
-            d = denominator[ids]
-            r = residual[ids]
-            maximum = float(np.max(d)) if d.size else 0.0
-            if maximum == 0:
-                return 0.0 if not np.any(r) else float("inf")
-            return float(np.linalg.norm(r / maximum) / np.linalg.norm(d / maximum))
-
-        ratios = {name: relative(ids) for name, ids in self.fields.items()}
-        total = relative(np.arange(len(b), dtype=np.int64))
-        if total > 1e-9 or any(value > 1e-9 for value in ratios.values()):
-            raise ValidationError(
-                "unscaled backend field residual exceeds 1e-9", field="solver"
-            )
-        report = SolveReport(
-            "scipy",
-            "cholesky" if self.kind == "positive_definite" else "sparse_lu",
-            True,
-            "direct_solve",
-            None,
-            total,
-            MappingProxyType(ratios),
-            _snapshot(residual),
+        return self.solution(
+            b,
+            x,
+            backend="scipy",
+            method="cholesky" if self.kind == "positive_definite" else "sparse_lu",
         )
-        return LinearSolution(_snapshot(x), report)
 
 
 def solve_linear(

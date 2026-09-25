@@ -211,3 +211,24 @@ jobs:
 
       - name: Smoke numerical solvers and mesh I/O
         run: python -m pytest tests/regression/test_piezo_d33_benchmark.py tests/regression/test_thermopiezo_example.py tests/unit/test_mesh_io.py
+
+  petsc:
+    name: PETSc / Python 3.12 / ${{ matrix.scalar }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        scalar: [real, complex]
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Build native PETSc test environment
+        run: docker build -f ci/petsc.Dockerfile -t fem-toolbox-petsc:test ci
+      - name: Require native scalar build and run backend verification
+        env:
+          PETSC_SCALAR: ${{ matrix.scalar }}
+        run: >-
+          docker run --rm -v "$GITHUB_WORKSPACE:/work:ro"
+          fem-toolbox-petsc:test python ci/run_petsc_tests.py
+          --scalar "$PETSC_SCALAR" -q tests/petsc -p no:cacheprovider

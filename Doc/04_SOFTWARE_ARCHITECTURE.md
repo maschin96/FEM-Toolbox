@@ -174,8 +174,10 @@ mit `SolveReport`; wiederverwendete Faktoren besitzen ihre eigenen Daten.
 Der [Backend-Vertrag](37_LINEAR_BACKEND.md) beschreibt reelle/komplexe Systeme,
 M6-Teilprobleme, Fehler und die Abgrenzung zum Eigenwertsolver (ADR-024).
 
-Für große Modelle ist ein optionales petsc4py-Backend mit FieldSplit- und
-Schur-Komplement-Präconditionierung vorgesehen. Dieses Backend darf die
+Der [optionale PETSc-Adapter (#34b)](38_PETSC_BACKEND.md) implementiert
+einprozessiges Direktlösen mit reellen und komplexen Scalar-Konfigurationen
+(ADR-025). Für große Modelle bleiben FieldSplit- und
+Schur-Komplement-Präconditionierung in #34c vorgesehen. Dieses Backend darf die
 Element- oder Material-API nicht verändern.
 
 ## 6. Eingabe und Ausgabe

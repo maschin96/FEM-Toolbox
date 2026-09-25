@@ -225,6 +225,10 @@ für stationäre Wärme, Floating-Elektrode und transiente Wärme liegen vor;
 
 #34a: Die interne Backend-Grenze mit SciPy-Referenz ist im Issue-Branch
 implementiert; [Vertrag und Nachweise](37_LINEAR_BACKEND.md). Einzelfelder,
-gekoppelte Elektroden und lineare M6-Teilprobleme nutzen sie. PETSc, FieldSplit,
-Backend-Konfiguration im Model und echte PETSc-CI bleiben #34b/c; das Issue
-bleibt offen. Nächster geplanter Backend-Schritt ist #34b.
+gekoppelte Elektroden und lineare M6-Teilprobleme nutzen sie.
+
+#34b: Der optionale PETSc-Direktadapter und echte CI-Jobs für float64/complex128
+sind im Issue-Branch umgesetzt. Konfiguration, Scalar-Abbildung, Parität und
+Grenzen stehen in [Dokument 38](38_PETSC_BACKEND.md). Nächster Backend-Schritt ist
+#34c: FieldSplit/Schur, iterative Nullräume und Nichtkonvergenz. Backend-Auswahl
+im Model bleibt ausstehend; #34 bleibt offen.
