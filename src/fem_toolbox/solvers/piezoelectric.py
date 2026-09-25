@@ -11,7 +11,6 @@ from itertools import combinations
 import numpy as np
 from numpy.typing import ArrayLike, NDArray
 from scipy import sparse  # type: ignore[import-untyped]
-from scipy.sparse.linalg import splu  # type: ignore[import-untyped]
 
 from fem_toolbox.assembly import (
     LinearSystem,
@@ -46,6 +45,7 @@ from fem_toolbox.physics.electrostatics import (
 from fem_toolbox.provenance import RunProvenance
 from fem_toolbox.solvers.elasticity import _check_supports
 from fem_toolbox.solvers.electrostatics import _check_gauge
+from fem_toolbox.solvers.linear_backend import LinearBackend, solve_linear
 
 
 def piezoelectric_dofs(mesh: Mesh) -> DofMap:
@@ -358,6 +358,7 @@ def solve_piezoelectric(
     material: PiezoelectricMaterial | Sequence[PiezoelectricMaterial],
     conditions: Iterable[Dirichlet],
     *,
+    backend: LinearBackend | None = None,
     body_force: VectorField = (0.0, 0.0, 0.0),
     tractions: Mapping[int, VectorField] | None = None,
     point_loads: Mapping[int, ArrayLike] | None = None,
@@ -371,6 +372,9 @@ def solve_piezoelectric(
     method: str = "direct",
 ) -> PiezoelectricResult:
     """Solve the symmetric-indefinite static u-phi Tet4 system with sparse LU.
+
+    ``backend`` is an experimental linear-backend hook; None selects SciPy.
+    Reduction, physical residuals and result units remain this solver's contract.
 
     Dirichlet DOFs use ``piezoelectric_dofs(mesh)`` and retain their original
     signed reactions. Mechanical loads are N/m³, N/m², and nodal N;
@@ -516,23 +520,19 @@ def solve_piezoelectric(
             int(np.count_nonzero(unique_representatives < phi_offset)),
             block_scaling,
         )
-        scaling = sparse.diags(scale)
-        try:
-            factor = splu((scaling @ reduced @ scaling).tocsc())
-            pivots = np.abs(factor.U.diagonal())
-            if not np.isfinite(pivots).all() or np.min(pivots) <= 1e-12 * np.max(
-                pivots
-            ):
-                raise ValidationError(
-                    "singular or ill-conditioned piezoelectric system", field="solver"
-                )
-            reduced_solution[free_reduced] = scale * factor.solve(
-                scale * constrained.rhs[free_reduced]
-            )
-        except RuntimeError as error:
-            raise ValidationError(
-                "singular piezoelectric system", field="solver"
-            ) from error
+        u_count = int(np.count_nonzero(unique_representatives < phi_offset))
+        reduced_solution[free_reduced] = solve_linear(
+            reduced,
+            constrained.rhs[free_reduced],
+            fields={
+                "u": np.flatnonzero(free_reduced < u_count),
+                "phi": np.flatnonzero(free_reduced >= u_count),
+            },
+            scale=scale,
+            pivot_tolerance=1e-12,
+            relative_pivot=True,
+            backend=backend,
+        ).values
     solution = reduced_solution[reduced_index]
     if not np.isfinite(solution).all():
         raise ValidationError("nonfinite piezoelectric solution", field="solver")
@@ -657,7 +657,7 @@ def solve_piezoelectric(
                 if electrode_data
                 else "piezoelectric-discrete-v1"
             ),
-            "backend": "scipy.sparse.linalg.splu",
+            "backend": "scipy.sparse.linalg.splu" if backend is None else backend.name,
             "block_scaling": block_scaling,
             "electric_thermal_strain": electric_thermal_strain,
             "mechanical_scale": mechanical_scale,

@@ -13,7 +13,6 @@ from typing import TypeAlias
 import numpy as np
 from numpy.typing import ArrayLike, NDArray
 from scipy import sparse  # type: ignore[import-untyped]
-from scipy.sparse.linalg import splu  # type: ignore[import-untyped]
 
 from fem_toolbox.assembly import (
     LinearSystem,
@@ -37,6 +36,7 @@ from fem_toolbox.physics.heat import (
     source_load,
 )
 from fem_toolbox.provenance import RunProvenance
+from fem_toolbox.solvers.linear_backend import LinearBackend, solve_linear
 from fem_toolbox.time import TimeSignal, integration_times, signal_value
 
 SpaceTimeField: TypeAlias = TimeSignal | Callable[[NDArray[np.float64], float], float]
@@ -186,6 +186,7 @@ def solve_transient_heat(
     times: ArrayLike,
     initial_temperature: ArrayLike,
     *,
+    backend: LinearBackend | None = None,
     conditions: Sequence[TemperatureBC] = (),
     source: SpaceTimeField = 0.0,
     outward_fluxes: Mapping[int, SpaceTimeField] | None = None,
@@ -197,6 +198,9 @@ def solve_transient_heat(
     on_frame: Callable[[HeatFrame], None] | None = None,
 ) -> TransientHeatResult:
     """Solve C Tdot + K T = f by backward Euler on an event-enriched time grid.
+
+    ``backend`` is an experimental linear-backend hook; None selects SciPy.
+    Reduction, physical residuals and result units remain this solver's contract.
 
     SI: time s, initial_temperature K (scalar or active-node vector), source
     W/m³, outward flux W/m². Spatial sources/fluxes may be f(x,t); explicitly
@@ -460,16 +464,13 @@ def solve_transient_heat(
             if np.any(diagonal <= 0):
                 raise ValidationError("nonpositive transient diagonal", field="solver")
             scale = 1 / np.sqrt(diagonal)
-            scaling = sparse.diags(scale)
-            try:
-                factor = splu((scaling @ a @ scaling).tocsc())
-                next_temperature[free] = scale * factor.solve(
-                    scale * constrained.rhs[free]
-                )
-            except RuntimeError as error:
-                raise ValidationError(
-                    "transient factorization failed", field="solver"
-                ) from error
+            next_temperature[free] = solve_linear(
+                a,
+                constrained.rhs[free],
+                fields={"T": np.arange(len(free))},
+                scale=scale,
+                backend=backend,
+            ).values
         if not np.isfinite(next_temperature).all():
             raise ValidationError("nonfinite transient temperature", field="solver")
         storage = capacity @ ((next_temperature - temperature) / dt)
@@ -526,6 +527,7 @@ def solve_transient_heat(
         digest.digest(),
         solver_name="fem_toolbox.solvers.transient_heat.solve_transient_heat",
         solver_parameters={
+            "linear_backend": "scipy" if backend is None else backend.name,
             "input_schema": "transient-heat-discrete-v1",
             "method": "backward_euler",
             "capacity": "lumped" if lumped else "consistent",

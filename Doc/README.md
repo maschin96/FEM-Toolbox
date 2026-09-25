@@ -60,6 +60,7 @@ Eintrag im Entscheidungsprotokoll.
 ## M7 — v1.2.0 (in Entwicklung)
 
 - [SciPy-/Tet4-Performance-Baseline (#37a)](36_PERFORMANCE_BASELINE.md)
+- [Interner linearer Backend-Vertrag und SciPy-Referenz (#34a)](37_LINEAR_BACKEND.md)
 
 ## Veröffentlichungen
 

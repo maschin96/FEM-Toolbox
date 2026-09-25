@@ -336,3 +336,27 @@ komplex; der bestehende `LinearSystem`-Vertrag bleibt reell. Frequenzen werden
 explizit in Hz eingegeben, rad/s separat ausgewiesen. Der ungedämpfte Pfad
 weist numerische Resonanz/Nähe zur Singularität zurück statt Dämpfung zu erfinden.
 Skalierung, Grenzwert und Nachweise: [Dokument 34](34_PIEZO_DYNAMICS.md).
+
+## ADR-024 — Interner linearer Backend-/Scalarvertrag (#34a)
+
+Datum: 25.09.2026. Status: Umsetzung im M7-Issue-Branch.
+
+Die Physikadapter verantworten Randbedingungen, Elektrodenkondensation,
+Nullräume und Rekonstruktion. Das Backend erhält den freien, unskalierten
+Operator samt vollständiger disjunkter Feldpartition in dessen lokaler
+Zeilennummerierung und positiver reeller Diagonalskalierung S. Es löst
+`(S A S)y = S b`, liefert `x=S y` und prüft Residuen gegen `A x-b`.
+Die Feldpartition beschreibt nach elektrischer Schur-Elimination nur das
+jeweils verbleibende Feld; die rekonstruierten physikalischen Residuen bleiben
+zusätzlich in den bestehenden Solvern Pflicht.
+
+Ein Faktorisierungsprotokoll erlaubt mehrere rechte Seiten und explizite
+Wiederverwendung; keine globale Backend-Auswahl oder implizite Caches.
+Reelle und komplexe float64/complex128-Daten sind zulässig, ohne komplexe
+Anteile abzuwerfen. SciPy implementiert Sparse-LU für allgemeine Operatoren
+und dichte Cholesky für die bereits dichten positiv definiten M6-Teilprobleme.
+Modale Eigenwertprobleme bleiben beim separaten SciPy-eigh-Vertrag.
+Backendfehler werden nicht durch Fallback verdeckt. SolveReport nennt Backend,
+Verfahren, Konvergenzgrund und unskalierte feldweise Residuen. Physikalische
+Bilanzen/Einheiten und die globale Reaktionsauswertung bleiben im Adapter.
+PETSc, FieldSplit, iterative Nullräume und Model-Konfiguration folgen #34b/c.

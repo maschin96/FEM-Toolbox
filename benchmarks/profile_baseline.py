@@ -31,7 +31,7 @@ from fem_toolbox.io import write_vtu
 from fem_toolbox.io.heat_series import HeatSeriesWriter
 from fem_toolbox.materials import PiezoelectricMaterial, ThermalMaterial
 from fem_toolbox.mesh import Mesh
-from fem_toolbox.solvers import heat, piezoelectric, transient_heat
+from fem_toolbox.solvers import heat, linear_backend, piezoelectric, transient_heat
 
 CASES = ("heat", "electrode", "transient")
 THREAD_VARS = (
@@ -186,7 +186,9 @@ class Measurements:
                             module, name, self.wrap(phase, getattr(module, name))
                         )
                     )
-        stack.enter_context(patch.object(module, "splu", self.factor(module.splu)))
+        stack.enter_context(
+            patch.object(linear_backend, "splu", self.factor(linear_backend.splu))
+        )
 
 
 def environment():

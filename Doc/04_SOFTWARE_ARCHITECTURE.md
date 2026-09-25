@@ -167,6 +167,13 @@ SciPy Sparse LU. CG ist für diesen indefiniten Operator gesperrt; MINRES bleibt
 geplant, bis ein geeigneter symmetrischer Präconditioner verifiziert ist.
 Details und Nachweise stehen in [Doc/17](17_PIEZOELECTRIC_SOLVER.md).
 
+Die interne Backend-Grenze aus #34a erhält freie unskalierte Operatoren,
+Feldpartitionen nach Kondensation und die positive Diagonalskalierung.
+`ScipyBackend.factorize(...).solve(rhs)` liefert ein unveränderliches Ergebnis
+mit `SolveReport`; wiederverwendete Faktoren besitzen ihre eigenen Daten.
+Der [Backend-Vertrag](37_LINEAR_BACKEND.md) beschreibt reelle/komplexe Systeme,
+M6-Teilprobleme, Fehler und die Abgrenzung zum Eigenwertsolver (ADR-024).
+
 Für große Modelle ist ein optionales petsc4py-Backend mit FieldSplit- und
 Schur-Komplement-Präconditionierung vorgesehen. Dieses Backend darf die
 Element- oder Material-API nicht verändern.
