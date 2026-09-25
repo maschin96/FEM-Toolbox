@@ -433,3 +433,17 @@ Referenz- bzw. physische Maße und sind nicht auf eins normiert. Die vergleichsw
 hohe Punktzahl priorisiert eine einfach unabhängig prüfbare Referenz. Keine
 neuen Abhängigkeiten, keine Änderung mathematischer Feldvorzeichen oder der
 Tet4-API. Nachweise und Grenzen: [Dokument 41](41_TET10_GEOMETRY.md).
+
+
+## ADR-029: Tet10-Operatoren und explizite positive Speicherdiagonalisierung (#35c)
+
+Datum: 25.09.2026. Status: Umsetzung im M7-Issue-Branch.
+
+Quadratische Operatoren verwenden einen additiven Moduleinstieg und punktabhängige
+Gradienten bei unveränderter affiner Geometrie und Feldkonvention. Globale
+Solverdispatch und ortsabhängige Ergebnisse folgen getrennt in #35d. Die
+konsistente Tet10-Masse besitzt negative Eckzeilensummen; P1-Zeilensummen-Lumping
+wird deshalb nicht übernommen. `lumping="hrz"` wählt ausdrücklich positive,
+gesamtspeichererhaltende Diagonalskalierung. Standard bleibt `consistent`.
+Der boolesche Tet4-Vertrag bleibt unverändert. Sechsknoten-Elektroden verwenden
+die gemeinsame aktive Randtopologie. [Formeln, Quellen und Nachweise](42_TET10_OPERATORS.md).

@@ -284,7 +284,7 @@ def _electrode_reduction(
                 )
             facets = mesh.facet_sets[electrode.facets]
         else:
-            facets = indices(electrode.facets, mesh.n_triangle3)
+            facets = indices(electrode.facets, mesh.n_facets)
         if not len(facets) or len(np.unique(facets)) != len(facets):
             raise ValidationError(
                 "electrode facets must be nonempty and unique", field="electrodes"
@@ -296,7 +296,7 @@ def _electrode_reduction(
                 f"electrode {electrode.name!r} conflicts with prescribed surface charge",
                 field="electrodes",
             )
-        nodes = np.unique(mesh.triangle3[facets])
+        nodes = np.unique(mesh.facets[facets])
         if occupied.intersection(int(node) for node in nodes):
             raise ValidationError("electrode node overlap", field="electrodes")
         occupied.update(int(node) for node in nodes)

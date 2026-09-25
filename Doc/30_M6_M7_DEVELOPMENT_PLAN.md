@@ -241,4 +241,7 @@ Gmsh-/VTU-I/O sind im Issue-Branch umgesetzt; [Vertrag und Grenzen](40_TET10_TOP
 #35b: Quadratische Formfunktionen, Ableitungen, affine Tet10-/Triangle6-Geometrie
 und positive Quadratur sind im Issue-Branch umgesetzt;
 [Vertrag und Interpolationsnachweise](41_TET10_GEOMETRY.md).
-Nächster geplanter Funktionsschritt: #35c (quadratische Feldoperatoren).
+#35c: Quadratische Feldoperatoren, konsistente/HRZ-Speicher, thermische Kopplung
+und Randlasten sind im Issue-Branch umgesetzt; die Elektrodenreduktion erfasst
+alle sechs Flächenknoten. [Vertrag und Nachweise](42_TET10_OPERATORS.md).
+Nächster geplanter Funktionsschritt: #35d (Model-/Solver-/Ergebnisintegration).

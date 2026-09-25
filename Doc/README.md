@@ -68,6 +68,8 @@ Eintrag im Entscheidungsprotokoll.
 
 - [Tet10-Formfunktionen, Geometrie und Quadratur (#35b)](41_TET10_GEOMETRY.md)
 
+- [Tet10-Feldoperatoren, Speicher und Randintegrale (#35c)](42_TET10_OPERATORS.md)
+
 ## Veröffentlichungen
 
 - [v1.1.0 — Transiente Wärme und Piezo-Dynamik](releases/v1.1.0.md)
