@@ -64,6 +64,8 @@ Eintrag im Entscheidungsprotokoll.
 - [Optionaler PETSc-Direktbackend und Scalar-Parität (#34b)](38_PETSC_BACKEND.md)
 - [Iterativer PETSc-Backend mit FieldSplit/Schur (#34c)](39_PETSC_FIELDSPLIT.md)
 
+- [Tet10-/Triangle6-Topologie und I/O (#35a)](40_TET10_TOPOLOGY.md)
+
 ## Veröffentlichungen
 
 - [v1.1.0 — Transiente Wärme und Piezo-Dynamik](releases/v1.1.0.md)

@@ -290,3 +290,12 @@ Assembly-Summen werden exakt verglichen; für Lösung und Residuum gilt bei dies
 gut konditionierten Größen der Ordnung eins `atol=1e-14, rtol=0` als
 Rundungstoleranz. Physikalische Patch- und Netzkonvergenztests sind erst mit den
 konkreten Elementoperatoren anwendbar.
+
+
+### M7-Erweiterung: quadratische Netztopologie
+
+#35a ergänzt `Mesh` um Tet10/Triangle6 und generische Zugriffe auf die aktive
+Zellfamilie. Netz-I/O, Randtopologie und Materialregionen verwenden diese Zugriffe;
+die Tet4-Operatoren bleiben unverändert. `Model` weist Tet10 bis zur vollständigen
+Operator- und Ergebnisintegration zurück. Knotenordnung, Kompatibilität und
+Geometriegrenzen sind in [Dokument 40](40_TET10_TOPOLOGY.md) festgelegt.

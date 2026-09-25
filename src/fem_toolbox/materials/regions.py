@@ -1,4 +1,4 @@
-"""Resolve named Tet4 volume sets to typed, traceable cell materials."""
+"""Resolve named volume sets to typed, traceable cell materials."""
 
 from __future__ import annotations
 
@@ -64,7 +64,7 @@ def _material_data(material: Material) -> dict[str, Any]:
 
 @dataclass(frozen=True, slots=True)
 class MaterialAssignment:
-    """Per-cell materials and provenance in input Tet4 row order."""
+    """Per-cell materials and provenance in input volume-cell row order."""
 
     field: str
     cell_ids: tuple[int, ...]
@@ -98,13 +98,13 @@ def assign_region_materials(
     regions: Mapping[str, str],
     materials: Mapping[str, Material],
 ) -> MaterialAssignment:
-    """Map named volume sets onto all Tet4 cells before field assembly.
+    """Map named volume sets onto all volume cells before field assembly.
 
     ``field`` is ``T``, ``u``, ``phi``, ``piezo`` or ``expansion``. Every
     region names one catalog entry of the matching immutable SI material type.
     Overlapping sets are allowed only when they name the same catalog entry.
     Unknown sets/materials, uncovered cells, conflicts and unused definitions
-    raise :class:`MaterialAssignmentError` with the external Tet4 ID where
+    raise :class:`MaterialAssignmentError` with the external volume-cell ID where
     applicable. Existing solvers accept ``cell_materials`` directly.
     """
     expected = _FIELD_TYPES.get(field)
@@ -112,9 +112,9 @@ def assign_region_materials(
         raise MaterialAssignmentError(
             kind="field", field=field, reason="unsupported active field"
         )
-    if mesh.n_tetra4 == 0:
+    if mesh.n_cells == 0:
         raise MaterialAssignmentError(
-            kind="empty_mesh", field=field, reason="no active Tet4 cells"
+            kind="empty_mesh", field=field, reason="no active volume cells"
         )
     if not isinstance(regions, Mapping):
         raise MaterialAssignmentError(
@@ -151,7 +151,7 @@ def assign_region_materials(
                 regions=(region,),
             )
 
-    per_cell: list[list[tuple[str, str]]] = [[] for _ in range(mesh.n_tetra4)]
+    per_cell: list[list[tuple[str, str]]] = [[] for _ in range(mesh.n_cells)]
     for region, name in sorted(regions.items()):
         for cell_index in mesh.volume_sets[region]:
             per_cell[int(cell_index)].append((region, name))
@@ -162,7 +162,7 @@ def assign_region_materials(
     region_names: list[tuple[str, ...]] = []
     for cell_index, entries in enumerate(per_cell):
         cell_id = (
-            cell_index if mesh.tetra4_ids is None else int(mesh.tetra4_ids[cell_index])
+            cell_index if mesh.cell_ids is None else int(mesh.cell_ids[cell_index])
         )
         if not entries:
             raise MaterialAssignmentError(

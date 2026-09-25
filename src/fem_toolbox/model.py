@@ -405,6 +405,10 @@ class Model:
     def __init__(self, *, mesh: Mesh, document: Mapping[str, object]) -> None:
         if not isinstance(mesh, Mesh):
             raise ModelSchemaError(path="mesh", reason="expected Mesh")
+        if mesh.n_tetra10 or mesh.n_triangle6:
+            raise ModelSchemaError(
+                path="mesh", reason="Tet10/Triangle6 models are not yet supported"
+            )
         try:
             raw = json.loads(json.dumps(document, allow_nan=False, sort_keys=True))
         except (TypeError, ValueError) as error:

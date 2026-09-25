@@ -152,12 +152,14 @@ interpretiert Koordinaten als Meter, `1.0e-3` rechnet Millimeter in Meter um.
 - `Mesh` kopiert seine Eingaben und prüft unter anderem Array-Formen,
   Indexgrenzen und topologisch doppelte Entitäten. Geometrische Entartung wird
   durch `Tet4Geometry` und beim Gmsh-Import geprüft.
-- Der Import unterstützt ausschließlich lineare Tetraeder und Dreiecksflächen;
-  andere Zelltypen führen zu einem `UnsupportedCellTypeError`.
+- M7 ergänzt geradkantige Tet10/Triangle6 für Topologie und I/O;
+  [Vertrag und Grenzen](Doc/40_TET10_TOPOLOGY.md). Tet10-Modelle und gemischte
+  Elementordnungen sind noch nicht unterstützt. Andere Zelltypen führen zu
+  einem `UnsupportedCellTypeError`.
 - Mehrfache physische Gmsh-Gruppen bleiben als benannte Auswahlsätze erhalten.
   Der einzelne numerische Tag bildet nur die erste gemeldete Mitgliedschaft ab.
 - VTU-Zellfelder benötigen für jeden vorhandenen Zelltyp ein Array unter
-  `tetra4` beziehungsweise `triangle3`. Auswahlsätze werden als separate
+  `tetra4`/`triangle3` oder `tetra10`/`triangle6`. Auswahlsätze werden als separate
   `fem_toolbox:set:<name>`-Masken exportiert.
 - Sehr flache oder entartete Tetraeder werden abgelehnt. Definition und
   Standardgrenze der Qualitätsprüfung stehen in der

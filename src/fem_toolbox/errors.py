@@ -89,7 +89,7 @@ class SelectionError(MeshValidationError):
 
 
 class BoundaryTopologyError(MeshValidationError):
-    """A Triangle3 is not a unique exterior Tet4 face, or a face is missing."""
+    """A surface simplex is not a unique exterior volume face, or is missing."""
 
     def __init__(
         self,
@@ -109,7 +109,7 @@ class BoundaryTopologyError(MeshValidationError):
             field="boundary_topology",
             reason=(
                 f"{kind} face {nodes}; triangle ID {entity_id}, "
-                f"Tet4 ID {cell_id}, physical groups {groups}"
+                f"cell ID {cell_id}, physical groups {groups}"
             ),
         )
 
@@ -131,7 +131,7 @@ class MaterialAssignmentError(ValidationError):
         self.regions = regions
         super().__init__(
             f"material assignment for {field}: {kind}: {reason}; "
-            f"Tet4 ID {cell_id}, regions {regions}",
+            f"cell ID {cell_id}, regions {regions}",
             field="material_assignment",
         )
 
@@ -155,7 +155,7 @@ class MeshIOError(FEMToolboxError):
 
 
 class UnsupportedCellTypeError(MeshIOError):
-    """An input mesh contains cell types outside the Tet4/Triangle3 contract."""
+    """An input mesh contains cell types outside the supported simplex families."""
 
     def __init__(self, cell_types: tuple[str, ...]) -> None:
         self.cell_types = cell_types
@@ -164,7 +164,7 @@ class UnsupportedCellTypeError(MeshIOError):
             operation="import",
             reason=(
                 f"unsupported cell type(s): {names}; expected only "
-                "'tetra' (Tet4) and 'triangle' (Triangle3)"
+                "tetra/triangle or tetra10/triangle6"
             ),
         )
 

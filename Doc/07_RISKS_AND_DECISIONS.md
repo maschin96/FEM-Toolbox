@@ -404,3 +404,17 @@ Abbildung und Physikparität. Jeder Solver isoliert intern gelesene FieldSplit-
 Optionen mit einem privaten Präfix. Ein Bericht zählt äußere Iterationen je
 Solve-Aufruf; Grenzen gelten je nativer RHS. Details und Einschränkungen stehen
 in [Dokument 39](39_PETSC_FIELDSPLIT.md).
+
+
+## ADR-027: Additive quadratische Topologie vor Operatorfreigabe (#35a)
+
+Datum: 25.09.2026. Status: Umsetzung im M7-Issue-Branch.
+
+Tet10/Triangle6 verwendet VTK-/meshio-Knotenordnung und eine einzige Familie je
+Netz. Bestehende Tet4-Arrays bleiben unverändert; generische Zellzugriffe dienen
+zunächst nur Topologie und Metadaten. Gemeinsame Kanten werden über Eck- und
+Kantenknoten geprüft. Import und Randgeometrie verlangen mittige Kantenknoten,
+bevor affine Eckgeometrie verwendet wird. Model lehnt Tet10 bis #35d explizit ab.
+VTU-Präsenzmasken erhalten den Unterschied zwischen fehlenden und nullwertigen
+Metadaten. Mathematische Feldkonventionen bleiben unverändert.
+Details: [Tet10-Topologie](40_TET10_TOPOLOGY.md).
