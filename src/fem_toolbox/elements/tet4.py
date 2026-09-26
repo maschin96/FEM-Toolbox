@@ -185,7 +185,7 @@ class Tet4Geometry:
         self._oriented_coordinates = _frozen_float_array(
             points[list(oriented_node_order)], shape=(4, 3)
         )
-        self._faces = self._build_faces()
+        self._faces: tuple[Tet4Face, ...] | None = None
 
     def _build_faces(self) -> tuple[Tet4Face, ...]:
         faces: list[Tet4Face] = []
@@ -260,7 +260,14 @@ class Tet4Geometry:
 
     @property
     def faces(self) -> tuple[Tet4Face, ...]:
-        """Four faces with measures and unit normals pointing away from the Tet4."""
+        """Four outward faces, computed on first access and retained per instance.
+
+        Volume-only operations do not construct faces. The unchanged geometric
+        calculation uses owned immutable coordinates; no external invalidation
+        or shared cache is needed. Concurrent first access may duplicate work.
+        """
+        if self._faces is None:
+            self._faces = self._build_faces()
         return self._faces
 
     def shape_values(self, point: ArrayLike) -> FloatArray:
