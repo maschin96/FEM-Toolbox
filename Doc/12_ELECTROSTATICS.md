@@ -166,3 +166,10 @@ Das Beispiel schreibt `parallel_plate.vtu` mit Potential und Elektrodenladung
 als Punktfeldern sowie E, D und Energie als Volumenzellfeldern. Bei Netzen mit
 unbenutzten Punkten müssen aktive Ergebnisse über `node_ids` zurückabgebildet
 werden. Es gibt keine Glättung oder implizite Projektion der Rohfelder.
+
+## M7-Erweiterung: Tet10
+
+Der direkte Solver und Model-Schema 1 unterstützen zusätzlich geradkantige
+Tet10 mit Triangle6-Randladungen. E und D sind explizite Schwerpunktwerte;
+gespeicherte Energien bleiben Zellintegrale.
+[Vertrag, Beispiel und Vier-Netze-Nachweis](46_TET10_ELECTROSTATICS.md).

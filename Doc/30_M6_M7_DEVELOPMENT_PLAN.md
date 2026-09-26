@@ -267,3 +267,11 @@ Backend-Grenze und versionierten Export angebunden. Der Schnitt enthält
 Gmsh-/TOML-Beispiele sowie Raum- und Zeitkonvergenznachweise. #35 bleibt für
 die übrigen Feldintegrationen und Vergleichsgates offen; #37c folgt danach.
 [Details und Grenzen](45_TET10_HEAT_INTEGRATION.md).
+
+## Fortschritt #35d: elektrischer Integrationsschnitt
+
+Stationäre Tet10-Elektrostatik ist einschließlich Model/Preflight, Backend,
+Ladungsbilanz und Schema-2-Export angebunden. E/D sind Schwerpunktwerte;
+Energie wird über das Element integriert. Vier-Netze-Nachweis und Gmsh-/TOML-
+Beispiel ergänzen die Tests. Mechanik, Piezo, Kopplungen und Vergleichsgates
+bleiben offen. [Details](46_TET10_ELECTROSTATICS.md).

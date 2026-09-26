@@ -2,7 +2,9 @@
 
 Status: implementierter und lokal geprüfter thermischer Teil von #35d im
 M7-Issue-Branch. #35 bleibt für die übrigen Physiken, Kopplungen und Vergleiche
-offen. Keine experimentelle Validierung oder M7-Releasefreigabe.
+offen. Der spätere [elektrische Integrationsschnitt](46_TET10_ELECTROSTATICS.md)
+ergänzt inzwischen Elektrostatik; die folgende Übersicht beschreibt den
+thermischen Teil zum Zeitpunkt seiner Umsetzung. Keine experimentelle Validierung oder M7-Releasefreigabe.
 
 ## Unterstützter Umfang
 
@@ -140,6 +142,7 @@ kein lokal bereits behaupteter Installationsnachweis.
 
 Die thermische Integration ist ein eigenständig prüfbarer PR-Schnitt innerhalb
 von #35d. Noch offen sind die produktive Tet10-Anbindung von Mechanik,
-Elektrostatik, Piezo-/Thermokopplungen und Piezo-Dynamik sowie deren
+Piezo-/Thermokopplungen und Piezo-Dynamik (Elektrostatik ist inzwischen in
+[Dokument 46](46_TET10_ELECTROSTATICS.md) integriert) sowie deren
 ortsabhängige Ergebnisverträge. Biegungs-/Fehlerbudgetvergleiche und #37c
 bleiben weitere Gates; #35 wird durch diesen Teilbeitrag nicht geschlossen.

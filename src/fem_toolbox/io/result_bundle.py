@@ -230,9 +230,11 @@ def export_result_bundle(
     quadratic = bool(mesh.n_tetra10)
     evaluation_points = None
     if quadratic:
-        if physics != "heat":
-            raise ValidationError("only Tet10 heat export is supported", field="result")
-        evaluation_points = getattr(parts["heat"], "field_points", None)
+        if physics not in ("heat", "electrostatics"):
+            raise ValidationError(
+                "only Tet10 heat/electrostatics export is supported", field="result"
+            )
+        evaluation_points = getattr(parts[physics], "field_points", None)
         expected = mesh.points[mesh.cells[:, :4]].mean(axis=1)
         if evaluation_points is None or not np.array_equal(evaluation_points, expected):
             raise ValidationError(
@@ -259,7 +261,8 @@ def export_result_bundle(
                 "inactive_padding": 0.0,
             }
         for attribute, (name, unit) in _CELL[kind].items():
-            if quadratic:
+            integral = quadratic and attribute == "element_energy"
+            if quadratic and not integral:
                 name += "_at_centroid"
             values = _array(getattr(part, attribute), mesh.n_cells, name)
             cell_data[name] = {mesh.cell_type: values}
@@ -269,11 +272,15 @@ def export_result_bundle(
                 )
             cell_meta[name] = {
                 "unit": unit,
-                "kind": "raw",
+                "kind": "cell_integral" if integral else "raw",
                 "shape": list(values.shape),
                 "components": _components_for(name, values),
                 "cell_type": mesh.cell_type,
-                **({"location": "cell_centroid"} if quadratic else {}),
+                **(
+                    {"location": "cell_volume" if integral else "cell_centroid"}
+                    if quadratic
+                    else {}
+                ),
                 f"{mesh.facet_type}_padding": 0.0 if mesh.n_facets else None,
             }
     if provenance is None:
@@ -320,12 +327,12 @@ def export_result_bundle(
         "metrics": metrics,
         "limitations": [
             (
-                "Stationary linear Tet10 heat result; no mesh convergence or experimental validation implied"
+                "Stationary linear Tet10 result; no mesh convergence or experimental validation implied"
                 if quadratic
                 else "Stationary linear Tet4 result; no mesh convergence or experimental validation implied"
             ),
             (
-                "Cell fields are raw centroid samples, not elementwise constant; no nodal averaging"
+                "Energies are cell integrals; other cell fields are raw centroid samples, not elementwise constant; no nodal averaging"
                 if quadratic
                 else "Cell fields are raw element values; no nodal averaging"
             ),

@@ -34,8 +34,9 @@ jobs:
           cp -R examples/transient_heat dist/transient_heat
           cp -R examples/piezo_dynamics dist/piezo_dynamics
           cp -R examples/tet10_heat dist/tet10_heat
+          cp -R examples/tet10_electrostatics dist/tet10_electrostatics
           cd dist
-          sha256sum *.whl *.tar.gz *.py thermopiezoelectric/* transient_heat/* piezo_dynamics/* tet10_heat/* > SHA256SUMS
+          sha256sum *.whl *.tar.gz *.py thermopiezoelectric/* transient_heat/* piezo_dynamics/* tet10_heat/* tet10_electrostatics/* > SHA256SUMS
       - name: Transfer artifacts and standalone solver example
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
@@ -103,6 +104,8 @@ jobs:
           "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/tet10_heat/run.py"
           test -s tet10_heat_results/stationary.json
           test -s tet10_heat_results/transient/heat.pvd
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/tet10_electrostatics/run.py"
+          test -s tet10_electric_results/electric.json
 
   quality:
     name: Quality / Python 3.13

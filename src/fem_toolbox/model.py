@@ -421,6 +421,7 @@ class Model:
         if (mesh.n_tetra10 or mesh.n_triangle6) and raw.get("physics") not in (
             "heat",
             "transient_heat",
+            "electrostatics",
         ):
             raise ModelSchemaError(
                 path="mesh",

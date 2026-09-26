@@ -93,3 +93,7 @@ Stationäre Tet10-Wärme verwendet Bündelschema 2, Zelltyp `tetra10` und expliz
 als Schwerpunktwerte benannte Gradienten/Flüsse samt Auswertekoordinaten.
 Tet4 behält Schema 1. Der eigenständige Manifestleser unterstützt beide
 Versionen. [Vertrag und Nachweise](45_TET10_HEAT_INTEGRATION.md).
+
+Tet10-Elektrostatik erweitert Schema 2 um rohe E-/D-Schwerpunktfelder und
+`electric_energy_J` als `cell_integral` am `cell_volume`. Energie erhält keinen
+Schwerpunktsuffix. [Details](46_TET10_ELECTROSTATICS.md).
