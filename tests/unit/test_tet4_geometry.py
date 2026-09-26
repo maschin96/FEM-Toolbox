@@ -300,3 +300,43 @@ def test_invalid_degeneracy_tolerance_is_rejected(
 ) -> None:
     with pytest.raises(ElementGeometryError):
         Tet4Geometry(reference_tetrahedron, degeneracy_tolerance=0.0)
+
+
+def test_face_work_is_deferred_and_reused_per_geometry(reference_tetrahedron):
+    """Allocation/work gate from #37b; no hardware-sensitive timing assertion."""
+    import cProfile
+    import pstats
+
+    profiler = cProfile.Profile()
+    profiler.enable()
+    geometry = Tet4Geometry(reference_tetrahedron)
+    volume = geometry.volume
+    gradient = geometry.gradient_matrix.copy()
+    profiler.disable()
+
+    def face_builds():
+        return sum(
+            counts[1]
+            for (_, _, name), counts in pstats.Stats(profiler).stats.items()
+            if name == "_build_faces"
+        )
+
+    assert face_builds() == 0
+    # Caller mutation before the first face access must not invalidate owned data.
+    reference_tetrahedron *= 2
+    profiler.enable()
+    first = geometry.faces
+    assert geometry.faces is first
+    second = Tet4Geometry(reference_tetrahedron)
+    second_faces = second.faces
+    assert second.faces is second_faces
+    profiler.disable()
+    assert face_builds() == 2
+    assert first is not second_faces
+    assert geometry.volume == volume
+    np.testing.assert_array_equal(geometry.gradient_matrix, gradient)
+    for original, scaled in zip(first, second_faces, strict=True):
+        assert scaled.area == pytest.approx(4 * original.area, rel=RTOL)
+        np.testing.assert_allclose(scaled.unit_normal, original.unit_normal, atol=ATOL)
+        with pytest.raises(ValueError):
+            original.centroid[0] = 9

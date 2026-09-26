@@ -99,3 +99,15 @@ identischem analytischem Fehlergate. Sie ersetzen keine nichttrivialen
 Konvergenzbenchmarks, kein MPI-, PETSc-, Tet10- oder Großmodell-Memory-Gate.
 Ergebnisse sind hardware- und lastabhängig. Der [Baseline-Bericht](../Doc/36_PERFORMANCE_BASELINE.md)
 nennt die gemessene Umgebung, Streuung und Folgerungen für #37b.
+
+
+## Optimierungsnachweis #37b
+
+[Vorher-/Nachher-Bericht](../Doc/44_GEOMETRY_PERFORMANCE.md) zur bedarfsgerechten
+Tet4-Flächenauswertung, mit identischem Messskript und fünf Wiederholungen je
+Fall für N=6 und N=10. Die Dateien
+`baselines/m7-37b-before-macos-arm64.json` und
+`baselines/m7-37b-after-macos-arm64.json` enthalten unveränderte Rohdaten.
+Der Bericht nennt die beiden Produktionsdateihashes, Paritätsnachweis, Streuung
+und Messgrenzen. Es bleibt ein Problemgrößenvergleich auf einem Rechner;
+der nichttriviale Fehlerbudgetvergleich Tet4/Tet10 und SciPy/PETSc folgt in #37c.

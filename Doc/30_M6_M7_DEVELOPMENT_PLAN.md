@@ -252,3 +252,10 @@ Randresiduen sowie deterministischer Dörfler-Markierung ist im Issue-Branch
 implementiert. Vier-Netze-Effektivität, lokalisierter Fehler und Materialgrenze
 sind geprüft; [Vertrag und Grenzen](43_HEAT_INDICATOR.md). Integration und
 Issue-Abschluss bleiben den CI-/Reviewgates unterworfen.
+
+
+#37b: Die bedarfsgerechte Tet4-Flächenauswertung ist im Issue-Branch umgesetzt.
+Bei fünf Wiederholungen je Fall/Größe sinkt die Elektroden-Medianlaufzeit für
+N=6/N=10 um 20,5 %/18,7 %; beide Wärmefälle und gemessene Speicherpeaks verbessern
+sich ebenfalls. [Rohdaten, Parität und Grenzen](44_GEOMETRY_PERFORMANCE.md).
+#37c und der Issue-Abschluss bleiben nach vollständiger Tet10-Integration offen.

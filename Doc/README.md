@@ -72,6 +72,8 @@ Eintrag im Entscheidungsprotokoll.
 
 - [Residualindikator und deterministische Markierung für Tet4-Wärme (#36)](43_HEAT_INDICATOR.md)
 
+- [Gemessene bedarfsgerechte Tet4-Flächengeometrie (#37b)](44_GEOMETRY_PERFORMANCE.md)
+
 ## Veröffentlichungen
 
 - [v1.1.0 — Transiente Wärme und Piezo-Dynamik](releases/v1.1.0.md)
