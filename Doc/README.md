@@ -70,6 +70,8 @@ Eintrag im Entscheidungsprotokoll.
 
 - [Tet10-Feldoperatoren, Speicher und Randintegrale (#35c)](42_TET10_OPERATORS.md)
 
+- [Residualindikator und deterministische Markierung für Tet4-Wärme (#36)](43_HEAT_INDICATOR.md)
+
 ## Veröffentlichungen
 
 - [v1.1.0 — Transiente Wärme und Piezo-Dynamik](releases/v1.1.0.md)

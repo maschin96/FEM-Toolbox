@@ -447,3 +447,19 @@ wird deshalb nicht übernommen. `lumping="hrz"` wählt ausdrücklich positive,
 gesamtspeichererhaltende Diagonalskalierung. Standard bleibt `consistent`.
 Der boolesche Tet4-Vertrag bleibt unverändert. Sechsknoten-Elektroden verwenden
 die gemeinsame aktive Randtopologie. [Formeln, Quellen und Nachweise](42_TET10_OPERATORS.md).
+
+
+## ADR-030: Residualindikator für stationäre Tet4-Wärme (#36)
+
+Datum: 26.09.2026. Status: Umsetzung im M7-Issue-Branch.
+
+Die additive Forschungs-API in `post` verwendet Zellquellen, innere
+Normalflusssprünge und explizite Neumann-/Robin-Randresiduen. Gewichtung mit
+Durchmessern und kleinsten Leitfähigkeitseigenwerten liefert Größen in der
+thermischen Energienorm, ohne garantierte Fehlerschranken oder Kontrastrobustheit
+zu behaupten. Vollständige Triangle3-Randabdeckung und explizite Dirichlet-Flächen
+verhindern das stillschweigende Weglassen von Randfehlern. Materialgrenzen
+verwenden Fluss- statt Gradientensprünge. Dörfler-Markierung ist deterministisch;
+Remeshing, Tet10 und gekoppelte Indikatoren bleiben getrennte Folgearbeit.
+Keine Änderung der stationären Solver-, Model- oder Vorzeichenverträge und keine
+neue Abhängigkeit. [Formeln und Nachweise](43_HEAT_INDICATOR.md).
