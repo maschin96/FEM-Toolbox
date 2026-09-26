@@ -463,3 +463,19 @@ verwenden Fluss- statt Gradientensprünge. Dörfler-Markierung ist deterministis
 Remeshing, Tet10 und gekoppelte Indikatoren bleiben getrennte Folgearbeit.
 Keine Änderung der stationären Solver-, Model- oder Vorzeichenverträge und keine
 neue Abhängigkeit. [Formeln und Nachweise](43_HEAT_INDICATOR.md).
+
+## ADR-031: Tet10-Wärme mit expliziten Schwerpunktfeldern (#35d)
+
+Datum: 26.09.2026. Status: Umsetzung im M7-Issue-Branch.
+
+Die thermische Integration verwendet bestehende Zeitintegratoren und Backends
+mit internem Elementdispatch. `Model` gibt Tet10 zunächst ausschließlich für
+stationäre und transiente Wärme frei. Quadratische Gradienten sind
+ortsabhängig: Ergebnisarrays enthalten rohe Schwerpunktwerte und zusätzliche
+unveränderliche `field_points`. Tet10-Exporte verwenden deshalb Schema 2 und
+Feldnamen mit `_at_centroid`; Tet4 behält Schema 1. Das ersetzt keine vollständige
+Feldrekonstruktion. Sondenlokalisierung verwendet affine Eckkoordinaten,
+Interpolation alle zehn Formfunktionen. HRZ bleibt explizit und erhält die
+Gesamtkapazität, ohne konsistente Quellmomente zu verändern. Keine neue
+Abhängigkeit und keine geänderten Feldvorzeichen.
+[Vertrag, Verifikation und verbleibende Schritte](45_TET10_HEAT_INTEGRATION.md).

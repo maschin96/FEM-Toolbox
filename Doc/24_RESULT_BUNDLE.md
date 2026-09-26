@@ -86,3 +86,10 @@ analytisch bekannte Felder und Bilanzgrenzen von `1e-12` für Rohfelder und
 `1e-10` für globale Bilanzen. Die Exportprüfungen verwenden keine zusätzliche
 Numeriktoleranz: JSON-Kennwerte sind dieselben Python-Fließkommazahlen, und
 VTU-Felder werden mit `assert_allclose` gegen ihre Solverarrays verglichen.
+
+## M7-Erweiterung: Tet10-Wärme
+
+Stationäre Tet10-Wärme verwendet Bündelschema 2, Zelltyp `tetra10` und explizit
+als Schwerpunktwerte benannte Gradienten/Flüsse samt Auswertekoordinaten.
+Tet4 behält Schema 1. Der eigenständige Manifestleser unterstützt beide
+Versionen. [Vertrag und Nachweise](45_TET10_HEAT_INTEGRATION.md).

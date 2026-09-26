@@ -1,11 +1,12 @@
 """Test-only Tet10 assembly and independent quartic manufactured heat solution.
 
-Exercises the element operators; production Model/solver dispatch is #35d.
+Exercises the independent assembler and the production Tet10 heat solver.
 """
 
 from itertools import product
 
 import numpy as np
+import pytest
 from scipy import sparse
 from scipy.sparse.linalg import spsolve
 
@@ -32,7 +33,8 @@ def elevate(mesh):
     return np.array(points), np.array(cells)
 
 
-def test_four_mesh_quartic_heat_solution_rates_and_balance(cube_mesh):
+@pytest.mark.parametrize("production", [False, True])
+def test_four_mesh_quartic_heat_solution_rates_and_balance(cube_mesh, production):
     roots, weights = np.polynomial.legendre.leggauss(6)
     roots, weights = (roots + 1) / 2, weights / 2
     bary, quadrature = [], []
@@ -68,6 +70,22 @@ def test_four_mesh_quartic_heat_solution_rates_and_balance(cube_mesh):
             matrix[free][:, free],
             rhs[free] - matrix[free][:, boundary] @ solution[boundary],
         )
+        if production:
+            from fem_toolbox.boundary import Dirichlet
+            from fem_toolbox.mesh import Mesh
+            from fem_toolbox.solvers.heat import solve_heat
+
+            reference = solution.copy()
+            solved = solve_heat(
+                Mesh(points=points, tetra10=cells),
+                ThermalMaterial.isotropic(2),
+                [Dirichlet(boundary, points[boundary] ** 4 @ coefficients)],
+                source=lambda p: -24 * (p**2 @ coefficients),
+            )
+            solution = solved.temperature
+            np.testing.assert_allclose(solution, reference, rtol=0, atol=2e-12)
+            assert abs(solved.power_balance) < 2e-12
+            assert abs(solved.source_power + 14) < 2e-12
         residual = matrix @ solution - rhs
         assert np.linalg.norm(residual[free]) < 1e-12
         assert abs(residual[boundary].sum() + rhs.sum()) < 2e-12

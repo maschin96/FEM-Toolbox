@@ -35,7 +35,7 @@ class HeatSeriesWriter:
         self.path = Path(path)
         self.mesh = mesh
         self.mesh_sha256 = heat_mesh_fingerprint(mesh)
-        self.active = np.unique(mesh.tetra4)
+        self.active = np.unique(mesh.cells)
         self._frames: list[dict[str, Any]] = []
         self._complete = False
         self.path.mkdir(parents=True, exist_ok=False)
@@ -60,7 +60,7 @@ class HeatSeriesWriter:
         temporary.replace(self.path / "heat.pvd")
         manifest: dict[str, Any] = {
             "schema": "fem-toolbox-heat-series",
-            "schema_version": 1,
+            "schema_version": 2 if self.mesh.n_tetra10 else 1,
             "mesh_sha256": self.mesh_sha256,
             "status": "complete" if result is not None else "incomplete",
             "frames": self._frames,
@@ -76,6 +76,18 @@ class HeatSeriesWriter:
             "initial_reactions": "not_evaluated_zero_filled",
             "inactive_values": "zero_filled_use_validity_masks",
         }
+        if self.mesh.n_tetra10:
+            manifest.update(
+                cell_type=self.mesh.cell_type,
+                field_location="cell_centroid",
+                field_evaluation_points_m=self.mesh.points[self.mesh.cells[:, :4]]
+                .mean(axis=1)
+                .tolist(),
+                cell_field_names=[
+                    "gradient_K_m_at_centroid",
+                    "heat_flux_W_m2_at_centroid",
+                ],
+            )
         if result is not None:
             manifest.update(
                 provenance=result.provenance.to_dict(),
@@ -106,6 +118,14 @@ class HeatSeriesWriter:
             raise ValidationError("frame belongs to a different mesh", field="export")
         if frame.temperature.shape != self.active.shape:
             raise ValidationError("frame node count differs from mesh", field="export")
+        if self.mesh.n_tetra10:
+            expected = self.mesh.points[self.mesh.cells[:, :4]].mean(axis=1)
+            if frame.field_points is None or not np.array_equal(
+                frame.field_points, expected
+            ):
+                raise ValidationError(
+                    "Tet10 frame centroid points differ from mesh", field="export"
+                )
         point_data: dict[str, Any] = {}
         for name, values in (
             ("temperature_K", frame.temperature),
@@ -123,13 +143,15 @@ class HeatSeriesWriter:
             ("gradient_K_m", frame.gradient),
             ("heat_flux_W_m2", frame.heat_flux),
         ):
-            blocks = {"tetra4": values}
-            if self.mesh.n_triangle3:
-                blocks["triangle3"] = np.zeros((self.mesh.n_triangle3, 3))
+            if self.mesh.n_tetra10:
+                name += "_at_centroid"
+            blocks = {self.mesh.cell_type: values}
+            if self.mesh.n_facets:
+                blocks[self.mesh.facet_type] = np.zeros((self.mesh.n_facets, 3))
             cell_data[name] = blocks
-        mask = {"tetra4": np.ones(self.mesh.n_tetra4, dtype=np.uint8)}
-        if self.mesh.n_triangle3:
-            mask["triangle3"] = np.zeros(self.mesh.n_triangle3, dtype=np.uint8)
+        mask = {self.mesh.cell_type: np.ones(self.mesh.n_cells, dtype=np.uint8)}
+        if self.mesh.n_facets:
+            mask[self.mesh.facet_type] = np.zeros(self.mesh.n_facets, dtype=np.uint8)
         cell_data["valid_volume_field"] = mask
         name = f"heat_{frame.index:06d}.vtu"
         temporary = self.path / f".{name}"

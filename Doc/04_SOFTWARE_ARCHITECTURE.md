@@ -296,6 +296,8 @@ konkreten Elementoperatoren anwendbar.
 
 #35a ergänzt `Mesh` um Tet10/Triangle6 und generische Zugriffe auf die aktive
 Zellfamilie. Netz-I/O, Randtopologie und Materialregionen verwenden diese Zugriffe;
-die Tet4-Operatoren bleiben unverändert. `Model` weist Tet10 bis zur vollständigen
-Operator- und Ergebnisintegration zurück. Knotenordnung, Kompatibilität und
+die Tet4-Operatoren bleiben unverändert. Der thermische Teil von #35d integriert
+Tet10 in stationäre und transiente Solver, Model, Preflight und Export. Andere
+Tet10-Physiken bleiben im Model abgelehnt. Der punktabhängige Ergebnisvertrag
+ist in [Dokument 45](45_TET10_HEAT_INTEGRATION.md) beschrieben. Knotenordnung, Kompatibilität und
 Geometriegrenzen sind in [Dokument 40](40_TET10_TOPOLOGY.md) festgelegt.

@@ -5,8 +5,10 @@ Operatoren für Wärme, Elektrostatik, Mechanik und Piezoelektrizität einschlie
 Masse, Wärmekapazität, thermischer Ausdehnung und Triangle6-Randlasten.
 Der additive API-Einstieg lautet `fem_toolbox.elements.quadratic` bzw.
 `fem_toolbox.physics.quadratic`. Bestehende Tet4-Einstiege bleiben unverändert.
-Die Auswahl im produktiven Model-/Solverablauf und quadratisches Postprocessing
-folgen in #35d; Tet10-Modelle werden dort weiterhin ausdrücklich abgelehnt.
+Der thermische Teil von #35d ergänzt den produktiven Model-/Solverablauf und
+explizite Schwerpunktfelder für stationäre und transiente Wärme, siehe
+[Dokument 45](45_TET10_HEAT_INTEGRATION.md). Die Integration der übrigen
+Tet10-Physiken bleibt offen.
 
 ## Lokaler Vertrag
 

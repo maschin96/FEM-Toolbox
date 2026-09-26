@@ -7,7 +7,6 @@ from numpy.testing import assert_allclose, assert_array_equal
 from fem_toolbox.errors import (
     BoundaryTopologyError,
     MeshValidationError,
-    ValidationError,
 )
 from fem_toolbox.materials import ThermalMaterial
 from fem_toolbox.materials.regions import assign_region_materials
@@ -108,10 +107,11 @@ def test_material_regions_address_quadratic_cell_rows():
     assert result.region_names == (("bulk", "overlap"),)
 
 
-def test_tet4_solver_does_not_silently_drop_quadratic_cells():
+def test_heat_solver_checks_quadratic_nullspace_instead_of_dropping_cells():
+    from fem_toolbox.errors import ThermalNullspaceError
     from fem_toolbox.solvers.heat import solve_heat
 
-    with pytest.raises(ValidationError, match="requires Tet4"):
+    with pytest.raises(ThermalNullspaceError):
         solve_heat(quadratic(), ThermalMaterial.isotropic(2), [])
 
 
