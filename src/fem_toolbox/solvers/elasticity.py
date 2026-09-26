@@ -15,26 +15,32 @@ from scipy.sparse.csgraph import connected_components  # type: ignore[import-unt
 
 from fem_toolbox.assembly import MatrixBlock, VectorBlock, assemble, indices, real_array
 from fem_toolbox.boundary import Dirichlet, eliminate_dirichlet
-from fem_toolbox.elements import Tet4Geometry
-from fem_toolbox.elements.elasticity import stiffness_matrix, strain_matrix
+from fem_toolbox.elements import Tet4Geometry, Tet10Geometry
 from fem_toolbox.errors import ValidationError
 from fem_toolbox.fields import DofMap, Field
 from fem_toolbox.materials import ElasticMaterial, ThermalExpansion
-from fem_toolbox.mesh import Mesh
-from fem_toolbox.physics.elasticity import VectorField, body_load, traction_load
+from fem_toolbox.mesh import Mesh, inspect_boundary_topology
+from fem_toolbox.physics.elasticity import VectorField
 from fem_toolbox.provenance import RunProvenance
 from fem_toolbox.solvers.linear_backend import LinearBackend, solve_linear
+from fem_toolbox.solvers.mechanical_elements import (
+    body_load,
+    quadratic_energy,
+    stiffness_matrix,
+    strain_matrix,
+    traction_load,
+)
 
 
 def mechanical_dofs(mesh: Mesh) -> DofMap:
-    """Allocate u=(x,y,z) on sorted active Tet4 node indices, in metres.
+    """Allocate u=(x,y,z) on sorted active Tet4/Tet10 node indices, in metres.
 
-    Mesh points unused by Tet4 cells receive no displacement DOFs.
+    Mesh points unused by volume cells receive no displacement DOFs.
     """
     return DofMap(
         (
             Field(
-                "u", ("x", "y", "z"), tuple(int(n) for n in np.unique(mesh.tetra4)), "m"
+                "u", ("x", "y", "z"), tuple(int(n) for n in np.unique(mesh.cells)), "m"
             ),
         )
     )
@@ -46,7 +52,9 @@ class ElasticResult:
 
     node_ids: (nactive,) mesh indices; displacement: (nactive,3) m;
     strain/stress: (ncells,6), total engineering Voigt strain and Pa stress;
-    element_energy: (ncells,) mechanical-strain energy J;
+    Tet4 strain/stress are cell constants (field_points=None); Tet10 uses raw
+    centroid samples located by field_points (ncells,3) in metres.
+    element_energy: (ncells,) integrated mechanical-strain energy J;
     reactions/applied_loads/residual: (nactive,3) N.
     Reactions are zero at free DOFs; residual retains their equilibrium error.
     force_balance (3,) N and moment_balance (3,) N m include external loads and
@@ -67,6 +75,7 @@ class ElasticResult:
     moment_balance: NDArray[np.float64]
     relative_residual: float
     provenance: RunProvenance
+    field_points: NDArray[np.float64] | None = None
 
     def __post_init__(self) -> None:
         for name in self.__dataclass_fields__:
@@ -88,10 +97,10 @@ class ElasticResult:
 
 def _check_supports(mesh: Mesh, dofs: DofMap, fixed: NDArray[np.int64]) -> None:
     """Check six rigid modes on every node-connected component before solving."""
-    active = np.unique(mesh.tetra4)
+    active = np.unique(mesh.cells)
     position = {int(node): i for i, node in enumerate(active)}
     rows, columns = [], []
-    for cell in mesh.tetra4:
+    for cell in mesh.cells:
         for a, b in combinations(cell, 2):
             rows.extend([position[int(a)], position[int(b)]])
             columns.extend([position[int(b)], position[int(a)]])
@@ -130,7 +139,7 @@ def solve_elasticity(
     expansion: ThermalExpansion | Sequence[ThermalExpansion] | None = None,
     temperature: ArrayLike | None = None,
 ) -> ElasticResult:
-    """Solve static linear elasticity on all Tet4 cells, in SI units.
+    """Solve static linear elasticity on Tet4 or straight Tet10 cells, in SI units.
 
     ``backend`` is an experimental linear-backend hook; None selects SciPy.
     Reduction, physical residuals and result units remain this solver's contract.
@@ -144,21 +153,27 @@ def solve_elasticity(
     Invalid materials, loads, conflicting conditions, missing supports and
     numerically singular systems raise ValidationError. Optional temperature is
     nodal absolute K; expansion may be homogeneous or per input cell. The thermal
-    eigenstrain is alpha times the cell-average temperature difference.
+    eigenstrain for Tet4 is alpha times the cell-average temperature difference.
+    Tet10 thermal expansion is not yet supported and is explicitly rejected.
+    Tet10 body/surface quadrature has degree five/four; Tet4 degree two.
     Diagonally equilibrated LU rejects relative pivots <= 1e-12; very poorly
     conditioned models require reformulation rather than a silent solution.
     """
-    if mesh.n_tetra4 == 0:
-        raise ValidationError("elasticity requires Tet4 cells", field="mesh")
+    if mesh.n_cells == 0:
+        raise ValidationError("elasticity requires Tet4 or Tet10 cells", field="mesh")
     materials = (
-        [material] * mesh.n_tetra4
+        [material] * mesh.n_cells
         if isinstance(material, ElasticMaterial)
         else list(material)
     )
-    if len(materials) != mesh.n_tetra4 or any(
+    if len(materials) != mesh.n_cells or any(
         not isinstance(m, ElasticMaterial) for m in materials
     ):
         raise ValidationError("one ElasticMaterial required per cell", field="material")
+    if mesh.n_tetra10 and (expansion is not None or temperature is not None):
+        raise ValidationError(
+            "Tet10 thermal expansion is not yet supported", field="temperature"
+        )
     if (expansion is None) != (temperature is None):
         raise ValidationError(
             "expansion and temperature must be supplied together", field="temperature"
@@ -167,11 +182,11 @@ def solve_elasticity(
     temperatures: NDArray[np.float64] | None = None
     if expansion is not None and temperature is not None:
         expansions = (
-            [expansion] * mesh.n_tetra4
+            [expansion] * mesh.n_cells
             if isinstance(expansion, ThermalExpansion)
             else list(expansion)
         )
-        if len(expansions) != mesh.n_tetra4 or any(
+        if len(expansions) != mesh.n_cells or any(
             not isinstance(item, ThermalExpansion) for item in expansions
         ):
             raise ValidationError(
@@ -182,19 +197,21 @@ def solve_elasticity(
             raise ValidationError(
                 "absolute temperature must be nonnegative K", field="temperature"
             )
+    if mesh.n_tetra10:
+        inspect_boundary_topology(mesh)
     dofs = mechanical_dofs(mesh)
-    active = np.unique(mesh.tetra4)
+    active = np.unique(mesh.cells)
     geometries = [
-        Tet4Geometry(
+        (Tet10Geometry if mesh.n_tetra10 else Tet4Geometry)(
             mesh.points[cell],
-            entity_id=int(mesh.tetra4_ids[i]) if mesh.tetra4_ids is not None else i,
+            entity_id=int(mesh.cell_ids[i]) if mesh.cell_ids is not None else i,
         )
-        for i, cell in enumerate(mesh.tetra4)
+        for i, cell in enumerate(mesh.cells)
     ]
     matrices, loads = [], []
-    eigenstrains = np.zeros((mesh.n_tetra4, 6))
+    eigenstrains = np.zeros((mesh.n_cells, 6))
     for i, (cell, geometry, mat) in enumerate(
-        zip(mesh.tetra4, geometries, materials, strict=True)
+        zip(mesh.cells, geometries, materials, strict=True)
     ):
         ids = dofs.indices("u", cell)
         matrices.append(MatrixBlock(ids, ids, stiffness_matrix(geometry, mat)))
@@ -215,15 +232,16 @@ def solve_elasticity(
     if tractions:
         faces = Counter(
             tuple(sorted(int(n) for n in face))
-            for cell in mesh.tetra4
-            for face in combinations(cell, 3)
+            for cell in mesh.cells
+            for face in combinations(cell[:4], 3)
         )
         for face, traction in tractions.items():
-            face_id = int(indices([face], mesh.n_triangle3)[0])
-            nodes = mesh.triangle3[face_id]
-            if faces[tuple(sorted(int(n) for n in nodes))] != 1:
+            face_id = int(indices([face], mesh.n_facets)[0])
+            nodes = mesh.facets[face_id]
+            if faces[tuple(sorted(int(n) for n in nodes[:3]))] != 1:
                 raise ValidationError(
-                    "traction face must be an exterior Tet4 face", field="traction"
+                    "traction face must be an exterior tetrahedral face",
+                    field="traction",
                 )
             loads.append(
                 VectorBlock(
@@ -279,7 +297,7 @@ def solve_elasticity(
     strain = np.array(
         [
             strain_matrix(g) @ solution[dofs.indices("u", cell)]
-            for cell, g in zip(mesh.tetra4, geometries, strict=True)
+            for cell, g in zip(mesh.cells, geometries, strict=True)
         ]
     )
     mechanical_strain = strain - eigenstrains
@@ -288,8 +306,17 @@ def solve_elasticity(
     )
     energy = np.array(
         [
-            0.5 * g.volume * e @ s
-            for g, e, s in zip(geometries, mechanical_strain, stress, strict=True)
+            quadratic_energy(g, m, solution[dofs.indices("u", cell)])
+            if isinstance(g, Tet10Geometry)
+            else 0.5 * g.volume * e @ s
+            for cell, g, m, e, s in zip(
+                mesh.cells,
+                geometries,
+                materials,
+                mechanical_strain,
+                stress,
+                strict=True,
+            )
         ]
     )
     external = (applied + reaction).reshape(-1, 3)
@@ -297,7 +324,7 @@ def solve_elasticity(
         json.dumps(
             {
                 "points": mesh.points.tolist(),
-                "tetra4": mesh.tetra4.tolist(),
+                mesh.cell_type: mesh.cells.tolist(),
                 "materials": [m.stiffness.tolist() for m in materials],
                 "thermal_eigenstrain": eigenstrains.tolist(),
                 "temperature": temperatures.tolist()
@@ -324,7 +351,10 @@ def solve_elasticity(
             "pivot_tolerance": 1e-12,
             "rigid_rank_tolerance": 1e-10,
             "relative_residual_tolerance": 1e-9,
-            "load_quadrature_degree": 2,
+            "load_quadrature_degree": 5 if mesh.n_tetra10 else 2,
+            "surface_quadrature_degree": 4 if mesh.n_tetra10 else 2,
+            "field_location": "cell_centroid" if mesh.n_tetra10 else "element_constant",
+            "energy_evaluation": "cell_integral",
         },
     )
     return ElasticResult(
@@ -340,4 +370,5 @@ def solve_elasticity(
         np.cross(mesh.points[active], external).sum(axis=0),
         relative,
         provenance,
+        mesh.points[mesh.cells[:, :4]].mean(axis=1) if mesh.n_tetra10 else None,
     )

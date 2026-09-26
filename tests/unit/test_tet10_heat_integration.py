@@ -221,7 +221,6 @@ def test_quadratic_curvature_probe_and_export_rejections(cube_mesh, tmp_path):
     with pytest.raises(ValidationError, match="centroid"):
         export_result_bundle(tmp_path / "bad", mesh, replace(result, field_points=None))
     for physics in (
-        "elasticity",
         "piezoelectric",
         "thermopiezoelectric",
         "piezo_modes",

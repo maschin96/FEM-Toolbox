@@ -158,8 +158,9 @@ interpretiert Koordinaten als Meter, `1.0e-3` rechnet Millimeter in Meter um.
   [Vertrag und Grenzen](Doc/40_TET10_TOPOLOGY.md). Stationäre und transiente
   [Tet10-Wärmemodelle samt Export](Doc/45_TET10_HEAT_INTEGRATION.md) sind
   unterstützt, ebenso [Tet10-Elektrostatik](Doc/46_TET10_ELECTROSTATICS.md).
-  Mechanik, Piezo und Kopplungen mit Tet10 sowie gemischte Elementordnungen
-  bleiben ausgeschlossen. Andere Zelltypen führen zu
+  [Statische Tet10-Elastizität](Doc/47_TET10_ELASTICITY.md) ist ebenfalls
+  unterstützt. Thermische Kopplungen, Piezo und gemischte Elementordnungen
+  bleiben bei Tet10 ausgeschlossen. Andere Zelltypen führen zu
   einem `UnsupportedCellTypeError`.
 - Mehrfache physische Gmsh-Gruppen bleiben als benannte Auswahlsätze erhalten.
   Der einzelne numerische Tag bildet nur die erste gemeldete Mitgliedschaft ab.

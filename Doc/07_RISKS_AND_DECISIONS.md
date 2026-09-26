@@ -493,3 +493,17 @@ punktabhängigen Gradienten integriert. Schema 2 unterscheidet deshalb
 erhält keinen Schwerpunktsuffix. Tet4 behält Schema 1. Keine neuen Abhängigkeiten
 und keine Freigabe weiterer Tet10-Kopplungen.
 [Nachweise und Grenzen](46_TET10_ELECTROSTATICS.md).
+
+## ADR-033: Statische Tet10-Mechanik vor Kopplungen integrieren (#35d)
+
+Datum: 26.09.2026. Status: Umsetzung im M7-Issue-Branch.
+
+Die statische Elastizität verwendet die bestehenden quadratischen Operatoren,
+Lagerprüfung und Backend-Grenze. Spannungen/Dehnungen sind rohe Schwerpunktwerte
+mit expliziten Auswerteorten und unveränderter technischer Voigt-Konvention.
+Verzerrungsenergie wird separat über das Element integriert. Schema 2 trennt
+Feldproben von Energieintegralen wie bei Elektrostatik. Tet4 behält Schema 1.
+Thermische Tet10-Eigendehnungen werden bis zur eigenen Kopplungsintegration
+ausdrücklich abgelehnt; die Tet4-Zellmittelung wird nicht auf P2 übertragen.
+Keine neuen Abhängigkeiten oder geänderten Vorzeichen.
+[Verifikation und Grenzen](47_TET10_ELASTICITY.md).

@@ -201,3 +201,28 @@ def test_tet10_electrostatics_patch_and_energy(cube_mesh, physics_backend):
     )
     assert abs(result.energy - 4e-11 / 3) < 1e-21
     assert abs(result.charge_balance) < 1e-21
+
+
+def test_tet10_elasticity_patch_and_energy(cube_mesh, physics_backend):
+    from tests.reference.quadratic_mesh import elevate
+
+    mesh = elevate(cube_mesh(2))
+    boundary = np.unique(mesh.facets)
+    exact = np.zeros_like(mesh.points)
+    exact[:, 0] = 0.01 * mesh.points[:, 0] ** 2
+    material = ElasticMaterial.isotropic(100, 0.25)
+    bc = [
+        Dirichlet(mechanical_dofs(mesh).indices("u", boundary), exact[boundary].ravel())
+    ]
+    reference = solve_elasticity(mesh, material, bc, body_force=[-2.4, 0, 0])
+    result = solve_elasticity(
+        mesh, material, bc, body_force=[-2.4, 0, 0], backend=physics_backend
+    )
+    assert_allclose(result.displacement, exact, rtol=0, atol=1e-11)
+    assert_allclose(result.stress, reference.stress, rtol=0, atol=1e-8)
+    assert_allclose(
+        result.element_energy, reference.element_energy, rtol=1e-9, atol=1e-13
+    )
+    assert abs(result.energy - 0.008) < 1e-11
+    assert_allclose(result.force_balance, 0, rtol=0, atol=1e-9)
+    assert_allclose(result.moment_balance, 0, rtol=0, atol=1e-9)

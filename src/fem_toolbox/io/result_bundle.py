@@ -157,7 +157,10 @@ def _array(value: object, rows: int, name: str) -> NDArray[np.float64]:
 def _components_for(name: str, values: NDArray[np.float64]) -> list[str]:
     if values.ndim == 1:
         return ["scalar"]
-    if values.shape[1] == 6 and name in ("strain_1", "stress_Pa"):
+    if values.shape[1] == 6 and name.removesuffix("_at_centroid") in (
+        "strain_1",
+        "stress_Pa",
+    ):
         return ["xx", "yy", "zz", "yz", "xz", "xy"]
     if values.shape[1] == 3:
         return ["x", "y", "z"]
@@ -230,9 +233,10 @@ def export_result_bundle(
     quadratic = bool(mesh.n_tetra10)
     evaluation_points = None
     if quadratic:
-        if physics not in ("heat", "electrostatics"):
+        if physics not in ("heat", "electrostatics", "elasticity"):
             raise ValidationError(
-                "only Tet10 heat/electrostatics export is supported", field="result"
+                "only Tet10 heat/electrostatics/elasticity export is supported",
+                field="result",
             )
         evaluation_points = getattr(parts[physics], "field_points", None)
         expected = mesh.points[mesh.cells[:, :4]].mean(axis=1)

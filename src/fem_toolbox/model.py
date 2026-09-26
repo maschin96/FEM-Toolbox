@@ -422,6 +422,7 @@ class Model:
             "heat",
             "transient_heat",
             "electrostatics",
+            "elasticity",
         ):
             raise ModelSchemaError(
                 path="mesh",

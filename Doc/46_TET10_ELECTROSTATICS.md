@@ -1,7 +1,8 @@
 # Tet10-Elektrostatik durch Model, Solver und Export (#35d)
 
 Dieser Integrationsschnitt erweitert die bereits vorhandene Tet10-Wärme um
-stationäre Elektrostatik. #35 bleibt für Mechanik, Piezo, Kopplungen und die
+stationäre Elektrostatik. Statische Mechanik ist inzwischen in
+[Dokument 47](47_TET10_ELASTICITY.md) integriert. #35 bleibt für Piezo, Kopplungen und die
 verbleibenden Vergleichsgates offen. Keine M7-Releasefreigabe oder experimentelle
 Validierungsbehauptung.
 

@@ -275,3 +275,12 @@ Ladungsbilanz und Schema-2-Export angebunden. E/D sind Schwerpunktwerte;
 Energie wird über das Element integriert. Vier-Netze-Nachweis und Gmsh-/TOML-
 Beispiel ergänzen die Tests. Mechanik, Piezo, Kopplungen und Vergleichsgates
 bleiben offen. [Details](46_TET10_ELECTROSTATICS.md).
+
+## Fortschritt #35d: mechanischer Integrationsschnitt
+
+Statische Tet10-Elastizität ist durch Model/Preflight, Backend, Lasten und
+Schema-2-Export angebunden. Dehnungen/Spannungen sind Schwerpunktwerte;
+Verzerrungsenergie wird integriert. Biegepatch, anisotroper Patch, Materialgrenze,
+Kraft-/Momentenbilanzen und vier Netze sind nachgewiesen. Thermische Tet10-
+Eigendehnungen, Piezo, Dynamik und Kostenvergleiche bleiben offen.
+[Details](47_TET10_ELASTICITY.md).

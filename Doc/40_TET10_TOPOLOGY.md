@@ -70,7 +70,8 @@ Ungültige Mischfamilien, gekrümmte Kanten und falsche Randzuordnungen werden
 abgelehnt. Die bisherige Tet4-Suite bleibt der Kompatibilitätsnachweis.
 
 Seit dem thermischen Teil von #35d unterstützt `Model` stationäre und transiente
-Tet10-Wärme und inzwischen [Elektrostatik](46_TET10_ELECTROSTATICS.md).
+Tet10-Wärme, [Elektrostatik](46_TET10_ELECTROSTATICS.md) und
+[statische Elastizität](47_TET10_ELASTICITY.md).
 Andere Physiken bleiben ausdrücklich abgelehnt; bestehende
 Tet4-Solver erhalten keine still reduzierte Konnektivität.
 Patch-, Energie- und Konvergenznachweise quadratischer Operatoren gehören zu
