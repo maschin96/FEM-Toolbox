@@ -3,7 +3,8 @@
 M7 erweitert das Netzmodell additiv um eine quadratische Simplex-Familie.
 Dieser Teil implementiert Topologie, Metadaten und I/O; quadratische
 Formfunktionen und Quadratur ergänzt [#35b](41_TET10_GEOMETRY.md).
-Operatoren und die Model-Integration folgen in #35c/d.
+Operatoren sind in #35c ergänzt; die thermische Model-Integration folgt im
+[thermischen Teil von #35d](45_TET10_HEAT_INTEGRATION.md).
 
 ## Datenvertrag
 
@@ -68,7 +69,8 @@ Orientierungswechsel, Einheiten und VTU-Rundreisen einschließlich Tet4.
 Ungültige Mischfamilien, gekrümmte Kanten und falsche Randzuordnungen werden
 abgelehnt. Die bisherige Tet4-Suite bleibt der Kompatibilitätsnachweis.
 
-Tet10 ist noch kein berechenbares Model. `Model` lehnt quadratische Netze früh
-ab; bestehende Tet4-Solver erhalten keine still reduzierte Konnektivität.
+Seit dem thermischen Teil von #35d unterstützt `Model` stationäre und transiente
+Tet10-Wärme. Andere Physiken bleiben ausdrücklich abgelehnt; bestehende
+Tet4-Solver erhalten keine still reduzierte Konnektivität.
 Patch-, Energie- und Konvergenznachweise quadratischer Operatoren gehören zu
 #35b/c und sind durch diese Topologietests nicht erbracht.

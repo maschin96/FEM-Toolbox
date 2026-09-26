@@ -197,3 +197,11 @@ Diese Nachweise sind Code-Verifikation, keine experimentelle Validierung.
 
 CI für Python 3.11–3.13 ist um das transiente Artefaktbeispiel ergänzt.
 Ein lokaler Nachweis ersetzt weder diese Matrix noch unabhängiges Review.
+
+## M7-Erweiterung: Tet10-Wärme
+
+Der bestehende Backward-Euler-Pfad unterstützt geradkantige Tet10 und
+Triangle6, einschließlich Model, quadratischer Sondeninterpolation und
+optionalem expliziten HRZ (`solver.lumping = "hrz"`). Der Tet4-Vertrag bleibt
+unverändert. Tet10-Zeitserien verwenden Schema 2 mit ausdrücklich benannten
+Schwerpunktfeldern. [Vertrag und Nachweise](45_TET10_HEAT_INTEGRATION.md).

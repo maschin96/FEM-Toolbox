@@ -155,8 +155,10 @@ interpretiert Koordinaten als Meter, `1.0e-3` rechnet Millimeter in Meter um.
 - M7 ergänzt geradkantige Tet10/Triangle6 für Topologie und I/O sowie
   [Formfunktionen, Geometrie und Quadratur](Doc/41_TET10_GEOMETRY.md) sowie
   [lokale Feldoperatoren und Randintegrale](Doc/42_TET10_OPERATORS.md);
-  [Vertrag und Grenzen](Doc/40_TET10_TOPOLOGY.md). Tet10-Modelle und gemischte
-  Elementordnungen sind noch nicht unterstützt. Andere Zelltypen führen zu
+  [Vertrag und Grenzen](Doc/40_TET10_TOPOLOGY.md). Stationäre und transiente
+  [Tet10-Wärmemodelle samt Export](Doc/45_TET10_HEAT_INTEGRATION.md) sind
+  unterstützt. Andere Tet10-Physiken im Model und gemischte Elementordnungen
+  bleiben ausgeschlossen. Andere Zelltypen führen zu
   einem `UnsupportedCellTypeError`.
 - Mehrfache physische Gmsh-Gruppen bleiben als benannte Auswahlsätze erhalten.
   Der einzelne numerische Tag bildet nur die erste gemeldete Mitgliedschaft ab.

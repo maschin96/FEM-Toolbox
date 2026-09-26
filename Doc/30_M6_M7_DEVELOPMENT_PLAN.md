@@ -259,3 +259,11 @@ Bei fünf Wiederholungen je Fall/Größe sinkt die Elektroden-Medianlaufzeit fü
 N=6/N=10 um 20,5 %/18,7 %; beide Wärmefälle und gemessene Speicherpeaks verbessern
 sich ebenfalls. [Rohdaten, Parität und Grenzen](44_GEOMETRY_PERFORMANCE.md).
 #37c und der Issue-Abschluss bleiben nach vollständiger Tet10-Integration offen.
+
+## Fortschritt #35d: thermischer Integrationsschnitt
+
+Stationäre und transiente Tet10-Wärme sind durch Model, Preflight, lineare
+Backend-Grenze und versionierten Export angebunden. Der Schnitt enthält
+Gmsh-/TOML-Beispiele sowie Raum- und Zeitkonvergenznachweise. #35 bleibt für
+die übrigen Feldintegrationen und Vergleichsgates offen; #37c folgt danach.
+[Details und Grenzen](45_TET10_HEAT_INTEGRATION.md).

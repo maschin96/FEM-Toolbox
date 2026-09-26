@@ -161,3 +161,24 @@ def test_modal_newmark_and_complex_harmonic(physics_backend):
             rtol=1e-11,
             atol=1e-12,
         )
+
+
+def test_tet10_heat_stationary_and_transient(cube_mesh, physics_backend):
+    from tests.reference.quadratic_mesh import elevate
+
+    mesh = elevate(cube_mesh(2))
+    material = ThermalMaterial.isotropic(2, density=3, specific_heat=4)
+    boundary = np.unique(mesh.facets)
+    exact = 300 + mesh.points[:, 0] ** 2
+    args = [mesh, material, [Dirichlet(boundary, exact[boundary])]]
+    reference = solve_heat(*args, source=-4)
+    result = solve_heat(*args, source=-4, backend=physics_backend)
+    assert_allclose(result.temperature, exact, rtol=0, atol=1e-9)
+    assert_allclose(result.temperature, reference.temperature, rtol=0, atol=1e-9)
+    assert_allclose(result.heat_flux, reference.heat_flux, rtol=0, atol=1e-9)
+    assert abs(result.power_balance) < 1e-9
+    history = solve_transient_heat(
+        mesh, material, [0, 0.2, 1], 300, source=12, backend=physics_backend
+    )
+    assert_allclose(history.frames[-1].temperature, 301, rtol=0, atol=1e-9)
+    assert max(abs(b.balance) for b in history.balances) < 1e-9

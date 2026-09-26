@@ -74,6 +74,8 @@ Eintrag im Entscheidungsprotokoll.
 
 - [Gemessene bedarfsgerechte Tet4-Flächengeometrie (#37b)](44_GEOMETRY_PERFORMANCE.md)
 
+- [Tet10-Wärme: Model, Backend und Schwerpunkt-Export (#35d, thermischer Teil)](45_TET10_HEAT_INTEGRATION.md)
+
 ## Veröffentlichungen
 
 - [v1.1.0 — Transiente Wärme und Piezo-Dynamik](releases/v1.1.0.md)

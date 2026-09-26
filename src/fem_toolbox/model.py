@@ -405,10 +405,6 @@ class Model:
     def __init__(self, *, mesh: Mesh, document: Mapping[str, object]) -> None:
         if not isinstance(mesh, Mesh):
             raise ModelSchemaError(path="mesh", reason="expected Mesh")
-        if mesh.n_tetra10 or mesh.n_triangle6:
-            raise ModelSchemaError(
-                path="mesh", reason="Tet10/Triangle6 models are not yet supported"
-            )
         try:
             raw = json.loads(json.dumps(document, allow_nan=False, sort_keys=True))
         except (TypeError, ValueError) as error:
@@ -422,6 +418,14 @@ class Model:
         self.physics: Physics
         self._transient: TransientHeatModel | None = None
         _mapping(raw, "document")
+        if (mesh.n_tetra10 or mesh.n_triangle6) and raw.get("physics") not in (
+            "heat",
+            "transient_heat",
+        ):
+            raise ModelSchemaError(
+                path="mesh",
+                reason="Tet10 models for this physics are not yet supported",
+            )
         if raw.get("physics") in (
             "piezo_modes",
             "transient_piezoelectric",
@@ -632,7 +636,7 @@ class Model:
                 raise ModelSchemaError(
                     path=f"{path}.set", reason=f"unknown facet set {name!r}"
                 )
-            nodes = np.unique(self.mesh.triangle3[self.mesh.facet_sets[name]])
+            nodes = np.unique(self.mesh.facets[self.mesh.facet_sets[name]])
             if nodes.size == 0:
                 raise ModelSchemaError(path=f"{path}.set", reason="empty facet set")
             return nodes
@@ -1032,8 +1036,8 @@ class Model:
             "document": self._document,
             "mesh": {
                 "points": self.mesh.points.tolist(),
-                "tetra4": self.mesh.tetra4.tolist(),
-                "triangle3": self.mesh.triangle3.tolist(),
+                self.mesh.cell_type: self.mesh.cells.tolist(),
+                self.mesh.facet_type: self.mesh.facets.tolist(),
             },
             "solver_input_sha256": solver_hashes,
         }

@@ -29,8 +29,8 @@ class PrescribedDof:
 
 
 def _components(mesh: Mesh) -> tuple[np.ndarray, ...]:
-    """Return Tet4 node-connected components in sorted node order."""
-    active = np.unique(mesh.tetra4)
+    """Return tetrahedral node-connected components in sorted node order."""
+    active = np.unique(mesh.cells)
     parent = {int(node): int(node) for node in active}
 
     def root(node: int) -> int:
@@ -39,7 +39,7 @@ def _components(mesh: Mesh) -> tuple[np.ndarray, ...]:
             node = parent[node]
         return node
 
-    for cell in mesh.tetra4:
+    for cell in mesh.cells:
         for a, b in combinations((int(n) for n in cell), 2):
             parent[root(b)] = root(a)
     grouped: dict[int, list[int]] = {}
@@ -122,7 +122,7 @@ def validate_model_constraints(
                 reason=f"electrode {electrode.name!r} on set {facet_set!r} "
                 f"conflicts with prescribed surface charge on facet {face}",
             )
-        nodes = np.unique(mesh.triangle3[facets])
+        nodes = np.unique(mesh.facets[facets])
         for node in nodes:
             node_id = int(node)
             if node_id in electrode_nodes:
@@ -167,7 +167,7 @@ def validate_model_constraints(
             anchored = bool(fixed_t & node_set)
             for face, condition in convection.items():
                 if condition.coefficient > 0 and node_set.intersection(
-                    int(node) for node in mesh.triangle3[face]
+                    int(node) for node in mesh.facets[face]
                 ):
                     anchored = True
             if not anchored:

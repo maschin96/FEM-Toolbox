@@ -50,3 +50,7 @@ schreibt rohe VTU-Felder sowie einen JSON-Bericht mit Provenienz und Bilanzen.
 [Transiente Wärme aus TOML/CSV mit ParaView und Messpunkten](transient_heat/README.md).
 
 - [Piezo-Dynamik: Moden, Newmark, Harmonik, CSV und ParaView](piezo_dynamics/README.md)
+
+## M7-Entwicklung
+
+- [Stationäre und transiente Tet10-Wärme](tet10_heat/README.md): Gmsh/TOML, analytische Patches und Schema-2-Export.
