@@ -245,3 +245,10 @@ und positive Quadratur sind im Issue-Branch umgesetzt;
 und Randlasten sind im Issue-Branch umgesetzt; die Elektrodenreduktion erfasst
 alle sechs Flächenknoten. [Vertrag und Nachweise](42_TET10_OPERATORS.md).
 Nächster geplanter Funktionsschritt: #35d (Model-/Solver-/Ergebnisintegration).
+
+
+#36: Der stationäre Tet4-Wärmeindikator mit Quellen-, Flusssprung- und
+Randresiduen sowie deterministischer Dörfler-Markierung ist im Issue-Branch
+implementiert. Vier-Netze-Effektivität, lokalisierter Fehler und Materialgrenze
+sind geprüft; [Vertrag und Grenzen](43_HEAT_INDICATOR.md). Integration und
+Issue-Abschluss bleiben den CI-/Reviewgates unterworfen.

@@ -167,6 +167,10 @@ interpretiert Koordinaten als Meter, `1.0e-3` rechnet Millimeter in Meter um.
   Standardgrenze der Qualitätsprüfung stehen in der
   [Tet4-Formulierung](Doc/03_TET4_FORMULATION.md).
 
+M7 ergänzt eine [Forschungs-API für Tet4-Wärmeindikatoren](Doc/43_HEAT_INDICATOR.md)
+mit lokalen Residualbeiträgen und deterministischer Markierung. Der Indikator
+ist keine garantierte Fehlerschranke und führt kein automatisches Remeshing aus.
+
 ## Wissenschaftlicher Anspruch
 
 Jedes physikalische Einzelfeld soll vor seiner Kopplung separat verifiziert
