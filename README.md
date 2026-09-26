@@ -157,7 +157,8 @@ interpretiert Koordinaten als Meter, `1.0e-3` rechnet Millimeter in Meter um.
   [lokale Feldoperatoren und Randintegrale](Doc/42_TET10_OPERATORS.md);
   [Vertrag und Grenzen](Doc/40_TET10_TOPOLOGY.md). Stationäre und transiente
   [Tet10-Wärmemodelle samt Export](Doc/45_TET10_HEAT_INTEGRATION.md) sind
-  unterstützt. Andere Tet10-Physiken im Model und gemischte Elementordnungen
+  unterstützt, ebenso [Tet10-Elektrostatik](Doc/46_TET10_ELECTROSTATICS.md).
+  Mechanik, Piezo und Kopplungen mit Tet10 sowie gemischte Elementordnungen
   bleiben ausgeschlossen. Andere Zelltypen führen zu
   einem `UnsupportedCellTypeError`.
 - Mehrfache physische Gmsh-Gruppen bleiben als benannte Auswahlsätze erhalten.

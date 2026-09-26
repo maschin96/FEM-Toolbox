@@ -222,7 +222,6 @@ def test_quadratic_curvature_probe_and_export_rejections(cube_mesh, tmp_path):
         export_result_bundle(tmp_path / "bad", mesh, replace(result, field_points=None))
     for physics in (
         "elasticity",
-        "electrostatics",
         "piezoelectric",
         "thermopiezoelectric",
         "piezo_modes",

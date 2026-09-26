@@ -182,3 +182,22 @@ def test_tet10_heat_stationary_and_transient(cube_mesh, physics_backend):
     )
     assert_allclose(history.frames[-1].temperature, 301, rtol=0, atol=1e-9)
     assert max(abs(b.balance) for b in history.balances) < 1e-9
+
+
+def test_tet10_electrostatics_patch_and_energy(cube_mesh, physics_backend):
+    from tests.reference.quadratic_mesh import elevate
+
+    mesh = elevate(cube_mesh(2))
+    material = DielectricMaterial.isotropic(2e-11)
+    boundary = np.unique(mesh.facets)
+    exact = mesh.points[:, 0] ** 2
+    args = [mesh, material, [Dirichlet(boundary, exact[boundary])]]
+    reference = solve_electrostatics(*args, volume_charge=-4e-11)
+    result = solve_electrostatics(*args, volume_charge=-4e-11, backend=physics_backend)
+    assert_allclose(result.potential, exact, rtol=0, atol=1e-10)
+    assert_allclose(result.electric_field, reference.electric_field, rtol=0, atol=1e-9)
+    assert_allclose(
+        result.element_energy, reference.element_energy, rtol=1e-9, atol=1e-24
+    )
+    assert abs(result.energy - 4e-11 / 3) < 1e-21
+    assert abs(result.charge_balance) < 1e-21

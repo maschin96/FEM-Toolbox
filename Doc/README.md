@@ -76,6 +76,8 @@ Eintrag im Entscheidungsprotokoll.
 
 - [Tet10-Wärme: Model, Backend und Schwerpunkt-Export (#35d, thermischer Teil)](45_TET10_HEAT_INTEGRATION.md)
 
+- [Tet10-Elektrostatik: Ladungen, Energie und Schwerpunkt-Export (#35d)](46_TET10_ELECTROSTATICS.md)
+
 ## Veröffentlichungen
 
 - [v1.1.0 — Transiente Wärme und Piezo-Dynamik](releases/v1.1.0.md)

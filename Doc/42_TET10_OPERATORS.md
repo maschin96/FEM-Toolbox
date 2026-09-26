@@ -8,7 +8,8 @@ Der additive API-Einstieg lautet `fem_toolbox.elements.quadratic` bzw.
 Der thermische Teil von #35d ergänzt den produktiven Model-/Solverablauf und
 explizite Schwerpunktfelder für stationäre und transiente Wärme, siehe
 [Dokument 45](45_TET10_HEAT_INTEGRATION.md). Die Integration der übrigen
-Tet10-Physiken bleibt offen.
+Tet10-Physiken bleibt offen, mit Ausnahme der inzwischen ergänzten
+[stationären Elektrostatik](46_TET10_ELECTROSTATICS.md).
 
 ## Lokaler Vertrag
 

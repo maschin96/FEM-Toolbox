@@ -479,3 +479,17 @@ Interpolation alle zehn Formfunktionen. HRZ bleibt explizit und erhält die
 Gesamtkapazität, ohne konsistente Quellmomente zu verändern. Keine neue
 Abhängigkeit und keine geänderten Feldvorzeichen.
 [Vertrag, Verifikation und verbleibende Schritte](45_TET10_HEAT_INTEGRATION.md).
+
+## ADR-032: Tet10-Elektrostatik trennt Feldproben und Energieintegrale (#35d)
+
+Datum: 26.09.2026. Status: Umsetzung im M7-Issue-Branch.
+
+Die stationäre Elektrostatik verwendet denselben geradkantigen Elementdispatch
+und die bestehende Backend-Grenze. Die negative elektrische Gleichung und
+Leiterladungsvorzeichen bleiben unverändert. E/D werden an expliziten
+Schwerpunkten ausgewertet; gespeicherte Energie wird separat über die
+punktabhängigen Gradienten integriert. Schema 2 unterscheidet deshalb
+`raw`/`cell_centroid` von `cell_integral`/`cell_volume`; der Energiefeldname
+erhält keinen Schwerpunktsuffix. Tet4 behält Schema 1. Keine neuen Abhängigkeiten
+und keine Freigabe weiterer Tet10-Kopplungen.
+[Nachweise und Grenzen](46_TET10_ELECTROSTATICS.md).
