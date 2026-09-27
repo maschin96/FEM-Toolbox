@@ -78,3 +78,13 @@ Skalen von `10^7` bis `10^8` in SI-Einheiten; sie entsprechen relativen
 Abweichungen weit unter `1e-12`. Die Materialeingaben werden ausdrücklich
 von GPa und Mikro-Dehnung in Pa und `1/K` umgerechnet. Diese Nachweise sind
 Code- und Lösungsverifikation, keine experimentelle Validierung.
+
+## M7-Erweiterung: Tet10
+
+Der bestehende Python-Ablauf unterstützt zusätzlich geradkantige Tet10.
+Thermische Lasten und mechanische Energie verwenden dort die quadratisch
+interpolierte Temperatur an Integrationspunkten; die oben beschriebene
+Tet4-Mittelung wird nicht übernommen. `thermal_backend`/`mechanical_backend`
+sind separat wählbar. Der gemeinsame Schema-2-Export kennzeichnet
+Schwerpunktfelder und Zellenergieintegrale.
+[Vertrag, Beispiel und gekoppelte Vier-Netze-Prüfung](48_TET10_THERMOMECHANICS.md).

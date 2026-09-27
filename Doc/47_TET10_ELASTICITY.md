@@ -1,9 +1,11 @@
 # Statische Tet10-Elastizität durch Model, Solver und Export (#35d)
 
-Dieser Teil von #35d ergänzt statische lineare Elastizität nach Wärme und
+Historischer Umfang dieses Integrationsschnitts: statische lineare Elastizität nach Wärme und
 Elektrostatik. #35 bleibt für thermische Kopplungen, Piezo, Dynamik und
 verbleibende Kosten-/Vergleichsgates offen. Keine M7-Releasefreigabe oder
-experimentelle Validierungsbehauptung.
+experimentelle Validierungsbehauptung. Die nachfolgende
+[Tet10-Thermomechanik](48_TET10_THERMOMECHANICS.md) hebt die unten
+beschriebene damalige Sperre thermischer Eigendehnungen inzwischen auf.
 
 ## Unterstützter Vertrag
 

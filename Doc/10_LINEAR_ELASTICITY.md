@@ -145,5 +145,5 @@ CI-Python-Versionen; keine Konvergenztests werden ausgelassen.
 
 Der direkte Solver und Model-Schema 1 unterstützen zusätzlich geradkantige
 Tet10 mit Triangle6-Traktionen. Dehnung/Spannung sind explizite Schwerpunktwerte;
-Energie bleibt ein Zellintegral. Thermische Tet10-Eigendehnungen bleiben
-ausdrücklich abgelehnt. [Vertrag, Biegepatch und Konvergenz](47_TET10_ELASTICITY.md).
+Energie bleibt ein Zellintegral. Thermische Tet10-Eigendehnungen sind inzwischen
+[punktabhängig integriert](48_TET10_THERMOMECHANICS.md). [Vertrag, Biegepatch und Konvergenz](47_TET10_ELASTICITY.md).

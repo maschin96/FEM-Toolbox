@@ -58,3 +58,5 @@ schreibt rohe VTU-Felder sowie einen JSON-Bericht mit Provenienz und Bilanzen.
 - [Tet10-Elektrostatik](tet10_electrostatics/README.md): quadratisches Potential, integrierte Energie und Schema-2-Export.
 
 - [Statische Tet10-Elastizität](tet10_elasticity/README.md): quadratischer Verschiebungspatch, integrierte Energie und Schema-2-Export.
+
+- [Stationäre Tet10-Thermomechanik](tet10_thermomechanics/README.md): Wärme → Mechanik, quadratische Eigenverzerrung und gemeinsamer Export über die Python-API.

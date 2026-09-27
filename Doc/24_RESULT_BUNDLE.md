@@ -102,3 +102,7 @@ Statische Tet10-Elastizität verwendet Schema 2 mit
 `strain_1_at_centroid`/`stress_Pa_at_centroid` und den sechs Voigt-Komponenten.
 `mechanical_energy_J` ist ein `cell_integral` am `cell_volume`, ohne
 Schwerpunktsuffix. [Details](47_TET10_ELASTICITY.md).
+
+Gekoppelte Tet10-Thermomechanik exportiert Wärme und Mechanik gemeinsam in
+Schema 2. Beide Teilresultate müssen passende Schwerpunktkoordinaten liefern.
+[Vertrag und Nachweise](48_TET10_THERMOMECHANICS.md).

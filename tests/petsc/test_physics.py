@@ -226,3 +226,57 @@ def test_tet10_elasticity_patch_and_energy(cube_mesh, physics_backend):
     assert abs(result.energy - 0.008) < 1e-11
     assert_allclose(result.force_balance, 0, rtol=0, atol=1e-9)
     assert_allclose(result.moment_balance, 0, rtol=0, atol=1e-9)
+
+
+def test_tet10_thermomechanical_transfer_and_energy(cube_mesh, physics_backend):
+    from fem_toolbox.materials import ThermalExpansion
+    from fem_toolbox.solvers.heat import thermal_dofs
+    from fem_toolbox.solvers.thermomechanics import solve_thermomechanics
+    from tests.reference.quadratic_mesh import elevate
+
+    mesh = elevate(cube_mesh(2))
+    fixed = np.unique(mesh.facets)
+    args = (
+        mesh,
+        ThermalMaterial.isotropic(2),
+        ElasticMaterial.isotropic(100, 0.25),
+        ThermalExpansion([0.01, 0, 0, 0, 0, 0], 1),
+        [
+            Dirichlet(
+                thermal_dofs(mesh).indices("T", fixed), 1 + mesh.points[fixed, 0] ** 2
+            )
+        ],
+        [
+            Dirichlet(
+                mechanical_dofs(mesh).indices("u", fixed), np.zeros(3 * len(fixed))
+            )
+        ],
+    )
+    reference = solve_thermomechanics(*args, source=-4)
+    result = solve_thermomechanics(
+        *args,
+        source=-4,
+        thermal_backend=physics_backend,
+        mechanical_backend=physics_backend,
+    )
+    assert_allclose(
+        result.heat.temperature, 1 + mesh.points[:, 0] ** 2, rtol=0, atol=1e-10
+    )
+    assert_allclose(
+        result.elasticity.displacement,
+        reference.elasticity.displacement,
+        rtol=0,
+        atol=1e-11,
+    )
+    assert_allclose(
+        result.elasticity.stress, reference.elasticity.stress, rtol=0, atol=1e-8
+    )
+    assert_allclose(
+        result.elasticity.element_energy,
+        reference.elasticity.element_energy,
+        rtol=1e-9,
+        atol=1e-13,
+    )
+    assert abs(result.heat.power_balance) < 1e-9
+    assert_allclose(result.elasticity.force_balance, 0, rtol=0, atol=1e-9)
+    assert_allclose(result.elasticity.moment_balance, 0, rtol=0, atol=1e-9)

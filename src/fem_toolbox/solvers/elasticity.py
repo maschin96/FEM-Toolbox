@@ -28,6 +28,7 @@ from fem_toolbox.solvers.mechanical_elements import (
     quadratic_energy,
     stiffness_matrix,
     strain_matrix,
+    thermal_terms,
     traction_load,
 )
 
@@ -154,7 +155,9 @@ def solve_elasticity(
     numerically singular systems raise ValidationError. Optional temperature is
     nodal absolute K; expansion may be homogeneous or per input cell. The thermal
     eigenstrain for Tet4 is alpha times the cell-average temperature difference.
-    Tet10 thermal expansion is not yet supported and is explicitly rejected.
+    Tet10 interpolates temperature quadratically at quadrature points for thermal
+    loads and mechanical-strain energy. Reported eigenstrain/stress is sampled
+    at the centroid, not obtained from an arithmetic nodal average.
     Tet10 body/surface quadrature has degree five/four; Tet4 degree two.
     Diagonally equilibrated LU rejects relative pivots <= 1e-12; very poorly
     conditioned models require reformulation rather than a silent solution.
@@ -170,10 +173,6 @@ def solve_elasticity(
         not isinstance(m, ElasticMaterial) for m in materials
     ):
         raise ValidationError("one ElasticMaterial required per cell", field="material")
-    if mesh.n_tetra10 and (expansion is not None or temperature is not None):
-        raise ValidationError(
-            "Tet10 thermal expansion is not yet supported", field="temperature"
-        )
     if (expansion is None) != (temperature is None):
         raise ValidationError(
             "expansion and temperature must be supplied together", field="temperature"
@@ -217,18 +216,10 @@ def solve_elasticity(
         matrices.append(MatrixBlock(ids, ids, stiffness_matrix(geometry, mat)))
         loads.append(VectorBlock(ids, body_load(geometry, body_force)))
         if expansions is not None and temperatures is not None:
-            eigenstrains[i] = expansions[i].alpha * (
-                float(np.mean(temperatures[cell])) - expansions[i].reference_temperature
+            eigenstrains[i], thermal = thermal_terms(
+                geometry, mat, temperatures[cell], expansions[i]
             )
-            loads.append(
-                VectorBlock(
-                    ids,
-                    geometry.volume
-                    * strain_matrix(geometry).T
-                    @ mat.stiffness
-                    @ eigenstrains[i],
-                )
-            )
+            loads.append(VectorBlock(ids, thermal))
     if tractions:
         faces = Counter(
             tuple(sorted(int(n) for n in face))
@@ -306,16 +297,24 @@ def solve_elasticity(
     )
     energy = np.array(
         [
-            quadratic_energy(g, m, solution[dofs.indices("u", cell)])
+            quadratic_energy(
+                g,
+                m,
+                solution[dofs.indices("u", cell)],
+                temperature=temperatures[cell] if temperatures is not None else None,
+                expansion=expansions[i] if expansions is not None else None,
+            )
             if isinstance(g, Tet10Geometry)
             else 0.5 * g.volume * e @ s
-            for cell, g, m, e, s in zip(
-                mesh.cells,
-                geometries,
-                materials,
-                mechanical_strain,
-                stress,
-                strict=True,
+            for i, (cell, g, m, e, s) in enumerate(
+                zip(
+                    mesh.cells,
+                    geometries,
+                    materials,
+                    mechanical_strain,
+                    stress,
+                    strict=True,
+                )
             )
         ]
     )
@@ -326,7 +325,11 @@ def solve_elasticity(
                 "points": mesh.points.tolist(),
                 mesh.cell_type: mesh.cells.tolist(),
                 "materials": [m.stiffness.tolist() for m in materials],
-                "thermal_eigenstrain": eigenstrains.tolist(),
+                (
+                    "thermal_eigenstrain_at_centroid"
+                    if mesh.n_tetra10
+                    else "thermal_eigenstrain"
+                ): eigenstrains.tolist(),
                 "temperature": temperatures.tolist()
                 if temperatures is not None
                 else None,
