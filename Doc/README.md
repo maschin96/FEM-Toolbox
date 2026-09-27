@@ -78,6 +78,8 @@ Eintrag im Entscheidungsprotokoll.
 
 - [Tet10-Elektrostatik: Ladungen, Energie und Schwerpunkt-Export (#35d)](46_TET10_ELECTROSTATICS.md)
 
+- [Statische Tet10-Elastizität: Biegung, Energie und Schwerpunkt-Export (#35d)](47_TET10_ELASTICITY.md)
+
 ## Veröffentlichungen
 
 - [v1.1.0 — Transiente Wärme und Piezo-Dynamik](releases/v1.1.0.md)

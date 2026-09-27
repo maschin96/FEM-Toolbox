@@ -97,3 +97,8 @@ Versionen. [Vertrag und Nachweise](45_TET10_HEAT_INTEGRATION.md).
 Tet10-Elektrostatik erweitert Schema 2 um rohe E-/D-Schwerpunktfelder und
 `electric_energy_J` als `cell_integral` am `cell_volume`. Energie erhält keinen
 Schwerpunktsuffix. [Details](46_TET10_ELECTROSTATICS.md).
+
+Statische Tet10-Elastizität verwendet Schema 2 mit
+`strain_1_at_centroid`/`stress_Pa_at_centroid` und den sechs Voigt-Komponenten.
+`mechanical_energy_J` ist ein `cell_integral` am `cell_volume`, ohne
+Schwerpunktsuffix. [Details](47_TET10_ELASTICITY.md).

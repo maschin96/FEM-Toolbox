@@ -56,3 +56,5 @@ schreibt rohe VTU-Felder sowie einen JSON-Bericht mit Provenienz und Bilanzen.
 - [Stationäre und transiente Tet10-Wärme](tet10_heat/README.md): Gmsh/TOML, analytische Patches und Schema-2-Export.
 
 - [Tet10-Elektrostatik](tet10_electrostatics/README.md): quadratisches Potential, integrierte Energie und Schema-2-Export.
+
+- [Statische Tet10-Elastizität](tet10_elasticity/README.md): quadratischer Verschiebungspatch, integrierte Energie und Schema-2-Export.

@@ -299,7 +299,9 @@ Zellfamilie. Netz-I/O, Randtopologie und Materialregionen verwenden diese Zugrif
 die Tet4-Operatoren bleiben unverändert. Der thermische Teil von #35d integriert
 Tet10 in stationäre und transiente Wärmesolver, Model, Preflight und Export.
 Der [elektrische Teil](46_TET10_ELECTROSTATICS.md) ergänzt stationäre Elektrostatik
-mit Schwerpunktfeldern und separat integrierter Energie. Mechanik, Piezo und
-Kopplungen bleiben im Tet10-Model abgelehnt. Der punktabhängige Ergebnisvertrag
+mit Schwerpunktfeldern und separat integrierter Energie.
+[Statische Elastizität](47_TET10_ELASTICITY.md) ergänzt diesen Vertrag für
+Spannungen, Dehnungen und Verzerrungsenergie. Piezo und thermische Kopplungen
+bleiben bei Tet10 abgelehnt. Der punktabhängige Ergebnisvertrag
 ist in [Dokument 45](45_TET10_HEAT_INTEGRATION.md) beschrieben. Knotenordnung, Kompatibilität und
 Geometriegrenzen sind in [Dokument 40](40_TET10_TOPOLOGY.md) festgelegt.

@@ -141,8 +141,9 @@ kein lokal bereits behaupteter Installationsnachweis.
 ## Restumfang
 
 Die thermische Integration ist ein eigenständig prüfbarer PR-Schnitt innerhalb
-von #35d. Noch offen sind die produktive Tet10-Anbindung von Mechanik,
+von #35d. Noch offen sind die produktive Tet10-Anbindung von
 Piezo-/Thermokopplungen und Piezo-Dynamik (Elektrostatik ist inzwischen in
 [Dokument 46](46_TET10_ELECTROSTATICS.md) integriert) sowie deren
 ortsabhängige Ergebnisverträge. Biegungs-/Fehlerbudgetvergleiche und #37c
 bleiben weitere Gates; #35 wird durch diesen Teilbeitrag nicht geschlossen.
+Statische Mechanik ist inzwischen in [Dokument 47](47_TET10_ELASTICITY.md) integriert.
