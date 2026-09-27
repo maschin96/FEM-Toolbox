@@ -80,6 +80,8 @@ Eintrag im Entscheidungsprotokoll.
 
 - [Statische Tet10-Elastizität: Biegung, Energie und Schwerpunkt-Export (#35d)](47_TET10_ELASTICITY.md)
 
+- [Stationäre Tet10-Thermomechanik: Eigenverzerrungen und gekoppelter Export (#35d)](48_TET10_THERMOMECHANICS.md)
+
 ## Veröffentlichungen
 
 - [v1.1.0 — Transiente Wärme und Piezo-Dynamik](releases/v1.1.0.md)

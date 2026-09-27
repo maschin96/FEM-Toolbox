@@ -1,4 +1,4 @@
-"""Sequential stationary heat to elasticity coupling on one Tet4 mesh."""
+"""Sequential stationary heat to elasticity coupling on one Tet4 or straight Tet10 mesh."""
 
 from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass
@@ -13,6 +13,7 @@ from fem_toolbox.physics.elasticity import VectorField
 from fem_toolbox.physics.heat import Convection, ScalarField
 from fem_toolbox.solvers.elasticity import ElasticResult, solve_elasticity
 from fem_toolbox.solvers.heat import HeatResult, solve_heat
+from fem_toolbox.solvers.linear_backend import LinearBackend
 
 
 @dataclass(frozen=True)
@@ -29,6 +30,8 @@ def solve_thermomechanics(
     thermal_conditions: Iterable[Dirichlet],
     mechanical_conditions: Iterable[Dirichlet],
     *,
+    thermal_backend: LinearBackend | None = None,
+    mechanical_backend: LinearBackend | None = None,
     source: ScalarField = 0.0,
     outward_fluxes: Mapping[int, ScalarField] | None = None,
     convection: Mapping[int, Convection] | None = None,
@@ -36,11 +39,18 @@ def solve_thermomechanics(
     tractions: Mapping[int, VectorField] | None = None,
     point_loads: Mapping[int, ArrayLike] | None = None,
 ) -> ThermomechanicalResult:
-    """Solve heat then mechanics, transferring absolute nodal K on the same mesh."""
+    """Solve heat then mechanics, transferring absolute nodal K on the same mesh.
+
+    Optional thermal_backend/mechanical_backend select independent linear
+    backends; None uses SciPy. Coupling is one-way, stationary, without thermal
+    feedback from deformation. Tet10 interpolates all ten nodal temperatures
+    in the eigenstrain integral; mechanical energy is integrated independently.
+    """
     heat = solve_heat(
         mesh,
         thermal_material,
         thermal_conditions,
+        backend=thermal_backend,
         source=source,
         outward_fluxes=outward_fluxes,
         convection=convection,
@@ -51,6 +61,7 @@ def solve_thermomechanics(
         mesh,
         elastic_material,
         mechanical_conditions,
+        backend=mechanical_backend,
         expansion=expansion,
         temperature=temperature,
         body_force=body_force,

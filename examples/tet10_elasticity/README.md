@@ -23,5 +23,6 @@ integrierte** Energie. Schema 2 kennzeichnet Feldorte und Integrale getrennt.
 Die Voigt-Reihenfolge ist xx, yy, zz, yz, xz, xy mit technischen Schubdehnungen.
 
 Der Nachweis ist Code-Verifikation, keine Materialvalidierung. Thermische
-Tet10-Eigendehnungen und gekoppelte Tet10-Analysen bleiben weitere Arbeit.
+Tet10-Eigendehnungen und der Ablauf T → u sind inzwischen im
+[Thermomechanikbeispiel](../tet10_thermomechanics/README.md) ergänzt.
 [Vertrag und zusätzliche Biege-/Konvergenznachweise](../../Doc/47_TET10_ELASTICITY.md).

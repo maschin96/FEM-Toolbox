@@ -11,7 +11,7 @@ from numpy.testing import assert_allclose
 from fem_toolbox.boundary import Dirichlet
 from fem_toolbox.errors import ValidationError
 from fem_toolbox.io import export_result_bundle
-from fem_toolbox.materials import ElasticMaterial, ThermalExpansion
+from fem_toolbox.materials import ElasticMaterial
 from fem_toolbox.model import Model
 from fem_toolbox.solvers.elasticity import mechanical_dofs, solve_elasticity
 from tests.reference.quadratic_mesh import elevate
@@ -101,7 +101,7 @@ def test_pure_bending_quadratic_exactness_and_balance(cube_mesh):
     assert_allclose(moment, [0, 0, young * curvature / 12], rtol=0, atol=2e-14)
 
 
-def test_tet10_rigid_modes_and_explicit_thermal_boundary(cube_mesh):
+def test_tet10_rigid_modes_and_incomplete_thermal_input(cube_mesh):
     mesh = elevate(cube_mesh(1))
     material = ElasticMaterial.isotropic(100, 0.25)
     with pytest.raises(ValidationError, match="rigid"):
@@ -110,13 +110,12 @@ def test_tet10_rigid_modes_and_explicit_thermal_boundary(cube_mesh):
     raw["boundary"].pop("dirichlet")
     with pytest.raises(ValidationError, match="rigid"):
         Model(mesh=mesh, document=raw)
-    with pytest.raises(ValidationError, match="Tet10 thermal expansion"):
+    with pytest.raises(ValidationError, match="must be supplied together"):
         solve_elasticity(
             mesh,
             material,
             [],
             temperature=np.full(mesh.n_points, 300),
-            expansion=ThermalExpansion([1e-5, 1e-5, 1e-5, 0, 0, 0], 293),
         )
 
 

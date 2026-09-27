@@ -12,7 +12,7 @@ from fem_toolbox.elements import (
     quadratic,
 )
 from fem_toolbox.elements import elasticity as linear
-from fem_toolbox.materials import ElasticMaterial
+from fem_toolbox.materials import ElasticMaterial, ThermalExpansion
 from fem_toolbox.physics import elasticity as loads
 from fem_toolbox.physics import quadratic as quadratic_loads
 
@@ -45,7 +45,12 @@ def traction_load(points: FloatArray, traction: loads.VectorField) -> FloatArray
 
 
 def quadratic_energy(
-    g: Tet10Geometry, material: ElasticMaterial, displacement: FloatArray
+    g: Tet10Geometry,
+    material: ElasticMaterial,
+    displacement: FloatArray,
+    *,
+    temperature: FloatArray | None = None,
+    expansion: ThermalExpansion | None = None,
 ) -> float:
     # Subtract translation without changing the displacement gradient.
     values = (displacement.reshape(-1, 3) - displacement[:3]).ravel()
@@ -53,5 +58,29 @@ def quadratic_energy(
     total = 0.0
     for point, weight in zip(rule.points, rule.weights, strict=True):
         strain = quadratic.strain_matrix(g, point) @ values
+        if temperature is not None and expansion is not None:
+            strain -= expansion.alpha * (
+                g.shape_values(point) @ (temperature - expansion.reference_temperature)
+            )
         total += 0.5 * weight * float(strain @ material.stiffness @ strain)
     return total
+
+
+def thermal_terms(
+    g: MechanicalGeometry,
+    material: ElasticMaterial,
+    temperature: FloatArray,
+    expansion: ThermalExpansion,
+) -> tuple[FloatArray, FloatArray]:
+    """Return reported eigenstrain and consistent load; Tet10 report is a sample."""
+    if isinstance(g, Tet10Geometry):
+        eigenstrain = expansion.alpha * (
+            g.shape_values(g.coordinates[:4].mean(axis=0))
+            @ (temperature - expansion.reference_temperature)
+        )
+        return eigenstrain, quadratic.thermal_load(g, material, temperature, expansion)
+    eigenstrain = expansion.alpha * (
+        float(np.mean(temperature)) - expansion.reference_temperature
+    )
+    load = g.volume * linear.strain_matrix(g).T @ material.stiffness @ eigenstrain
+    return eigenstrain, load

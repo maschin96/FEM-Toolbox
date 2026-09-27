@@ -507,3 +507,16 @@ Thermische Tet10-Eigendehnungen werden bis zur eigenen Kopplungsintegration
 ausdrücklich abgelehnt; die Tet4-Zellmittelung wird nicht auf P2 übertragen.
 Keine neuen Abhängigkeiten oder geänderten Vorzeichen.
 [Verifikation und Grenzen](47_TET10_ELASTICITY.md).
+
+## ADR-034: Quadratische Temperaturfelder in Tet10-Thermomechanik integrieren (#35d)
+
+Datum: 27.09.2026. Status: Umsetzung im M7-Issue-Branch.
+
+Die stationäre einseitige Kopplung verwendet alle zehn Knotentemperaturen
+in `N(x)(T-Tref)`. Die vorhandene Grad-5-Quadratur integriert thermische Lasten
+und mechanische Energie; Schwerpunkt-Eigendehnung und -Spannung bleiben
+ausdrücklich Feldproben. Tet4-Mittelung und Schema 1 bleiben unverändert.
+Der bestehende Python-Ablauf erhält getrennte optionale Backend-Hooks;
+der gemeinsame Schema-2-Export prüft die Auswerteorte beider Teilresultate.
+Kein neuer Model-Modus, keine thermische Rückwirkung oder geänderten Vorzeichen.
+[Nachweise und Grenzen](48_TET10_THERMOMECHANICS.md).

@@ -233,17 +233,20 @@ def export_result_bundle(
     quadratic = bool(mesh.n_tetra10)
     evaluation_points = None
     if quadratic:
-        if physics not in ("heat", "electrostatics", "elasticity"):
+        if physics not in ("heat", "electrostatics", "elasticity", "thermomechanics"):
             raise ValidationError(
-                "only Tet10 heat/electrostatics/elasticity export is supported",
+                "only Tet10 heat/electrostatics/elasticity/thermomechanics export is supported",
                 field="result",
             )
-        evaluation_points = getattr(parts[physics], "field_points", None)
         expected = mesh.points[mesh.cells[:, :4]].mean(axis=1)
-        if evaluation_points is None or not np.array_equal(evaluation_points, expected):
-            raise ValidationError(
-                "Tet10 centroid evaluation points differ from mesh", field="result"
-            )
+        for kind, part in parts.items():
+            points = getattr(part, "field_points", None)
+            if points is None or not np.array_equal(points, expected):
+                raise ValidationError(
+                    f"Tet10 {kind} centroid evaluation points differ from mesh",
+                    field="result",
+                )
+        evaluation_points = expected
     point_data: dict[str, NDArray[np.float64]] = {}
     cell_data: dict[str, dict[str, NDArray[np.float64]]] = {}
     point_meta: dict[str, Any] = {}

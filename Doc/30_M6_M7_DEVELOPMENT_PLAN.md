@@ -284,3 +284,13 @@ Verzerrungsenergie wird integriert. Biegepatch, anisotroper Patch, Materialgrenz
 Kraft-/Momentenbilanzen und vier Netze sind nachgewiesen. Thermische Tet10-
 Eigendehnungen, Piezo, Dynamik und Kostenvergleiche bleiben offen.
 [Details](47_TET10_ELASTICITY.md).
+
+## Fortschritt #35d: thermomechanischer Integrationsschnitt
+
+Räumlich veränderliche thermische Tet10-Eigendehnungen und der bestehende
+Python-Ablauf Wärme → Mechanik sind integriert. Lasten und mechanische Energie
+werden punktabhängig ausgewertet, beide Backends sind separat wählbar und der
+gemeinsame Schema-2-Export prüft beide Auswerteort-Arrays. Direkte Patches und
+gekoppelte Vier-Netze-Konvergenz sind nachgewiesen. Kein neuer TOML-Modus;
+Piezo-/Thermopiezo, Dynamik und Kostenvergleiche bleiben offen.
+[Details](48_TET10_THERMOMECHANICS.md).
