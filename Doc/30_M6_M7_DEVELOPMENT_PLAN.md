@@ -1,5 +1,7 @@
 # Entwicklungsstand und nächste Meilensteine M6/M7
 
+Aktueller Performance-Gesamtabgleich: [Abnahme #37](56_PERFORMANCE_ACCEPTANCE.md).
+
 Aktueller Tet10-Gesamtabgleich: [Abnahme #35](55_TET10_ACCEPTANCE.md).
 Die chronologischen Einträge weiter unten behalten ihren damaligen Status;
 alle Tet10-Analyseschnitte und der Vergleich #37c sind inzwischen integriert.

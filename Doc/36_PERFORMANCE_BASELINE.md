@@ -2,9 +2,9 @@
 
 Stand: 25.09.2026. Teilbeitrag **37a** zu [Issue #37](https://github.com/maschin96/FEM-Toolbox/issues/37).
 Status: lokal gemessen und gegen analytische Referenzen geprüft.
-#37b ist inzwischen als [gemessene bedarfsgerechte Flächenauswertung](44_GEOMETRY_PERFORMANCE.md)
-im Issue-Branch umgesetzt. #37c (Tet10-/PETSc-Vergleich) und der Abschluss von
-#37 bleiben offen. Die folgenden Zahlen bleiben die unveränderte historische Baseline.
+#37b und #37c sind inzwischen integriert. Der
+[Gesamtabgleich](56_PERFORMANCE_ACCEPTANCE.md) bündelt Kriterien und Grenzen.
+Die folgenden Zahlen und damaligen Ausblicke bleiben die historische Baseline.
 
 ## Reproduktion und Messumgebung
 

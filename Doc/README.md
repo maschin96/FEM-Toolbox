@@ -96,6 +96,8 @@ Eintrag im Entscheidungsprotokoll.
 
 - [Tet10-Gesamtabnahme: Kriterien, Analyseumfang und Grenzen (#35)](55_TET10_ACCEPTANCE.md)
 
+- [Performance-Gesamtabnahme: Rohdatenabgleich und Grenzen (#37)](56_PERFORMANCE_ACCEPTANCE.md)
+
 ## Veröffentlichungen
 
 - [v1.1.0 — Transiente Wärme und Piezo-Dynamik](releases/v1.1.0.md)
