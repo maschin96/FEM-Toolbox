@@ -549,3 +549,12 @@ einen explizit symmetrisierten Tet10-Dielektrikblock gegen Quadratur-Rundungsres
 Residuen bleiben am ursprünglichen System definiert. Die Grenze von 2048 DOFs
 bleibt bestehen. Modenexport nutzt Schema 2 mit Schwerpunktkennzeichnung und
 P2-Messpunkten. [Analytische Nachweise und Grenzen](51_TET10_MODES.md).
+
+## ADR-038 — Tet10-Newmark (28.09.2026)
+
+Die bestehende ungedämpfte Newmark-Integration wird für geradkantige Tet10
+freigegeben. Der gemeinsame Dynamikaufbau hält den bereits für Moden
+symmetrisierten dielektrischen Block vor; Newmark verwendet ihn für die
+elektrische Lastrekonstruktion wieder. Physikalische Matrizen, Residuen,
+Energie-, Ereignis- und Speicherverträge bleiben unverändert. Die konsistente
+P2-Masse wird nicht gelumpt. [Nachweise und Grenzen](52_TET10_NEWMARK.md).

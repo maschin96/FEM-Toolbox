@@ -179,7 +179,6 @@ def test_two_modes_mass_orthogonality_and_orientation():
 def test_modal_validation_and_dynamic_scope(cube_mesh):
     from fem_toolbox.mesh import Mesh
     from fem_toolbox.solvers.piezo_harmonic import solve_harmonic_piezoelectric
-    from fem_toolbox.solvers.piezo_transient import solve_transient_piezoelectric
 
     mesh, mat, bc = quadratic_oscillator()
     for density in (0, -1, np.nan, [1, 2]):
@@ -207,8 +206,6 @@ def test_modal_validation_and_dynamic_scope(cube_mesh):
         )
     with pytest.raises(ValidationError, match="not yet supported"):
         solve_harmonic_piezoelectric(mesh, mat, 6, bc, 0)
-    with pytest.raises(ValidationError, match="not yet supported"):
-        solve_transient_piezoelectric(mesh, mat, 6, bc, [0, 1])
 
 
 def test_gmsh_toml_example(tmp_path):

@@ -71,4 +71,10 @@ schreibt rohe VTU-Felder sowie einen JSON-Bericht mit Provenienz und Bilanzen.
 
 Konsistente Masse, offene/kurzgeschlossene Elektroden, Model und Modenexport
 sind integriert. [Umfang und Verifikation](../Doc/51_TET10_MODES.md).
-Tet10-Newmark, Harmonik und Gesamt-Abnahme-/Kostenvergleiche bleiben offen.
+Tet10-Harmonik und Gesamt-Abnahme-/Kostenvergleiche bleiben offen.
+
+## Tet10-Newmark (#35d)
+
+Zeitintegration mit konsistenter Masse, bewegten Rändern, Last-/Spannungsereignissen,
+Model und Zeitserienexport ist integriert. [Nachweise und Grenzen](../Doc/52_TET10_NEWMARK.md).
+Tet10-Harmonik und Gesamt-Abnahme-/Kostenvergleiche bleiben offen.

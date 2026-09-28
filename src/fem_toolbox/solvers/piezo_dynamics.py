@@ -93,6 +93,7 @@ class _DynamicSystem:
     free_u: NDArray[np.int64]
     free_phi: NDArray[np.int64]
     electric_map: NDArray[np.float64]
+    dielectric: NDArray[np.float64]
     stiffness: NDArray[np.float64]
     free_mass: NDArray[np.float64]
     electrodes: list[tuple[str, NDArray[np.int64], float | None, float | None]]
@@ -183,8 +184,8 @@ def _build_dynamic_system(
     mass = np.asarray(assemble(nu, masses).matrix.toarray(), dtype=np.float64)
     reduced = np.asarray(reduction.system.matrix.toarray(), dtype=np.float64)
     coupling = reduced[np.ix_(free_phi, free_u)]
+    dielectric = -reduced[np.ix_(free_phi, free_phi)]
     if len(free_phi):
-        dielectric = -reduced[np.ix_(free_phi, free_phi)]
         if mesh.n_tetra10:
             # Exact bilinear form is symmetric. Quadrature cancellation near
             # zero can leave unequal roundoff in transposed entries. Physical
@@ -229,6 +230,7 @@ def _build_dynamic_system(
         free_u,
         free_phi,
         electric_map,
+        dielectric,
         stiffness,
         mass[np.ix_(free_u, free_u)],
         reduction.data,

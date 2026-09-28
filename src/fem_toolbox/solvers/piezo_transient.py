@@ -99,6 +99,7 @@ def solve_transient_piezoelectric(
     ``backend`` is an experimental linear-backend hook; None selects SciPy.
     Reduction, physical residuals and result units remain this solver's contract.
 
+    Straight Tet4/Tet10 cells use consistent mechanical mass, no electric mass.
     Topology uses homogeneous Dirichlet/electrode declarations as in modes.
     loads(t) returns integrated signed [force (N), electric RHS (C)] of shape
     (4*nactive,); for total floating conductor charge Q put -Q on one of its
@@ -118,10 +119,6 @@ def solve_transient_piezoelectric(
     At most 2048 active DOFs and 2,000,000 stored scalar state entries; arrays
     are retained in memory. Invalid data and failed residuals raise ValidationError.
     """
-    if mesh.n_tetra10:
-        raise ValidationError(
-            "Tet10 transient/harmonic piezo is not yet supported", field="mesh"
-        )
     system = _build_dynamic_system(
         mesh, material, density, conditions, electrodes, backend
     )
@@ -143,7 +140,7 @@ def solve_transient_piezoelectric(
     fixed_original = np.flatnonzero(np.isin(system.index, system.fixed))
     fixed_mask = np.zeros(size, dtype=bool)
     fixed_mask[fixed_original] = True
-    dielectric = -system.reduced[np.ix_(fp, fp)]
+    dielectric = system.dielectric
     if len(fp):
         electric_inverse = solve_linear(
             dielectric,

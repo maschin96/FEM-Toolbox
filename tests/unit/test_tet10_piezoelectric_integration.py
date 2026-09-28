@@ -186,10 +186,7 @@ def test_dynamic_paths_still_rejected(cube_mesh):
     from fem_toolbox.model import Model
 
     mesh = elevate(cube_mesh(1))
-    for physics in (
-        "transient_piezoelectric",
-        "harmonic_piezoelectric",
-    ):
+    for physics in ("harmonic_piezoelectric",):
         raw = document()
         raw["physics"] = physics
         with pytest.raises(ValidationError, match="Tet10"):

@@ -308,7 +308,7 @@ punktabhängige Eigendehnungen und Energie und überträgt T → u über die Pyt
 den monolithischen Solver, Elektroden, Model und Export.
 [Stationäre Tet10-Thermopiezoelektrizität](50_TET10_THERMOPIEZOELECTRIC.md)
 ergänzt punktabhängige Eigenverzerrungen und den Ablauf T → (u, φ).
-Tet10-Modalanalyse ist ergänzt; Newmark und Harmonik bleiben abgelehnt.
+Tet10-Modalanalyse und Newmark sind ergänzt; Harmonik bleibt abgelehnt.
 Der punktabhängige Ergebnisvertrag
 ist in [Dokument 45](45_TET10_HEAT_INTEGRATION.md) beschrieben. Knotenordnung, Kompatibilität und
 Geometriegrenzen sind in [Dokument 40](40_TET10_TOPOLOGY.md) festgelegt.
@@ -317,4 +317,10 @@ Geometriegrenzen sind in [Dokument 40](40_TET10_TOPOLOGY.md) festgelegt.
 
 Konsistente Masse, offene/kurzgeschlossene Elektroden, Model und Modenexport
 sind integriert. [Umfang und Verifikation](51_TET10_MODES.md).
-Tet10-Newmark, Harmonik und Gesamt-Abnahme-/Kostenvergleiche bleiben offen.
+Tet10-Harmonik und Gesamt-Abnahme-/Kostenvergleiche bleiben offen.
+
+## Tet10-Newmark (#35d)
+
+Zeitintegration mit konsistenter Masse, bewegten Rändern, Last-/Spannungsereignissen,
+Model und Zeitserienexport ist integriert. [Nachweise und Grenzen](52_TET10_NEWMARK.md).
+Tet10-Harmonik und Gesamt-Abnahme-/Kostenvergleiche bleiben offen.

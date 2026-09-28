@@ -88,6 +88,8 @@ Eintrag im Entscheidungsprotokoll.
 
 - [Tet10-Modalanalyse: Masse, Elektroden und Modenexport (#35d)](51_TET10_MODES.md)
 
+- [Tet10-Newmark: Zeitintegration, Elektroden und Zeitserien (#35d)](52_TET10_NEWMARK.md)
+
 ## Veröffentlichungen
 
 - [v1.1.0 — Transiente Wärme und Piezo-Dynamik](releases/v1.1.0.md)

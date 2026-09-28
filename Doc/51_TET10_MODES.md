@@ -8,7 +8,7 @@ werden verwendet. Dichte kann global oder zellweise angegeben werden.
 
 Der Referenzsolver bleibt auf 2048 aktive Freiheitsgrade vor Reduktion begrenzt.
 Kein Mass-Lumping, kein Großmodell-Eigensolver, keine gekrümmten Elemente.
-Tet10-Newmark und -Harmonik bleiben ausdrücklich gesperrt. #35 ist damit noch
+Tet10-Harmonik bleibt ausdrücklich gesperrt; Newmark siehe Doc 52. #35 ist damit noch
 nicht abgeschlossen; auch die übergreifenden Kosten-/Abnahmevergleiche fehlen.
 
 ## Numerik und Export
@@ -69,3 +69,9 @@ PYTHONPATH=src python examples/tet10_modes/run.py
 Das Gmsh/TOML-Beispiel prüft denselben analytischen Eckoszillator und exportiert
 VTU/PVD, Manifest und Messpunkt-CSV. Die Artefakt-CI führt es aus installiertem
 Wheel und sdist aus.
+
+## Tet10-Newmark (#35d)
+
+Zeitintegration mit konsistenter Masse, bewegten Rändern, Last-/Spannungsereignissen,
+Model und Zeitserienexport ist integriert. [Nachweise und Grenzen](52_TET10_NEWMARK.md).
+Tet10-Harmonik und Gesamt-Abnahme-/Kostenvergleiche bleiben offen.

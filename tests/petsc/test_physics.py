@@ -382,3 +382,61 @@ def test_tet10_modal_electrodes(cube_mesh, physics_backend, short):
     )
     assert max(result.relative_residual_u) < 1e-8
     assert max(result.relative_residual_phi) < 1e-8
+
+
+@pytest.mark.parametrize("short", [False, True])
+def test_tet10_newmark_electrodes(cube_mesh, physics_backend, short):
+    from tests.convergence.test_tet10_modal import bar
+
+    mesh, material, bc, electrodes = bar(cube_mesh, 2, short)
+    modes = solve_piezoelectric_modes(
+        mesh, material, 7500, bc, electrodes=electrodes, count=1
+    )
+    args = (
+        mesh,
+        material,
+        7500,
+        bc,
+        np.arange(6) * 0.04 / modes.angular_frequencies[0],
+    )
+    kwargs = dict(
+        electrodes=electrodes, initial_displacement=modes.displacement[0] * 1e-6
+    )
+    reference = solve_transient_piezoelectric(*args, **kwargs)
+    result = solve_transient_piezoelectric(*args, **kwargs, backend=physics_backend)
+    assert_allclose(result.displacement, reference.displacement, rtol=2e-8, atol=1e-14)
+    assert_allclose(result.potential, reference.potential, rtol=2e-8, atol=1e-9)
+    assert_allclose(result.total_energy, reference.total_energy, rtol=2e-8, atol=0)
+    assert max(result.relative_residual_u) < 1e-9
+    assert max(result.relative_residual_phi) < 1e-9
+
+
+def test_tet10_newmark_charged_equilibrium(cube_mesh, physics_backend):
+    from tests.unit.test_tet10_newmark import charged_bar
+
+    mesh, mat, bc, electrodes, force, initial = charged_bar(cube_mesh)
+    result = solve_transient_piezoelectric(
+        mesh,
+        mat,
+        7500,
+        bc,
+        [0, 1e-6, 3e-6],
+        electrodes=electrodes,
+        loads=lambda t: force,
+        initial_displacement=initial,
+        backend=physics_backend,
+    )
+    assert_allclose(
+        result.displacement,
+        np.broadcast_to(initial, result.displacement.shape),
+        rtol=0,
+        atol=2e-14,
+    )
+    assert_allclose(
+        result.potential,
+        np.broadcast_to(mesh.points[:, 2], result.potential.shape),
+        rtol=0,
+        atol=2e-9,
+    )
+    assert max(result.relative_residual_u) < 1e-9
+    assert max(result.relative_residual_phi) < 1e-9
