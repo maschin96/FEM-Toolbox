@@ -530,3 +530,13 @@ integrierten Enthalpiebeiträgen; das additive `field_points` hält Tet4-Aufrufe
 kompatibel. Schema 2 kennzeichnet die drei Energiebeiträge als Zellintegrale.
 Thermopiezo und Dynamik bleiben bis zu eigenen Integrationsnachweisen gesperrt.
 Begründung und analytische/Konvergenznachweise: [Doc 49](49_TET10_PIEZOELECTRIC.md).
+
+## ADR-036 — Stationäre Tet10-Thermopiezoelektrizität (28.09.2026)
+
+Der vorhandene Ablauf T → (u, φ) wird mit vollständigem Knotentemperaturtransfer
+auf geradkantige Tet10 erweitert. Eigenverzerrung und Enthalpie werden an
+Integrationspunkten ausgewertet; Feldberichte bleiben Schwerpunktwerte.
+Der elektrische Thermalschalter behält seine beiden bestehenden Konventionen.
+Tet4-Mittelung und -Provenienz bleiben erhalten; Tet10 hasht zusätzlich alle
+Temperaturen und Expansionsdaten. Getrennte optionale Backends und Schema-2-Export
+folgen dem Thermomechanikvertrag. [Details und Nachweise](50_TET10_THERMOPIEZOELECTRIC.md).

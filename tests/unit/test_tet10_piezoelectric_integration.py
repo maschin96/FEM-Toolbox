@@ -182,22 +182,12 @@ def test_model_roundtrip_and_preflight(cube_mesh, tmp_path):
         Model(mesh=mesh, document=missing)
 
 
-def test_thermal_and_dynamic_paths_still_rejected(cube_mesh):
-    from fem_toolbox.materials import ThermalExpansion
+def test_dynamic_paths_still_rejected(cube_mesh):
     from fem_toolbox.model import Model
     from fem_toolbox.solvers.piezo_dynamics import solve_piezoelectric_modes
 
     mesh = elevate(cube_mesh(1))
-    with pytest.raises(ValidationError, match="thermal coupling"):
-        solve_piezoelectric(
-            mesh,
-            material(),
-            [],
-            temperature=np.ones(mesh.n_points),
-            expansion=ThermalExpansion([0.01, 0.01, 0.01, 0, 0, 0], 1),
-        )
     for physics in (
-        "thermopiezoelectric",
         "piezo_modes",
         "transient_piezoelectric",
         "harmonic_piezoelectric",

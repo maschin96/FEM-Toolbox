@@ -1,0 +1,63 @@
+schema_version = 1
+units = "SI"
+physics = "thermopiezoelectric"
+
+[mesh]
+path = "body.msh"
+length_scale_to_m = 1.0
+length_unit = "m"
+
+[materials.piezo.solid]
+stiffness = [[100,0,0,0,0,0],[0,100,0,0,0,0],[0,0,100,0,0,0],[0,0,0,50,0,0],[0,0,0,0,50,0],[0,0,0,0,0,50]]
+stress_coupling = [[2,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]]
+permittivity = [[3,0,0],[0,3,0],[0,0,3]]
+[materials.piezo.solid.units]
+stiffness = "Pa"
+stress_coupling = "C/m^2"
+permittivity = "F/m"
+
+[regions.piezo]
+body = "solid"
+
+[[boundary.dirichlet]]
+field = "u"
+nodes = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26]
+value = [0.0, 0.0, 0.0]
+unit = "m"
+
+[[boundary.electrodes]]
+name = "ground"
+set = "left"
+potential = 0.0
+potential_unit = "V"
+
+[[boundary.electrodes]]
+name = "top"
+set = "right"
+charge = 0.0
+charge_unit = "C"
+
+[materials.T.thermal]
+conductivity = 2.0
+unit = "W/(m K)"
+[materials.expansion.active]
+alpha = [0.01,0,0,0,0,0]
+alpha_unit = "1/K"
+reference_temperature = 1.0
+reference_temperature_unit = "K"
+[regions.T]
+body = "thermal"
+[regions.expansion]
+body = "active"
+[[boundary.dirichlet]]
+field = "T"
+set = "left"
+value = 1.0
+unit = "K"
+[[boundary.dirichlet]]
+field = "T"
+set = "right"
+value = 2.0
+unit = "K"
+[solver]
+electric_thermal_strain = true

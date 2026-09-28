@@ -302,3 +302,11 @@ schwebenden Triangle6-Elektroden, Backends und Schema-2-Export integriert.
 Quadratische gekoppelte Felder, integrierte Enthalpie, Bilanzen und vier Netze
 sind nachgewiesen; [Details](49_TET10_PIEZOELECTRIC.md). Thermopiezo,
 Piezo-Dynamik und Gesamt-Abnahme-/Kostenvergleiche bleiben offen.
+
+## Fortschritt #35d: thermopiezoelektrischer Integrationsschnitt
+
+Stationäres T → (u, φ) ist für Tet10 durch Python-API, Model, getrennte Backends
+und Schema-2-Export integriert. Beide elektrischen Thermalkonventionen werden
+punktabhängig integriert; analytische gekoppelte Patches, schwebende Elektroden
+und Vier-Netze-Konvergenz sind geprüft. [Nachweise](50_TET10_THERMOPIEZOELECTRIC.md).
+Tet10-Piezo-Dynamik und Gesamt-Abnahme-/Kostenvergleiche bleiben offen.

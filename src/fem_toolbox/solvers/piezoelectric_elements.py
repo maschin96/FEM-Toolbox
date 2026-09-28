@@ -10,7 +10,7 @@ from fem_toolbox.elements import Tet10Geometry, quadratic
 from fem_toolbox.elements import piezoelectric as linear
 from fem_toolbox.elements.piezoelectric import PiezoelectricElementResponse
 from fem_toolbox.errors import ValidationError
-from fem_toolbox.materials import PiezoelectricMaterial
+from fem_toolbox.materials import PiezoelectricMaterial, ThermalExpansion
 from fem_toolbox.solvers.mechanical_elements import MechanicalGeometry
 
 
@@ -29,6 +29,8 @@ def piezoelectric_response(
     potential: ArrayLike,
     *,
     thermal_strain: ArrayLike | None = None,
+    temperature: ArrayLike | None = None,
+    expansion: ThermalExpansion | None = None,
     electric_thermal_strain: bool = False,
 ) -> PiezoelectricElementResponse:
     if not isinstance(geometry, Tet10Geometry):
@@ -40,10 +42,21 @@ def piezoelectric_response(
             thermal_strain=thermal_strain,
             electric_thermal_strain=electric_thermal_strain,
         )
-    if thermal_strain is not None or electric_thermal_strain:
+    if (temperature is None) != (expansion is None):
         raise ValidationError(
-            "Tet10 piezo thermal coupling is not yet supported", field="thermal"
+            "temperature and expansion must be supplied together", field="thermal"
         )
+    delta = (
+        None
+        if temperature is None or expansion is None
+        else real_array(temperature, (10,)) - expansion.reference_temperature
+    )
+
+    def eigenstrain(point: NDArray[np.float64]) -> NDArray[np.float64]:
+        if delta is None or expansion is None:
+            return np.zeros(6)
+        return expansion.alpha * (geometry.shape_values(point) @ delta)
+
     u = real_array(displacement, (10, 3))
     u = (u - u[0]).ravel()
     phi = real_array(potential, (10,))
@@ -51,19 +64,23 @@ def piezoelectric_response(
     center = geometry.coordinates[:4].mean(axis=0)
     strain = quadratic.strain_matrix(geometry, center) @ u
     field = -geometry.shape_gradients(center).T @ phi
-    stress = material.stiffness @ strain - material.stress_coupling.T @ field
+    mechanical = strain - eigenstrain(center)
+    coupling = mechanical if electric_thermal_strain else strain
+    stress = material.stiffness @ mechanical - material.stress_coupling.T @ field
     electric_displacement = (
-        material.stress_coupling @ strain + material.permittivity @ field
+        material.stress_coupling @ coupling + material.permittivity @ field
     )
     energies = np.zeros(3)
     rule = geometry.quadrature()
     for point, weight in zip(rule.points, rule.weights, strict=True):
         eps = quadratic.strain_matrix(geometry, point) @ u
+        mechanical = eps - eigenstrain(point)
+        coupling = mechanical if electric_thermal_strain else eps
         electric = -geometry.shape_gradients(point).T @ phi
         energies += weight * np.array(
             [
-                0.5 * eps @ material.stiffness @ eps,
-                -eps @ material.stress_coupling.T @ electric,
+                0.5 * mechanical @ material.stiffness @ mechanical,
+                -coupling @ material.stress_coupling.T @ electric,
                 -0.5 * electric @ material.permittivity @ electric,
             ]
         )

@@ -305,7 +305,9 @@ Spannungen, Dehnungen und Verzerrungsenergie. Die
 [stationäre Thermomechanik](48_TET10_THERMOMECHANICS.md) integriert
 punktabhängige Eigendehnungen und Energie und überträgt T → u über die Python-API.
 [Stationäre Tet10-Piezoelektrizität](49_TET10_PIEZOELECTRIC.md) ergänzt
-den monolithischen Solver, Elektroden, Model und Export. Thermopiezo und
-Piezo-Dynamik bleiben bei Tet10 abgelehnt. Der punktabhängige Ergebnisvertrag
+den monolithischen Solver, Elektroden, Model und Export.
+[Stationäre Tet10-Thermopiezoelektrizität](50_TET10_THERMOPIEZOELECTRIC.md)
+ergänzt punktabhängige Eigenverzerrungen und den Ablauf T → (u, φ).
+Piezo-Dynamik bleibt bei Tet10 abgelehnt. Der punktabhängige Ergebnisvertrag
 ist in [Dokument 45](45_TET10_HEAT_INTEGRATION.md) beschrieben. Knotenordnung, Kompatibilität und
 Geometriegrenzen sind in [Dokument 40](40_TET10_TOPOLOGY.md) festgelegt.

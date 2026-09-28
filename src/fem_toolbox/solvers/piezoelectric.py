@@ -26,7 +26,7 @@ from fem_toolbox.boundary import (
     ElectrodeState,
     eliminate_dirichlet,
 )
-from fem_toolbox.elements import Tet4Geometry, Tet10Geometry
+from fem_toolbox.elements import Tet4Geometry, Tet10Geometry, quadratic
 from fem_toolbox.elements.piezoelectric import (
     piezoelectric_thermal_load,
 )
@@ -186,10 +186,11 @@ def _thermal_data(
         raise ValidationError(
             "absolute temperature must be nonnegative K", field="temperature"
         )
-    for i, (cell, item) in enumerate(zip(mesh.cells, expansions, strict=True)):
-        strains[i] = item.alpha * (
-            float(np.mean(temperatures[cell])) - item.reference_temperature
-        )
+    if not mesh.n_tetra10:
+        for i, (cell, item) in enumerate(zip(mesh.cells, expansions, strict=True)):
+            strains[i] = item.alpha * (
+                float(np.mean(temperatures[cell])) - item.reference_temperature
+            )
     return strains, expansions, temperatures
 
 
@@ -394,8 +395,9 @@ def solve_piezoelectric(
     Fixed electrodes share a prescribed potential; floating electrodes share
     an unknown potential and prescribe their total adjacent conductor charge.
     The optional thermal-electric contribution to D is explicitly selected.
-    Tet10 currently supports only the nonthermal static path; thermal data
-    raise ValidationError. Straight Tet10 geometry and Triangle6 faces are required.
+    Tet10 interpolates nodal temperature at every integration point for thermal
+    loads and enthalpy; field values are sampled at the centroid. Straight Tet10
+    geometry and Triangle6 faces are required.
     The only supported method is direct LU: CG is invalid for this saddle
     system; MINRES awaits a verified block preconditioner. Invalid inputs,
     missing constraints, singularity, or excessive field residuals raise
@@ -407,10 +409,6 @@ def solve_piezoelectric(
         )
     if mesh.n_tetra10:
         inspect_boundary_topology(mesh)
-        if temperature is not None or expansion is not None or electric_thermal_strain:
-            raise ValidationError(
-                "Tet10 piezo thermal coupling is not yet supported", field="thermal"
-            )
     if method != "direct":
         raise ValidationError(
             "only direct LU is supported for the piezoelectric saddle system",
@@ -421,7 +419,7 @@ def solve_piezoelectric(
     ):
         raise ValidationError("expected boolean solver switches", field="solver")
     materials = _materials(material, mesh.n_cells)
-    eigenstrains, expansions, _ = _thermal_data(
+    eigenstrains, expansions, temperatures = _thermal_data(
         mesh, expansion, temperature, electric_thermal_strain
     )
     dofs = piezoelectric_dofs(mesh)
@@ -448,19 +446,27 @@ def solve_piezoelectric(
         matrices.append(MatrixBlock(ids, ids, piezoelectric_matrix(geometry, mat)))
         loads.append(VectorBlock(u_ids, body_load(geometry, body_force)))
         np.add.at(volume_vector, phi_ids, volume_charge_load(geometry, volume_charge))
-        if expansions is not None:
-            assert isinstance(geometry, Tet4Geometry)
-            loads.append(
-                VectorBlock(
-                    ids,
-                    piezoelectric_thermal_load(
-                        geometry,
-                        mat,
-                        eigenstrains[i],
-                        electric_thermal_strain=electric_thermal_strain,
-                    ),
+        if expansions is not None and temperatures is not None:
+            if isinstance(geometry, Tet10Geometry):
+                eigenstrains[i] = expansions[i].alpha * (
+                    geometry.shape_values(geometry.coordinates[:4].mean(axis=0))
+                    @ (temperatures[cell] - expansions[i].reference_temperature)
                 )
-            )
+                thermal_load = quadratic.thermal_load(
+                    geometry,
+                    mat,
+                    temperatures[cell],
+                    expansions[i],
+                    electric_thermal_strain=electric_thermal_strain,
+                )
+            else:
+                thermal_load = piezoelectric_thermal_load(
+                    geometry,
+                    mat,
+                    eigenstrains[i],
+                    electric_thermal_strain=electric_thermal_strain,
+                )
+            loads.append(VectorBlock(ids, thermal_load))
     if tractions or surface_charges:
         faces = Counter(
             tuple(sorted(int(node) for node in face))
@@ -610,6 +616,8 @@ def solve_piezoelectric(
             displacement[np.searchsorted(active, cell)],
             potential[np.searchsorted(active, cell)],
             thermal_strain=eigenstrains[i] if expansions is not None else None,
+            temperature=temperatures[cell] if temperatures is not None else None,
+            expansion=expansions[i] if expansions is not None else None,
             electric_thermal_strain=electric_thermal_strain,
         )
         for i, (cell, geometry, mat) in enumerate(
@@ -659,6 +667,18 @@ def solve_piezoelectric(
         "fixed_dofs": fixed.tolist(),
         "fixed_values": solution[fixed].tolist(),
     }
+    if mesh.n_tetra10 and temperatures is not None and expansions is not None:
+        provenance_input["temperature"] = temperatures.tolist()
+        provenance_input["expansion"] = [
+            {
+                "alpha": item.alpha.tolist(),
+                "reference_temperature": item.reference_temperature,
+            }
+            for item in expansions
+        ]
+        provenance_input["thermal_eigenstrain_at_centroid"] = provenance_input.pop(
+            "thermal_eigenstrain"
+        )
     if electrode_data:
         provenance_input["electrodes"] = [
             (name, electrode_dofs.tolist(), potential, charge)

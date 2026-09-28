@@ -38,8 +38,9 @@ jobs:
           cp -R examples/tet10_elasticity dist/tet10_elasticity
           cp -R examples/tet10_thermomechanics dist/tet10_thermomechanics
           cp -R examples/tet10_piezoelectric dist/tet10_piezoelectric
+          cp -R examples/tet10_thermopiezoelectric dist/tet10_thermopiezoelectric
           cd dist
-          sha256sum *.whl *.tar.gz *.py thermopiezoelectric/* transient_heat/* piezo_dynamics/* tet10_heat/* tet10_electrostatics/* tet10_elasticity/* tet10_thermomechanics/* tet10_piezoelectric/* > SHA256SUMS
+          sha256sum *.whl *.tar.gz *.py thermopiezoelectric/* transient_heat/* piezo_dynamics/* tet10_heat/* tet10_electrostatics/* tet10_elasticity/* tet10_thermomechanics/* tet10_piezoelectric/* tet10_thermopiezoelectric/* > SHA256SUMS
       - name: Transfer artifacts and standalone solver example
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
@@ -115,6 +116,8 @@ jobs:
           test -s tet10_thermal_expansion_results/coupled.json
           "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/tet10_piezoelectric/run.py"
           test -s tet10_piezo_results/piezo.json
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/tet10_thermopiezoelectric/run.py"
+          test -s tet10_thermopiezo_results/coupled.json
 
   quality:
     name: Quality / Python 3.13

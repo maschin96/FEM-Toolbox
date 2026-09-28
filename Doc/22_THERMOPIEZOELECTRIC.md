@@ -59,3 +59,11 @@ Piezo-Solver geprüft. Leistung, Kraft, Moment und Ladung behalten getrennte
 Bilanzen. Diese Tests sind Code- und Lösungsverifikation eines linearen
 Grenzfalls. Der ergänzende 3D-Vier-Netze-Nachweis mit Materialgrenze und
 leitenden Elektroden steht in [Doc/25](25_THERMOPIEZO_CONVERGENCE.md).
+
+## M7-Erweiterung
+
+[Geradkantige Tet10](50_TET10_THERMOPIEZOELECTRIC.md) unterstützen denselben
+stationären Ablauf einschließlich Model und Elektroden. Abweichend von Tet4
+wird die Temperatur an jedem Integrationspunkt interpoliert; Spannungen/D
+sind Schwerpunktwerte, Enthalpien separate Zellintegrale. Optionale getrennte
+Backend-Keywords steuern den Wärme- und Piezoschritt.
