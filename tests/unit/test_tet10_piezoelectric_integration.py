@@ -182,17 +182,6 @@ def test_model_roundtrip_and_preflight(cube_mesh, tmp_path):
         Model(mesh=mesh, document=missing)
 
 
-def test_dynamic_paths_still_rejected(cube_mesh):
-    from fem_toolbox.model import Model
-
-    mesh = elevate(cube_mesh(1))
-    for physics in ("harmonic_piezoelectric",):
-        raw = document()
-        raw["physics"] = physics
-        with pytest.raises(ValidationError, match="Tet10"):
-            Model(mesh=mesh, document=raw)
-
-
 def test_gmsh_toml_example(tmp_path):
     import subprocess
     import sys

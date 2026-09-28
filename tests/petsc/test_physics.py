@@ -440,3 +440,41 @@ def test_tet10_newmark_charged_equilibrium(cube_mesh, physics_backend):
     )
     assert max(result.relative_residual_u) < 1e-9
     assert max(result.relative_residual_phi) < 1e-9
+
+
+@pytest.mark.parametrize("short", [False, True])
+def test_tet10_harmonic_electrodes(cube_mesh, physics_backend, short):
+    from tests.convergence.test_tet10_harmonic_convergence import driven_bar
+
+    mesh, mat, bc, electrodes, loads, _ = driven_bar(cube_mesh, 2, short)
+    omega = 0.6 / 0.02 * np.sqrt((1e9 + 25 / 1e-8) / 7500)
+    args = (mesh, mat, 7500, bc, omega / (2 * np.pi))
+    reference = solve_harmonic_piezoelectric(*args, electrodes=electrodes, loads=loads)
+    result = solve_harmonic_piezoelectric(
+        *args, electrodes=electrodes, loads=loads, backend=physics_backend
+    )
+    assert_allclose(result.displacement, reference.displacement, rtol=2e-8, atol=1e-15)
+    assert_allclose(result.potential, reference.potential, rtol=2e-8, atol=1e-9)
+    assert result.relative_residual_u < 1e-9
+    assert result.relative_residual_phi < 1e-9
+
+
+def test_tet10_harmonic_complex_charge(cube_mesh, physics_backend):
+    from tests.unit.test_tet10_newmark import charged_bar
+
+    mesh, mat, bc, electrodes, force, initial = charged_bar(cube_mesh)
+    factor = 1 + 2j
+    result = solve_harmonic_piezoelectric(
+        mesh,
+        mat,
+        7500,
+        bc,
+        0,
+        electrodes=electrodes,
+        loads=force * factor,
+        backend=physics_backend,
+    )
+    assert_allclose(result.displacement, initial * factor, rtol=0, atol=2e-14)
+    assert_allclose(result.potential, mesh.points[:, 2] * factor, rtol=0, atol=2e-9)
+    assert result.relative_residual_u < 1e-9
+    assert result.relative_residual_phi < 1e-9

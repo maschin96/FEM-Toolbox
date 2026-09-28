@@ -558,3 +558,12 @@ symmetrisierten dielektrischen Block vor; Newmark verwendet ihn für die
 elektrische Lastrekonstruktion wieder. Physikalische Matrizen, Residuen,
 Energie-, Ereignis- und Speicherverträge bleiben unverändert. Die konsistente
 P2-Masse wird nicht gelumpt. [Nachweise und Grenzen](52_TET10_NEWMARK.md).
+
+## ADR-039 — Tet10-Harmonik (28.09.2026)
+
+Der bestehende ungedämpfte harmonische Referenzsolver wird für geradkantige
+Tet10 freigegeben. Die elektrische Lastrekonstruktion verwendet denselben
+symmetrisierten Dielektrikblock wie Moden und Newmark. Originalresiduen,
+komplexe Spitzenwertkonvention, Resonanzschwelle und DOF-Grenze bleiben erhalten.
+Model-Schema 3 und der vorhandene Schema-2-Feldexport benötigen keine neue
+Schemaversion. [Unabhängige Nachweise](53_TET10_HARMONIC.md).
