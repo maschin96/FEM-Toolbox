@@ -315,4 +315,10 @@ Tet10-Piezo-Dynamik und Gesamt-Abnahme-/Kostenvergleiche bleiben offen.
 
 Konsistente Masse, offene/kurzgeschlossene Elektroden, Model und Modenexport
 sind integriert. [Umfang und Verifikation](51_TET10_MODES.md).
-Tet10-Newmark, Harmonik und Gesamt-Abnahme-/Kostenvergleiche bleiben offen.
+Tet10-Harmonik und Gesamt-Abnahme-/Kostenvergleiche bleiben offen.
+
+## Tet10-Newmark (#35d)
+
+Zeitintegration mit konsistenter Masse, bewegten Rändern, Last-/Spannungsereignissen,
+Model und Zeitserienexport ist integriert. [Nachweise und Grenzen](52_TET10_NEWMARK.md).
+Tet10-Harmonik und Gesamt-Abnahme-/Kostenvergleiche bleiben offen.
