@@ -1,7 +1,8 @@
 # Bedarfsgerechte Tet4-Flächengeometrie (#37b)
 
-Status: Mess- und Umsetzungsprotokoll im M7-Issue-Branch. Teilbeitrag zu #37;
-Tet10-/PETSc-Vergleich #37c bleibt nach vollständiger Tet10-Integration offen.
+Status: integrierter Teilbeitrag zu #37. Der [Vergleich #37c](54_ACCURACY_COST_COMPARISON.md)
+ist ebenfalls integriert; [Gesamtabgleich und Abnahme](56_PERFORMANCE_ACCEPTANCE.md).
+Die folgenden Mess- und Testangaben dokumentieren den damaligen Optimierungsschritt.
 
 ## Vorab festgelegte Entscheidung
 
@@ -152,5 +153,4 @@ git diff --check
 Die numerischen Gleichungen und Diskretisierungen sind unverändert; bestehende
 Patch-, Bilanz- und Konvergenztests sind Teil der Gesamtsuite. Kein neues
 Hardware-Zeitgate, keine abgeschwächten numerischen Toleranzen. Kein unabhängiger
-Reviewer beteiligt; keine Reviewfreigabe behauptet. #37 bleibt wegen des
-separaten Tet10-/PETSc-Vergleichs #37c offen.
+Reviewer beteiligt; keine Reviewfreigabe behauptet. Der spätere Tet10-/PETSc-Vergleich und die Gesamtabnahme sind oben verlinkt.
