@@ -310,3 +310,9 @@ und Schema-2-Export integriert. Beide elektrischen Thermalkonventionen werden
 punktabhängig integriert; analytische gekoppelte Patches, schwebende Elektroden
 und Vier-Netze-Konvergenz sind geprüft. [Nachweise](50_TET10_THERMOPIEZOELECTRIC.md).
 Tet10-Piezo-Dynamik und Gesamt-Abnahme-/Kostenvergleiche bleiben offen.
+
+## Tet10-Modalanalyse (#35d)
+
+Konsistente Masse, offene/kurzgeschlossene Elektroden, Model und Modenexport
+sind integriert. [Umfang und Verifikation](51_TET10_MODES.md).
+Tet10-Newmark, Harmonik und Gesamt-Abnahme-/Kostenvergleiche bleiben offen.

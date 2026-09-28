@@ -104,12 +104,10 @@ class PiezoDynamicModel:
         _unit(density, "kg/m^3", "density")
         raw = np.asarray(_required(density, "value", "density"))
         self.density = real_array(raw, raw.shape)
-        if self.density.shape not in ((), (mesh.n_tetra4,)) or np.any(
-            self.density <= 0
-        ):
+        if self.density.shape not in ((), (mesh.n_cells,)) or np.any(self.density <= 0):
             raise ModelSchemaError(
                 path="density",
-                reason="positive scalar or one density per Tet4 required",
+                reason="positive scalar or one density per cell required",
             )
         keys = {
             "piezo_modes": {"count"},
@@ -125,7 +123,7 @@ class PiezoDynamicModel:
         self.analysis = _mapping(
             _required(table, "analysis", "document"), "analysis", keys[self.physics]
         )
-        self.n = len(np.unique(mesh.tetra4))
+        self.n = len(np.unique(mesh.cells))
         self.nu = 3 * self.n
         for bc in self.base._conditions:
             if np.any(bc.values):

@@ -66,3 +66,9 @@ schreibt rohe VTU-Felder sowie einen JSON-Bericht mit Provenienz und Bilanzen.
 
 - [Tet10-Thermopiezoelektrizität](tet10_thermopiezoelectric/README.md):
   thermisch induzierte Leerlaufspannung, Model und gemeinsamer Export.
+
+## Tet10-Modalanalyse (#35d)
+
+Konsistente Masse, offene/kurzgeschlossene Elektroden, Model und Modenexport
+sind integriert. [Umfang und Verifikation](../Doc/51_TET10_MODES.md).
+Tet10-Newmark, Harmonik und Gesamt-Abnahme-/Kostenvergleiche bleiben offen.

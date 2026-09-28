@@ -86,6 +86,8 @@ Eintrag im Entscheidungsprotokoll.
 
 - [Stationäre Tet10-Thermopiezoelektrizität: T → (u, φ), Model und Enthalpie (#35d)](50_TET10_THERMOPIEZOELECTRIC.md)
 
+- [Tet10-Modalanalyse: Masse, Elektroden und Modenexport (#35d)](51_TET10_MODES.md)
+
 ## Veröffentlichungen
 
 - [v1.1.0 — Transiente Wärme und Piezo-Dynamik](releases/v1.1.0.md)

@@ -357,3 +357,28 @@ def test_tet10_thermopiezo_sequential_backend_parity(
     assert abs(result.piezoelectric.charge_balance) < 2e-9
     assert_allclose(result.piezoelectric.force_balance, 0, rtol=0, atol=2e-9)
     assert_allclose(result.piezoelectric.moment_balance, 0, rtol=0, atol=2e-9)
+
+
+@pytest.mark.parametrize("short", [False, True])
+def test_tet10_modal_electrodes(cube_mesh, physics_backend, short):
+    from fem_toolbox.solvers.piezo_dynamics import solve_piezoelectric_modes
+    from tests.convergence.test_tet10_modal import bar
+
+    mesh, material, bc, electrodes = bar(cube_mesh, 2, short)
+    reference = solve_piezoelectric_modes(
+        mesh, material, 7500, bc, electrodes=electrodes, count=1
+    )
+    result = solve_piezoelectric_modes(
+        mesh,
+        material,
+        7500,
+        bc,
+        electrodes=electrodes,
+        count=1,
+        backend=physics_backend,
+    )
+    np.testing.assert_allclose(
+        result.angular_frequencies, reference.angular_frequencies, rtol=2e-9
+    )
+    assert max(result.relative_residual_u) < 1e-8
+    assert max(result.relative_residual_phi) < 1e-8

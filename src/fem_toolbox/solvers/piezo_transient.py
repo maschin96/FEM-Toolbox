@@ -118,6 +118,10 @@ def solve_transient_piezoelectric(
     At most 2048 active DOFs and 2,000,000 stored scalar state entries; arrays
     are retained in memory. Invalid data and failed residuals raise ValidationError.
     """
+    if mesh.n_tetra10:
+        raise ValidationError(
+            "Tet10 transient/harmonic piezo is not yet supported", field="mesh"
+        )
     system = _build_dynamic_system(
         mesh, material, density, conditions, electrodes, backend
     )

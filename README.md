@@ -162,7 +162,8 @@ interpretiert Koordinaten als Meter, `1.0e-3` rechnet Millimeter in Meter um.
   unterstützt, ebenso [stationäre Tet10-Thermomechanik über die Python-API](Doc/48_TET10_THERMOMECHANICS.md).
   [Stationäre Tet10-Piezoelektrizität mit Elektroden](Doc/49_TET10_PIEZOELECTRIC.md)
   ist ebenfalls unterstützt, ebenso die [stationäre Tet10-Thermopiezoelektrizität](Doc/50_TET10_THERMOPIEZOELECTRIC.md).
-  Piezo-Dynamik und gemischte Elementordnungen bleiben bei Tet10 ausgeschlossen. Andere Zelltypen führen zu
+  [Tet10-Modalanalyse](Doc/51_TET10_MODES.md) ist unterstützt.
+  Newmark, Harmonik und gemischte Elementordnungen bleiben bei Tet10 ausgeschlossen. Andere Zelltypen führen zu
   einem `UnsupportedCellTypeError`.
 - Mehrfache physische Gmsh-Gruppen bleiben als benannte Auswahlsätze erhalten.
   Der einzelne numerische Tag bildet nur die erste gemeldete Mitgliedschaft ab.
@@ -287,3 +288,9 @@ wie NumPy, SciPy und meshio behalten ihre eigenen Bedingungen; die
 [Bestandsaufnahme](Doc/27_DISTRIBUTION_INVENTORY.md) nennt die geprüften
 Drittbestandteile und den Umfang der Paketarchive. Wheel und sdist werden als GitHub-Release-Artefakte bereitgestellt. Ein
 öffentlicher PyPI-Upload ist damit nicht verbunden.
+
+## Tet10-Modalanalyse (#35d)
+
+Konsistente Masse, offene/kurzgeschlossene Elektroden, Model und Modenexport
+sind integriert. [Umfang und Verifikation](Doc/51_TET10_MODES.md).
+Tet10-Newmark, Harmonik und Gesamt-Abnahme-/Kostenvergleiche bleiben offen.

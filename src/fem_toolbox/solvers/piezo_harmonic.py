@@ -108,6 +108,10 @@ def solve_harmonic_piezoelectric(
     omega = 2 * np.pi * hz
     if not np.isfinite(omega) or omega > np.sqrt(np.finfo(np.float64).max):
         raise ValidationError("frequency is not representable", field="frequency_hz")
+    if mesh.n_tetra10:
+        raise ValidationError(
+            "Tet10 transient/harmonic piezo is not yet supported", field="mesh"
+        )
     system = _build_dynamic_system(
         mesh, material, density, conditions, electrodes, backend
     )
