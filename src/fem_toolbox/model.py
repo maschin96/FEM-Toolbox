@@ -425,6 +425,7 @@ class Model:
             "elasticity",
             "piezoelectric",
             "thermopiezoelectric",
+            "piezo_modes",
         ):
             raise ModelSchemaError(
                 path="mesh",

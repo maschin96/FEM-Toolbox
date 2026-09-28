@@ -14,13 +14,13 @@ import numpy as np
 from numpy.typing import ArrayLike, NDArray
 
 from fem_toolbox.dynamic_result import PiezoDynamicResult
-from fem_toolbox.elements import Tet4Geometry
-from fem_toolbox.elements.piezoelectric import piezoelectric_response
+from fem_toolbox.elements import Tet4Geometry, Tet10Geometry
 from fem_toolbox.errors import ValidationError
 from fem_toolbox.io.meshio_adapter import write_vtu
 from fem_toolbox.model import ModelResult
 from fem_toolbox.solvers.piezo_dynamics import PiezoelectricModes
 from fem_toolbox.solvers.piezo_transient import TransientPiezoelectricResult
+from fem_toolbox.solvers.piezoelectric_elements import piezoelectric_response
 from fem_toolbox.solvers.transient_heat import _probes, heat_mesh_fingerprint
 
 
@@ -92,9 +92,11 @@ def export_piezo_series(
     """Write a new directory with PVD/VTU fields, probe CSV and manifest.
 
     Requires a schema-3 ModelResult bound to its solved mesh/materials. Probe
-    locations are mesh node indices or points (3,) m inside Tet4s. Interpolate
+    locations are mesh node indices or points (3,) m inside Tet4/Tet10 cells.
+    Interpolate
     complex u/v/a/phi before computing amplitude/phase. Cell strain/stress/E/D
-    remain unsmoothed Tet4 values. Inactive nodes/facets are zero-filled with
+    are unsmoothed Tet4 constants or explicitly labelled Tet10 centroid samples.
+    Inactive nodes/facets are zero-filled with
     validity masks. Amplitude and phase are componentwise (peak, radians);
     zero amplitude has phase=0 and phase_valid=0. Real modes/transients only
     emit *_real, never a fictitious phase.
@@ -110,8 +112,11 @@ def export_piezo_series(
         raise ValidationError("expected schema-3 dynamic ModelResult", field="result")
     bundle = result.field_result
     mesh = bundle.mesh
-    active = np.unique(mesh.tetra4)
-    geometries = [Tet4Geometry(mesh.points[cell]) for cell in mesh.tetra4]
+    active = np.unique(mesh.cells)
+    geometries = [
+        (Tet10Geometry if mesh.n_tetra10 else Tet4Geometry)(mesh.points[cell])
+        for cell in mesh.cells
+    ]
     names, weights = _probes(mesh, active, geometries, probes or {})
     solution = bundle.solution
     harmonic = isinstance(solution, tuple)
@@ -126,7 +131,22 @@ def export_piezo_series(
     destination.mkdir(parents=True, exist_ok=False)
     manifest: dict[str, Any] = {
         "schema": "fem-toolbox-piezo-series",
-        "schema_version": 1,
+        "schema_version": 2 if mesh.n_tetra10 else 1,
+        **(
+            {
+                "cell_fields": {
+                    "cell_type": mesh.cell_type,
+                    "location": "cell_centroid",
+                    "kind": "raw",
+                    "evaluation_points_m": mesh.points[mesh.cells[:, :4]]
+                    .mean(axis=1)
+                    .tolist(),
+                    "projection": "none",
+                }
+            }
+            if mesh.n_tetra10
+            else {}
+        ),
         "status": "incomplete",
         "axis": axis,
         "mesh_sha256": heat_mesh_fingerprint(mesh),
@@ -207,7 +227,7 @@ def export_piezo_series(
                 )
             }
             for cell, geometry, material in zip(
-                mesh.tetra4, geometries, bundle.materials, strict=True
+                mesh.cells, geometries, bundle.materials, strict=True
             ):
                 positions = np.searchsorted(active, cell)
                 u = np.asarray(fields["u"][positions], dtype=complex)
@@ -219,14 +239,20 @@ def export_piezo_series(
                         getattr(real, name) + 1j * getattr(imaginary, name)
                     )
             cell_data: dict[str, dict[str, NDArray[np.float64]]] = {}
-            cell_parts = {"tetra_valid": np.ones(mesh.n_tetra4)}
+            cell_parts = {"tetra_valid": np.ones(mesh.n_cells)}
             for name, values in cell_values.items():
-                cell_parts.update(_parts(name, np.asarray(values), harmonic))
+                cell_parts.update(
+                    _parts(
+                        name + "_at_centroid" if mesh.n_tetra10 else name,
+                        np.asarray(values),
+                        harmonic,
+                    )
+                )
             for name, values in cell_parts.items():
-                cell_data[name] = {"tetra4": values}
-                if mesh.n_triangle3:
-                    cell_data[name]["triangle3"] = np.zeros(
-                        (mesh.n_triangle3, *values.shape[1:])
+                cell_data[name] = {mesh.cell_type: values}
+                if mesh.n_facets:
+                    cell_data[name][mesh.facet_type] = np.zeros(
+                        (mesh.n_facets, *values.shape[1:])
                     )
             filename = f"frame_{index:06d}.vtu"
             write_vtu(

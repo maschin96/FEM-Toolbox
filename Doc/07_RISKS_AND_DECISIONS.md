@@ -540,3 +540,12 @@ Der elektrische Thermalschalter behält seine beiden bestehenden Konventionen.
 Tet4-Mittelung und -Provenienz bleiben erhalten; Tet10 hasht zusätzlich alle
 Temperaturen und Expansionsdaten. Getrennte optionale Backends und Schema-2-Export
 folgen dem Thermomechanikvertrag. [Details und Nachweise](50_TET10_THERMOPIEZOELECTRIC.md).
+
+## ADR-037 — Tet10-Modalanalyse (28.09.2026)
+
+Der gemeinsame Dynamikaufbau verwendet Tet10-Operatoren und konsistente Masse;
+nur der Modalpfad wird freigegeben. Die elektrische Schur-Elimination erhält
+einen explizit symmetrisierten Tet10-Dielektrikblock gegen Quadratur-Rundungsreste.
+Residuen bleiben am ursprünglichen System definiert. Die Grenze von 2048 DOFs
+bleibt bestehen. Modenexport nutzt Schema 2 mit Schwerpunktkennzeichnung und
+P2-Messpunkten. [Analytische Nachweise und Grenzen](51_TET10_MODES.md).

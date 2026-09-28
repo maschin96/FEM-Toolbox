@@ -184,11 +184,9 @@ def test_model_roundtrip_and_preflight(cube_mesh, tmp_path):
 
 def test_dynamic_paths_still_rejected(cube_mesh):
     from fem_toolbox.model import Model
-    from fem_toolbox.solvers.piezo_dynamics import solve_piezoelectric_modes
 
     mesh = elevate(cube_mesh(1))
     for physics in (
-        "piezo_modes",
         "transient_piezoelectric",
         "harmonic_piezoelectric",
     ):
@@ -196,8 +194,6 @@ def test_dynamic_paths_still_rejected(cube_mesh):
         raw["physics"] = physics
         with pytest.raises(ValidationError, match="Tet10"):
             Model(mesh=mesh, document=raw)
-    with pytest.raises(ValidationError, match="Tet4"):
-        solve_piezoelectric_modes(mesh, material(), 1, [])
 
 
 def test_gmsh_toml_example(tmp_path):

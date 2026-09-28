@@ -5,7 +5,7 @@ Der bestehende einseitige Ablauf T → (u, φ) unterstützt geradkantige Tet10
 an allen aktiven Knoten übertragen; Materialregionen, Referenztemperaturen,
 anisotrope Expansion und feste/schwebende Triangle6-Elektroden bleiben nutzbar.
 Keine thermische Rückwirkung, Pyroelektrizität oder transiente Kopplung.
-Tet10-Piezo-Dynamik und die Gesamt-Abnahme-/Kostenvergleiche von #35 bleiben offen.
+Tet10-Newmark, Harmonik und die Gesamt-Abnahme-/Kostenvergleiche von #35 bleiben offen.
 
 ## Thermischer Integrationsvertrag
 
@@ -51,7 +51,7 @@ beider Teilergebnisse müssen zum Netz passen. Model benötigt keine neue Schema
 Vor der Umsetzung scheiterten zwei Tests an der Tet10-Thermalsperre und zwei
 an den fehlenden Backend-Keywords. Der Model-Test scheiterte an der bisherigen
 Tet10-Thermopiezosperre, der Beispieltest am fehlenden Skript. Danach bestanden
-die gezielten Tests. Dynamische Tet10-Piezopfade bleiben gesperrt und geprüft.
+die gezielten Tests. Tet10-Newmark/Harmonik bleiben gesperrt und geprüft; Modalfolgearbeit siehe Doc 51.
 
 Synthetisches Material für die kleinen Würfelfälle: E=100 Pa, ν=0, κ=3 I F/m,
 eₓₓₓ=2 C/m² und αxx=0,01/K. Beide elektrischen Schalterstellungen werden geprüft.
@@ -112,3 +112,9 @@ zusätzlich aus Wheel/sdist unter Python 3.11–3.13 ausgeführt.
 übersprungen. Ruff, Formatprüfung, Mypy und `git diff --check` bestanden.
 Native PETSc- und Artefaktprüfungen erfolgen in CI; lokale Skips sind kein
 PETSc-Nachweis.
+
+## Tet10-Modalanalyse (#35d)
+
+Konsistente Masse, offene/kurzgeschlossene Elektroden, Model und Modenexport
+sind integriert. [Umfang und Verifikation](51_TET10_MODES.md).
+Tet10-Newmark, Harmonik und Gesamt-Abnahme-/Kostenvergleiche bleiben offen.
