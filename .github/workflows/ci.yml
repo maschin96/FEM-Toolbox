@@ -90,7 +90,33 @@ jobs:
         run: |
           "$RUNNER_TEMP/artifact-env/bin/python" -m pip check
           "$RUNNER_TEMP/artifact-env/bin/python" -m pip freeze
-          "$RUNNER_TEMP/artifact-env/bin/python" -I -c 'import sys; from pathlib import Path; from importlib.metadata import metadata; import fem_toolbox; p = Path(fem_toolbox.__file__).resolve(); assert p.is_relative_to(Path(sys.prefix).resolve()), p; m = metadata("fem-toolbox"); assert m["License-Expression"] == "MIT"; print(p, m["Version"], m["Requires-Python"])'
+          "$RUNNER_TEMP/artifact-env/bin/python" -I - <<'PY'
+          import sys
+          from importlib.metadata import distribution
+          from importlib.util import find_spec
+          from pathlib import Path
+          import fem_toolbox
+          from fem_toolbox.errors import ValidationError
+          from fem_toolbox.solvers.petsc_backend import PetscBackend, PetscFieldSplitBackend
+
+          package = Path(fem_toolbox.__file__).resolve()
+          assert package.is_relative_to(Path(sys.prefix).resolve()), package
+          dist = distribution("fem-toolbox")
+          assert dist.version == fem_toolbox.__version__ == "1.2.0rc1"
+          assert dist.metadata["License-Expression"] == "MIT"
+          licenses = [f for f in dist.files if f.name == "LICENSE"]
+          assert len(licenses) == 1, licenses
+          assert "Permission is hereby granted" in dist.locate_file(licenses[0]).read_text()
+          assert find_spec("petsc4py") is None, "core artifact unexpectedly needs PETSc"
+          for backend in (PetscBackend, PetscFieldSplitBackend):
+              try:
+                  backend()
+              except ValidationError as error:
+                  assert "petsc4py" in str(error)
+              else:
+                  raise AssertionError("missing PETSc must fail explicitly")
+          print(package, dist.version, dist.metadata["Requires-Python"])
+          PY
           cd "$RUNNER_TEMP"
           "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/steady_heat.py"
           test -s steady_heat.vtu

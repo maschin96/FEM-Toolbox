@@ -253,3 +253,12 @@ def test_invalid_field_and_empty_named_boundary_are_schema_errors(cube_mesh) -> 
     )
     with pytest.raises(ModelSchemaError, match="empty"):
         Model(mesh=mesh_empty, document=document)
+
+
+@pytest.mark.parametrize("nested", [False, True])
+def test_model_cannot_silently_select_petsc(tmp_path: Path, nested: bool) -> None:
+    path = _heat_file(tmp_path, extra="" if nested else 'backend = "petsc"')
+    if nested:
+        path.write_text(path.read_text() + '\n[solver]\nbackend = "petsc"\n')
+    with pytest.raises(ModelSchemaError, match="unknown key 'backend'"):
+        Model.from_file(path)

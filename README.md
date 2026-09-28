@@ -5,6 +5,10 @@ dreidimensionale Finite-Elemente-Simulationen. Ziel sind verifizierte Modelle f�
 Festkörpermechanik, Wärmeleitung, Elektrostatik und deren thermomechanische und
 piezoelektrische Kopplungen auf Basis linearer Vierknoten-Tetraeder (**Tet4**).
 
+**Dieser M7-Checkout: Release-Kandidat 1.2.0rc1.**
+[Supportmatrix und Release-Gates](Doc/57_M7_RELEASE_CANDIDATE.md) ·
+[Vorläufige Release Notes](Doc/releases/v1.2.0.md). Noch keine finale v1.2.0-Freigabe.
+
 **Stabile Freigabe: v1.1.0 — transiente Wärme und Piezo-Dynamik.**
 
 Neu gegenüber v1.0: [transiente Wärmeleitung](Doc/33_TRANSIENT_HEAT.md) mit
@@ -208,7 +212,7 @@ elektrisches Potential `phi` mit feldweiser Freiheitsgradverwaltung.
 | M4 | v0.5.0 | Monolithische Piezoelektrizität `u–phi` | Freigegeben |
 | M5 | v1.0.0 | Elektroden, Modellformat und vollständiger stationärer Workflow | Freigegeben |
 | M6 | v1.1.0 | Transiente Wärme, Piezo-Dynamik/Harmonik (reziproke Thermoelastizität zurückgestellt) | Freigegeben |
-| M7 | v1.2.0 | PETSc-Backend, Tet10, Wärmeindikatoren und gemessene Skalierung | Konkretisiert |
+| M7 | v1.2.0 | PETSc-Backend, Tet10, Wärmeindikatoren und gemessene Skalierung | Kandidat 1.2.0rc1 |
 | M8 | v1.3.0* | Reproduzierbare Parameterstudien | Geplant |
 | M9 | v1.4.0* | Experimentelle Validierung und Unsicherheit | Geplant |
 | M10 | v1.5.0* | Kontrollierte adaptive Netzstudien | Geplant |
