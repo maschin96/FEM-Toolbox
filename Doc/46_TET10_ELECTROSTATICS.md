@@ -1,5 +1,10 @@
 # Tet10-Elektrostatik durch Model, Solver und Export (#35d)
 
+**Aktueller Gesamtstand:** [Tet10-Abnahme](55_TET10_ACCEPTANCE.md).
+Die folgenden Status- und Restumfangsangaben dokumentieren den jeweiligen
+Implementierungsschnitt; später integrierte Analysen und Vergleiche sind im
+Gesamtbericht zusammengeführt.
+
 Dieser Integrationsschnitt erweitert die bereits vorhandene Tet10-Wärme um
 stationäre Elektrostatik. Statische Mechanik ist inzwischen in
 [Dokument 47](47_TET10_ELASTICITY.md) integriert. #35 bleibt für Piezo, Kopplungen und die

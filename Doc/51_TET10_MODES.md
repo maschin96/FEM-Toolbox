@@ -1,5 +1,10 @@
 # Tet10-Modalanalyse (#35d)
 
+**Aktueller Gesamtstand:** [Tet10-Abnahme](55_TET10_ACCEPTANCE.md).
+Die folgenden Status- und Restumfangsangaben dokumentieren den jeweiligen
+Implementierungsschnitt; später integrierte Analysen und Vergleiche sind im
+Gesamtbericht zusammengeführt.
+
 Geradkantige Tet10 unterstützen `solve_piezoelectric_modes` und `Model`-Schema 3
 mit `physics="piezo_modes"`. Konsistente mechanische Masse wird quadraturbasiert
 integriert; das elektrische Feld besitzt keine Masse. Die bestehende elektrische

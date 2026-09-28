@@ -1,5 +1,10 @@
 # Tet10-Harmonik (#35d)
 
+**Aktueller Gesamtstand:** [Tet10-Abnahme](55_TET10_ACCEPTANCE.md).
+Die folgenden Status- und Restumfangsangaben dokumentieren den jeweiligen
+Implementierungsschnitt; später integrierte Analysen und Vergleiche sind im
+Gesamtbericht zusammengeführt.
+
 `solve_harmonic_piezoelectric` und `Model`-Schema 3 mit
 `physics="harmonic_piezoelectric"` unterstützen geradkantige Tet10, einschließlich
 DC, komplexer Kraft-/Ladungsanregung, vorgeschriebener Spannung und bewegter Ränder.

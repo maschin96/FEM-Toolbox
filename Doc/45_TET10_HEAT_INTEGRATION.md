@@ -1,5 +1,10 @@
 # Tet10-Wärmepfad: Model, Solver, Backend und Export (#35d)
 
+**Aktueller Gesamtstand:** [Tet10-Abnahme](55_TET10_ACCEPTANCE.md).
+Die folgenden Status- und Restumfangsangaben dokumentieren den jeweiligen
+Implementierungsschnitt; später integrierte Analysen und Vergleiche sind im
+Gesamtbericht zusammengeführt.
+
 Status: implementierter und lokal geprüfter thermischer Teil von #35d im
 M7-Issue-Branch. #35 bleibt für die übrigen Physiken, Kopplungen und Vergleiche
 offen. Der spätere [elektrische Integrationsschnitt](46_TET10_ELECTROSTATICS.md)

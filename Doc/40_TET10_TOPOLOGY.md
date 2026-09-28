@@ -1,5 +1,10 @@
 # Tet10-/Triangle6-Topologie (#35a)
 
+**Aktueller Gesamtstand:** [Tet10-Abnahme](55_TET10_ACCEPTANCE.md).
+Die folgenden Status- und Restumfangsangaben dokumentieren den jeweiligen
+Implementierungsschnitt; später integrierte Analysen und Vergleiche sind im
+Gesamtbericht zusammengeführt.
+
 M7 erweitert das Netzmodell additiv um eine quadratische Simplex-Familie.
 Dieser Teil implementiert Topologie, Metadaten und I/O; quadratische
 Formfunktionen und Quadratur ergänzt [#35b](41_TET10_GEOMETRY.md).

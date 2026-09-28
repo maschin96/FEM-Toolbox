@@ -1,5 +1,10 @@
 # Geradkantige Tet10-Geometrie und Quadratur (#35b)
 
+**Aktueller Gesamtstand:** [Tet10-Abnahme](55_TET10_ACCEPTANCE.md).
+Die folgenden Status- und Restumfangsangaben dokumentieren den jeweiligen
+Implementierungsschnitt; später integrierte Analysen und Vergleiche sind im
+Gesamtbericht zusammengeführt.
+
 M7 ergänzt quadratische Lagrange-Interpolation für affine Tetraeder und ihre
 planaren Dreiecksflächen. Die [Knotenordnung aus #35a](40_TET10_TOPOLOGY.md)
 bleibt unverändert. [Feldoperatoren ergänzt #35c](42_TET10_OPERATORS.md); globale Tet10-Solver

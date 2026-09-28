@@ -1,5 +1,10 @@
 # Quadratische Feldoperatoren und Randintegrale (#35c)
 
+**Aktueller Gesamtstand:** [Tet10-Abnahme](55_TET10_ACCEPTANCE.md).
+Die folgenden Status- und Restumfangsangaben dokumentieren den jeweiligen
+Implementierungsschnitt; später integrierte Analysen und Vergleiche sind im
+Gesamtbericht zusammengeführt.
+
 M7 ergänzt auf der [affinen Tet10-Geometrie](41_TET10_GEOMETRY.md) lokale
 Operatoren für Wärme, Elektrostatik, Mechanik und Piezoelektrizität einschließlich
 Masse, Wärmekapazität, thermischer Ausdehnung und Triangle6-Randlasten.

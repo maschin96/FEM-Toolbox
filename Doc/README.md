@@ -94,6 +94,8 @@ Eintrag im Entscheidungsprotokoll.
 
 - [Genauigkeit und Kosten: Tet4/Tet10 × SciPy/PETSc (#37c)](54_ACCURACY_COST_COMPARISON.md)
 
+- [Tet10-Gesamtabnahme: Kriterien, Analyseumfang und Grenzen (#35)](55_TET10_ACCEPTANCE.md)
+
 ## Veröffentlichungen
 
 - [v1.1.0 — Transiente Wärme und Piezo-Dynamik](releases/v1.1.0.md)
