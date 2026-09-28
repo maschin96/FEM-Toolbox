@@ -111,3 +111,8 @@ Stationäre [Tet10-Piezoelektrizität](49_TET10_PIEZOELECTRIC.md) nutzt ebenfall
 Schema 2: `mechanical_energy_J`, `coupling_energy_J` und
 `dielectric_enthalpy_J` sind Zellintegrale. Dehnung, Spannung, E und D tragen
 `_at_centroid`. Elektrodenladungen und -potentiale bleiben Bilanzkennwerte.
+
+[Tet10-Thermopiezo](50_TET10_THERMOPIEZOELECTRIC.md) exportiert T → (u, φ)
+gemeinsam in Schema 2 mit getrennten Provenienzen/Bilanzen. Beide Komponenten
+müssen passende Schwerpunktkoordinaten liefern; Energie-/Enthalpiefelder
+bleiben Zellintegrale.

@@ -424,6 +424,7 @@ class Model:
             "electrostatics",
             "elasticity",
             "piezoelectric",
+            "thermopiezoelectric",
         ):
             raise ModelSchemaError(
                 path="mesh",

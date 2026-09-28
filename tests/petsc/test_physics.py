@@ -323,3 +323,37 @@ def test_tet10_quadratic_piezo_and_floating_electrode(cube_mesh, physics_backend
     assert_allclose(result.force_balance, 0, rtol=0, atol=2e-9)
     assert_allclose(result.moment_balance, 0, rtol=0, atol=2e-9)
     assert abs(result.charge_balance) < 2e-9
+
+
+@pytest.mark.parametrize("electric", [False, True])
+def test_tet10_thermopiezo_sequential_backend_parity(
+    cube_mesh, physics_backend, electric
+):
+    from tests.reference.quadratic_mesh import elevate
+    from tests.unit.test_tet10_thermopiezoelectric_integration import coupled_case
+
+    mesh = elevate(cube_mesh(2))
+    reference = coupled_case(mesh, electric)
+    result = coupled_case(mesh, electric, physics_backend, physics_backend)
+    assert_allclose(
+        result.heat.temperature, reference.heat.temperature, rtol=0, atol=2e-9
+    )
+    for field in (
+        "displacement",
+        "potential",
+        "stress",
+        "electric_displacement",
+        "mechanical_energy",
+        "coupling_energy",
+        "dielectric_enthalpy",
+    ):
+        assert_allclose(
+            getattr(result.piezoelectric, field),
+            getattr(reference.piezoelectric, field),
+            rtol=2e-8,
+            atol=2e-10,
+        )
+    assert abs(result.heat.power_balance) < 2e-9
+    assert abs(result.piezoelectric.charge_balance) < 2e-9
+    assert_allclose(result.piezoelectric.force_balance, 0, rtol=0, atol=2e-9)
+    assert_allclose(result.piezoelectric.moment_balance, 0, rtol=0, atol=2e-9)

@@ -63,3 +63,6 @@ schreibt rohe VTU-Felder sowie einen JSON-Bericht mit Provenienz und Bilanzen.
 
 - [Tet10-Piezoelektrizität mit schwebender Elektrode](tet10_piezoelectric/README.md):
   Gmsh/TOML, analytischer Nachweis und Schema-2-Export.
+
+- [Tet10-Thermopiezoelektrizität](tet10_thermopiezoelectric/README.md):
+  thermisch induzierte Leerlaufspannung, Model und gemeinsamer Export.

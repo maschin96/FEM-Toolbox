@@ -239,9 +239,10 @@ def export_result_bundle(
             "elasticity",
             "thermomechanics",
             "piezoelectric",
+            "thermopiezoelectric",
         ):
             raise ValidationError(
-                "only Tet10 heat/electrostatics/elasticity/thermomechanics/piezoelectric export is supported",
+                "unsupported Tet10 result physics",
                 field="result",
             )
         expected = mesh.points[mesh.cells[:, :4]].mean(axis=1)

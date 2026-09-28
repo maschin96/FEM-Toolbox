@@ -17,6 +17,7 @@ from fem_toolbox.physics.elasticity import VectorField
 from fem_toolbox.physics.electrostatics import ChargeDensity
 from fem_toolbox.physics.heat import Convection, ScalarField
 from fem_toolbox.solvers.heat import HeatResult, solve_heat
+from fem_toolbox.solvers.linear_backend import LinearBackend
 from fem_toolbox.solvers.piezoelectric import PiezoelectricResult, solve_piezoelectric
 
 
@@ -36,6 +37,8 @@ def solve_thermopiezoelectric(
     thermal_conditions: Iterable[Dirichlet],
     piezoelectric_conditions: Iterable[Dirichlet],
     *,
+    thermal_backend: LinearBackend | None = None,
+    piezoelectric_backend: LinearBackend | None = None,
     source: ScalarField = 0.0,
     outward_fluxes: Mapping[int, ScalarField] | None = None,
     convection: Mapping[int, Convection] | None = None,
@@ -49,17 +52,19 @@ def solve_thermopiezoelectric(
     block_scaling: bool = True,
     method: str = "direct",
 ) -> ThermopiezoelectricResult:
-    """Solve heat first, then transfer absolute nodal K on the same Tet4 mesh.
+    """Solve heat first, then transfer absolute nodal K on the same Tet4/Tet10 mesh.
 
     Expansion is defined per cell in global engineering-Voigt order (1/K)
     with a reference temperature (K). ``electric_thermal_strain`` controls
     the optional thermal contribution to electric displacement explicitly.
-    There is no reciprocal heat feedback or time dependence.
+    Separate optional thermal_backend/piezoelectric_backend hooks select linear
+    backends (None uses SciPy). There is no reciprocal heat feedback or time dependence.
     """
     heat = solve_heat(
         mesh,
         thermal_material,
         thermal_conditions,
+        backend=thermal_backend,
         source=source,
         outward_fluxes=outward_fluxes,
         convection=convection,
@@ -70,6 +75,7 @@ def solve_thermopiezoelectric(
         mesh,
         piezoelectric_material,
         piezoelectric_conditions,
+        backend=piezoelectric_backend,
         body_force=body_force,
         tractions=tractions,
         point_loads=point_loads,

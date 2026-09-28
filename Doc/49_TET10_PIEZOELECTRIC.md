@@ -7,6 +7,10 @@ konstante anisotrope Materialdaten pro Zelle sowie feste und schwebende Elektrod
 Thermische Piezo-Eigendehnungen, Thermopiezo und Piezo-Dynamik bleiben für Tet10
 explizit abgelehnt. Die bestehende Tet4-Thermopiezofunktion bleibt erhalten.
 
+Die damalige Thermalsperre wird durch den nachfolgenden
+[Tet10-Thermopiezoschnitt](50_TET10_THERMOPIEZOELECTRIC.md) aufgehoben;
+dieses Dokument beschreibt den nichtthermischen Integrationsstand.
+
 ## Diskretisierung und API
 
 `piezoelectric_dofs(mesh)` erzeugt feldweise u- und φ-Freiheitsgrade auf allen

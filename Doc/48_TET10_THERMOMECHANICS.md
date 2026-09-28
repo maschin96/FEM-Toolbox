@@ -58,7 +58,8 @@ Schwerpunktkoordinaten **beider** Teilresultate gegen das Netz geprüft.
 Felder bleiben rohe Schwerpunktwerte; keine Knotenprojektion. Tet4 behält
 Schema 1. Das [ausführbare Gmsh-Beispiel](../examples/tet10_thermomechanics/README.md)
 verwendet die Python-API: Ein eigenständiger `thermomechanics`-TOML-Modus
-existiert weiterhin nicht. Tet10-Thermopiezo-Modelle bleiben ausdrücklich gesperrt.
+existiert weiterhin nicht. Die damalige Tet10-Thermopiezosperre ist inzwischen durch
+[Dokument 50](50_TET10_THERMOPIEZOELECTRIC.md) aufgehoben.
 
 ## Verifikation
 
