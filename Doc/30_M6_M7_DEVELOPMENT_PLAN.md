@@ -328,3 +328,9 @@ Gesamt-Abnahme-/Kostenvergleiche bleiben offen.
 Komplexe Frequenzantworten einschließlich DC, Elektroden, Model und P2-Export
 sind integriert. [Nachweise und Grenzen](53_TET10_HARMONIC.md).
 Gesamt-Abnahme und Genauigkeits-/Kostenvergleiche bleiben offen.
+
+### #37c: Genauigkeit und Kosten
+
+Der [Vergleichsbericht](54_ACCURACY_COST_COMPARISON.md) ergänzt den
+Issue-Branch um 72 Messläufe für Tet4/Tet10 und SciPy/PETSc, einschließlich
+Biegungs-/Gradientenvergleich für #35. Integration und Abnahme bleiben separat.
