@@ -8,6 +8,9 @@ Wärmerückwirkung, keine reziproke Thermoelastizität und keine transiente
 Strukturkopplung. Piezo-/Thermopiezointegration, Dynamik und Kostenvergleiche
 bleiben offen; #35 ist damit nicht abgeschlossen.
 
+Der nachfolgende [stationäre Piezoschnitt](49_TET10_PIEZOELECTRIC.md)
+ergänzt inzwischen Tet10-Piezo; die obige Abgrenzung beschreibt den damaligen Stand.
+
 ## Thermischer Last- und Ergebnisvertrag
 
 Temperatur ist weiterhin ein absolutes Knotenfeld der Länge `mesh.n_points` in K.

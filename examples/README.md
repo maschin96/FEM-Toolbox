@@ -60,3 +60,6 @@ schreibt rohe VTU-Felder sowie einen JSON-Bericht mit Provenienz und Bilanzen.
 - [Statische Tet10-Elastizität](tet10_elasticity/README.md): quadratischer Verschiebungspatch, integrierte Energie und Schema-2-Export.
 
 - [Stationäre Tet10-Thermomechanik](tet10_thermomechanics/README.md): Wärme → Mechanik, quadratische Eigenverzerrung und gemeinsamer Export über die Python-API.
+
+- [Tet10-Piezoelektrizität mit schwebender Elektrode](tet10_piezoelectric/README.md):
+  Gmsh/TOML, analytischer Nachweis und Schema-2-Export.

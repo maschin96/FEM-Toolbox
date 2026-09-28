@@ -6,6 +6,9 @@ stationäre Elektrostatik. Statische Mechanik ist inzwischen in
 verbleibenden Vergleichsgates offen. Keine M7-Releasefreigabe oder experimentelle
 Validierungsbehauptung.
 
+Der nachfolgende [stationäre Piezoschnitt](49_TET10_PIEZOELECTRIC.md)
+ergänzt inzwischen Tet10-Piezo; die obige Abgrenzung beschreibt den damaligen Stand.
+
 ## Umfang und Konventionen
 
 `solve_electrostatics`, `electric_dofs` und Model-Schema 1 unterstützen
