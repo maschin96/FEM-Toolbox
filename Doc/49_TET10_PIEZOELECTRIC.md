@@ -1,5 +1,10 @@
 # Stationäre Tet10-Piezoelektrizität (#35d)
 
+**Aktueller Gesamtstand:** [Tet10-Abnahme](55_TET10_ACCEPTANCE.md).
+Die folgenden Status- und Restumfangsangaben dokumentieren den jeweiligen
+Implementierungsschnitt; später integrierte Analysen und Vergleiche sind im
+Gesamtbericht zusammengeführt.
+
 Dieser Integrationsschnitt von #35 verbindet die vorhandenen quadratischen
 Elementoperatoren mit `solve_piezoelectric`, Model/Preflight, linearen Backends
 und Ergebnisexport. Unterstützt sind geradkantige Tet10 mit Triangle6-Rändern,

@@ -1,5 +1,10 @@
 # Statische Tet10-Elastizität durch Model, Solver und Export (#35d)
 
+**Aktueller Gesamtstand:** [Tet10-Abnahme](55_TET10_ACCEPTANCE.md).
+Die folgenden Status- und Restumfangsangaben dokumentieren den jeweiligen
+Implementierungsschnitt; später integrierte Analysen und Vergleiche sind im
+Gesamtbericht zusammengeführt.
+
 Historischer Umfang dieses Integrationsschnitts: statische lineare Elastizität nach Wärme und
 Elektrostatik. #35 bleibt für thermische Kopplungen, Piezo, Dynamik und
 verbleibende Kosten-/Vergleichsgates offen. Keine M7-Releasefreigabe oder

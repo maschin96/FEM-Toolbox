@@ -8,7 +8,7 @@ auf dem Einheitswürfel, jeweils exakte Dirichlet-Daten auf dem gesamten Rand:
 
 - Wärmegradient: k=1 W/(m K), T=1+x⁴+y⁴/2+z⁴/4 K,
   Q=-12(x²+y²/2+z²/4) W/m³.
-- Biegung: E=100 Pa, ν=0, a=0,01 m, u=(-3ax²z,0,ax³),
+- Biegung: E=100 Pa, ν=0, a=0,01 m⁻², u=(-3ax²z,0,ax³),
   εxx=-6axz, alle anderen Verzerrungen null, σxx=-6Eaxz,
   b=(6Eaz,0,0) N/m³. Schubfreie kubische Biegekinematik mit unabhängig
   hergeleiteter Volumenlast; kein freier Kragträger oder experimenteller Versuch.

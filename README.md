@@ -289,20 +289,10 @@ wie NumPy, SciPy und meshio behalten ihre eigenen Bedingungen; die
 Drittbestandteile und den Umfang der Paketarchive. Wheel und sdist werden als GitHub-Release-Artefakte bereitgestellt. Ein
 öffentlicher PyPI-Upload ist damit nicht verbunden.
 
-## Tet10-Modalanalyse (#35d)
+## Tet10-Gesamtnachweis (#35)
 
-Konsistente Masse, offene/kurzgeschlossene Elektroden, Model und Modenexport
-sind integriert. [Umfang und Verifikation](Doc/51_TET10_MODES.md).
-Gesamt-Abnahme-/Kostenvergleiche bleiben offen.
-
-## Tet10-Newmark (#35d)
-
-Zeitintegration mit konsistenter Masse, bewegten Rändern, Last-/Spannungsereignissen,
-Model und Zeitserienexport ist integriert. [Nachweise und Grenzen](Doc/52_TET10_NEWMARK.md).
-Gesamt-Abnahme-/Kostenvergleiche bleiben offen.
-
-## Tet10-Harmonik (#35d)
-
-Komplexe Frequenzantworten einschließlich DC, Elektroden, Model und P2-Export
-sind integriert. [Nachweise und Grenzen](Doc/53_TET10_HARMONIC.md).
-Gesamt-Abnahme und Genauigkeits-/Kostenvergleiche bleiben offen.
+Der M7-Branch unterstützt geradkantige Tet10 durch stationäre Felder und
+Kopplungen sowie transiente Wärme, Modal-, Newmark- und Harmonikanalyse.
+[Abnahmekriterien, Tests und Grenzen](Doc/55_TET10_ACCEPTANCE.md) bündeln den
+Nachweis einschließlich des Genauigkeits-/Kostenvergleichs. Die Freigabe von
+v1.2.0 erfolgt separat über #38.

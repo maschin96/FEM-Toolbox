@@ -1,5 +1,9 @@
 # Entwicklungsstand und nächste Meilensteine M6/M7
 
+Aktueller Tet10-Gesamtabgleich: [Abnahme #35](55_TET10_ACCEPTANCE.md).
+Die chronologischen Einträge weiter unten behalten ihren damaligen Status;
+alle Tet10-Analyseschnitte und der Vergleich #37c sind inzwischen integriert.
+
 Stand: 23.09.2026. Tracking: [#167](https://github.com/maschin96/FEM-Toolbox/issues/167).
 Diese Planung ersetzt für M6/M7 die ältere Baseline aus Dokument 13.
 Sie beschreibt geplante Arbeit, keine bereits implementierten Fähigkeiten.

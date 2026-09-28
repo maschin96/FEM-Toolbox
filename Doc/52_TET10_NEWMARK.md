@@ -1,5 +1,10 @@
 # Tet10-Newmark-Zeitintegration (#35d)
 
+**Aktueller Gesamtstand:** [Tet10-Abnahme](55_TET10_ACCEPTANCE.md).
+Die folgenden Status- und Restumfangsangaben dokumentieren den jeweiligen
+Implementierungsschnitt; später integrierte Analysen und Vergleiche sind im
+Gesamtbericht zusammengeführt.
+
 `solve_transient_piezoelectric` und `Model`-Schema 3 mit
 `physics="transient_piezoelectric"` unterstützen geradkantige Tet10.
 Der bestehende Newmark-Vertrag bleibt unverändert: β=1/4, γ=1/2, konsistente

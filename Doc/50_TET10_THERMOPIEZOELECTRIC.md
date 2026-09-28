@@ -1,5 +1,10 @@
 # Stationäre Tet10-Thermopiezoelektrizität (#35d)
 
+**Aktueller Gesamtstand:** [Tet10-Abnahme](55_TET10_ACCEPTANCE.md).
+Die folgenden Status- und Restumfangsangaben dokumentieren den jeweiligen
+Implementierungsschnitt; später integrierte Analysen und Vergleiche sind im
+Gesamtbericht zusammengeführt.
+
 Der bestehende einseitige Ablauf T → (u, φ) unterstützt geradkantige Tet10
 über die Python-API und `Model`-Schema 1. Temperatur wird auf demselben Netz
 an allen aktiven Knoten übertragen; Materialregionen, Referenztemperaturen,

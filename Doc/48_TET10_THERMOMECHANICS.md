@@ -1,5 +1,10 @@
 # Stationäre Tet10-Thermomechanik (#35d)
 
+**Aktueller Gesamtstand:** [Tet10-Abnahme](55_TET10_ACCEPTANCE.md).
+Die folgenden Status- und Restumfangsangaben dokumentieren den jeweiligen
+Implementierungsschnitt; später integrierte Analysen und Vergleiche sind im
+Gesamtbericht zusammengeführt.
+
 Dieser Teil von #35d verbindet die verifizierten Tet10-Wärme- und Mechanikpfade.
 `solve_elasticity(..., temperature=..., expansion=...)` und der bestehende
 Python-Einstieg `solve_thermomechanics` unterstützen geradkantige Tet10.
