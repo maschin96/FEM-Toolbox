@@ -427,6 +427,7 @@ class Model:
             "thermopiezoelectric",
             "piezo_modes",
             "transient_piezoelectric",
+            "harmonic_piezoelectric",
         ):
             raise ModelSchemaError(
                 path="mesh",

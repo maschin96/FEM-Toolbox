@@ -163,7 +163,7 @@ interpretiert Koordinaten als Meter, `1.0e-3` rechnet Millimeter in Meter um.
   [Stationäre Tet10-Piezoelektrizität mit Elektroden](Doc/49_TET10_PIEZOELECTRIC.md)
   ist ebenfalls unterstützt, ebenso die [stationäre Tet10-Thermopiezoelektrizität](Doc/50_TET10_THERMOPIEZOELECTRIC.md).
   [Tet10-Modalanalyse](Doc/51_TET10_MODES.md) ist unterstützt.
-  Harmonik und gemischte Elementordnungen bleiben bei Tet10 ausgeschlossen. Andere Zelltypen führen zu
+  Gemischte Elementordnungen bleiben bei Tet10 ausgeschlossen. Andere Zelltypen führen zu
   einem `UnsupportedCellTypeError`.
 - Mehrfache physische Gmsh-Gruppen bleiben als benannte Auswahlsätze erhalten.
   Der einzelne numerische Tag bildet nur die erste gemeldete Mitgliedschaft ab.
@@ -293,10 +293,16 @@ Drittbestandteile und den Umfang der Paketarchive. Wheel und sdist werden als Gi
 
 Konsistente Masse, offene/kurzgeschlossene Elektroden, Model und Modenexport
 sind integriert. [Umfang und Verifikation](Doc/51_TET10_MODES.md).
-Tet10-Harmonik und Gesamt-Abnahme-/Kostenvergleiche bleiben offen.
+Gesamt-Abnahme-/Kostenvergleiche bleiben offen.
 
 ## Tet10-Newmark (#35d)
 
 Zeitintegration mit konsistenter Masse, bewegten Rändern, Last-/Spannungsereignissen,
 Model und Zeitserienexport ist integriert. [Nachweise und Grenzen](Doc/52_TET10_NEWMARK.md).
-Tet10-Harmonik und Gesamt-Abnahme-/Kostenvergleiche bleiben offen.
+Gesamt-Abnahme-/Kostenvergleiche bleiben offen.
+
+## Tet10-Harmonik (#35d)
+
+Komplexe Frequenzantworten einschließlich DC, Elektroden, Model und P2-Export
+sind integriert. [Nachweise und Grenzen](Doc/53_TET10_HARMONIC.md).
+Gesamt-Abnahme und Genauigkeits-/Kostenvergleiche bleiben offen.

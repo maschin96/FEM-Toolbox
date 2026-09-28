@@ -1,0 +1,60 @@
+schema_version = 3
+units = "SI"
+physics = "harmonic_piezoelectric"
+
+[mesh]
+path = "body.msh"
+length_scale_to_m = 1.0
+
+[density]
+value = 6.0
+unit = "kg/m^3"
+
+[analysis.frequencies]
+values = [0.0, 0.2, 2.0]
+unit = "Hz"
+
+[analysis.load_factor]
+real = 1.0
+imag = 2.0
+
+[base]
+schema_version = 1
+units = "SI"
+physics = "piezoelectric"
+
+[base.materials.piezo.synthetic]
+stiffness = [[10.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 20.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 30.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 4.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 5.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 6.0]]
+stress_coupling = [[2.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]]
+permittivity = [[3.0, 0.0, 0.0], [0.0, 4.0, 0.0], [0.0, 0.0, 5.0]]
+
+[base.materials.piezo.synthetic.units]
+stiffness = "Pa"
+stress_coupling = "C/m^2"
+permittivity = "F/m"
+
+[base.regions.piezo]
+all = "synthetic"
+
+[[base.boundary.dirichlet]]
+field = "u"
+nodes = [0, 2, 3, 4, 5, 6, 7, 8, 9]
+value = 0.0
+unit = "m"
+
+[[base.boundary.dirichlet]]
+field = "u"
+nodes = [1]
+components = ["y", "z"]
+value = 0.0
+unit = "m"
+
+[[base.boundary.dirichlet]]
+field = "phi"
+nodes = [0, 2, 3, 4, 5, 6, 7, 8, 9]
+value = 0.0
+unit = "V"
+
+[base.loads.body_force]
+value = [6.0, 0.0, 0.0]
+unit = "N/m^3"

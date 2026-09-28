@@ -8,7 +8,7 @@ werden verwendet. Dichte kann global oder zellweise angegeben werden.
 
 Der Referenzsolver bleibt auf 2048 aktive Freiheitsgrade vor Reduktion begrenzt.
 Kein Mass-Lumping, kein Großmodell-Eigensolver, keine gekrümmten Elemente.
-Tet10-Harmonik bleibt ausdrücklich gesperrt; Newmark siehe Doc 52. #35 ist damit noch
+Newmark und Harmonik sind inzwischen ergänzt; siehe Doc 52/53. #35 ist damit noch
 nicht abgeschlossen; auch die übergreifenden Kosten-/Abnahmevergleiche fehlen.
 
 ## Numerik und Export
@@ -74,4 +74,10 @@ Wheel und sdist aus.
 
 Zeitintegration mit konsistenter Masse, bewegten Rändern, Last-/Spannungsereignissen,
 Model und Zeitserienexport ist integriert. [Nachweise und Grenzen](52_TET10_NEWMARK.md).
-Tet10-Harmonik und Gesamt-Abnahme-/Kostenvergleiche bleiben offen.
+Gesamt-Abnahme-/Kostenvergleiche bleiben offen.
+
+## Tet10-Harmonik (#35d)
+
+Komplexe Frequenzantworten einschließlich DC, Elektroden, Model und P2-Export
+sind integriert. [Nachweise und Grenzen](53_TET10_HARMONIC.md).
+Gesamt-Abnahme und Genauigkeits-/Kostenvergleiche bleiben offen.

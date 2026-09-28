@@ -90,6 +90,8 @@ Eintrag im Entscheidungsprotokoll.
 
 - [Tet10-Newmark: Zeitintegration, Elektroden und Zeitserien (#35d)](52_TET10_NEWMARK.md)
 
+- [Tet10-Harmonik: komplexe Frequenzantworten und Export (#35d)](53_TET10_HARMONIC.md)
+
 ## Veröffentlichungen
 
 - [v1.1.0 — Transiente Wärme und Piezo-Dynamik](releases/v1.1.0.md)

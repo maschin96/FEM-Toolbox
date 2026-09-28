@@ -98,4 +98,10 @@ Das eigenständige Gmsh/TOML-Beispiel prüft freie Schwingung und Energie und sc
 41 Zeitschritte mit einem inneren Messpunkt. CI führt es aus Wheel und sdist aus.
 Die Grenzen bleiben 2048 aktive Gesamt-DOFs und 2.000.000 skalare Zustandswerte.
 Keine gekrümmten Tet10, kein Streaming, keine transiente thermische Kopplung.
-Tet10-Harmonik und Gesamt-Abnahme-/Kostenvergleiche für #35 bleiben offen.
+Gesamt-Abnahme-/Kostenvergleiche für #35 bleiben offen.
+
+## Tet10-Harmonik (#35d)
+
+Komplexe Frequenzantworten einschließlich DC, Elektroden, Model und P2-Export
+sind integriert. [Nachweise und Grenzen](53_TET10_HARMONIC.md).
+Gesamt-Abnahme und Genauigkeits-/Kostenvergleiche bleiben offen.

@@ -220,9 +220,6 @@ def test_quadratic_curvature_probe_and_export_rejections(cube_mesh, tmp_path):
     result = Model(mesh=mesh, document=stationary_document()).solve().field_result
     with pytest.raises(ValidationError, match="centroid"):
         export_result_bundle(tmp_path / "bad", mesh, replace(result, field_points=None))
-    for physics in ("harmonic_piezoelectric",):
-        with pytest.raises(ValidationError, match="not yet supported"):
-            Model(mesh=mesh, document={"physics": physics})
 
 
 @pytest.mark.parametrize("lumping", ["", "row_sum", False])

@@ -41,8 +41,9 @@ jobs:
           cp -R examples/tet10_thermopiezoelectric dist/tet10_thermopiezoelectric
           cp -R examples/tet10_modes dist/tet10_modes
           cp -R examples/tet10_newmark dist/tet10_newmark
+          cp -R examples/tet10_harmonic dist/tet10_harmonic
           cd dist
-          sha256sum *.whl *.tar.gz *.py thermopiezoelectric/* transient_heat/* piezo_dynamics/* tet10_heat/* tet10_electrostatics/* tet10_elasticity/* tet10_thermomechanics/* tet10_piezoelectric/* tet10_thermopiezoelectric/* tet10_modes/* tet10_newmark/* > SHA256SUMS
+          sha256sum *.whl *.tar.gz *.py thermopiezoelectric/* transient_heat/* piezo_dynamics/* tet10_heat/* tet10_electrostatics/* tet10_elasticity/* tet10_thermomechanics/* tet10_piezoelectric/* tet10_thermopiezoelectric/* tet10_modes/* tet10_newmark/* tet10_harmonic/* > SHA256SUMS
       - name: Transfer artifacts and standalone solver example
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
@@ -124,6 +125,8 @@ jobs:
           test -s tet10_modes_results/manifest.json
           "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/tet10_newmark/run.py"
           test -s tet10_newmark_results/manifest.json
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/tet10_harmonic/run.py"
+          test -s tet10_harmonic_results/manifest.json
 
   quality:
     name: Quality / Python 3.13

@@ -88,6 +88,7 @@ def solve_harmonic_piezoelectric(
     ``backend`` is an experimental linear-backend hook; None selects SciPy.
     Reduction, physical residuals and result units remain this solver's contract.
 
+    Straight Tet4/Tet10 cells carry consistent mechanical mass, no electric mass.
     Topology uses homogeneous conditions/electrodes; loads and prescribed
     arrays are finite real/complex (4*nactive,) in [u,phi] DOF order. Loads
     are integrated force [N] and signed electric RHS [C], prescribed values
@@ -108,8 +109,6 @@ def solve_harmonic_piezoelectric(
     omega = 2 * np.pi * hz
     if not np.isfinite(omega) or omega > np.sqrt(np.finfo(np.float64).max):
         raise ValidationError("frequency is not representable", field="frequency_hz")
-    if mesh.n_tetra10:
-        raise ValidationError("Tet10 harmonic piezo is not yet supported", field="mesh")
     system = _build_dynamic_system(
         mesh, material, density, conditions, electrodes, backend
     )
@@ -164,7 +163,7 @@ def solve_harmonic_piezoelectric(
     reduced_state = reduced_g.copy()
     reduced_state[fu] = q
     if len(fp):
-        dielectric = -system.reduced[np.ix_(fp, fp)]
+        dielectric = system.dielectric
         electric = solve_linear(
             dielectric,
             rhs[fp],
