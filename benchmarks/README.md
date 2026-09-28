@@ -110,4 +110,10 @@ Fall für N=6 und N=10. Die Dateien
 `baselines/m7-37b-after-macos-arm64.json` enthalten unveränderte Rohdaten.
 Der Bericht nennt die beiden Produktionsdateihashes, Paritätsnachweis, Streuung
 und Messgrenzen. Es bleibt ein Problemgrößenvergleich auf einem Rechner;
-der nichttriviale Fehlerbudgetvergleich Tet4/Tet10 und SciPy/PETSc folgt in #37c.
+der nichttriviale Fehlerbudgetvergleich Tet4/Tet10 und SciPy/PETSc ist in [#37c](../Doc/54_ACCURACY_COST_COMPARISON.md) dokumentiert.
+
+## Genauigkeit und Kosten #37c
+
+`accuracy_cost.py` vergleicht Tet4/Tet10 und SciPy/PETSc für glatte Wärme- und
+Biegefelder. [Messvertrag, Reproduktion und Ergebnisse](../Doc/54_ACCURACY_COST_COMPARISON.md)
+enthalten Fehler- und Kostenbudgets sowie die Grenzen der Messung.
