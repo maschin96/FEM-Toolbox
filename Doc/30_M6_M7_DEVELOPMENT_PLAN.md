@@ -294,3 +294,11 @@ gemeinsame Schema-2-Export prüft beide Auswerteort-Arrays. Direkte Patches und
 gekoppelte Vier-Netze-Konvergenz sind nachgewiesen. Kein neuer TOML-Modus;
 Piezo-/Thermopiezo, Dynamik und Kostenvergleiche bleiben offen.
 [Details](48_TET10_THERMOMECHANICS.md).
+
+## Fortschritt #35d: stationärer piezoelektrischer Integrationsschnitt
+
+Tet10-Piezo ist mit Model/Preflight, anisotropen Materialregionen, festen und
+schwebenden Triangle6-Elektroden, Backends und Schema-2-Export integriert.
+Quadratische gekoppelte Felder, integrierte Enthalpie, Bilanzen und vier Netze
+sind nachgewiesen; [Details](49_TET10_PIEZOELECTRIC.md). Thermopiezo,
+Piezo-Dynamik und Gesamt-Abnahme-/Kostenvergleiche bleiben offen.

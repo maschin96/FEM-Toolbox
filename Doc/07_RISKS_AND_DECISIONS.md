@@ -520,3 +520,13 @@ Der bestehende Python-Ablauf erhält getrennte optionale Backend-Hooks;
 der gemeinsame Schema-2-Export prüft die Auswerteorte beider Teilresultate.
 Kein neuer Model-Modus, keine thermische Rückwirkung oder geänderten Vorzeichen.
 [Nachweise und Grenzen](48_TET10_THERMOMECHANICS.md).
+
+## ADR-035 — Stationäre Tet10-Piezoelektrizität (27.09.2026)
+
+Der vorhandene monolithische Solver nutzt die generische aktive Zellfamilie
+und die verifizierten Tet10-Operatoren. Elektrodenreduktion erfasst alle
+Triangle6-Knoten. Der interne Elementadapter trennt Schwerpunktfelder von
+integrierten Enthalpiebeiträgen; das additive `field_points` hält Tet4-Aufrufer
+kompatibel. Schema 2 kennzeichnet die drei Energiebeiträge als Zellintegrale.
+Thermopiezo und Dynamik bleiben bis zu eigenen Integrationsnachweisen gesperrt.
+Begründung und analytische/Konvergenznachweise: [Doc 49](49_TET10_PIEZOELECTRIC.md).

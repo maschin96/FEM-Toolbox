@@ -106,3 +106,8 @@ Schwerpunktsuffix. [Details](47_TET10_ELASTICITY.md).
 Gekoppelte Tet10-Thermomechanik exportiert Wärme und Mechanik gemeinsam in
 Schema 2. Beide Teilresultate müssen passende Schwerpunktkoordinaten liefern.
 [Vertrag und Nachweise](48_TET10_THERMOMECHANICS.md).
+
+Stationäre [Tet10-Piezoelektrizität](49_TET10_PIEZOELECTRIC.md) nutzt ebenfalls
+Schema 2: `mechanical_energy_J`, `coupling_energy_J` und
+`dielectric_enthalpy_J` sind Zellintegrale. Dehnung, Spannung, E und D tragen
+`_at_centroid`. Elektrodenladungen und -potentiale bleiben Bilanzkennwerte.

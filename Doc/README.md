@@ -82,6 +82,8 @@ Eintrag im Entscheidungsprotokoll.
 
 - [Stationäre Tet10-Thermomechanik: Eigenverzerrungen und gekoppelter Export (#35d)](48_TET10_THERMOMECHANICS.md)
 
+- [Stationäre Tet10-Piezoelektrizität: Elektroden, Model und Enthalpie (#35d)](49_TET10_PIEZOELECTRIC.md)
+
 ## Veröffentlichungen
 
 - [v1.1.0 — Transiente Wärme und Piezo-Dynamik](releases/v1.1.0.md)

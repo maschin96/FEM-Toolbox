@@ -233,9 +233,15 @@ def export_result_bundle(
     quadratic = bool(mesh.n_tetra10)
     evaluation_points = None
     if quadratic:
-        if physics not in ("heat", "electrostatics", "elasticity", "thermomechanics"):
+        if physics not in (
+            "heat",
+            "electrostatics",
+            "elasticity",
+            "thermomechanics",
+            "piezoelectric",
+        ):
             raise ValidationError(
-                "only Tet10 heat/electrostatics/elasticity/thermomechanics export is supported",
+                "only Tet10 heat/electrostatics/elasticity/thermomechanics/piezoelectric export is supported",
                 field="result",
             )
         expected = mesh.points[mesh.cells[:, :4]].mean(axis=1)
@@ -268,7 +274,12 @@ def export_result_bundle(
                 "inactive_padding": 0.0,
             }
         for attribute, (name, unit) in _CELL[kind].items():
-            integral = quadratic and attribute == "element_energy"
+            integral = quadratic and attribute in (
+                "element_energy",
+                "mechanical_energy",
+                "coupling_energy",
+                "dielectric_enthalpy",
+            )
             if quadratic and not integral:
                 name += "_at_centroid"
             values = _array(getattr(part, attribute), mesh.n_cells, name)

@@ -280,3 +280,46 @@ def test_tet10_thermomechanical_transfer_and_energy(cube_mesh, physics_backend):
     assert abs(result.heat.power_balance) < 1e-9
     assert_allclose(result.elasticity.force_balance, 0, rtol=0, atol=1e-9)
     assert_allclose(result.elasticity.moment_balance, 0, rtol=0, atol=1e-9)
+
+
+def test_tet10_quadratic_piezo_and_floating_electrode(cube_mesh, physics_backend):
+    from tests.reference.quadratic_mesh import elevate
+    from tests.unit.test_tet10_piezoelectric_integration import material, quadratic_case
+
+    mesh = elevate(cube_mesh(2))
+    reference = quadratic_case(mesh)
+    result = quadratic_case(mesh, physics_backend)
+    for field in (
+        "displacement",
+        "potential",
+        "stress",
+        "electric_displacement",
+        "mechanical_energy",
+        "coupling_energy",
+        "dielectric_enthalpy",
+    ):
+        assert_allclose(
+            getattr(result, field), getattr(reference, field), rtol=2e-8, atol=2e-10
+        )
+    left = np.unique(mesh.facets[mesh.facet_sets["left"]])
+    result = solve_piezoelectric(
+        mesh,
+        material(),
+        [
+            Dirichlet(
+                piezoelectric_dofs(mesh).indices("u", left), np.zeros(3 * len(left))
+            )
+        ],
+        electrodes=[
+            Electrode("ground", "left", potential=0),
+            Electrode("top", "right", charge=3.04),
+        ],
+        backend=physics_backend,
+    )
+    assert_allclose(result.potential, mesh.points[:, 0], rtol=0, atol=2e-9)
+    assert_allclose(
+        result.displacement[:, 0], -0.02 * mesh.points[:, 0], rtol=0, atol=2e-10
+    )
+    assert_allclose(result.force_balance, 0, rtol=0, atol=2e-9)
+    assert_allclose(result.moment_balance, 0, rtol=0, atol=2e-9)
+    assert abs(result.charge_balance) < 2e-9

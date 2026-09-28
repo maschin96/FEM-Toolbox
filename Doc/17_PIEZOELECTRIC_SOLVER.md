@@ -105,3 +105,10 @@ direkten/inversen Effekt, Kurzschluss, einfachen Leerlauf, Reziprozität und
 vierstufige Konvergenz. Der Leerlauf-Benchmark präzisiert die
 Rundungstoleranz der globalen Ladungsbilanz bei physikalisch verschwindender
 Nettoladung.
+
+## M7: zweite Elementfamilie
+
+[Stationäre Tet10-Piezoelektrizität](49_TET10_PIEZOELECTRIC.md) verwendet
+denselben Solver-/Elektrodenvertrag mit allen zehn Zell- und sechs Flächenknoten.
+Zellfelder sind Schwerpunktwerte, Energiebeiträge sind Volumenintegrale.
+Thermische und dynamische Tet10-Piezokopplung bleiben Folgearbeit.
