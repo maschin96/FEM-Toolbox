@@ -125,3 +125,7 @@ Eintrag im Entscheidungsprotokoll.
 
 Die Planungsdokumente 01–09 sind Entwürfe. Implementierungs- und
 Verifikationsdokumente benennen ihren jeweiligen Nachweisumfang ausdrücklich.
+
+## M8 — in Entwicklung
+
+- [Stationäre Parameterstudien, Fallkatalog und Fortsetzung (#59)](59_PARAMETER_STUDIES.md)

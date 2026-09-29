@@ -218,7 +218,7 @@ elektrisches Potential `phi` mit feldweiser Freiheitsgradverwaltung.
 | M5 | v1.0.0 | Elektroden, Modellformat und vollständiger stationärer Workflow | Freigegeben |
 | M6 | v1.1.0 | Transiente Wärme, Piezo-Dynamik/Harmonik (reziproke Thermoelastizität zurückgestellt) | Freigegeben |
 | M7 | v1.2.0 | PETSc-Backend, Tet10, Wärmeindikatoren und gemessene Skalierung | Freigegeben |
-| M8 | v1.3.0* | Reproduzierbare Parameterstudien | Geplant |
+| M8 | v1.3.0* | Parameterstudien, Visualisierung und Surrogatmodelle | In Entwicklung |
 | M9 | v1.4.0* | Experimentelle Validierung und Unsicherheit | Geplant |
 | M10 | v1.5.0* | Kontrollierte adaptive Netzstudien | Geplant |
 | M11 | Offen | Topologieoptimierung | Grober Horizont |
@@ -305,3 +305,12 @@ Kopplungen sowie transiente Wärme, Modal-, Newmark- und Harmonikanalyse.
 [Abnahmekriterien, Tests und Grenzen](Doc/55_TET10_ACCEPTANCE.md) bündeln den
 Nachweis einschließlich des Genauigkeits-/Kostenvergleichs. Die Freigabe von
 v1.2.0 erfolgt separat über #38.
+
+## M8-Entwicklung: stationäre Parameterstudien (#59)
+
+Der M8-Entwicklungsstand ergänzt `fem_toolbox.studies.Study` für deklarative,
+lokale stationäre Parameterstudien mit deterministischen Fall-IDs, geprüfter
+Wiederverwendung und Fortsetzung nach Abbruch. [Vertrag und Grenzen](Doc/59_PARAMETER_STUDIES.md)
+und [ausführbares Wärmebeispiel](examples/parameter_study/README.md).
+Dies ist noch keine neue stabile Freigabe; Berichte, Visualisierung und
+Surrogatmodelle werden in eigenen M8-Issues umgesetzt.

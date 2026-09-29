@@ -84,3 +84,5 @@ Gesamt-Abnahme-/Kostenvergleiche bleiben offen.
 Komplexe Frequenzantworten einschließlich DC, Elektroden, Model und P2-Export
 sind integriert. [Nachweise und Grenzen](../Doc/53_TET10_HARMONIC.md).
 Gesamt-Abnahme und Genauigkeits-/Kostenvergleiche bleiben offen.
+
+- [Lokale stationäre Parameterstudie mit Resume](parameter_study/README.md) (M8-Entwicklung).

@@ -33,6 +33,7 @@ jobs:
           cp -R examples/thermopiezoelectric dist/thermopiezoelectric
           cp -R examples/transient_heat dist/transient_heat
           cp -R examples/piezo_dynamics dist/piezo_dynamics
+          cp -R examples/parameter_study dist/parameter_study
           cp -R examples/tet10_heat dist/tet10_heat
           cp -R examples/tet10_electrostatics dist/tet10_electrostatics
           cp -R examples/tet10_elasticity dist/tet10_elasticity
@@ -43,7 +44,7 @@ jobs:
           cp -R examples/tet10_newmark dist/tet10_newmark
           cp -R examples/tet10_harmonic dist/tet10_harmonic
           cd dist
-          sha256sum *.whl *.tar.gz *.py thermopiezoelectric/* transient_heat/* piezo_dynamics/* tet10_heat/* tet10_electrostatics/* tet10_elasticity/* tet10_thermomechanics/* tet10_piezoelectric/* tet10_thermopiezoelectric/* tet10_modes/* tet10_newmark/* tet10_harmonic/* > SHA256SUMS
+          sha256sum *.whl *.tar.gz *.py thermopiezoelectric/* transient_heat/* piezo_dynamics/* tet10_heat/* tet10_electrostatics/* tet10_elasticity/* tet10_thermomechanics/* tet10_piezoelectric/* tet10_thermopiezoelectric/* tet10_modes/* tet10_newmark/* tet10_harmonic/* parameter_study/* > SHA256SUMS
       - name: Transfer artifacts and standalone solver example
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
@@ -153,6 +154,9 @@ jobs:
           test -s tet10_newmark_results/manifest.json
           "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/tet10_harmonic/run.py"
           test -s tet10_harmonic_results/manifest.json
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/parameter_study/run.py" --max-cases 1
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/parameter_study/run.py"
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/parameter_study/run.py"
 
   quality:
     name: Quality / Python 3.13
@@ -264,7 +268,7 @@ jobs:
           python -c 'import fem_toolbox, meshio, numpy, scipy; print(f"fem_toolbox={fem_toolbox.__file__} meshio={meshio.__version__} numpy={numpy.__version__} scipy={scipy.__version__}")'
 
       - name: Smoke numerical solvers and mesh I/O
-        run: python -m pytest tests/regression/test_piezo_d33_benchmark.py tests/regression/test_thermopiezo_example.py tests/unit/test_mesh_io.py
+        run: python -m pytest tests/regression/test_piezo_d33_benchmark.py tests/regression/test_thermopiezo_example.py tests/unit/test_mesh_io.py tests/unit/test_studies.py
 
   petsc:
     name: PETSc / Python 3.12 / ${{ matrix.scalar }}

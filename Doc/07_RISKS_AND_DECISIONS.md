@@ -567,3 +567,19 @@ symmetrisierten Dielektrikblock wie Moden und Newmark. Originalresiduen,
 komplexe Spitzenwertkonvention, Resonanzschwelle und DOF-Grenze bleiben erhalten.
 Model-Schema 3 und der vorhandene Schema-2-Feldexport benötigen keine neue
 Schemaversion. [Unabhängige Nachweise](53_TET10_HARMONIC.md).
+
+
+## ADR-040 — Lokale stationäre Parameterstudien (29.09.2026)
+
+#59 ergänzt einen Adapter über der vorhandenen Model-/Ergebnis-API, ohne
+Feldoperatoren zu ändern. Schema 1 bildet ein endliches kartesisches Produkt
+expliziter SI-Parameter auf bestehende Model-Eigenschaften ab. Fallidentität
+und Eingabegültigkeit sind getrennt: Parameter definieren stabile Fall-IDs;
+Dokument, Netzbytes, Solveroptionen und Versionsvertrag bestimmen Wiederverwendung.
+Ein atomar ersetzter Katalog veröffentlicht den Erfolg erst nach vollständigem
+Ergebnisbündel. Fortsetzung prüft beide Dateihashes und Bündelprovenienz.
+Jeder Versuch erhält ein neues Verzeichnis, ein exklusiver Lock verhindert
+konkurrierende Writer. Nach hartem Prozessabbruch erfolgt Lockfreigabe bewusst
+manuell, ohne fremde laufende Arbeit automatisch zu übernehmen. Alte Versuche
+bleiben erhalten; keine verteilte Ausführung oder automatische Bereinigung.
+[API, Katalogvertrag und Nachweise](59_PARAMETER_STUDIES.md).
