@@ -100,9 +100,11 @@ Eintrag im Entscheidungsprotokoll.
 
 - [M7-Release-Kandidat 1.2.0rc1 und Supportmatrix (#38)](57_M7_RELEASE_CANDIDATE.md)
 
+- [M7: finaler Release-Nachweis und Veröffentlichungsgates (#38)](58_M7_RELEASE_VERIFICATION.md)
+
 ## Veröffentlichungen
 
-- [v1.2.0 — vorläufige Release Notes, Kandidat 1.2.0rc1](releases/v1.2.0.md)
+- [v1.2.0 — Release Notes, Veröffentlichung vorbereitet](releases/v1.2.0.md)
 
 - [v1.1.0 — Transiente Wärme und Piezo-Dynamik](releases/v1.1.0.md)
 

@@ -3,8 +3,8 @@
 Stand: 23. September 2026. Diese Anleitung richtet eine **Entwicklungsumgebung
 aus dem Repository** ein. Die stabile Version ist v1.1.0 (stationär, transiente Wärme und Piezo-Dynamik); ein späterer Checkout kann bereits
 weitere Entwicklungsänderungen enthalten.
-Dieser M7-Checkout trägt die Kandidatenversion **1.2.0rc1**, noch keine finale
-v1.2.0-Freigabe. [Supportmatrix und Grenzen](Doc/57_M7_RELEASE_CANDIDATE.md).
+Dieser M7-Checkout trägt den Freigabestand **1.2.0**; Tag und Veröffentlichung
+stehen noch aus. [Supportmatrix und Grenzen](Doc/57_M7_RELEASE_CANDIDATE.md).
 Ein PyPI-Release des aktuellen Checkouts wird hier nicht vorausgesetzt.
 
 ## Voraussetzungen und geprüfte Plattformen
@@ -166,7 +166,7 @@ Toleranzen. Die separate Gmsh-Installation lieferte Version 4.15.2; der
 einlas. Dieser lokale Nachweis ergänzt die Linux-CI-Matrix und ist keine
 Windows-Verifikation.
 
-## Optionaler PETSc-Kandidat
+## Optionales PETSc-Backend
 
 Die normale Wheel-/sdist-Installation funktioniert ohne PETSc. Native PETSc-
 Backends werden separat eingerichtet; die getestete Linux-Umgebung und die
