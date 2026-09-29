@@ -591,3 +591,15 @@ lesbaren Markdown-Bericht. Fallidentität, Herkunft, Einheit, Auswahl und Redukt
 bleiben explizit; fehlende Werte sind null mit Grund. Bilanzbewertungen benötigen
 explizite Schwellen, Netzkonvergenz wird nicht aus einem Solve abgeleitet.
 [Vertrag und Nachweise](60_STUDY_REPORTS.md).
+
+## ADR-042 — Polynomiale Surrogate mit explizitem Holdout (29.09.2026)
+
+#205 nutzt NumPy-Least-Squares auf einer train-only skalierten vollständigen
+Polynombasis vom Gesamtgrad 1/2. Optionale Ridge-Regularisierung wird als
+erweitertes Least-Squares-System ohne Strafe auf den konstanten Term gelöst.
+Explizite Fallpartition und Gruppierung identischer Eingaben verhindern Datenleckage.
+Der #60-Adapter übernimmt SI-/Quellmetadaten; Ausschlüsse sind ausdrücklich und
+vollständig protokolliert. Ein geprüftes JSON-Artefakt enthält alle für Vorhersagen
+benötigten Größen, niemals ausführbare Serialisierung. Boxgrenzen und Testfehler
+werden nicht als Unsicherheitsintervalle oder physikalische Validierung ausgegeben.
+[Vertrag und Nachweise](61_SURROGATE_MODELS.md).

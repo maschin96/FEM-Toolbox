@@ -312,5 +312,8 @@ Der M8-Entwicklungsstand ergänzt `fem_toolbox.studies.Study` für deklarative,
 lokale stationäre Parameterstudien mit deterministischen Fall-IDs, geprüfter
 Wiederverwendung und Fortsetzung nach Abbruch. [Vertrag und Grenzen](Doc/59_PARAMETER_STUDIES.md)
 und [ausführbares Wärmebeispiel](examples/parameter_study/README.md).
-Dies ist noch keine neue stabile Freigabe; Berichte, Visualisierung und
-Surrogatmodelle werden in eigenen M8-Issues umgesetzt.
+Der M8-Stand enthält außerdem [Kennwerttabellen und Berichte](Doc/60_STUDY_REPORTS.md)
+sowie [polynomiale Surrogatmodelle](Doc/61_SURROGATE_MODELS.md) mit expliziten
+Trainings-/Testfällen und wiederverwendbaren JSON-Artefakten.
+[Wärme-Surrogatbeispiel](examples/surrogate_heat/README.md).
+Dies ist noch keine neue stabile Freigabe; Visualisierung bleibt ein eigenes M8-Issue.
