@@ -129,3 +129,5 @@ Verifikationsdokumente benennen ihren jeweiligen Nachweisumfang ausdrücklich.
 ## M8 — in Entwicklung
 
 - [Stationäre Parameterstudien, Fallkatalog und Fortsetzung (#59)](59_PARAMETER_STUDIES.md)
+
+- [Kennwerttabellen und Studienberichte (#60)](60_STUDY_REPORTS.md)
