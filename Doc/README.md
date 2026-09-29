@@ -131,3 +131,5 @@ Verifikationsdokumente benennen ihren jeweiligen Nachweisumfang ausdrücklich.
 - [Stationäre Parameterstudien, Fallkatalog und Fortsetzung (#59)](59_PARAMETER_STUDIES.md)
 
 - [Kennwerttabellen und Studienberichte (#60)](60_STUDY_REPORTS.md)
+
+- [Surrogatmodelle: Training, Prüfung und Modellartefakte (#205)](61_SURROGATE_MODELS.md)

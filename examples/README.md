@@ -86,3 +86,5 @@ sind integriert. [Nachweise und Grenzen](../Doc/53_TET10_HARMONIC.md).
 Gesamt-Abnahme und Genauigkeits-/Kostenvergleiche bleiben offen.
 
 - [Lokale stationäre Parameterstudie mit Resume](parameter_study/README.md) (M8-Entwicklung).
+
+- [Surrogatmodell aus echten Wärme-Kennwerten](surrogate_heat/README.md) (M8-Entwicklung).
