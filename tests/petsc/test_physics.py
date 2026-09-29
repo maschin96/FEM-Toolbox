@@ -228,13 +228,17 @@ def test_tet10_elasticity_patch_and_energy(cube_mesh, physics_backend):
     assert_allclose(result.moment_balance, 0, rtol=0, atol=1e-9)
 
 
-def test_tet10_thermomechanical_transfer_and_energy(cube_mesh, physics_backend):
+@pytest.mark.parametrize("order", [1, 2])
+def test_thermomechanical_transfer_and_energy(cube_mesh, physics_backend, order):
     from fem_toolbox.materials import ThermalExpansion
     from fem_toolbox.solvers.heat import thermal_dofs
     from fem_toolbox.solvers.thermomechanics import solve_thermomechanics
     from tests.reference.quadratic_mesh import elevate
 
-    mesh = elevate(cube_mesh(2))
+    mesh = cube_mesh(2)
+    if order == 2:
+        mesh = elevate(mesh)
+    source = -4 if order == 2 else 0
     fixed = np.unique(mesh.facets)
     args = (
         mesh,
@@ -243,7 +247,8 @@ def test_tet10_thermomechanical_transfer_and_energy(cube_mesh, physics_backend):
         ThermalExpansion([0.01, 0, 0, 0, 0, 0], 1),
         [
             Dirichlet(
-                thermal_dofs(mesh).indices("T", fixed), 1 + mesh.points[fixed, 0] ** 2
+                thermal_dofs(mesh).indices("T", fixed),
+                1 + mesh.points[fixed, 0] ** order,
             )
         ],
         [
@@ -252,15 +257,15 @@ def test_tet10_thermomechanical_transfer_and_energy(cube_mesh, physics_backend):
             )
         ],
     )
-    reference = solve_thermomechanics(*args, source=-4)
+    reference = solve_thermomechanics(*args, source=source)
     result = solve_thermomechanics(
         *args,
-        source=-4,
+        source=source,
         thermal_backend=physics_backend,
         mechanical_backend=physics_backend,
     )
     assert_allclose(
-        result.heat.temperature, 1 + mesh.points[:, 0] ** 2, rtol=0, atol=1e-10
+        result.heat.temperature, 1 + mesh.points[:, 0] ** order, rtol=0, atol=1e-10
     )
     assert_allclose(
         result.elasticity.displacement,
@@ -325,14 +330,27 @@ def test_tet10_quadratic_piezo_and_floating_electrode(cube_mesh, physics_backend
     assert abs(result.charge_balance) < 2e-9
 
 
+@pytest.mark.parametrize("order", [1, 2])
 @pytest.mark.parametrize("electric", [False, True])
-def test_tet10_thermopiezo_sequential_backend_parity(
-    cube_mesh, physics_backend, electric
+def test_thermopiezo_sequential_backend_parity(
+    cube_mesh, physics_backend, electric, order
 ):
     from tests.reference.quadratic_mesh import elevate
     from tests.unit.test_tet10_thermopiezoelectric_integration import coupled_case
 
-    mesh = elevate(cube_mesh(2))
+    mesh = cube_mesh(2)
+    if order == 2:
+        mesh = elevate(mesh)
+    else:
+        mesh = Mesh(
+            points=mesh.points,
+            tetra4=mesh.cells,
+            triangle3=mesh.facets,
+            facet_sets={
+                name: np.flatnonzero(np.all(mesh.points[mesh.facets, 0] == x, axis=1))
+                for name, x in (("left", 0), ("right", 1))
+            },
+        )
     reference = coupled_case(mesh, electric)
     result = coupled_case(mesh, electric, physics_backend, physics_backend)
     assert_allclose(

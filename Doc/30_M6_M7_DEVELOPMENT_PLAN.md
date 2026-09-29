@@ -1,5 +1,7 @@
 # Entwicklungsstand und nächste Meilensteine M6/M7
 
+Aktueller Release-Schritt: [Kandidat 1.2.0rc1 / #38](57_M7_RELEASE_CANDIDATE.md).
+
 Aktueller Performance-Gesamtabgleich: [Abnahme #37](56_PERFORMANCE_ACCEPTANCE.md).
 
 Aktueller Tet10-Gesamtabgleich: [Abnahme #35](55_TET10_ACCEPTANCE.md).
