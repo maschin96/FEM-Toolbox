@@ -583,3 +583,11 @@ konkurrierende Writer. Nach hartem Prozessabbruch erfolgt Lockfreigabe bewusst
 manuell, ohne fremde laufende Arbeit automatisch zu übernehmen. Alte Versuche
 bleiben erhalten; keine verteilte Ausführung oder automatische Bereinigung.
 [API, Katalogvertrag und Nachweise](59_PARAMETER_STUDIES.md).
+
+## ADR-041 — Studienkennwerte als CSV-/JSON-Vertrag (29.09.2026)
+
+#60 trennt numerische CSV-Werte von vollständigen JSON-Metadaten und einem
+lesbaren Markdown-Bericht. Fallidentität, Herkunft, Einheit, Auswahl und Reduktion
+bleiben explizit; fehlende Werte sind null mit Grund. Bilanzbewertungen benötigen
+explizite Schwellen, Netzkonvergenz wird nicht aus einem Solve abgeleitet.
+[Vertrag und Nachweise](60_STUDY_REPORTS.md).

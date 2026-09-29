@@ -34,3 +34,7 @@ Fall und belegt, dass der erste erhalten bleibt und der zweite neu gerechnet wir
 
 [Vertrag, Fingerprints und Recovery](../../Doc/59_PARAMETER_STUDIES.md).
 Das Beispiel enthält zwei einzelne Tet4-Läufe, keine großen Daten oder Extras.
+
+Mit `python examples/parameter_study/report.py` entsteht anschließend eine neue
+CSV-/JSON-Kennwerttabelle samt Markdown-Bericht, ohne erneuten Solve.
+[Vertrag](../../Doc/60_STUDY_REPORTS.md).
