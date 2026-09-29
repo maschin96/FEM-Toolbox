@@ -1,10 +1,9 @@
 # Installation und erster Lauf
 
-Stand: 23. September 2026. Diese Anleitung richtet eine **Entwicklungsumgebung
-aus dem Repository** ein. Die stabile Version ist v1.1.0 (stationär, transiente Wärme und Piezo-Dynamik); ein späterer Checkout kann bereits
-weitere Entwicklungsänderungen enthalten.
-Dieser M7-Checkout trägt den Freigabestand **1.2.0**; Tag und Veröffentlichung
-stehen noch aus. [Supportmatrix und Grenzen](Doc/57_M7_RELEASE_CANDIDATE.md).
+Stand: 29. September 2026. Diese Anleitung richtet eine **Entwicklungsumgebung
+aus dem Repository** ein. Die stabile Version ist **v1.2.0**. Ein späterer
+Checkout kann bereits weitere Entwicklungsänderungen enthalten.
+[Supportmatrix und Grenzen](Doc/57_M7_RELEASE_CANDIDATE.md).
 Ein PyPI-Release des aktuellen Checkouts wird hier nicht vorausgesetzt.
 
 ## Voraussetzungen und geprüfte Plattformen

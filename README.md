@@ -5,9 +5,9 @@ dreidimensionale Finite-Elemente-Simulationen. Ziel sind verifizierte Modelle f�
 Festkörpermechanik, Wärmeleitung, Elektrostatik und deren thermomechanische und
 piezoelektrische Kopplungen auf Basis linearer **Tet4** und geradkantiger quadratischer **Tet10**.
 
-**Freigabestand v1.2.0 — PETSc, Tet10, Wärmeindikatoren und gemessene Performance.**
-Veröffentlichung und Tag stehen noch aus; zuletzt veröffentlicht ist v1.1.0.
-[Release-Nachweis und offene Veröffentlichungsschritte](Doc/58_M7_RELEASE_VERIFICATION.md) ·
+**Stabile Freigabe v1.2.0 — PETSc, Tet10, Wärmeindikatoren und gemessene Performance.**
+Veröffentlicht am 29.09.2026; siehe [GitHub Release v1.2.0](https://github.com/maschin96/FEM-Toolbox/releases/tag/v1.2.0).
+[Release-Nachweis](Doc/58_M7_RELEASE_VERIFICATION.md) ·
 [Release Notes](Doc/releases/v1.2.0.md) ·
 [Supportmatrix](Doc/57_M7_RELEASE_CANDIDATE.md).
 
@@ -217,7 +217,7 @@ elektrisches Potential `phi` mit feldweiser Freiheitsgradverwaltung.
 | M4 | v0.5.0 | Monolithische Piezoelektrizität `u–phi` | Freigegeben |
 | M5 | v1.0.0 | Elektroden, Modellformat und vollständiger stationärer Workflow | Freigegeben |
 | M6 | v1.1.0 | Transiente Wärme, Piezo-Dynamik/Harmonik (reziproke Thermoelastizität zurückgestellt) | Freigegeben |
-| M7 | v1.2.0 | PETSc-Backend, Tet10, Wärmeindikatoren und gemessene Skalierung | Freigabe vorbereitet |
+| M7 | v1.2.0 | PETSc-Backend, Tet10, Wärmeindikatoren und gemessene Skalierung | Freigegeben |
 | M8 | v1.3.0* | Reproduzierbare Parameterstudien | Geplant |
 | M9 | v1.4.0* | Experimentelle Validierung und Unsicherheit | Geplant |
 | M10 | v1.5.0* | Kontrollierte adaptive Netzstudien | Geplant |
