@@ -157,7 +157,10 @@ def _array(value: object, rows: int, name: str) -> NDArray[np.float64]:
 def _components_for(name: str, values: NDArray[np.float64]) -> list[str]:
     if values.ndim == 1:
         return ["scalar"]
-    if values.shape[1] == 6 and name in ("strain_1", "stress_Pa"):
+    if values.shape[1] == 6 and name.removesuffix("_at_centroid") in (
+        "strain_1",
+        "stress_Pa",
+    ):
         return ["xx", "yy", "zz", "yz", "xz", "xy"]
     if values.shape[1] == 3:
         return ["x", "y", "z"]
@@ -227,6 +230,30 @@ def export_result_bundle(
     if not prefix.parent.is_dir():
         raise ValueError(f"result bundle parent does not exist: {prefix.parent}")
     physics, parts, provenance = _components(result)
+    quadratic = bool(mesh.n_tetra10)
+    evaluation_points = None
+    if quadratic:
+        if physics not in (
+            "heat",
+            "electrostatics",
+            "elasticity",
+            "thermomechanics",
+            "piezoelectric",
+            "thermopiezoelectric",
+        ):
+            raise ValidationError(
+                "unsupported Tet10 result physics",
+                field="result",
+            )
+        expected = mesh.points[mesh.cells[:, :4]].mean(axis=1)
+        for kind, part in parts.items():
+            points = getattr(part, "field_points", None)
+            if points is None or not np.array_equal(points, expected):
+                raise ValidationError(
+                    f"Tet10 {kind} centroid evaluation points differ from mesh",
+                    field="result",
+                )
+        evaluation_points = expected
     point_data: dict[str, NDArray[np.float64]] = {}
     cell_data: dict[str, dict[str, NDArray[np.float64]]] = {}
     point_meta: dict[str, Any] = {}
@@ -248,19 +275,32 @@ def export_result_bundle(
                 "inactive_padding": 0.0,
             }
         for attribute, (name, unit) in _CELL[kind].items():
-            values = _array(getattr(part, attribute), mesh.n_tetra4, name)
-            cell_data[name] = {"tetra4": values}
-            if mesh.n_triangle3:
-                cell_data[name]["triangle3"] = np.zeros(
-                    (mesh.n_triangle3, *values.shape[1:])
+            integral = quadratic and attribute in (
+                "element_energy",
+                "mechanical_energy",
+                "coupling_energy",
+                "dielectric_enthalpy",
+            )
+            if quadratic and not integral:
+                name += "_at_centroid"
+            values = _array(getattr(part, attribute), mesh.n_cells, name)
+            cell_data[name] = {mesh.cell_type: values}
+            if mesh.n_facets:
+                cell_data[name][mesh.facet_type] = np.zeros(
+                    (mesh.n_facets, *values.shape[1:])
                 )
             cell_meta[name] = {
                 "unit": unit,
-                "kind": "raw",
+                "kind": "cell_integral" if integral else "raw",
                 "shape": list(values.shape),
                 "components": _components_for(name, values),
-                "cell_type": "tetra4",
-                "triangle3_padding": 0.0 if mesh.n_triangle3 else None,
+                "cell_type": mesh.cell_type,
+                **(
+                    {"location": "cell_volume" if integral else "cell_centroid"}
+                    if quadratic
+                    else {}
+                ),
+                f"{mesh.facet_type}_padding": 0.0 if mesh.n_facets else None,
             }
     if provenance is None:
         ordered = {
@@ -277,7 +317,7 @@ def export_result_bundle(
         provenance_data = provenance.to_dict()
         model_version = provenance.solver_parameters.get("model_schema_version")
     payload: dict[str, Any] = {
-        "bundle_schema_version": _BUNDLE_VERSION,
+        "bundle_schema_version": 2 if quadratic else _BUNDLE_VERSION,
         "toolbox_version": __version__,
         "provenance_schema_version": PROVENANCE_SCHEMA_VERSION,
         "physics": physics,
@@ -287,21 +327,34 @@ def export_result_bundle(
         "solver_provenance": solver_provenance,
         "mesh": {
             "points": mesh.n_points,
-            "tetra4_cells": mesh.n_tetra4,
-            "triangle3_facets": mesh.n_triangle3,
-            "tetra4_ids": (
-                mesh.tetra4_ids.tolist()
-                if mesh.tetra4_ids is not None
-                else list(range(mesh.n_tetra4))
+            f"{mesh.cell_type}_cells": mesh.n_cells,
+            f"{mesh.facet_type}_facets": mesh.n_facets,
+            f"{mesh.cell_type}_ids": (
+                mesh.cell_ids.tolist()
+                if mesh.cell_ids is not None
+                else list(range(mesh.n_cells))
             ),
             "volume_sets": sorted(mesh.volume_sets),
             "facet_sets": sorted(mesh.facet_sets),
         },
-        "fields": {"point": point_meta, "tetra4": cell_meta},
+        "fields": {"point": point_meta, mesh.cell_type: cell_meta},
+        **(
+            {"field_evaluation_points_m": evaluation_points.tolist()}
+            if evaluation_points is not None
+            else {}
+        ),
         "metrics": metrics,
         "limitations": [
-            "Stationary linear Tet4 result; no mesh convergence or experimental validation implied",
-            "Cell fields are raw element values; no nodal averaging",
+            (
+                "Stationary linear Tet10 result; no mesh convergence or experimental validation implied"
+                if quadratic
+                else "Stationary linear Tet4 result; no mesh convergence or experimental validation implied"
+            ),
+            (
+                "Energies are cell integrals; other cell fields are raw centroid samples, not elementwise constant; no nodal averaging"
+                if quadratic
+                else "Cell fields are raw element values; no nodal averaging"
+            ),
             *(
                 ["Thermal coupling is one-way; no reciprocal or transient feedback"]
                 if physics in ("thermomechanics", "thermopiezoelectric")

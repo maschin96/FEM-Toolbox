@@ -8,7 +8,6 @@ from dataclasses import dataclass
 
 import numpy as np
 from numpy.typing import ArrayLike, NDArray
-from scipy.linalg import cho_factor, cho_solve  # type: ignore[import-untyped]
 
 from fem_toolbox.assembly import real_array
 from fem_toolbox.boundary import Dirichlet, Electrode
@@ -16,6 +15,7 @@ from fem_toolbox.errors import ValidationError
 from fem_toolbox.materials import PiezoelectricMaterial
 from fem_toolbox.mesh import Mesh
 from fem_toolbox.provenance import RunProvenance
+from fem_toolbox.solvers.linear_backend import LinearBackend, ScipyBackend, solve_linear
 from fem_toolbox.solvers.piezo_dynamics import _build_dynamic_system, _readonly
 from fem_toolbox.time import integration_times
 
@@ -86,6 +86,7 @@ def solve_transient_piezoelectric(
     conditions: Iterable[Dirichlet],
     times: ArrayLike,
     *,
+    backend: LinearBackend | None = None,
     electrodes: Sequence[Electrode] | None = None,
     initial_displacement: ArrayLike | None = None,
     initial_velocity: ArrayLike | None = None,
@@ -95,6 +96,10 @@ def solve_transient_piezoelectric(
 ) -> TransientPiezoelectricResult:
     """Integrate with beta=1/4, gamma=1/2, no physical or numerical damping.
 
+    ``backend`` is an experimental linear-backend hook; None selects SciPy.
+    Reduction, physical residuals and result units remain this solver's contract.
+
+    Straight Tet4/Tet10 cells use consistent mechanical mass, no electric mass.
     Topology uses homogeneous Dirichlet/electrode declarations as in modes.
     loads(t) returns integrated signed [force (N), electric RHS (C)] of shape
     (4*nactive,); for total floating conductor charge Q put -Q on one of its
@@ -114,7 +119,9 @@ def solve_transient_piezoelectric(
     At most 2048 active DOFs and 2,000,000 stored scalar state entries; arrays
     are retained in memory. Invalid data and failed residuals raise ValidationError.
     """
-    system = _build_dynamic_system(mesh, material, density, conditions, electrodes)
+    system = _build_dynamic_system(
+        mesh, material, density, conditions, electrodes, backend
+    )
     grid = integration_times(times)
     raw_events = np.asarray(events)
     ev = real_array(events, raw_events.shape)
@@ -133,17 +140,22 @@ def solve_transient_piezoelectric(
     fixed_original = np.flatnonzero(np.isin(system.index, system.fixed))
     fixed_mask = np.zeros(size, dtype=bool)
     fixed_mask[fixed_original] = True
-    dielectric = -system.reduced[np.ix_(fp, fp)]
+    dielectric = system.dielectric
     if len(fp):
-        scale = np.sqrt(np.diag(dielectric))
-        electric_factor = cho_factor(dielectric / scale[:, None] / scale[None, :])
-        electric_inverse = (
-            cho_solve(electric_factor, np.eye(len(fp)) / scale[:, None])
-            / scale[:, None]
-        )
+        electric_inverse = solve_linear(
+            dielectric,
+            np.eye(len(fp)),
+            fields={"phi": np.arange(len(fp))},
+            scale=1 / np.sqrt(np.diag(dielectric)),
+            kind="positive_definite",
+            backend=backend,
+        ).values
     else:
         electric_inverse = np.empty((0, 0))
-    mass_factor = cho_factor(system.free_mass)
+    selected_backend = ScipyBackend() if backend is None else backend
+    mass_factor = selected_backend.factorize(
+        system.free_mass, fields={"u": np.arange(len(fu))}, kind="positive_definite"
+    )
     _, representatives = np.unique(system.index, return_index=True)
     samples = []
 
@@ -213,7 +225,7 @@ def solve_transient_piezoelectric(
     v[fixed_u] = gv[fixed_u]
     q = u[fu].copy()
     w = v[fu].copy()
-    acc = cho_solve(mass_factor, effective - system.stiffness @ q)
+    acc = mass_factor.solve(effective - system.stiffness @ q).values
     displacements = []
     velocities = []
     accelerations = []
@@ -237,12 +249,17 @@ def solve_transient_piezoelectric(
                         field="prescribed",
                     )
             predicted = q + dt * w + 0.25 * dt * dt * acc
-            factor = cho_factor(system.free_mass + 0.25 * dt * dt * system.stiffness)
-            new_acc = cho_solve(factor, left[5] - system.stiffness @ predicted)
+            new_acc = solve_linear(
+                system.free_mass + 0.25 * dt * dt * system.stiffness,
+                left[5] - system.stiffness @ predicted,
+                fields={"u": np.arange(len(fu))},
+                kind="positive_definite",
+                backend=backend,
+            ).values
             q = predicted + 0.25 * dt * dt * new_acc
             w = w + 0.5 * dt * (acc + new_acc)
             f, g, gv, ga, rhs, effective = right
-            acc = cho_solve(mass_factor, effective - system.stiffness @ q)
+            acc = mass_factor.solve(effective - system.stiffness @ q).values
         reduced_state = np.zeros(len(system.reduced))
         reduced_state[system.index[fixed_original]] = g[fixed_original]
         reduced_state[fu] = q
@@ -308,6 +325,7 @@ def solve_transient_piezoelectric(
         ).encode(),
         solver_name="fem_toolbox.solvers.piezo_transient.solve_transient_piezoelectric",
         solver_parameters={
+            "linear_backend": "scipy" if backend is None else backend.name,
             "beta": 0.25,
             "gamma": 0.5,
             "physical_damping": 0,

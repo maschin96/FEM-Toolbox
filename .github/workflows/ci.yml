@@ -33,8 +33,17 @@ jobs:
           cp -R examples/thermopiezoelectric dist/thermopiezoelectric
           cp -R examples/transient_heat dist/transient_heat
           cp -R examples/piezo_dynamics dist/piezo_dynamics
+          cp -R examples/tet10_heat dist/tet10_heat
+          cp -R examples/tet10_electrostatics dist/tet10_electrostatics
+          cp -R examples/tet10_elasticity dist/tet10_elasticity
+          cp -R examples/tet10_thermomechanics dist/tet10_thermomechanics
+          cp -R examples/tet10_piezoelectric dist/tet10_piezoelectric
+          cp -R examples/tet10_thermopiezoelectric dist/tet10_thermopiezoelectric
+          cp -R examples/tet10_modes dist/tet10_modes
+          cp -R examples/tet10_newmark dist/tet10_newmark
+          cp -R examples/tet10_harmonic dist/tet10_harmonic
           cd dist
-          sha256sum *.whl *.tar.gz *.py thermopiezoelectric/* transient_heat/* piezo_dynamics/* > SHA256SUMS
+          sha256sum *.whl *.tar.gz *.py thermopiezoelectric/* transient_heat/* piezo_dynamics/* tet10_heat/* tet10_electrostatics/* tet10_elasticity/* tet10_thermomechanics/* tet10_piezoelectric/* tet10_thermopiezoelectric/* tet10_modes/* tet10_newmark/* tet10_harmonic/* > SHA256SUMS
       - name: Transfer artifacts and standalone solver example
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
@@ -81,7 +90,33 @@ jobs:
         run: |
           "$RUNNER_TEMP/artifact-env/bin/python" -m pip check
           "$RUNNER_TEMP/artifact-env/bin/python" -m pip freeze
-          "$RUNNER_TEMP/artifact-env/bin/python" -I -c 'import sys; from pathlib import Path; from importlib.metadata import metadata; import fem_toolbox; p = Path(fem_toolbox.__file__).resolve(); assert p.is_relative_to(Path(sys.prefix).resolve()), p; m = metadata("fem-toolbox"); assert m["License-Expression"] == "MIT"; print(p, m["Version"], m["Requires-Python"])'
+          "$RUNNER_TEMP/artifact-env/bin/python" -I - <<'PY'
+          import sys
+          from importlib.metadata import distribution
+          from importlib.util import find_spec
+          from pathlib import Path
+          import fem_toolbox
+          from fem_toolbox.errors import ValidationError
+          from fem_toolbox.solvers.petsc_backend import PetscBackend, PetscFieldSplitBackend
+
+          package = Path(fem_toolbox.__file__).resolve()
+          assert package.is_relative_to(Path(sys.prefix).resolve()), package
+          dist = distribution("fem-toolbox")
+          assert dist.version == fem_toolbox.__version__ == "1.2.0"
+          assert dist.metadata["License-Expression"] == "MIT"
+          licenses = [f for f in dist.files if f.name == "LICENSE"]
+          assert len(licenses) == 1, licenses
+          assert "Permission is hereby granted" in dist.locate_file(licenses[0]).read_text()
+          assert find_spec("petsc4py") is None, "core artifact unexpectedly needs PETSc"
+          for backend in (PetscBackend, PetscFieldSplitBackend):
+              try:
+                  backend()
+              except ValidationError as error:
+                  assert "petsc4py" in str(error)
+              else:
+                  raise AssertionError("missing PETSc must fail explicitly")
+          print(package, dist.version, dist.metadata["Requires-Python"])
+          PY
           cd "$RUNNER_TEMP"
           "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/steady_heat.py"
           test -s steady_heat.vtu
@@ -99,6 +134,25 @@ jobs:
           test -s piezo_dynamic_results/transient/piezo.pvd
           test -s piezo_dynamic_results/harmonic/probes.csv
           test -s piezo_dynamic_results/modes/manifest.json
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/tet10_heat/run.py"
+          test -s tet10_heat_results/stationary.json
+          test -s tet10_heat_results/transient/heat.pvd
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/tet10_electrostatics/run.py"
+          test -s tet10_electric_results/electric.json
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/tet10_elasticity/run.py"
+          test -s tet10_elastic_results/solid.json
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/tet10_thermomechanics/run.py"
+          test -s tet10_thermal_expansion_results/coupled.json
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/tet10_piezoelectric/run.py"
+          test -s tet10_piezo_results/piezo.json
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/tet10_thermopiezoelectric/run.py"
+          test -s tet10_thermopiezo_results/coupled.json
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/tet10_modes/run.py"
+          test -s tet10_modes_results/manifest.json
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/tet10_newmark/run.py"
+          test -s tet10_newmark_results/manifest.json
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/tet10_harmonic/run.py"
+          test -s tet10_harmonic_results/manifest.json
 
   quality:
     name: Quality / Python 3.13
@@ -211,3 +265,24 @@ jobs:
 
       - name: Smoke numerical solvers and mesh I/O
         run: python -m pytest tests/regression/test_piezo_d33_benchmark.py tests/regression/test_thermopiezo_example.py tests/unit/test_mesh_io.py
+
+  petsc:
+    name: PETSc / Python 3.12 / ${{ matrix.scalar }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        scalar: [real, complex]
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Build native PETSc test environment
+        run: docker build -f ci/petsc.Dockerfile -t fem-toolbox-petsc:test .
+      - name: Require native scalar build and run backend verification
+        env:
+          PETSC_SCALAR: ${{ matrix.scalar }}
+        run: >-
+          docker run --rm -v "$GITHUB_WORKSPACE:/work:ro"
+          fem-toolbox-petsc:test python ci/run_petsc_tests.py
+          --scalar "$PETSC_SCALAR" -q tests/petsc -p no:cacheprovider

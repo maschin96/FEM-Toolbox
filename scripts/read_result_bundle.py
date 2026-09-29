@@ -9,9 +9,9 @@ from pathlib import Path
 
 
 def read_bundle(path: Path) -> dict:
-    """Read version 1 and verify the companion VTU checksum."""
+    """Read versions 1/2 and verify the companion VTU checksum."""
     data = json.loads(path.read_text(encoding="utf-8"))
-    if data.get("bundle_schema_version") != 1:
+    if data.get("bundle_schema_version") not in (1, 2):
         raise ValueError("unsupported result bundle schema")
     files = data["files"]
     name = files["fields"]

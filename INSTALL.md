@@ -3,6 +3,8 @@
 Stand: 23. September 2026. Diese Anleitung richtet eine **Entwicklungsumgebung
 aus dem Repository** ein. Die stabile Version ist v1.1.0 (stationär, transiente Wärme und Piezo-Dynamik); ein späterer Checkout kann bereits
 weitere Entwicklungsänderungen enthalten.
+Dieser M7-Checkout trägt den Freigabestand **1.2.0**; Tag und Veröffentlichung
+stehen noch aus. [Supportmatrix und Grenzen](Doc/57_M7_RELEASE_CANDIDATE.md).
 Ein PyPI-Release des aktuellen Checkouts wird hier nicht vorausgesetzt.
 
 ## Voraussetzungen und geprüfte Plattformen
@@ -163,3 +165,11 @@ Toleranzen. Die separate Gmsh-Installation lieferte Version 4.15.2; der
 `box.geo`-Aufruf erzeugte ein Netz mit 1101 Tet4-Zellen, das `read_gmsh`
 einlas. Dieser lokale Nachweis ergänzt die Linux-CI-Matrix und ist keine
 Windows-Verifikation.
+
+## Optionales PETSc-Backend
+
+Die normale Wheel-/sdist-Installation funktioniert ohne PETSc. Native PETSc-
+Backends werden separat eingerichtet; die getestete Linux-Umgebung und die
+Auswahl real/complex stehen im [PETSc-Installationsvertrag](Doc/38_PETSC_BACKEND.md).
+`Model`/TOML verwendet SciPy; PETSc wird an der direkten Python-Solver-API
+ausgewählt. Fehlendes PETSc wird beim Backendaufbau ausdrücklich diagnostiziert.

@@ -1,4 +1,4 @@
-"""Small-model Tet4 piezoelastodynamics with algebraic electric DOFs.
+"""Small-model Tet4/Tet10 piezo modal reference with algebraic electric DOFs.
 
 The dense Schur reference is intentionally limited to 2048 active [u, phi]
 DOFs. No electric mass, artificial grounding, or dynamic thermal feedback.
@@ -12,24 +12,25 @@ from dataclasses import dataclass
 
 import numpy as np
 from numpy.typing import ArrayLike, NDArray
-from scipy.linalg import cho_factor, cho_solve, eigh  # type: ignore[import-untyped]
+from scipy.linalg import eigh  # type: ignore[import-untyped]
 
 from fem_toolbox.assembly import MatrixBlock, assemble, indices, real_array
 from fem_toolbox.boundary import Dirichlet, Electrode, eliminate_dirichlet
-from fem_toolbox.elements import Tet4Geometry
-from fem_toolbox.elements.piezoelectric import piezoelectric_matrix
+from fem_toolbox.elements import Tet4Geometry, Tet10Geometry, quadratic
 from fem_toolbox.elements.storage import mass_matrix
 from fem_toolbox.errors import ValidationError
 from fem_toolbox.materials import PiezoelectricMaterial
-from fem_toolbox.mesh import Mesh
+from fem_toolbox.mesh import Mesh, inspect_boundary_topology
 from fem_toolbox.provenance import RunProvenance
 from fem_toolbox.solvers.elasticity import _check_supports
 from fem_toolbox.solvers.electrostatics import _check_gauge
+from fem_toolbox.solvers.linear_backend import LinearBackend, solve_linear
 from fem_toolbox.solvers.piezoelectric import (
     _electrode_reduction,
     _materials,
     piezoelectric_dofs,
 )
+from fem_toolbox.solvers.piezoelectric_elements import piezoelectric_matrix
 
 MAX_DENSE_DOFS = 2048
 
@@ -92,6 +93,7 @@ class _DynamicSystem:
     free_u: NDArray[np.int64]
     free_phi: NDArray[np.int64]
     electric_map: NDArray[np.float64]
+    dielectric: NDArray[np.float64]
     stiffness: NDArray[np.float64]
     free_mass: NDArray[np.float64]
     electrodes: list[tuple[str, NDArray[np.int64], float | None, float | None]]
@@ -104,22 +106,27 @@ def _build_dynamic_system(
     density: ArrayLike,
     conditions: Iterable[Dirichlet],
     electrodes: Sequence[Electrode] | None,
+    backend: LinearBackend | None = None,
 ) -> _DynamicSystem:
-    if mesh.n_tetra4 == 0:
-        raise ValidationError("piezo dynamics requires Tet4 cells", field="mesh")
+    if mesh.n_cells == 0:
+        raise ValidationError(
+            "piezo dynamics requires Tet4 or Tet10 cells", field="mesh"
+        )
     dofs = piezoelectric_dofs(mesh)
     if dofs.size > MAX_DENSE_DOFS:
         raise ValidationError(
             f"dense reference supports at most {MAX_DENSE_DOFS} active DOFs",
             field="solver",
         )
-    active = np.unique(mesh.tetra4)
+    if mesh.n_tetra10:
+        inspect_boundary_topology(mesh)
+    active = np.unique(mesh.cells)
     nu = 3 * len(active)
-    materials = _materials(material, mesh.n_tetra4)
+    materials = _materials(material, mesh.n_cells)
     rho = real_array(density, np.asarray(density).shape)
     if rho.ndim == 0:
-        rho = np.full(mesh.n_tetra4, float(rho))
-    rho = real_array(rho, (mesh.n_tetra4,))
+        rho = np.full(mesh.n_cells, float(rho))
+    rho = real_array(rho, (mesh.n_cells,))
     if np.any(rho <= 0):
         raise ValidationError("density must be positive in kg/m³", field="density")
     bcs = tuple(conditions)
@@ -140,12 +147,19 @@ def _build_dynamic_system(
                 )
     blocks: list[MatrixBlock] = []
     masses: list[MatrixBlock] = []
-    for cell, mat, r in zip(mesh.tetra4, materials, rho, strict=True):
-        geometry = Tet4Geometry(mesh.points[cell])
+    for cell, mat, r in zip(mesh.cells, materials, rho, strict=True):
+        geometry = (Tet10Geometry if mesh.n_tetra10 else Tet4Geometry)(
+            mesh.points[cell]
+        )
         u_ids = dofs.indices("u", cell)
         ids = np.concatenate((u_ids, dofs.indices("phi", cell)))
         blocks.append(MatrixBlock(ids, ids, piezoelectric_matrix(geometry, mat)))
-        masses.append(MatrixBlock(u_ids, u_ids, mass_matrix(geometry, float(r))))
+        local_mass = (
+            quadratic.mass_matrix(geometry, float(r))
+            if isinstance(geometry, Tet10Geometry)
+            else mass_matrix(geometry, float(r))
+        )
+        masses.append(MatrixBlock(u_ids, u_ids, local_mass))
     original = assemble(dofs.size, blocks)
     reduction = _electrode_reduction(mesh, dofs, original, bcs, electrodes)
     # Also validates duplicate/conflicting Dirichlet declarations.
@@ -170,24 +184,31 @@ def _build_dynamic_system(
     mass = np.asarray(assemble(nu, masses).matrix.toarray(), dtype=np.float64)
     reduced = np.asarray(reduction.system.matrix.toarray(), dtype=np.float64)
     coupling = reduced[np.ix_(free_phi, free_u)]
+    dielectric = -reduced[np.ix_(free_phi, free_phi)]
     if len(free_phi):
-        dielectric = -reduced[np.ix_(free_phi, free_phi)]
-        scale = np.sqrt(np.diag(dielectric))
-        try:
-            factor = cho_factor(dielectric / scale[:, None] / scale[None, :])
-            electric_map = np.asarray(
-                cho_solve(factor, coupling / scale[:, None]) / scale[:, None],
-                dtype=np.float64,
-            )
-        except np.linalg.LinAlgError as error:
-            raise ValidationError("singular electric block", field="solver") from error
+        if mesh.n_tetra10:
+            # Exact bilinear form is symmetric. Quadrature cancellation near
+            # zero can leave unequal roundoff in transposed entries. Physical
+            # residuals below still use the original assembled operator.
+            dielectric = (dielectric + dielectric.T) / 2
+        electric_map = np.asarray(
+            solve_linear(
+                dielectric,
+                coupling,
+                fields={"phi": np.arange(len(free_phi))},
+                scale=1 / np.sqrt(np.diag(dielectric)),
+                kind="positive_definite",
+                backend=backend,
+            ).values,
+            dtype=np.float64,
+        )
     else:
         electric_map = np.empty((0, len(free_u)))
     stiffness = reduced[np.ix_(free_u, free_u)] + coupling.T @ electric_map
     canonical = json.dumps(
         {
             "points": mesh.points.tolist(),
-            "tetra4": mesh.tetra4.tolist(),
+            mesh.cell_type: mesh.cells.tolist(),
             "materials": [mat.to_provenance_dict() for mat in materials],
             "density": rho.tolist(),
             "fixed": fixed.tolist(),
@@ -209,6 +230,7 @@ def _build_dynamic_system(
         free_u,
         free_phi,
         electric_map,
+        dielectric,
         stiffness,
         mass[np.ix_(free_u, free_u)],
         reduction.data,
@@ -222,10 +244,14 @@ def solve_piezoelectric_modes(
     density: ArrayLike,
     conditions: Iterable[Dirichlet],
     *,
+    backend: LinearBackend | None = None,
     count: int = 6,
     electrodes: Sequence[Electrode] | None = None,
 ) -> PiezoelectricModes:
     """Solve the lowest ``count`` supported, undamped natural modes.
+
+    ``backend`` is an experimental linear-backend hook; None selects SciPy.
+    Reduction, physical residuals and result units remain this solver's contract.
 
     Constant density: positive scalar or (ncells,) kg/m³. Dirichlet indices
     use piezoelectric_dofs(mesh); all prescribed values/charges must be zero
@@ -235,14 +261,16 @@ def solve_piezoelectric_modes(
     supports eliminating rigid-body modes. Uncovered electric boundaries
     have D.n=0; these are not automatically conducting electrodes.
 
-    Only mechanical DOFs carry consistent Tet4 mass. Eliminate free electric
+    Only mechanical DOFs carry consistent Tet4/Tet10 mass. Eliminate free electric
     DOFs via K_eff=Kuu+B D^-1 B.T, then solve K_eff u=omega² M u using a
     symmetric definite eigensolver. Reconstruct phi=D^-1 B.T u. The dense
     reference rejects more than 2048 active total DOFs before allocation.
     Invalid inputs, nonpositive eigenvalues or failed field residuals raise
     ValidationError; a missing gauge raises ElectricGaugeError.
     """
-    system = _build_dynamic_system(mesh, material, density, conditions, electrodes)
+    system = _build_dynamic_system(
+        mesh, material, density, conditions, electrodes, backend
+    )
     if (
         isinstance(count, bool)
         or not isinstance(count, int)
@@ -315,6 +343,7 @@ def solve_piezoelectric_modes(
             solver_name="fem_toolbox.solvers.piezo_dynamics.solve_piezoelectric_modes",
             solver_parameters={
                 "backend": "scipy.linalg.eigh",
+                "linear_backend": "scipy" if backend is None else backend.name,
                 "count": count,
                 "electrical_mass": 0,
                 "mass": "consistent",

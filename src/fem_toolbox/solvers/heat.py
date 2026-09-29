@@ -12,30 +12,33 @@ import numpy as np
 from numpy.typing import NDArray
 from scipy import sparse  # type: ignore[import-untyped]
 from scipy.sparse.csgraph import connected_components  # type: ignore[import-untyped]
-from scipy.sparse.linalg import splu  # type: ignore[import-untyped]
 
 from fem_toolbox.assembly import MatrixBlock, VectorBlock, assemble, indices
 from fem_toolbox.boundary import Dirichlet, eliminate_dirichlet
-from fem_toolbox.elements import Tet4Geometry
-from fem_toolbox.elements.heat import conductance_matrix
+from fem_toolbox.elements import Tet4Geometry, Tet10Geometry
 from fem_toolbox.errors import ThermalNullspaceError, ValidationError
 from fem_toolbox.fields import DofMap, Field
 from fem_toolbox.materials import ThermalMaterial
-from fem_toolbox.mesh import Mesh
+from fem_toolbox.mesh import Mesh, inspect_boundary_topology
 from fem_toolbox.physics.heat import (
     Convection,
     ScalarField,
+)
+from fem_toolbox.provenance import RunProvenance
+from fem_toolbox.solvers.linear_backend import LinearBackend, solve_linear
+from fem_toolbox.solvers.thermal_elements import (
+    conductance_matrix,
     convection_terms,
     flux_load,
     source_load,
+    temperature_gradient,
 )
-from fem_toolbox.provenance import RunProvenance
 
 
 def thermal_dofs(mesh: Mesh) -> DofMap:
-    """One T DOF per sorted active Tet4 mesh node, in K; no unused-node DOFs."""
+    """One T DOF per sorted active Tet4/Tet10 mesh node, in K; no unused-node DOFs."""
     return DofMap(
-        (Field("T", ("scalar",), tuple(int(n) for n in np.unique(mesh.tetra4)), "K"),)
+        (Field("T", ("scalar",), tuple(int(n) for n in np.unique(mesh.cells)), "K"),)
     )
 
 
@@ -45,6 +48,9 @@ class HeatResult:
 
     node_ids (nactive,) map temperature (nactive,) K back to the mesh.
     gradient/heat_flux (ncells,3) are K/m and W/m² in input cell order.
+    Tet4 values are elementwise constant (field_points=None). Tet10 values are
+    raw centroid samples; field_points (ncells,3) gives their physical locations
+    in metres. They are neither nodal projections nor constant Tet10 fields.
     reactions/residual (nactive,) are W; reaction is zero on free DOFs and
     positive for heat supplied by a prescribed-temperature reservoir.
     source_power, prescribed_outflow, convection_outflow, dirichlet_inflow and
@@ -66,6 +72,7 @@ class HeatResult:
     power_balance: float
     relative_residual: float
     provenance: RunProvenance
+    field_points: NDArray[np.float64] | None = None
 
     def __post_init__(self) -> None:
         for name in self.__dataclass_fields__:
@@ -87,7 +94,7 @@ def _check_nullspace(
     rhs: NDArray[np.float64],
 ) -> None:
     rows, columns = [], []
-    for cell in mesh.tetra4:
+    for cell in mesh.cells:
         for a, b in combinations(np.searchsorted(active, cell), 2):
             rows.extend([a, b])
             columns.extend([b, a])
@@ -113,17 +120,22 @@ def solve_heat(
     material: ThermalMaterial | Sequence[ThermalMaterial],
     conditions: Iterable[Dirichlet],
     *,
+    backend: LinearBackend | None = None,
     source: ScalarField = 0.0,
     outward_fluxes: Mapping[int, ScalarField] | None = None,
     convection: Mapping[int, Convection] | None = None,
 ) -> HeatResult:
-    """Solve -div(k grad T)=Q on all Tet4 cells with SI data.
+    """Solve -div(k grad T)=Q on a homogeneous Tet4 or straight Tet10 mesh with SI data.
+
+    ``backend`` is an experimental linear-backend hook; None selects SciPy.
+    Reduction, physical residuals and result units remain this solver's contract.
 
     Material is homogeneous or one per input cell. Dirichlet indices come from
     thermal_dofs(mesh). Surface mappings address exterior triangle row indices.
     Positive outward flux removes heat. Robin law is q_out=h*(T-T_inf); surface
     contributions may add (including prescribed flux on a convecting surface).
-    Source/flux/ambient callables use degree-two quadrature. Temperatures share
+    Tet4 load quadrature is degree two; Tet10 volume/surface rules are degree
+    five/four. Temperatures share
     the same reference, normally absolute kelvin; no reference is invented.
 
     ValidationError rejects invalid input, singularity or failed residual/balance
@@ -131,25 +143,27 @@ def solve_heat(
     compatible or incompatible before sparse factorization. Pure Neumann systems
     are not automatically pinned, even when compatible. No transient coupling.
     """
-    if mesh.n_tetra4 == 0:
-        raise ValidationError("heat solver requires Tet4 cells", field="mesh")
+    if mesh.n_cells == 0:
+        raise ValidationError("heat solver requires Tet4 or Tet10 cells", field="mesh")
     materials = (
-        [material] * mesh.n_tetra4
+        [material] * mesh.n_cells
         if isinstance(material, ThermalMaterial)
         else list(material)
     )
-    if len(materials) != mesh.n_tetra4 or any(
+    if len(materials) != mesh.n_cells or any(
         not isinstance(m, ThermalMaterial) for m in materials
     ):
         raise ValidationError("one ThermalMaterial required per cell", field="material")
+    if mesh.n_tetra10:
+        inspect_boundary_topology(mesh)
     dofs = thermal_dofs(mesh)
-    active = np.unique(mesh.tetra4)
+    active = np.unique(mesh.cells)
     geometries = [
-        Tet4Geometry(
+        (Tet10Geometry if mesh.n_tetra10 else Tet4Geometry)(
             mesh.points[cell],
-            entity_id=int(mesh.tetra4_ids[i]) if mesh.tetra4_ids is not None else i,
+            entity_id=int(mesh.cell_ids[i]) if mesh.cell_ids is not None else i,
         )
-        for i, cell in enumerate(mesh.tetra4)
+        for i, cell in enumerate(mesh.cells)
     ]
     matrices: list[MatrixBlock] = []
     source_vector = np.zeros(dofs.size)
@@ -157,22 +171,22 @@ def solve_heat(
     ambient_vector = np.zeros(dofs.size)
     robin: list[tuple[NDArray[np.int64], NDArray[np.float64], NDArray[np.float64]]] = []
     convective_nodes: list[int] = []
-    for cell, g, m in zip(mesh.tetra4, geometries, materials, strict=True):
+    for cell, g, m in zip(mesh.cells, geometries, materials, strict=True):
         ids = dofs.indices("T", cell)
         matrices.append(MatrixBlock(ids, ids, conductance_matrix(g, m)))
         np.add.at(source_vector, ids, source_load(g, source))
     faces = Counter(
         tuple(sorted(int(n) for n in face))
-        for cell in mesh.tetra4
-        for face in combinations(cell, 3)
+        for cell in mesh.cells
+        for face in combinations(cell[:4], 3)
     )
 
     def face_nodes(face: int) -> NDArray[np.int64]:
-        face_id = int(indices([face], mesh.n_triangle3)[0])
-        nodes = mesh.triangle3[face_id]
-        if faces[tuple(sorted(int(n) for n in nodes))] != 1:
+        face_id = int(indices([face], mesh.n_facets)[0])
+        nodes = mesh.facets[face_id]
+        if faces[tuple(sorted(int(n) for n in nodes[:3]))] != 1:
             raise ValidationError(
-                "thermal boundary must be an exterior Tet4 face", field="surface"
+                "thermal boundary must be an exterior tetrahedral face", field="surface"
             )
         return np.asarray(nodes, dtype=np.int64)
 
@@ -223,16 +237,14 @@ def solve_heat(
                 "nonpositive thermal conductance diagonal", field="solver"
             )
         scale = 1 / np.sqrt(diagonal)
-        scaling = sparse.diags(scale)
-        try:
-            factor = splu((scaling @ reduced @ scaling).tocsc())
-            if np.min(np.abs(factor.U.diagonal())) <= 1e-12:
-                raise ValidationError(
-                    "singular or ill-conditioned thermal system", field="solver"
-                )
-            temperature[free] = scale * factor.solve(scale * constrained.rhs[free])
-        except RuntimeError as error:
-            raise ValidationError("singular thermal system", field="solver") from error
+        temperature[free] = solve_linear(
+            reduced,
+            constrained.rhs[free],
+            fields={"T": np.arange(len(free))},
+            scale=scale,
+            pivot_tolerance=1e-12,
+            backend=backend,
+        ).values
     if not np.isfinite(temperature).all():
         raise ValidationError("nonfinite temperature solution", field="solver")
     residual = original.residual(temperature)
@@ -245,12 +257,8 @@ def solve_heat(
     reaction[fixed] = residual[fixed]
     gradient = np.array(
         [
-            g.gradient_matrix
-            @ (
-                temperature[dofs.indices("T", cell)]
-                - temperature[dofs.indices("T", cell)[0]]
-            )
-            for cell, g in zip(mesh.tetra4, geometries, strict=True)
+            temperature_gradient(g, temperature[dofs.indices("T", cell)])
+            for cell, g in zip(mesh.cells, geometries, strict=True)
         ]
     )
     heat_flux = np.array(
@@ -274,7 +282,7 @@ def solve_heat(
         json.dumps(
             {
                 "points": mesh.points.tolist(),
-                "tetra4": mesh.tetra4.tolist(),
+                mesh.cell_type: mesh.cells.tolist(),
                 "materials": [m.conductivity.tolist() for m in materials],
                 "source_load": source_vector.tolist(),
                 "flux_load": flux_vector.tolist(),
@@ -294,14 +302,15 @@ def solve_heat(
         solver_name="fem_toolbox.solvers.heat.solve_heat",
         solver_parameters={
             "input_schema": "heat-discrete-v1",
-            "backend": "scipy.sparse.linalg.splu",
+            "backend": "scipy.sparse.linalg.splu" if backend is None else backend.name,
             "scaling": "diagonal",
             "pivot_tolerance": 1e-12,
             "neumann_relative_tolerance": 1e-10,
             "relative_residual_tolerance": 1e-9,
             "relative_power_tolerance": 1e-9,
             "power_roundoff_factor": 100,
-            "load_quadrature_degree": 2,
+            "load_quadrature_degree": 5 if mesh.n_tetra10 else 2,
+            "field_location": "cell_centroid" if mesh.n_tetra10 else "element_constant",
             "flux_convention": "positive_outward",
         },
     )
@@ -319,4 +328,5 @@ def solve_heat(
         balance,
         relative,
         provenance,
+        mesh.points[mesh.cells[:, :4]].mean(axis=1) if mesh.n_tetra10 else None,
     )

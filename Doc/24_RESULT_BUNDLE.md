@@ -86,3 +86,33 @@ analytisch bekannte Felder und Bilanzgrenzen von `1e-12` für Rohfelder und
 `1e-10` für globale Bilanzen. Die Exportprüfungen verwenden keine zusätzliche
 Numeriktoleranz: JSON-Kennwerte sind dieselben Python-Fließkommazahlen, und
 VTU-Felder werden mit `assert_allclose` gegen ihre Solverarrays verglichen.
+
+## M7-Erweiterung: Tet10-Wärme
+
+Stationäre Tet10-Wärme verwendet Bündelschema 2, Zelltyp `tetra10` und explizit
+als Schwerpunktwerte benannte Gradienten/Flüsse samt Auswertekoordinaten.
+Tet4 behält Schema 1. Der eigenständige Manifestleser unterstützt beide
+Versionen. [Vertrag und Nachweise](45_TET10_HEAT_INTEGRATION.md).
+
+Tet10-Elektrostatik erweitert Schema 2 um rohe E-/D-Schwerpunktfelder und
+`electric_energy_J` als `cell_integral` am `cell_volume`. Energie erhält keinen
+Schwerpunktsuffix. [Details](46_TET10_ELECTROSTATICS.md).
+
+Statische Tet10-Elastizität verwendet Schema 2 mit
+`strain_1_at_centroid`/`stress_Pa_at_centroid` und den sechs Voigt-Komponenten.
+`mechanical_energy_J` ist ein `cell_integral` am `cell_volume`, ohne
+Schwerpunktsuffix. [Details](47_TET10_ELASTICITY.md).
+
+Gekoppelte Tet10-Thermomechanik exportiert Wärme und Mechanik gemeinsam in
+Schema 2. Beide Teilresultate müssen passende Schwerpunktkoordinaten liefern.
+[Vertrag und Nachweise](48_TET10_THERMOMECHANICS.md).
+
+Stationäre [Tet10-Piezoelektrizität](49_TET10_PIEZOELECTRIC.md) nutzt ebenfalls
+Schema 2: `mechanical_energy_J`, `coupling_energy_J` und
+`dielectric_enthalpy_J` sind Zellintegrale. Dehnung, Spannung, E und D tragen
+`_at_centroid`. Elektrodenladungen und -potentiale bleiben Bilanzkennwerte.
+
+[Tet10-Thermopiezo](50_TET10_THERMOPIEZOELECTRIC.md) exportiert T → (u, φ)
+gemeinsam in Schema 2 mit getrennten Provenienzen/Bilanzen. Beide Komponenten
+müssen passende Schwerpunktkoordinaten liefern; Energie-/Enthalpiefelder
+bleiben Zellintegrale.

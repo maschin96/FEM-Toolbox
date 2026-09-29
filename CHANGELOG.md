@@ -6,6 +6,32 @@ Versionierung an [Semantic Versioning](https://semver.org/).
 
 ## Unreleased
 
+## [1.2.0] - 2026-09-29
+
+Freigabestand vorbereitet; Tag und Veröffentlichung stehen noch aus.
+
+### Added
+
+- Optionale PETSc-Direkt-/FieldSplit-Backends mit nativer real/complex-Parität (#34).
+- Geradkantige Tet10/Triangle6 durch I/O, stationäre Felder/Kopplungen und
+  transiente Wärme/Piezo-Dynamik; quadratische Sonden und Schwerpunktfelder (#35).
+- Residualindikator und deterministische Markierung für stationäre Tet4-Wärme (#36).
+- Reproduzierbare Profiling-Baseline und Fehler-/Kostenvergleich mit Rohdaten (#37).
+- Supportmatrix und erweiterte Kandidaten-Artefaktprüfung (#38).
+
+### Changed
+
+- Tet4-Flächengeometrie wird bedarfsgerecht ausgewertet; gemessene Verbesserung
+  und Regressionstoleranzen sind im Performancebericht belegt (#37).
+
+### Compatibility and limits
+
+- Tet4-Verträge, Model-Schemata 1–3, CPython 3.11–3.13 und MIT bleiben bestehen.
+  PETSc bleibt optional und wird nur über direkte Python-Solver-APIs ausgewählt.
+- Keine gekrümmten/hybriden Tet10-Netze, MPI-, Adaptivitäts- oder experimentelle
+  Validierungszusage. Bestehende Dynamiklimits bleiben unverändert.
+- [Release-Nachweis und verbleibende Freigabeschritte](Doc/58_M7_RELEASE_VERIFICATION.md).
+
 ## [1.1.0] - 2026-09-23
 
 ### Added

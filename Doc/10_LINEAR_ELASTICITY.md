@@ -140,3 +140,10 @@ Rohwerte liegen nur auf den Volumenzellen. Für Netze mit unbenutzten Punkten mu
 beim Export über `result.node_ids` auf alle Mesh-Punkte zurückabgebildet werden.
 Die kurze Konvergenzstudie läuft in der regulären Testsuite und damit in allen
 CI-Python-Versionen; keine Konvergenztests werden ausgelassen.
+
+## M7-Erweiterung: Tet10
+
+Der direkte Solver und Model-Schema 1 unterstützen zusätzlich geradkantige
+Tet10 mit Triangle6-Traktionen. Dehnung/Spannung sind explizite Schwerpunktwerte;
+Energie bleibt ein Zellintegral. Thermische Tet10-Eigendehnungen sind inzwischen
+[punktabhängig integriert](48_TET10_THERMOMECHANICS.md). [Vertrag, Biegepatch und Konvergenz](47_TET10_ELASTICITY.md).

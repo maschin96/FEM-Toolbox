@@ -258,7 +258,7 @@ class TransientHeatModel:
                     nodes = (
                         entry["nodes"]
                         if faces is None
-                        else np.unique(mesh.triangle3[faces])
+                        else np.unique(mesh.facets[faces])
                     )
                     _unit(entry, "K", path)
                     self.conditions.append(
@@ -308,7 +308,9 @@ class TransientHeatModel:
                     path="probes." + name, reason="choose node or point"
                 )
             self.probes[name] = next(iter(entry.values()))
-        solver = _mapping(table.get("solver", {}), "solver", {"method", "lumped"})
+        solver = _mapping(
+            table.get("solver", {}), "solver", {"method", "lumped", "lumping"}
+        )
         if (
             solver.get("method", "backward_euler") != "backward_euler"
             or type(solver.get("lumped", False)) is not bool
@@ -317,6 +319,15 @@ class TransientHeatModel:
                 path="solver", reason="backward_euler and boolean lumped required"
             )
         self.lumped = solver.get("lumped", False)
+        self.lumping = solver.get("lumping")
+        if (mesh.n_tetra10 and self.lumped) or (
+            self.lumping is not None
+            and (not mesh.n_tetra10 or self.lumping not in ("consistent", "hrz"))
+        ):
+            raise ModelSchemaError(
+                path="solver.lumping",
+                reason="Tet10 requires consistent or explicit hrz lumping; no boolean lumped",
+            )
         output = _mapping(
             table.get("output", {}), "output", {"every", "max_history_bytes"}
         )
@@ -352,6 +363,7 @@ class TransientHeatModel:
             convection=self.convection,
             probes=self.probes,
             lumped=self.lumped,
+            lumping=self.lumping,
             output_every=self.output_every,
             max_history_bytes=self.max_history_bytes,
         )

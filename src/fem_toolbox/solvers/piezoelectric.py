@@ -1,4 +1,4 @@
-"""Monolithic quasistatic piezoelectric Tet4 reference solver."""
+"""Monolithic quasistatic piezoelectric Tet4/Tet10 reference solver."""
 
 from __future__ import annotations
 
@@ -11,7 +11,6 @@ from itertools import combinations
 import numpy as np
 from numpy.typing import ArrayLike, NDArray
 from scipy import sparse  # type: ignore[import-untyped]
-from scipy.sparse.linalg import splu  # type: ignore[import-untyped]
 
 from fem_toolbox.assembly import (
     LinearSystem,
@@ -27,30 +26,36 @@ from fem_toolbox.boundary import (
     ElectrodeState,
     eliminate_dirichlet,
 )
-from fem_toolbox.elements import Tet4Geometry
+from fem_toolbox.elements import Tet4Geometry, Tet10Geometry, quadratic
 from fem_toolbox.elements.piezoelectric import (
-    piezoelectric_matrix,
-    piezoelectric_response,
     piezoelectric_thermal_load,
 )
 from fem_toolbox.errors import ValidationError
 from fem_toolbox.fields import DofMap, Field
 from fem_toolbox.materials import PiezoelectricMaterial, ThermalExpansion
 from fem_toolbox.mesh import Mesh, inspect_boundary_topology
-from fem_toolbox.physics.elasticity import VectorField, body_load, traction_load
+from fem_toolbox.physics.elasticity import VectorField
 from fem_toolbox.physics.electrostatics import (
     ChargeDensity,
-    surface_charge_load,
-    volume_charge_load,
 )
 from fem_toolbox.provenance import RunProvenance
 from fem_toolbox.solvers.elasticity import _check_supports
+from fem_toolbox.solvers.electric_elements import (
+    surface_charge_load,
+    volume_charge_load,
+)
 from fem_toolbox.solvers.electrostatics import _check_gauge
+from fem_toolbox.solvers.linear_backend import LinearBackend, solve_linear
+from fem_toolbox.solvers.mechanical_elements import body_load, traction_load
+from fem_toolbox.solvers.piezoelectric_elements import (
+    piezoelectric_matrix,
+    piezoelectric_response,
+)
 
 
 def piezoelectric_dofs(mesh: Mesh) -> DofMap:
-    """Return field-major [u (m), phi (V)] DOFs on sorted active Tet4 nodes."""
-    active = tuple(int(node) for node in np.unique(mesh.tetra4))
+    """Return field-major [u (m), phi (V)] DOFs on sorted active Tet4/Tet10 nodes."""
+    active = tuple(int(node) for node in np.unique(mesh.cells))
     return DofMap(
         (
             Field("u", ("x", "y", "z"), active, "m"),
@@ -64,7 +69,10 @@ class PiezoelectricResult:
     """Raw monolithic solution and physical checks in active-node/cell order.
 
     Nodal displacement is (nactive,3) m and potential (nactive,) V; cell fields
-    follow stress-charge SI units. Reactions and residuals belong to the
+    follow stress-charge SI units. Tet4 fields are constant (field_points=None);
+    Tet10 fields are centroid samples at field_points (ncells,3) in m. All
+    energy arrays are volume integrals in J, not centroid approximations.
+    Reactions and residuals belong to the
     original signed equations, with mechanical rows in N and electric rows in
     C. ``electrode_charges`` is the negative electric residual on fixed and
     floating electrode nodes; ``electrode_states`` sums these by conductor.
@@ -99,6 +107,7 @@ class PiezoelectricResult:
     electric_scale: float
     electrode_states: tuple[ElectrodeState, ...]
     provenance: RunProvenance
+    field_points: NDArray[np.float64] | None = None
 
     def __post_init__(self) -> None:
         for name in self.__dataclass_fields__:
@@ -158,15 +167,15 @@ def _thermal_data(
             "electric thermal strain requires expansion and temperature",
             field="thermal",
         )
-    strains = np.zeros((mesh.n_tetra4, 6))
+    strains = np.zeros((mesh.n_cells, 6))
     if expansion is None or temperature is None:
         return strains, None, None
     expansions = (
-        [expansion] * mesh.n_tetra4
+        [expansion] * mesh.n_cells
         if isinstance(expansion, ThermalExpansion)
         else list(expansion)
     )
-    if len(expansions) != mesh.n_tetra4 or any(
+    if len(expansions) != mesh.n_cells or any(
         not isinstance(item, ThermalExpansion) for item in expansions
     ):
         raise ValidationError(
@@ -177,10 +186,11 @@ def _thermal_data(
         raise ValidationError(
             "absolute temperature must be nonnegative K", field="temperature"
         )
-    for i, (cell, item) in enumerate(zip(mesh.tetra4, expansions, strict=True)):
-        strains[i] = item.alpha * (
-            float(np.mean(temperatures[cell])) - item.reference_temperature
-        )
+    if not mesh.n_tetra10:
+        for i, (cell, item) in enumerate(zip(mesh.cells, expansions, strict=True)):
+            strains[i] = item.alpha * (
+                float(np.mean(temperatures[cell])) - item.reference_temperature
+            )
     return strains, expansions, temperatures
 
 
@@ -284,7 +294,7 @@ def _electrode_reduction(
                 )
             facets = mesh.facet_sets[electrode.facets]
         else:
-            facets = indices(electrode.facets, mesh.n_triangle3)
+            facets = indices(electrode.facets, mesh.n_facets)
         if not len(facets) or len(np.unique(facets)) != len(facets):
             raise ValidationError(
                 "electrode facets must be nonempty and unique", field="electrodes"
@@ -296,7 +306,7 @@ def _electrode_reduction(
                 f"electrode {electrode.name!r} conflicts with prescribed surface charge",
                 field="electrodes",
             )
-        nodes = np.unique(mesh.triangle3[facets])
+        nodes = np.unique(mesh.facets[facets])
         if occupied.intersection(int(node) for node in nodes):
             raise ValidationError("electrode node overlap", field="electrodes")
         occupied.update(int(node) for node in nodes)
@@ -358,6 +368,7 @@ def solve_piezoelectric(
     material: PiezoelectricMaterial | Sequence[PiezoelectricMaterial],
     conditions: Iterable[Dirichlet],
     *,
+    backend: LinearBackend | None = None,
     body_force: VectorField = (0.0, 0.0, 0.0),
     tractions: Mapping[int, VectorField] | None = None,
     point_loads: Mapping[int, ArrayLike] | None = None,
@@ -370,7 +381,10 @@ def solve_piezoelectric(
     block_scaling: bool = True,
     method: str = "direct",
 ) -> PiezoelectricResult:
-    """Solve the symmetric-indefinite static u-phi Tet4 system with sparse LU.
+    """Solve the symmetric-indefinite static u-phi Tet4/Tet10 system with sparse LU.
+
+    ``backend`` is an experimental linear-backend hook; None selects SciPy.
+    Reduction, physical residuals and result units remain this solver's contract.
 
     Dirichlet DOFs use ``piezoelectric_dofs(mesh)`` and retain their original
     signed reactions. Mechanical loads are N/m³, N/m², and nodal N;
@@ -381,13 +395,20 @@ def solve_piezoelectric(
     Fixed electrodes share a prescribed potential; floating electrodes share
     an unknown potential and prescribe their total adjacent conductor charge.
     The optional thermal-electric contribution to D is explicitly selected.
+    Tet10 interpolates nodal temperature at every integration point for thermal
+    loads and enthalpy; field values are sampled at the centroid. Straight Tet10
+    geometry and Triangle6 faces are required.
     The only supported method is direct LU: CG is invalid for this saddle
     system; MINRES awaits a verified block preconditioner. Invalid inputs,
     missing constraints, singularity, or excessive field residuals raise
     ValidationError (ElectricGaugeError for a missing potential reference).
     """
-    if mesh.n_tetra4 == 0:
-        raise ValidationError("piezoelectric solve requires Tet4 cells", field="mesh")
+    if mesh.n_cells == 0:
+        raise ValidationError(
+            "piezoelectric solve requires Tet4 or Tet10 cells", field="mesh"
+        )
+    if mesh.n_tetra10:
+        inspect_boundary_topology(mesh)
     if method != "direct":
         raise ValidationError(
             "only direct LU is supported for the piezoelectric saddle system",
@@ -397,26 +418,27 @@ def solve_piezoelectric(
         electric_thermal_strain, bool
     ):
         raise ValidationError("expected boolean solver switches", field="solver")
-    materials = _materials(material, mesh.n_tetra4)
-    eigenstrains, expansions, _ = _thermal_data(
+    materials = _materials(material, mesh.n_cells)
+    eigenstrains, expansions, temperatures = _thermal_data(
         mesh, expansion, temperature, electric_thermal_strain
     )
     dofs = piezoelectric_dofs(mesh)
-    active = np.unique(mesh.tetra4)
+    active = np.unique(mesh.cells)
     phi_offset = dofs.block("phi").start
+    geometry_type = Tet10Geometry if mesh.n_tetra10 else Tet4Geometry
     geometries = [
-        Tet4Geometry(
+        geometry_type(
             mesh.points[cell],
-            entity_id=int(mesh.tetra4_ids[i]) if mesh.tetra4_ids is not None else i,
+            entity_id=int(mesh.cell_ids[i]) if mesh.cell_ids is not None else i,
         )
-        for i, cell in enumerate(mesh.tetra4)
+        for i, cell in enumerate(mesh.cells)
     ]
     matrices: list[MatrixBlock] = []
     loads: list[VectorBlock] = []
     volume_vector = np.zeros(dofs.size)
     surface_vector = np.zeros(dofs.size)
     for i, (cell, geometry, mat) in enumerate(
-        zip(mesh.tetra4, geometries, materials, strict=True)
+        zip(mesh.cells, geometries, materials, strict=True)
     ):
         u_ids = dofs.indices("u", cell)
         phi_ids = dofs.indices("phi", cell)
@@ -424,31 +446,40 @@ def solve_piezoelectric(
         matrices.append(MatrixBlock(ids, ids, piezoelectric_matrix(geometry, mat)))
         loads.append(VectorBlock(u_ids, body_load(geometry, body_force)))
         np.add.at(volume_vector, phi_ids, volume_charge_load(geometry, volume_charge))
-        if expansions is not None:
-            loads.append(
-                VectorBlock(
-                    ids,
-                    piezoelectric_thermal_load(
-                        geometry,
-                        mat,
-                        eigenstrains[i],
-                        electric_thermal_strain=electric_thermal_strain,
-                    ),
+        if expansions is not None and temperatures is not None:
+            if isinstance(geometry, Tet10Geometry):
+                eigenstrains[i] = expansions[i].alpha * (
+                    geometry.shape_values(geometry.coordinates[:4].mean(axis=0))
+                    @ (temperatures[cell] - expansions[i].reference_temperature)
                 )
-            )
+                thermal_load = quadratic.thermal_load(
+                    geometry,
+                    mat,
+                    temperatures[cell],
+                    expansions[i],
+                    electric_thermal_strain=electric_thermal_strain,
+                )
+            else:
+                thermal_load = piezoelectric_thermal_load(
+                    geometry,
+                    mat,
+                    eigenstrains[i],
+                    electric_thermal_strain=electric_thermal_strain,
+                )
+            loads.append(VectorBlock(ids, thermal_load))
     if tractions or surface_charges:
         faces = Counter(
             tuple(sorted(int(node) for node in face))
-            for cell in mesh.tetra4
-            for face in combinations(cell, 3)
+            for cell in mesh.cells
+            for face in combinations(cell[:4], 3)
         )
 
         def exterior_face(face_id: int, field: str) -> NDArray[np.int64]:
-            index = int(indices([face_id], mesh.n_triangle3)[0])
-            nodes = mesh.triangle3[index]
-            if faces[tuple(sorted(int(node) for node in nodes))] != 1:
+            index = int(indices([face_id], mesh.n_facets)[0])
+            nodes = mesh.facets[index]
+            if faces[tuple(sorted(int(node) for node in nodes[:3]))] != 1:
                 raise ValidationError(
-                    "load face must be an exterior Tet4 face", field=field
+                    "load face must be an exterior tetrahedral face", field=field
                 )
             return np.asarray(nodes, dtype=np.int64)
 
@@ -516,23 +547,19 @@ def solve_piezoelectric(
             int(np.count_nonzero(unique_representatives < phi_offset)),
             block_scaling,
         )
-        scaling = sparse.diags(scale)
-        try:
-            factor = splu((scaling @ reduced @ scaling).tocsc())
-            pivots = np.abs(factor.U.diagonal())
-            if not np.isfinite(pivots).all() or np.min(pivots) <= 1e-12 * np.max(
-                pivots
-            ):
-                raise ValidationError(
-                    "singular or ill-conditioned piezoelectric system", field="solver"
-                )
-            reduced_solution[free_reduced] = scale * factor.solve(
-                scale * constrained.rhs[free_reduced]
-            )
-        except RuntimeError as error:
-            raise ValidationError(
-                "singular piezoelectric system", field="solver"
-            ) from error
+        u_count = int(np.count_nonzero(unique_representatives < phi_offset))
+        reduced_solution[free_reduced] = solve_linear(
+            reduced,
+            constrained.rhs[free_reduced],
+            fields={
+                "u": np.flatnonzero(free_reduced < u_count),
+                "phi": np.flatnonzero(free_reduced >= u_count),
+            },
+            scale=scale,
+            pivot_tolerance=1e-12,
+            relative_pivot=True,
+            backend=backend,
+        ).values
     solution = reduced_solution[reduced_index]
     if not np.isfinite(solution).all():
         raise ValidationError("nonfinite piezoelectric solution", field="solver")
@@ -589,10 +616,12 @@ def solve_piezoelectric(
             displacement[np.searchsorted(active, cell)],
             potential[np.searchsorted(active, cell)],
             thermal_strain=eigenstrains[i] if expansions is not None else None,
+            temperature=temperatures[cell] if temperatures is not None else None,
+            expansion=expansions[i] if expansions is not None else None,
             electric_thermal_strain=electric_thermal_strain,
         )
         for i, (cell, geometry, mat) in enumerate(
-            zip(mesh.tetra4, geometries, materials, strict=True)
+            zip(mesh.cells, geometries, materials, strict=True)
         )
     ]
     applied_force = rhs[:phi_offset].reshape(-1, 3)
@@ -630,7 +659,7 @@ def solve_piezoelectric(
         )
     provenance_input = {
         "points": mesh.points.tolist(),
-        "tetra4": mesh.tetra4.tolist(),
+        mesh.cell_type: mesh.cells.tolist(),
         "materials": [item.to_provenance_dict() for item in materials],
         "thermal_eigenstrain": eigenstrains.tolist(),
         "electric_thermal_strain": electric_thermal_strain,
@@ -638,6 +667,18 @@ def solve_piezoelectric(
         "fixed_dofs": fixed.tolist(),
         "fixed_values": solution[fixed].tolist(),
     }
+    if mesh.n_tetra10 and temperatures is not None and expansions is not None:
+        provenance_input["temperature"] = temperatures.tolist()
+        provenance_input["expansion"] = [
+            {
+                "alpha": item.alpha.tolist(),
+                "reference_temperature": item.reference_temperature,
+            }
+            for item in expansions
+        ]
+        provenance_input["thermal_eigenstrain_at_centroid"] = provenance_input.pop(
+            "thermal_eigenstrain"
+        )
     if electrode_data:
         provenance_input["electrodes"] = [
             (name, electrode_dofs.tolist(), potential, charge)
@@ -657,7 +698,7 @@ def solve_piezoelectric(
                 if electrode_data
                 else "piezoelectric-discrete-v1"
             ),
-            "backend": "scipy.sparse.linalg.splu",
+            "backend": "scipy.sparse.linalg.splu" if backend is None else backend.name,
             "block_scaling": block_scaling,
             "electric_thermal_strain": electric_thermal_strain,
             "mechanical_scale": mechanical_scale,
@@ -701,4 +742,7 @@ def solve_piezoelectric(
         electric_scale=electric_scale,
         electrode_states=electrode_states,
         provenance=provenance,
+        field_points=mesh.points[mesh.cells[:, :4]].mean(axis=1)
+        if mesh.n_tetra10
+        else None,
     )

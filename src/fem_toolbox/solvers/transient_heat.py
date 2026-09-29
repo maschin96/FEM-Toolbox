@@ -1,4 +1,4 @@
-"""Backward-Euler Tet4 heat reference with storage and reservoir reactions."""
+"""Backward-Euler Tet4/Tet10 heat reference with storage and reservoir reactions."""
 
 from __future__ import annotations
 
@@ -13,7 +13,6 @@ from typing import TypeAlias
 import numpy as np
 from numpy.typing import ArrayLike, NDArray
 from scipy import sparse  # type: ignore[import-untyped]
-from scipy.sparse.linalg import splu  # type: ignore[import-untyped]
 
 from fem_toolbox.assembly import (
     LinearSystem,
@@ -23,20 +22,27 @@ from fem_toolbox.assembly import (
     real_array,
 )
 from fem_toolbox.boundary import Dirichlet, eliminate_dirichlet
-from fem_toolbox.elements import Tet4Geometry
-from fem_toolbox.elements.heat import conductance_matrix
-from fem_toolbox.elements.storage import capacity_matrix
+from fem_toolbox.elements import Tet4Geometry, Tet10Geometry
 from fem_toolbox.errors import ValidationError
 from fem_toolbox.materials import ThermalMaterial
-from fem_toolbox.mesh import Mesh
+from fem_toolbox.mesh import Mesh, inspect_boundary_topology
 from fem_toolbox.physics.heat import (
     Convection,
     ScalarField,
+)
+from fem_toolbox.provenance import RunProvenance
+from fem_toolbox.solvers.linear_backend import LinearBackend, solve_linear
+from fem_toolbox.solvers.thermal_elements import (
+    Lumping,
+    ThermalGeometry,
+    capacity_matrix,
+    conductance_matrix,
+    contains,
     convection_terms,
     flux_load,
     source_load,
+    temperature_gradient,
 )
-from fem_toolbox.provenance import RunProvenance
 from fem_toolbox.time import TimeSignal, integration_times, signal_value
 
 SpaceTimeField: TypeAlias = TimeSignal | Callable[[NDArray[np.float64], float], float]
@@ -63,7 +69,9 @@ class HeatFrame:
     """A stored time state: temperature K, gradient K/m, heat_flux W/m².
 
     temperature/reactions/residual use active node order; element fields use
-    input cell order. Initial reactions/residual are zero (not evaluated).
+    input cell order. Tet4 element fields are constant (field_points=None).
+    Tet10 fields are raw centroid samples; field_points (ncells,3) locates them
+    in metres. Initial reactions/residual are zero (not evaluated).
     """
 
     mesh_sha256: str
@@ -74,10 +82,20 @@ class HeatFrame:
     heat_flux: NDArray[np.float64]
     reactions: NDArray[np.float64]
     residual: NDArray[np.float64]
+    field_points: NDArray[np.float64] | None = None
 
     def __post_init__(self) -> None:
-        for name in ("temperature", "gradient", "heat_flux", "reactions", "residual"):
+        for name in (
+            "temperature",
+            "gradient",
+            "heat_flux",
+            "reactions",
+            "residual",
+            "field_points",
+        ):
             a = getattr(self, name)
+            if a is None:
+                continue
             object.__setattr__(
                 self, name, np.frombuffer(a.tobytes(), dtype=a.dtype).reshape(a.shape)
             )
@@ -130,8 +148,8 @@ def heat_mesh_fingerprint(mesh: Mesh) -> str:
         json.dumps(
             {
                 "points": mesh.points.tolist(),
-                "cells": mesh.tetra4.tolist(),
-                "facets": mesh.triangle3.tolist(),
+                "cells": mesh.cells.tolist(),
+                "facets": mesh.facets.tolist(),
             },
             separators=(",", ":"),
         ).encode()
@@ -151,7 +169,7 @@ def _at(field: SpaceTimeField, time: float) -> ScalarField:
 def _probes(
     mesh: Mesh,
     active: NDArray[np.int64],
-    geometries: Sequence[Tet4Geometry],
+    geometries: Sequence[ThermalGeometry],
     probes: Mapping[str, int | ArrayLike],
 ) -> tuple[tuple[str, ...], NDArray[np.float64]]:
     rows = []
@@ -167,14 +185,14 @@ def _probes(
             row[np.searchsorted(active, location)] = 1.0
         else:
             point = real_array(location, (3,))
-            for cell, geometry in zip(mesh.tetra4, geometries, strict=True):
+            for cell, geometry in zip(mesh.cells, geometries, strict=True):
                 weights = geometry.shape_values(point)
-                if np.all(weights >= -1e-12) and np.all(weights <= 1 + 1e-12):
+                if contains(geometry, point):
                     row[np.searchsorted(active, cell)] = weights
                     break
             else:
                 raise ValidationError(
-                    f"probe {name!r} outside Tet4 domain", field="probes"
+                    f"probe {name!r} outside tetrahedral domain", field="probes"
                 )
         rows.append(row)
     return tuple(sorted(probes)), np.asarray(rows).reshape(len(rows), len(active))
@@ -186,17 +204,27 @@ def solve_transient_heat(
     times: ArrayLike,
     initial_temperature: ArrayLike,
     *,
+    backend: LinearBackend | None = None,
     conditions: Sequence[TemperatureBC] = (),
     source: SpaceTimeField = 0.0,
     outward_fluxes: Mapping[int, SpaceTimeField] | None = None,
     convection: Mapping[int, TransientConvection] | None = None,
     probes: Mapping[str, int | ArrayLike] | None = None,
     lumped: bool = False,
+    lumping: Lumping | None = None,
     output_every: int = 1,
     max_history_bytes: int = 256 * 1024 * 1024,
     on_frame: Callable[[HeatFrame], None] | None = None,
 ) -> TransientHeatResult:
     """Solve C Tdot + K T = f by backward Euler on an event-enriched time grid.
+
+    ``backend`` is an experimental linear-backend hook; None selects SciPy.
+    Reduction, physical residuals and result units remain this solver's contract.
+
+    Straight Tet10 uses consistent capacity by default; lumping="hrz" selects
+    conservative diagonal scaling. Tet10 rejects lumped=True (negative row-sum
+    masses). Tet4 retains its boolean lumped option and rejects explicit lumping.
+    HRZ conserves total storage but does not preserve consistent source moments.
 
     SI: time s, initial_temperature K (scalar or active-node vector), source
     W/m³, outward flux W/m². Spatial sources/fluxes may be f(x,t); explicitly
@@ -211,8 +239,10 @@ def solve_transient_heat(
     on_frame permits incremental export. max_history_bytes bounds estimated
     retained numerical history, not factorization/workspace memory.
     """
-    if not mesh.n_tetra4:
-        raise ValidationError("transient heat requires Tet4 cells", field="mesh")
+    if not mesh.n_cells:
+        raise ValidationError(
+            "transient heat requires Tet4 or Tet10 cells", field="mesh"
+        )
     if (
         type(output_every) is not int
         or output_every < 1
@@ -223,11 +253,11 @@ def solve_transient_heat(
             "positive output interval/history budget required", field="output"
         )
     materials = (
-        [material] * mesh.n_tetra4
+        [material] * mesh.n_cells
         if isinstance(material, ThermalMaterial)
         else list(material)
     )
-    if len(materials) != mesh.n_tetra4 or any(
+    if len(materials) != mesh.n_cells or any(
         not isinstance(m, ThermalMaterial)
         or m.density is None
         or m.specific_heat is None
@@ -251,14 +281,19 @@ def solve_transient_heat(
     signals.extend(b.value for b in conditions)
     signals.extend(v for b in robin.values() for v in (b.coefficient, b.ambient))
     grid = integration_times(times, signals)
-    active = np.unique(mesh.tetra4)
+    if mesh.n_tetra10:
+        inspect_boundary_topology(mesh)
+    active = np.unique(mesh.cells)
     size = len(active)
-    geometries = [Tet4Geometry(mesh.points[cell]) for cell in mesh.tetra4]
-    cell_dofs = [np.searchsorted(active, cell) for cell in mesh.tetra4]
+    geometries = [
+        (Tet10Geometry if mesh.n_tetra10 else Tet4Geometry)(mesh.points[cell])
+        for cell in mesh.cells
+    ]
+    cell_dofs = [np.searchsorted(active, cell) for cell in mesh.cells]
     names, probe_matrix = _probes(mesh, active, geometries, probes or {})
     output_indices = set(range(0, len(grid), output_every)) | {len(grid) - 1}
     estimated = 8 * (
-        len(output_indices) * (3 * size + 6 * mesh.n_tetra4)
+        len(output_indices) * (3 * size + (9 if mesh.n_tetra10 else 6) * mesh.n_cells)
         + len(grid) * (len(names) + 12)
     )
     if estimated > max_history_bytes:
@@ -325,21 +360,23 @@ def solve_transient_heat(
             MatrixBlock(
                 ids,
                 ids,
-                capacity_matrix(geometry, m.density, m.specific_heat, lumped=lumped),
+                capacity_matrix(
+                    geometry, m.density, m.specific_heat, lumped=lumped, lumping=lumping
+                ),
             )
         )
     stiffness = assemble(size, stiffness_blocks).matrix
     capacity = assemble(size, capacity_blocks).matrix
     face_counts = Counter(
-        tuple(sorted(f)) for cell in mesh.tetra4 for f in combinations(cell, 3)
+        tuple(sorted(f)) for cell in mesh.cells for f in combinations(cell[:4], 3)
     )
     face_data = {}
     for face in set(fluxes) | set(robin):
-        i = int(indices([face], mesh.n_triangle3)[0])
-        nodes = mesh.triangle3[i]
-        if face_counts[tuple(sorted(nodes))] != 1:
+        i = int(indices([face], mesh.n_facets)[0])
+        nodes = mesh.facets[i]
+        if face_counts[tuple(sorted(nodes[:3]))] != 1:
             raise ValidationError(
-                "boundary must be exterior Tet4 face", field="surface"
+                "boundary must be exterior tetrahedral face", field="surface"
             )
         face_data[face] = (np.searchsorted(active, nodes), mesh.points[nodes])
     digest = hashlib.sha256()
@@ -355,8 +392,8 @@ def solve_transient_heat(
     record(
         {
             "points": mesh.points.tolist(),
-            "cells": mesh.tetra4.tolist(),
-            "facets": mesh.triangle3.tolist(),
+            "cells": mesh.cells.tolist(),
+            "facets": mesh.facets.tolist(),
             "initial": initial.tolist(),
             "materials": [
                 {
@@ -369,6 +406,7 @@ def solve_transient_heat(
             ],
             "times": grid.tolist(),
             "lumped": lumped,
+            **({"lumping": lumping or "consistent"} if mesh.n_tetra10 else {}),
             "probe_names": names,
             "probe_weights": probe_matrix.tolist(),
             "output_every": output_every,
@@ -389,7 +427,7 @@ def solve_transient_heat(
             return
         gradients = np.array(
             [
-                g.gradient_matrix @ (temperature[ids] - temperature[ids[0]])
+                temperature_gradient(g, temperature[ids])
                 for ids, g in zip(cell_dofs, geometries, strict=True)
             ]
         )
@@ -407,6 +445,7 @@ def solve_transient_heat(
             ),
             reactions,
             residual,
+            mesh.points[mesh.cells[:, :4]].mean(axis=1) if mesh.n_tetra10 else None,
         )
         if on_frame is not None:
             on_frame(frame)
@@ -460,16 +499,13 @@ def solve_transient_heat(
             if np.any(diagonal <= 0):
                 raise ValidationError("nonpositive transient diagonal", field="solver")
             scale = 1 / np.sqrt(diagonal)
-            scaling = sparse.diags(scale)
-            try:
-                factor = splu((scaling @ a @ scaling).tocsc())
-                next_temperature[free] = scale * factor.solve(
-                    scale * constrained.rhs[free]
-                )
-            except RuntimeError as error:
-                raise ValidationError(
-                    "transient factorization failed", field="solver"
-                ) from error
+            next_temperature[free] = solve_linear(
+                a,
+                constrained.rhs[free],
+                fields={"T": np.arange(len(free))},
+                scale=scale,
+                backend=backend,
+            ).values
         if not np.isfinite(next_temperature).all():
             raise ValidationError("nonfinite transient temperature", field="solver")
         storage = capacity @ ((next_temperature - temperature) / dt)
@@ -526,9 +562,13 @@ def solve_transient_heat(
         digest.digest(),
         solver_name="fem_toolbox.solvers.transient_heat.solve_transient_heat",
         solver_parameters={
+            "linear_backend": "scipy" if backend is None else backend.name,
             "input_schema": "transient-heat-discrete-v1",
             "method": "backward_euler",
-            "capacity": "lumped" if lumped else "consistent",
+            "capacity": (lumping or "consistent")
+            if mesh.n_tetra10
+            else ("lumped" if lumped else "consistent"),
+            "field_location": "cell_centroid" if mesh.n_tetra10 else "element_constant",
             "output_every": output_every,
             "load_endpoint": "left_limit",
             "dirichlet_endpoint": "right",

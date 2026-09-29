@@ -14,6 +14,7 @@ from fem_toolbox.errors import (
     SelectionError,
     ShapeError,
 )
+from fem_toolbox.mesh.quadratic import validate_edge_incidence
 
 FloatArray = NDArray[np.float64]
 IndexArray = NDArray[np.int64]
@@ -192,7 +193,7 @@ def _selection_map(
 
 
 class Mesh:
-    """Immutable validated topology for Tet4 cells and Triangle3 facets.
+    """Immutable topology for one Tet4/Triangle3 or Tet10/Triangle6 family.
 
     Connectivity and selections always contain zero-based internal indices.
     Optional external IDs remain separate so importer-specific numbering cannot
@@ -208,8 +209,12 @@ class Mesh:
         "_points",
         "_tetra4",
         "_tetra4_ids",
+        "_tetra10",
+        "_tetra10_ids",
         "_triangle3",
         "_triangle3_ids",
+        "_triangle6",
+        "_triangle6_ids",
         "_volume_sets",
     )
 
@@ -219,6 +224,10 @@ class Mesh:
         points: ArrayLike,
         tetra4: ArrayLike | None = None,
         triangle3: ArrayLike | None = None,
+        tetra10: ArrayLike | None = None,
+        triangle6: ArrayLike | None = None,
+        tetra10_ids: ArrayLike | None = None,
+        triangle6_ids: ArrayLike | None = None,
         point_ids: ArrayLike | None = None,
         tetra4_ids: ArrayLike | None = None,
         triangle3_ids: ArrayLike | None = None,
@@ -230,6 +239,23 @@ class Mesh:
         points_array = _points_array(points)
         tetra4_array = _index_matrix(tetra4, field="tetra4", width=4)
         triangle3_array = _index_matrix(triangle3, field="triangle3", width=3)
+        tetra10_array = _index_matrix(tetra10, field="tetra10", width=10)
+        triangle6_array = _index_matrix(triangle6, field="triangle6", width=6)
+        if (len(tetra4_array) or len(triangle3_array)) and (
+            len(tetra10_array) or len(triangle6_array)
+        ):
+            raise MeshValidationError(
+                field="cells",
+                reason="hybrid Tet4/Tet10 or Triangle3/Triangle6 meshes are unsupported",
+            )
+        tetra10_ids_array = _external_ids(
+            tetra10_ids, size=len(tetra10_array), field="tetra10_ids"
+        )
+        triangle6_ids_array = _external_ids(
+            triangle6_ids, size=len(triangle6_array), field="triangle6_ids"
+        )
+        cell_count = len(tetra4_array) + len(tetra10_array)
+        facet_count = len(triangle3_array) + len(triangle6_array)
         point_ids_array = _external_ids(
             point_ids, size=len(points_array), field="point_ids"
         )
@@ -239,17 +265,15 @@ class Mesh:
         triangle3_ids_array = _external_ids(
             triangle3_ids, size=len(triangle3_array), field="triangle3_ids"
         )
-        cell_tags_array = _entity_tags(
-            cell_tags, size=len(tetra4_array), field="cell_tags"
-        )
+        cell_tags_array = _entity_tags(cell_tags, size=cell_count, field="cell_tags")
         facet_tags_array = _entity_tags(
-            facet_tags, size=len(triangle3_array), field="facet_tags"
+            facet_tags, size=facet_count, field="facet_tags"
         )
         volume_set_map = _selection_map(
-            volume_sets, field="volume_sets", entity_count=len(tetra4_array)
+            volume_sets, field="volume_sets", entity_count=cell_count
         )
         facet_set_map = _selection_map(
-            facet_sets, field="facet_sets", entity_count=len(triangle3_array)
+            facet_sets, field="facet_sets", entity_count=facet_count
         )
         _validate_connectivity(
             tetra4_array,
@@ -264,6 +288,31 @@ class Mesh:
             external_ids=triangle3_ids_array,
             selections=facet_set_map,
         )
+
+        for field, array, ids in (
+            ("tetra10", tetra10_array, tetra10_ids_array),
+            ("triangle6", triangle6_array, triangle6_ids_array),
+        ):
+            _validate_connectivity(
+                array,
+                field=field,
+                point_count=len(points_array),
+                external_ids=ids,
+                selections=facet_set_map if field == "triangle6" else volume_set_map,
+            )
+            # The corner simplex identifies an entity even if its edge nodes differ.
+            _validate_connectivity(
+                array[:, : 4 if field == "tetra10" else 3],
+                field=field,
+                point_count=len(points_array),
+                external_ids=ids,
+                selections=facet_set_map if field == "triangle6" else volume_set_map,
+            )
+        validate_edge_incidence(tetra10_array, tetra10_ids_array)
+        self._tetra10 = tetra10_array
+        self._triangle6 = triangle6_array
+        self._tetra10_ids = tetra10_ids_array
+        self._triangle6_ids = triangle6_ids_array
 
         self._points = points_array
         self._tetra4 = tetra4_array
@@ -313,22 +362,22 @@ class Mesh:
 
     @property
     def cell_tags(self) -> IndexArray | None:
-        """Optional integer region tag for every Tet4 cell."""
+        """Optional integer region tag for every active volume cell."""
         return self._cell_tags
 
     @property
     def facet_tags(self) -> IndexArray | None:
-        """Optional integer boundary tag for every Triangle3 facet."""
+        """Optional integer boundary tag for every active surface facet."""
         return self._facet_tags
 
     @property
     def volume_sets(self) -> SelectionMap:
-        """Named Tet4 selections containing zero-based internal cell indices."""
+        """Named active-volume selections containing zero-based internal cell indices."""
         return self._volume_sets
 
     @property
     def facet_sets(self) -> SelectionMap:
-        """Named Triangle3 selections containing zero-based internal facet indices."""
+        """Named active-surface selections containing zero-based internal facet indices."""
         return self._facet_sets
 
     @property
@@ -345,3 +394,68 @@ class Mesh:
     def n_triangle3(self) -> int:
         """Number of Triangle3 facets."""
         return len(self._triangle3)
+
+    @property
+    def tetra10(self) -> IndexArray:
+        """Tet10 rows: corners 0..3, edge nodes 01,12,20,03,13,23 (VTK order)."""
+        return self._tetra10
+
+    @property
+    def triangle6(self) -> IndexArray:
+        """Triangle6 rows: corners 0..2, edge nodes 01,12,20."""
+        return self._triangle6
+
+    @property
+    def tetra10_ids(self) -> IndexArray | None:
+        """Optional external Tet10 IDs."""
+        return self._tetra10_ids
+
+    @property
+    def triangle6_ids(self) -> IndexArray | None:
+        """Optional external Triangle6 IDs."""
+        return self._triangle6_ids
+
+    @property
+    def n_tetra10(self) -> int:
+        return len(self._tetra10)
+
+    @property
+    def n_triangle6(self) -> int:
+        return len(self._triangle6)
+
+    @property
+    def cell_type(self) -> str:
+        """Active volume family; empty meshes default to tetra4."""
+        return "tetra10" if self.n_tetra10 or self.n_triangle6 else "tetra4"
+
+    @property
+    def facet_type(self) -> str:
+        return "triangle6" if self.cell_type == "tetra10" else "triangle3"
+
+    @property
+    def cells(self) -> IndexArray:
+        """Active volume rows addressed by cell_tags and volume_sets."""
+        return self.tetra10 if self.cell_type == "tetra10" else self.tetra4
+
+    @property
+    def facets(self) -> IndexArray:
+        """Active surface rows addressed by facet_tags and facet_sets."""
+        return self.triangle6 if self.facet_type == "triangle6" else self.triangle3
+
+    @property
+    def cell_ids(self) -> IndexArray | None:
+        return self.tetra10_ids if self.cell_type == "tetra10" else self.tetra4_ids
+
+    @property
+    def facet_ids(self) -> IndexArray | None:
+        return (
+            self.triangle6_ids if self.facet_type == "triangle6" else self.triangle3_ids
+        )
+
+    @property
+    def n_cells(self) -> int:
+        return len(self.cells)
+
+    @property
+    def n_facets(self) -> int:
+        return len(self.facets)

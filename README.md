@@ -3,9 +3,13 @@
 Eine wissenschaftlich ausgerichtete Python-Toolbox im Aufbau für lineare,
 dreidimensionale Finite-Elemente-Simulationen. Ziel sind verifizierte Modelle für
 Festkörpermechanik, Wärmeleitung, Elektrostatik und deren thermomechanische und
-piezoelektrische Kopplungen auf Basis linearer Vierknoten-Tetraeder (**Tet4**).
+piezoelektrische Kopplungen auf Basis linearer **Tet4** und geradkantiger quadratischer **Tet10**.
 
-**Stabile Freigabe: v1.1.0 — transiente Wärme und Piezo-Dynamik.**
+**Freigabestand v1.2.0 — PETSc, Tet10, Wärmeindikatoren und gemessene Performance.**
+Veröffentlichung und Tag stehen noch aus; zuletzt veröffentlicht ist v1.1.0.
+[Release-Nachweis und offene Veröffentlichungsschritte](Doc/58_M7_RELEASE_VERIFICATION.md) ·
+[Release Notes](Doc/releases/v1.2.0.md) ·
+[Supportmatrix](Doc/57_M7_RELEASE_CANDIDATE.md).
 
 Neu gegenüber v1.0: [transiente Wärmeleitung](Doc/33_TRANSIENT_HEAT.md) mit
 [Materialbibliothek](Doc/32_MATERIAL_LIBRARY.md), Sprüngen/Rampen/CSV,
@@ -30,25 +34,30 @@ verifizierten Annahmen und numerischen Grenzen.
 
 ## Verfügbare Funktionen
 
-| Bereich | Umfang in v1.1.0 |
+| Bereich | Umfang im Freigabestand v1.2.0 |
 |---|---|
-| Netzmodell | Unveränderliche NumPy-Arrays für 3D-Punkte, Tet4-Zellen und Triangle3-Flächen; validierte Indizes, externe IDs und Tags |
+| Netzmodell | Unveränderliche NumPy-Arrays für 3D-Punkte, Tet4/Tet10-Zellen und Triangle3/Triangle6-Flächen; validierte Indizes, externe IDs und Tags |
 | Auswahlsätze | Benannte Volumen- und Flächensätze, auch mit überlappenden Mitgliedschaften |
-| Tet4-Geometrie | Volumen, Formfunktionen, Gradienten, positive lokale Orientierung, Flächen und äußere Normalen |
+| Tet4/Tet10-Geometrie | Volumen, Formfunktionen, Gradienten, positive lokale Orientierung, Flächen und äußere Normalen |
 | Netzqualität | Skalierungsunabhängige Qualitätsindikatoren und Erkennung entarteter Tetraeder |
 | Ein- und Ausgabe | Gmsh-2.2/4.1-Import und VTU-Export über `meshio`, einschließlich Feldern und Auswahlsätzen |
 | Projektbasis | Mathematische und SI-Konventionen, spezifische Validierungsfehler und deterministische Laufprovenienz mit `RunProvenance` |
-| Elastizität | Kleine lineare Tet4-Verformungen, anisotrope Materialien, Volumen-/Flächen-/Punktlasten sowie Spannungs-, Energie- und Reaktionsauswertung |
-| Wärme | Stationäre Tet4-Wärmeleitung mit anisotroper Leitfähigkeit, Quellen, äußerem Wärmestrom, Konvektion und Leistungsbilanz |
-| Elektrostatik | Stationäres Tet4-Potential mit anisotroper Permittivität, freien Ladungen, Gauge-Diagnostik, E-/D-Feldern und Ladungsbilanz |
+| Elastizität | Kleine lineare Tet4/Tet10-Verformungen, anisotrope Materialien, Volumen-/Flächen-/Punktlasten sowie Spannungs-, Energie- und Reaktionsauswertung |
+| Wärme | Stationäre Tet4/Tet10-Wärmeleitung mit anisotroper Leitfähigkeit, Quellen, äußerem Wärmestrom, Konvektion und Leistungsbilanz |
+| Elektrostatik | Stationäres Tet4/Tet10-Potential mit anisotroper Permittivität, freien Ladungen, Gauge-Diagnostik, E-/D-Feldern und Ladungsbilanz |
 | Thermomechanik | Sequenzielle stationäre Wärme-zu-Mechanik-Kopplung mit anisotroper thermischer Expansion und regionsweisen Referenztemperaturen |
-| Piezoelektrizität | Stress-Charge-Materialdaten, Konversion und Achsrotation; gekoppelte Tet4-Operatoren und monolithische Sparse-LU-Lösung mit feldweiser Skalierung, Reaktionen, Ladungs- und Energiebilanzen |
-| Thermopiezoelektrizität | Einseitiger stationärer Ablauf `T → (u, φ)` mit regionsweiser thermischer Eigenverzerrung und getrennten Wärme-, Kraft- und Ladungsbilanzen in v1.0.0 |
+| Piezoelektrizität | Stress-Charge-Materialdaten, Konversion und Achsrotation; gekoppelte Tet4/Tet10-Operatoren und monolithische Lösung mit SciPy oder optional PETSc mit feldweiser Skalierung, Reaktionen, Ladungs- und Energiebilanzen |
+| Thermopiezoelektrizität | Einseitiger stationärer Ablauf `T → (u, φ)` mit regionsweiser thermischer Eigenverzerrung und getrennten Wärme-, Kraft- und Ladungsbilanzen |
 | Transiente Wärme | Konstante rho/c-Daten, Backward Euler, Model-Schema 2, Zeitprofile, Speicherbilanz und PVD-/Messpunktserien |
 | Piezo-Dynamik | Mechanische konsistente Masse, algebraisches Potential, Modal-/Newmark-/Harmonikanalyse, Model-Schema 3 und komplexe Feld-/Messpunktausgabe |
 
 Ein vollständiger deklarativer Lauf mit Gmsh-Eingabe, VTU-Feldern und
 Provenienzbericht steht unter [examples/thermopiezoelectric](examples/thermopiezoelectric/README.md).
+
+Zusätzlich: optionale PETSc-Direkt-/FieldSplit-Backends an den Python-APIs,
+stationäre Tet4-Wärmeindikatoren und gemessene Performancevergleiche.
+Abgeleitete Tet10-Feldgrößen werden als Schwerpunktwerte gekennzeichnet; Model/TOML bleibt
+bei SciPy. Die Supportmatrix nennt die vollständigen Grenzen.
 
 ## Installation
 
@@ -152,16 +161,31 @@ interpretiert Koordinaten als Meter, `1.0e-3` rechnet Millimeter in Meter um.
 - `Mesh` kopiert seine Eingaben und prüft unter anderem Array-Formen,
   Indexgrenzen und topologisch doppelte Entitäten. Geometrische Entartung wird
   durch `Tet4Geometry` und beim Gmsh-Import geprüft.
-- Der Import unterstützt ausschließlich lineare Tetraeder und Dreiecksflächen;
-  andere Zelltypen führen zu einem `UnsupportedCellTypeError`.
+- M7 ergänzt geradkantige Tet10/Triangle6 für Topologie und I/O sowie
+  [Formfunktionen, Geometrie und Quadratur](Doc/41_TET10_GEOMETRY.md) sowie
+  [lokale Feldoperatoren und Randintegrale](Doc/42_TET10_OPERATORS.md);
+  [Vertrag und Grenzen](Doc/40_TET10_TOPOLOGY.md). Stationäre und transiente
+  [Tet10-Wärmemodelle samt Export](Doc/45_TET10_HEAT_INTEGRATION.md) sind
+  unterstützt, ebenso [Tet10-Elektrostatik](Doc/46_TET10_ELECTROSTATICS.md).
+  [Statische Tet10-Elastizität](Doc/47_TET10_ELASTICITY.md) ist ebenfalls
+  unterstützt, ebenso [stationäre Tet10-Thermomechanik über die Python-API](Doc/48_TET10_THERMOMECHANICS.md).
+  [Stationäre Tet10-Piezoelektrizität mit Elektroden](Doc/49_TET10_PIEZOELECTRIC.md)
+  ist ebenfalls unterstützt, ebenso die [stationäre Tet10-Thermopiezoelektrizität](Doc/50_TET10_THERMOPIEZOELECTRIC.md).
+  [Tet10-Modalanalyse](Doc/51_TET10_MODES.md) ist unterstützt.
+  Gemischte Elementordnungen bleiben bei Tet10 ausgeschlossen. Andere Zelltypen führen zu
+  einem `UnsupportedCellTypeError`.
 - Mehrfache physische Gmsh-Gruppen bleiben als benannte Auswahlsätze erhalten.
   Der einzelne numerische Tag bildet nur die erste gemeldete Mitgliedschaft ab.
 - VTU-Zellfelder benötigen für jeden vorhandenen Zelltyp ein Array unter
-  `tetra4` beziehungsweise `triangle3`. Auswahlsätze werden als separate
+  `tetra4`/`triangle3` oder `tetra10`/`triangle6`. Auswahlsätze werden als separate
   `fem_toolbox:set:<name>`-Masken exportiert.
 - Sehr flache oder entartete Tetraeder werden abgelehnt. Definition und
   Standardgrenze der Qualitätsprüfung stehen in der
   [Tet4-Formulierung](Doc/03_TET4_FORMULATION.md).
+
+M7 ergänzt eine [Forschungs-API für Tet4-Wärmeindikatoren](Doc/43_HEAT_INDICATOR.md)
+mit lokalen Residualbeiträgen und deterministischer Markierung. Der Indikator
+ist keine garantierte Fehlerschranke und führt kein automatisches Remeshing aus.
 
 ## Wissenschaftlicher Anspruch
 
@@ -193,7 +217,7 @@ elektrisches Potential `phi` mit feldweiser Freiheitsgradverwaltung.
 | M4 | v0.5.0 | Monolithische Piezoelektrizität `u–phi` | Freigegeben |
 | M5 | v1.0.0 | Elektroden, Modellformat und vollständiger stationärer Workflow | Freigegeben |
 | M6 | v1.1.0 | Transiente Wärme, Piezo-Dynamik/Harmonik (reziproke Thermoelastizität zurückgestellt) | Freigegeben |
-| M7 | v1.2.0 | PETSc-Backend, Tet10, Wärmeindikatoren und gemessene Skalierung | Konkretisiert |
+| M7 | v1.2.0 | PETSc-Backend, Tet10, Wärmeindikatoren und gemessene Skalierung | Freigabe vorbereitet |
 | M8 | v1.3.0* | Reproduzierbare Parameterstudien | Geplant |
 | M9 | v1.4.0* | Experimentelle Validierung und Unsicherheit | Geplant |
 | M10 | v1.5.0* | Kontrollierte adaptive Netzstudien | Geplant |
@@ -273,3 +297,11 @@ wie NumPy, SciPy und meshio behalten ihre eigenen Bedingungen; die
 [Bestandsaufnahme](Doc/27_DISTRIBUTION_INVENTORY.md) nennt die geprüften
 Drittbestandteile und den Umfang der Paketarchive. Wheel und sdist werden als GitHub-Release-Artefakte bereitgestellt. Ein
 öffentlicher PyPI-Upload ist damit nicht verbunden.
+
+## Tet10-Gesamtnachweis (#35)
+
+Der M7-Branch unterstützt geradkantige Tet10 durch stationäre Felder und
+Kopplungen sowie transiente Wärme, Modal-, Newmark- und Harmonikanalyse.
+[Abnahmekriterien, Tests und Grenzen](Doc/55_TET10_ACCEPTANCE.md) bündeln den
+Nachweis einschließlich des Genauigkeits-/Kostenvergleichs. Die Freigabe von
+v1.2.0 erfolgt separat über #38.

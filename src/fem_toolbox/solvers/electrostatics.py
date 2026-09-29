@@ -1,4 +1,4 @@
-"""Electrostatic Tet4 reference solver, preserving the negative electric block."""
+"""Electrostatic Tet4/Tet10 reference solver, preserving the negative electric block."""
 
 from __future__ import annotations
 
@@ -12,28 +12,30 @@ import numpy as np
 from numpy.typing import NDArray
 from scipy import sparse  # type: ignore[import-untyped]
 from scipy.sparse.csgraph import connected_components  # type: ignore[import-untyped]
-from scipy.sparse.linalg import splu  # type: ignore[import-untyped]
 
 from fem_toolbox.assembly import MatrixBlock, VectorBlock, assemble, indices
 from fem_toolbox.boundary import Dirichlet, eliminate_dirichlet
-from fem_toolbox.elements import Tet4Geometry
-from fem_toolbox.elements.electrostatics import dielectric_matrix
+from fem_toolbox.elements import Tet4Geometry, Tet10Geometry
 from fem_toolbox.errors import ElectricGaugeError, ValidationError
 from fem_toolbox.fields import DofMap, Field
 from fem_toolbox.materials import DielectricMaterial
-from fem_toolbox.mesh import Mesh
-from fem_toolbox.physics.electrostatics import (
-    ChargeDensity,
+from fem_toolbox.mesh import Mesh, inspect_boundary_topology
+from fem_toolbox.physics.electrostatics import ChargeDensity
+from fem_toolbox.provenance import RunProvenance
+from fem_toolbox.solvers.electric_elements import (
+    dielectric_matrix,
+    electric_field,
+    stored_energy,
     surface_charge_load,
     volume_charge_load,
 )
-from fem_toolbox.provenance import RunProvenance
+from fem_toolbox.solvers.linear_backend import LinearBackend, solve_linear
 
 
 def electric_dofs(mesh: Mesh) -> DofMap:
-    """Allocate phi (V) on sorted active Tet4 nodes, without unused DOFs."""
+    """Allocate phi (V) on sorted active Tet4/Tet10 nodes, without unused DOFs."""
     return DofMap(
-        (Field("phi", ("scalar",), tuple(int(n) for n in np.unique(mesh.tetra4)), "V"),)
+        (Field("phi", ("scalar",), tuple(int(n) for n in np.unique(mesh.cells)), "V"),)
     )
 
 
@@ -43,7 +45,10 @@ class ElectrostaticResult:
 
     node_ids (nactive,) map potential (nactive,) V to mesh nodes. electric_field
     and electric_displacement (ncells,3) are E=-grad(phi) V/m and D=kappa E C/m².
-    element_energy (ncells,) is positive stored energy (J), not electric enthalpy.
+    Tet4 fields are elementwise constant (field_points=None); Tet10 fields are
+    raw centroid samples located by field_points (ncells,3) in metres.
+    element_energy (ncells,) integrates positive stored energy (J) over each
+    entire cell, not electric enthalpy or energy evaluated at its centroid.
     reactions and residual (nactive,) are C for the ORIGINAL negative electric
     equation. reactions are unknown outward D-flux contributions at fixed DOFs
     (zero on free DOFs). Adjacent conductor charges are their NEGATIVE.
@@ -66,6 +71,7 @@ class ElectrostaticResult:
     charge_balance: float
     relative_residual: float
     provenance: RunProvenance
+    field_points: NDArray[np.float64] | None = None
 
     def __post_init__(self) -> None:
         for name in self.__dataclass_fields__:
@@ -92,7 +98,7 @@ def _check_gauge(
     rhs: NDArray[np.float64],
 ) -> None:
     rows, columns = [], []
-    for cell in mesh.tetra4:
+    for cell in mesh.cells:
         for a, b in combinations(np.searchsorted(active, cell), 2):
             rows.extend([a, b])
             columns.extend([b, a])
@@ -118,63 +124,73 @@ def solve_electrostatics(
     material: DielectricMaterial | Sequence[DielectricMaterial],
     conditions: Iterable[Dirichlet],
     *,
+    backend: LinearBackend | None = None,
     volume_charge: ChargeDensity = 0.0,
     surface_charges: Mapping[int, ChargeDensity] | None = None,
 ) -> ElectrostaticResult:
     """Solve div(D)=rho, D=-kappa grad(phi), with the negative electric block.
 
+    ``backend`` is an experimental linear-backend hook; None selects SciPy.
+    Reduction, physical residuals and result units remain this solver's contract.
+
     Permittivity is homogeneous or one material per input cell (absolute F/m).
     Dirichlet DOFs use electric_dofs(mesh). volume_charge is rho C/m³; surface
     mappings address exterior triangle rows and prescribe omega=D.n_out C/m²,
-    not adjacent conductor charge. Callables receive x (3,) m. Degree-two load
-    quadrature is exact for affine densities. Unspecified boundaries have D.n=0.
+    not adjacent conductor charge. Callables receive x (3,) m. Tet4 load rules
+    have degree two; Tet10 volume/surface rules have degree five/four. Only
+    straight Tet10 is supported. Unspecified boundaries have D.n=0.
 
     Each connected component needs a supplied potential reference. Missing gauges
     raise ElectricGaugeError before factorization; no automatic pinning occurs.
     Invalid input, conditioning or failed residual/charge balance raises
     ValidationError. No piezoelectric coupling or floating electrodes.
     """
-    if mesh.n_tetra4 == 0:
-        raise ValidationError("electrostatics requires Tet4 cells", field="mesh")
+    if mesh.n_cells == 0:
+        raise ValidationError(
+            "electrostatics requires Tet4 or Tet10 cells", field="mesh"
+        )
     materials = (
-        [material] * mesh.n_tetra4
+        [material] * mesh.n_cells
         if isinstance(material, DielectricMaterial)
         else list(material)
     )
-    if len(materials) != mesh.n_tetra4 or any(
+    if len(materials) != mesh.n_cells or any(
         not isinstance(m, DielectricMaterial) for m in materials
     ):
         raise ValidationError(
             "one DielectricMaterial required per cell", field="material"
         )
+    if mesh.n_tetra10:
+        inspect_boundary_topology(mesh)
     dofs = electric_dofs(mesh)
-    active = np.unique(mesh.tetra4)
+    active = np.unique(mesh.cells)
     geometries = [
-        Tet4Geometry(
+        (Tet10Geometry if mesh.n_tetra10 else Tet4Geometry)(
             mesh.points[cell],
-            entity_id=int(mesh.tetra4_ids[i]) if mesh.tetra4_ids is not None else i,
+            entity_id=int(mesh.cell_ids[i]) if mesh.cell_ids is not None else i,
         )
-        for i, cell in enumerate(mesh.tetra4)
+        for i, cell in enumerate(mesh.cells)
     ]
     matrices = []
     volume_vector = np.zeros(dofs.size)
     surface_vector = np.zeros(dofs.size)
-    for cell, g, m in zip(mesh.tetra4, geometries, materials, strict=True):
+    for cell, g, m in zip(mesh.cells, geometries, materials, strict=True):
         ids = dofs.indices("phi", cell)
         matrices.append(MatrixBlock(ids, ids, -dielectric_matrix(g, m)))
         np.add.at(volume_vector, ids, volume_charge_load(g, volume_charge))
     if surface_charges:
         faces = Counter(
             tuple(sorted(int(n) for n in face))
-            for cell in mesh.tetra4
-            for face in combinations(cell, 3)
+            for cell in mesh.cells
+            for face in combinations(cell[:4], 3)
         )
         for face, charge in surface_charges.items():
-            face_id = int(indices([face], mesh.n_triangle3)[0])
-            nodes = mesh.triangle3[face_id]
-            if faces[tuple(sorted(int(n) for n in nodes))] != 1:
+            face_id = int(indices([face], mesh.n_facets)[0])
+            nodes = mesh.facets[face_id]
+            if faces[tuple(sorted(int(n) for n in nodes[:3]))] != 1:
                 raise ValidationError(
-                    "electrical boundary must be an exterior Tet4 face", field="surface"
+                    "electrical boundary must be an exterior tetrahedral face",
+                    field="surface",
                 )
             np.add.at(
                 surface_vector,
@@ -204,16 +220,14 @@ def solve_electrostatics(
         if np.any(diagonal <= 0):
             raise ValidationError("nonpositive dielectric diagonal", field="solver")
         scale = 1 / np.sqrt(diagonal)
-        scaling = sparse.diags(scale)
-        try:
-            factor = splu((scaling @ reduced @ scaling).tocsc())
-            if np.min(np.abs(factor.U.diagonal())) <= 1e-12:
-                raise ValidationError(
-                    "singular or ill-conditioned electric system", field="solver"
-                )
-            potential[free] = scale * factor.solve(-scale * constrained.rhs[free])
-        except RuntimeError as error:
-            raise ValidationError("singular electric system", field="solver") from error
+        potential[free] = solve_linear(
+            reduced,
+            -constrained.rhs[free],
+            fields={"phi": np.arange(len(free))},
+            scale=scale,
+            pivot_tolerance=1e-12,
+            backend=backend,
+        ).values
     if not np.isfinite(potential).all():
         raise ValidationError("nonfinite potential", field="solver")
     residual = original.residual(potential)
@@ -226,12 +240,8 @@ def solve_electrostatics(
     reaction[fixed] = residual[fixed]
     field = np.array(
         [
-            -g.gradient_matrix
-            @ (
-                potential[dofs.indices("phi", cell)]
-                - potential[dofs.indices("phi", cell)[0]]
-            )
-            for cell, g in zip(mesh.tetra4, geometries, strict=True)
+            electric_field(g, potential[dofs.indices("phi", cell)])
+            for cell, g in zip(mesh.cells, geometries, strict=True)
         ]
     )
     displacement = np.array(
@@ -239,8 +249,8 @@ def solve_electrostatics(
     )
     energy = np.array(
         [
-            0.5 * g.volume * np.dot(e, d)
-            for g, e, d in zip(geometries, field, displacement, strict=True)
+            stored_energy(g, m, potential[dofs.indices("phi", cell)])
+            for cell, g, m in zip(mesh.cells, geometries, materials, strict=True)
         ]
     )
     volume_total = -float(volume_vector.sum())
@@ -263,7 +273,7 @@ def solve_electrostatics(
         json.dumps(
             {
                 "points": mesh.points.tolist(),
-                "tetra4": mesh.tetra4.tolist(),
+                mesh.cell_type: mesh.cells.tolist(),
                 "materials": [m.permittivity.tolist() for m in materials],
                 "volume_load": volume_vector.tolist(),
                 "surface_load": surface_vector.tolist(),
@@ -277,14 +287,17 @@ def solve_electrostatics(
         solver_name="fem_toolbox.solvers.electrostatics.solve_electrostatics",
         solver_parameters={
             "input_schema": "electrostatics-discrete-v1",
-            "backend": "scipy.sparse.linalg.splu",
+            "backend": "scipy.sparse.linalg.splu" if backend is None else backend.name,
             "scaling": "diagonal",
             "pivot_tolerance": 1e-12,
             "gauge_relative_tolerance": 1e-10,
             "relative_residual_tolerance": 1e-9,
             "relative_charge_tolerance": 1e-9,
             "charge_roundoff_factor": 100,
-            "load_quadrature_degree": 2,
+            "load_quadrature_degree": 5 if mesh.n_tetra10 else 2,
+            "surface_quadrature_degree": 4 if mesh.n_tetra10 else 2,
+            "field_location": "cell_centroid" if mesh.n_tetra10 else "element_constant",
+            "energy_evaluation": "cell_integral",
             "equation": "-K_phi phi = surface(D.n) - volume(rho)",
         },
     )
@@ -303,4 +316,5 @@ def solve_electrostatics(
         balance,
         relative,
         provenance,
+        mesh.points[mesh.cells[:, :4]].mean(axis=1) if mesh.n_tetra10 else None,
     )

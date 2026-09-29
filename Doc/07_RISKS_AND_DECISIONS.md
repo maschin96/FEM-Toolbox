@@ -336,3 +336,234 @@ komplex; der bestehende `LinearSystem`-Vertrag bleibt reell. Frequenzen werden
 explizit in Hz eingegeben, rad/s separat ausgewiesen. Der ungedämpfte Pfad
 weist numerische Resonanz/Nähe zur Singularität zurück statt Dämpfung zu erfinden.
 Skalierung, Grenzwert und Nachweise: [Dokument 34](34_PIEZO_DYNAMICS.md).
+
+## ADR-024 — Interner linearer Backend-/Scalarvertrag (#34a)
+
+Datum: 25.09.2026. Status: Umsetzung im M7-Issue-Branch.
+
+Die Physikadapter verantworten Randbedingungen, Elektrodenkondensation,
+Nullräume und Rekonstruktion. Das Backend erhält den freien, unskalierten
+Operator samt vollständiger disjunkter Feldpartition in dessen lokaler
+Zeilennummerierung und positiver reeller Diagonalskalierung S. Es löst
+`(S A S)y = S b`, liefert `x=S y` und prüft Residuen gegen `A x-b`.
+Die Feldpartition beschreibt nach elektrischer Schur-Elimination nur das
+jeweils verbleibende Feld; die rekonstruierten physikalischen Residuen bleiben
+zusätzlich in den bestehenden Solvern Pflicht.
+
+Ein Faktorisierungsprotokoll erlaubt mehrere rechte Seiten und explizite
+Wiederverwendung; keine globale Backend-Auswahl oder implizite Caches.
+Reelle und komplexe float64/complex128-Daten sind zulässig, ohne komplexe
+Anteile abzuwerfen. SciPy implementiert Sparse-LU für allgemeine Operatoren
+und dichte Cholesky für die bereits dichten positiv definiten M6-Teilprobleme.
+Modale Eigenwertprobleme bleiben beim separaten SciPy-eigh-Vertrag.
+Backendfehler werden nicht durch Fallback verdeckt. SolveReport nennt Backend,
+Verfahren, Konvergenzgrund und unskalierte feldweise Residuen. Physikalische
+Bilanzen/Einheiten und die globale Reaktionsauswertung bleiben im Adapter.
+PETSc, FieldSplit, iterative Nullräume und Model-Konfiguration folgen #34b/c.
+
+
+## ADR-025 — Optionaler einprozessiger PETSc-Direktadapter (#34b)
+
+Datum: 25.09.2026. Status: Umsetzung im M7-Issue-Branch.
+
+Die erste native Referenz verwendet PETSc PREONLY mit SeqAIJ-LU auf COMM_SELF.
+Sie teilt Datenvalidierung und Originalresiduen mit SciPy, aber keine
+Faktorisierung. PETSc wird erst bei expliziter Backend-Auswahl geladen.
+Ein reeller Build bildet komplexe Operatoren exakt als doppelt großes reelles
+Blocksystem ab; ein komplexer Build löst nativ. Beide Varianten erhalten echte
+CI-Nachweise. Die kontrollierte optionale Umgebung ist Ubuntu 24.04 mit
+Python 3.12 und PETSc/petsc4py 3.19.6; der Core behält Python 3.11–3.13.
+
+Diese Wahl liefert zunächst Scalar- und Physikparität ohne iterative Parameter
+oder stillen Fallback. LU-Pivotierung ist nicht mit SuperLU identisch; Fehler
+werden weitergereicht. Positive Definitheit der begrenzten dichten M6-Blöcke
+wird vor der nativen LU separat geprüft. FieldSplit, Schur-Präconditionierung,
+Nullraumübergabe und iterative Nichtkonvergenz folgen #34c. Keine MPI- oder
+Performancezusage aus diesem Schritt. Details: [Dokument 38](38_PETSC_BACKEND.md).
+
+
+## ADR-026 — FGMRES/Schur und unveränderte physikalische Nullraumprüfung (#34c)
+
+Datum: 25.09.2026. Status: Umsetzung im M7-Issue-Branch.
+
+Der optionale iterative Adapter verwendet Rechtspräkonditionierung mit PETSc
+FieldSplit: volle Blockfaktorisierung, A11 als Schur-Näherung und native LU für
+beide Teilinversen. Ein einzelnes verbleibendes Feld nutzt FGMRES/LU. Da dieser
+Präkonditionierer nicht symmetrisch-positiv sein muss, ist FGMRES auch beim
+symmetrisch-indefiniten Piezo-Operator angemessen; CG/MINRES werden nicht gewählt.
+Diese erste Referenz verspricht keinen Laufzeit- oder verteilten Skalierungsvorteil.
+
+Physikalische Nullräume werden weiterhin vor dem Backend diagnostiziert und
+müssen durch explizite Lager/Referenzen entfernt werden. Die frühere Planung
+einer Nullraumübergabe aus ADR-025 wird damit präzisiert: keine implizite
+Lastprojektion, kein zusätzlicher singulärer Solve-Vertrag. Algebraische Krylov-
+Konvergenz allein garantiert keine Eindeutigkeit beliebiger Eingabematrizen.
+
+Echte PETSc-Tests prüfen native Iterationsabbrüche, Originalresiduen, Scalar-
+Abbildung und Physikparität. Jeder Solver isoliert intern gelesene FieldSplit-
+Optionen mit einem privaten Präfix. Ein Bericht zählt äußere Iterationen je
+Solve-Aufruf; Grenzen gelten je nativer RHS. Details und Einschränkungen stehen
+in [Dokument 39](39_PETSC_FIELDSPLIT.md).
+
+
+## ADR-027: Additive quadratische Topologie vor Operatorfreigabe (#35a)
+
+Datum: 25.09.2026. Status: Umsetzung im M7-Issue-Branch.
+
+Tet10/Triangle6 verwendet VTK-/meshio-Knotenordnung und eine einzige Familie je
+Netz. Bestehende Tet4-Arrays bleiben unverändert; generische Zellzugriffe dienen
+zunächst nur Topologie und Metadaten. Gemeinsame Kanten werden über Eck- und
+Kantenknoten geprüft. Import und Randgeometrie verlangen mittige Kantenknoten,
+bevor affine Eckgeometrie verwendet wird. Model lehnt Tet10 bis #35d explizit ab.
+VTU-Präsenzmasken erhalten den Unterschied zwischen fehlenden und nullwertigen
+Metadaten. Mathematische Feldkonventionen bleiben unverändert.
+Details: [Tet10-Topologie](40_TET10_TOPOLOGY.md).
+
+
+## ADR-028: Affine Tet10-Interpolation und positive Referenzquadratur (#35b)
+
+Datum: 25.09.2026. Status: Umsetzung im M7-Issue-Branch.
+
+Die erste Tet10-Geometrie beschränkt sich auf mittige Kantenknoten. Quadratische
+Felder verwenden affine Eckgeometrie; gekrümmte Elemente werden nicht still
+linearisiert. Triangle6 liefert tangentiale Ableitungen und lehnt Auswertung
+außerhalb seiner Ebene ab. Positive kollabierte Gauss-Produkte integrieren
+Volumenpolynome bis Grad 5 und Flächenpolynome bis Grad 4; Gewichte enthalten
+Referenz- bzw. physische Maße und sind nicht auf eins normiert. Die vergleichsweise
+hohe Punktzahl priorisiert eine einfach unabhängig prüfbare Referenz. Keine
+neuen Abhängigkeiten, keine Änderung mathematischer Feldvorzeichen oder der
+Tet4-API. Nachweise und Grenzen: [Dokument 41](41_TET10_GEOMETRY.md).
+
+
+## ADR-029: Tet10-Operatoren und explizite positive Speicherdiagonalisierung (#35c)
+
+Datum: 25.09.2026. Status: Umsetzung im M7-Issue-Branch.
+
+Quadratische Operatoren verwenden einen additiven Moduleinstieg und punktabhängige
+Gradienten bei unveränderter affiner Geometrie und Feldkonvention. Globale
+Solverdispatch und ortsabhängige Ergebnisse folgen getrennt in #35d. Die
+konsistente Tet10-Masse besitzt negative Eckzeilensummen; P1-Zeilensummen-Lumping
+wird deshalb nicht übernommen. `lumping="hrz"` wählt ausdrücklich positive,
+gesamtspeichererhaltende Diagonalskalierung. Standard bleibt `consistent`.
+Der boolesche Tet4-Vertrag bleibt unverändert. Sechsknoten-Elektroden verwenden
+die gemeinsame aktive Randtopologie. [Formeln, Quellen und Nachweise](42_TET10_OPERATORS.md).
+
+
+## ADR-030: Residualindikator für stationäre Tet4-Wärme (#36)
+
+Datum: 26.09.2026. Status: Umsetzung im M7-Issue-Branch.
+
+Die additive Forschungs-API in `post` verwendet Zellquellen, innere
+Normalflusssprünge und explizite Neumann-/Robin-Randresiduen. Gewichtung mit
+Durchmessern und kleinsten Leitfähigkeitseigenwerten liefert Größen in der
+thermischen Energienorm, ohne garantierte Fehlerschranken oder Kontrastrobustheit
+zu behaupten. Vollständige Triangle3-Randabdeckung und explizite Dirichlet-Flächen
+verhindern das stillschweigende Weglassen von Randfehlern. Materialgrenzen
+verwenden Fluss- statt Gradientensprünge. Dörfler-Markierung ist deterministisch;
+Remeshing, Tet10 und gekoppelte Indikatoren bleiben getrennte Folgearbeit.
+Keine Änderung der stationären Solver-, Model- oder Vorzeichenverträge und keine
+neue Abhängigkeit. [Formeln und Nachweise](43_HEAT_INDICATOR.md).
+
+## ADR-031: Tet10-Wärme mit expliziten Schwerpunktfeldern (#35d)
+
+Datum: 26.09.2026. Status: Umsetzung im M7-Issue-Branch.
+
+Die thermische Integration verwendet bestehende Zeitintegratoren und Backends
+mit internem Elementdispatch. `Model` gibt Tet10 zunächst ausschließlich für
+stationäre und transiente Wärme frei. Quadratische Gradienten sind
+ortsabhängig: Ergebnisarrays enthalten rohe Schwerpunktwerte und zusätzliche
+unveränderliche `field_points`. Tet10-Exporte verwenden deshalb Schema 2 und
+Feldnamen mit `_at_centroid`; Tet4 behält Schema 1. Das ersetzt keine vollständige
+Feldrekonstruktion. Sondenlokalisierung verwendet affine Eckkoordinaten,
+Interpolation alle zehn Formfunktionen. HRZ bleibt explizit und erhält die
+Gesamtkapazität, ohne konsistente Quellmomente zu verändern. Keine neue
+Abhängigkeit und keine geänderten Feldvorzeichen.
+[Vertrag, Verifikation und verbleibende Schritte](45_TET10_HEAT_INTEGRATION.md).
+
+## ADR-032: Tet10-Elektrostatik trennt Feldproben und Energieintegrale (#35d)
+
+Datum: 26.09.2026. Status: Umsetzung im M7-Issue-Branch.
+
+Die stationäre Elektrostatik verwendet denselben geradkantigen Elementdispatch
+und die bestehende Backend-Grenze. Die negative elektrische Gleichung und
+Leiterladungsvorzeichen bleiben unverändert. E/D werden an expliziten
+Schwerpunkten ausgewertet; gespeicherte Energie wird separat über die
+punktabhängigen Gradienten integriert. Schema 2 unterscheidet deshalb
+`raw`/`cell_centroid` von `cell_integral`/`cell_volume`; der Energiefeldname
+erhält keinen Schwerpunktsuffix. Tet4 behält Schema 1. Keine neuen Abhängigkeiten
+und keine Freigabe weiterer Tet10-Kopplungen.
+[Nachweise und Grenzen](46_TET10_ELECTROSTATICS.md).
+
+## ADR-033: Statische Tet10-Mechanik vor Kopplungen integrieren (#35d)
+
+Datum: 26.09.2026. Status: Umsetzung im M7-Issue-Branch.
+
+Die statische Elastizität verwendet die bestehenden quadratischen Operatoren,
+Lagerprüfung und Backend-Grenze. Spannungen/Dehnungen sind rohe Schwerpunktwerte
+mit expliziten Auswerteorten und unveränderter technischer Voigt-Konvention.
+Verzerrungsenergie wird separat über das Element integriert. Schema 2 trennt
+Feldproben von Energieintegralen wie bei Elektrostatik. Tet4 behält Schema 1.
+Thermische Tet10-Eigendehnungen werden bis zur eigenen Kopplungsintegration
+ausdrücklich abgelehnt; die Tet4-Zellmittelung wird nicht auf P2 übertragen.
+Keine neuen Abhängigkeiten oder geänderten Vorzeichen.
+[Verifikation und Grenzen](47_TET10_ELASTICITY.md).
+
+## ADR-034: Quadratische Temperaturfelder in Tet10-Thermomechanik integrieren (#35d)
+
+Datum: 27.09.2026. Status: Umsetzung im M7-Issue-Branch.
+
+Die stationäre einseitige Kopplung verwendet alle zehn Knotentemperaturen
+in `N(x)(T-Tref)`. Die vorhandene Grad-5-Quadratur integriert thermische Lasten
+und mechanische Energie; Schwerpunkt-Eigendehnung und -Spannung bleiben
+ausdrücklich Feldproben. Tet4-Mittelung und Schema 1 bleiben unverändert.
+Der bestehende Python-Ablauf erhält getrennte optionale Backend-Hooks;
+der gemeinsame Schema-2-Export prüft die Auswerteorte beider Teilresultate.
+Kein neuer Model-Modus, keine thermische Rückwirkung oder geänderten Vorzeichen.
+[Nachweise und Grenzen](48_TET10_THERMOMECHANICS.md).
+
+## ADR-035 — Stationäre Tet10-Piezoelektrizität (27.09.2026)
+
+Der vorhandene monolithische Solver nutzt die generische aktive Zellfamilie
+und die verifizierten Tet10-Operatoren. Elektrodenreduktion erfasst alle
+Triangle6-Knoten. Der interne Elementadapter trennt Schwerpunktfelder von
+integrierten Enthalpiebeiträgen; das additive `field_points` hält Tet4-Aufrufer
+kompatibel. Schema 2 kennzeichnet die drei Energiebeiträge als Zellintegrale.
+Thermopiezo und Dynamik bleiben bis zu eigenen Integrationsnachweisen gesperrt.
+Begründung und analytische/Konvergenznachweise: [Doc 49](49_TET10_PIEZOELECTRIC.md).
+
+## ADR-036 — Stationäre Tet10-Thermopiezoelektrizität (28.09.2026)
+
+Der vorhandene Ablauf T → (u, φ) wird mit vollständigem Knotentemperaturtransfer
+auf geradkantige Tet10 erweitert. Eigenverzerrung und Enthalpie werden an
+Integrationspunkten ausgewertet; Feldberichte bleiben Schwerpunktwerte.
+Der elektrische Thermalschalter behält seine beiden bestehenden Konventionen.
+Tet4-Mittelung und -Provenienz bleiben erhalten; Tet10 hasht zusätzlich alle
+Temperaturen und Expansionsdaten. Getrennte optionale Backends und Schema-2-Export
+folgen dem Thermomechanikvertrag. [Details und Nachweise](50_TET10_THERMOPIEZOELECTRIC.md).
+
+## ADR-037 — Tet10-Modalanalyse (28.09.2026)
+
+Der gemeinsame Dynamikaufbau verwendet Tet10-Operatoren und konsistente Masse;
+nur der Modalpfad wird freigegeben. Die elektrische Schur-Elimination erhält
+einen explizit symmetrisierten Tet10-Dielektrikblock gegen Quadratur-Rundungsreste.
+Residuen bleiben am ursprünglichen System definiert. Die Grenze von 2048 DOFs
+bleibt bestehen. Modenexport nutzt Schema 2 mit Schwerpunktkennzeichnung und
+P2-Messpunkten. [Analytische Nachweise und Grenzen](51_TET10_MODES.md).
+
+## ADR-038 — Tet10-Newmark (28.09.2026)
+
+Die bestehende ungedämpfte Newmark-Integration wird für geradkantige Tet10
+freigegeben. Der gemeinsame Dynamikaufbau hält den bereits für Moden
+symmetrisierten dielektrischen Block vor; Newmark verwendet ihn für die
+elektrische Lastrekonstruktion wieder. Physikalische Matrizen, Residuen,
+Energie-, Ereignis- und Speicherverträge bleiben unverändert. Die konsistente
+P2-Masse wird nicht gelumpt. [Nachweise und Grenzen](52_TET10_NEWMARK.md).
+
+## ADR-039 — Tet10-Harmonik (28.09.2026)
+
+Der bestehende ungedämpfte harmonische Referenzsolver wird für geradkantige
+Tet10 freigegeben. Die elektrische Lastrekonstruktion verwendet denselben
+symmetrisierten Dielektrikblock wie Moden und Newmark. Originalresiduen,
+komplexe Spitzenwertkonvention, Resonanzschwelle und DOF-Grenze bleiben erhalten.
+Model-Schema 3 und der vorhandene Schema-2-Feldexport benötigen keine neue
+Schemaversion. [Unabhängige Nachweise](53_TET10_HARMONIC.md).

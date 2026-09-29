@@ -1,5 +1,13 @@
 # Entwicklungsstand und nächste Meilensteine M6/M7
 
+Aktueller Release-Schritt: [finale Version 1.2.0 / #38](58_M7_RELEASE_VERIFICATION.md).
+
+Aktueller Performance-Gesamtabgleich: [Abnahme #37](56_PERFORMANCE_ACCEPTANCE.md).
+
+Aktueller Tet10-Gesamtabgleich: [Abnahme #35](55_TET10_ACCEPTANCE.md).
+Die chronologischen Einträge weiter unten behalten ihren damaligen Status;
+alle Tet10-Analyseschnitte und der Vergleich #37c sind inzwischen integriert.
+
 Stand: 23.09.2026. Tracking: [#167](https://github.com/maschin96/FEM-Toolbox/issues/167).
 Diese Planung ersetzt für M6/M7 die ältere Baseline aus Dokument 13.
 Sie beschreibt geplante Arbeit, keine bereits implementierten Fähigkeiten.
@@ -215,3 +223,122 @@ Messpunkt-CSV sind implementiert und lokal verifiziert; Nachweise in [Doc/33](33
 Issue-Abnahme, PR-Integration und M6-Freigabe sind davon getrennte Schritte.
 Der dynamische u/v/a-/Frequenzvertrag und #31 bleiben ausstehend.
 #32 ist auf Nutzerwunsch zurückgestellt (ADR-021).
+
+## M7 begonnen (25.09.2026)
+
+#37a: reproduzierbares Benchmarkwerkzeug und 27 lokale SciPy-/Tet4-Messläufe
+für stationäre Wärme, Floating-Elektrode und transiente Wärme liegen vor;
+[Messvertrag, Rohdaten und Grenzen](36_PERFORMANCE_BASELINE.md).
+#37b/c und Issue-Abschluss bleiben offen.
+
+#34a: Die interne Backend-Grenze mit SciPy-Referenz ist im Issue-Branch
+implementiert; [Vertrag und Nachweise](37_LINEAR_BACKEND.md). Einzelfelder,
+gekoppelte Elektroden und lineare M6-Teilprobleme nutzen sie.
+
+#34b: Der optionale PETSc-Direktadapter und echte CI-Jobs für float64/complex128
+sind im Issue-Branch umgesetzt. Konfiguration, Scalar-Abbildung, Parität und
+Grenzen stehen in [Dokument 38](38_PETSC_BACKEND.md).
+
+#34c: FGMRES mit FieldSplit/Schur, Nullraum- und Nichtkonvergenzdiagnostik sowie
+zusätzliche reale/komplexe Physik- und Konvergenznachweise sind im Issue-Branch
+umgesetzt; [Vertrag und Grenzen](39_PETSC_FIELDSPLIT.md). Issue-Abschluss erst
+nach erfolgreicher CI, Review und Integration. Backend-Auswahl im Model bleibt
+eine spätere Erweiterung.
+#35a: Additive Tet10-/Triangle6-Topologie, Randzuordnung, Materialregionen und
+Gmsh-/VTU-I/O sind im Issue-Branch umgesetzt; [Vertrag und Grenzen](40_TET10_TOPOLOGY.md).
+#35b: Quadratische Formfunktionen, Ableitungen, affine Tet10-/Triangle6-Geometrie
+und positive Quadratur sind im Issue-Branch umgesetzt;
+[Vertrag und Interpolationsnachweise](41_TET10_GEOMETRY.md).
+#35c: Quadratische Feldoperatoren, konsistente/HRZ-Speicher, thermische Kopplung
+und Randlasten sind im Issue-Branch umgesetzt; die Elektrodenreduktion erfasst
+alle sechs Flächenknoten. [Vertrag und Nachweise](42_TET10_OPERATORS.md).
+Nächster geplanter Funktionsschritt: #35d (Model-/Solver-/Ergebnisintegration).
+
+
+#36: Der stationäre Tet4-Wärmeindikator mit Quellen-, Flusssprung- und
+Randresiduen sowie deterministischer Dörfler-Markierung ist im Issue-Branch
+implementiert. Vier-Netze-Effektivität, lokalisierter Fehler und Materialgrenze
+sind geprüft; [Vertrag und Grenzen](43_HEAT_INDICATOR.md). Integration und
+Issue-Abschluss bleiben den CI-/Reviewgates unterworfen.
+
+
+#37b: Die bedarfsgerechte Tet4-Flächenauswertung ist im Issue-Branch umgesetzt.
+Bei fünf Wiederholungen je Fall/Größe sinkt die Elektroden-Medianlaufzeit für
+N=6/N=10 um 20,5 %/18,7 %; beide Wärmefälle und gemessene Speicherpeaks verbessern
+sich ebenfalls. [Rohdaten, Parität und Grenzen](44_GEOMETRY_PERFORMANCE.md).
+#37c und der Issue-Abschluss bleiben nach vollständiger Tet10-Integration offen.
+
+## Fortschritt #35d: thermischer Integrationsschnitt
+
+Stationäre und transiente Tet10-Wärme sind durch Model, Preflight, lineare
+Backend-Grenze und versionierten Export angebunden. Der Schnitt enthält
+Gmsh-/TOML-Beispiele sowie Raum- und Zeitkonvergenznachweise. #35 bleibt für
+die übrigen Feldintegrationen und Vergleichsgates offen; #37c folgt danach.
+[Details und Grenzen](45_TET10_HEAT_INTEGRATION.md).
+
+## Fortschritt #35d: elektrischer Integrationsschnitt
+
+Stationäre Tet10-Elektrostatik ist einschließlich Model/Preflight, Backend,
+Ladungsbilanz und Schema-2-Export angebunden. E/D sind Schwerpunktwerte;
+Energie wird über das Element integriert. Vier-Netze-Nachweis und Gmsh-/TOML-
+Beispiel ergänzen die Tests. Mechanik, Piezo, Kopplungen und Vergleichsgates
+bleiben offen. [Details](46_TET10_ELECTROSTATICS.md).
+
+## Fortschritt #35d: mechanischer Integrationsschnitt
+
+Statische Tet10-Elastizität ist durch Model/Preflight, Backend, Lasten und
+Schema-2-Export angebunden. Dehnungen/Spannungen sind Schwerpunktwerte;
+Verzerrungsenergie wird integriert. Biegepatch, anisotroper Patch, Materialgrenze,
+Kraft-/Momentenbilanzen und vier Netze sind nachgewiesen. Thermische Tet10-
+Eigendehnungen, Piezo, Dynamik und Kostenvergleiche bleiben offen.
+[Details](47_TET10_ELASTICITY.md).
+
+## Fortschritt #35d: thermomechanischer Integrationsschnitt
+
+Räumlich veränderliche thermische Tet10-Eigendehnungen und der bestehende
+Python-Ablauf Wärme → Mechanik sind integriert. Lasten und mechanische Energie
+werden punktabhängig ausgewertet, beide Backends sind separat wählbar und der
+gemeinsame Schema-2-Export prüft beide Auswerteort-Arrays. Direkte Patches und
+gekoppelte Vier-Netze-Konvergenz sind nachgewiesen. Kein neuer TOML-Modus;
+Piezo-/Thermopiezo, Dynamik und Kostenvergleiche bleiben offen.
+[Details](48_TET10_THERMOMECHANICS.md).
+
+## Fortschritt #35d: stationärer piezoelektrischer Integrationsschnitt
+
+Tet10-Piezo ist mit Model/Preflight, anisotropen Materialregionen, festen und
+schwebenden Triangle6-Elektroden, Backends und Schema-2-Export integriert.
+Quadratische gekoppelte Felder, integrierte Enthalpie, Bilanzen und vier Netze
+sind nachgewiesen; [Details](49_TET10_PIEZOELECTRIC.md). Thermopiezo,
+Piezo-Dynamik und Gesamt-Abnahme-/Kostenvergleiche bleiben offen.
+
+## Fortschritt #35d: thermopiezoelektrischer Integrationsschnitt
+
+Stationäres T → (u, φ) ist für Tet10 durch Python-API, Model, getrennte Backends
+und Schema-2-Export integriert. Beide elektrischen Thermalkonventionen werden
+punktabhängig integriert; analytische gekoppelte Patches, schwebende Elektroden
+und Vier-Netze-Konvergenz sind geprüft. [Nachweise](50_TET10_THERMOPIEZOELECTRIC.md).
+Tet10-Piezo-Dynamik und Gesamt-Abnahme-/Kostenvergleiche bleiben offen.
+
+## Tet10-Modalanalyse (#35d)
+
+Konsistente Masse, offene/kurzgeschlossene Elektroden, Model und Modenexport
+sind integriert. [Umfang und Verifikation](51_TET10_MODES.md).
+Gesamt-Abnahme-/Kostenvergleiche bleiben offen.
+
+## Tet10-Newmark (#35d)
+
+Zeitintegration mit konsistenter Masse, bewegten Rändern, Last-/Spannungsereignissen,
+Model und Zeitserienexport ist integriert. [Nachweise und Grenzen](52_TET10_NEWMARK.md).
+Gesamt-Abnahme-/Kostenvergleiche bleiben offen.
+
+## Tet10-Harmonik (#35d)
+
+Komplexe Frequenzantworten einschließlich DC, Elektroden, Model und P2-Export
+sind integriert. [Nachweise und Grenzen](53_TET10_HARMONIC.md).
+Gesamt-Abnahme und Genauigkeits-/Kostenvergleiche bleiben offen.
+
+### #37c: Genauigkeit und Kosten
+
+Der [Vergleichsbericht](54_ACCURACY_COST_COMPARISON.md) ergänzt den
+Issue-Branch um 72 Messläufe für Tet4/Tet10 und SciPy/PETSc, einschließlich
+Biegungs-/Gradientenvergleich für #35. Integration und Abnahme bleiben separat.

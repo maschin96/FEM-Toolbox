@@ -1,4 +1,4 @@
-"""Deterministic Tet4 incidence and Triangle3 boundary preflight."""
+"""Deterministic simplex incidence and matching surface preflight."""
 
 from __future__ import annotations
 
@@ -12,26 +12,27 @@ from numpy.typing import NDArray
 from fem_toolbox.elements import Tet4Geometry
 from fem_toolbox.errors import BoundaryTopologyError
 from fem_toolbox.mesh.model import Mesh
+from fem_toolbox.mesh.quadratic import edge_nodes, require_straight
 
 FloatArray = NDArray[np.float64]
 FaceKey = tuple[int, int, int]
 
 
-def _face_key(nodes: tuple[int, int, int]) -> FaceKey:
+def _face_key(nodes: tuple[int, ...]) -> FaceKey:
     ordered = sorted(nodes)
     return ordered[0], ordered[1], ordered[2]
 
 
 @dataclass(frozen=True, slots=True)
 class BoundaryFace:
-    """Exterior face, oriented away from its unique Tet4 owner.
+    """Exterior face, oriented away from its unique tetrahedral owner.
 
     ``cell_index`` and ``triangle_index`` are zero-based rows; IDs retain the
     imported entity numbers where present. ``triangle_index`` is absent for an
-    exterior face with no Triangle3 entry.
+    exterior face with no surface entry.
     """
 
-    nodes: FaceKey
+    nodes: tuple[int, ...]
     cell_index: int
     cell_id: int
     opposite_node: int
@@ -54,28 +55,40 @@ class BoundaryTopology:
 def inspect_boundary_topology(
     mesh: Mesh, *, require_complete: bool = False
 ) -> BoundaryTopology:
-    """Validate each Triangle3 against the unique exterior Tet4 incidence.
+    """Validate each surface simplex against the unique exterior volume incidence.
 
-    Set ``require_complete`` when every exterior Tet4 face must have a
-    Triangle3 row. Partial boundary meshes remain valid by default. Named
+    Set ``require_complete`` when every exterior volume face must have a
+    surface row. Partial boundary meshes remain valid by default. Named
     groups may overlap; conflicting boundary conditions belong to Model
     validation, where their physical meaning is known.
     """
     incidence: dict[FaceKey, list[BoundaryFace]] = {}
-    for cell_index, cell in enumerate(mesh.tetra4):
+    for cell_index, cell in enumerate(mesh.cells):
         cell_id = (
-            cell_index if mesh.tetra4_ids is None else int(mesh.tetra4_ids[cell_index])
+            cell_index if mesh.cell_ids is None else int(mesh.cell_ids[cell_index])
         )
-        geometry = Tet4Geometry(mesh.points[cell], entity_id=cell_id)
+        geometry = Tet4Geometry(mesh.points[cell[:4]], entity_id=cell_id)
+        if len(cell) == 10:
+            require_straight(mesh.points, cell)
         for face in geometry.faces:
-            nodes: FaceKey = (
+            nodes: tuple[int, ...] = (
                 int(cell[face.local_nodes[0]]),
                 int(cell[face.local_nodes[1]]),
                 int(cell[face.local_nodes[2]]),
             )
             key = _face_key(nodes)
+            oriented: tuple[int, ...] = nodes
+            if len(cell) == 10:
+                edges = edge_nodes(cell)
+                oriented = (
+                    *nodes,
+                    *(
+                        edges[tuple(sorted((nodes[a], nodes[b])))]
+                        for a, b in ((0, 1), (1, 2), (2, 0))
+                    ),
+                )
             owner = BoundaryFace(
-                nodes=nodes,
+                nodes=oriented,
                 cell_index=cell_index,
                 cell_id=cell_id,
                 opposite_node=int(cell[face.opposite_node]),
@@ -86,7 +99,7 @@ def inspect_boundary_topology(
 
     assigned: dict[FaceKey, BoundaryFace] = {}
     triangle_faces: list[BoundaryFace] = []
-    for triangle_index, triangle in enumerate(mesh.triangle3):
+    for triangle_index, triangle in enumerate(mesh.facets):
         key = _face_key((int(triangle[0]), int(triangle[1]), int(triangle[2])))
         owners = incidence.get(key, [])
         groups = tuple(
@@ -96,8 +109,8 @@ def inspect_boundary_topology(
         )
         triangle_id = (
             triangle_index
-            if mesh.triangle3_ids is None
-            else int(mesh.triangle3_ids[triangle_index])
+            if mesh.facet_ids is None
+            else int(mesh.facet_ids[triangle_index])
         )
         if len(owners) != 1:
             kind = (
@@ -115,6 +128,16 @@ def inspect_boundary_topology(
                 nodes=key,
             )
         owner = owners[0]
+        if len(triangle) == 6 and edge_nodes(triangle) != edge_nodes(
+            np.array(owner.nodes, dtype=np.int64)
+        ):
+            raise BoundaryTopologyError(
+                kind="nonconforming",
+                entity_id=triangle_id,
+                cell_id=owner.cell_id,
+                groups=groups,
+                nodes=key,
+            )
         mapped = BoundaryFace(
             nodes=owner.nodes,
             cell_index=owner.cell_index,

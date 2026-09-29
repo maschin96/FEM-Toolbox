@@ -154,7 +154,8 @@ Die erste Implementierung verwendet SciPy:
 - `spsolve` als Referenz für kleine und mittlere Probleme,
 - CG nur für nachweislich symmetrisch-positive Einzelfeldsysteme,
 - MINRES optional für das symmetrisch-indefinite piezoelektrische System,
-- GMRES nur, wenn eine spätere Formulierung tatsächlich unsymmetrisch ist.
+- GMRES/FGMRES auch für unsymmetrisch präkonditionierte Systeme, insbesondere
+  die approximative Schur-Blockfaktorisierung aus ADR-026.
 
 Eine dimensionsbasierte diagonale beziehungsweise blockweise Skalierung ist bei
 gekoppelten Systemen Pflicht: mechanische und elektrische Koeffizienten können
@@ -167,8 +168,18 @@ SciPy Sparse LU. CG ist für diesen indefiniten Operator gesperrt; MINRES bleibt
 geplant, bis ein geeigneter symmetrischer Präconditioner verifiziert ist.
 Details und Nachweise stehen in [Doc/17](17_PIEZOELECTRIC_SOLVER.md).
 
-Für große Modelle ist ein optionales petsc4py-Backend mit FieldSplit- und
-Schur-Komplement-Präconditionierung vorgesehen. Dieses Backend darf die
+Die interne Backend-Grenze aus #34a erhält freie unskalierte Operatoren,
+Feldpartitionen nach Kondensation und die positive Diagonalskalierung.
+`ScipyBackend.factorize(...).solve(rhs)` liefert ein unveränderliches Ergebnis
+mit `SolveReport`; wiederverwendete Faktoren besitzen ihre eigenen Daten.
+Der [Backend-Vertrag](37_LINEAR_BACKEND.md) beschreibt reelle/komplexe Systeme,
+M6-Teilprobleme, Fehler und die Abgrenzung zum Eigenwertsolver (ADR-024).
+
+Der [optionale PETSc-Adapter (#34b)](38_PETSC_BACKEND.md) implementiert
+einprozessiges Direktlösen mit reellen und komplexen Scalar-Konfigurationen
+(ADR-025). [FieldSplit/Schur mit FGMRES (#34c)](39_PETSC_FIELDSPLIT.md)
+ergänzt eine iterative Variante mit LU-Teilblöcken und expliziter
+Nichtkonvergenzdiagnose (ADR-026). Dieses Backend darf die
 Element- oder Material-API nicht verändern.
 
 ## 6. Eingabe und Ausgabe
@@ -279,3 +290,43 @@ Assembly-Summen werden exakt verglichen; für Lösung und Residuum gilt bei dies
 gut konditionierten Größen der Ordnung eins `atol=1e-14, rtol=0` als
 Rundungstoleranz. Physikalische Patch- und Netzkonvergenztests sind erst mit den
 konkreten Elementoperatoren anwendbar.
+
+
+### M7-Erweiterung: quadratische Netztopologie
+
+#35a ergänzt `Mesh` um Tet10/Triangle6 und generische Zugriffe auf die aktive
+Zellfamilie. Netz-I/O, Randtopologie und Materialregionen verwenden diese Zugriffe;
+die Tet4-Operatoren bleiben unverändert. Der thermische Teil von #35d integriert
+Tet10 in stationäre und transiente Wärmesolver, Model, Preflight und Export.
+Der [elektrische Teil](46_TET10_ELECTROSTATICS.md) ergänzt stationäre Elektrostatik
+mit Schwerpunktfeldern und separat integrierter Energie.
+[Statische Elastizität](47_TET10_ELASTICITY.md) ergänzt diesen Vertrag für
+Spannungen, Dehnungen und Verzerrungsenergie. Die
+[stationäre Thermomechanik](48_TET10_THERMOMECHANICS.md) integriert
+punktabhängige Eigendehnungen und Energie und überträgt T → u über die Python-API.
+[Stationäre Tet10-Piezoelektrizität](49_TET10_PIEZOELECTRIC.md) ergänzt
+den monolithischen Solver, Elektroden, Model und Export.
+[Stationäre Tet10-Thermopiezoelektrizität](50_TET10_THERMOPIEZOELECTRIC.md)
+ergänzt punktabhängige Eigenverzerrungen und den Ablauf T → (u, φ).
+Tet10-Modalanalyse, Newmark und Harmonik sind ergänzt.
+Der punktabhängige Ergebnisvertrag
+ist in [Dokument 45](45_TET10_HEAT_INTEGRATION.md) beschrieben. Knotenordnung, Kompatibilität und
+Geometriegrenzen sind in [Dokument 40](40_TET10_TOPOLOGY.md) festgelegt.
+
+## Tet10-Modalanalyse (#35d)
+
+Konsistente Masse, offene/kurzgeschlossene Elektroden, Model und Modenexport
+sind integriert. [Umfang und Verifikation](51_TET10_MODES.md).
+Gesamt-Abnahme-/Kostenvergleiche bleiben offen.
+
+## Tet10-Newmark (#35d)
+
+Zeitintegration mit konsistenter Masse, bewegten Rändern, Last-/Spannungsereignissen,
+Model und Zeitserienexport ist integriert. [Nachweise und Grenzen](52_TET10_NEWMARK.md).
+Gesamt-Abnahme-/Kostenvergleiche bleiben offen.
+
+## Tet10-Harmonik (#35d)
+
+Komplexe Frequenzantworten einschließlich DC, Elektroden, Model und P2-Export
+sind integriert. [Nachweise und Grenzen](53_TET10_HARMONIC.md).
+Gesamt-Abnahme und Genauigkeits-/Kostenvergleiche bleiben offen.

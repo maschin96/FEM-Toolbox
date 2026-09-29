@@ -50,3 +50,37 @@ schreibt rohe VTU-Felder sowie einen JSON-Bericht mit Provenienz und Bilanzen.
 [Transiente Wärme aus TOML/CSV mit ParaView und Messpunkten](transient_heat/README.md).
 
 - [Piezo-Dynamik: Moden, Newmark, Harmonik, CSV und ParaView](piezo_dynamics/README.md)
+
+## M7-Entwicklung
+
+- [Stationäre und transiente Tet10-Wärme](tet10_heat/README.md): Gmsh/TOML, analytische Patches und Schema-2-Export.
+
+- [Tet10-Elektrostatik](tet10_electrostatics/README.md): quadratisches Potential, integrierte Energie und Schema-2-Export.
+
+- [Statische Tet10-Elastizität](tet10_elasticity/README.md): quadratischer Verschiebungspatch, integrierte Energie und Schema-2-Export.
+
+- [Stationäre Tet10-Thermomechanik](tet10_thermomechanics/README.md): Wärme → Mechanik, quadratische Eigenverzerrung und gemeinsamer Export über die Python-API.
+
+- [Tet10-Piezoelektrizität mit schwebender Elektrode](tet10_piezoelectric/README.md):
+  Gmsh/TOML, analytischer Nachweis und Schema-2-Export.
+
+- [Tet10-Thermopiezoelektrizität](tet10_thermopiezoelectric/README.md):
+  thermisch induzierte Leerlaufspannung, Model und gemeinsamer Export.
+
+## Tet10-Modalanalyse (#35d)
+
+Konsistente Masse, offene/kurzgeschlossene Elektroden, Model und Modenexport
+sind integriert. [Umfang und Verifikation](../Doc/51_TET10_MODES.md).
+Gesamt-Abnahme-/Kostenvergleiche bleiben offen.
+
+## Tet10-Newmark (#35d)
+
+Zeitintegration mit konsistenter Masse, bewegten Rändern, Last-/Spannungsereignissen,
+Model und Zeitserienexport ist integriert. [Nachweise und Grenzen](../Doc/52_TET10_NEWMARK.md).
+Gesamt-Abnahme-/Kostenvergleiche bleiben offen.
+
+## Tet10-Harmonik (#35d)
+
+Komplexe Frequenzantworten einschließlich DC, Elektroden, Model und P2-Export
+sind integriert. [Nachweise und Grenzen](../Doc/53_TET10_HARMONIC.md).
+Gesamt-Abnahme und Genauigkeits-/Kostenvergleiche bleiben offen.

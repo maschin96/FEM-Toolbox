@@ -234,3 +234,21 @@ analytisch abgeleitete Lagerbewegung, VTU-Roundtrip einschließlich komplexer
 Zellfelder, Messpunktinterpolation und kontrollierter Schreibabbruch.
 CI führt das Beispiel zusätzlich aus frisch installierten Wheels und sdists
 unter Python 3.11–3.13 aus.
+
+## Tet10-Modalanalyse (#35d)
+
+Konsistente Masse, offene/kurzgeschlossene Elektroden, Model und Modenexport
+sind integriert. [Umfang und Verifikation](51_TET10_MODES.md).
+Gesamt-Abnahme-/Kostenvergleiche bleiben offen.
+
+## Tet10-Newmark (#35d)
+
+Zeitintegration mit konsistenter Masse, bewegten Rändern, Last-/Spannungsereignissen,
+Model und Zeitserienexport ist integriert. [Nachweise und Grenzen](52_TET10_NEWMARK.md).
+Gesamt-Abnahme-/Kostenvergleiche bleiben offen.
+
+## Tet10-Harmonik (#35d)
+
+Komplexe Frequenzantworten einschließlich DC, Elektroden, Model und P2-Export
+sind integriert. [Nachweise und Grenzen](53_TET10_HARMONIC.md).
+Gesamt-Abnahme und Genauigkeits-/Kostenvergleiche bleiben offen.

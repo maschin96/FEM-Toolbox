@@ -57,7 +57,54 @@ Eintrag im Entscheidungsprotokoll.
 
 - [M6-Release-Verifikation, Migration und Grenzen](35_M6_RELEASE_VERIFICATION.md)
 
+## M7 — v1.2.0 (in Entwicklung)
+
+- [SciPy-/Tet4-Performance-Baseline (#37a)](36_PERFORMANCE_BASELINE.md)
+- [Interner linearer Backend-Vertrag und SciPy-Referenz (#34a)](37_LINEAR_BACKEND.md)
+- [Optionaler PETSc-Direktbackend und Scalar-Parität (#34b)](38_PETSC_BACKEND.md)
+- [Iterativer PETSc-Backend mit FieldSplit/Schur (#34c)](39_PETSC_FIELDSPLIT.md)
+
+- [Tet10-/Triangle6-Topologie und I/O (#35a)](40_TET10_TOPOLOGY.md)
+
+- [Tet10-Formfunktionen, Geometrie und Quadratur (#35b)](41_TET10_GEOMETRY.md)
+
+- [Tet10-Feldoperatoren, Speicher und Randintegrale (#35c)](42_TET10_OPERATORS.md)
+
+- [Residualindikator und deterministische Markierung für Tet4-Wärme (#36)](43_HEAT_INDICATOR.md)
+
+- [Gemessene bedarfsgerechte Tet4-Flächengeometrie (#37b)](44_GEOMETRY_PERFORMANCE.md)
+
+- [Tet10-Wärme: Model, Backend und Schwerpunkt-Export (#35d, thermischer Teil)](45_TET10_HEAT_INTEGRATION.md)
+
+- [Tet10-Elektrostatik: Ladungen, Energie und Schwerpunkt-Export (#35d)](46_TET10_ELECTROSTATICS.md)
+
+- [Statische Tet10-Elastizität: Biegung, Energie und Schwerpunkt-Export (#35d)](47_TET10_ELASTICITY.md)
+
+- [Stationäre Tet10-Thermomechanik: Eigenverzerrungen und gekoppelter Export (#35d)](48_TET10_THERMOMECHANICS.md)
+
+- [Stationäre Tet10-Piezoelektrizität: Elektroden, Model und Enthalpie (#35d)](49_TET10_PIEZOELECTRIC.md)
+
+- [Stationäre Tet10-Thermopiezoelektrizität: T → (u, φ), Model und Enthalpie (#35d)](50_TET10_THERMOPIEZOELECTRIC.md)
+
+- [Tet10-Modalanalyse: Masse, Elektroden und Modenexport (#35d)](51_TET10_MODES.md)
+
+- [Tet10-Newmark: Zeitintegration, Elektroden und Zeitserien (#35d)](52_TET10_NEWMARK.md)
+
+- [Tet10-Harmonik: komplexe Frequenzantworten und Export (#35d)](53_TET10_HARMONIC.md)
+
+- [Genauigkeit und Kosten: Tet4/Tet10 × SciPy/PETSc (#37c)](54_ACCURACY_COST_COMPARISON.md)
+
+- [Tet10-Gesamtabnahme: Kriterien, Analyseumfang und Grenzen (#35)](55_TET10_ACCEPTANCE.md)
+
+- [Performance-Gesamtabnahme: Rohdatenabgleich und Grenzen (#37)](56_PERFORMANCE_ACCEPTANCE.md)
+
+- [M7-Release-Kandidat 1.2.0rc1 und Supportmatrix (#38)](57_M7_RELEASE_CANDIDATE.md)
+
+- [M7: finaler Release-Nachweis und Veröffentlichungsgates (#38)](58_M7_RELEASE_VERIFICATION.md)
+
 ## Veröffentlichungen
+
+- [v1.2.0 — Release Notes, Veröffentlichung vorbereitet](releases/v1.2.0.md)
 
 - [v1.1.0 — Transiente Wärme und Piezo-Dynamik](releases/v1.1.0.md)
 
