@@ -1,6 +1,10 @@
 # M7 / v1.2.0 — finaler Freigabestand (#38)
 
-Stand: 29.09.2026. Paketversion **1.2.0**, noch kein Tag und keine Veröffentlichung.
+Status: **v1.2.0 veröffentlicht am 29.09.2026.**
+Tag: [`v1.2.0`](https://github.com/maschin96/FEM-Toolbox/releases/tag/v1.2.0).
+main-Zielcommit: `ee3465f8d3297e36c0a4709078dc5744aac2980c`.
+CI-Lauf des Zielcommits: [36528677242](https://github.com/maschin96/FEM-Toolbox/actions/runs/36528677242),
+19/19 Prüfungen erfolgreich.
 Basis ist der integrierte Kandidat aus [PR #201](https://github.com/maschin96/FEM-Toolbox/pull/201),
 M7-Commit `a2c24c886a0fd38b0a5b9586b95b9bc9a9f39201`.
 Dieser Schnitt setzt die finale Version und aktualisiert die nutzerseitige
@@ -27,7 +31,7 @@ Wiederholung desselben Jobs ohne Codeänderung bestand am 29.09.2026.
 [CI-Lauf](https://github.com/maschin96/FEM-Toolbox/actions/runs/36411692616).
 Dies ist die Evidenz für den Kandidaten, nicht die CI am künftigen main-Zielcommit.
 
-## Finaler Versionswechsel und Prüfung
+## Finaler Versionswechsel und Artefaktprüfung
 
 TDD: Der Pakettest wurde zuerst auf 1.2.0 gesetzt und scheiterte erwartungsgemäß
 an `1.2.0rc1 != 1.2.0`. Nach Anpassung der kanonischen Version in `pyproject.toml`
@@ -42,25 +46,25 @@ Wheel und sdist wurden isoliert gebaut; Version 1.2.0, MIT-Metadaten und
 Lizenzdateien wurden in beiden Archiven geprüft. Die nativen PETSc- und frischen
 Installationsnachweise folgen in der CI des finalen PR-Stands.
 
-Die finale Versionsnummer allein ist keine Veröffentlichung. Sie ermöglicht,
-genau die späteren Distributionsmetadaten vor dem Release zu testen.
-Kein PyPI-Upload, kein Tag und keine Release-Assets werden durch diesen PR erzeugt.
+Die finale Versionsnummer wurde vor dem Release geprüft. Tag und GitHub Release
+wurden nach bestandener CI am main-Zielcommit erzeugt; die ausgelieferten
+Distributionsmetadaten entsprechen 1.2.0. Es gab keinen PyPI-Upload.
 
-## Integration und noch offene Gates
+## Integration und Release-Abschluss
 
-Das aktuelle `origin/main` wurde am 29.09.2026 als Vorfahr des M7-Standes geprüft;
-zu diesem Zeitpunkt waren keine zusätzlichen main-Änderungen zu übernehmen.
-Vor dem späteren Release-Merge erneut fetch/Abgleich durchführen. Falls main
-weiterläuft, Änderungen zuerst in M7 integrieren und erneut prüfen.
+- Das zum M7-Zeitpunkt aktuelle `main` war Vorfahr des Milestone-Branches;
+  keine zusätzlichen main-Änderungen waren zu übernehmen.
+- [Release-PR #203](https://github.com/maschin96/FEM-Toolbox/pull/203) wurde
+  integriert. Die CI am tatsächlichen main-Zielcommit `ee3465f` bestand mit
+  19/19 Prüfungen, darunter Tests für Python 3.11–3.13, sechs frische
+  Wheel-/sdist-Installationen und native PETSc-real/complex-Jobs.
+- Das annotierte Tag `v1.2.0` zeigt auf genau diesen Commit.
+- Das [GitHub Release](https://github.com/maschin96/FEM-Toolbox/releases/tag/v1.2.0)
+  enthält `fem_toolbox-1.2.0-py3-none-any.whl`,
+  `fem_toolbox-1.2.0.tar.gz` sowie `SHA256SUMS`. Die Prüfsummen stimmen mit den
+  Artefakten aus dem genannten CI-Lauf überein.
+- Kein unabhängiger Reviewer ist für den Release-PR verzeichnet; dies wird
+  nicht als unabhängige Freigabe dargestellt.
 
-1. Finalisierungs-PR nach `codex/milestone-m7` integrieren, nachdem dessen
-   anwendbare CI grün ist und Review-Anmerkungen geklärt sind.
-2. Release-PR von M7 nach main erstellen und aktuellen Stand prüfen. Keine
-   unfertige Funktionalität auf main übernehmen.
-3. Nach dem Merge die CI am tatsächlichen main-Zielcommit prüfen.
-4. Erst danach unveränderliches annotiertes `v1.2.0`-Tag setzen, GitHub Release
-   und dazu passende geprüfte Wheel-/sdist-Artefakte mit Prüfsummen veröffentlichen.
-5. Veröffentlichungsstatus in der Dokumentation nachtragen, #38 und M7 abschließen.
-
-Ein unabhängiger Reviewer ist nicht nachgewiesen; eine solche Freigabe wird
-nicht behauptet. Der [Release-Prozess](09_RELEASE_PROCESS.md) bleibt verbindlich.
+Issue #38 kann nach Merge dieses Statusnachtrags geschlossen werden. Der Release
+und das Tag sind veröffentlicht; ein PyPI-Upload fand nicht statt.
