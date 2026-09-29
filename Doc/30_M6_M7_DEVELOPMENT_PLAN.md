@@ -1,6 +1,6 @@
 # Entwicklungsstand und nächste Meilensteine M6/M7
 
-Aktueller Release-Schritt: [Kandidat 1.2.0rc1 / #38](57_M7_RELEASE_CANDIDATE.md).
+Aktueller Release-Schritt: [finale Version 1.2.0 / #38](58_M7_RELEASE_VERIFICATION.md).
 
 Aktueller Performance-Gesamtabgleich: [Abnahme #37](56_PERFORMANCE_ACCEPTANCE.md).
 

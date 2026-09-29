@@ -6,7 +6,9 @@ Versionierung an [Semantic Versioning](https://semver.org/).
 
 ## Unreleased
 
-## [1.2.0rc1] — Release-Kandidat, noch nicht veröffentlicht
+## [1.2.0] - 2026-09-29
+
+Freigabestand vorbereitet; Tag und Veröffentlichung stehen noch aus.
 
 ### Added
 
@@ -28,7 +30,7 @@ Versionierung an [Semantic Versioning](https://semver.org/).
   PETSc bleibt optional und wird nur über direkte Python-Solver-APIs ausgewählt.
 - Keine gekrümmten/hybriden Tet10-Netze, MPI-, Adaptivitäts- oder experimentelle
   Validierungszusage. Bestehende Dynamiklimits bleiben unverändert.
-- [Kandidatenumfang und verbleibende Freigabeschritte](Doc/57_M7_RELEASE_CANDIDATE.md).
+- [Release-Nachweis und verbleibende Freigabeschritte](Doc/58_M7_RELEASE_VERIFICATION.md).
 
 ## [1.1.0] - 2026-09-23
 

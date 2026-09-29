@@ -102,7 +102,7 @@ jobs:
           package = Path(fem_toolbox.__file__).resolve()
           assert package.is_relative_to(Path(sys.prefix).resolve()), package
           dist = distribution("fem-toolbox")
-          assert dist.version == fem_toolbox.__version__ == "1.2.0rc1"
+          assert dist.version == fem_toolbox.__version__ == "1.2.0"
           assert dist.metadata["License-Expression"] == "MIT"
           licenses = [f for f in dist.files if f.name == "LICENSE"]
           assert len(licenses) == 1, licenses

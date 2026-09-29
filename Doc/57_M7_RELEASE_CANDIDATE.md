@@ -1,5 +1,9 @@
 # M7-Release-Kandidat und Supportmatrix (#38)
 
+Die Supportmatrix gilt auch für den unveränderten Funktionsumfang von 1.2.0.
+Aktueller Status: [finaler Release-Nachweis](58_M7_RELEASE_VERIFICATION.md).
+Die folgenden Kandidatenversionen und Testergebnisse sind historisch.
+
 Stand: 28.09.2026. Kandidat **1.2.0rc1**, Zielversion **v1.2.0**.
 Stabile veröffentlichte Version bleibt v1.1.0. Der Kandidat enthält die in M7
 integrierten PETSc-, Tet10-, Indikator- und Performanceänderungen. Er ist kein
