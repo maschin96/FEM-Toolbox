@@ -1,0 +1,85 @@
+schema_version = 1
+units = "SI"
+physics = "thermopiezoelectric"
+
+[mesh]
+path = "mesh.msh"
+length_scale_to_m = 1.0
+
+[materials.T.thermal]
+conductivity = 2.0
+unit = "W/(m K)"
+
+[materials.piezo.active]
+stiffness = [
+  [10.0, 0, 0, 0, 0, 0],
+  [0, 10.0, 0, 0, 0, 0],
+  [0, 0, 10.0, 0, 0, 0],
+  [0, 0, 0, 10.0, 0, 0],
+  [0, 0, 0, 0, 10.0, 0],
+  [0, 0, 0, 0, 0, 10.0],
+]
+stress_coupling = [
+  [2.0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0],
+]
+permittivity = [
+  [4.0, 0, 0],
+  [0, 4.0, 0],
+  [0, 0, 4.0],
+]
+
+[materials.piezo.active.units]
+stiffness = "Pa"
+stress_coupling = "C/m^2"
+permittivity = "F/m"
+
+[materials.expansion.active]
+alpha = [0.01, 0, 0, 0, 0, 0]
+alpha_unit = "1/K"
+reference_temperature = 300.0
+reference_temperature_unit = "K"
+
+[regions.T]
+specimen = "thermal"
+
+[regions.piezo]
+specimen = "active"
+
+[regions.expansion]
+specimen = "active"
+
+[[boundary.dirichlet]]
+field = "T"
+nodes = [0, 1, 2, 3]
+value = [300.0, 310.0, 300.0, 300.0]
+unit = "K"
+
+[[boundary.dirichlet]]
+field = "u"
+nodes = [0, 2, 3]
+value = 0.0
+unit = "m"
+
+[[boundary.dirichlet]]
+field = "u"
+nodes = [1]
+components = ["y", "z"]
+value = 0.0
+unit = "m"
+
+[[boundary.dirichlet]]
+field = "phi"
+nodes = [0, 2, 3]
+value = 0.0
+unit = "V"
+
+[loads.volume_charge]
+value = 4.0
+unit = "C/m^3"
+
+[solver]
+method = "direct"
+block_scaling = true
+electric_thermal_strain = true

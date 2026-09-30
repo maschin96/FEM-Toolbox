@@ -172,3 +172,8 @@ Backends werden separat eingerichtet; die getestete Linux-Umgebung und die
 Auswahl real/complex stehen im [PETSc-Installationsvertrag](Doc/38_PETSC_BACKEND.md).
 `Model`/TOML verwendet SciPy; PETSc wird an der direkten Python-Solver-API
 ausgewählt. Fehlendes PETSc wird beim Backendaufbau ausdrücklich diagnostiziert.
+
+## Optionale Feldvisualisierung
+
+`python -m pip install '.[visualization]'` ergänzt Matplotlib. Ohne dieses Extra
+bleiben Solver nutzbar. [API und Headless-Beispiel](Doc/62_FIELD_VISUALIZATION.md).

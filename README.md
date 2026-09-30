@@ -316,4 +316,5 @@ Der M8-Stand enthält außerdem [Kennwerttabellen und Berichte](Doc/60_STUDY_REP
 sowie [polynomiale Surrogatmodelle](Doc/61_SURROGATE_MODELS.md) mit expliziten
 Trainings-/Testfällen und wiederverwendbaren JSON-Artefakten.
 [Wärme-Surrogatbeispiel](examples/surrogate_heat/README.md).
-Dies ist noch keine neue stabile Freigabe; Visualisierung bleibt ein eigenes M8-Issue.
+Der optionale [Tet4-Feldbildadapter mit JPEG-Export](Doc/62_FIELD_VISUALIZATION.md)
+ergänzt den M8-Stand. Dies ist noch keine neue stabile Freigabe.
