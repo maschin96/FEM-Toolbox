@@ -28,6 +28,7 @@ classifiers = [
 ]
 
 [project.optional-dependencies]
+visualization = ["matplotlib>=3.9,<4"]
 test = [
   "pytest>=8.3",
 ]
@@ -81,3 +82,7 @@ strict = true
 warn_unreachable = true
 show_error_codes = true
 pretty = true
+
+[[tool.mypy.overrides]]
+module = ["matplotlib.*", "mpl_toolkits.*"]
+ignore_missing_imports = true

@@ -35,6 +35,7 @@ jobs:
           cp -R examples/piezo_dynamics dist/piezo_dynamics
           cp -R examples/parameter_study dist/parameter_study
           cp -R examples/surrogate_heat dist/surrogate_heat
+          cp -R examples/field_visualization dist/field_visualization
           cp -R examples/tet10_heat dist/tet10_heat
           cp -R examples/tet10_electrostatics dist/tet10_electrostatics
           cp -R examples/tet10_elasticity dist/tet10_elasticity
@@ -45,7 +46,7 @@ jobs:
           cp -R examples/tet10_newmark dist/tet10_newmark
           cp -R examples/tet10_harmonic dist/tet10_harmonic
           cd dist
-          sha256sum *.whl *.tar.gz *.py thermopiezoelectric/* transient_heat/* piezo_dynamics/* tet10_heat/* tet10_electrostatics/* tet10_elasticity/* tet10_thermomechanics/* tet10_piezoelectric/* tet10_thermopiezoelectric/* tet10_modes/* tet10_newmark/* tet10_harmonic/* parameter_study/* surrogate_heat/* > SHA256SUMS
+          sha256sum *.whl *.tar.gz *.py thermopiezoelectric/* transient_heat/* piezo_dynamics/* tet10_heat/* tet10_electrostatics/* tet10_elasticity/* tet10_thermomechanics/* tet10_piezoelectric/* tet10_thermopiezoelectric/* tet10_modes/* tet10_newmark/* tet10_harmonic/* parameter_study/* surrogate_heat/* field_visualization/* > SHA256SUMS
       - name: Transfer artifacts and standalone solver example
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
@@ -109,6 +110,15 @@ jobs:
           licenses = [f for f in dist.files if f.name == "LICENSE"]
           assert len(licenses) == 1, licenses
           assert "Permission is hereby granted" in dist.locate_file(licenses[0]).read_text()
+          assert find_spec("matplotlib") is None, "core requires Matplotlib"
+          from fem_toolbox.post.visualization import plot_field
+          from fem_toolbox.mesh import Mesh
+          try:
+              plot_field(Mesh(points=[[0,0,0],[1,0,0],[0,1,0],[0,0,1]], tetra4=[[0,1,2,3]]), [1], association="cell", name="T", unit="K")
+          except ImportError as error:
+              assert "fem-toolbox[visualization]" in str(error)
+          else:
+              raise AssertionError("missing Matplotlib must fail explicitly")
           assert find_spec("petsc4py") is None, "core artifact unexpectedly needs PETSc"
           for backend in (PetscBackend, PetscFieldSplitBackend):
               try:
@@ -160,6 +170,13 @@ jobs:
           "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/parameter_study/run.py"
           "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/parameter_study/report.py"
           "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/surrogate_heat/run.py"
+      - name: Install visualization extra and render installed-package example
+        run: |
+          "$RUNNER_TEMP/artifact-env/bin/python" -m pip install 'fem-toolbox[visualization]==1.2.0'
+          cd "$RUNNER_TEMP"
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/field_visualization/run.py" --output field_images
+          "$RUNNER_TEMP/artifact-env/bin/python" -I -c 'from pathlib import Path; from PIL import Image; paths=list(Path("field_images").glob("*.jpg")); assert len(paths)==6; images=[Image.open(p) for p in paths]; assert all(i.format=="JPEG" and i.size==(1200,900) for i in images); [i.close() for i in images]'
+
 
   quality:
     name: Quality / Python 3.13
@@ -180,7 +197,7 @@ jobs:
         run: python -m pip install --disable-pip-version-check --upgrade 'pip>=26.2'
 
       - name: Install project and quality tools
-        run: python -m pip install --disable-pip-version-check -e '.[dev]'
+        run: python -m pip install --disable-pip-version-check -e '.[dev,visualization]'
 
       - name: Lint
         run: python -m ruff check .
@@ -217,7 +234,7 @@ jobs:
         run: python -m pip install --disable-pip-version-check --upgrade 'pip>=26.2'
 
       - name: Install project and test tools
-        run: python -m pip install --disable-pip-version-check -e '.[test]'
+        run: python -m pip install --disable-pip-version-check -e '.[test,visualization]'
 
       - name: Run tests
         run: python -m pytest

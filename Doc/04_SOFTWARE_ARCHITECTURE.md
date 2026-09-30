@@ -330,3 +330,8 @@ Gesamt-Abnahme-/Kostenvergleiche bleiben offen.
 Komplexe Frequenzantworten einschließlich DC, Elektroden, Model und P2-Export
 sind integriert. [Nachweise und Grenzen](53_TET10_HARMONIC.md).
 Gesamt-Abnahme und Genauigkeits-/Kostenvergleiche bleiben offen.
+
+## M8: Feldbildadapter
+
+Der optionale Adapter `post.visualization` verwendet Matplotlib/Agg und
+vorhandene Tet4-Randtopologie. Solver bleiben unabhängig; [Vertrag](62_FIELD_VISUALIZATION.md).

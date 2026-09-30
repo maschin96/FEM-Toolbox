@@ -135,3 +135,8 @@ erst in einer Major-Version. Schemadateien werden nie stillschweigend
 migriert: ein inkompatibles Format erhält eine neue `schema_version` samt
 expliziter getesteter Migration. Diese Regeln gelten auch für
 Einheiten-/Vorzeichenänderungen und die Struktur versionierter Ergebnisbündel.
+
+## M8: optionale Feldvisualisierung
+
+`fem_toolbox.post.visualization` bietet `plot_field`, `FieldPlot` und
+`save_jpeg`; [Signaturen, Formen und Fehler](62_FIELD_VISUALIZATION.md).

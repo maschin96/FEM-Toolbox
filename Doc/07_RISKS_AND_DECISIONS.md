@@ -603,3 +603,11 @@ vollständig protokolliert. Ein geprüftes JSON-Artefakt enthält alle für Vorh
 benötigten Größen, niemals ausführbare Serialisierung. Boxgrenzen und Testfehler
 werden nicht als Unsicherheitsintervalle oder physikalische Validierung ausgegeben.
 [Vertrag und Nachweise](61_SURROGATE_MODELS.md).
+
+## ADR-043: optionale Matplotlib-Feldbilder (#189)
+
+Entscheidung vom 30.09.2026: Matplotlib >=3.9,<4 als separates
+`visualization`-Extra (BSD-kompatible Lizenz), expliziter Agg-Canvas ohne
+pyplot-Registrierung. Tet4-Außenflächen mit nodalen Flächenmitteln oder
+Eigentümerzellwerten; keine implizite Materialglättung. Tet10 und komplexe
+Felder werden abgelehnt. [API, Grenzen und Nachweise](62_FIELD_VISUALIZATION.md).

@@ -133,3 +133,5 @@ Verifikationsdokumente benennen ihren jeweiligen Nachweisumfang ausdrücklich.
 - [Kennwerttabellen und Studienberichte (#60)](60_STUDY_REPORTS.md)
 
 - [Surrogatmodelle: Training, Prüfung und Modellartefakte (#205)](61_SURROGATE_MODELS.md)
+
+- [Stationäre Tet4-Feldvisualisierung und JPEG-Export](62_FIELD_VISUALIZATION.md)
