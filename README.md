@@ -5,10 +5,10 @@ dreidimensionale Finite-Elemente-Simulationen. Ziel sind verifizierte Modelle f�
 Festkörpermechanik, Wärmeleitung, Elektrostatik und deren thermomechanische und
 piezoelektrische Kopplungen auf Basis linearer **Tet4** und geradkantiger quadratischer **Tet10**.
 
-**Stabile Freigabe v1.2.0 — PETSc, Tet10, Wärmeindikatoren und gemessene Performance.**
-Veröffentlicht am 29.09.2026; siehe [GitHub Release v1.2.0](https://github.com/maschin96/FEM-Toolbox/releases/tag/v1.2.0).
-[Release-Nachweis](Doc/58_M7_RELEASE_VERIFICATION.md) ·
-[Release Notes](Doc/releases/v1.2.0.md) ·
+**v1.3.0 — stationäre Parameterstudien, Feldbilder und Surrogatmodelle.**
+Release-Stand vom 01.10.2026; Veröffentlichungsstatus im [M8-Freigabebericht](Doc/64_M8_RELEASE_VERIFICATION.md).
+[Release-Nachweis](Doc/64_M8_RELEASE_VERIFICATION.md) ·
+[Release Notes](Doc/releases/v1.3.0.md) ·
 [Supportmatrix](Doc/57_M7_RELEASE_CANDIDATE.md).
 
 Neu gegenüber v1.0: [transiente Wärmeleitung](Doc/33_TRANSIENT_HEAT.md) mit
@@ -34,7 +34,7 @@ verifizierten Annahmen und numerischen Grenzen.
 
 ## Verfügbare Funktionen
 
-| Bereich | Umfang im Freigabestand v1.2.0 |
+| Bereich | Umfang im Freigabestand v1.3.0 |
 |---|---|
 | Netzmodell | Unveränderliche NumPy-Arrays für 3D-Punkte, Tet4/Tet10-Zellen und Triangle3/Triangle6-Flächen; validierte Indizes, externe IDs und Tags |
 | Auswahlsätze | Benannte Volumen- und Flächensätze, auch mit überlappenden Mitgliedschaften |
@@ -218,7 +218,7 @@ elektrisches Potential `phi` mit feldweiser Freiheitsgradverwaltung.
 | M5 | v1.0.0 | Elektroden, Modellformat und vollständiger stationärer Workflow | Freigegeben |
 | M6 | v1.1.0 | Transiente Wärme, Piezo-Dynamik/Harmonik (reziproke Thermoelastizität zurückgestellt) | Freigegeben |
 | M7 | v1.2.0 | PETSc-Backend, Tet10, Wärmeindikatoren und gemessene Skalierung | Freigegeben |
-| M8 | v1.3.0* | Reproduzierbare Parameterstudien | Geplant |
+| M8 | v1.3.0 | Parameterstudien, Visualisierung und Surrogatmodelle | Implementiert und verifiziert; Release-Abschluss siehe Freigabebericht |
 | M9 | v1.4.0* | Experimentelle Validierung und Unsicherheit | Geplant |
 | M10 | v1.5.0* | Kontrollierte adaptive Netzstudien | Geplant |
 | M11 | Offen | Topologieoptimierung | Grober Horizont |
@@ -305,3 +305,18 @@ Kopplungen sowie transiente Wärme, Modal-, Newmark- und Harmonikanalyse.
 [Abnahmekriterien, Tests und Grenzen](Doc/55_TET10_ACCEPTANCE.md) bündeln den
 Nachweis einschließlich des Genauigkeits-/Kostenvergleichs. Die Freigabe von
 v1.2.0 erfolgt separat über #38.
+
+## Stationäre Parameterstudien, Feldbilder und Surrogatmodelle (v1.3.0)
+
+v1.3.0 ergänzt `fem_toolbox.studies.Study` für deklarative,
+lokale stationäre Parameterstudien mit deterministischen Fall-IDs, geprüfter
+Wiederverwendung und Fortsetzung nach Abbruch. [Vertrag und Grenzen](Doc/59_PARAMETER_STUDIES.md)
+und [ausführbares Wärmebeispiel](examples/parameter_study/README.md).
+Der M8-Stand enthält außerdem [Kennwerttabellen und Berichte](Doc/60_STUDY_REPORTS.md)
+sowie [polynomiale Surrogatmodelle](Doc/61_SURROGATE_MODELS.md) mit expliziten
+Trainings-/Testfällen und wiederverwendbaren JSON-Artefakten.
+[Wärme-Surrogatbeispiel](examples/surrogate_heat/README.md).
+Der optionale [Tet4-Feldbildadapter mit JPEG-Export](Doc/62_FIELD_VISUALIZATION.md)
+ergänzt den M8-Stand. Grenzen und Migration stehen in den Release Notes.
+
+[Zwei reproduzierbare Wärme-/Piezo-Studienrezepte](examples/study_recipes/README.md) und [Abnahmeprotokoll](Doc/63_STUDY_RECIPE_ACCEPTANCE.md) ergänzen den M8-Stand (#61).

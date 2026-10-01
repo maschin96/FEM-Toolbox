@@ -1,0 +1,268 @@
+{
+  "recipe": "piezo",
+  "toolbox_version": "1.2.0",
+  "package_path": "/tmp/fem61-wheel-env/lib/python3.13/site-packages/fem_toolbox/__init__.py",
+  "python": "3.13.5",
+  "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
+  "numpy": "2.5.3",
+  "study_seconds": 0.04005808300001945,
+  "cases": [
+    {
+      "case_id": "3c5c9323eebd8e2a490e376e695207badc8ea5bf9c44ffaea5f7c911d728efda",
+      "expected": {
+        "displacement": -5e-07,
+        "charge": 1.7499999999999998e-08,
+        "mechanical": 6.25e-07,
+        "coupling": -1.25e-06,
+        "dielectric": -2.5e-07
+      },
+      "actual": {
+        "charge": 1.750000000000003e-08,
+        "charge_balance": -8.271806125530277e-25,
+        "coupling": -1.250000000000002e-06,
+        "dielectric": -2.5000000000000047e-07,
+        "displacement": -4.999999999999999e-07,
+        "force_balance": 2.498001805406602e-16,
+        "mechanical": 6.250000000000009e-07,
+        "parameter:coupling": [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            5.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        "parameter:geometry": "short.msh"
+      },
+      "direct": {
+        "displacement": -4.999999999999999e-07,
+        "charge": 1.750000000000003e-08,
+        "mechanical": 6.250000000000009e-07,
+        "coupling": -1.250000000000002e-06,
+        "dielectric": -2.5000000000000047e-07,
+        "force_balance": 2.498001805406602e-16,
+        "charge_balance": -8.271806125530277e-25
+      },
+      "absolute_tolerances": {
+        "displacement": 1e-16,
+        "charge": 1e-18,
+        "mechanical": 1e-16,
+        "coupling": 1e-16,
+        "dielectric": 1e-16
+      },
+      "relative_tolerance": 2e-11
+    },
+    {
+      "case_id": "a4c43aea95ddf9f7f9c32ab7298881dcbc13a17a3622e0cdce6ad9f3a842b459",
+      "expected": {
+        "displacement": -1e-06,
+        "charge": 5.4999999999999996e-08,
+        "mechanical": 2.5e-06,
+        "coupling": -5e-06,
+        "dielectric": -2.5e-07
+      },
+      "actual": {
+        "charge": 5.5000000000000095e-08,
+        "charge_balance": 4.963083675318166e-24,
+        "coupling": -5.000000000000008e-06,
+        "dielectric": -2.5000000000000047e-07,
+        "displacement": -9.999999999999997e-07,
+        "force_balance": 4.996003610813204e-16,
+        "mechanical": 2.5000000000000036e-06,
+        "parameter:coupling": [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            10.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        "parameter:geometry": "short.msh"
+      },
+      "direct": {
+        "displacement": -9.999999999999997e-07,
+        "charge": 5.5000000000000095e-08,
+        "mechanical": 2.5000000000000036e-06,
+        "coupling": -5.000000000000008e-06,
+        "dielectric": -2.5000000000000047e-07,
+        "force_balance": 4.996003610813204e-16,
+        "charge_balance": 4.963083675318166e-24
+      },
+      "absolute_tolerances": {
+        "displacement": 1e-16,
+        "charge": 1e-18,
+        "mechanical": 1e-16,
+        "coupling": 1e-16,
+        "dielectric": 1e-16
+      },
+      "relative_tolerance": 2e-11
+    },
+    {
+      "case_id": "105842eab0e530a2b9a2ba9d9f31fa83ecf6a16a66ef695a8e3515299f7c4055",
+      "expected": {
+        "displacement": -5e-07,
+        "charge": 8.749999999999999e-09,
+        "mechanical": 3.125e-07,
+        "coupling": -6.25e-07,
+        "dielectric": -1.25e-07
+      },
+      "actual": {
+        "charge": 8.750000000000009e-09,
+        "charge_balance": -4.1359030627651384e-25,
+        "coupling": -6.250000000000007e-07,
+        "dielectric": -1.250000000000001e-07,
+        "displacement": -5.000000000000003e-07,
+        "force_balance": 7.91033905045424e-16,
+        "mechanical": 3.125000000000005e-07,
+        "parameter:coupling": [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            5.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        "parameter:geometry": "long.msh"
+      },
+      "direct": {
+        "displacement": -5.000000000000003e-07,
+        "charge": 8.750000000000009e-09,
+        "mechanical": 3.125000000000005e-07,
+        "coupling": -6.250000000000007e-07,
+        "dielectric": -1.250000000000001e-07,
+        "force_balance": 7.91033905045424e-16,
+        "charge_balance": -4.1359030627651384e-25
+      },
+      "absolute_tolerances": {
+        "displacement": 1e-16,
+        "charge": 1e-18,
+        "mechanical": 1e-16,
+        "coupling": 1e-16,
+        "dielectric": 1e-16
+      },
+      "relative_tolerance": 2e-11
+    },
+    {
+      "case_id": "2b86435414835598e210f84e18b31206a6fa8cf30e148202418df8d458f6788b",
+      "expected": {
+        "displacement": -1e-06,
+        "charge": 2.7499999999999998e-08,
+        "mechanical": 1.25e-06,
+        "coupling": -2.5e-06,
+        "dielectric": -1.25e-07
+      },
+      "actual": {
+        "charge": 2.750000000000003e-08,
+        "charge_balance": 1.6543612251060553e-24,
+        "coupling": -2.5000000000000027e-06,
+        "dielectric": -1.250000000000001e-07,
+        "displacement": -1.0000000000000006e-06,
+        "force_balance": 1.582067810090848e-15,
+        "mechanical": 1.250000000000002e-06,
+        "parameter:coupling": [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            10.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        "parameter:geometry": "long.msh"
+      },
+      "direct": {
+        "displacement": -1.0000000000000006e-06,
+        "charge": 2.750000000000003e-08,
+        "mechanical": 1.250000000000002e-06,
+        "coupling": -2.5000000000000027e-06,
+        "dielectric": -1.250000000000001e-07,
+        "force_balance": 1.582067810090848e-15,
+        "charge_balance": 1.6543612251060553e-24
+      },
+      "absolute_tolerances": {
+        "displacement": 1e-16,
+        "charge": 1e-18,
+        "mechanical": 1e-16,
+        "coupling": 1e-16,
+        "dielectric": 1e-16
+      },
+      "relative_tolerance": 2e-11
+    }
+  ],
+  "resume_attempts_unchanged": true,
+  "input_change_invalidated": true,
+  "failed_cases": 1,
+  "failure_error": "ModelSchemaError: invalid model materials.piezo.solid: permittivity must be positive definite and well resolved",
+  "direct_and_analytic_checks_passed": true
+}

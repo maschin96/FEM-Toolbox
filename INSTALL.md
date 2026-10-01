@@ -1,7 +1,7 @@
 # Installation und erster Lauf
 
 Stand: 29. September 2026. Diese Anleitung richtet eine **Entwicklungsumgebung
-aus dem Repository** ein. Die stabile Version ist **v1.2.0**. Ein späterer
+aus dem Repository** ein. Der M8-Release-Stand ist **v1.3.0**; der [Freigabebericht](Doc/64_M8_RELEASE_VERIFICATION.md) nennt den Veröffentlichungsstatus. Ein späterer
 Checkout kann bereits weitere Entwicklungsänderungen enthalten.
 [Supportmatrix und Grenzen](Doc/57_M7_RELEASE_CANDIDATE.md).
 Ein PyPI-Release des aktuellen Checkouts wird hier nicht vorausgesetzt.
@@ -172,3 +172,8 @@ Backends werden separat eingerichtet; die getestete Linux-Umgebung und die
 Auswahl real/complex stehen im [PETSc-Installationsvertrag](Doc/38_PETSC_BACKEND.md).
 `Model`/TOML verwendet SciPy; PETSc wird an der direkten Python-Solver-API
 ausgewählt. Fehlendes PETSc wird beim Backendaufbau ausdrücklich diagnostiziert.
+
+## Optionale Feldvisualisierung
+
+`python -m pip install '.[visualization]'` ergänzt Matplotlib. Ohne dieses Extra
+bleiben Solver nutzbar. [API und Headless-Beispiel](Doc/62_FIELD_VISUALIZATION.md).

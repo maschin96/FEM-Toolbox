@@ -38,7 +38,7 @@ Das Projekt verwendet [Semantic Versioning](https://semver.org/) in der Form
 | M5 — Vollständiger stationärer Workflow | `v1.0.0` | erste stabile stationäre Forschungs-API |
 | M6 — Transiente und dynamische Erweiterung | `v1.1.0` | transiente Wärme und lineare gekoppelte Dynamik |
 | M7 — Skalierung und weitere Elemente | `v1.2.0` | PETSc-Option, Tet10 und Genauigkeitserweiterungen |
-| M8 — Reproduzierbare Parameterstudien | `v1.3.0`* | wiederholbare Mehrfallstudien mit Provenienz |
+| M8 — Parameterstudien, Feldbilder und Surrogate | `v1.3.0`* | wiederholbare Mehrfallstudien, Tet4-Feldbilder/JPEG und geprüfte polynomiale Surrogate |
 | M9 — Experimentelle Validierung und Unsicherheit | `v1.4.0`* | abgegrenzter Messvergleich mit Unsicherheitsbudget |
 | M10 — Kontrollierte adaptive Netzstudien | `v1.5.0`* | adaptiver stationärer Wärme-Workflow |
 

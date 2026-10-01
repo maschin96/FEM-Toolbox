@@ -567,3 +567,47 @@ symmetrisierten Dielektrikblock wie Moden und Newmark. Originalresiduen,
 komplexe Spitzenwertkonvention, Resonanzschwelle und DOF-Grenze bleiben erhalten.
 Model-Schema 3 und der vorhandene Schema-2-Feldexport benötigen keine neue
 Schemaversion. [Unabhängige Nachweise](53_TET10_HARMONIC.md).
+
+
+## ADR-040 — Lokale stationäre Parameterstudien (29.09.2026)
+
+#59 ergänzt einen Adapter über der vorhandenen Model-/Ergebnis-API, ohne
+Feldoperatoren zu ändern. Schema 1 bildet ein endliches kartesisches Produkt
+expliziter SI-Parameter auf bestehende Model-Eigenschaften ab. Fallidentität
+und Eingabegültigkeit sind getrennt: Parameter definieren stabile Fall-IDs;
+Dokument, Netzbytes, Solveroptionen und Versionsvertrag bestimmen Wiederverwendung.
+Ein atomar ersetzter Katalog veröffentlicht den Erfolg erst nach vollständigem
+Ergebnisbündel. Fortsetzung prüft beide Dateihashes und Bündelprovenienz.
+Jeder Versuch erhält ein neues Verzeichnis, ein exklusiver Lock verhindert
+konkurrierende Writer. Nach hartem Prozessabbruch erfolgt Lockfreigabe bewusst
+manuell, ohne fremde laufende Arbeit automatisch zu übernehmen. Alte Versuche
+bleiben erhalten; keine verteilte Ausführung oder automatische Bereinigung.
+[API, Katalogvertrag und Nachweise](59_PARAMETER_STUDIES.md).
+
+## ADR-041 — Studienkennwerte als CSV-/JSON-Vertrag (29.09.2026)
+
+#60 trennt numerische CSV-Werte von vollständigen JSON-Metadaten und einem
+lesbaren Markdown-Bericht. Fallidentität, Herkunft, Einheit, Auswahl und Reduktion
+bleiben explizit; fehlende Werte sind null mit Grund. Bilanzbewertungen benötigen
+explizite Schwellen, Netzkonvergenz wird nicht aus einem Solve abgeleitet.
+[Vertrag und Nachweise](60_STUDY_REPORTS.md).
+
+## ADR-042 — Polynomiale Surrogate mit explizitem Holdout (29.09.2026)
+
+#205 nutzt NumPy-Least-Squares auf einer train-only skalierten vollständigen
+Polynombasis vom Gesamtgrad 1/2. Optionale Ridge-Regularisierung wird als
+erweitertes Least-Squares-System ohne Strafe auf den konstanten Term gelöst.
+Explizite Fallpartition und Gruppierung identischer Eingaben verhindern Datenleckage.
+Der #60-Adapter übernimmt SI-/Quellmetadaten; Ausschlüsse sind ausdrücklich und
+vollständig protokolliert. Ein geprüftes JSON-Artefakt enthält alle für Vorhersagen
+benötigten Größen, niemals ausführbare Serialisierung. Boxgrenzen und Testfehler
+werden nicht als Unsicherheitsintervalle oder physikalische Validierung ausgegeben.
+[Vertrag und Nachweise](61_SURROGATE_MODELS.md).
+
+## ADR-043: optionale Matplotlib-Feldbilder (#189)
+
+Entscheidung vom 30.09.2026: Matplotlib >=3.9,<4 als separates
+`visualization`-Extra (BSD-kompatible Lizenz), expliziter Agg-Canvas ohne
+pyplot-Registrierung. Tet4-Außenflächen mit nodalen Flächenmitteln oder
+Eigentümerzellwerten; keine implizite Materialglättung. Tet10 und komplexe
+Felder werden abgelehnt. [API, Grenzen und Nachweise](62_FIELD_VISUALIZATION.md).
