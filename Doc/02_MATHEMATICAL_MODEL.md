@@ -176,3 +176,8 @@ Intern gilt SI:
 
 Andere Einheitensysteme sind nur über einen vorgeschalteten, getesteten
 Konverter zulässig.
+
+## Experimenteller CFD-Operator
+
+Der reduzierte Kanaloperator, SI-Vorzeichen und Erhaltungsbilanzen sind in
+[Doc/68](68_EXPERIMENTAL_CFD_CORE.md) festgelegt; kein allgemeiner RANS-Solver.

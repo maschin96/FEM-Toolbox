@@ -335,3 +335,9 @@ Gesamt-Abnahme und Genauigkeits-/Kostenvergleiche bleiben offen.
 
 Der optionale Adapter `post.visualization` verwendet Matplotlib/Agg und
 vorhandene Tet4-Randtopologie. Solver bleiben unabhängig; [Vertrag](62_FIELD_VISUALIZATION.md).
+
+## Experimenteller CFD-Einstieg
+
+`cfd/channel.py` enthält einen eigenständigen konservativen Kanaloperator.
+Keine Abhängigkeit von Festkörper-Elementoperatoren oder der Model-API.
+[Vertrag und Grenzen](68_EXPERIMENTAL_CFD_CORE.md).

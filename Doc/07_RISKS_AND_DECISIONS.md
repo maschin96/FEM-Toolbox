@@ -611,3 +611,13 @@ Entscheidung vom 30.09.2026: Matplotlib >=3.9,<4 als separates
 pyplot-Registrierung. Tet4-Außenflächen mit nodalen Flächenmitteln oder
 Eigentümerzellwerten; keine implizite Materialglättung. Tet10 und komplexe
 Felder werden abgelehnt. [API, Grenzen und Nachweise](62_FIELD_VISUALIZATION.md).
+
+## ADR-046 — Zweiter Experimental-Branch: CFD-Kanaloperator
+
+01.10.2026: Auf Nutzerauftrag beginnt M12 unabhängig vom SPICE-Branch.
+Ein zellzentrierter Finite-Volumen-Diffusionsoperator auf ebenen Kanalzellen
+verifiziert den viskosen Impulsanteil. Konstante Viskosität, vorgegebener
+Druckgradient und zwei Wandgeschwindigkeiten begrenzen den ersten Schnitt.
+Allgemeine Druckkopplung, RANS-Modellentscheidung und FSI bleiben offen;
+#84–#86 werden dadurch nicht abgeschlossen. Keine neue Abhängigkeit.
+[Konventionen und Nachweise](68_EXPERIMENTAL_CFD_CORE.md).
