@@ -1,0 +1,70 @@
+{
+  "recipe": "heat",
+  "toolbox_version": "1.2.0",
+  "package_path": "/tmp/fem61-sdist-env/lib/python3.13/site-packages/fem_toolbox/__init__.py",
+  "python": "3.13.5",
+  "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
+  "numpy": "2.5.3",
+  "study_seconds": 0.026446667000016078,
+  "cases": [
+    {
+      "case_id": "a0b12917627bef646006d44d84be3e8d65a5b388ca2ff08dbb70177675cbd249",
+      "expected": {
+        "temperature": 301.0,
+        "source": 1.3333333333333333,
+        "inflow": -1.3333333333333333
+      },
+      "actual": {
+        "balance": 1.354472090042691e-14,
+        "inflow": -1.3333333333333197,
+        "parameter:conductivity": 2.0,
+        "source": 1.3333333333333333,
+        "temperature": 301.0
+      },
+      "direct": {
+        "temperature": 301.0,
+        "source": 1.3333333333333333,
+        "inflow": -1.3333333333333197,
+        "balance": 1.354472090042691e-14
+      },
+      "absolute_tolerances": {
+        "temperature": 1e-11,
+        "source": 1e-11,
+        "inflow": 1e-11
+      },
+      "relative_tolerance": 2e-11
+    },
+    {
+      "case_id": "9c3375ca35aad958bc2339ac41f273f9b5b811da7a01fea26a6ab9a81b05848f",
+      "expected": {
+        "temperature": 300.5,
+        "source": 1.3333333333333333,
+        "inflow": -1.3333333333333333
+      },
+      "actual": {
+        "balance": 7.993605777301127e-15,
+        "inflow": -1.3333333333333253,
+        "parameter:conductivity": 4.0,
+        "source": 1.3333333333333333,
+        "temperature": 300.5
+      },
+      "direct": {
+        "temperature": 300.5,
+        "source": 1.3333333333333333,
+        "inflow": -1.3333333333333253,
+        "balance": 7.993605777301127e-15
+      },
+      "absolute_tolerances": {
+        "temperature": 1e-11,
+        "source": 1e-11,
+        "inflow": 1e-11
+      },
+      "relative_tolerance": 2e-11
+    }
+  ],
+  "resume_attempts_unchanged": true,
+  "input_change_invalidated": true,
+  "failed_cases": 1,
+  "failure_error": "ModelSchemaError: invalid model materials.T.thermal: conductivity must be positive",
+  "direct_and_analytic_checks_passed": true
+}

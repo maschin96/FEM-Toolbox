@@ -33,6 +33,7 @@ jobs:
           cp -R examples/thermopiezoelectric dist/thermopiezoelectric
           cp -R examples/transient_heat dist/transient_heat
           cp -R examples/piezo_dynamics dist/piezo_dynamics
+          cp -R examples/study_recipes dist/study_recipes
           cp -R examples/parameter_study dist/parameter_study
           cp -R examples/surrogate_heat dist/surrogate_heat
           cp -R examples/field_visualization dist/field_visualization
@@ -46,7 +47,7 @@ jobs:
           cp -R examples/tet10_newmark dist/tet10_newmark
           cp -R examples/tet10_harmonic dist/tet10_harmonic
           cd dist
-          sha256sum *.whl *.tar.gz *.py thermopiezoelectric/* transient_heat/* piezo_dynamics/* tet10_heat/* tet10_electrostatics/* tet10_elasticity/* tet10_thermomechanics/* tet10_piezoelectric/* tet10_thermopiezoelectric/* tet10_modes/* tet10_newmark/* tet10_harmonic/* parameter_study/* surrogate_heat/* field_visualization/* > SHA256SUMS
+          sha256sum *.whl *.tar.gz *.py thermopiezoelectric/* transient_heat/* piezo_dynamics/* tet10_heat/* tet10_electrostatics/* tet10_elasticity/* tet10_thermomechanics/* tet10_piezoelectric/* tet10_thermopiezoelectric/* tet10_modes/* tet10_newmark/* tet10_harmonic/* parameter_study/* surrogate_heat/* field_visualization/* study_recipes/*.py study_recipes/*.md study_recipes/heat/* study_recipes/piezo/* > SHA256SUMS
       - name: Transfer artifacts and standalone solver example
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
@@ -130,6 +131,8 @@ jobs:
           print(package, dist.version, dist.metadata["Requires-Python"])
           PY
           cd "$RUNNER_TEMP"
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/study_recipes/run.py" heat --output recipe_heat_results
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/study_recipes/run.py" piezo --output recipe_piezo_results
           "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/steady_heat.py"
           test -s steady_heat.vtu
           for example in elastic_tension parallel_plate thermal_expansion piezo_d33; do
