@@ -107,7 +107,7 @@ Projektfundament. Dies verändert keine Gleichungen oder Vorzeichen.
 
 ## 5. Neue Milestones und Arbeitspakete
 
-### M8 — Reproduzierbare Parameterstudien (vorläufig v1.3.0)
+### M8 — Parameterstudien, Feldvisualisierung und Surrogatmodelle (v1.3.0)
 
 [GitHub M8](https://github.com/maschin96/FEM-Toolbox/milestone/9).
 Fachliche Voraussetzung: M5. Integration ist nach M7 vorgesehen; Entwicklung
@@ -116,11 +116,13 @@ kann nach stabiler Model-/Ergebnis-API unabhängig von PETSc beginnen.
 - [#59](https://github.com/maschin96/FEM-Toolbox/issues/59): deterministisches Studienmanifest, Fall-IDs, Status und Fortsetzung.
 - [#60](https://github.com/maschin96/FEM-Toolbox/issues/60): Kennwerttabellen und Berichte mit Einheiten, Bilanzstatus und Provenienz.
 - [#61](https://github.com/maschin96/FEM-Toolbox/issues/61): thermisches und piezoelektrisches Studienrezept samt unabhängiger Reproduktion.
+- [#189](https://github.com/maschin96/FEM-Toolbox/issues/189): optionaler stationärer Tet4-Feldbildadapter und JPEG-Export.
+- [#205](https://github.com/maschin96/FEM-Toolbox/issues/205): polynomiale Surrogate aus FEM-Kennwerten, getrennte Testdaten und versionierte Modellartefakte.
 - [#62](https://github.com/maschin96/FEM-Toolbox/issues/62): Release-Gate einschließlich Abbruch-/Resume-Nachweis und Kompatibilität.
 
 Abnahme: getrennte Einzelläufe und Studie stimmen innerhalb vorab begründeter
 Toleranzen überein; Fehler werden sichtbar, veränderte Eingaben invalidieren
-Ergebnisse und beide Rezepte laufen aus sauberer Installation. Kein Optimierer,
+Ergebnisse und beide Rezepte laufen aus sauberer Installation. Feldbilder laufen headless, Surrogate prüfen disjunkte Trainings-/Testfälle und geladene Vorhersagen. [Freigabenachweis](64_M8_RELEASE_VERIFICATION.md). Kein Optimierer,
 keine verteilte Ausführung und kein Dashboard als Pflichtumfang.
 
 ### M9 — Experimentelle Validierung und Unsicherheit (vorläufig v1.4.0)

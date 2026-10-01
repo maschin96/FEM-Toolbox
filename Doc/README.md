@@ -115,6 +115,8 @@ Eintrag im Entscheidungsprotokoll.
 - [v0.2.0 — Netz und Tet4-Geometrie](releases/v0.2.0.md)
 - [v0.1.0 — Projektfundament](releases/v0.1.0.md)
 
+- [v1.3.0 — Parameterstudien, Feldbilder und Surrogatmodelle](releases/v1.3.0.md)
+
 ## Statuskonvention
 
 - **Entwurf**: fachlich geplant, Implementierung noch offen
@@ -126,7 +128,7 @@ Eintrag im Entscheidungsprotokoll.
 Die Planungsdokumente 01–09 sind Entwürfe. Implementierungs- und
 Verifikationsdokumente benennen ihren jeweiligen Nachweisumfang ausdrücklich.
 
-## M8 — in Entwicklung
+## M8 — v1.3.0
 
 - [Stationäre Parameterstudien, Fallkatalog und Fortsetzung (#59)](59_PARAMETER_STUDIES.md)
 
@@ -137,3 +139,5 @@ Verifikationsdokumente benennen ihren jeweiligen Nachweisumfang ausdrücklich.
 - [Stationäre Tet4-Feldvisualisierung und JPEG-Export](62_FIELD_VISUALIZATION.md)
 
 - [Studienrezepte: Abnahme und saubere Reproduktion](63_STUDY_RECIPE_ACCEPTANCE.md)
+
+- [M8-Freigabebericht, Kompatibilität und Release-Gate](64_M8_RELEASE_VERIFICATION.md)
