@@ -341,3 +341,9 @@ vorhandene Tet4-Randtopologie. Solver bleiben unabhängig; [Vertrag](62_FIELD_VI
 `cfd/channel.py` enthält einen eigenständigen konservativen Kanaloperator.
 Keine Abhängigkeit von Festkörper-Elementoperatoren oder der Model-API.
 [Vertrag und Grenzen](68_EXPERIMENTAL_CFD_CORE.md).
+
+## Experimentelle Druck-Geschwindigkeits-Kopplung
+
+`cfd/stokes.py` besitzt den uniformen 2D-MAC-Operator, das monolithische
+Sparse-Sattelpunktsystem und getrennte Feld-/Bilanzrekonstruktion.
+API und Grenzen sind in [Doc/69](69_CFD_PRESSURE_COUPLING.md) dokumentiert.

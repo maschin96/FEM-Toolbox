@@ -145,3 +145,5 @@ Verifikationsdokumente benennen ihren jeweiligen Nachweisumfang ausdrücklich.
 ## M12 — Experimenteller CFD-Einstieg
 
 - [Kanaloperator: Vertrag, Referenzen und Grenzen](68_EXPERIMENTAL_CFD_CORE.md)
+
+- [Experimentelle Stokes-Druckkopplung: Vertrag und Nachweise](69_CFD_PRESSURE_COUPLING.md)

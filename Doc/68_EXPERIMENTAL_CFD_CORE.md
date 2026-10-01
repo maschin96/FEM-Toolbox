@@ -76,3 +76,9 @@ git diff --check
 Gesamtsuite: 710 bestanden, 83 übersprungen (93.68 s). Ruff, Formatprüfung,
 mypy und Beispiel bestanden. Übersprungene Prüfungen gelten nicht als
 bestanden. Keine unabhängige Reviewfreigabe und kein CFD-Release.
+
+## Erweiterung: Druckkopplung
+
+Der historische reine Kanal-Schnitt wurde um einen geschlossenen 2D-Stokes-
+Solver mit echtem Druckfeld ergänzt. [Vertrag und Nachweise](69_CFD_PRESSURE_COUPLING.md).
+Die oben offenen allgemeinen CFD-/RANS-/FSI-Gates bleiben offen.

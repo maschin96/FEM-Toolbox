@@ -94,3 +94,5 @@ Gesamt-Abnahme und Genauigkeits-/Kostenvergleiche bleiben offen.
 ## Experimenteller CFD-Einstieg (M12)
 
 - [Viskoser Kanaloperator mit analytischer Referenz](cfd_channel/README.md).
+
+- [Gekoppelte Stokes-Geschwindigkeiten und Druck auf vier Netzen](cfd_pressure/README.md).

@@ -621,3 +621,14 @@ Druckgradient und zwei Wandgeschwindigkeiten begrenzen den ersten Schnitt.
 Allgemeine Druckkopplung, RANS-Modellentscheidung und FSI bleiben offen;
 #84–#86 werden dadurch nicht abgeschlossen. Keine neue Abhängigkeit.
 [Konventionen und Nachweise](68_EXPERIMENTAL_CFD_CORE.md).
+
+## ADR-047 — Monolithische MAC-Druckkopplung (01.10.2026)
+
+Auf Nutzerauftrag wird #86 um einen geschlossenen 2D-Stokes-Schnitt ergänzt.
+Versetzte Freiheitsgrade, konservative Divergenz und adjungierter Gradient
+verhindern einen entkoppelten Druckmodus. Druckreferenz am ersten Zellzentrum;
+die ausgelassene Kontinuitätszeile wird anschließend wieder geprüft.
+Sparse-LU mit Äquilibrierung ist die Referenz, keine Strafkompressibilität.
+Die starke und diskrete Form sowie Rand- und Leistungskonventionen stehen
+in [Doc/69](69_CFD_PRESSURE_COUPLING.md). Offene Randbedingungen, Konvektion,
+RANS und skalierbare iterative Solver bleiben nachfolgende Arbeit.
