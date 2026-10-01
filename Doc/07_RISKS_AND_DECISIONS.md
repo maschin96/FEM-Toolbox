@@ -631,3 +631,22 @@ elektrische/thermische Ports und monolithische/iterative FEM-Kopplung aus #114,
 Transienten und AC werden vor ihrer Implementierung entschieden. M13 ist
 damit weder abgeschlossen noch freigegeben; Issues bleiben offen.
 [Vertrag, Referenzen und Prüfnachweis](65_EXPERIMENTAL_CIRCUIT_CORE.md).
+
+## ADR-045 — RLC-Analysen und Portvertrag (01.10.2026)
+
+Auf Nutzerauftrag werden #114–#119 auf dem Experimental-Branch fortgeführt.
+Striktes TOML mit expliziten SI-Einheiten ergänzt die Textnetzliste. Elektrische
+und thermische Ports sind validierte Metadaten; tatsächliche FEM-Selektoren
+prüft erst der spätere Adapter. Transienten verwenden Backward Euler mit
+konsistenter Anfangslösung und ereignisangereichertem Zeitraster. Höherindexige
+ideale C/V-Schleifen und L/I-Schnittmengen werden abgelehnt. Numerische
+Dämpfung wird getrennt von physikalischen Verlusten bilanziert. AC verwendet
+Peakphasoren mit exp(+i omega t), bei f=0 den DC-Vertrag. Singuläre Resonanz
+erhält keine künstliche Dämpfung.
+
+Die spätere elektrische FEM-Kopplung ist nach Elektrodenreduktion monolithisch
+geplant; thermisch zuerst einseitige Joule-Leistung, danach iterative
+Rückkopplung. Analytische Piezo- und Wärmereferenzen werden vorab festgelegt.
+Diese Entscheidung implementiert keinen gekoppelten Solver und gibt M13
+nicht frei. [Vertrag](66_CIRCUIT_ANALYSES_AND_PORTS.md),
+[Nachweise](67_CIRCUIT_CORE_VERIFICATION.md).

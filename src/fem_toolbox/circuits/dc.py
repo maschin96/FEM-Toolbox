@@ -5,9 +5,10 @@ from __future__ import annotations
 import json
 import math
 from collections.abc import Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from importlib.metadata import version
 from types import MappingProxyType
+from typing import TypeVar
 
 import numpy as np
 from numpy.typing import NDArray
@@ -15,13 +16,14 @@ from scipy.sparse import coo_matrix, csc_matrix, diags  # type: ignore[import-un
 from scipy.sparse.linalg import splu  # type: ignore[import-untyped]
 
 from fem_toolbox.circuits.model import (
-    CIRCUIT_SCHEMA_VERSION,
     Circuit,
     Component,
     _finite_scalar,
 )
 from fem_toolbox.errors import ValidationError
 from fem_toolbox.provenance import RunProvenance
+
+Scalar = TypeVar("Scalar", np.float64, np.complex128)
 
 
 class CircuitTopologyError(ValidationError):
@@ -50,6 +52,9 @@ class DCResult:
     power_balance_W: float
     relative_residual: float
     provenance: RunProvenance
+    capacitor_charge_C: Mapping[str, float] = field(default_factory=dict)
+    inductor_flux_Wb: Mapping[str, float] = field(default_factory=dict)
+    stored_energy_J: float = 0.0
 
     def __post_init__(self) -> None:
         for name in (
@@ -58,6 +63,8 @@ class DCResult:
             "branch_currents_A",
             "branch_powers_W",
             "kcl_residual_A",
+            "capacitor_charge_C",
+            "inductor_flux_Wb",
         ):
             object.__setattr__(self, name, MappingProxyType(dict(getattr(self, name))))
 
@@ -66,14 +73,16 @@ def _numerical(reason: str) -> ValidationError:
     return ValidationError(reason, field="circuit.numerics")
 
 
-def _preflight(circuit: Circuit) -> None:
+def _preflight(
+    circuit: Circuit, *, capacitors: bool = False, ideal_inductors: bool = True
+) -> None:
     conducting: dict[str, set[str]] = {n: set() for n in circuit.nodes}
     ideal: dict[str, list[tuple[str, float, str]]] = {n: [] for n in circuit.nodes}
     for c in circuit.components:
-        if c.kind in "RVL":
+        if c.kind in "RVL" or (capacitors and c.kind == "C"):
             conducting[c.positive].add(c.negative)
             conducting[c.negative].add(c.positive)
-        if c.kind in "VL":
+        if c.kind == "V" or (ideal_inductors and c.kind == "L"):
             voltage = c.value if c.kind == "V" else 0.0
             ideal[c.positive].append((c.negative, voltage, c.name))
             ideal[c.negative].append((c.positive, -voltage, c.name))
@@ -118,7 +127,7 @@ def _preflight(circuit: Circuit) -> None:
                     pending.append(neighbor)
         redundant |= len(edges) >= vertices
     for c in circuit.components:
-        if c.kind not in "VL":
+        if c.kind != "V" and not (ideal_inductors and c.kind == "L"):
             continue
         expected = c.value if c.kind == "V" else 0.0
         # Roundoff allowance is based on voltages along both independent paths,
@@ -195,8 +204,12 @@ def _assemble(
 
 
 def _linear_solve(
-    matrix: csc_matrix, rhs: NDArray[np.float64]
-) -> tuple[NDArray[np.float64], float]:
+    matrix: csc_matrix,
+    rhs: NDArray[Scalar],
+    *,
+    pivot_tolerance: float = 0,
+    singular_kind: str = "singular",
+) -> tuple[NDArray[Scalar], float]:
     with np.errstate(over="ignore", divide="ignore", invalid="ignore"):
         row_scale = 1.0 / np.asarray(abs(matrix).max(axis=1).toarray()).ravel()
         row_scaled = diags(row_scale) @ matrix
@@ -211,11 +224,19 @@ def _linear_solve(
     ):
         raise _numerical("DC equilibration is not representable")
     try:
+        factor = splu(scaled)
+        pivots = abs(factor.U.diagonal())
+        if np.min(pivots) <= pivot_tolerance * np.max(pivots):
+            raise CircuitTopologyError(
+                kind=singular_kind, reason="singular or ill-conditioned MNA operator"
+            )
         with np.errstate(over="ignore", invalid="ignore"):
-            solution = column_scale * splu(scaled).solve(scaled_rhs)
+            solution: NDArray[Scalar] = np.asarray(
+                column_scale * factor.solve(scaled_rhs), dtype=rhs.dtype
+            )
     except RuntimeError as error:
         raise CircuitTopologyError(
-            kind="singular", reason="numerically singular DC system"
+            kind=singular_kind, reason="numerically singular MNA system"
         ) from error
     with np.errstate(over="ignore", invalid="ignore"):
         residual = matrix @ solution - rhs
@@ -301,13 +322,21 @@ def solve_dc(
             raise _numerical("DC absorbed power balance failed")
     except OverflowError as error:
         raise _numerical("DC balance sums are not representable") from error
+    charge = {
+        c.name: c.value * voltages[c.name] for c in circuit.components if c.kind == "C"
+    }
+    flux = {
+        c.name: c.value * currents[c.name] for c in circuit.components if c.kind == "L"
+    }
+    stored = 0.0
+    for c in circuit.components:
+        if c.kind in "CL":
+            amplitude = voltages[c.name] if c.kind == "C" else currents[c.name]
+            stored += 0.5 * c.value * amplitude * amplitude
+    if not np.isfinite([stored, *charge.values(), *flux.values()]).all():
+        raise _numerical("DC storage not representable")
     canonical = json.dumps(
-        {
-            "circuit_schema_version": CIRCUIT_SCHEMA_VERSION,
-            "components": [
-                [c.name, c.positive, c.negative, c.value] for c in circuit.components
-            ],
-        },
+        circuit.to_document(),
         sort_keys=True,
         separators=(",", ":"),
         allow_nan=False,
@@ -318,7 +347,7 @@ def solve_dc(
         solver_parameters={
             "analysis": "dc",
             "method": "equilibrated_sparse_mna_lu",
-            "revision": 1,
+            "revision": 2,
             "numpy": np.__version__,
             "scipy": version("scipy"),
             "relative_tolerance": rtol,
@@ -328,7 +357,17 @@ def solve_dc(
         },
     )
     return DCResult(
-        potentials, voltages, currents, powers, kcl, power_balance, relative, provenance
+        potentials,
+        voltages,
+        currents,
+        powers,
+        kcl,
+        power_balance,
+        relative,
+        provenance,
+        charge,
+        flux,
+        stored,
     )
 
 

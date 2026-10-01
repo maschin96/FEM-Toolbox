@@ -343,3 +343,12 @@ Gesamt-Abnahme und Genauigkeits-/Kostenvergleiche bleiben offen.
 
 Der optionale Adapter `post.visualization` verwendet Matplotlib/Agg und
 vorhandene Tet4-Randtopologie. Solver bleiben unabhängig; [Vertrag](62_FIELD_VISUALIZATION.md).
+
+## Erweiterter experimenteller Schaltungskern
+
+`config.py` liest das strikte TOML-Schema, `ports.py` besitzt unveränderliche
+Portmetadaten. `mna.py` bündelt Speicheroperator, Quellen und Provenienz;
+`ac.py` und `transient.py` besitzen ihre Analyseverträge und rekonstruieren
+physikalische Bilanzen. Sparse-Lösung und Topologieprüfung werden mit DC
+geteilt. Ergebnisse besitzen unveränderliche Daten. Feldadapter bleiben
+außerhalb des eigenständigen Kerns; siehe [Vertrag](66_CIRCUIT_ANALYSES_AND_PORTS.md).

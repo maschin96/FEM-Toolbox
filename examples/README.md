@@ -94,3 +94,4 @@ Gesamt-Abnahme und Genauigkeits-/Kostenvergleiche bleiben offen.
 ## Experimenteller Schaltungskern (M13)
 
 - [DC-Spannungsteiler mit Netzliste und unabhängigen Bilanzprüfungen](circuit_dc/README.md).
+- [RLC-Transienten und AC mit analytischen Referenzen](circuit_analyses/README.md).

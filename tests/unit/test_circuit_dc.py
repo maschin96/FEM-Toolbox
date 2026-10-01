@@ -19,12 +19,14 @@ def balances(result):
 
 def test_voltage_divider_currents_power_and_immutable_output():
     r = solve("V1 in 0 12\nR1 in out 1k\nR2 out 0 2k")
-    assert r.node_potentials_V == pytest.approx({"0": 0, "in": 12, "out": 8}, abs=1e-12)
+    assert r.node_potentials_V == pytest.approx(
+        {"0": 0, "in": 12, "out": 8}, rel=0, abs=1e-12
+    )
     assert r.branch_currents_A == pytest.approx(
-        {"V1": -0.004, "R1": 0.004, "R2": 0.004}, abs=1e-14
+        {"V1": -0.004, "R1": 0.004, "R2": 0.004}, rel=0, abs=1e-14
     )
     assert r.branch_powers_W == pytest.approx(
-        {"V1": -0.048, "R1": 0.016, "R2": 0.032}, abs=1e-13
+        {"V1": -0.048, "R1": 0.016, "R2": 0.032}, rel=0, abs=1e-13
     )
     balances(r)
     with pytest.raises(TypeError):
@@ -35,53 +37,53 @@ def test_voltage_divider_currents_power_and_immutable_output():
 
 def test_current_source_orientation_and_parallel_resistors():
     r = solve("I1 0 a 3m\nR1 a 0 4k\nR2 a 0 4k")
-    assert r.node_potentials_V["a"] == pytest.approx(6, abs=1e-12)
-    assert r.branch_currents_A["I1"] == pytest.approx(0.003, abs=1e-14)
-    assert r.branch_currents_A["R1"] == pytest.approx(0.0015, abs=1e-14)
-    assert r.branch_powers_W["I1"] == pytest.approx(-0.018, abs=1e-13)
+    assert r.node_potentials_V["a"] == pytest.approx(6, rel=0, abs=1e-12)
+    assert r.branch_currents_A["I1"] == pytest.approx(0.003, rel=0, abs=1e-14)
+    assert r.branch_currents_A["R1"] == pytest.approx(0.0015, rel=0, abs=1e-14)
+    assert r.branch_powers_W["I1"] == pytest.approx(-0.018, rel=0, abs=1e-13)
     balances(r)
 
 
 def test_reversed_voltage_source_and_negative_current_source():
     r = solve("V1 0 a 5\nR1 a 0 1k\nI1 a 0 -1m")
-    assert r.node_potentials_V["a"] == pytest.approx(-5, abs=1e-12)
-    assert r.branch_currents_A["R1"] == pytest.approx(-0.005, abs=1e-14)
-    assert r.branch_currents_A["V1"] == pytest.approx(-0.006, abs=1e-14)
+    assert r.node_potentials_V["a"] == pytest.approx(-5, rel=0, abs=1e-12)
+    assert r.branch_currents_A["R1"] == pytest.approx(-0.005, rel=0, abs=1e-14)
+    assert r.branch_currents_A["V1"] == pytest.approx(-0.006, rel=0, abs=1e-14)
     balances(r)
 
 
 def test_floating_voltage_source_between_grounded_nodes():
     # v_a-v_b=3, v_a/1000+v_b/2000=0 -> v_a=1, v_b=-2.
     r = solve("V1 a b 3\nR1 a 0 1k\nR2 b 0 2k")
-    assert r.node_potentials_V["a"] == pytest.approx(1, abs=1e-12)
-    assert r.node_potentials_V["b"] == pytest.approx(-2, abs=1e-12)
-    assert r.branch_currents_A["V1"] == pytest.approx(-0.001, abs=1e-14)
+    assert r.node_potentials_V["a"] == pytest.approx(1, rel=0, abs=1e-12)
+    assert r.node_potentials_V["b"] == pytest.approx(-2, rel=0, abs=1e-12)
+    assert r.branch_currents_A["V1"] == pytest.approx(-0.001, rel=0, abs=1e-14)
     balances(r)
 
 
 def test_dc_capacitor_open_inductor_short():
     r = solve("V1 in 0 10\nR1 in a 1k\nL1 a b 2m\nR2 b 0 1k\nC1 a 0 1u")
-    assert r.node_potentials_V["a"] == pytest.approx(5, abs=1e-12)
-    assert r.node_potentials_V["b"] == pytest.approx(5, abs=1e-12)
-    assert r.branch_currents_A["L1"] == pytest.approx(0.005, abs=1e-14)
-    assert r.branch_currents_A["C1"] == pytest.approx(0, abs=1e-14)
-    assert r.branch_voltages_V["L1"] == pytest.approx(0, abs=1e-12)
+    assert r.node_potentials_V["a"] == pytest.approx(5, rel=0, abs=1e-12)
+    assert r.node_potentials_V["b"] == pytest.approx(5, rel=0, abs=1e-12)
+    assert r.branch_currents_A["L1"] == pytest.approx(0.005, rel=0, abs=1e-14)
+    assert r.branch_currents_A["C1"] == pytest.approx(0, rel=0, abs=1e-14)
+    assert r.branch_voltages_V["L1"] == pytest.approx(0, rel=0, abs=1e-12)
     balances(r)
 
 
 def test_balanced_bridge_against_independent_branch_reduction():
     r = solve("V1 in 0 6\nR1 in a 1k\nR2 a 0 2k\nR3 in b 2k\nR4 b 0 4k\nR5 a b 5k")
-    assert r.node_potentials_V["a"] == pytest.approx(4, abs=1e-12)
-    assert r.node_potentials_V["b"] == pytest.approx(4, abs=1e-12)
-    assert r.branch_currents_A["R5"] == pytest.approx(0, abs=1e-14)
-    assert r.branch_currents_A["V1"] == pytest.approx(-0.003, abs=1e-14)
+    assert r.node_potentials_V["a"] == pytest.approx(4, rel=0, abs=1e-12)
+    assert r.node_potentials_V["b"] == pytest.approx(4, rel=0, abs=1e-12)
+    assert r.branch_currents_A["R5"] == pytest.approx(0, rel=0, abs=1e-14)
+    assert r.branch_currents_A["V1"] == pytest.approx(-0.003, rel=0, abs=1e-14)
     balances(r)
 
 
 def test_no_source_zero_solution_and_direct_voltage_constraint():
     for text in ("R1 a 0 10\nC1 a 0 1u", "V1 a 0 0"):
         r = solve(text)
-        assert r.node_potentials_V["a"] == pytest.approx(0, abs=1e-12)
+        assert r.node_potentials_V["a"] == pytest.approx(0, rel=0, abs=1e-12)
         balances(r)
 
 
@@ -146,16 +148,30 @@ def test_large_inconsistent_voltage_loop_has_concrete_diagnosis():
 def test_unbalanced_bridge_against_hand_solved_two_node_equations():
     # 3*a-b=10, -a+2.5*b=10 -> a=70/13, b=80/13 V.
     r = solve("V1 in 0 10\nR1 in a 1k\nR2 a 0 1k\nR3 in b 1k\nR4 b 0 2k\nR5 a b 1k")
-    assert r.node_potentials_V["a"] == pytest.approx(70 / 13, abs=1e-12)
-    assert r.node_potentials_V["b"] == pytest.approx(80 / 13, abs=1e-12)
-    assert r.branch_currents_A["R5"] == pytest.approx(-1 / 1300, abs=1e-14)
+    assert r.node_potentials_V["a"] == pytest.approx(70 / 13, rel=0, abs=1e-12)
+    assert r.node_potentials_V["b"] == pytest.approx(80 / 13, rel=0, abs=1e-12)
+    assert r.branch_currents_A["R5"] == pytest.approx(-1 / 1300, rel=0, abs=1e-14)
     balances(r)
 
 
 @pytest.mark.parametrize("resistance", [1e-12, 1e12])
 def test_equilibration_across_conductance_scales(resistance):
     r = solve(f"V1 a 0 1\nR1 a 0 {resistance}")
-    assert r.node_potentials_V["a"] == pytest.approx(1, abs=1e-12)
+    assert r.node_potentials_V["a"] == pytest.approx(1, rel=0, abs=1e-12)
     assert r.branch_currents_A["R1"] == pytest.approx(1 / resistance, rel=1e-12)
     assert r.branch_currents_A["V1"] == pytest.approx(-1 / resistance, rel=1e-12)
     assert abs(r.power_balance_W) < 1e-12
+
+
+def test_dc_charge_flux_and_quasistatic_stored_energy():
+    r = solve("V1 a 0 2\nC1 a 0 .1\nR1 a b 1\nL1 b 0 .2")
+    assert r.capacitor_charge_C["C1"] == pytest.approx(0.2, rel=0, abs=1e-12)
+    assert r.inductor_flux_Wb["L1"] == pytest.approx(0.4, rel=0, abs=1e-12)
+    assert r.stored_energy_J == pytest.approx(0.6, rel=0, abs=1e-12)
+
+
+def test_dc_storage_overflow_is_specific_validation_error():
+    from fem_toolbox.errors import ValidationError
+
+    with pytest.raises(ValidationError):
+        solve("V1 a 0 1e200\nC1 a 0 1")

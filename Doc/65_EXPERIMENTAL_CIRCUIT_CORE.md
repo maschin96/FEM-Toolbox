@@ -42,8 +42,9 @@ hat negative Leistung. Die Summe aller Zweigleistungen ist null.
 R: `i = v/R`; I: vorgegebener Zweigstrom; V: vorgegebene Zweigspannung.
 C ist im DC-Grenzfall offen (`i=0`), L ist kurzgeschlossen (`v=0`) mit eigenem
 Stromfreiheitsgrad. Kapazitäts-/Induktivitätswerte bleiben im Modell und in
-der Provenienz erhalten. Anfangswerte und gespeicherte Energie gehören noch
-nicht zu diesem DC-Ergebnisvertrag.
+der Provenienz erhalten. Anfangswerte gehören zum Transientenvertrag. Der erweiterte DC-Vertrag
+liefert zusätzlich Q=Cv, Flussverkettung Li und statische Speicherenergie
+(siehe [Analysenvertrag](66_CIRCUIT_ANALYSES_AND_PORTS.md)).
 
 Die modifizierte Knotenanalyse verwendet Knotenpotentiale ohne Masse und
 Zweigströme der V-/L-Elemente:
@@ -136,3 +137,9 @@ Qualitätsprüfungen bestanden. Gesamtsuite mit
 in 94.65 s. Übersprungene optionale Prüfungen gelten nicht als bestanden.
 Keine GitHub-CI, keine saubere Artefaktinstallation und kein unabhängiges
 Review dieses Experimental-Standes behauptet. Kein Issue wird geschlossen.
+
+## Erweiterung des Experimental-Standes
+
+Der oben protokollierte Erstnachweis bleibt historisch. Transienten, AC,
+TOML und Portmetadaten sind inzwischen ergänzt; der aktuelle Nachweis steht
+in [Doc/67](67_CIRCUIT_CORE_VERIFICATION.md).

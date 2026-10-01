@@ -145,3 +145,9 @@ Verifikationsdokumente benennen ihren jeweiligen Nachweisumfang ausdrücklich.
 - [Studienrezepte: Abnahme und saubere Reproduktion](63_STUDY_RECIPE_ACCEPTANCE.md)
 
 - [M8-Freigabebericht, Kompatibilität und Release-Gate](64_M8_RELEASE_VERIFICATION.md)
+
+## M13 — Experimenteller Schaltungskern
+
+- [Erster DC-Schnitt](65_EXPERIMENTAL_CIRCUIT_CORE.md)
+- [Analysen, Ports und Kopplungsentscheidung](66_CIRCUIT_ANALYSES_AND_PORTS.md)
+- [Verifikationsmatrix und Grenzen](67_CIRCUIT_CORE_VERIFICATION.md)

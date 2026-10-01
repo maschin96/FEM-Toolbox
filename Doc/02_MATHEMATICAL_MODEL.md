@@ -187,3 +187,11 @@ Zweigströmen liefert den symmetrisch-indefiniten Operator `[G B; B^T 0]`.
 Kirchhoff-Ströme und Zweigleistungen werden zusätzlich unabhängig vom
 MNA-Residual rekonstruiert. [Arbeitsvertrag, Gleichungen und Fehlerfälle](65_EXPERIMENTAL_CIRCUIT_CORE.md).
 Keine Änderung der FEM-Vorzeichen und noch keine Feld-/Schaltungskopplung.
+
+## Experimenteller linearer Schaltungskern (M13)
+
+Passive Zweigvorzeichen, Sparse-MNA, Backward Euler, komplexe Peakphasoren
+mit exp(+i omega t), Speicherenergie sowie elektrische und thermische
+Portkonventionen sind im [Analysenvertrag](66_CIRCUIT_ANALYSES_AND_PORTS.md)
+festgelegt. Dieser ergänzt die Feldkonventionen; FEM-Kopplungsoperatoren
+sind noch nicht implementiert.
