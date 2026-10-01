@@ -97,3 +97,9 @@ nach Refactoring, Beispiel, Ruff, Formatprüfung und mypy bestanden.
 Übersprungene optionale Prüfungen gelten nicht als bestanden. GitHub-CI
 und unabhängiges Review ersetzen diese lokalen Nachweise nicht; keine
 Integrationsfreigabe behauptet und #86 bleibt offen.
+
+## Erweiterung zu #86
+
+Dieser Nachweis bleibt der historische Stokes-Schnitt. Konvektion,
+Picard-Iteration und Ein-/Auslass sind inzwischen im
+[stationären Referenzkern](70_STATIONARY_FLOW_CORE.md) ergänzt.

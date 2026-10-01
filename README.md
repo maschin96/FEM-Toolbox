@@ -222,7 +222,7 @@ elektrisches Potential `phi` mit feldweiser Freiheitsgradverwaltung.
 | M9 | v1.4.0* | Experimentelle Validierung und Unsicherheit | Geplant |
 | M10 | v1.5.0* | Kontrollierte adaptive Netzstudien | Geplant |
 | M11 | Offen | Topologieoptimierung | Grober Horizont |
-| M12 | Offen | RANS-CFD mit Fluid-Struktur-Kopplung | Grober Horizont |
+| M12 | Offen | RANS-CFD mit Fluid-Struktur-Kopplung | Experimenteller stationärer Kern (#86) |
 
 *Vorläufige Zielversionen ohne Terminzusage. Produktvision, Bestandsanalyse,
 Abhängigkeiten und Abnahmegates stehen in der
@@ -320,3 +320,13 @@ Der optionale [Tet4-Feldbildadapter mit JPEG-Export](Doc/62_FIELD_VISUALIZATION.
 ergänzt den M8-Stand. Grenzen und Migration stehen in den Release Notes.
 
 [Zwei reproduzierbare Wärme-/Piezo-Studienrezepte](examples/study_recipes/README.md) und [Abnahmeprotokoll](Doc/63_STUDY_RECIPE_ACCEPTANCE.md) ergänzen den M8-Stand (#61).
+
+## Experimenteller CFD-Kern (M12)
+
+Der eigenständige uniforme 2D-MAC-Kern bietet stationäre inkompressible
+Strömung mit konservativer Konvektion, Druck-Geschwindigkeits-Kopplung,
+Picard-Iteration und expliziten Wand-/Einlass-/Druckauslassbedingungen.
+[Vertrag, Verifikation und Grenzen](Doc/70_STATIONARY_FLOW_CORE.md),
+[ausführbarer TOML-Kanallauf](examples/cfd_flow/README.md).
+Dieser M12-Entwicklungsumfang ist kein v1.3-Release-Feature; Turbulenzschließung,
+FSI, Zeitintegration und allgemeine 3D-/Tet-CFD-Netze gehören nicht zum Kern.

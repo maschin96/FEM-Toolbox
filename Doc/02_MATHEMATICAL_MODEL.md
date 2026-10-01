@@ -187,3 +187,9 @@ Der reduzierte Kanaloperator, SI-Vorzeichen und Erhaltungsbilanzen sind in
 Für den geschlossenen 2D-MAC-Schnitt gelten -mu Laplace(u)+grad(p)=f und
 div(u)=0 mit G=-D^T und explizitem Druck-Gauge.
 [Vorzeichen, Randwerte und Bilanzkonventionen](69_CFD_PRESSURE_COUPLING.md).
+
+## Stationärer inkompressibler MAC-Kern
+
+Konservative Konvektion, Picard/Oseen-Schritte, gewichtete Druckadjungiertheit
+und der Geschwindigkeitseinlass/Druckauslass ergänzen den Stokes-Vertrag.
+[Mathematik und Akzeptanz #86](70_STATIONARY_FLOW_CORE.md).

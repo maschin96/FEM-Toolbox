@@ -632,3 +632,19 @@ Sparse-LU mit Äquilibrierung ist die Referenz, keine Strafkompressibilität.
 Die starke und diskrete Form sowie Rand- und Leistungskonventionen stehen
 in [Doc/69](69_CFD_PRESSURE_COUPLING.md). Offene Randbedingungen, Konvektion,
 RANS und skalierbare iterative Solver bleiben nachfolgende Arbeit.
+
+## ADR-048 — Stationärer MAC-Kern mit Konvektion und offenen Grenzen
+
+01.10.2026: Auf Auftrag zur vollständigen Umsetzung von #86 ergänzt der
+uniforme 2D-MAC-Referenzkern konservative Konvektion, gedämpfte Picard-Iteration
+und linken Geschwindigkeitseinlass/rechten Druckauslass. Der Auslass-u-DOF
+hat ein halbes Dualvolumen; Druckgradient und Divergenz sind volumengewichtet
+adjungiert. Rückströmung ist ein expliziter Fehler, kein stiller Randwechsel.
+Donor-Cell ist Standard; zentrale Konvektion erfordert |Pe|<2. Minmod-begrenzte
+Linear-Upwind-Rekonstruktion ist ein gesondertes explizites Verfahren mit
+verzögerter Korrektur, dessen nichtlineares Residuum erneut rekonstruiert wird.
+Abbruch verlangt lokale/globale Masse, feldweisen Impuls und Arbeit, nicht nur
+Iterandenänderung. TOML-Schema 1 beschreibt ausschließlich die unterstützten
+uniformen Rechtecke. RANS-Schließung und FSI sind Folgeissues; keine allgemeine
+Tet-CFD- oder 3D-Unterstützung und keine neue Abhängigkeit behauptet.
+[Vertrag und wissenschaftliche Nachweise](70_STATIONARY_FLOW_CORE.md).

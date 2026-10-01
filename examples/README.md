@@ -96,3 +96,5 @@ Gesamt-Abnahme und Genauigkeits-/Kostenvergleiche bleiben offen.
 - [Viskoser Kanaloperator mit analytischer Referenz](cfd_channel/README.md).
 
 - [Gekoppelte Stokes-Geschwindigkeiten und Druck auf vier Netzen](cfd_pressure/README.md).
+
+- [Stationärer Kanal aus TOML mit Einlass, Druckauslass und Bilanzartefakten](cfd_flow/README.md).

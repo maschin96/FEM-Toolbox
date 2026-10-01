@@ -82,3 +82,9 @@ bestanden. Keine unabhängige Reviewfreigabe und kein CFD-Release.
 Der historische reine Kanal-Schnitt wurde um einen geschlossenen 2D-Stokes-
 Solver mit echtem Druckfeld ergänzt. [Vertrag und Nachweise](69_CFD_PRESSURE_COUPLING.md).
 Die oben offenen allgemeinen CFD-/RANS-/FSI-Gates bleiben offen.
+
+## Vollständiger stationärer Referenzkern
+
+Die historischen Grenzen des ersten Kanal-Schnitts sind im neuen
+[Vertrag #86](70_STATIONARY_FLOW_CORE.md) um Konvektion, nichtlineare Iteration
+und offene Kanalgrenzen ergänzt. Die allgemeine RANS-/FSI-Planung bleibt M12.
