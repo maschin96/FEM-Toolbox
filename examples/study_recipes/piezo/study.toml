@@ -1,0 +1,12 @@
+study_schema_version = 1
+model = "model.toml"
+[[parameters]]
+name = "geometry"
+target = "mesh.path"
+unit = "1"
+values = ["short.msh","long.msh"]
+[[parameters]]
+name = "coupling"
+target = "materials.piezo.solid.stress_coupling"
+unit = "C/m^2"
+values = [[[0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 5.0, 0.0, 0.0, 0.0]], [[0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 10.0, 0.0, 0.0, 0.0]]]

@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-01",
+  "base_commit": "3b2571de22b985e8058ea34c7a267a9d42ee9d3d",
+  "independence": "Two fresh environments, isolated Python (-I), outside checkout; same machine and author, no second-person review.",
+  "artifact_version": "1.2.0 (unreleased M8 candidate; not stable v1.2.0 release artifacts)",
+  "artifacts_sha256": {
+    "fem_toolbox-1.2.0.tar.gz": "9c620dcea30791340b224c33377c98b9112d525b8ba849bd067b850e00c9e900",
+    "fem_toolbox-1.2.0-py3-none-any.whl": "bedad983da6c2a2811a2e062d691fb2748f834069f7cff79291b3fbc6a4f76b4"
+  },
+  "recipe_sha256": {
+    "examples/study_recipes/run.py": "f8e34f99c05d83fa813106858ae7ebeff23aa523e2f9ffaf641947aa58228e94",
+    "examples/study_recipes/heat/model.toml": "fb1221002108573da4b42d5c95acf5b90a1bcae47b433c14edf28fa93fd3d0e8",
+    "examples/study_recipes/heat/mesh.msh": "280468c994742594912ab6311ae1de85b108c6b079cc10375483485d4baf4c63",
+    "examples/study_recipes/heat/study.toml": "65027edb8d23a10d24463715ac020bc69bcf8b6eaf7e99bc58051aa058e185c6",
+    "examples/study_recipes/piezo/short.msh": "afc5402226a11f3a15d04c26396e5c87c467b2cf2b28d94b1048c19cf4f368ca",
+    "examples/study_recipes/piezo/model.toml": "cc954057aba2ec65db33bd6335f1f4b2c51455166228f231b0e2ca851794fccf",
+    "examples/study_recipes/piezo/study.toml": "751ea000b5e30809bb1261995478c6cbae9fbc5c866833f5079845d213cb9c2e",
+    "examples/study_recipes/piezo/long.msh": "0a33a4fd16d26025b02a3e598bb0181444b24abe2541d7234780939685745ac3"
+  },
+  "runs": {
+    "wheel-heat": {
+      "study_seconds": 0.02702258400000801,
+      "package_path": "/tmp/fem61-wheel-env/lib/python3.13/site-packages/fem_toolbox/__init__.py"
+    },
+    "wheel-piezo": {
+      "study_seconds": 0.04005808300001945,
+      "package_path": "/tmp/fem61-wheel-env/lib/python3.13/site-packages/fem_toolbox/__init__.py"
+    },
+    "sdist-heat": {
+      "study_seconds": 0.026446667000016078,
+      "package_path": "/tmp/fem61-sdist-env/lib/python3.13/site-packages/fem_toolbox/__init__.py"
+    },
+    "sdist-piezo": {
+      "study_seconds": 0.03991216700001132,
+      "package_path": "/tmp/fem61-sdist-env/lib/python3.13/site-packages/fem_toolbox/__init__.py"
+    }
+  }
+}

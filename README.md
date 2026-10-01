@@ -318,3 +318,5 @@ Trainings-/Testfällen und wiederverwendbaren JSON-Artefakten.
 [Wärme-Surrogatbeispiel](examples/surrogate_heat/README.md).
 Der optionale [Tet4-Feldbildadapter mit JPEG-Export](Doc/62_FIELD_VISUALIZATION.md)
 ergänzt den M8-Stand. Dies ist noch keine neue stabile Freigabe.
+
+[Zwei reproduzierbare Wärme-/Piezo-Studienrezepte](examples/study_recipes/README.md) und [Abnahmeprotokoll](Doc/63_STUDY_RECIPE_ACCEPTANCE.md) ergänzen den M8-Stand (#61).
