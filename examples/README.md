@@ -90,3 +90,11 @@ Gesamt-Abnahme und Genauigkeits-/Kostenvergleiche bleiben offen.
 - [Surrogatmodell aus echten Wärme-Kennwerten](surrogate_heat/README.md) (M8-Entwicklung).
 
 - [Reproduzierbare Wärme- und Piezo-Studienrezepte samt Artefaktabnahme](study_recipes/README.md) (#61).
+
+## Experimenteller CFD-Einstieg (M12)
+
+- [Viskoser Kanaloperator mit analytischer Referenz](cfd_channel/README.md).
+
+- [Gekoppelte Stokes-Geschwindigkeiten und Druck auf vier Netzen](cfd_pressure/README.md).
+
+- [Stationärer Kanal aus TOML mit Einlass, Druckauslass und Bilanzartefakten](cfd_flow/README.md).

@@ -209,3 +209,12 @@ Zusätzlich auf Milestone-Ebene: Release-Issue abgeschlossen und Zielcommit auf
 Milestone-Release.
 
 M8-Pflichtumfang ist integriert und verifiziert. [Freigabestand v1.3.0](64_M8_RELEASE_VERIFICATION.md); keine transiente Studienausführung, Optimierung oder experimentelle Validierung.
+
+## Experimenteller M12-Arbeitsstand (#86)
+
+Der ausgewählte uniforme 2D-MAC-Kern besitzt konservative Konvektion,
+monolithische Druckkopplung, Picard-Iteration und offene Kanalgrenzen.
+Die [Akzeptanzmatrix #86](70_STATIONARY_FLOW_CORE.md) führt die numerischen
+Nachweise und Grenzen. #84/#85 bleiben für den übergreifenden RANS-/FSI-Vertrag
+und weitere Netzadapter separat; #87 ergänzt erst die Turbulenzschließung.
+Die RANS-/FSI-Freigabe M12 und #94 sind dadurch nicht abgeschlossen.

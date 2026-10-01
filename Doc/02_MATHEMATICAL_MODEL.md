@@ -176,3 +176,20 @@ Intern gilt SI:
 
 Andere Einheitensysteme sind nur über einen vorgeschalteten, getesteten
 Konverter zulässig.
+
+## Experimenteller CFD-Operator
+
+Der reduzierte Kanaloperator, SI-Vorzeichen und Erhaltungsbilanzen sind in
+[Doc/68](68_EXPERIMENTAL_CFD_CORE.md) festgelegt; kein allgemeiner RANS-Solver.
+
+## Experimentelle Stokes-Druckkopplung
+
+Für den geschlossenen 2D-MAC-Schnitt gelten -mu Laplace(u)+grad(p)=f und
+div(u)=0 mit G=-D^T und explizitem Druck-Gauge.
+[Vorzeichen, Randwerte und Bilanzkonventionen](69_CFD_PRESSURE_COUPLING.md).
+
+## Stationärer inkompressibler MAC-Kern
+
+Konservative Konvektion, Picard/Oseen-Schritte, gewichtete Druckadjungiertheit
+und der Geschwindigkeitseinlass/Druckauslass ergänzen den Stokes-Vertrag.
+[Mathematik und Akzeptanz #86](70_STATIONARY_FLOW_CORE.md).

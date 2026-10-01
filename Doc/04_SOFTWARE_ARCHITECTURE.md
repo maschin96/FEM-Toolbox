@@ -335,3 +335,24 @@ Gesamt-Abnahme und Genauigkeits-/Kostenvergleiche bleiben offen.
 
 Der optionale Adapter `post.visualization` verwendet Matplotlib/Agg und
 vorhandene Tet4-Randtopologie. Solver bleiben unabhängig; [Vertrag](62_FIELD_VISUALIZATION.md).
+
+## Experimenteller CFD-Einstieg
+
+`cfd/channel.py` enthält einen eigenständigen konservativen Kanaloperator.
+Keine Abhängigkeit von Festkörper-Elementoperatoren oder der Model-API.
+[Vertrag und Grenzen](68_EXPERIMENTAL_CFD_CORE.md).
+
+## Experimentelle Druck-Geschwindigkeits-Kopplung
+
+`cfd/stokes.py` besitzt den uniformen 2D-MAC-Operator, das monolithische
+Sparse-Sattelpunktsystem und getrennte Feld-/Bilanzrekonstruktion.
+API und Grenzen sind in [Doc/69](69_CFD_PRESSURE_COUPLING.md) dokumentiert.
+
+## Vollständiger stationärer CFD-Referenzkern (#86)
+
+`cfd/flow_model.py` besitzt validierte uniforme Netze, SI-Fluid und Randtypen.
+`mac.py` assembliert Diffusion/Divergenz/Gradient, konservative Transportflüsse
+und Oseen-Schritte. `flow.py` besitzt die nichtlineare Iteration und finale
+feldweise Rekonstruktion. `flow_config.py` ist der strikte TOML-Adapter.
+Die experimentelle Python-API bleibt außerhalb der stabilen FEM-Model-API.
+[Vertrag, Grenzen und Referenzen](70_STATIONARY_FLOW_CORE.md).

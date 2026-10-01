@@ -611,3 +611,40 @@ Entscheidung vom 30.09.2026: Matplotlib >=3.9,<4 als separates
 pyplot-Registrierung. Tet4-Außenflächen mit nodalen Flächenmitteln oder
 Eigentümerzellwerten; keine implizite Materialglättung. Tet10 und komplexe
 Felder werden abgelehnt. [API, Grenzen und Nachweise](62_FIELD_VISUALIZATION.md).
+
+## ADR-046 — Zweiter Experimental-Branch: CFD-Kanaloperator
+
+01.10.2026: Auf Nutzerauftrag beginnt M12 unabhängig vom SPICE-Branch.
+Ein zellzentrierter Finite-Volumen-Diffusionsoperator auf ebenen Kanalzellen
+verifiziert den viskosen Impulsanteil. Konstante Viskosität, vorgegebener
+Druckgradient und zwei Wandgeschwindigkeiten begrenzen den ersten Schnitt.
+Allgemeine Druckkopplung, RANS-Modellentscheidung und FSI bleiben offen;
+#84–#86 werden dadurch nicht abgeschlossen. Keine neue Abhängigkeit.
+[Konventionen und Nachweise](68_EXPERIMENTAL_CFD_CORE.md).
+
+## ADR-047 — Monolithische MAC-Druckkopplung (01.10.2026)
+
+Auf Nutzerauftrag wird #86 um einen geschlossenen 2D-Stokes-Schnitt ergänzt.
+Versetzte Freiheitsgrade, konservative Divergenz und adjungierter Gradient
+verhindern einen entkoppelten Druckmodus. Druckreferenz am ersten Zellzentrum;
+die ausgelassene Kontinuitätszeile wird anschließend wieder geprüft.
+Sparse-LU mit Äquilibrierung ist die Referenz, keine Strafkompressibilität.
+Die starke und diskrete Form sowie Rand- und Leistungskonventionen stehen
+in [Doc/69](69_CFD_PRESSURE_COUPLING.md). Offene Randbedingungen, Konvektion,
+RANS und skalierbare iterative Solver bleiben nachfolgende Arbeit.
+
+## ADR-048 — Stationärer MAC-Kern mit Konvektion und offenen Grenzen
+
+01.10.2026: Auf Auftrag zur vollständigen Umsetzung von #86 ergänzt der
+uniforme 2D-MAC-Referenzkern konservative Konvektion, gedämpfte Picard-Iteration
+und linken Geschwindigkeitseinlass/rechten Druckauslass. Der Auslass-u-DOF
+hat ein halbes Dualvolumen; Druckgradient und Divergenz sind volumengewichtet
+adjungiert. Rückströmung ist ein expliziter Fehler, kein stiller Randwechsel.
+Donor-Cell ist Standard; zentrale Konvektion erfordert |Pe|<2. Minmod-begrenzte
+Linear-Upwind-Rekonstruktion ist ein gesondertes explizites Verfahren mit
+verzögerter Korrektur, dessen nichtlineares Residuum erneut rekonstruiert wird.
+Abbruch verlangt lokale/globale Masse, feldweisen Impuls und Arbeit, nicht nur
+Iterandenänderung. TOML-Schema 1 beschreibt ausschließlich die unterstützten
+uniformen Rechtecke. RANS-Schließung und FSI sind Folgeissues; keine allgemeine
+Tet-CFD- oder 3D-Unterstützung und keine neue Abhängigkeit behauptet.
+[Vertrag und wissenschaftliche Nachweise](70_STATIONARY_FLOW_CORE.md).

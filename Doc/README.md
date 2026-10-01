@@ -141,3 +141,11 @@ Verifikationsdokumente benennen ihren jeweiligen Nachweisumfang ausdrücklich.
 - [Studienrezepte: Abnahme und saubere Reproduktion](63_STUDY_RECIPE_ACCEPTANCE.md)
 
 - [M8-Freigabebericht, Kompatibilität und Release-Gate](64_M8_RELEASE_VERIFICATION.md)
+
+## M12 — Experimenteller CFD-Einstieg
+
+- [Kanaloperator: Vertrag, Referenzen und Grenzen](68_EXPERIMENTAL_CFD_CORE.md)
+
+- [Experimentelle Stokes-Druckkopplung: Vertrag und Nachweise](69_CFD_PRESSURE_COUPLING.md)
+
+- [Stationärer inkompressibler Kern: Konvektion, Picard, Ein-/Auslass und Abnahme #86](70_STATIONARY_FLOW_CORE.md)
