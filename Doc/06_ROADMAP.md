@@ -166,7 +166,7 @@ Für M6/M7 gilt nun der Entwicklungsplan vom 23.09.2026.
 
 | Milestone | Zielversion (vorläufig) | Ergebnis | Issues / Release-Gate |
 |---|---|---|---|
-| [M8](https://github.com/maschin96/FEM-Toolbox/milestone/9) | v1.3.0 | reproduzierbare Parameterstudien und Kennwertberichte | #59–#61 / #62 |
+| [M8](https://github.com/maschin96/FEM-Toolbox/milestone/9) | v1.3.0 | reproduzierbare stationäre Parameterstudien, Kennwertberichte, Tet4-Feldbilder/JPEG und polynomiale Surrogatmodelle | #59–#61, #189, #205 / #62 |
 | [M9](https://github.com/maschin96/FEM-Toolbox/milestone/10) | v1.4.0 | abgegrenzte experimentelle Validierung mit Unsicherheit | #63–#65 / #66 |
 | [M10](https://github.com/maschin96/FEM-Toolbox/milestone/11) | v1.5.0 | kontrollierte adaptive stationäre Wärme auf Tet4 | #67–#69 / #70 |
 
@@ -207,3 +207,5 @@ nicht anwendbare numerische Nachweise werden begründet.
 Zusätzlich auf Milestone-Ebene: Release-Issue abgeschlossen und Zielcommit auf
 `main` annotiert getaggt. Ein einzelnes Arbeitspaket benötigt keinen eigenen
 Milestone-Release.
+
+M8-Pflichtumfang ist integriert und verifiziert. [Freigabestand v1.3.0](64_M8_RELEASE_VERIFICATION.md); keine transiente Studienausführung, Optimierung oder experimentelle Validierung.

@@ -2,10 +2,9 @@
 
 [Wärme: Leitfähigkeit](heat/README.md) · [Piezo: Geometrie und Material](piezo/README.md)
 
-Diese Rezepte benötigen den M8-Kandidaten mit `Study` und `study_reports`.
-Das veröffentlichte stabile v1.2.0 enthält diese APIs noch nicht. Die interne
-Paketversion des Kandidaten lautet weiterhin 1.2.0; deshalb **Artefakthash und
-Quellcommit**, nicht allein Versionsnummer, zur Identifikation verwenden.
+Diese Rezepte verwenden die ab v1.3.0 vorhandenen APIs `Study` und
+`study_reports`. Stabiles v1.2.0 enthält sie noch nicht. Für archivierte
+Kandidatenläufe aus #61 gelten deren dokumentierte Commit-/Artefakthashes.
 Keine Visualisierungs-/Surrogat-Extras, kein Gmsh-Programm und kein Netzservice nötig.
 
 ## Saubere Installation und Ausführung
@@ -30,7 +29,7 @@ In einem neuen Arbeitsverzeichnis außerhalb des Checkouts:
 mkdir /tmp/fem61-user
 cd /tmp/fem61-user
 python3 -m venv env
-env/bin/python -m pip install /tmp/fem61-artifacts/fem_toolbox-1.2.0-py3-none-any.whl
+env/bin/python -m pip install /tmp/fem61-artifacts/fem_toolbox-1.3.0-py3-none-any.whl
 tar -xzf /tmp/fem61-recipes.tar.gz
 env/bin/python -I study_recipes/run.py heat --output heat-results
 env/bin/python -I study_recipes/run.py piezo --output piezo-results
@@ -39,7 +38,7 @@ env/bin/python -I study_recipes/run.py piezo --output piezo-results
 Windows: neue venv, `env\Scripts\python.exe` statt `env/bin/python`, Pfade
 entsprechend anpassen. Die Plattformprüfung hier erfolgte unter macOS.
 Für die sdist-Reproduktion eine **weitere** neue venv erstellen und stattdessen
-`fem_toolbox-1.2.0.tar.gz` installieren. `-I` ignoriert `PYTHONPATH` und den
+`fem_toolbox-1.3.0.tar.gz` installieren. `-I` ignoriert `PYTHONPATH` und den
 Benutzer-Sitepfad. `verification.json.package_path` muss in der neuen venv liegen.
 Für die exakt geprüfte Abhängigkeitskombination vor der Paketinstallation
 `numpy==2.5.3 scipy==1.18.1 meshio==5.3.5` installieren (Python 3.13).

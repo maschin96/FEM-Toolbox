@@ -1,0 +1,21 @@
+{
+  "base_commit": "716c08a39f5a099a01836c431cd9846946705c34",
+  "version": "1.3.0",
+  "artifacts_sha256": {
+    "fem_toolbox-1.3.0.tar.gz": "8827ec379be6862c6bd11ee98c54d21ca8d89b1a22a730c320d1b42beb3ccf9f",
+    "fem_toolbox-1.3.0-py3-none-any.whl": "362f9bf6ac2ecf5e1f5899fa9bf6b9f36b04d244aa220ffbf93f9d8548c13dc7"
+  },
+  "license_verified": "MIT metadata and license in wheel; license in sdist",
+  "commands": "Doc/64_M8_RELEASE_VERIFICATION.md",
+  "independence": "Two new venvs outside checkout, python -I; same author and machine",
+  "core_without_matplotlib": true,
+  "surrogate_example_exit_codes": [
+    0,
+    0
+  ],
+  "jpeg_count_per_distribution": 6,
+  "jpeg_size": [
+    1200,
+    900
+  ]
+}

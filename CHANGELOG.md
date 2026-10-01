@@ -6,6 +6,23 @@ Versionierung an [Semantic Versioning](https://semver.org/).
 
 ## Unreleased
 
+## [1.3.0] - 2026-10-01
+
+### Added
+
+- Stationäre deklarative Parameterstudien mit Fingerprints, Resume und sichtbaren Fehlern (#59).
+- Rückverfolgbare CSV/JSON-Kennwerttabellen und Markdown-Berichte mit getrennten Qualitätsaussagen (#60).
+- Wärme- und Piezo-Studienrezepte mit analytischen Referenzen und sauberer Artefaktreproduktion (#61).
+- Optionaler stationärer Tet4-Feldbildadapter mit Headless-Rendering und JPEG-Export (#189).
+- Polynomiale FEM-Surrogate mit disjunkten Trainings-/Testfällen, Fehlerbericht und JSON-Artefakten (#205).
+
+### Compatibility and limits
+
+- Kompatible Minor-Erweiterung; Model-Schemata 1–3 und vorhandene Solver bleiben bestehen.
+- Versionsgebundene Studienfingerprints invalidieren Ergebnisse beim Update bewusst.
+- Keine dynamischen Studien, garantierten Surrogatfehler oder experimentelle Validierung.
+- [Release Notes](Doc/releases/v1.3.0.md) und [Freigabebericht](Doc/64_M8_RELEASE_VERIFICATION.md).
+
 ## [1.2.0] - 2026-09-29
 
 Release v1.2.0, veröffentlicht am 29.09.2026.
