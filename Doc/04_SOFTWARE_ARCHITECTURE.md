@@ -18,6 +18,14 @@ Zentrale Entwurfsregeln:
 - Sparse-Assembly über COO-Tripletts, danach CSR/CSC
 - Abhängigkeiten auf Infrastrukturgrenzen beschränken
 
+Der experimentelle lineare Schaltungskern liegt separat in `circuits/`:
+`model.py` besitzt unveränderliche SI-Komponenten und Schaltungen,
+`netlist.py` ist der strikte Textadapter, `dc.py` übernimmt DC-Preflight,
+Sparse-MNA, Lösung und Bilanzrekonstruktion. Der Kern benötigt kein FEM-Netz
+und verändert weder `Model` noch die Feldsolver. `RunProvenance` wird
+wiederverwendet; zusätzliche Abhängigkeiten entstehen nicht.
+[Arbeitsvertrag und API](65_EXPERIMENTAL_CIRCUIT_CORE.md).
+
 ## 2. Zielstruktur
 
 ```text

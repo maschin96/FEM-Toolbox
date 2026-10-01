@@ -176,3 +176,14 @@ Intern gilt SI:
 
 Andere Einheitensysteme sind nur über einen vorgeschalteten, getesteten
 Konverter zulässig.
+
+## 8. Experimentelle lineare Schaltungen
+
+Der separate DC-Kern verwendet die passive Zweigkonvention: Spannung
+`v=phi_plus-phi_minus`, Strom von plus nach minus, aufgenommene Leistung
+`p=v*i`. Masse ist Knoten `0`. R/C/L-Werte gelten in Ohm/F/H, Quellen in V/A.
+DC setzt C offen und L kurzgeschlossen. MNA mit Knotenpotentialen und V-/L-
+Zweigströmen liefert den symmetrisch-indefiniten Operator `[G B; B^T 0]`.
+Kirchhoff-Ströme und Zweigleistungen werden zusätzlich unabhängig vom
+MNA-Residual rekonstruiert. [Arbeitsvertrag, Gleichungen und Fehlerfälle](65_EXPERIMENTAL_CIRCUIT_CORE.md).
+Keine Änderung der FEM-Vorzeichen und noch keine Feld-/Schaltungskopplung.

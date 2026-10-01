@@ -117,6 +117,10 @@ Eintrag im Entscheidungsprotokoll.
 
 - [v1.3.0 — Parameterstudien, Feldbilder und Surrogatmodelle](releases/v1.3.0.md)
 
+## Experimentelle M13-Arbeiten
+
+- [Eigenständiger DC-Schaltungskern: Netzliste, MNA, Bilanzen und Grenzen](65_EXPERIMENTAL_CIRCUIT_CORE.md)
+
 ## Statuskonvention
 
 - **Entwurf**: fachlich geplant, Implementierung noch offen
