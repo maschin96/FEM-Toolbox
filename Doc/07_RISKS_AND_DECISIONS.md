@@ -648,3 +648,33 @@ Iterandenänderung. TOML-Schema 1 beschreibt ausschließlich die unterstützten
 uniformen Rechtecke. RANS-Schließung und FSI sind Folgeissues; keine allgemeine
 Tet-CFD- oder 3D-Unterstützung und keine neue Abhängigkeit behauptet.
 [Vertrag und wissenschaftliche Nachweise](70_STATIONARY_FLOW_CORE.md).
+
+## ADR-049 — Stationäre SA-noft2 und begrenzte bidirektionale FSI (#84)
+
+04.10.2026: Gewählt wird eine wandaufgelöste SA-noft2-Schließung mit der
+Allmaras/Johnson/Spalart-S-Modifikation, ohne Transition, Wandfunktion oder
+stilles Positivitätsclipping. Der volle variable viskose Spannungstensor ist
+Pflicht. Der vorhandene uniforme MAC-Kern bleibt Referenz; für gedehnte und
+verformte strukturierte Quad-Netze wird eine separate konservative kollokierte
+FV-Diskretisierung mit SIMPLE/Rhie-Chow gewählt. #226 übernimmt das gesonderte
+Operator-/Druckstabilitätsgate nach dem Netzadapter #85. Ein verformtes Netz
+darf nicht mit unveränderten uniformen MAC-Koeffizienten gelöst werden.
+
+Erste FSI-Abnahme: ebene Fluidströmung und explizit extrudierte, spannweiten-
+invariante lineare 3D-Struktur mit Triangle3-Schnittstelle. Gemeinsame Quadratur
+und transponierte Interpolation übertragen Kräfte und virtuelle Arbeit;
+Fluidnetzbewegung ist harmonisch, absolut vom Referenznetz und stationär.
+Keine künstliche Zeit-/Wandgeschwindigkeit aus Kopplungsiterationen.
+Unrelaxierte Verschiebungsreste, Laständerung und alle inneren Feldbilanzen
+sind gemeinsame Abbruchbedingungen. Große Verformung, schlechte Netzqualität,
+fehlende Wandauflösung oder Nichtkonvergenz führen zu konkreten Fehlern.
+
+Risiken: SA-Modellfehler trotz kleinem Codefehler, Druckschachbrettmodus der
+neuen Diskretisierung, nichtorthogonale Korrektur und anisotrope Wandzellen,
+inkonsistente variable Scherterme, fehlende Breiten-/Druckreferenz, Mapping-
+momentfehler und divergente Partitionierung. Deshalb getrennte MMS-/MAC-/1D-
+Codevergleiche, DNS-Kanal-Modellvergleich sowie laminare und SA-Deckelreferenzen
+mit vorab gesetzten Budgets. Keine allgemeine 3D-RANS-/FSI-Freigabe oder
+experimentelle Validierung; keine neue Laufzeitabhängigkeit.
+[Vertrag, Quellen, Fehlergrenzen und Go/no-go-Gates](71_M12_RANS_FSI_CONTRACT.md).
+Diese Entscheidung erweitert den geplanten Umfang, keine bestandenen Nachweise.

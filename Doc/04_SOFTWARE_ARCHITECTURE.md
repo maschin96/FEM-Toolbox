@@ -356,3 +356,16 @@ und Oseen-Schritte. `flow.py` besitzt die nichtlineare Iteration und finale
 feldweise Rekonstruktion. `flow_config.py` ist der strikte TOML-Adapter.
 Die experimentelle Python-API bleibt außerhalb der stabilen FEM-Model-API.
 [Vertrag, Grenzen und Referenzen](70_STATIONARY_FLOW_CORE.md).
+
+## M12: RANS-/FSI-Entwicklungsarchitektur (#84, ADR-049)
+
+Die geplante körperangepasste Quad4-Finite-Volumen-API bleibt getrennt vom
+uniformen MAC-Referenzkern und vom stabilen FEM-Model-Schema. Zellzentrierte
+RANS-Felder verwenden konservierte Face-Massenströme, SIMPLE und Rhie-Chow;
+#85 liefert Import/Preflight; #226 verifiziert den neuen Netzoperator.
+SA-noft2, InterfaceMap, harmonische MeshMotion und partitionierte stationäre
+Kopplung besitzen getrennte Zuständigkeiten. Die Struktur verwendet weiterhin
+den verifizierten Kleinverformungssolver auf ihrem Referenznetz.
+[Ziel-API, Datenformen, Adapter, Provenienz und Gates](71_M12_RANS_FSI_CONTRACT.md)
+sind beschlossen, noch nicht verfügbar. NumPy/SciPy/meshio bleiben die
+Abhängigkeitsbasis; keine externe CFD-/Kopplungsbibliothek wird eingebettet.

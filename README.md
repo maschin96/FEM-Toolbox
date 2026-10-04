@@ -330,3 +330,7 @@ Picard-Iteration und expliziten Wand-/Einlass-/Druckauslassbedingungen.
 [ausführbarer TOML-Kanallauf](examples/cfd_flow/README.md).
 Dieser M12-Entwicklungsumfang ist kein v1.3-Release-Feature; Turbulenzschließung,
 FSI, Zeitintegration und allgemeine 3D-/Tet-CFD-Netze gehören nicht zum Kern.
+
+Der [M12-RANS-/FSI-Zielvertrag](Doc/71_M12_RANS_FSI_CONTRACT.md) legt die
+SA-noft2-Schließung, körperangepasste Fluidnetze und begrenzte stationäre
+Kopplung für die Folgeissues fest. Diese Funktionen sind noch nicht verfügbar.

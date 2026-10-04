@@ -180,14 +180,16 @@ Es werden keine Kalendertermine oder noch nicht belegten Validierungen zugesagt.
 | Milestone | Zielbild | Planungsstand |
 |---|---|---|
 | [M11 — Topologieoptimierung](https://github.com/maschin96/FEM-Toolbox/milestone/12) | Optimierer auf verifizierter FEM-Basis, zunächst lineare Strukturmechanik mit Volumenrestriktion, geprüften Sensitivitäten und Kontrolle der Netzabhängigkeit | Beschreibung ohne Einzelissues, Version oder Termin |
-| [M12 — RANS-CFD und Fluid-Struktur-Kopplung](https://github.com/maschin96/FEM-Toolbox/milestone/13) | Ausschließlich RANS-Strömungsmodelle mit Turbulenzschließung und bidirektionaler Strukturkopplung; zunächst stationär, inkompressibel und isotherm | Beschreibung ohne Einzelissues, Version oder Termin |
+| [M12 — RANS-CFD und Fluid-Struktur-Kopplung](https://github.com/maschin96/FEM-Toolbox/milestone/13) | Ausschließlich RANS-Strömungsmodelle mit Turbulenzschließung und bidirektionaler Strukturkopplung; zunächst stationär, inkompressibel und isotherm | #84 RANS-/FSI-Vertrag, #85 Netz, #226 Quad-FV-Operator, #86 MAC-Kern integriert, #87–#94 Nachweise/Kopplung/Release offen; Version und Termin offen |
 
 Die [Milestone-Beschreibungen](13_PRODUCT_VISION.md) halten groben Umfang,
 Abhängigkeiten, Nachweise und Grenzen fest. M12 schließt DNS, LES und hybride
 Verfahren aus; dynamische FSI/URANS benötigt eine spätere Umfangsentscheidung.
 Die Reihenfolge M10 → M11 → M12 ist ein Produkthorizont, keine technische
 Abhängigkeit der CFD-Erweiterung vom Optimierer. Detaillierung, Architektur-
-entscheidungen und Release-Issues folgen erst vor der jeweiligen Umsetzung.
+entscheidungen werden issueweise umgesetzt. Für M12 legt
+[der Vertrag #84](71_M12_RANS_FSI_CONTRACT.md) SA-noft2, die Quad-FV-Erweiterung
+und stationäre FSI samt Reihenfolge und Abnahmegates fest; er ist kein Release-Nachweis.
 
 ## Definition of Done für jedes Arbeitspaket
 
