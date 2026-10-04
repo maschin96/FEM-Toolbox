@@ -150,6 +150,23 @@ nicht zum stillen Neubeginn. Alte Versuche bleiben zur Diagnose erhalten; kein
 automatischer Cleanup. Stromausfallgarantien jenseits der Dateisystemsemantik
 sind nicht zugesagt.
 
+Resume und Bericht validieren den vollständigen Schema-1-Fallrecord an derselben
+Lesegrenze (#220): Pflichtfelder, Parameterwerte/-metadaten, endliche
+Modelldokumentdaten, SHA-256-Fingerprints, Versionsangaben, relative Ergebnis-
+und Versuchspfade sowie Status-/Ergebniskombinationen. Erfolgreiche Fälle
+benötigen Ergebnis und Versuch; andere Zustände besitzen kein Ergebnis.
+`pending` hat noch keinen Versuch, `running` keinen Fehler; `failed`,
+`interrupted` und `invalid` nennen einen Fehlergrund. Historieneinträge sind
+Invalidierungssnapshots mit Grund, früheren Fingerprints, optionalem Ergebnis
+und Versuchszähler. Retired Records werden strukturell nach demselben Vertrag
+geprüft, ohne aktuelle Bündelgültigkeit zu behaupten; wiederholte archivierte
+Fall-IDs bleiben zulässig. Fachlich ungültige, aber strukturell lesbare
+Modelleingaben bleiben als Fehlfälle dokumentierbar.
+
+Vertragsverletzungen liefern `ModelSchemaError` mit konkretem Katalogfeldpfad.
+Dabei bleiben Katalog und Ergebnisdateien unverändert; Resume gibt die Lockdatei
+auch bei fehlgeschlagener Prüfung frei. Es gibt keine automatische Reparatur.
+
 `.study.lock` verhindert mehrere gleichzeitige Writer. Bei normalem Abschluss,
 Exceptions und Ctrl-C wird sie entfernt. Nach hartem Kill **erst prüfen, dass
 kein Writer mehr läuft**, dann ausschließlich diese Lockdatei entfernen und
