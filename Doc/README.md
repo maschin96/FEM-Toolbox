@@ -149,3 +149,5 @@ Verifikationsdokumente benennen ihren jeweiligen Nachweisumfang ausdrücklich.
 - [Experimentelle Stokes-Druckkopplung: Vertrag und Nachweise](69_CFD_PRESSURE_COUPLING.md)
 
 - [Stationärer inkompressibler Kern: Konvektion, Picard, Ein-/Auslass und Abnahme #86](70_STATIONARY_FLOW_CORE.md)
+
+- [M12: vollständiger RANS-/FSI-Zielvertrag und unabhängige Abnahmegates (#84)](71_M12_RANS_FSI_CONTRACT.md)
