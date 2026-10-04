@@ -9,6 +9,7 @@ import os
 import re
 import tomllib
 from collections.abc import Mapping
+from dataclasses import replace
 from hashlib import sha256
 from importlib.metadata import version
 from pathlib import Path
@@ -433,6 +434,16 @@ class Study:
                     )
                 model = Model(mesh=mesh, document=document)
                 run = model.solve()
+                run = replace(
+                    run,
+                    provenance=replace(
+                        run.provenance,
+                        solver_parameters={
+                            **run.provenance.solver_parameters,
+                            "study_case": _result_identity(case),
+                        },
+                    ),
+                )
                 fields, manifest = export_result_bundle(
                     directory / "result", model.mesh, run
                 )
@@ -523,11 +534,31 @@ def _load_catalog(path: Path) -> dict[str, Any]:
         ) from error
 
 
+def _result_identity(case: dict[str, Any]) -> dict[str, Any]:
+    """Bind a bundle to its case and resolved inputs without host paths."""
+    return {
+        "case_id": _hash(case["parameters"]),
+        "document_sha256": _hash(case["document"]),
+        "fingerprints": case["fingerprints"],
+        "versions": case["versions"],
+    }
+
+
 def _valid_result(root: Path, case: dict[str, Any]) -> bool:
     try:
         result = case["result"]
         manifest = _inside(root, result["manifest"])
         fields = _inside(root, result["fields"])
+        expected = _inside(
+            root, f"cases/{case['case_id']}/attempt-{case['attempts']:06d}"
+        )
+        if (
+            case["case_id"] != _hash(case["parameters"])
+            or _inside(root, case["attempt_directory"]) != expected
+            or manifest != expected / "result.json"
+            or fields != expected / "result.vtu"
+        ):
+            return False
         if sha256(manifest.read_bytes()).hexdigest() != result["manifest_sha256"]:
             return False
         if sha256(fields.read_bytes()).hexdigest() != result["fields_sha256"]:
@@ -538,6 +569,8 @@ def _valid_result(root: Path, case: dict[str, Any]) -> bool:
             and data["files"]["fields"] == fields.name
             and data["files"]["fields_sha256"] == result["fields_sha256"]
             and data["provenance"]["input_sha256"] == result["model_input_sha256"]
+            and data["provenance"]["solver"]["parameters"]["study_case"]
+            == _result_identity(case)
         )
     except (OSError, ValueError, KeyError, TypeError, ModelSchemaError):
         return False
