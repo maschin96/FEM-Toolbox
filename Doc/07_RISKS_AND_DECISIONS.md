@@ -611,3 +611,42 @@ Entscheidung vom 30.09.2026: Matplotlib >=3.9,<4 als separates
 pyplot-Registrierung. Tet4-Außenflächen mit nodalen Flächenmitteln oder
 Eigentümerzellwerten; keine implizite Materialglättung. Tet10 und komplexe
 Felder werden abgelehnt. [API, Grenzen und Nachweise](62_FIELD_VISUALIZATION.md).
+
+## ADR-044 — Experimenteller eigenständiger DC-Schaltungskern (01.10.2026)
+
+Auf ausdrücklichen Nutzerauftrag beginnt M13 auf einem separaten
+Experimental-Branch vom stabilen M13-Integrationsstand. Erster Schnitt zu
+#114/#115/#116: lineare R/C/L-Elemente und unabhängige V-/I-Quellen,
+begrenzter strikt geprüfter Netzlistendialekt und Sparse-MNA mit
+Zeilen-/Spaltenäquilibrierung. Passive Zweigvorzeichen, Masse `0`, C offen und
+L kurzgeschlossen definieren den DC-Grenzfall. Kein CG, keine künstlichen
+Leckleitfähigkeiten und keine automatische Auflösung redundanter idealer
+Quellenschleifen. KCL an allen Knoten und aufgenommene Zweigleistung werden
+aus der Lösung rekonstruiert und getrennt vom algebraischen Residuum geprüft.
+
+Der Kern verwendet vorhandenes NumPy/SciPy und `RunProvenance`. Module bleiben
+getrennt vom FEM-Model; die experimentelle API erhält keine v1.3-Stabilitätszusage.
+Diese Entscheidung legt nur den eigenständigen DC-Schnitt fest. Vollständige
+elektrische/thermische Ports und monolithische/iterative FEM-Kopplung aus #114,
+Transienten und AC werden vor ihrer Implementierung entschieden. M13 ist
+damit weder abgeschlossen noch freigegeben; Issues bleiben offen.
+[Vertrag, Referenzen und Prüfnachweis](65_EXPERIMENTAL_CIRCUIT_CORE.md).
+
+## ADR-045 — RLC-Analysen und Portvertrag (01.10.2026)
+
+Auf Nutzerauftrag werden #114–#119 auf dem Experimental-Branch fortgeführt.
+Striktes TOML mit expliziten SI-Einheiten ergänzt die Textnetzliste. Elektrische
+und thermische Ports sind validierte Metadaten; tatsächliche FEM-Selektoren
+prüft erst der spätere Adapter. Transienten verwenden Backward Euler mit
+konsistenter Anfangslösung und ereignisangereichertem Zeitraster. Höherindexige
+ideale C/V-Schleifen und L/I-Schnittmengen werden abgelehnt. Numerische
+Dämpfung wird getrennt von physikalischen Verlusten bilanziert. AC verwendet
+Peakphasoren mit exp(+i omega t), bei f=0 den DC-Vertrag. Singuläre Resonanz
+erhält keine künstliche Dämpfung.
+
+Die spätere elektrische FEM-Kopplung ist nach Elektrodenreduktion monolithisch
+geplant; thermisch zuerst einseitige Joule-Leistung, danach iterative
+Rückkopplung. Analytische Piezo- und Wärmereferenzen werden vorab festgelegt.
+Diese Entscheidung implementiert keinen gekoppelten Solver und gibt M13
+nicht frei. [Vertrag](66_CIRCUIT_ANALYSES_AND_PORTS.md),
+[Nachweise](67_CIRCUIT_CORE_VERIFICATION.md).

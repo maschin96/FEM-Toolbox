@@ -1,0 +1,5 @@
+* Experimental DC reference: 12 V, 1 kOhm / 2 kOhm divider
+V1 in 0 12
+R1 in out 1k
+R2 out 0 2k
+.end

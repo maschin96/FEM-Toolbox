@@ -1,0 +1,44 @@
+circuit_schema_version = 1
+
+[[components]]
+name = "V1"
+positive = "in"
+negative = "0"
+value = 0.0
+unit = "V"
+
+[[components]]
+name = "R1"
+positive = "in"
+negative = "a"
+value = 1.0
+unit = "Ohm"
+
+[[components]]
+name = "L1"
+positive = "a"
+negative = "out"
+value = 1.0
+unit = "H"
+
+[[components]]
+name = "C1"
+positive = "out"
+negative = "0"
+value = 1.0
+unit = "F"
+
+[[electrical_ports]]
+name = "top"
+node = "out"
+electrode = "piezo_top"
+
+[[electrical_ports]]
+name = "bottom"
+node = "0"
+electrode = "piezo_bottom"
+
+[[thermal_ports]]
+name = "cooler"
+region = "resistor_contact"
+components = ["R1"]

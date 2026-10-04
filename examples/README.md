@@ -90,3 +90,8 @@ Gesamt-Abnahme und Genauigkeits-/Kostenvergleiche bleiben offen.
 - [Surrogatmodell aus echten Wärme-Kennwerten](surrogate_heat/README.md) (M8-Entwicklung).
 
 - [Reproduzierbare Wärme- und Piezo-Studienrezepte samt Artefaktabnahme](study_recipes/README.md) (#61).
+
+## Experimenteller Schaltungskern (M13)
+
+- [DC-Spannungsteiler mit Netzliste und unabhängigen Bilanzprüfungen](circuit_dc/README.md).
+- [RLC-Transienten und AC mit analytischen Referenzen](circuit_analyses/README.md).

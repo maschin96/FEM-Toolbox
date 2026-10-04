@@ -18,6 +18,14 @@ Zentrale Entwurfsregeln:
 - Sparse-Assembly über COO-Tripletts, danach CSR/CSC
 - Abhängigkeiten auf Infrastrukturgrenzen beschränken
 
+Der experimentelle lineare Schaltungskern liegt separat in `circuits/`:
+`model.py` besitzt unveränderliche SI-Komponenten und Schaltungen,
+`netlist.py` ist der strikte Textadapter, `dc.py` übernimmt DC-Preflight,
+Sparse-MNA, Lösung und Bilanzrekonstruktion. Der Kern benötigt kein FEM-Netz
+und verändert weder `Model` noch die Feldsolver. `RunProvenance` wird
+wiederverwendet; zusätzliche Abhängigkeiten entstehen nicht.
+[Arbeitsvertrag und API](65_EXPERIMENTAL_CIRCUIT_CORE.md).
+
 ## 2. Zielstruktur
 
 ```text
@@ -335,3 +343,12 @@ Gesamt-Abnahme und Genauigkeits-/Kostenvergleiche bleiben offen.
 
 Der optionale Adapter `post.visualization` verwendet Matplotlib/Agg und
 vorhandene Tet4-Randtopologie. Solver bleiben unabhängig; [Vertrag](62_FIELD_VISUALIZATION.md).
+
+## Erweiterter experimenteller Schaltungskern
+
+`config.py` liest das strikte TOML-Schema, `ports.py` besitzt unveränderliche
+Portmetadaten. `mna.py` bündelt Speicheroperator, Quellen und Provenienz;
+`ac.py` und `transient.py` besitzen ihre Analyseverträge und rekonstruieren
+physikalische Bilanzen. Sparse-Lösung und Topologieprüfung werden mit DC
+geteilt. Ergebnisse besitzen unveränderliche Daten. Feldadapter bleiben
+außerhalb des eigenständigen Kerns; siehe [Vertrag](66_CIRCUIT_ANALYSES_AND_PORTS.md).
