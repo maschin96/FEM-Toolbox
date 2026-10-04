@@ -222,3 +222,80 @@ def test_invalid_definitions(kwargs):
     base.update(kwargs)
     with pytest.raises(ValueError):
         Quantity(**base)
+
+
+@pytest.mark.parametrize("relocate", [False, True])
+def test_swapped_results_rejected_by_report_and_resume(tmp_path, relocate):
+    runner = study(tmp_path)
+    root = tmp_path / "runs"
+    catalog = runner.run(root)
+    first, second = catalog["cases"]
+    first["result"], second["result"] = second["result"], first["result"]
+    (root / "catalog.json").write_text(json.dumps(catalog))
+    if relocate:
+        copytree(root, tmp_path / "copied")
+        root = tmp_path / "copied"
+    q = Quantity(
+        "temperature", "point", "temperature_K", "K", "maximum", reduction="max"
+    )
+    export_study_table(root / "catalog.json", tmp_path / "table", [q])
+    rows = read_study_table(tmp_path / "table")["rows"]
+    assert all(row["status"] == "invalid" for row in rows)
+    assert all(row["values"]["temperature"] is None for row in rows)
+    assert all(row["missing"]["temperature"] for row in rows)
+    repaired = runner.run(root)
+    assert all(case["attempts"] == 2 for case in repaired["cases"])
+    assert all(
+        case["history"][-1]["result"] == old["result"]
+        for case, old in zip(repaired["cases"], catalog["cases"], strict=True)
+    )
+    export_study_table(root / "catalog.json", tmp_path / "repaired", [q])
+    values = [
+        row["values"]["temperature"]
+        for row in read_study_table(tmp_path / "repaired")["rows"]
+    ]
+    # Analytic unit-tetrahedron solution; 1e-11 K covers float64 roundoff at 300 K.
+    assert values == pytest.approx([301, 300.5], rel=0, abs=1e-11)
+    assert runner.run(root) == repaired
+
+
+@pytest.mark.parametrize("damage", ["foreign_bundle", "document", "legacy"])
+def test_result_binding_checked_independently_of_paths(tmp_path, damage):
+    from hashlib import sha256
+
+    from fem_toolbox.studies import _valid_result
+
+    runner = study(tmp_path)
+    root = tmp_path / "runs"
+    catalog = runner.run(root)
+    case = catalog["cases"][0]
+    result = case["result"]
+    manifest = root / result["manifest"]
+    if damage == "foreign_bundle":
+        foreign = catalog["cases"][1]["result"]
+        manifest.write_bytes((root / foreign["manifest"]).read_bytes())
+        (root / result["fields"]).write_bytes((root / foreign["fields"]).read_bytes())
+        result["fields_sha256"] = foreign["fields_sha256"]
+        result["model_input_sha256"] = foreign["model_input_sha256"]
+    elif damage == "document":
+        case["document"]["materials"]["T"]["thermal"]["conductivity"] = 9.0
+    else:
+        bundle = json.loads(manifest.read_text())
+        del bundle["provenance"]["solver"]["parameters"]["study_case"]
+        manifest.write_text(json.dumps(bundle))
+    result["manifest_sha256"] = sha256(manifest.read_bytes()).hexdigest()
+    assert not _valid_result(root, case)
+
+
+def test_intact_copied_study_reused_without_solve(tmp_path, monkeypatch):
+    from fem_toolbox.model import Model
+
+    runner = study(tmp_path)
+    catalog = runner.run(tmp_path / "runs")
+    copytree(tmp_path / "runs", tmp_path / "copied")
+
+    def forbidden(*args):
+        raise AssertionError("intact relocated results must be reused")
+
+    monkeypatch.setattr(Model, "solve", forbidden)
+    assert runner.run(tmp_path / "copied") == catalog

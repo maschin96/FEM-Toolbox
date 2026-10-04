@@ -99,6 +99,15 @@ Damit ist dieselbe Parameterkombination vor/nach Änderung nachvollziehbar.
 Erfolgreiche Ergebnisse werden nur übernommen, wenn Fingerprints **und**
 SHA-256 beider Bündeldateien stimmen, das Bündelschema unterstützt ist und
 Bündelreferenz, VTU-Hash sowie ursprüngliche Model-Provenienz konsistent sind.
+Zusätzlich müssen beide Dateien im erwarteten Fall-/Versuchsverzeichnis liegen.
+Die Bündelprovenienz enthält unter `solver.parameters.study_case` die unabhängig
+aus dem Fall geprüfte Parameteridentität, den Hash des aufgelösten Dokuments,
+Fingerprints und Versionen. So werden auch fremde, intern konsistente Bündel
+erkannt, die in den eigenen Versuchspfad kopiert wurden (#219). Die Prüfung
+benötigt keinen Solve und keine ursprünglichen Eingabedateien; vollständig
+kopierte Studienverzeichnisse bleiben wiederverwendbar. Frühere Bündel ohne
+diese Zuordnung werden konservativ als ungültig behandelt und beim nächsten
+Lauf mit erhaltener Historie neu berechnet; Berichte zeigen fehlende Kennwerte.
 Dies ist Integritätsprüfung gegen unbeabsichtigte Änderungen, keine kryptografische
 Authentifizierung eines fremd manipulierten Katalogs.
 
