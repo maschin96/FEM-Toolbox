@@ -113,7 +113,9 @@ dem Umbau schließen.
 - Den in README und Projektkonfiguration festgelegten Python-Support beachten.
   Entwicklungswerkzeuge und Abhängigkeiten in `pyproject.toml` zentral konfigurieren,
   sobald M0 umgesetzt wird; reproduzierbare Installation dokumentieren.
-- `src/fem_toolbox/` und die geplante Teststruktur verwenden. Kleine Funktionen,
+- `src/femantis/` für die kanonische Implementierung und `src/fem_toolbox/`
+  ausschließlich für den kompatiblen Altimportadapter verwenden (M14, #237).
+  Die geplante Teststruktur verwenden. Kleine Funktionen,
   explizite Datenflüsse und klare Modulgrenzen bevorzugen; globale Zustände vermeiden.
 - Öffentliche APIs typisieren und Annahmen, Array-Formen, SI-Einheiten,
   Rückgabewerte und Fehlerfälle dokumentieren. Ungültige Daten früh mit konkreten
@@ -128,7 +130,7 @@ dem Umbau schließen.
   python -m pytest
   python -m ruff check .
   python -m ruff format --check .
-  python -m mypy src/fem_toolbox
+  python -m mypy src/femantis src/fem_toolbox tests/typing
   git diff --check
   ```
 

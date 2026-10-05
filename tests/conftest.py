@@ -6,7 +6,7 @@ from itertools import permutations, product
 import numpy as np
 import pytest
 
-from fem_toolbox.mesh import Mesh
+from femantis.mesh import Mesh
 
 
 @pytest.fixture

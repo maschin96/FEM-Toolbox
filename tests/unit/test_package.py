@@ -6,9 +6,9 @@ from importlib.metadata import metadata, version
 
 def test_package_can_be_imported() -> None:
     """The public package namespace is importable after installation."""
-    package = import_module("fem_toolbox")
+    package = import_module("femantis")
 
-    assert package.__name__ == "fem_toolbox"
+    assert package.__name__ == "femantis"
 
 
 def test_distribution_exposes_release_version() -> None:

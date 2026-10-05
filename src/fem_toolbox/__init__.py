@@ -1,11 +1,17 @@
-"""Finite-element research tools for verified 3D multiphysics simulations.
+"""Compatibility import for Femantis, supported throughout v2.x."""
 
-Stable stationary user APIs and their validity limits are documented in the
-public API contract. Internal research building blocks may evolve separately.
-"""
+import sys
+import warnings
 
-from importlib.metadata import version
+import femantis
+from femantis import __version__ as __version__
+from femantis._legacy_imports import install_legacy_finder
 
-__version__ = version("fem-toolbox")
-
-__all__ = ("__version__",)
+warnings.warn(
+    "fem_toolbox is deprecated; import femantis instead. "
+    "Legacy imports remain supported throughout v2.x.",
+    DeprecationWarning,
+    stacklevel=2,
+)
+install_legacy_finder()
+sys.modules[__name__] = femantis

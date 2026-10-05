@@ -21,6 +21,7 @@ Eintrag im Entscheidungsprotokoll.
 
 - [Femantis: vollständige Corporate Identity mit Original-Bildtafel](75_FEMANTIS_CORPORATE_IDENTITY.md)
 - [Femantis: vollständiger Code-/Paket-/GitHub-Umbenennungsplan](76_FEMANTIS_RENAMING_PLAN.md)
+- [Femantis: kanonischer Namespace und kompatible Altimporte (#237, M14-Entwicklungsstand)](78_FEMANTIS_NAMESPACE.md)
 - [Femantis: Namensinventar und Migrationsvertrag (#235, ADR-053)](77_FEMANTIS_MIGRATION_CONTRACT.md)
 - [Markenbilder: Inventar, Herkunft und Kontrastnachweis](brand/README.md)
 

@@ -25,7 +25,7 @@ FEM-Toolbox/
 ├── README.md
 ├── Doc/
 ├── pyproject.toml
-├── src/fem_toolbox/
+├── src/femantis/
 │   ├── mesh/            # Netz, Tags, Gmsh-Adapter, Qualitätsmaße
 │   ├── fields/          # Feld- und DOF-Definitionen
 │   ├── materials/       # Elastik, Wärme, Dielektrik, Piezo
@@ -344,3 +344,14 @@ bis Ende v2.x identische Adapter; Implementierung und numerische Verträge werde
 nicht dupliziert. Persistierte Kennungen bleiben kompatibel. Das ist eine
 Architekturentscheidung vor Umsetzung; der aktuelle Code liegt weiterhin unter
 `src/fem_toolbox/`.
+
+
+### M14-Namespace umgesetzt (#237)
+
+Auf dem M14-Entwicklungsbranch ist der kanonische Code nach `src/femantis/`
+verschoben. `src/fem_toolbox/` enthält ausschließlich Rootadapter und
+Typweiterleitungen. Ein lazy Importfinder wahrt identische Modulobjekte und
+kanonische Metadaten; physikalische Implementierungen und persistierte
+Kennungen bleiben unverändert. [Implementierung und Nachweise](78_FEMANTIS_NAMESPACE.md).
+Der Auftraggeber hat den parallelen Beginn während SPICE am 05.10.2026
+beauftragt; vollständige Releasegates gelten weiterhin.

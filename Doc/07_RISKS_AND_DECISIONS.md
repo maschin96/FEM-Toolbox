@@ -639,3 +639,14 @@ Registry-Zugriff, Marken-/Bildrechte und Eigentümerfreigaben sind vor externer
 Veröffentlichung nachzuweisen. Keine numerischen oder SI-Konventionen ändern
 sich. Unabhängiges Review dieser Entscheidung steht bis PR-Abnahme aus.
 [Inventar, Befunde und vollständiger Vertrag](77_FEMANTIS_MIGRATION_CONTRACT.md).
+
+
+### Fortschreibung ADR-053: paralleler Arbeitsbeginn (#237)
+
+05.10.2026: Auf ausdrücklichen Auftrag wird die M14-Namespacearbeit parallel
+zur Umsetzung des SPICE-Meilensteins begonnen. Der Integrationsbranch basiert
+auf stabilem main; #237 geht per PR nach `codex/milestone-m14`. Das ersetzt
+nur die frühere Startreihenfolge, nicht die vollständigen Releasegates oder
+Voraussetzungen für externe Veröffentlichungen. Der kanonische Code wird
+mit lazy identischen Altmodulen und statischen Typweiterleitungen umgesetzt.
+[Implementierung und Nachweise](78_FEMANTIS_NAMESPACE.md).
