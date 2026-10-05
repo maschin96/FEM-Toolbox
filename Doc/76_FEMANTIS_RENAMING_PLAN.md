@@ -37,6 +37,13 @@ sich durch die Umbenennung nicht verändern.
 
 ## 2. Kompatibilitätsentscheidung zur Umsetzung
 
+Paket A wurde mit [Issue #235 und ADR-053](77_FEMANTIS_MIGRATION_CONTRACT.md)
+konkretisiert: kanonisch `femantis`, Altimporte während aller v2.x-Releases,
+Entfernung frühestens v3.0.0 und Einordnung in die bestehende M14-/v2.0-Freigabe.
+Das [exakte Inventar](brand/femantis-name-inventory.json) ersetzt die grobe
+Bestandszahl für die weitere Umsetzung. Der folgende ursprüngliche Vorschlag
+wird durch diesen verbindlichen Vertrag präzisiert.
+
 Empfohlene Zielstrategie: kanonischer Namespace `femantis`; befristeter
 Legacy-Namespace `fem_toolbox` als expliziter Kompatibilitätsadapter für einen
 vollständigen freigegebenen Übergangszyklus. Entfernen erst in einer späteren
@@ -67,9 +74,8 @@ enthalten. Zukünftige `femantis:*`-Writer benötigen Dual-Reader und explizite
 Konfliktregel: widersprüchliche alte/neue Daten ablehnen, nicht still bevorzugen.
 Historische Ergebnisse werden nicht nachträglich umgeschrieben.
 
-Diese Kompatibilitätsstrategie ist ein konkreter Umsetzungsvorschlag. Die
-Architekturentscheidung wird vor abhängigem Code als ADR mit genauer
-Übergangsversion und unterstützten Altpfaden beschlossen.
+ADR-053 hält die Architekturentscheidung und die unterstützte Modulmatrix
+fest. Unabhängige Prüfung und Integration von Paket A gehen dem Code voraus.
 
 ## 3. Vollständige Änderungsflächen
 
@@ -102,7 +108,7 @@ Milestone-Branch, bevor die Release-Einordnung entschieden und Arbeit begonnen i
 
 | Paket | Ergebnis | Abnahme / Abhängigkeit |
 |---|---|---|
-| A — Inventar und ADR | Exakte Namensliste, externe Dienste, Namens-/Rechteprüfung, Major-/Übergangsvertrag | Verantwortliche entscheiden Name, Zeitraum und Release-Ziel vor B |
+| A — Inventar und ADR ([#235](https://github.com/maschin96/FEM-Toolbox/issues/235)) | Exakte Namensliste, externe Dienste, Namens-/Rechteprüfung, Major-/Übergangsvertrag | Verantwortliche entscheiden Name, Zeitraum und Release-Ziel vor B |
 | B — Namespace und Adapter | `femantis` als einzige Implementierung; getestete `fem_toolbox`-Adapter | Beide Importpfade, Objektidentität, Exceptions, Warnungen und Typen; nach A |
 | C — Packaging und CI | Neue Distribution, Typdaten, Extras, Build-/Installations- und optionale Backendprüfung | Wheel/sdist in sauberen CPython-3.11–3.13-Umgebungen; nach B |
 | D — Persistenz und Provenienz | Dokumentierter Alt-/Neuformatvertrag, Reader/Writer und Metadaten | Historische Fixtures unverändert lesbar, Konflikte abgelehnt, Provenienz nachvollziehbar; nach A/B |
