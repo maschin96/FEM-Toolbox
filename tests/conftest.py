@@ -14,7 +14,7 @@ from fem_toolbox.mesh import Mesh
 def quad_mesh():
     """Authored rectangular/sheared FV meshes; no production mesh generator."""
 
-    def build(nx=4, ny=4, *, shear=0.0):
+    def build(nx=4, ny=4, *, shear=0.0, size_m=(1.0, 1.0), warp=0.0):
         points = np.array(
             [
                 [i / nx + shear * j / ny, j / ny]
@@ -22,6 +22,10 @@ def quad_mesh():
                 for i in range(nx + 1)
             ]
         )
+        points[:, 1] += (
+            warp * np.sin(2 * np.pi * points[:, 0]) * np.sin(np.pi * points[:, 1])
+        )
+        points *= size_m
 
         def node(i, j):
             return j * (nx + 1) + i

@@ -342,5 +342,7 @@ führen noch keinen RANS-/FSI-Solve aus.
 
 [Konservative Quad-FV-Grundoperatoren (#229)](Doc/73_QUAD_FV_OPERATORS.md)
 ergänzen linear-exakte Gradienten, volle variable Spannungen und kompakte
-Druck-/Rhie-Chow-Bausteine. SIMPLE und die vollständige Strömungsabnahme
-folgen separat in #230; der uniforme MAC-Kern bleibt die unabhängige Referenz.
+Druck-/Rhie-Chow-Bausteine. Der [laminare Quad-FV-Solver (#230)](Doc/74_QUAD_FV_SIMPLE.md)
+ergänzt SIMPLE mit GMRES-Beschleunigung, konservativen Transport und explizite
+SI-Bilanzen. Ein [vorbereiteter Dateikanal](examples/quad_flow/README.md)
+exportiert Felder und Provenienz; der MAC-Kern bleibt die unabhängige Referenz.

@@ -59,6 +59,9 @@ addopts = [
   "--strict-markers",
 ]
 testpaths = ["tests"]
+markers = [
+  "cfd_convergence: expensive four-mesh Quad-FV verification (mandatory separate CI jobs)",
+]
 
 [tool.ruff]
 target-version = "py311"

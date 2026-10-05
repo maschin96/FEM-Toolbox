@@ -388,3 +388,15 @@ und Sparse-Assembly ohne I/O oder PDE-Orchestrierung. #230 ergänzt SIMPLE,
 BC-Rekonstruktion, Transport und vollständige finale Solverdiagnostik;
 #226 bleibt bis zur Abnahme beider Arbeitspakete offen.
 [API, Vorzeichen und Operatornachweise](73_QUAD_FV_OPERATORS.md).
+
+## Stationärer Quad-FV-Solver (#230 / #226b)
+
+`cfd/quad_system.py` stellt die affine konservative Rekonstruktion und volle
+Spannungs-/Transportblöcke bereit. `cfd/quad_flow.py` orchestriert Picard,
+Krylov-beschleunigte SIMPLE-Korrekturen und frische SI-Feld-/Bilanzprüfung.
+Eine konsistente kubische Zell-/Face-Rekonstruktion vermeidet Randübergangsfehler;
+der kompakte Anteil der inneren Normalableitung bleibt erhalten.
+Die Solver-API verlangt Uref/Lref und liefert immutable Felder, Faceflüsse,
+Wandtraktion und sämtliche diskreten Energieanteile mit Provenienz.
+FluidDomain bleibt Eingabeadapter, der MAC-Kern unabhängige Referenz.
+[Algorithmus und Nachweise](74_QUAD_FV_SIMPLE.md).
