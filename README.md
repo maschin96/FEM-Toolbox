@@ -246,7 +246,9 @@ Die neue Markenidentität **Femantis (bisher FEM Toolbox)** ist im
 [Corporate-Identity-Leitfaden](Doc/75_FEMANTIS_CORPORATE_IDENTITY.md) mit
 [Bildinventar](Doc/brand/README.md) dokumentiert. Der
 [vollständige Umbenennungsplan](Doc/76_FEMANTIS_RENAMING_PLAN.md) beschreibt die
-spätere technische Migration; Paketname und Python-Imports bleiben vorerst gültig.
+spätere technische Migration. Auf diesem M14-Entwicklungsstand ist der
+[neue Namespace samt Altimportadapter](Doc/78_FEMANTIS_NAMESPACE.md) implementiert;
+der Distributionsname bleibt vorerst `fem-toolbox`.
 
 Der [Dokumentationsindex](Doc/README.md) führt durch die fachlichen und
 technischen Entwurfsdokumente.
@@ -266,7 +268,8 @@ technischen Entwurfsdokumente.
 
 ## Entwicklung
 
-Der Python-Code liegt unter `src/fem_toolbox/`. Die [Teststruktur](tests/README.md)
+Der Python-Code dieses M14-Entwicklungsstands liegt unter `src/femantis/`;
+`src/fem_toolbox/` enthält den [kompatiblen Importadapter](Doc/78_FEMANTIS_NAMESPACE.md). Die [Teststruktur](tests/README.md)
 unterscheidet Unit-, Patch-, Konvergenz- und Regressionstests;
 [examples/](examples/README.md) enthält drei Einzelfeldbeispiele und ein
 reproduzierbares Thermomechanik-Beispiel.
@@ -277,7 +280,7 @@ Aus dem Repository-Root mit aktivierter Entwicklungsumgebung prüfen:
 python -m pytest
 python -m ruff check .
 python -m ruff format --check .
-python -m mypy src/fem_toolbox
+python -m mypy src/femantis src/fem_toolbox tests/typing
 git diff --check
 ```
 

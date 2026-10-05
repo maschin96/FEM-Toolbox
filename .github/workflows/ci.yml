@@ -209,7 +209,7 @@ jobs:
         run: python -m ruff format --check .
 
       - name: Check types
-        run: python -m mypy src/fem_toolbox
+        run: python -m mypy src/femantis src/fem_toolbox tests/typing
 
   tests:
     name: Tests / Python ${{ matrix.python-version }}

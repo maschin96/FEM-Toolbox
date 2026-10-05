@@ -109,7 +109,7 @@ Milestone-Branch, bevor die Release-Einordnung entschieden und Arbeit begonnen i
 | Paket | Ergebnis | Abnahme / Abhängigkeit |
 |---|---|---|
 | A — Inventar und ADR ([#235](https://github.com/maschin96/FEM-Toolbox/issues/235)) | Exakte Namensliste, externe Dienste, Namens-/Rechteprüfung, Major-/Übergangsvertrag | Verantwortliche entscheiden Name, Zeitraum und Release-Ziel vor B |
-| B — Namespace und Adapter | `femantis` als einzige Implementierung; getestete `fem_toolbox`-Adapter | Beide Importpfade, Objektidentität, Exceptions, Warnungen und Typen; nach A |
+| B — Namespace und Adapter ([#237](https://github.com/maschin96/FEM-Toolbox/issues/237)) | `femantis` als einzige Implementierung; getestete `fem_toolbox`-Adapter | Beide Importpfade, Objektidentität, Exceptions, Warnungen und Typen; nach A |
 | C — Packaging und CI | Neue Distribution, Typdaten, Extras, Build-/Installations- und optionale Backendprüfung | Wheel/sdist in sauberen CPython-3.11–3.13-Umgebungen; nach B |
 | D — Persistenz und Provenienz | Dokumentierter Alt-/Neuformatvertrag, Reader/Writer und Metadaten | Historische Fixtures unverändert lesbar, Konflikte abgelehnt, Provenienz nachvollziehbar; nach A/B |
 | E — Beispiele und Dokumentation | Alle aktuellen Rezepte/Links/API-Beschreibungen aktualisiert | Ausführbare Beispiele und Publikationsabdeckung; nach B/C/D |
@@ -182,3 +182,12 @@ Verweise betroffen sein können. Die Leser alter Daten bleiben erhalten.
 
 Keines dieser Migrationsgates wird durch die heutige Dokumentation als
 abgeschlossen behauptet.
+
+
+## Paket B und autorisierter Parallelbeginn
+
+Der Auftraggeber hat am 05.10.2026 die Namespacearbeit parallel zum
+SPICE-Meilenstein beauftragt. Der M14-Branch wurde dafür vom stabilen main
+angelegt; Issue #237 erhält einen PR in diesen Integrationsbranch. Der
+[Namespace-/Adapter-Nachweis](78_FEMANTIS_NAMESPACE.md) beschreibt den
+implementierten Entwicklungsstand; vollständige Releasegates bleiben bestehen.

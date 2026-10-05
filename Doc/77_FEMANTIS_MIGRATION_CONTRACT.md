@@ -167,3 +167,13 @@ festgelegten Namen, Zeiträumen und Veröffentlichungsgates.
 Eigentümerfreigaben fehlen. A dokumentiert diese offenen externen Nachweise;
 es behauptet sie nicht als erfüllt. Eine Domain ist keine Voraussetzung
 für die Python-Distribution; sie ist nur bei tatsächlicher Nutzung ein Gate.
+
+
+## Fortschreibung: paralleler M14-Beginn (#237)
+
+05.10.2026: Der Auftraggeber hat die Weiterarbeit parallel zum SPICE-Meilenstein
+beauftragt. Damit ist der vorgezogene Beginn auf `codex/milestone-m14` vom
+stabilen main autorisiert. Die oben dokumentierte ursprüngliche
+Startreihenfolge wird insoweit ersetzt. Issue-PRs gehen weiterhin nach M14;
+SPICE-Funktionalität und vollständige v2.0-Releasegates bleiben separat.
+[Paket B: Namespace und Nachweise](78_FEMANTIS_NAMESPACE.md).

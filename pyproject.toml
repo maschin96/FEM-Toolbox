@@ -51,6 +51,7 @@ package-dir = { "" = "src" }
 where = ["src"]
 
 [tool.setuptools.package-data]
+femantis = ["py.typed"]
 fem_toolbox = ["py.typed"]
 
 [tool.pytest.ini_options]
