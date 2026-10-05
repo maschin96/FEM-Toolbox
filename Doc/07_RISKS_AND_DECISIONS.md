@@ -611,3 +611,31 @@ Entscheidung vom 30.09.2026: Matplotlib >=3.9,<4 als separates
 pyplot-Registrierung. Tet4-Außenflächen mit nodalen Flächenmitteln oder
 Eigentümerzellwerten; keine implizite Materialglättung. Tet10 und komplexe
 Felder werden abgelehnt. [API, Grenzen und Nachweise](62_FIELD_VISUALIZATION.md).
+
+## ADR-053 — Femantis-Namespace und Kompatibilitätsvertrag (#235)
+
+05.10.2026: Der kanonische Produktname wird Femantis, Namespace und Distribution
+werden `femantis`, die Wortmarke bleibt FEMantis. Die Umsetzung wird in die
+bestehende M14-/v2.0.0-Freigabe #113 eingeordnet; kein unabhängiges zweites
+v2.0-Release und kein vorzeitiger Milestone-Branch. Die reine Planung ist
+Repositorypflege nach main, die Umsetzung folgt dem M14-Integrationsworkflow.
+
+Alle im Basisinventar vorhandenen Altmodule bleiben während sämtlicher v2.x-
+Releases als Adapter erreichbar. Entfernung frühestens v3.0.0 mit neuem
+Issue und Ankündigung. Kanonische und alte Imports liefern identische
+Modul-/Klassen-/Exceptionobjekte; keine doppelte Solverimplementierung.
+Eine gezielte DeprecationWarning entsteht am Legacy-Rootimport. Typdaten und
+optionale Abhängigkeiten behalten ihre dokumentierten Verträge.
+
+Die Umbenennung ändert keine persistierten Feldnamen oder Daten-Schemata.
+VTU-Präfixe und Wärme-Serienkennung bleiben erhalten; historische Provenienz,
+Fixtures, Referenzen und Tags werden nicht umgeschrieben. Neue Solverkennungen
+sind nur innerhalb vorhandener frei definierter Schemawerte zulässig.
+Neue persistierte Kennungen verlangen ein eigenes Schema-Issue.
+
+Die öffentlich abgefragten Zielnamen lieferten am Prüftag kein sichtbares
+Projekt-/Domainobjekt; das ist weder Reservierung noch Rechtsfreigabe.
+Registry-Zugriff, Marken-/Bildrechte und Eigentümerfreigaben sind vor externer
+Veröffentlichung nachzuweisen. Keine numerischen oder SI-Konventionen ändern
+sich. Unabhängiges Review dieser Entscheidung steht bis PR-Abnahme aus.
+[Inventar, Befunde und vollständiger Vertrag](77_FEMANTIS_MIGRATION_CONTRACT.md).

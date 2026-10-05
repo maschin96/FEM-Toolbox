@@ -140,3 +140,13 @@ Ab M0 besitzt das Paket genau eine kanonische Versionsquelle. Build-Metadaten un
 Übereinstimmung von Paketversion, erwartetem Release-Tag und Release-Metadaten.
 Entwicklungsstände zwischen Releases werden als `X.Y.Z.devN` oder über lokale
 Build-Metadaten kenntlich gemacht und nicht als finale Version veröffentlicht.
+
+## Femantis-Namensmigration in M14 / v2.0.0 (#235)
+
+Die bereits geplante M14-Freigabe #113 erhält die Migration zu `femantis` als
+zusätzliches verpflichtendes Gate gemäß [ADR-053 und Vertrag](77_FEMANTIS_MIGRATION_CONTRACT.md).
+Es entsteht kein konkurrierendes v2.0-Release. Alle v2.x-Versionen behalten den
+Legacy-Importadapter; früheste Entfernung ist v3.0.0 nach separater Entscheidung.
+Namens-, Registry-, Rechte-, Altimport-, Datenkompatibilitäts- und numerische
+Paritätsnachweise gehören vor Veröffentlichung zum vollständigen Gate. Das
+aktuelle Release 1.3.0 und historische Artefakte bleiben unverändert.
