@@ -678,3 +678,25 @@ mit vorab gesetzten Budgets. Keine allgemeine 3D-RANS-/FSI-Freigabe oder
 experimentelle Validierung; keine neue Laufzeitabhängigkeit.
 [Vertrag, Quellen, Fehlergrenzen und Go/no-go-Gates](71_M12_RANS_FSI_CONTRACT.md).
 Diese Entscheidung erweitert den geplanten Umfang, keine bestandenen Nachweise.
+
+## ADR-050 — Quad4-Fluidnetz und SI-Preflight (#85)
+
+04.10.2026: Der erste Adapter des ADR-049 liest strikt versionierte JSON-
+Netze und eine separate Domain-JSON. Optionale volume_sets sind benannte
+Auswahlen ohne mehrere Fluidmaterialien. Line2-Zeilen bleiben unverändert,
+Normalen stammen aus CCW-Zelleigentümern. Vollständige konforme Randtopologie,
+positive Quad-Geometrie, Überlappung/T-Knoten und FV-Winkel-/Skewness-Gates
+werden vor Nutzung geprüft. Der erste Adapter verlangt eine zusammenhängende
+Domäne; disconnected Komponenten/Hex8 folgen gesondert. Große wandnormal
+anisotrope Seitenverhältnisse sind allein kein Fehler.
+
+Wandentfernung ist exakt zu den ausgewählten Segmenten einschließlich Endpunkten;
+Schichtwachstum wird auf den strukturierten gegenüberliegenden Quad-Faces
+verfolgt. Finale y+-Prüfung verlangt tatsächliche Wandschubwerte und darf aus
+einem Import nicht als bestanden gelten. Extrusionsbreite ist Pflicht zur
+korrekten Massenstromeinheit. Periodische Segmente werden reziprok nach
+Translation gematcht; äußere Normalen sind dabei entgegengesetzt, gespeicherte
+line2-Endpunktreihenfolge darf abweichen. Dies präzisiert die geometrische
+Orientierungsaussage in ADR-049, keine Änderung physikalischer Vorzeichen.
+Keine neue Dependency: NumPy/SciPy einschließlich cKDTree sind vorhanden.
+[Vertrag und Prüfungen](72_FLUID_MESH_ADAPTER.md).

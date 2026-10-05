@@ -155,7 +155,9 @@ explizite line2[nface,2] und benannte Randgruppen als Face-Indizes.
 Alle äußeren Kanten genau einmal, keine innere Kante als Rand, keine Lücken,
 mehrfachen Eigentümer oder sich schneidenden Zellen. Genau ein physikalischer
 Randtyp je Face; FSI ist zusätzlich eine Wandmarkierung. Periodische Partner
-sind explizit, kongruent und gleich orientiert nach Translation.
+sind explizit und kongruent nach Translation; ihre äußeren Normalen sind
+entgegengesetzt. Gespeicherte Segmentendpunktreihenfolge darf abweichen
+(Präzisierung ADR-050).
 JSON und TOML laden Daten, keinen ausführbaren Code. Vorbereitete Netze und
 Import ohne interne Manipulation sind Pflicht; kein automatischer Generator.
 

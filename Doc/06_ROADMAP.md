@@ -180,7 +180,7 @@ Es werden keine Kalendertermine oder noch nicht belegten Validierungen zugesagt.
 | Milestone | Zielbild | Planungsstand |
 |---|---|---|
 | [M11 — Topologieoptimierung](https://github.com/maschin96/FEM-Toolbox/milestone/12) | Optimierer auf verifizierter FEM-Basis, zunächst lineare Strukturmechanik mit Volumenrestriktion, geprüften Sensitivitäten und Kontrolle der Netzabhängigkeit | Beschreibung ohne Einzelissues, Version oder Termin |
-| [M12 — RANS-CFD und Fluid-Struktur-Kopplung](https://github.com/maschin96/FEM-Toolbox/milestone/13) | Ausschließlich RANS-Strömungsmodelle mit Turbulenzschließung und bidirektionaler Strukturkopplung; zunächst stationär, inkompressibel und isotherm | #84 RANS-/FSI-Vertrag, #85 Netz, #226 Quad-FV-Operator, #86 MAC-Kern integriert, #87–#94 Nachweise/Kopplung/Release offen; Version und Termin offen |
+| [M12 — RANS-CFD und Fluid-Struktur-Kopplung](https://github.com/maschin96/FEM-Toolbox/milestone/13) | Ausschließlich RANS-Strömungsmodelle mit Turbulenzschließung und bidirektionaler Strukturkopplung; zunächst stationär, inkompressibel und isotherm | #84 RANS-/FSI-Vertrag, #85 ebener Netzadapter implementiert, #226 Quad-FV-Operator, #86 MAC-Kern integriert, #87–#94 Nachweise/Kopplung/Release offen; Version und Termin offen |
 
 Die [Milestone-Beschreibungen](13_PRODUCT_VISION.md) halten groben Umfang,
 Abhängigkeiten, Nachweise und Grenzen fest. M12 schließt DNS, LES und hybride
@@ -220,3 +220,7 @@ Die [Akzeptanzmatrix #86](70_STATIONARY_FLOW_CORE.md) führt die numerischen
 Nachweise und Grenzen. #84/#85 bleiben für den übergreifenden RANS-/FSI-Vertrag
 und weitere Netzadapter separat; #87 ergänzt erst die Turbulenzschließung.
 Die RANS-/FSI-Freigabe M12 und #94 sind dadurch nicht abgeschlossen.
+
+[Der ebene Fluidnetzadapter #85](72_FLUID_MESH_ADAPTER.md) liefert importierbare
+Quad4-Geometrie, Wandqualität und BC-/SI-Preflight; der neue Quad-FV-Solver #226
+und RANS #87 sind damit noch nicht implementiert.
