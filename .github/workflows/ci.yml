@@ -220,7 +220,11 @@ jobs:
   tests:
     name: Tests / Python ${{ matrix.python-version }}
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 15
+    env:
+      OPENBLAS_NUM_THREADS: "1"
+      OMP_NUM_THREADS: "1"
+      MKL_NUM_THREADS: "1"
     strategy:
       fail-fast: false
       matrix:
@@ -245,8 +249,56 @@ jobs:
       - name: Install project and test tools
         run: python -m pip install --disable-pip-version-check -e '.[test,visualization]'
 
-      - name: Run tests
-        run: python -m pytest
+      - name: Run tests (CFD four-mesh verification runs in mandatory separate jobs)
+        run: python -m pytest -m "not cfd_convergence" --durations=10
+
+  cfd-convergence:
+    name: CFD / Python ${{ matrix.python-version }} / ${{ matrix.case }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      OPENBLAS_NUM_THREADS: "1"
+      OMP_NUM_THREADS: "1"
+      MKL_NUM_THREADS: "1"
+      CFD_TEST_NODE: ${{ matrix.node }}
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+        case: [poiseuille, central, linear-upwind, variable-mu]
+        include:
+          - case: poiseuille
+            node: test_quad_poiseuille_four_meshes
+          - case: central
+            node: test_quad_nonlinear_mms_four_meshes[central-0.1-0.01-1.8]
+          - case: linear-upwind
+            node: test_quad_nonlinear_mms_four_meshes[linear-upwind-1.0-0.1-0.7]
+          - case: variable-mu
+            node: test_quad_variable_mu_four_meshes
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: pyproject.toml
+      - name: Install project and test tools
+        run: python -m pip install --disable-pip-version-check -e '.[test]'
+      - name: Run complete four-mesh case with visible progress
+        run: >-
+          python -m pytest -vv -s --durations=5 -o junit_family=legacy
+          --junitxml=cfd-results.xml
+          "tests/convergence/test_quad_flow_convergence.py::$CFD_TEST_NODE"
+      - name: Retain numerical verification report
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: cfd-${{ matrix.python-version }}-${{ matrix.case }}
+          path: cfd-results.xml
+          if-no-files-found: warn
+          retention-days: 7
 
   compatibility:
     name: Compatibility / Python ${{ matrix.python-version }} / ${{ matrix.dependency_set }}

@@ -5,6 +5,8 @@ import pytest
 
 from fem_toolbox.cfd import FluidDomain, solve_quad_flow
 
+pytestmark = pytest.mark.cfd_convergence
+
 
 def problem(mesh, *, rho=1, periodic=False, closed=False):
     boundaries = {"bottom": {"type": "wall"}, "top": {"type": "wall"}}
@@ -70,12 +72,19 @@ def exact_mms(points, density):
 def test_quad_poiseuille_four_meshes(quad_mesh, record_property):
     errors, pressure_errors = [], []
     for n in (8, 16, 32, 64):
+        print(f"Poiseuille: starting {2 * n}x{n} cells", flush=True)
         mesh = quad_mesh(2 * n, n, size_m=(2, 1))
         r = solve_quad_flow(problem(mesh), velocity_scale_m_s=1, length_scale_m=2)
         y = mesh.cell_centres_m[:, 1]
         errors.append(float(np.max(np.abs(r.velocity_m_s[:, 0] - y * (1 - y)))))
         p = r.pressure_Pa.reshape(n, 2 * n).mean(axis=0)
         pressure_errors.append(float(np.sqrt(np.mean((np.diff(p) * n + 2) ** 2))))
+        print(
+            f"Poiseuille {2 * n}x{n}: U error={errors[-1]:.6g}, "
+            f"pressure-gradient error={pressure_errors[-1]:.6g}, "
+            f"outer={r.iterations}, SIMPLE={r.simple_steps}",
+            flush=True,
+        )
         assert abs(r.global_mass_balance_kg_s) < 1e-9 * r.inlet_mass_flow_kg_s
     record_property("velocity_errors", errors)
     record_property("pressure_gradient_errors", pressure_errors)
@@ -93,6 +102,7 @@ def test_quad_nonlinear_mms_four_meshes(
 ):
     errors, p_errors = [], []
     for n in (16, 32, 64, 128):
+        print(f"MMS {scheme}: starting {n}x{n} cells", flush=True)
         mesh = quad_mesh(n, n)
         exact, p, force = exact_mms(mesh.cell_centres_m, rho)
         r = solve_quad_flow(
@@ -106,6 +116,12 @@ def test_quad_nonlinear_mms_four_meshes(
             float(np.sqrt(np.mean(np.sum((r.velocity_m_s - exact) ** 2, axis=1))))
         )
         p_errors.append(float(np.sqrt(np.mean((r.pressure_Pa - p + p[0]) ** 2))))
+        print(
+            f"MMS {scheme} {n}x{n}: U error={errors[-1]:.6g}, "
+            f"p error={p_errors[-1]:.6g}, outer={r.iterations}, "
+            f"SIMPLE={r.simple_steps}",
+            flush=True,
+        )
         assert np.max(np.abs(r.mass_residual_kg_m3_s)) < 1e-8 * rho
     record_property("velocity_errors", errors)
     record_property("pressure_errors", p_errors)
@@ -119,6 +135,7 @@ def test_quad_nonlinear_mms_four_meshes(
 def test_quad_variable_mu_four_meshes(quad_mesh, record_property, warp):
     errors = []
     for n in (16, 32, 64, 128):
+        print(f"Variable mu (warp={warp}): starting {n}x{n} cells", flush=True)
         mesh = quad_mesh(n, n, warp=warp)
         x, b = mesh.cell_centres_m, mesh.face_centres_m[mesh.boundary_face_indices]
         force = np.column_stack(
@@ -139,6 +156,11 @@ def test_quad_variable_mu_four_meshes(quad_mesh, record_property, warp):
             float(
                 np.sqrt(np.mean((r.velocity_m_s[:, 0] - x[:, 1] * (1 - x[:, 1])) ** 2))
             )
+        )
+        print(
+            f"Variable mu {n}x{n}: U error={errors[-1]:.6g}, "
+            f"outer={r.iterations}, SIMPLE={r.simple_steps}",
+            flush=True,
         )
     record_property("velocity_errors", errors)
     assert errors[-1] < 0.001, errors

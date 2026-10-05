@@ -163,3 +163,23 @@ Masse −3,97e−12 kg/s, x-Impuls 6,41e−11 N und Leistung −5,54e−11 W.
 83 optionale native PETSc-Prüfungen sind lokal mangels PETSc übersprungen;
 CI enthält deren gesonderte Real-/Complex-Jobs. CI und unabhängiges Review
 sind vor Integration am aktuellen PR-Commit separat zu prüfen.
+
+## Sichtbare und getrennte CI-Abnahme
+
+Der erste gemeinsame Testjob überschritt auf allen drei GitHub-Python-Versionen
+das 30-Minuten-Budget während der Quad-FV-Abnahme. Deshalb laufen die fünf
+`cfd_convergence`-Prüfungen in verpflichtenden separaten Jobs: Poiseuille,
+zentrale MMS, begrenztes Upwind und beide Variable-mu-Netzfamilien, jeweils
+unter Python 3.11/3.12/3.13. Jeder Job zeigt den Beginn und Fehlerwerte jeder
+Netzstufe, bleibt auf 20 Minuten begrenzt und speichert seinen JUnit-Nachweis.
+BLAS-/OpenMP-Threads sind in den Testjobs auf eins begrenzt, um konkurrierende
+Rechenthreads bei den vielen kleinen Krylov-Vektoroperationen zu vermeiden.
+Der übrige Testjob hat wieder ein 15-Minuten-Budget. Diese Aufteilung lässt
+keine Abnahme aus; sämtliche CFD-Jobs müssen vor Integration grün sein.
+
+```sh
+python -m pytest -m "not cfd_convergence" --durations=10
+python -m pytest -m cfd_convergence -vv -s -o junit_family=legacy
+```
+
+`python -m pytest` ohne Filter führt weiterhin sämtliche Prüfungen aus.
