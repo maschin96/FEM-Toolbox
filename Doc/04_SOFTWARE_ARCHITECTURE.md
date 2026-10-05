@@ -378,3 +378,13 @@ SI-Domäne, vollständige BC-Zuordnung, Einlassfluss und periodische Paarung.
 JSON-I/O ist eine getrennte Factory-Grenze; Geometrie/Preflight rechnen ohne
 Dateizugriff. Kein neuer Solver, keine neue Bibliothek, keine FSI-Netzbewegung.
 [API, Formate und Grenzen](72_FLUID_MESH_ADAPTER.md).
+
+## Quad-FV-Grundoperatoren (#229 / #226a)
+
+`cfd/quad_fv.py` besitzt SI-FV-Geometrie, periodische gemeinsame Faces,
+gewichtete Least-Squares-Gradienten, nichtorthogonale Facekorrektur, volle
+variable Spannung und kompakte Druck-/Rhie-Chow-Operatoren. Reine Feldoperationen
+und Sparse-Assembly ohne I/O oder PDE-Orchestrierung. #230 ergänzt SIMPLE,
+BC-Rekonstruktion, Transport und vollständige finale Solverdiagnostik;
+#226 bleibt bis zur Abnahme beider Arbeitspakete offen.
+[API, Vorzeichen und Operatornachweise](73_QUAD_FV_OPERATORS.md).

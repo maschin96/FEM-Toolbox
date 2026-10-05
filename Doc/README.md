@@ -153,3 +153,5 @@ Verifikationsdokumente benennen ihren jeweiligen Nachweisumfang ausdrücklich.
 - [M12: vollständiger RANS-/FSI-Zielvertrag und unabhängige Abnahmegates (#84)](71_M12_RANS_FSI_CONTRACT.md)
 
 - [Fluidnetzadapter: Quad4-Geometrie, Wandauflösung und BC-Preflight (#85)](72_FLUID_MESH_ADAPTER.md)
+
+- [Konservative Quad-FV-Grundoperatoren: Gradienten, Spannungen und Druckkopplungsbausteine (#229)](73_QUAD_FV_OPERATORS.md)

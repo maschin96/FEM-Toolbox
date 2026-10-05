@@ -224,3 +224,8 @@ Die RANS-/FSI-Freigabe M12 und #94 sind dadurch nicht abgeschlossen.
 [Der ebene Fluidnetzadapter #85](72_FLUID_MESH_ADAPTER.md) liefert importierbare
 Quad4-Geometrie, Wandqualität und BC-/SI-Preflight; der neue Quad-FV-Solver #226
 und RANS #87 sind damit noch nicht implementiert.
+
+#226 ist in [Grundoperatoren #229](73_QUAD_FV_OPERATORS.md) und
+[SIMPLE-/Strömungsabnahme #230](https://github.com/maschin96/FEM-Toolbox/issues/230)
+geteilt. Der Operatorpatch liefert keine fertige Strömung und gibt #87 nicht
+frei; ursprüngliche Vier-Netz-/Bilanzgates bleiben für #230 verbindlich.

@@ -700,3 +700,24 @@ line2-Endpunktreihenfolge darf abweichen. Dies präzisiert die geometrische
 Orientierungsaussage in ADR-049, keine Änderung physikalischer Vorzeichen.
 Keine neue Dependency: NumPy/SciPy einschließlich cKDTree sind vorhanden.
 [Vertrag und Prüfungen](72_FLUID_MESH_ADAPTER.md).
+
+## ADR-051 — Quad-FV-Operatorabnahme vor SIMPLE (05.10.2026)
+
+**Status:** Angenommen als Umsetzung des unveränderten ADR-049-Vertrags.
+Das große #226 erhält zwei unabhängig prüfbare Issues: #229 für konservative
+Geometrie-/Gradienten-/Spannungs-/Druckbausteine, #230 für SIMPLE, Transport,
+BC-Rekonstruktion und die vollständigen Strömungs-/Bilanzgates. #226 bleibt
+bis zur Abnahme beider Beiträge offen; neue RANS-Schließung darf nicht allein
+auf einen Operatorpatch aufbauen. Vorab definierter zusätzlicher
+Gradienten-Vier-Netz-Test ersetzt keines der ursprünglichen Fehlerbudgets.
+
+Die reine Operator-API fordert alle Rand-Samples explizit und besitzt keine
+Gauge-Elimination oder Relaxationsrückrechnung. Gewichtete lineare Least Squares,
+Face-Extrapolationen und over-relaxed nichtorthogonale Korrektur verwenden
+gemeinsame Eigentümerdistanzen. Die Druckmobilität V/a verlangt unrelaxierte
+integrierte Impulsdiagonalen. Periodische Facepaare speichern einen gemeinsamen
+Fluss mit exakten Gegenvorzeichen, keine zwei separat akzeptierten Flüsse.
+Der kompakte Druckblock hat ausschließlich den konstanten Nullraum; der
+Rhie-Chow-Zusatz annihiliert hingegen absichtlich affine Druckfelder. Diese
+zwei Aussagen werden nicht als derselbe Nullraumtest ausgegeben.
+[Formeln, API und unabhängige Nachweise](73_QUAD_FV_OPERATORS.md).

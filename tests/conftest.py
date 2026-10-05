@@ -6,7 +6,48 @@ from itertools import permutations, product
 import numpy as np
 import pytest
 
+from fem_toolbox.cfd import FluidMesh2D
 from fem_toolbox.mesh import Mesh
+
+
+@pytest.fixture
+def quad_mesh():
+    """Authored rectangular/sheared FV meshes; no production mesh generator."""
+
+    def build(nx=4, ny=4, *, shear=0.0):
+        points = np.array(
+            [
+                [i / nx + shear * j / ny, j / ny]
+                for j in range(ny + 1)
+                for i in range(nx + 1)
+            ]
+        )
+
+        def node(i, j):
+            return j * (nx + 1) + i
+
+        cells = [
+            [node(i, j), node(i + 1, j), node(i + 1, j + 1), node(i, j + 1)]
+            for j in range(ny)
+            for i in range(nx)
+        ]
+        edges = [[node(i, 0), node(i + 1, 0)] for i in range(nx)]
+        edges += [[node(nx, j), node(nx, j + 1)] for j in range(ny)]
+        edges += [[node(i + 1, ny), node(i, ny)] for i in range(nx)]
+        edges += [[node(0, j + 1), node(0, j)] for j in range(ny)]
+        return FluidMesh2D(
+            points,
+            cells,
+            edges,
+            {
+                "bottom": np.arange(nx),
+                "right": np.arange(nx, nx + ny),
+                "top": np.arange(nx + ny, 2 * nx + ny),
+                "left": np.arange(2 * nx + ny, 2 * (nx + ny)),
+            },
+        )
+
+    return build
 
 
 @pytest.fixture

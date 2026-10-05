@@ -339,3 +339,8 @@ Der experimentelle [Fluidnetzadapter (#85)](Doc/72_FLUID_MESH_ADAPTER.md)
 liest vorbereitete Quad4-JSON-Netze mit Randgruppen, prüft Wandabstände,
 Netzqualität und SI-Randbedingungen. [Kanaleingabe und Preflight](examples/fluid_mesh/README.md)
 führen noch keinen RANS-/FSI-Solve aus.
+
+[Konservative Quad-FV-Grundoperatoren (#229)](Doc/73_QUAD_FV_OPERATORS.md)
+ergänzen linear-exakte Gradienten, volle variable Spannungen und kompakte
+Druck-/Rhie-Chow-Bausteine. SIMPLE und die vollständige Strömungsabnahme
+folgen separat in #230; der uniforme MAC-Kern bleibt die unabhängige Referenz.
