@@ -58,6 +58,11 @@ es gibt keinen gekoppelten LU-Solve im produktiven Solver. Bis zu 20
 Nachkorrekturen verwenden den gesamten nichtorthogonalen Oseen-Operator.
 Innere Restbudgets werden aus den äußeren volumenbezogenen SI-Gates
 abgeleitet. U und p werden anschließend separat unterrelaxiert.
+Der vorherige unrelaxierte lineare Lösungsstand dient als Startwert. Er wird
+gegen den frisch aufgebauten Operator geprüft; erfüllt er bereits dessen
+Restgate, entfallen neue SIMPLE-Schritte und Blockfaktorisierungen. Der erste
+kalte Solve prüft die Faktorisierbarkeit auch bei Nullquelle. Äußere Relaxation
+und die vollständige finale physikalische Prüfung bleiben unverändert.
 
 `convection_scheme`: `donor-cell` (Standard), `linear-upwind` mit explizit
 begrenzter Gradientenkorrektur oder `central` für Diffusionsdominanz.
@@ -183,3 +188,24 @@ python -m pytest -m cfd_convergence -vv -s -o junit_family=legacy
 ```
 
 `python -m pytest` ohne Filter führt weiterhin sämtliche Prüfungen aus.
+
+## Laufzeitkorrektur und Nachprüfung (#230)
+
+Profiling des zentralen 64×64-MMS-Laufs zeigte 5508 SIMPLE-Korrekturen und
+76 Blockfaktorisierungen bei einem Neustart von null in jedem äußeren Schritt.
+Der vorherige lineare Lösungsstand reduziert die Korrekturen auf 2716; der
+beobachtete Profiling-Lauf sinkt von 38 auf 29 Sekunden. RMS-U bleibt
+0,000773520 und RMS-p 0,000428110; die 38 äußeren Schritte und sämtliche
+Abnahmegates bleiben erhalten. Solver-Provenienzrevision 2 benennt den Startwert.
+
+TDD prüft eine durch unabhängiges gekoppeltes LU bestimmte Lösung unter einem
+Ein-Schritt-Budget: zunächst fehlender Startwertparameter, anschließend gleiche
+Felder ohne zusätzliche Korrektur. Geänderte Quellen erzwingen erneut Korrekturen
+und stimmen mit dem unabhängigen LU überein. Ein zusätzlicher Red-/Green-Test
+verhindert, dass der kalte Nullquellenfall einen singulären SIMPLE-Block verbirgt.
+
+Nach der Optimierung: alle fünf Vier-Netz-Prüfungen bestanden in 619 Sekunden;
+904 übrige Tests bestanden, 83 native PETSc-Tests lokal mangels PETSc übersprungen.
+Die zusätzliche Nullquellen-/Singularitätsregression und die betroffenen
+Solver-/Diagnostik-/Dateilauftests bestehen ebenfalls. Fehlerbudgets und
+Netzstufen werden weder verkleinert noch abgeschwächt.

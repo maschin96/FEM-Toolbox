@@ -261,6 +261,50 @@ def test_simple_step_matches_independent_coupled_lu(quad_mesh):
     )
     np.testing.assert_allclose(np.concatenate((u, p)), exact, atol=1e-10, rtol=0)
     assert count > 0
+    # A converged previous linear state needs no new SIMPLE correction, even
+    # with a budget of one. Values are supplied by the independent coupled LU.
+    warm_u, warm_p, warm_count = _linear_simple(
+        s,
+        s.diffusion,
+        rhs,
+        diagonal,
+        pflux,
+        max_steps=1,
+        momentum_gate=1e-8,
+        continuity_gate=1e-8,
+        initial_state=exact,
+    )
+    np.testing.assert_allclose(
+        np.concatenate((warm_u, warm_p)), exact, atol=1e-10, rtol=0
+    )
+    assert warm_count == 0
+    # A stale state must be corrected for changed forcing; a previous
+    # successful solve is not evidence of convergence of the fresh problem.
+    changed_rhs = rhs + np.tile([0.1, -0.2], s.n)
+    expected_changed = spsolve(
+        matrix,
+        np.concatenate(
+            (
+                changed_rhs,
+                -s.mass_velocity.constant - np.asarray(s.balance @ pflux.constant),
+            )
+        ),
+    )
+    changed_u, changed_p, changed_count = _linear_simple(
+        s,
+        s.diffusion,
+        changed_rhs,
+        diagonal,
+        pflux,
+        max_steps=500,
+        momentum_gate=1e-8,
+        continuity_gate=1e-8,
+        initial_state=exact,
+    )
+    np.testing.assert_allclose(
+        np.concatenate((changed_u, changed_p)), expected_changed, atol=1e-10, rtol=0
+    )
+    assert changed_count > 0
 
 
 def test_complete_nonconvergence_history_is_attached(quad_mesh):
@@ -273,6 +317,32 @@ def test_complete_nonconvergence_history_is_attached(quad_mesh):
         )
     assert len(error.value.residual_history) == 2
     assert len(error.value.residual_history[0]) == 5
+
+
+def test_cold_zero_rhs_still_rejects_singular_simple_block(quad_mesh):
+    from scipy.sparse import eye
+
+    from fem_toolbox.cfd.quad_flow import _linear_simple
+    from fem_toolbox.cfd.quad_system import Map, QuadSystem
+
+    system = QuadSystem(
+        domain_for(quad_mesh(4, 4), periodic=True), np.ones(16), np.ones(16)
+    )
+    matrix = eye(32, format="lil")
+    # Positive diagonal, but the first two rows have null vector (1,-1).
+    matrix[0, 1] = matrix[1, 0] = 1
+    diagonal = np.ones((16, 2))
+    with pytest.raises(ValidationError, match="factorization failed"):
+        _linear_simple(
+            system,
+            Map(matrix.tocsr(), np.zeros(32)),
+            np.zeros(32),
+            diagonal,
+            system.pressure_flux(diagonal),
+            max_steps=1,
+            momentum_gate=1e-8,
+            continuity_gate=1e-8,
+        )
 
 
 @pytest.mark.parametrize("cubic", [False, True])

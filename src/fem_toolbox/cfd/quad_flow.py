@@ -111,6 +111,7 @@ def _linear_simple(
     max_steps: int,
     momentum_gate: float,
     continuity_gate: float,
+    initial_state: NDArray[np.float64] | None = None,
 ) -> tuple[NDArray[np.float64], NDArray[np.float64], int]:
     """Sparse-LU momentum/compact-pressure solves form the SIMPLE preconditioner.
 
@@ -150,6 +151,18 @@ def _linear_simple(
     if gauge is not None:
         scale[2 * n + gauge] = 1
     scaled = diags(scale) @ operator
+    state = np.zeros(3 * n) if initial_state is None else initial_state.copy()
+    if state.shape != (3 * n,) or not np.all(np.isfinite(state)):
+        _error(
+            "initial_state", "finite previous linear state of shape (3*ncell,) required"
+        )
+    # Check against the fresh operator, not the previous convergence flag.
+    # A valid initial state avoids even factoring the two SIMPLE blocks.
+    if (
+        initial_state is not None
+        and np.max(np.abs((target - operator @ state) * scale)) <= 0.5
+    ):
+        return state[: 2 * n], state[2 * n :], 0
     try:
         lu_u, lu_p = splu(a.tocsc()), splu(compact.tocsc())
     except RuntimeError as error:
@@ -167,7 +180,6 @@ def _linear_simple(
         steps[0] += 1
 
     pre = LinearOperator((3 * n, 3 * n), matvec=precondition, dtype=np.float64)
-    state = np.zeros(3 * n)
     # Refinement includes the entire nonorthogonal operator, at most 20 passes.
     for _correction in range(20):
         residual = (target - operator @ state) * scale
@@ -446,6 +458,7 @@ def solve_quad_flow(
     flux = system.alias_flux(system.velocity_flux.apply(u))
     history: list[tuple[float, ...]] = []
     steps = 0
+    previous_linear_state: NDArray[np.float64] | None = None
     for _iteration in range(max_iterations):
         transport, _ = system.transport(flux, u, convection_scheme)
         momentum = Map(
@@ -470,7 +483,9 @@ def solve_quad_flow(
             max_steps=max_simple_steps,
             momentum_gate=float(gates[0]),
             continuity_gate=float(gates[1]),
+            initial_state=previous_linear_state,
         )
+        previous_linear_state = np.concatenate((candidate, pressure))
         steps += count
         u = (1 - au) * u + au * candidate
         p = (1 - ap) * p + ap * pressure
@@ -528,7 +543,8 @@ def solve_quad_flow(
         json.dumps(canonical, sort_keys=True, allow_nan=False).encode(),
         solver_name="quad-fv-simple-gmres",
         solver_parameters=dict(
-            revision=1,
+            revision=2,
+            linear_initial_guess="previous_oseen_solution",
             geometry_sha256=sha256(
                 json.dumps(canonical["mesh"], sort_keys=True, allow_nan=False).encode()
             ).hexdigest(),
