@@ -242,6 +242,12 @@ Arbeitspakete und Abnahmekriterien stehen in der
 
 ## Dokumentation
 
+Die neue Markenidentität **Femantis (bisher FEM Toolbox)** ist im
+[Corporate-Identity-Leitfaden](Doc/75_FEMANTIS_CORPORATE_IDENTITY.md) mit
+[Bildinventar](Doc/brand/README.md) dokumentiert. Der
+[vollständige Umbenennungsplan](Doc/76_FEMANTIS_RENAMING_PLAN.md) beschreibt die
+spätere technische Migration; Paketname und Python-Imports bleiben vorerst gültig.
+
 Der [Dokumentationsindex](Doc/README.md) führt durch die fachlichen und
 technischen Entwurfsdokumente.
 
