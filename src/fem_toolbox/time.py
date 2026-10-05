@@ -5,6 +5,7 @@ from __future__ import annotations
 import csv
 from collections.abc import Iterable
 from dataclasses import dataclass
+from math import isfinite
 from pathlib import Path
 from typing import Literal, TypeAlias
 
@@ -61,7 +62,12 @@ class Step:
 
 @dataclass(frozen=True)
 class Ramp:
-    """Linear ramp on [start,end] s, held constant before and after."""
+    """Linear ramp on [start,end] s, held constant before and after.
+
+    Finite ordered time limits and finite scalar amplitudes are required.
+    Overflowing intermediate spans are normalized; exact endpoints and constant
+    amplitudes are retained. This does not extend a solver's time-grid support.
+    """
 
     start: float
     end: float
@@ -79,9 +85,31 @@ class Ramp:
         return (self.start, self.end)
 
     def value(self, time: float, *, side: Side = "right") -> float:
-        fraction = float(
-            np.clip((_scalar(time) - self.start) / (self.end - self.start), 0, 1)
-        )
+        t = _scalar(time)
+        if t <= self.start:
+            return self.start_value
+        if t >= self.end:
+            return self.end_value
+
+        span = self.end - self.start
+        if isfinite(span):
+            fraction = (t - self.start) / span
+        else:
+            # An overflowing span necessarily crosses zero. Halving all
+            # coordinates preserves the ratio without overflowing the span.
+            fraction = (0.5 * t - 0.5 * self.start) / (
+                0.5 * self.end - 0.5 * self.start
+            )
+
+        if (self.start_value >= 0) == (self.end_value >= 0):
+            # Same-sign differences are finite. Interpolate from the nearer
+            # endpoint, avoiding a sum of near-maximum same-sign amplitudes.
+            difference = self.end_value - self.start_value
+            if fraction <= 0.5:
+                return self.start_value + fraction * difference
+            return self.end_value - (1 - fraction) * difference
+        # Opposite-sign weighted terms cannot overflow when added, whereas
+        # the amplitude difference could overflow.
         return (1 - fraction) * self.start_value + fraction * self.end_value
 
     def __call__(self, time: float) -> float:

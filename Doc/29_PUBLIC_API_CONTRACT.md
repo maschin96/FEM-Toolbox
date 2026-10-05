@@ -140,3 +140,39 @@ Einheiten-/Vorzeichenänderungen und die Struktur versionierter Ergebnisbündel.
 
 `fem_toolbox.post.visualization` bietet `plot_field`, `FieldPlot` und
 `save_jpeg`; [Signaturen, Formen und Fehler](62_FIELD_VISUALIZATION.md).
+
+
+## Robuste skalare Rampenprofile (#221)
+
+`Ramp(start, end, start_value, end_value)` erwartet endliche skalare
+Zeitgrenzen in s mit `end > start` und endliche Amplituden in der SI-Einheit
+des jeweiligen Feldes. `value(time, side=...)` und `__call__` erwarten endliche
+Abfragezeiten. Ungültige Daten werden mit `ValidationError` abgelehnt.
+Die kontinuierliche Rampe liefert für beide Ereignisseiten denselben Wert.
+
+Die lineare Interpolation unterstützt auch Zeitintervalle, deren unskalierte
+Differenz in float64 überläuft. Beispielsweise liefert
+`Ramp(-1e308, 1e308, 0.0, 1.0)(0.0)` den analytischen Mittelpunkt **0.5**.
+Zeitkoordinaten werden nur bei überlaufender Spanne gemeinsam halbiert;
+kleine darstellbare, auch subnormale Zeitintervalle bleiben unskaliert.
+
+Außerhalb des Intervalls und an dessen Endpunkten werden die gespeicherten
+Amplituden direkt zurückgegeben. Konstante Amplituden bleiben exakt konstant,
+auch am größten endlichen float64-Wert. Bei gleichnamigen Amplituden wird vom
+näheren Endpunkt mit endlicher Differenz interpoliert, bei verschiedenen
+Vorzeichen mit gewichteten Termen statt potenziell überlaufender Differenz.
+Normale Zwischenwerte bleiben bis auf die übliche float64-Rundung linear;
+für subnormale Ergebnisse ist eine absolute, keine pauschale relative
+Genauigkeitsbeurteilung erforderlich.
+
+Die Änderungen betreffen ausschließlich die skalare Profilevaluation.
+`integration_times` und die transienten Solver verlangen weiterhin streng
+steigende Raster mit endlichen darstellbaren Zeitschritten. Die Robustheit
+eines einzelnen Profils ist keine Zusage für numerisch beliebig große
+Integrationszeitbereiche oder eine neue physikalische Modellgültigkeit.
+
+Die Regressionstests verwenden unabhängige Viertel-/Mittelpunktwerte und
+100-stellige Decimal-Auswertung der geraden Verbindung exakter float64-
+Eingabewerte. Acht float64-Epsilon als absolute Toleranz nach Normierung auf
+die Endamplitudenskala decken die wenigen arithmetischen Operationen dieser
+Referenzfälle ab; End-/Halte- und konstante Werte werden exakt geprüft.

@@ -6,6 +6,11 @@ Versionierung an [Semantic Versioning](https://semver.org/).
 
 ## Unreleased
 
+### Fixed
+
+- Rampen interpolieren große endliche Zeitgrenzen und Amplituden ohne stillen
+  Zwischenüberlauf; End-/Haltewerte und konstante Profile bleiben erhalten (#221).
+
 ## [1.3.0] - 2026-10-01
 
 ### Added
