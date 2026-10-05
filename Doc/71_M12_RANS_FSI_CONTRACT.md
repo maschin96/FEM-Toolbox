@@ -400,6 +400,11 @@ Diese Rechnungen sind unabhängig von einem CFD-/Struktursolver.
 
 #85 liefert Netz/Import ohne CFD-Solver. #226 liefert den gesonderten
 Quad-FV-Operator mit Druckkopplung; reine Importdaten geben #87 nicht frei.
+
+Umsetzungspräzisierung vom 05.10.2026 (ADR-051): #226 ist in Grundoperatoren
+#229 und SIMPLE-/Strömungsabnahme #230 geteilt. Alle obigen Gates und die
+Abhängigkeit von #87 bleiben bestehen; ein integrierter #229-Patch allein
+schließt #226 nicht. [Operatorvertrag und separate Rekonstruktionsprüfung](73_QUAD_FV_OPERATORS.md).
 #90 liefert Netzbewegung für dieselbe FV-Geometrie, ohne MAC-Netze
 stillschweigend zu verformen. Reihenfolge: #84 -> #85 -> #226 -> #87 -> #88;
 #89 nach #84/#85, #90 nach #85/#226, #91 nach #88/#89/#90,

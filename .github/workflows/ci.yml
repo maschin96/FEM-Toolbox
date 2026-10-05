@@ -295,7 +295,7 @@ jobs:
           python -c 'import fem_toolbox, meshio, numpy, scipy; print(f"fem_toolbox={fem_toolbox.__file__} meshio={meshio.__version__} numpy={numpy.__version__} scipy={scipy.__version__}")'
 
       - name: Smoke numerical solvers and mesh I/O
-        run: python -m pytest tests/regression/test_piezo_d33_benchmark.py tests/regression/test_thermopiezo_example.py tests/unit/test_mesh_io.py tests/unit/test_studies.py tests/unit/test_study_reports.py tests/unit/test_surrogates.py tests/unit/test_cfd_channel.py tests/unit/test_cfd_stokes.py tests/unit/test_cfd_flow.py tests/unit/test_cfd_flow_config.py tests/unit/test_cfd_convection.py tests/regression/test_cfd_flow_example.py tests/unit/test_fluid_mesh.py tests/regression/test_fluid_mesh_example.py
+        run: python -m pytest tests/regression/test_piezo_d33_benchmark.py tests/regression/test_thermopiezo_example.py tests/unit/test_mesh_io.py tests/unit/test_studies.py tests/unit/test_study_reports.py tests/unit/test_surrogates.py tests/unit/test_cfd_channel.py tests/unit/test_cfd_stokes.py tests/unit/test_cfd_flow.py tests/unit/test_cfd_flow_config.py tests/unit/test_cfd_convection.py tests/regression/test_cfd_flow_example.py tests/unit/test_fluid_mesh.py tests/regression/test_fluid_mesh_example.py tests/unit/test_quad_fv.py tests/convergence/test_quad_fv_reconstruction.py
 
   petsc:
     name: PETSc / Python 3.12 / ${{ matrix.scalar }}

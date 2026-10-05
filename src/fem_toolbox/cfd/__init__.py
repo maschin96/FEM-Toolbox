@@ -11,6 +11,7 @@ from fem_toolbox.cfd.flow_model import (
 )
 from fem_toolbox.cfd.fluid_domain import FluidDomain
 from fem_toolbox.cfd.fluid_mesh import FluidMesh2D, WallQuality
+from fem_toolbox.cfd.quad_fv import FaceGradient, QuadFVGeometry, StressFlux
 from fem_toolbox.cfd.stokes import StokesResult, solve_stokes
 
 __all__ = [
@@ -18,12 +19,15 @@ __all__ = [
     "ChannelBoundary",
     "ChannelResult",
     "ClosedWalls",
+    "FaceGradient",
     "FlowProblem",
     "FluidDomain",
     "FluidMesh2D",
     "IncompressibleFluid",
+    "QuadFVGeometry",
     "StationaryFlowResult",
     "StokesResult",
+    "StressFlux",
     "WallQuality",
     "solve_channel",
     "solve_stationary_flow",
