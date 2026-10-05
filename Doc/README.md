@@ -19,6 +19,10 @@ Eintrag im Entscheidungsprotokoll.
 
 ## Produktplanung
 
+- [Femantis: vollständige Corporate Identity mit Original-Bildtafel](75_FEMANTIS_CORPORATE_IDENTITY.md)
+- [Femantis: vollständiger Code-/Paket-/GitHub-Umbenennungsplan](76_FEMANTIS_RENAMING_PLAN.md)
+- [Markenbilder: Inventar, Herkunft und Kontrastnachweis](brand/README.md)
+
 - [Aktueller Entwicklungsstand und konkrete M6/M7-Planung](30_M6_M7_DEVELOPMENT_PLAN.md)
 
 - [Installation, Gmsh-Einrichtung und erster Lauf](../INSTALL.md)
