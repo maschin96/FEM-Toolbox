@@ -369,3 +369,12 @@ den verifizierten Kleinverformungssolver auf ihrem Referenznetz.
 [Ziel-API, Datenformen, Adapter, Provenienz und Gates](71_M12_RANS_FSI_CONTRACT.md)
 sind beschlossen, noch nicht verfügbar. NumPy/SciPy/meshio bleiben die
 Abhängigkeitsbasis; keine externe CFD-/Kopplungsbibliothek wird eingebettet.
+
+## Fluidnetz-/Randadapter (#85)
+
+`cfd/fluid_mesh.py` besitzt immutable Quad4-Geometrie, Face-Eigentümer,
+Wandsegmentabstände und Netz-/y+-Gates. `cfd/fluid_domain.py` validiert die
+SI-Domäne, vollständige BC-Zuordnung, Einlassfluss und periodische Paarung.
+JSON-I/O ist eine getrennte Factory-Grenze; Geometrie/Preflight rechnen ohne
+Dateizugriff. Kein neuer Solver, keine neue Bibliothek, keine FSI-Netzbewegung.
+[API, Formate und Grenzen](72_FLUID_MESH_ADAPTER.md).

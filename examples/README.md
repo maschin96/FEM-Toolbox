@@ -98,3 +98,8 @@ Gesamt-Abnahme und Genauigkeits-/Kostenvergleiche bleiben offen.
 - [Gekoppelte Stokes-Geschwindigkeiten und Druck auf vier Netzen](cfd_pressure/README.md).
 
 - [Stationärer Kanal aus TOML mit Einlass, Druckauslass und Bilanzartefakten](cfd_flow/README.md).
+
+## Experimenteller Fluidnetzimport (#85)
+
+[Vorbereiteter Quad4-Kanal](fluid_mesh/README.md) mit JSON-Netz, SI-Fluid,
+Ein-/Auslass-/Wandgruppen und reinem Geometrie-/Rand-Preflight; kein Solve.

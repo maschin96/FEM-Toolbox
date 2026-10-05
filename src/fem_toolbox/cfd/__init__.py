@@ -9,6 +9,8 @@ from fem_toolbox.cfd.flow_model import (
     ClosedWalls,
     IncompressibleFluid,
 )
+from fem_toolbox.cfd.fluid_domain import FluidDomain
+from fem_toolbox.cfd.fluid_mesh import FluidMesh2D, WallQuality
 from fem_toolbox.cfd.stokes import StokesResult, solve_stokes
 
 __all__ = [
@@ -17,9 +19,12 @@ __all__ = [
     "ChannelResult",
     "ClosedWalls",
     "FlowProblem",
+    "FluidDomain",
+    "FluidMesh2D",
     "IncompressibleFluid",
     "StationaryFlowResult",
     "StokesResult",
+    "WallQuality",
     "solve_channel",
     "solve_stationary_flow",
     "solve_stokes",

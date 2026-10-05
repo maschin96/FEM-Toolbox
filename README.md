@@ -334,3 +334,8 @@ FSI, Zeitintegration und allgemeine 3D-/Tet-CFD-Netze gehören nicht zum Kern.
 Der [M12-RANS-/FSI-Zielvertrag](Doc/71_M12_RANS_FSI_CONTRACT.md) legt die
 SA-noft2-Schließung, körperangepasste Fluidnetze und begrenzte stationäre
 Kopplung für die Folgeissues fest. Diese Funktionen sind noch nicht verfügbar.
+
+Der experimentelle [Fluidnetzadapter (#85)](Doc/72_FLUID_MESH_ADAPTER.md)
+liest vorbereitete Quad4-JSON-Netze mit Randgruppen, prüft Wandabstände,
+Netzqualität und SI-Randbedingungen. [Kanaleingabe und Preflight](examples/fluid_mesh/README.md)
+führen noch keinen RANS-/FSI-Solve aus.

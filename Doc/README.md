@@ -151,3 +151,5 @@ Verifikationsdokumente benennen ihren jeweiligen Nachweisumfang ausdrücklich.
 - [Stationärer inkompressibler Kern: Konvektion, Picard, Ein-/Auslass und Abnahme #86](70_STATIONARY_FLOW_CORE.md)
 
 - [M12: vollständiger RANS-/FSI-Zielvertrag und unabhängige Abnahmegates (#84)](71_M12_RANS_FSI_CONTRACT.md)
+
+- [Fluidnetzadapter: Quad4-Geometrie, Wandauflösung und BC-Preflight (#85)](72_FLUID_MESH_ADAPTER.md)
