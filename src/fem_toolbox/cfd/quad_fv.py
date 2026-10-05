@@ -460,7 +460,21 @@ class QuadFVGeometry:
     def _pressure_data(
         self, diagonal: ArrayLike, density: float, boundary_indices: ArrayLike
     ) -> tuple[NDArray[np.float64], NDArray[np.bool_], float]:
-        a = self._positive(diagonal, len(self.mesh.quad4), "momentum_diagonal_kg_s")
+        raw = _float_array(diagonal, "momentum_diagonal_kg_s")
+        if raw.shape == (len(self.mesh.quad4), 2):
+            if np.any(raw <= 0):
+                _error(
+                    "momentum_diagonal_kg_s", "positive component diagonals required"
+                )
+            a = raw
+        else:
+            a = np.repeat(
+                self._positive(raw, len(self.mesh.quad4), "momentum_diagonal_kg_s")[
+                    :, None
+                ],
+                2,
+                axis=1,
+            )
         rho = _scalar(density, "density_kg_m3")
         if rho <= 0:
             _error("density_kg_m3", "positive density required")
@@ -491,14 +505,15 @@ class QuadFVGeometry:
                 "pressure_boundary_indices",
                 "periodic face cannot also prescribe pressure",
             )
-        d = self.cell_volumes_m3 / a
+        d = self.cell_volumes_m3[:, None] / a
         df = d[self.mesh.face_owners].copy()
         inner = self.neighbours >= 0
-        w = self._fraction[inner]
+        w = self._fraction[inner, None]
         df[inner] = (1 - w) * df[inner] + w * d[self.neighbours[inner]]
         if not np.all(np.isfinite(df)) or np.any(df <= 0):
             _error("momentum_diagonal_kg_s", "unrepresentable V/a pressure mobility")
-        return df, opened, rho
+        normal_mobility = np.sum(df * self.mesh.face_normals**2, axis=1)
+        return normal_mobility, opened, rho
 
     def pressure_correction_matrix(
         self,
@@ -510,6 +525,8 @@ class QuadFVGeometry:
         """Positive compact -div(rho*d*grad(pc)) block (kg/(Pa s)).
 
         d=V/a from the *unrelaxed integrated* momentum diagonal (kg/s).
+        a accepts scalar, (ncell,) or component (ncell,2) diagonals; the latter
+        uses n.T @ diag(V/a) @ n for the common normal mobility.
         No gauge: closed/periodic block has exactly the constant null mode.
         Selected boundary line rows mean prescribed pc=0; other outer fluxes
         fixed. Nonorthogonal correction is explicit through FaceGradient.

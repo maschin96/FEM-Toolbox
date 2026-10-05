@@ -721,3 +721,31 @@ Der kompakte Druckblock hat ausschließlich den konstanten Nullraum; der
 Rhie-Chow-Zusatz annihiliert hingegen absichtlich affine Druckfelder. Diese
 zwei Aussagen werden nicht als derselbe Nullraumtest ausgegeben.
 [Formeln, API und unabhängige Nachweise](73_QUAD_FV_OPERATORS.md).
+
+## ADR-052 — Konsistente Quad-FV-Rekonstruktion und SIMPLE-Abnahme (#230)
+
+05.10.2026: Die laminare Orchestrierung verwendet GMRES-beschleunigte SIMPLE-
+Schritte mit getrennten Impuls-/kompakten Druck-LU-Blöcken. Kein produktiver
+gekoppelter LU-Solve; die innere Fehlerschranke wird aus den unveränderten
+volumenbezogenen SI-Gates bestimmt. Komponentenweise V/a wird entlang der
+Facenormalen kontrahiert; Relaxation verändert nicht die Mobilitätsdefinition.
+
+Die ursprüngliche lineare Innenrekonstruktion mit gesonderter Randableitung
+verfehlte Druckfehler und Verfeinerungsrate der MMS. Die Orchestrierung
+verwendet deshalb konsistente kubische Zell-/Face-Polynome, zwei innere bzw.
+drei äußere Nachbarringe, explizite BC-Samples und einen kubisch konsistenten
+kompakten Normalgradienten. Ein unabhängiger kubischer Diffusionspatch
+reproduzierte zunächst künstliche Quellen in den Randzellen. Die gemeinsame
+Facekraft wird weiterhin konservativ bilanziert; Defizienz führt zum Fehler,
+keine lineare Ersatzrekonstruktion. Die Grundoperator-API aus #229 bleibt als
+linear-exakte Referenz vorhanden. Keine neue Laufzeitabhängigkeit.
+
+Leistungsabnahme prüft die diskrete Facearbeitsbilanz und legt ihre Differenzen
+zu 2mu S:S, Druckrandarbeit und konvektivem Randtransport getrennt offen.
+Ein kleines diskretes Restmaß beweist keine genaue Kontinuumsdissipation.
+Polynomexakte uniforme Referenzen werden auf allen ursprünglichen Netzstufen
+mit einem strengeren absoluten Fehlernachweis geprüft; eine zusätzliche glatt
+verformte Vier-Netz-Familie desselben analytischen Problems misst die
+unveränderte Mindestordnung. Diese Interpretation benötigt unabhängiges Review
+vor Integration. Turbulenzschließung, y+- und FSI-Abnahme bleiben Folgeissues.
+[API, Algorithmus, Nachweise und Grenzen](74_QUAD_FV_SIMPLE.md).
