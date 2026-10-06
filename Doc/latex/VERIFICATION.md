@@ -12,6 +12,10 @@ Releasebericht und keine unabhängige Freigabe.
   meldete die noch fehlende Matrixdatei. Nach Implementierung neun grüne Tests.
 - Zweiter Red-Schritt: ein ungültiges Ziel eines geplanten M9-Themas wurde noch
   nicht abgelehnt (1 fehlgeschlagen, 11 bestanden); nach Korrektur alle 12 grün.
+- Zusätzlicher PDF-Red-Nachweis: Das sichtbar richtige Integralzeichen wurde
+  als „Z“ extrahiert; der neue Symboltest scheiterte mit `mathematical Unicode
+  missing`. Nach expliziter Glyphzuordnung werden Gradient und Integral als
+  Unicode extrahiert und automatisch geprüft.
 - Vollständige Python-Suite: 771 bestanden, 83 optionale PETSc-Tests lokal
   ausgelassen. PETSc ist hier nicht installiert; CI prüft beide Scalar-Varianten.
 - Ruff-Lint, Ruff-Format und mypy auf `src/fem_toolbox` sowie dem neuen

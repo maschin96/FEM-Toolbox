@@ -2,7 +2,12 @@
 \documentclass[11pt,a4paper,oneside]{book}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage{cmap,lmodern}
+\usepackage{lmodern}
+\input{glyphtounicode}
+\pdfgentounicode=1
+% Large integral glyphs otherwise extract as Latin Z in TeX Live 2022.
+\pdfglyphtounicode{integraldisplay}{222B}
+\pdfglyphtounicode{integraltext}{222B}
 \usepackage[ngerman]{babel}
 \usepackage{amsmath,amssymb,graphicx,booktabs,longtable,listings,xcolor,makeidx}
 \usepackage[margin=28mm]{geometry}

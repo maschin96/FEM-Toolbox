@@ -40,7 +40,7 @@ Multiarch-Digest und die Paketquelle auf den Debian-Snapshot
 einen festen Paketbestand; `manifest.json` erfasst alle installierten
 Paketversionen und Engine-Versionen. Engine: **pdfLaTeX / TeX Live 2022**,
 Literatur: **BibTeX / plain**, Register: **makeindex**, Schrift: **Latin Modern**
-(T1, eingebettet, ToUnicode via cmap), PDF-Prüfung: **Poppler**.
+(T1, eingebettet, ToUnicode via glyphtounicode, explizite Integral-Glyphzuordnung), PDF-Prüfung: **Poppler**.
 Keine Laufzeitdownloads, kein Shell-Escape. Der eigentliche Dokumentenbuild
 läuft ohne Netzwerk, als Hostbenutzer und mit schreibgeschütztem Repository.
 Der Container ist ausschließlich ein Dokumentationswerkzeug.

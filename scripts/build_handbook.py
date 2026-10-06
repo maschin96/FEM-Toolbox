@@ -211,6 +211,12 @@ def native_build(root: Path, output: Path, args: argparse.Namespace) -> None:
                     raise ValueError(
                         f"documentation build: {book}: missing PDF text {marker}"
                     )
+            if book in {"main", "theory"} and not all(
+                symbol in text for symbol in ("∇", "∫")
+            ):
+                raise ValueError(
+                    f"documentation build: {book}: mathematical Unicode missing"
+                )
             if b"/Outlines" not in (work / f"{book}.pdf").read_bytes():
                 raise ValueError(f"documentation build: {book}: missing PDF bookmarks")
             fonts = run(["pdffonts", f"{book}.pdf"], work)
