@@ -1,0 +1,55 @@
+\pdfobjcompresslevel=0
+\documentclass[11pt,a4paper,oneside]{book}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\input{glyphtounicode}
+\pdfgentounicode=1
+% Large integral glyphs otherwise extract as Latin Z in TeX Live 2022.
+\pdfglyphtounicode{integraldisplay}{222B}
+\pdfglyphtounicode{integraltext}{222B}
+\usepackage[ngerman]{babel}
+\usepackage{amsmath,amssymb,graphicx,booktabs,longtable,listings,xcolor,makeidx}
+\usepackage[margin=28mm]{geometry}
+\definecolor{navy}{HTML}{0B1F2A}
+\definecolor{accent}{HTML}{168557}
+\usepackage[unicode,colorlinks=true,linkcolor=navy,urlcolor=accent,citecolor=navy]{hyperref}
+\input{metadata}
+\hypersetup{pdftitle={FEM Toolbox -- Handbuchkandidat},pdfauthor={FEM Toolbox},pdfsubject={Version \ToolboxVersion; Commit \SourceCommit; KANDIDAT}}
+\lstset{basicstyle=\small\ttfamily,breaklines=true,frame=single,columns=fullflexible}
+\makeindex
+\AtBeginDocument{\renewcommand{\indexname}{Sachregister}}
+\newcommand{\BookTitle}{Gesamthandbuch}
+\newcommand{\FrontMatter}{%
+\frontmatter
+\begin{titlepage}
+{\Huge\sffamily\bfseries FEM Toolbox\par}\vspace{12mm}
+{\LARGE\BookTitle\par}\vspace{8mm}
+{\Large KANDIDAT -- Struktur und Musterteil\par}\vfill
+Version \ToolboxVersion\\[4mm]
+Quellcommit: {\small\ttfamily\SourceCommit}\\[4mm]
+Quellzustand: \SourceState\\[4mm]
+M9 / Issue 206. Die Fachbände sind noch offen.\\
+Keine experimentelle Validierungsfreigabe.\\[8mm]
+Deutschsprachige Referenz mit englischen API-Bezeichnern.
+\end{titlepage}
+\tableofcontents\listoffigures\listoftables
+\chapter{Lesehinweise und Status}
+Die Bände Theorie (Issue 207), Anwendung (208), API/Entwicklung (209) und
+Nachweise (210) werden separat abgenommen. Redaktionelle Gesamtabnahme: 211.
+Dieses Dokument zeigt die Buchstruktur; offene Kapitel sind kein vollständiges Handbuch.
+\section{Symbole und Abkürzungen}
+\begin{tabular}{ll}
+$\Omega$ & Gebiet in drei Dimensionen\\
+$\mathbf n$ & äußere Einheitsnormale\\
+$T$ & absolute Temperatur, K\\
+$\mathbf q$ & Wärmestromdichte, W/m$^2$\\
+FEM & Finite-Elemente-Methode\\
+SI & Internationales Einheitensystem\\
+V\&V & Verifikation und Validierung
+\end{tabular}
+\mainmatter}
+\newcommand{\BackMatter}{%
+\backmatter
+\bibliographystyle{plain}\bibliography{references}
+\printindex}

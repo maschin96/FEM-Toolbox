@@ -146,3 +146,9 @@ Verifikationsdokumente benennen ihren jeweiligen Nachweisumfang ausdrücklich.
 - [Studienrezepte: Abnahme und saubere Reproduktion](63_STUDY_RECIPE_ACCEPTANCE.md)
 
 - [M8-Freigabebericht, Kompatibilität und Release-Gate](64_M8_RELEASE_VERIFICATION.md)
+
+## M9 — Handbuchstruktur (Kandidat)
+
+- [LaTeX-Bände, reproduzierbarer PDF-Build und Quellenmatrix (#206)](latex/README.md)
+
+Die Fachbände #207–#210 und die redaktionelle Gesamtabnahme #211 bleiben offen.

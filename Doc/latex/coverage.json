@@ -1,0 +1,876 @@
+{
+  "schema": 1,
+  "scope": "M0–M8 stable sources; M9 planned; M12/M13/M14 only historical/planned where present",
+  "entries": [
+    {
+      "source": "Doc/01_SCOPE_AND_REQUIREMENTS.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/01_SCOPE_AND_REQUIREMENTS.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/02_MATHEMATICAL_MODEL.md",
+      "target": "Doc/latex/chapters/theory.tex",
+      "canonical": "Doc/02_MATHEMATICAL_MODEL.md",
+      "owner": "Fachliche Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/03_TET4_FORMULATION.md",
+      "target": "Doc/latex/chapters/theory.tex",
+      "canonical": "Doc/03_TET4_FORMULATION.md",
+      "owner": "Fachliche Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/04_SOFTWARE_ARCHITECTURE.md",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "Doc/04_SOFTWARE_ARCHITECTURE.md",
+      "owner": "API-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/05_VERIFICATION_AND_VALIDATION.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/05_VERIFICATION_AND_VALIDATION.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical"
+    },
+    {
+      "source": "Doc/06_ROADMAP.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/06_ROADMAP.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/07_RISKS_AND_DECISIONS.md",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "Doc/07_RISKS_AND_DECISIONS.md",
+      "owner": "API-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/08_REFERENCES.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/08_REFERENCES.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/09_RELEASE_PROCESS.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/09_RELEASE_PROCESS.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical"
+    },
+    {
+      "source": "Doc/10_LINEAR_ELASTICITY.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/10_LINEAR_ELASTICITY.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/11_STEADY_HEAT.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/11_STEADY_HEAT.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/12_ELECTROSTATICS.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/12_ELECTROSTATICS.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/13_PRODUCT_VISION.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/13_PRODUCT_VISION.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/14_THERMOMECHANICS.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/14_THERMOMECHANICS.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/15_PIEZOELECTRIC_MATERIAL.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/15_PIEZOELECTRIC_MATERIAL.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/16_PIEZOELECTRIC_ELEMENT.md",
+      "target": "Doc/latex/chapters/theory.tex",
+      "canonical": "Doc/16_PIEZOELECTRIC_ELEMENT.md",
+      "owner": "Fachliche Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/17_PIEZOELECTRIC_SOLVER.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/17_PIEZOELECTRIC_SOLVER.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/18_PIEZO_D33_VERIFICATION.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/18_PIEZO_D33_VERIFICATION.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical"
+    },
+    {
+      "source": "Doc/19_MATERIAL_REGIONS.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/19_MATERIAL_REGIONS.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/20_ELECTRODES.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/20_ELECTRODES.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/21_MODEL_SCHEMA.md",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "Doc/21_MODEL_SCHEMA.md",
+      "owner": "API-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/22_THERMOPIEZOELECTRIC.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/22_THERMOPIEZOELECTRIC.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/23_MODEL_PREFLIGHT.md",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "Doc/23_MODEL_PREFLIGHT.md",
+      "owner": "API-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/24_RESULT_BUNDLE.md",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "Doc/24_RESULT_BUNDLE.md",
+      "owner": "API-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/25_THERMOPIEZO_CONVERGENCE.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/25_THERMOPIEZO_CONVERGENCE.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/26_VALIDITY_AND_LIMITS.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/26_VALIDITY_AND_LIMITS.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/27_DISTRIBUTION_INVENTORY.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/27_DISTRIBUTION_INVENTORY.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/28_DEPENDENCY_COMPATIBILITY.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/28_DEPENDENCY_COMPATIBILITY.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/29_PUBLIC_API_CONTRACT.md",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "Doc/29_PUBLIC_API_CONTRACT.md",
+      "owner": "API-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/29_RELEASE_ARTIFACTS_AND_PROTECTION.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/29_RELEASE_ARTIFACTS_AND_PROTECTION.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical"
+    },
+    {
+      "source": "Doc/30_M6_M7_DEVELOPMENT_PLAN.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/30_M6_M7_DEVELOPMENT_PLAN.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/31_TET4_STORAGE.md",
+      "target": "Doc/latex/chapters/theory.tex",
+      "canonical": "Doc/31_TET4_STORAGE.md",
+      "owner": "Fachliche Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/32_MATERIAL_LIBRARY.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/32_MATERIAL_LIBRARY.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/33_TRANSIENT_HEAT.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/33_TRANSIENT_HEAT.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/34_PIEZO_DYNAMICS.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/34_PIEZO_DYNAMICS.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/35_M6_RELEASE_VERIFICATION.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/35_M6_RELEASE_VERIFICATION.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical"
+    },
+    {
+      "source": "Doc/36_PERFORMANCE_BASELINE.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/36_PERFORMANCE_BASELINE.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical"
+    },
+    {
+      "source": "Doc/37_LINEAR_BACKEND.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/37_LINEAR_BACKEND.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/38_PETSC_BACKEND.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/38_PETSC_BACKEND.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/39_PETSC_FIELDSPLIT.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/39_PETSC_FIELDSPLIT.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/40_TET10_TOPOLOGY.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/40_TET10_TOPOLOGY.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/41_TET10_GEOMETRY.md",
+      "target": "Doc/latex/chapters/theory.tex",
+      "canonical": "Doc/41_TET10_GEOMETRY.md",
+      "owner": "Fachliche Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/42_TET10_OPERATORS.md",
+      "target": "Doc/latex/chapters/theory.tex",
+      "canonical": "Doc/42_TET10_OPERATORS.md",
+      "owner": "Fachliche Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/43_HEAT_INDICATOR.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/43_HEAT_INDICATOR.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/44_GEOMETRY_PERFORMANCE.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/44_GEOMETRY_PERFORMANCE.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical"
+    },
+    {
+      "source": "Doc/45_TET10_HEAT_INTEGRATION.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/45_TET10_HEAT_INTEGRATION.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/46_TET10_ELECTROSTATICS.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/46_TET10_ELECTROSTATICS.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/47_TET10_ELASTICITY.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/47_TET10_ELASTICITY.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/48_TET10_THERMOMECHANICS.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/48_TET10_THERMOMECHANICS.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/49_TET10_PIEZOELECTRIC.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/49_TET10_PIEZOELECTRIC.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/50_TET10_THERMOPIEZOELECTRIC.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/50_TET10_THERMOPIEZOELECTRIC.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/51_TET10_MODES.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/51_TET10_MODES.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/52_TET10_NEWMARK.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/52_TET10_NEWMARK.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/53_TET10_HARMONIC.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/53_TET10_HARMONIC.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/54_ACCURACY_COST_COMPARISON.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/54_ACCURACY_COST_COMPARISON.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/55_TET10_ACCEPTANCE.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/55_TET10_ACCEPTANCE.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical"
+    },
+    {
+      "source": "Doc/56_PERFORMANCE_ACCEPTANCE.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/56_PERFORMANCE_ACCEPTANCE.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical"
+    },
+    {
+      "source": "Doc/57_M7_RELEASE_CANDIDATE.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/57_M7_RELEASE_CANDIDATE.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical"
+    },
+    {
+      "source": "Doc/58_M7_RELEASE_VERIFICATION.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/58_M7_RELEASE_VERIFICATION.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical"
+    },
+    {
+      "source": "Doc/59_PARAMETER_STUDIES.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/59_PARAMETER_STUDIES.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/60_STUDY_REPORTS.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/60_STUDY_REPORTS.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/61_SURROGATE_MODELS.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/61_SURROGATE_MODELS.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/62_FIELD_VISUALIZATION.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/62_FIELD_VISUALIZATION.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/63_STUDY_RECIPE_ACCEPTANCE.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/63_STUDY_RECIPE_ACCEPTANCE.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical"
+    },
+    {
+      "source": "Doc/64_M8_RELEASE_VERIFICATION.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/64_M8_RELEASE_VERIFICATION.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical"
+    },
+    {
+      "source": "Doc/75_FEMANTIS_CORPORATE_IDENTITY.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/75_FEMANTIS_CORPORATE_IDENTITY.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/76_FEMANTIS_RENAMING_PLAN.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/76_FEMANTIS_RENAMING_PLAN.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/77_FEMANTIS_MIGRATION_CONTRACT.md",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "Doc/77_FEMANTIS_MIGRATION_CONTRACT.md",
+      "owner": "API-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/README.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/README.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/brand/README.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/brand/README.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/brand/assets/femantis-brand-board-reference.png",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/brand/assets/femantis-brand-board-reference.png",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/brand/femantis-name-inventory.json",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/brand/femantis-name-inventory.json",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/evidence/issue61/artifacts.json",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/evidence/issue61/artifacts.json",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical"
+    },
+    {
+      "source": "Doc/evidence/issue61/sdist-heat.json",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/evidence/issue61/sdist-heat.json",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical"
+    },
+    {
+      "source": "Doc/evidence/issue61/sdist-piezo.json",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/evidence/issue61/sdist-piezo.json",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical"
+    },
+    {
+      "source": "Doc/evidence/issue61/wheel-heat.json",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/evidence/issue61/wheel-heat.json",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical"
+    },
+    {
+      "source": "Doc/evidence/issue61/wheel-piezo.json",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/evidence/issue61/wheel-piezo.json",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical"
+    },
+    {
+      "source": "Doc/evidence/issue62/artifacts.json",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/evidence/issue62/artifacts.json",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical"
+    },
+    {
+      "source": "Doc/evidence/issue62/sdist-heat.json",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/evidence/issue62/sdist-heat.json",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical"
+    },
+    {
+      "source": "Doc/evidence/issue62/sdist-piezo.json",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/evidence/issue62/sdist-piezo.json",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical"
+    },
+    {
+      "source": "Doc/evidence/issue62/sdist-surrogate.json",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/evidence/issue62/sdist-surrogate.json",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical"
+    },
+    {
+      "source": "Doc/evidence/issue62/wheel-heat.json",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/evidence/issue62/wheel-heat.json",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical"
+    },
+    {
+      "source": "Doc/evidence/issue62/wheel-piezo.json",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/evidence/issue62/wheel-piezo.json",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical"
+    },
+    {
+      "source": "Doc/evidence/issue62/wheel-surrogate.json",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/evidence/issue62/wheel-surrogate.json",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical"
+    },
+    {
+      "source": "Doc/latex/README.md",
+      "target": "Doc/latex/chapters/theory.tex",
+      "canonical": "Doc/latex/README.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "sample"
+    },
+    {
+      "source": "Doc/latex/VERIFICATION.md",
+      "canonical": "Doc/latex/VERIFICATION.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "owner": "Dokumentations-Maintainer",
+      "status": "sample"
+    },
+    {
+      "source": "Doc/releases/v0.1.0.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/releases/v0.1.0.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical"
+    },
+    {
+      "source": "Doc/releases/v0.2.0.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/releases/v0.2.0.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical"
+    },
+    {
+      "source": "Doc/releases/v0.3.0.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/releases/v0.3.0.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical"
+    },
+    {
+      "source": "Doc/releases/v0.4.0.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/releases/v0.4.0.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical"
+    },
+    {
+      "source": "Doc/releases/v0.5.0.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/releases/v0.5.0.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical"
+    },
+    {
+      "source": "Doc/releases/v1.0.0-draft.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/releases/v1.0.0-draft.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical"
+    },
+    {
+      "source": "Doc/releases/v1.0.0.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/releases/v1.0.0.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical"
+    },
+    {
+      "source": "Doc/releases/v1.1.0.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/releases/v1.1.0.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical"
+    },
+    {
+      "source": "Doc/releases/v1.2.0.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/releases/v1.2.0.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical"
+    },
+    {
+      "source": "Doc/releases/v1.3.0.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/releases/v1.3.0.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical"
+    },
+    {
+      "source": "INSTALL.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "INSTALL.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "README.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "README.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/__init__.py",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "src/fem_toolbox/__init__.py",
+      "owner": "API-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/assembly/__init__.py",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "src/fem_toolbox/assembly/__init__.py",
+      "owner": "API-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/boundary/__init__.py",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "src/fem_toolbox/boundary/__init__.py",
+      "owner": "API-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/conventions.py",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "src/fem_toolbox/conventions.py",
+      "owner": "API-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/dynamic_result.py",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "src/fem_toolbox/dynamic_result.py",
+      "owner": "API-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/elements/__init__.py",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "src/fem_toolbox/elements/__init__.py",
+      "owner": "API-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/errors.py",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "src/fem_toolbox/errors.py",
+      "owner": "API-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/fields/__init__.py",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "src/fem_toolbox/fields/__init__.py",
+      "owner": "API-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/io/__init__.py",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "src/fem_toolbox/io/__init__.py",
+      "owner": "API-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/materials/__init__.py",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "src/fem_toolbox/materials/__init__.py",
+      "owner": "API-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/mesh/__init__.py",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "src/fem_toolbox/mesh/__init__.py",
+      "owner": "API-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/model.py",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "src/fem_toolbox/model.py",
+      "owner": "API-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/model_preflight.py",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "src/fem_toolbox/model_preflight.py",
+      "owner": "API-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/physics/__init__.py",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "src/fem_toolbox/physics/__init__.py",
+      "owner": "API-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/piezo_dynamic_model.py",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "src/fem_toolbox/piezo_dynamic_model.py",
+      "owner": "API-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/post/__init__.py",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "src/fem_toolbox/post/__init__.py",
+      "owner": "API-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/provenance.py",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "src/fem_toolbox/provenance.py",
+      "owner": "API-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/solvers/__init__.py",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "src/fem_toolbox/solvers/__init__.py",
+      "owner": "API-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/studies.py",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "src/fem_toolbox/studies.py",
+      "owner": "API-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/study_reports.py",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "src/fem_toolbox/study_reports.py",
+      "owner": "API-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/surrogates.py",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "src/fem_toolbox/surrogates.py",
+      "owner": "API-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/time.py",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "src/fem_toolbox/time.py",
+      "owner": "API-Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/transient_model.py",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "src/fem_toolbox/transient_model.py",
+      "owner": "API-Maintainer",
+      "status": "open"
+    }
+  ],
+  "planned": [
+    {
+      "issue": 63,
+      "topic": "Messdatenvertrag",
+      "target": "Doc/latex/chapters/verification.tex",
+      "status": "open",
+      "owner": "V&V-Verantwortliche"
+    },
+    {
+      "issue": 64,
+      "topic": "Unsicherheits- und Sensitivitätsstudien",
+      "target": "Doc/latex/chapters/verification.tex",
+      "status": "open",
+      "owner": "Fachliche Maintainer"
+    },
+    {
+      "issue": 65,
+      "topic": "Experimentelle Validierung",
+      "target": "Doc/latex/chapters/verification.tex",
+      "status": "open",
+      "owner": "V&V-Verantwortliche"
+    }
+  ]
+}
