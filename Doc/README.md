@@ -154,3 +154,10 @@ Verifikationsdokumente benennen ihren jeweiligen Nachweisumfang ausdrücklich.
 
 Anwendungs-, API- und Nachweisband #208–#210 und die redaktionelle
 Gesamtabnahme #211 bleiben offen.
+
+## M9 — Messdaten und Validierung
+
+- [Messdatenvertrag, Kandidatensuche und offenes Datengate (#63)](65_VALIDATION_DATA_CONTRACT.md)
+
+Es liegt noch kein qualifizierter Messdatensatz vor; Unsicherheits-API und
+experimentelle Abnahme bleiben offen.

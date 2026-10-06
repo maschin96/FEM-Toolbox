@@ -1084,6 +1084,13 @@
         "status": "documented-candidate",
         "map": "Doc/latex/theory-map.json"
       }
+    },
+    {
+      "source": "Doc/65_VALIDATION_DATA_CONTRACT.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/65_VALIDATION_DATA_CONTRACT.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "open"
     }
   ],
   "planned": [
