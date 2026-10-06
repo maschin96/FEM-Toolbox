@@ -326,3 +326,6 @@ Der optionale [Tet4-Feldbildadapter mit JPEG-Export](Doc/62_FIELD_VISUALIZATION.
 ergänzt den M8-Stand. Grenzen und Migration stehen in den Release Notes.
 
 [Zwei reproduzierbare Wärme-/Piezo-Studienrezepte](examples/study_recipes/README.md) und [Abnahmeprotokoll](Doc/63_STUDY_RECIPE_ACCEPTANCE.md) ergänzen den M8-Stand (#61).
+
+Die [M9-LaTeX-Handbuchstruktur](Doc/latex/README.md) bietet einen getrennten
+PDF-Build und einen geprüften Musterteil; vollständige Fachbände bleiben offen.
