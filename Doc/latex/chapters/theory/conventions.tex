@@ -1,0 +1,147 @@
+\chapter{Modell, Felder und Konventionen}\label{chap:conventions}
+\section{Geltungsbereich und Lesart}
+Dieser Band beschreibt den tatsächlich implementierten stabilen Umfang bis M8
+(v1.3.0) einschließlich der Korrekturen auf der M9-Basis. Version und Quellcommit
+stehen auf dem Titelblatt. Der Text ist eine eigenständig ausgearbeitete
+Herleitung der Projektmodelle; maßgeblich bleiben die mathematischen Konventionen
+in \path{Doc/02_MATHEMATICAL_MODEL.md}, die spezifischen Verträge und die
+zugeordneten Tests. Ältere Entwicklungsberichte enthalten historische
+Restumfangsangaben; der integrierte Stand aus Doc/55 und Doc/64 hat Vorrang für
+die Frage, welche Verfahren verfügbar sind.
+
+Die Annahmen sind kleine Verzerrungen, lineare Materialien, feste Geometrie,
+konforme 3D-Tetraedernetze und pro Zelle konstante Materialtensoren.
+Tet4/Triangle3 und geradkantige Tet10/Triangle6 werden unterstützt. Temperatur
+wirkt in den stationären Kopplungen einseitig. Elektrische Felder sind
+quasistatisch; keine Maxwell-Wellenausbreitung, Leitströme oder elektrische
+Trägheit werden modelliert. Dynamik betrifft die Mechanik mit algebraischem
+Potential. Die gezeigten Zahlenbeispiele sind synthetische Verifikation,
+keine Materialmessung oder experimentelle Validierung.
+\index{Gültigkeitsbereich}\index{Verifikation}
+
+Nicht enthalten sind Plastizität, Kontakt, große Verformungen, Materialnichtlinearität,
+Pyroelektrizität, reziproke transiente Thermoelastizität, Dämpfung und
+gekrümmte Geometrie. M9-Unsicherheit/Messdaten gehören zu Issue 210;
+Adaptivität, Optimierung, RANS/FSI und SPICE sind keine Funktionen dieses
+stabilen M8-Theorieumfangs. Die Femantis-Umbenennung wird separat integriert;
+die hier referenzierten Module verwenden weiterhin \texttt{fem\_toolbox}.
+
+\section{Notation, Räume und Einheiten}
+$\Omega\subset\mathbb R^3$ ist das Gebiet, $\Gamma=\partial\Omega$ sein Rand
+mit äußerer Einheitsnormaler $\mathbf n$. Indizes $i,j,k,l$ laufen über
+$x,y,z$; wiederholte Tensorindizes werden summiert. $a,b$ bezeichnen lokale
+Knoten, $K$ eine Zelle und $F$ eine Fläche. Fett gesetzte Kleinbuchstaben sind
+Vektoren; Matrizen sind fett oder durch ihren Kontext erkennbar.
+$\operatorname{sym}\mathbf A=(\mathbf A+\mathbf A^T)/2$.
+Die Felder sind $\mathbf u:\Omega\to\mathbb R^3$, $T:\Omega\to\mathbb R$
+und $\phi:\Omega\to\mathbb R$. Es gilt
+\begin{equation}\label{eq:kinematics}
+\boldsymbol\varepsilon=\operatorname{sym}\nabla\mathbf u,
+\qquad\mathbf E=-\nabla\phi,\qquad\theta=T-T_{\rm ref}.
+\end{equation}
+Temperaturen sind absolute Kelvinwerte; nur $\theta$ ist eine Differenz.
+Ansatz- und Testfunktionen liegen in $H^1$; Testfunktionen verschwinden auf dem
+jeweiligen Dirichlet-Rand. Im schwachen Problem müssen daher keine zweiten
+Ableitungen der diskreten Felder existieren.
+
+\begin{longtable}{lll}
+\caption{Erweitertes Symbol- und Einheitenverzeichnis.}\label{tab:symbols}\\
+\toprule Symbol & Bedeutung & SI-Einheit\\\midrule\endfirsthead
+\toprule Symbol & Bedeutung & SI-Einheit\\\midrule\endhead
+$\mathbf x,\mathbf u$ & Ort, Verschiebung & m\\
+$\mathbf v,\mathbf a$ & Geschwindigkeit, Beschleunigung & m/s, m/s$^2$\\
+$\boldsymbol\varepsilon,\boldsymbol\gamma$ & Verzerrung, technische Schubverzerrung & 1\\
+$\boldsymbol\sigma,\mathbf C$ & Spannung, elastische Steifigkeit & Pa\\
+$\mathbf b,\bar{\mathbf t}$ & Volumenlast, Traktion & N/m$^3$, N/m$^2$\\
+$T,\theta$ & Temperatur, Temperaturdifferenz & K\\
+$\mathbf k,\mathbf q,Q$ & Leitfähigkeit, Wärmestrom, Quelle & W/(m K), W/m$^2$, W/m$^3$\\
+$h,T_\infty$ & Wärmeübergang, Umgebung & W/(m$^2$ K), K\\
+$\rho_m,c$ & Massendichte, spezifische Wärme & kg/m$^3$, J/(kg K)\\
+$\phi,\mathbf E$ & Potential, Feldstärke & V, V/m\\
+$\mathbf D,\rho_f,\bar\omega$ & D-Vektor, Ladungsdichte, D-Randfluss & C/m$^2$, C/m$^3$, C/m$^2$\\
+$Q_L$ & Gesamtladung eines Leiters & C\\
+$\boldsymbol\kappa^S,\boldsymbol\kappa^T$ & absolute Permittivitäten & F/m\\
+$\mathbf e,\mathbf d$ & Piezo-Matrizen & C/m$^2$, C/N\\
+$\boldsymbol\alpha$ & thermischer Expansionsvektor & 1/K\\
+$\mathbf M,\mathbf C_T$ & mechanische Masse, thermische Kapazität & kg, J/K\\
+$\mathcal H,U,\mathcal E$ & Enthalpie, gespeicherte Energie, Gesamtenergie & J\\
+$\omega,f,\Delta t$ & Kreisfrequenz, Frequenz, Zeitschritt & rad/s, Hz, s\\
+\bottomrule
+\end{longtable}
+$\rho_m$ und $\rho_f$ werden getrennt geschrieben, um Masse und Ladung nicht zu
+verwechseln. $Q$ bezeichnet hier eine Wärmequelle; $Q_L$ stets eine Leiterladung.
+In Matrizen ist $\mathbf B$ der Verzerrungsoperator; $\mathbf L$ bezeichnet
+später den mechanisch-elektrischen Kopplungsblock, um eine doppelte Bedeutung
+von $\mathbf B$ zu vermeiden.
+
+\section{Voigt-Darstellung und Achsen}
+\begin{equation}\label{eq:voigt}
+\varepsilon_v=(\varepsilon_{xx},\varepsilon_{yy},\varepsilon_{zz},
+2\varepsilon_{yz},2\varepsilon_{xz},2\varepsilon_{xy})^T,
+\quad
+\sigma_v=(\sigma_{xx},\sigma_{yy},\sigma_{zz},
+\sigma_{yz},\sigma_{xz},\sigma_{xy})^T.
+\end{equation}
+Damit ist $\sigma_v^T\varepsilon_v=\boldsymbol\sigma:\boldsymbol\varepsilon$.
+Der Faktor zwei gehört zur Verzerrung, nicht zur Spannung. Die Reihenfolge
+$[xx,yy,zz,yz,xz,xy]$ und elektrische Reihenfolge $[x,y,z]$ sind verbindlich.
+Eine Materialtabelle mit anderer Reihenfolge muss vor Verwendung permutiert
+und bei tensorialen Schubkoeffizienten entsprechend transformiert werden.
+\index{Voigt-Konvention}\index{Materialachsen}
+
+Die Spalten von $\mathbf R$ sind lokale Materialachsen im globalen System;
+$\mathbf R^T\mathbf R=\mathbf I$ und $\det\mathbf R=+1$. Für einen Tensor gilt
+$\varepsilon_g=\mathbf R\varepsilon_l\mathbf R^T$.
+Bezeichne die daraus gebildeten Voigt-Abbildungen mit $\mathbf T_\varepsilon$
+und $\mathbf T_\sigma$. Arbeitsinvarianz verlangt
+$\mathbf T_\sigma^T\mathbf T_\varepsilon=\mathbf I$. Folglich
+\begin{align}\label{eq:rotation}
+\mathbf C_g&=\mathbf T_\sigma\mathbf C_l\mathbf T_\varepsilon^{-1},&
+\mathbf e_g&=\mathbf R\mathbf e_l\mathbf T_\varepsilon^{-1},\\
+\boldsymbol\kappa_g&=\mathbf R\boldsymbol\kappa_l\mathbf R^T,&
+\alpha_g&=\mathbf T_\varepsilon\alpha_l.\nonumber
+\end{align}
+Eine bloße Rotation der sechs Einträge als gewöhnlicher räumlicher Vektor wäre
+falsch. Leitfähigkeit rotiert wie $\boldsymbol\kappa$. Piezo-Materialachsen und
+\texttt{ThermalExpansion.from\_principal} führen diese Transformation explizit
+auf die globalen Daten aus; andere Materialkonstruktoren erwarten bereits
+globale Matrizen.
+
+\section{Materialdaten und numerische Zulässigkeit}
+$\mathbf C^E$ (6$\times$6), $\mathbf k$ und $\boldsymbol\kappa^S$
+(je 3$\times$3) sind symmetrisch positiv definit; $\mathbf e$ ist 3$\times$6.
+Die Implementierung prüft endliche Zahlen, Formen, skalierte Symmetrie und
+auflösbare positive Eigenwerte. Beispielsweise akzeptiert der Piezo-Konstruktor
+nur Eigenwertverhältnisse größer als $10^{-12}$ und Symmetrieabweichungen bis
+$10^{-12}$ relativ zum größten Koeffizienten. Diese Schranken diagnostizieren
+numerische Auflösbarkeit und sind keine Materialvalidierung. Dichte und
+spezifische Wärme sind positive Konstanten pro Zelle. Absolute Permittivität
+in F/m wird direkt eingegeben; relative Zahlen erfordern vorher $\varepsilon_r
+\varepsilon_0$.
+
+Die Strain-Charge-Daten
+$\varepsilon_v=\mathbf s^E\sigma_v+\mathbf d^T\mathbf E$,
+$\mathbf D=\mathbf d\sigma_v+\boldsymbol\kappa^T\mathbf E$ werden durch
+Einsetzen von $\sigma_v$ umgerechnet:
+\begin{equation}\label{eq:conversion}
+\mathbf C^E=(\mathbf s^E)^{-1},\quad
+\mathbf e=\mathbf d\mathbf C^E,\quad
+\boldsymbol\kappa^S=\boldsymbol\kappa^T-\mathbf d\mathbf C^E\mathbf d^T.
+\end{equation}
+Im Code stehen lineare Lösevorgänge statt einer expliziten Matrixinverse.
+Auch die resultierende $\boldsymbol\kappa^S$ muss positiv definit sein.
+Die beiden Stoffgesetzformen und die Bedeutung der gehaltenen mechanischen
+Größe werden anhand der externen Theoriequelle \cite{comsol-piezo} gegengeprüft;
+deren lokale Nummerierung ist nicht automatisch die Toolbox-Nummerierung.
+
+\subsection*{Implementierung und Nachweis.}
+{\small\raggedright
+\path{src/fem_toolbox/conventions.py},
+\path{src/fem_toolbox/materials/piezoelectric.py} und
+\path{src/fem_toolbox/materials/__init__.py};
+\path{tests/unit/test_conventions.py},
+\path{tests/unit/test_piezo_material.py} und
+\path{tests/unit/test_thermal_expansion.py}. Rotationen, Energieinvarianz,
+Konversion und ungültige Daten werden unabhängig geprüft.
+
+\par}

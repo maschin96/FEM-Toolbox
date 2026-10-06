@@ -1,0 +1,269 @@
+\chapter{Speicherung und zeitabhängige Verfahren}\label{chap:dynamics}
+\section{Konsistente Masse und Wärmekapazität}
+$\rho_m$ und $c$ sind konstante positive Materialdaten pro Zelle. Aus dem
+kinetischen Integral und dem thermischen Speicherterm folgen
+\begin{equation}\label{eq:storage}
+\mathbf S^e=\int_K\mathbf N^T\mathbf N\,\mathrm dV,\quad
+\mathbf M^e=\rho_m(\mathbf S^e\otimes\mathbf I_3),\quad
+\mathbf C_T^e=\rho_m c\mathbf S^e.
+\end{equation}
+Elektrische DOFs erhalten keine Masse. Mit den Momenten aus
+Gleichung~\ref{eq:simplex-moment} ist für Tet4
+\begin{equation}\label{eq:tet4-storage}
+\mathbf S^e=\frac V{20}
+\begin{pmatrix}2&1&1&1\\1&2&1&1\\1&1&2&1\\1&1&1&2\end{pmatrix},
+\qquad\mathbf S_{\rm lumped}^e=\frac V4\mathbf I_4.
+\end{equation}
+Die Zeilensummenvariante wird ausdrücklich mit \texttt{lumped=True} gewählt.
+Sie erhält Gesamtmasse je Translationsrichtung und Gesamtkapazität, nicht
+alle Momente der konsistenten Matrix. Im Einheits-Tet4 mit $\rho_m=6$ kg/m$^3$
+ist Gesamtmasse 1 kg, ein Diagonaleintrag 0,1 kg und ein Nebendiagonaleintrag
+0,05 kg. Bei $c=2$ J/(kg K) beträgt Gesamtkapazität 2 J/K; gleichmäßiges
+Heizen um 10 K benötigt 20 J.
+\index{Massenmatrix}\index{Wärmekapazität}\index{HRZ-Lumping}
+
+Bei Tet10 ergibt $\int N_i=-V/20$ an Ecken. Zeilensummen-Lumping würde
+negative Eckmassen erzeugen. Angeboten wird nur die konsistente Matrix oder
+explizites HRZ:
+\begin{equation}\label{eq:hrz}
+S_{{\rm HRZ},ii}=V\frac{S_{ii}}{\sum_jS_{jj}}.
+\end{equation}
+Die positive Diagonale wird auf das Gesamtvolumen skaliert; Masse/Kapazität
+folgen durch $\rho_m$ bzw. $\rho_mc$. Dies entspricht der dokumentierten
+Diagonalskalierung \cite{oasys-hrz}. Es ist keine exakte Integration aller
+quadratischen Bewegungen. Ein Tet4-Booleschwert wird nicht still zu HRZ
+umgedeutet. Unter-/Überlauf nicht darstellbarer Speicherkoeffizienten ist ein
+Eingabefehler. Piezo-Dynamik verwendet die konsistente mechanische Masse.
+
+\section{Transiente Wärme und Backward Euler}
+Mit temperaturunabhängigen $\rho_m,c,\mathbf k$ gilt
+\begin{equation}\label{eq:heat-time}
+\rho_mc\,\dot T-\nabla\cdot(\mathbf k\nabla T)=Q,
+\qquad\mathbf C_T\dot{\mathbf T}+\mathbf K_n\mathbf T=\mathbf f_n,
+\end{equation}
+wobei $\mathbf K_n$ Leit- und Robinanteil enthält. Ein vollständig aufgelöstes
+Anfangsfeld $T_0$ und zeitliche Dirichlet-Daten sind nötig. Mit
+$\Delta t_n=t_n-t_{n-1}>0$ wird
+\begin{equation}\label{eq:backward-euler}
+(\mathbf C_T/\Delta t_n+\mathbf K_n)\mathbf T_n
+=\mathbf f_n+\mathbf C_T\mathbf T_{n-1}/\Delta t_n.
+\end{equation}
+Freie Zeilen mit bewegter Temperaturvorgabe $\mathbf g_n$ tragen zusätzlich
+$-\mathbf K_{fc,n}\mathbf g_n-
+\mathbf C_{T,fc}(\mathbf g_n-\mathbf g_{n-1})/\Delta t_n$.
+Der volle Speicherterm darf nicht weggelassen werden, wenn feste Randknoten
+Kapazität besitzen. Anfangswerte müssen Randwerte bei $t_0$ auf $10^{-10}$ K
+erfüllen; es gibt keine stille Anfangsprojektion.
+\index{Backward Euler}
+
+Bekannte Signalereignisse werden in das Zeitraster aufgenommen. Quellen,
+Flüsse und Robin-Daten verwenden am Intervallende den \emph{linken Grenzwert};
+vorgegebene Temperaturen sind am Endpunkt rechtsstetig. Daher heizt ein
+Quellensprung bei $t=2$ nicht schon das Intervall davor.
+Callables müssen ihre Ereigniszeiten ausdrücklich melden; ein vorheriger
+Float-Zeitpunkt approximiert den linken Grenzwert. Ein Raster mit endlichen,
+streng steigenden, darstellbaren Schrittweiten ist erforderlich. Die robuste
+Rampeninterpolation erweitert nicht die Grenzen des eigentlichen Zeitintegrators.
+
+Für einen ungetriebenen skalaren Modus $\dot\vartheta=-\lambda\vartheta$ gilt
+$\vartheta_n=\vartheta_{n-1}/(1+\lambda\Delta t)$.
+Der Faktor ist für $\lambda\ge0$ und jeden positiven Schritt höchstens eins:
+Backward Euler ist für dieses lineare dissipative Problem stabil, aber nur
+zeitlich erster Ordnung und numerisch dämpfend. Stabilität bedeutet keine
+zeitliche Auflösung. Konsistente Kapazität garantiert bei räumlicher
+Diskretisierung keine allgemeine Temperaturpositivität/Monotonie.
+Ein idealer Temperatursprung kann Überschwinger verursachen.
+
+\subsection{Speicher- und Leistungsbilanz}
+Die diskrete Änderung des thermischen Energieinhalts relativ zu $T_0$ ist
+$\Delta U_T=\mathbf1^T\mathbf C_T(\mathbf T_n-\mathbf T_0)$ in J.
+Das ist kein quadratischer Normausdruck. Pro Schritt gilt
+\begin{equation}\label{eq:transient-balance}
+P_Q+P_{D,\rm in}-P_{q,\rm out}-P_{h,\rm out}
+-\mathbf1^T\mathbf C_T(\mathbf T_n-\mathbf T_{n-1})/\Delta t_n=0.
+\end{equation}
+Die Randreservoir-Reaktion enthält die Trägheit des Temperaturfeldes.
+Feldresiduen und Bilanz werden unabhängig geprüft; initiale
+Wärme-Frame-Reaktionen sind im Vertrag null, nicht als ausgewertete Bilanz
+bei $t_0$ zu interpretieren.
+
+\subsection{Handrechnung: gleichmäßige Abkühlung}
+Ein im Test spezifiziertes gleichmäßiges Feld hat Rate $\lambda=1$/s,
+$T_\infty=300$ K und $T_0=310$ K. Nach einem Schritt $\Delta t=0{,}1$ s gilt
+$T_1=300+100/11=309{,}090909\ldots$ K.
+Analytisch wäre $300+10e^{-0.1}=309{,}048374\ldots$ K.
+Die Differenz ist Diskretisierungsfehler, keine Materialunsicherheit.
+Auf 10/20/40/80 Schritten bis 1 s zeigen die bestehenden Tests Fehler
+$0{,}176638/0{,}090100/0{,}045512/0{,}022873$ K und Ordnung gegen eins.
+Raumkonvergenz wird separat mit zeitlich linearer Referenz geprüft, für die
+Backward Euler keinen Zeitfehler erzeugt.
+
+\section{Piezo-Dynamik als differential-algebraisches System}
+Nach Elektroden- und Randreduktion sei $\mathbf D$ positiv definit. Für freie
+mechanische/elektrische Unbekannte lautet das homogene Grundsystem
+\begin{equation}\label{eq:dae}
+\mathbf M\ddot{\mathbf u}+\mathbf K_u\mathbf u+\mathbf L\phi=\mathbf f_u,
+\qquad\mathbf L^T\mathbf u-\mathbf D\phi=\mathbf f_\phi.
+\end{equation}
+Die mechanische starke Form ist $\rho_m\ddot{\mathbf u}-\nabla\cdot\sigma=\mathbf b$;
+das Gauß-Gesetz bleibt algebraisch. Es gibt keine singuläre elektrische
+Massenmatrix im Eigenwertsolver. Durch Auflösen der zweiten Gleichung folgt
+\begin{align}\label{eq:dynamic-schur}
+\phi&=\mathbf D^{-1}(\mathbf L^T\mathbf u-\mathbf f_\phi),\\
+\mathbf K_{\rm eff}&=\mathbf K_u+\mathbf L\mathbf D^{-1}\mathbf L^T,\qquad
+\mathbf M\ddot{\mathbf u}+\mathbf K_{\rm eff}\mathbf u
+=\mathbf f_u+\mathbf L\mathbf D^{-1}\mathbf f_\phi.\nonumber
+\end{align}
+Inverse Schreibweise ist mathematische Kurznotation; Faktorisierung/Lösen
+bzw. die dokumentierte dichte Schur-Referenz implementieren die Operation.
+Bei bewegten mechanischen Rändern kommt $-\mathbf M_{fc}\ddot{\mathbf g}_c$
+zur reduzierten Last; statische bekannte Randterme werden ebenfalls abgezogen.
+Nur $\mathbf u_0,\mathbf v_0$ sind unabhängige Anfangsdaten.
+$\phi_0$ folgt algebraisch und $\mathbf a_0$ aus der mechanischen Gleichung.
+Explizite Anfangsdaten müssen vorgegebene Verschiebung/Geschwindigkeit bis
+$10^{-12}$ m bzw. m/s erfüllen.
+\index{Differential-algebraisches System}
+
+\section{Modalanalyse und Randwirkung}
+Homogene Störungen führen zu
+\begin{equation}\label{eq:modes}
+\mathbf K_{\rm eff}\mathbf z_j=\omega_j^2\mathbf M\mathbf z_j,
+\qquad\mathbf z_i^T\mathbf M\mathbf z_j=\delta_{ij},
+\qquad f_j=\omega_j/(2\pi).
+\end{equation}
+Potentialformen sind $\mathbf D^{-1}\mathbf L^T\mathbf z_j$.
+Der größte mechanische Eintrag wird positiv gewählt; bei mehrfachen
+Eigenwerten ist die Basis nicht eindeutig. Massennormierte Formen sind keine
+physikalischen Anregungsamplituden. Nichtnull modale Randwerte werden
+abgelehnt; ein statischer Bias verändert ohne Nichtlinearitätsmodell die
+Tangenten nicht. Offene Leiter und kurzgeschlossene Leiter haben verschiedene
+reduzierte Freiheitsräume und deshalb verschiedene Eigenfrequenzen.
+
+Im Einheits-Tet4 mit nur einem freien mechanischen und einem elektrischen
+DOF gilt $M=\rho_m/60$, $K=C/6$, $L=e/6$, $D=\kappa/6$.
+Bei $\rho_m=6$, $C=10$, $e=2$, $\kappa=3$ in SI ist
+$M=0{,}1$ kg, $K_{\rm eff}=17/9$ N/m und
+$\omega_{\rm offen}^2=170/9$ s$^{-2}$.
+Kurzschluss gibt $\omega_{\rm kurz}^2=50/3$ s$^{-2}$.
+Die algebraische Rückabbildung lautet $\phi=(2/3)u$ in V/m mal u.
+
+Für einen länglichen nichtaffinen dynamischen d33-Modus darf man Kurzschluss
+nicht einfach durch $C$ ersetzen: Er fixiert nur die Gesamtspannung.
+Die bestehende analytische Stabreferenz hat offen
+$\omega=(\pi/(2L))\sqrt{C_D/\rho_m}$ und kurzgeschlossen
+$\lambda\cot\lambda=e^2/(\kappa C_D)$,
+$\omega=\lambda\sqrt{C_D/\rho_m}/L$. Diese eigene Referenz unterscheidet
+statische uniforme Dehnung von einem räumlichen Schwingungsmodus.
+
+\section{Newmark mit mittlerer Beschleunigung}
+Die festen Parameter sind $\beta=1/4$, $\gamma=1/2$; physikalische und
+numerische Dämpfung werden nicht ergänzt. Die üblichen kinematischen
+Beziehungen \cite{opensees-newmark} lauten
+\begin{align}\label{eq:newmark}
+\mathbf u_{n+1}&=\mathbf u_n+\Delta t\mathbf v_n+
+\Delta t^2[(1/2-\beta)\mathbf a_n+\beta\mathbf a_{n+1}],\\
+\mathbf v_{n+1}&=\mathbf v_n+\Delta t[(1-\gamma)\mathbf a_n+
+\gamma\mathbf a_{n+1}].\nonumber
+\end{align}
+Mit dem Prädiktor
+$\mathbf u_p=\mathbf u_n+\Delta t\mathbf v_n+\Delta t^2\mathbf a_n/4$
+setzt man $\mathbf u_{n+1}=\mathbf u_p+\Delta t^2\mathbf a_{n+1}/4$ in die
+reduzierte Gleichung ein:
+\begin{equation}\label{eq:newmark-solve}
+(\mathbf M+\Delta t^2\mathbf K_{\rm eff}/4)\mathbf a_{n+1}
+=\mathbf f_{{\rm eff},n+1}-\mathbf K_{\rm eff}\mathbf u_p.
+\end{equation}
+Für glatte lineare Daten ist die Methode auf festem Raumnetz zeitlich zweiter
+Ordnung und ohne Dämpfung stabil; grobe Schritte haben weiterhin Phasenfehler.
+Für $\ddot u+\omega^2u=0$ ist das Verfahren äquivalent zur
+Trapezregel im Zustand $y=(u,v)$ mit
+$\mathbf J=\left[\begin{smallmatrix}0&1\\-\omega^2&0\end{smallmatrix}\right]$:
+\begin{equation}\label{eq:newmark-stability}
+y_{n+1}=(\mathbf I-\Delta t\mathbf J/2)^{-1}
+(\mathbf I+\Delta t\mathbf J/2)y_n,\qquad
+g_\pm=\frac{1\pm i\omega\Delta t/2}{1\mp i\omega\Delta t/2}.
+\end{equation}
+$|g_\pm|=1$ für jeden positiven Schritt: Stabilität benötigt im linearen,
+positiv definiten reduzierten Modell keine CFL-Schranke. Die numerische
+Kreisfrequenz $\tilde\omega=2\arctan(\omega\Delta t/2)/\Delta t$
+weicht aber um $-\omega^3\Delta t^2/12+O(\Delta t^4)$ ab. Energieerhaltung
+beweist daher keine korrekte Phase. Für mehrere massennormierte Moden gilt
+die Rechnung getrennt für jede Mode; nichtlineare oder instabile Modelle
+werden dadurch nicht freigegeben.
+
+Bekannte Kraft-/Spannungssprünge teilen das Raster: bis zum Ereignis wird links
+integriert, danach werden Potential und Beschleunigung rechtsstetig neu
+bestimmt. Verschiebung und Geschwindigkeit bleiben kontinuierlich.
+Verschiebungs-/Geschwindigkeitssprünge sind nicht unterstützt.
+\index{Newmark}
+
+Bei ungetriebenen homogenen Rändern ist die positive Gesamtenergie
+\begin{equation}\label{eq:dynamic-energy}
+\mathcal E=\tfrac12\mathbf v^T\mathbf M\mathbf v+
+\tfrac12\mathbf u^T\mathbf K_u\mathbf u+
+\tfrac12\phi^T\mathbf D\phi
+=\tfrac12\mathbf v^T\mathbf M\mathbf v+
+\tfrac12\mathbf u^T\mathbf K_{\rm eff}\mathbf u
+\end{equation}
+konstant. Die zweite Gleichheit setzt die homogene elektrische Last voraus.
+Bei Anregung wird keine ungeprüfte Arbeitsbilanz behauptet.
+Für $u_0=0{,}01$ m im obigen Ein-DOF-Modell ist
+$\mathcal E_0=17/180000$ J.
+Die analytische Referenz $u(t)=0{,}01\cos(\sqrt{170/9}\,t)$ prüft auf
+40/80/160 Schritten Fehlerquotienten 3,8--4,2 und Energietreue bis
+$3\cdot10^{-12}$ relativ.
+
+\section{Harmonische Analyse und Resonanzgrenze}
+Spitzenwert-Phasoren verwenden
+$\mathbf u(t)=\operatorname{Re}(\hat{\mathbf u}e^{+i\omega t})$,
+$\hat{\mathbf v}=i\omega\hat{\mathbf u}$,
+$\hat{\mathbf a}=-\omega^2\hat{\mathbf u}$.
+$\omega=2\pi f$; Eingaben sind Hz, keine RMS-Werte. Dann
+\begin{equation}\label{eq:harmonic}
+(\mathbf K_{\rm eff}-\omega^2\mathbf M)\hat{\mathbf u}
+=\hat{\mathbf f}_u+\mathbf L\mathbf D^{-1}\hat{\mathbf f}_\phi.
+\end{equation}
+Bewegte Randphasoren ergänzen $+\omega^2\mathbf M_{fc}\hat{\mathbf g}_c$
+zusätzlich zu den statischen Randtermen. Komplexe Anteile bleiben erhalten.
+$f=0$ reproduziert das statische System; negative Frequenzen sind ungültig.
+
+Es gibt keine Dämpfung. Die Implementierung skaliert die dynamische Steifigkeit
+mit $\operatorname{diag}(\mathbf K_{\rm eff}+\omega^2\mathbf M)^{-1/2}$.
+Dimensionslose Eigenwertbeträge $\le10^{-10}$ führen zu einem expliziten
+Resonanz-/Konditionsfehler, auch bei Last null. Das ist keine physikalische
+Resonanzbreite und liefert keine künstlich gekappte Amplitude.
+Ein Frequenzsweep kennt nur berechnete Frequenzen.
+\index{Harmonik}
+
+Im skalaren Beispiel und bei $\omega=1$ rad/s, $\hat F=1$ N,
+$\hat f_\phi=0$ ist $\hat u=90/161$ m und $\hat\phi=60/161$ V.
+Das große Verhältnis dient der linearen algebraischen Handrechnung;
+physikalisch kleine Auslenkungen erhält man durch entsprechende Lastskalierung.
+
+\section{Größen-, Genauigkeits- und Exportgrenzen}
+Der dichte dynamische Schur-Pfad begrenzt \emph{aktive Gesamt-DOFs} vor der
+Allokation auf 2048. Newmark-Historien sind auf
+$\texttt{ntime}\cdot4\cdot\texttt{nactive}\le2\,000\,000$ beschränkt.
+PETSc macht diese dichten Schritte nicht unbegrenzt skalierbar.
+Wärme-Historien besitzen einen eigenen Byte-Grenzwert für numerische Arrays,
+keine Garantie zum Gesamtprozess-RSS. Ereignisraster, räumlicher Fehler,
+Zeitfehler und Frequenzabtastung werden separat beurteilt.
+Zeit-/Moden-/Frequenzachsen sind im Export explizit; komplexe Felder haben
+Realteil, Imaginärteil, Betrag und gültigkeitsmarkierte Phase.
+
+\subsection*{Implementierung und Nachweise.}
+{\small\raggedright
+\path{src/fem_toolbox/elements/storage.py},
+\path{src/fem_toolbox/solvers/transient_heat.py},
+\path{src/fem_toolbox/solvers/piezo_dynamics.py},
+\path{src/fem_toolbox/solvers/piezo_transient.py},
+\path{src/fem_toolbox/solvers/piezo_harmonic.py};
+\path{tests/unit/test_storage.py},
+\path{tests/unit/test_transient_heat.py},
+\path{tests/unit/test_piezo_modal.py},
+\path{tests/unit/test_piezo_newmark.py},
+\path{tests/unit/test_piezo_harmonic.py}.
+Tet10-Modal-/Newmark-/Harmonik- und Raum-/Zeitnachweise sind in
+Kapitel~\ref{chap:evidence} vollständig zugeordnet.
+
+\par}

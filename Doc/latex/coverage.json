@@ -11,17 +11,27 @@
     },
     {
       "source": "Doc/02_MATHEMATICAL_MODEL.md",
-      "target": "Doc/latex/chapters/theory.tex",
+      "target": "Doc/latex/chapters/theory/scalar.tex",
       "canonical": "Doc/02_MATHEMATICAL_MODEL.md",
       "owner": "Fachliche Maintainer",
-      "status": "open"
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/scalar.tex",
+        "map": "Doc/latex/theory-map.json"
+      }
     },
     {
       "source": "Doc/03_TET4_FORMULATION.md",
-      "target": "Doc/latex/chapters/theory.tex",
+      "target": "Doc/latex/chapters/theory/geometry.tex",
       "canonical": "Doc/03_TET4_FORMULATION.md",
       "owner": "Fachliche Maintainer",
-      "status": "open"
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/geometry.tex",
+        "map": "Doc/latex/theory-map.json"
+      }
     },
     {
       "source": "Doc/04_SOFTWARE_ARCHITECTURE.md",
@@ -35,7 +45,12 @@
       "target": "Doc/latex/chapters/verification.tex",
       "canonical": "Doc/05_VERIFICATION_AND_VALIDATION.md",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "historical"
+      "status": "historical",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/evidence.tex",
+        "map": "Doc/latex/theory-map.json"
+      }
     },
     {
       "source": "Doc/06_ROADMAP.md",
@@ -49,7 +64,12 @@
       "target": "Doc/latex/chapters/api.tex",
       "canonical": "Doc/07_RISKS_AND_DECISIONS.md",
       "owner": "API-Maintainer",
-      "status": "open"
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/conventions.tex",
+        "map": "Doc/latex/theory-map.json"
+      }
     },
     {
       "source": "Doc/08_REFERENCES.md",
@@ -70,21 +90,36 @@
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "Doc/10_LINEAR_ELASTICITY.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/scalar.tex",
+        "map": "Doc/latex/theory-map.json"
+      }
     },
     {
       "source": "Doc/11_STEADY_HEAT.md",
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "Doc/11_STEADY_HEAT.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/mechanics.tex",
+        "map": "Doc/latex/theory-map.json"
+      }
     },
     {
       "source": "Doc/12_ELECTROSTATICS.md",
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "Doc/12_ELECTROSTATICS.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/scalar.tex",
+        "map": "Doc/latex/theory-map.json"
+      }
     },
     {
       "source": "Doc/13_PRODUCT_VISION.md",
@@ -98,28 +133,48 @@
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "Doc/14_THERMOMECHANICS.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/mechanics.tex",
+        "map": "Doc/latex/theory-map.json"
+      }
     },
     {
       "source": "Doc/15_PIEZOELECTRIC_MATERIAL.md",
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "Doc/15_PIEZOELECTRIC_MATERIAL.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/coupling.tex",
+        "map": "Doc/latex/theory-map.json"
+      }
     },
     {
       "source": "Doc/16_PIEZOELECTRIC_ELEMENT.md",
-      "target": "Doc/latex/chapters/theory.tex",
+      "target": "Doc/latex/chapters/theory/geometry.tex",
       "canonical": "Doc/16_PIEZOELECTRIC_ELEMENT.md",
       "owner": "Fachliche Maintainer",
-      "status": "open"
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/geometry.tex",
+        "map": "Doc/latex/theory-map.json"
+      }
     },
     {
       "source": "Doc/17_PIEZOELECTRIC_SOLVER.md",
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "Doc/17_PIEZOELECTRIC_SOLVER.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/solvers.tex",
+        "map": "Doc/latex/theory-map.json"
+      }
     },
     {
       "source": "Doc/18_PIEZO_D33_VERIFICATION.md",
@@ -140,21 +195,36 @@
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "Doc/20_ELECTRODES.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/coupling.tex",
+        "map": "Doc/latex/theory-map.json"
+      }
     },
     {
       "source": "Doc/21_MODEL_SCHEMA.md",
       "target": "Doc/latex/chapters/api.tex",
       "canonical": "Doc/21_MODEL_SCHEMA.md",
       "owner": "API-Maintainer",
-      "status": "open"
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/algebra.tex",
+        "map": "Doc/latex/theory-map.json"
+      }
     },
     {
       "source": "Doc/22_THERMOPIEZOELECTRIC.md",
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "Doc/22_THERMOPIEZOELECTRIC.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/coupling.tex",
+        "map": "Doc/latex/theory-map.json"
+      }
     },
     {
       "source": "Doc/23_MODEL_PREFLIGHT.md",
@@ -175,7 +245,12 @@
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "Doc/25_THERMOPIEZO_CONVERGENCE.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/evidence.tex",
+        "map": "Doc/latex/theory-map.json"
+      }
     },
     {
       "source": "Doc/26_VALIDITY_AND_LIMITS.md",
@@ -221,10 +296,15 @@
     },
     {
       "source": "Doc/31_TET4_STORAGE.md",
-      "target": "Doc/latex/chapters/theory.tex",
+      "target": "Doc/latex/chapters/theory/dynamics.tex",
       "canonical": "Doc/31_TET4_STORAGE.md",
       "owner": "Fachliche Maintainer",
-      "status": "open"
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/dynamics.tex",
+        "map": "Doc/latex/theory-map.json"
+      }
     },
     {
       "source": "Doc/32_MATERIAL_LIBRARY.md",
@@ -238,49 +318,84 @@
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "Doc/33_TRANSIENT_HEAT.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/dynamics.tex",
+        "map": "Doc/latex/theory-map.json"
+      }
     },
     {
       "source": "Doc/34_PIEZO_DYNAMICS.md",
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "Doc/34_PIEZO_DYNAMICS.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/dynamics.tex",
+        "map": "Doc/latex/theory-map.json"
+      }
     },
     {
       "source": "Doc/35_M6_RELEASE_VERIFICATION.md",
       "target": "Doc/latex/chapters/verification.tex",
       "canonical": "Doc/35_M6_RELEASE_VERIFICATION.md",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "historical"
+      "status": "historical",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/dynamics.tex",
+        "map": "Doc/latex/theory-map.json"
+      }
     },
     {
       "source": "Doc/36_PERFORMANCE_BASELINE.md",
       "target": "Doc/latex/chapters/verification.tex",
       "canonical": "Doc/36_PERFORMANCE_BASELINE.md",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "historical"
+      "status": "historical",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/dynamics.tex",
+        "map": "Doc/latex/theory-map.json"
+      }
     },
     {
       "source": "Doc/37_LINEAR_BACKEND.md",
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "Doc/37_LINEAR_BACKEND.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/solvers.tex",
+        "map": "Doc/latex/theory-map.json"
+      }
     },
     {
       "source": "Doc/38_PETSC_BACKEND.md",
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "Doc/38_PETSC_BACKEND.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/solvers.tex",
+        "map": "Doc/latex/theory-map.json"
+      }
     },
     {
       "source": "Doc/39_PETSC_FIELDSPLIT.md",
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "Doc/39_PETSC_FIELDSPLIT.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/solvers.tex",
+        "map": "Doc/latex/theory-map.json"
+      }
     },
     {
       "source": "Doc/40_TET10_TOPOLOGY.md",
@@ -291,24 +406,39 @@
     },
     {
       "source": "Doc/41_TET10_GEOMETRY.md",
-      "target": "Doc/latex/chapters/theory.tex",
+      "target": "Doc/latex/chapters/theory/geometry.tex",
       "canonical": "Doc/41_TET10_GEOMETRY.md",
       "owner": "Fachliche Maintainer",
-      "status": "open"
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/geometry.tex",
+        "map": "Doc/latex/theory-map.json"
+      }
     },
     {
       "source": "Doc/42_TET10_OPERATORS.md",
-      "target": "Doc/latex/chapters/theory.tex",
+      "target": "Doc/latex/chapters/theory/geometry.tex",
       "canonical": "Doc/42_TET10_OPERATORS.md",
       "owner": "Fachliche Maintainer",
-      "status": "open"
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/geometry.tex",
+        "map": "Doc/latex/theory-map.json"
+      }
     },
     {
       "source": "Doc/43_HEAT_INDICATOR.md",
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "Doc/43_HEAT_INDICATOR.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/solvers.tex",
+        "map": "Doc/latex/theory-map.json"
+      }
     },
     {
       "source": "Doc/44_GEOMETRY_PERFORMANCE.md",
@@ -350,91 +480,156 @@
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "Doc/49_TET10_PIEZOELECTRIC.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/dynamics.tex",
+        "map": "Doc/latex/theory-map.json"
+      }
     },
     {
       "source": "Doc/50_TET10_THERMOPIEZOELECTRIC.md",
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "Doc/50_TET10_THERMOPIEZOELECTRIC.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/dynamics.tex",
+        "map": "Doc/latex/theory-map.json"
+      }
     },
     {
       "source": "Doc/51_TET10_MODES.md",
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "Doc/51_TET10_MODES.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/dynamics.tex",
+        "map": "Doc/latex/theory-map.json"
+      }
     },
     {
       "source": "Doc/52_TET10_NEWMARK.md",
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "Doc/52_TET10_NEWMARK.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/dynamics.tex",
+        "map": "Doc/latex/theory-map.json"
+      }
     },
     {
       "source": "Doc/53_TET10_HARMONIC.md",
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "Doc/53_TET10_HARMONIC.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/dynamics.tex",
+        "map": "Doc/latex/theory-map.json"
+      }
     },
     {
       "source": "Doc/54_ACCURACY_COST_COMPARISON.md",
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "Doc/54_ACCURACY_COST_COMPARISON.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/solvers.tex",
+        "map": "Doc/latex/theory-map.json"
+      }
     },
     {
       "source": "Doc/55_TET10_ACCEPTANCE.md",
       "target": "Doc/latex/chapters/verification.tex",
       "canonical": "Doc/55_TET10_ACCEPTANCE.md",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "historical"
+      "status": "historical",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/solvers.tex",
+        "map": "Doc/latex/theory-map.json"
+      }
     },
     {
       "source": "Doc/56_PERFORMANCE_ACCEPTANCE.md",
       "target": "Doc/latex/chapters/verification.tex",
       "canonical": "Doc/56_PERFORMANCE_ACCEPTANCE.md",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "historical"
+      "status": "historical",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/surrogates.tex",
+        "map": "Doc/latex/theory-map.json"
+      }
     },
     {
       "source": "Doc/57_M7_RELEASE_CANDIDATE.md",
       "target": "Doc/latex/chapters/verification.tex",
       "canonical": "Doc/57_M7_RELEASE_CANDIDATE.md",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "historical"
+      "status": "historical",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/surrogates.tex",
+        "map": "Doc/latex/theory-map.json"
+      }
     },
     {
       "source": "Doc/58_M7_RELEASE_VERIFICATION.md",
       "target": "Doc/latex/chapters/verification.tex",
       "canonical": "Doc/58_M7_RELEASE_VERIFICATION.md",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "historical"
+      "status": "historical",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/surrogates.tex",
+        "map": "Doc/latex/theory-map.json"
+      }
     },
     {
       "source": "Doc/59_PARAMETER_STUDIES.md",
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "Doc/59_PARAMETER_STUDIES.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/surrogates.tex",
+        "map": "Doc/latex/theory-map.json"
+      }
     },
     {
       "source": "Doc/60_STUDY_REPORTS.md",
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "Doc/60_STUDY_REPORTS.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/surrogates.tex",
+        "map": "Doc/latex/theory-map.json"
+      }
     },
     {
       "source": "Doc/61_SURROGATE_MODELS.md",
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "Doc/61_SURROGATE_MODELS.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/surrogates.tex",
+        "map": "Doc/latex/theory-map.json"
+      }
     },
     {
       "source": "Doc/62_FIELD_VISUALIZATION.md",
@@ -700,7 +895,12 @@
       "target": "Doc/latex/chapters/api.tex",
       "canonical": "src/fem_toolbox/assembly/__init__.py",
       "owner": "API-Maintainer",
-      "status": "open"
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/algebra.tex",
+        "map": "Doc/latex/theory-map.json"
+      }
     },
     {
       "source": "src/fem_toolbox/boundary/__init__.py",
@@ -714,7 +914,12 @@
       "target": "Doc/latex/chapters/api.tex",
       "canonical": "src/fem_toolbox/conventions.py",
       "owner": "API-Maintainer",
-      "status": "open"
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/conventions.tex",
+        "map": "Doc/latex/theory-map.json"
+      }
     },
     {
       "source": "src/fem_toolbox/dynamic_result.py",
@@ -756,7 +961,12 @@
       "target": "Doc/latex/chapters/api.tex",
       "canonical": "src/fem_toolbox/materials/__init__.py",
       "owner": "API-Maintainer",
-      "status": "open"
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/conventions.tex",
+        "map": "Doc/latex/theory-map.json"
+      }
     },
     {
       "source": "src/fem_toolbox/mesh/__init__.py",
@@ -819,21 +1029,36 @@
       "target": "Doc/latex/chapters/api.tex",
       "canonical": "src/fem_toolbox/studies.py",
       "owner": "API-Maintainer",
-      "status": "open"
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/surrogates.tex",
+        "map": "Doc/latex/theory-map.json"
+      }
     },
     {
       "source": "src/fem_toolbox/study_reports.py",
       "target": "Doc/latex/chapters/api.tex",
       "canonical": "src/fem_toolbox/study_reports.py",
       "owner": "API-Maintainer",
-      "status": "open"
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/surrogates.tex",
+        "map": "Doc/latex/theory-map.json"
+      }
     },
     {
       "source": "src/fem_toolbox/surrogates.py",
       "target": "Doc/latex/chapters/api.tex",
       "canonical": "src/fem_toolbox/surrogates.py",
       "owner": "API-Maintainer",
-      "status": "open"
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/surrogates.tex",
+        "map": "Doc/latex/theory-map.json"
+      }
     },
     {
       "source": "src/fem_toolbox/time.py",
@@ -848,6 +1073,17 @@
       "canonical": "src/fem_toolbox/transient_model.py",
       "owner": "API-Maintainer",
       "status": "open"
+    },
+    {
+      "source": "Doc/latex/THEORY_VERIFICATION.md",
+      "target": "Doc/latex/chapters/theory/evidence.tex",
+      "canonical": "Doc/latex/THEORY_VERIFICATION.md",
+      "owner": "Fachliche Maintainer",
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "map": "Doc/latex/theory-map.json"
+      }
     }
   ],
   "planned": [
