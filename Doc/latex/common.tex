@@ -14,6 +14,12 @@
 \definecolor{navy}{HTML}{0B1F2A}
 \definecolor{accent}{HTML}{168557}
 \usepackage[unicode,colorlinks=true,linkcolor=navy,urlcolor=accent,citecolor=navy]{hyperref}
+% Permit line breaks in long repository paths without another TeX dependency.
+\expandafter\def\expandafter\UrlBreaks\expandafter{\UrlBreaks
+\do\a\do\b\do\c\do\d\do\e\do\f\do\g\do\h\do\i\do\j\do\k\do\l\do\m
+\do\n\do\o\do\p\do\q\do\r\do\s\do\t\do\u\do\v\do\w\do\x\do\y\do\z
+\do\A\do\B\do\C\do\D\do\E\do\F\do\G\do\H\do\I\do\J\do\K\do\L\do\M
+\do\N\do\O\do\P\do\Q\do\R\do\S\do\T\do\U\do\V\do\W\do\X\do\Y\do\Z}
 \input{metadata}
 \hypersetup{pdftitle={FEM Toolbox -- Handbuchkandidat},pdfauthor={FEM Toolbox},pdfsubject={Version \ToolboxVersion; Commit \SourceCommit; KANDIDAT}}
 \lstset{basicstyle=\small\ttfamily,breaklines=true,frame=single,columns=fullflexible}
@@ -25,19 +31,20 @@
 \begin{titlepage}
 {\Huge\sffamily\bfseries FEM Toolbox\par}\vspace{12mm}
 {\LARGE\BookTitle\par}\vspace{8mm}
-{\Large KANDIDAT -- Struktur und Musterteil\par}\vfill
+{\Large KANDIDAT -- Handbuchentwicklung\par}\vfill
 Version \ToolboxVersion\\[4mm]
 Quellcommit: {\small\ttfamily\SourceCommit}\\[4mm]
 Quellzustand: \SourceState\\[4mm]
-M9 / Issue 206. Die Fachbände sind noch offen.\\
+M9 / Issues 206--207. Theorie ausgearbeitet; andere Fachbände offen.\\
 Keine experimentelle Validierungsfreigabe.\\[8mm]
 Deutschsprachige Referenz mit englischen API-Bezeichnern.
 \end{titlepage}
 \tableofcontents\listoffigures\listoftables
 \chapter{Lesehinweise und Status}
-Die Bände Theorie (Issue 207), Anwendung (208), API/Entwicklung (209) und
-Nachweise (210) werden separat abgenommen. Redaktionelle Gesamtabnahme: 211.
-Dieses Dokument zeigt die Buchstruktur; offene Kapitel sind kein vollständiges Handbuch.
+Der Theorieband (Issue 207) ist ausgearbeitet und wird separat geprüft.
+Anwendung (208), API/Entwicklung (209) und Nachweise (210) bleiben offen.
+Redaktionelle Gesamtabnahme: 211. Der Kandidatenstatus gilt weiter;
+das Gesamtdokument ist noch kein vollständig abgenommenes Handbuch.
 \section{Symbole und Abkürzungen}
 \begin{tabular}{ll}
 $\Omega$ & Gebiet in drei Dimensionen\\

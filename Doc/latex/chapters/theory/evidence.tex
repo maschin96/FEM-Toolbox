@@ -1,0 +1,134 @@
+\chapter{Nachweise, Grenzen und Rückverfolgbarkeit}\label{chap:evidence}
+\section{Was ein Nachweis aussagt}
+Code-Verifikation prüft implementierte Gleichungen, Lösungsverifikation ihre
+räumliche/zeitliche Auflösung. Validierung bewertet Modellabweichung gegenüber
+geeigneten unabhängigen Messdaten. Dieser Theorieband beansprucht die ersten
+beiden Nachweisarten nur für die angegebenen Referenzen, keine experimentelle
+Validierung. Manufactured Solutions setzen bekannte Felder in die starke Form
+ein und leiten Quellen/Randwerte unabhängig ab; der Sandia-Bericht
+\cite{sandia-mms} erläutert dieses Prinzip. Gleicher Output zweier Solver allein
+ist keine vollständige Verifikation.
+
+Jedes Kapitel enthält Annahmen, Variablen, Einheiten, Ableitung, implementierte
+Form und Nutzungsgrenzen. \path{Doc/latex/THEORY_VERIFICATION.md} protokolliert
+die tatsächliche Nachrechnung und Wiederholung der kleinen Referenztests.
+\path{Doc/latex/theory-map.json} ordnet je Bereich Quellkapitel,
+Implementierung, kanonische Verträge und analytische Referenzen, Patch-, Bilanz- und
+Konvergenztests zu. Die übergreifende Quellenmatrix bleibt
+\path{Doc/latex/coverage.json}. Der dortige Original-Status beschreibt die
+Herkunft des Initialstands; \texttt{theory\_\allowbreak coverage} beschreibt separat den
+Ausarbeitungsstand dieses Bandes und ist keine automatische Freigabe.
+
+\section{Nachweisübersicht nach Verfahren}
+\begin{longtable}{p{0.22\textwidth}p{0.69\textwidth}}
+\caption{Unabhängige Referenzen und zugehörige bestehende Tests.}\label{tab:evidence}\\
+\toprule Bereich & Referenz und Prüfquelle\\\midrule\endfirsthead
+\toprule Bereich & Referenz und Prüfquelle\\\midrule\endhead
+Konventionen & Achsrotation, Energieinvarianz, Strain-/Stress-Charge-Konversion;
+\path{tests/unit/test_piezo_material.py}.\\
+Tet4/Tet10 & Simplexmomente, alle Eckpermutationen, Monomreproduktion;
+\path{tests/unit/test_tet10_geometry.py} und
+\path{tests/unit/test_tet10_operators.py}.\\
+Wärme & Affiner Fluss, Robin-Quader, Quellen-/Reservoirbilanz;
+\path{tests/patch/test_heat_patch.py}; vier Netze in
+\path{tests/convergence/test_heat_convergence.py}.\\
+Elektrostatik & Kondensator $C=\kappa A/L$, D-Flussvorzeichen, Energie;
+\path{tests/patch/test_electrostatics_patch.py}; vier Netze in
+\path{tests/convergence/test_electrostatics_convergence.py}.\\
+Elastizität & Starrkörper-/Affinpatch, unabhängiger Zugzustand, Kraft/Moment;
+\path{tests/patch/test_elasticity_patch.py} und
+\path{tests/convergence/test_elasticity_convergence.py}.\\
+Thermomechanik & Freie/behinderte gedrehte Expansion, gekoppelte MMS;
+\path{tests/patch/test_thermomechanics_patch.py} und
+\path{tests/convergence/test_thermomechanics_convergence.py}.\\
+Piezo & Affine Enthalpievariation, d33-Reziprozität und zweite unabhängige
+1D-FE-Rechnung; \path{tests/regression/test_piezo_d33_benchmark.py},
+\path{tests/reference/piezo_bar_1d.py}.\\
+Thermopiezo & Geklemmter thermischer Potentialgrenzfall, lineare Überlagerung;
+\path{tests/unit/test_thermopiezoelectric.py}; Material-/Elektrodenmodell auf
+vier Netzen in \path{tests/convergence/test_thermopiezo_model_convergence.py}.\\
+Elektroden & Drei analytische Gesamtladungs-/Potentialfälle;
+\path{tests/patch/test_electrodes.py}.\\
+Masse/Wärme & Exakte Momente, positive Masse und HRZ-Gesamterhaltung;
+\path{tests/unit/test_storage.py} und
+\path{tests/unit/test_tet10_operators.py}.\\
+Backward Euler & Analytische Abkühlrate, Quellensprung, Speicher-/Randbilanz;
+\path{tests/unit/test_transient_heat.py} und
+\path{tests/convergence/test_transient_heat_convergence.py}.\\
+Modal & Unabhängiger Ein-DOF-Oszillator und offener/kurzer d33-Stab;
+\path{tests/unit/test_piezo_modal.py} und
+\path{tests/convergence/test_piezo_modal_convergence.py}.\\
+Newmark & Energie und zweite Zeitordnung auf festem Raummodell, bewegte
+Ränder/Trägheit; \path{tests/unit/test_piezo_newmark.py}.\\
+Harmonik & Komplexer Oszillator, DC, Resonanzfehler und Newmark-Parität;
+\path{tests/unit/test_piezo_harmonic.py}.\\
+Tet10-Solver & Vier-Netze-Feldnormen je Physik, integrierte Energie und
+Bilanzen; \path{Doc/55_TET10_ACCEPTANCE.md} bündelt die Einzelnachweise.\\
+Tet10-Dynamik & Eigene Stab-Modal-/Harmonik-Raumverfeinerung und Newmark-
+Zeitprüfung; \path{tests/convergence/test_tet10_modal.py},
+\path{tests/convergence/test_tet10_harmonic_convergence.py},
+\path{tests/unit/test_tet10_newmark.py}.\\
+PETSc & Native real/complex-Parität, FieldSplit-Abbruch, freie Feldresiduen;
+\path{tests/petsc}. Fehlende Laufzeit ist lokal sichtbar, in nativer CI ein Fehler.\\
+Indikator & Analytische Zellen-/Flussterme und getrennte Fehler-/Indikator-
+Netzstudie; \path{tests/unit/test_heat_indicator.py},
+\path{tests/convergence/test_heat_indicator_convergence.py}.\\
+Surrogate & Unabhängige lineare/quadratische Funktionen, Ridge-Intercept,
+Holdouts, Box-/Rangfehler; \path{tests/unit/test_surrogates.py} und
+\path{tests/regression/test_surrogate_example.py}.\\
+\bottomrule
+\end{longtable}
+
+\section{Wie die Referenztests interpretiert werden}
+Algebraische Identitäten und exakt darstellbare Zuordnungen können exakt
+verglichen werden. Nach linearen Lösevorgängen werden relative und absolute
+Toleranzen aus SI-Skalen und Kondition vorab festgelegt. Beispielsweise gelten
+$10^{-12}$ V/C im synthetischen Elektrodenquader, aber $2\cdot10^{-22}$ C
+für einen Kondensator mit Ladung in der Größenordnung $10^{-9}$ C.
+Ein gemeinsamer dimensionsloser absoluter Grenzwert wäre fachlich falsch.
+Die hier wiederholten Tests behalten ihre bestehenden Toleranzen.
+
+Die historischen vierstufigen Nachweise aus Doc/55 und Doc/25 bleiben anwendbar,
+weil dieser PR keine numerischen Operatoren oder Materialien ändert.
+P1-Fenster für glatte Probleme sind typischerweise L2 1,8--2,2 und H1
+0,85--1,15, P2 2,7--3,3 und 1,8--2,2 auf den letzten Verfeinerungen.
+Diese Fenster werden nicht nachträglich angepasst. Exportmasken, Schwerpunkt-
+orte und Energieintegrale sind eigene Verträge und keine Konvergenzordnungen.
+
+\section{Ein minimaler nachvollziehbarer Matrixeinstieg}
+Die folgende lokale Rechnung reproduziert den Patch aus
+Gleichung~\ref{eq:piezo-patch-example}, ohne eine globale Lagerung oder einen
+Solver als Referenz zu benötigen. $x^T A x/2$ ist Enthalpie, keine positive Norm.
+Alle Zahlen sind synthetische SI-Daten.
+\begin{lstlisting}[language=Python,caption={Lokale Enthalpie des affinen Piezo-Patches.},label={code:piezo-patch}]
+import numpy as np
+from fem_toolbox.elements import Tet4Geometry
+from fem_toolbox.elements.piezoelectric import piezoelectric_matrix
+from fem_toolbox.materials import PiezoelectricMaterial
+
+points = np.array([[0., 0., 0.], [1., 0., 0.],
+                   [0., 1., 0.], [0., 0., 1.]])
+e = np.zeros((3, 6)); e[0, 0] = 2.
+material = PiezoelectricMaterial(
+    np.diag([10., 20., 30., 4., 5., 6.]), e,
+    np.diag([3., 4., 5.]))
+A = piezoelectric_matrix(Tet4Geometry(points), material)
+u = np.zeros((4, 3)); u[:, 0] = 0.2 * points[:, 0]
+x = np.r_[u.ravel(), 0.3 * points[:, 0]]
+enthalpy = float(x @ A @ x / 2)  # 37/1200 J
+\end{lstlisting}
+
+\section{Checkliste zur Anwendung}
+Vor einer Rechnung müssen Geometrie/Orientierung, Materialachsen/Einheiten,
+Eindeutigkeit, Randarten und Ereignis-/Frequenzraster zum Modell passen.
+Nach einer Rechnung werden freie Feldresiduen, physikalische Bilanzen,
+rohe Feldherkunft und getrennte Raum-/Zeitfehler bewertet.
+Kostenvergleiche sind nur im gemessenen Raster gültig.
+Eine später erhobene Messabweichung darf weder als Diskretisierungsfehler noch
+als empirischer Surrogatfehler umetikettiert werden.
+
+Der aktuelle Band liefert keine fachliche Fremdfreigabe. Eigenprüfung und
+CI sind dokumentiert; fehlendes unabhängiges Review wird im PR benannt.
+Anwendungs-, API- und V\&V-Bände bleiben Gegenstand von \#208--\#210,
+Gesamtabnahme \#211 und Release \#66. Das abschließende Handbuch kann erst nach
+diesen Gates als vollständig bezeichnet werden.

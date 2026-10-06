@@ -1,0 +1,162 @@
+\chapter{Solver, Fehlermessung und Wärmeindikatoren}\label{chap:solvers}
+\section{Kongruente Skalierung und direkte Referenz}
+Nach Rand- und Elektrodenreduktion löst die Referenz das freie eindeutige System
+$\mathbf A\mathbf x=\mathbf b$. Bei positiver Diagonalmatrix $\mathbf S$ gilt
+\begin{equation}\label{eq:scale}
+(\mathbf S\mathbf A\mathbf S)\mathbf y=\mathbf S\mathbf b,
+\qquad\mathbf x=\mathbf S\mathbf y.
+\end{equation}
+Diese Kongruenz erhält Symmetrie und Trägheit der Matrix; sie ändert weder
+Physik noch Eindeutigkeit. Einzelne positive Feldsysteme verwenden die
+Kehrwurzel der Diagonalen. Piezo verwendet feldweise mediane positive
+mechanische/dielektrische Diagonalen $a_u$ und $a_\phi$ mit
+$S_u=a_u^{-1/2}$, $S_\phi=a_\phi^{-1/2}$.
+N/m und F dürfen ohne diese Einheitenbehandlung nicht pauschal verglichen werden.
+\index{Skalierung}\index{Sparse LU}
+
+SciPy Sparse LU ist die Produktionsreferenz über \texttt{splu}; die
+SciPy-Dokumentation \cite{scipy-lu} erläutert den direkten CSC-/LU-Einstieg.
+Faktoren besitzen Kopien und können für mehrere rechte Seiten wiederverwendet
+werden. Komplexe rechte Seiten zu reellen Faktoren werden mit getrennten
+Real-/Imaginärsolves behandelt. Der Standardpfad hat keinen stillen Fallback.
+Pivotgrenzen diagnostizieren numerische Singularität, sind aber kein
+vollständiger Konditionszahlnachweis. CG ist nur für wirklich positiv definite
+Einzelfelder mathematisch zulässig und kein auswählbarer Ersatz des
+monolithischen Piezo-Solvers. MINRES ist ohne geeigneten symmetrischen
+Präconditioner nicht als unterstützt zu beschreiben.
+
+\section{PETSc direkt und FieldSplit}
+Der optionale Direktadapter verwendet in einem Prozess \texttt{COMM\_SELF},
+SeqAIJ, PREONLY/LU. Core-Import benötigt kein PETSc; die Konstruktion prüft die
+native Laufzeit. Model/TOML verwenden SciPy; direkte Python-Einstiege wählen
+den Backend explizit. Ein realer PETSc-Build bildet komplexe Systeme durch
+\begin{equation}\label{eq:complex-embed}
+\begin{pmatrix}\operatorname{Re}\mathbf A&-\operatorname{Im}\mathbf A\\
+\operatorname{Im}\mathbf A&\operatorname{Re}\mathbf A\end{pmatrix}
+\begin{pmatrix}\operatorname{Re}\mathbf x\\\operatorname{Im}\mathbf x\end{pmatrix}
+=\begin{pmatrix}\operatorname{Re}\mathbf b\\\operatorname{Im}\mathbf b\end{pmatrix}
+\end{equation}
+ab; komplexe PETSc-Builds arbeiten direkt. Beide erhalten sämtliche
+komplexen Matrix- und Lastanteile.
+\index{PETSc}\index{FieldSplit}
+
+Für zwei nichtleere Felder besitzt
+$\mathbf A=\left[\begin{smallmatrix}\mathbf A_{00}&\mathbf A_{01}\\
+\mathbf A_{10}&\mathbf A_{11}\end{smallmatrix}\right]$ die Faktorisierung
+\begin{equation}\label{eq:schur-factor}
+\mathbf A=
+\begin{pmatrix}\mathbf I&0\\\mathbf A_{10}\mathbf A_{00}^{-1}&\mathbf I\end{pmatrix}
+\begin{pmatrix}\mathbf A_{00}&0\\0&\mathbf S_c\end{pmatrix}
+\begin{pmatrix}\mathbf I&\mathbf A_{00}^{-1}\mathbf A_{01}\\0&\mathbf I\end{pmatrix},
+\end{equation}
+mit dem Schur-Komplement
+\begin{equation}
+\mathbf S_c=\mathbf A_{11}-\mathbf A_{10}\mathbf A_{00}^{-1}\mathbf A_{01}.
+\end{equation}
+Der implementierte FieldSplit verwendet volle Schur-Blockfaktorisierung,
+LU für $\mathbf A_{00}$ und $\mathbf A_{11}^{-1}$ als Approximation für
+$\mathbf S_c^{-1}$. Der Schur-Operator wird nicht dicht assembliert.
+Die offizielle FieldSplit-Quelle \cite{petsc-fieldsplit} beschreibt die
+Blockstruktur; die konkrete A11-Wahl ist der Projektvertrag aus Doc/39.
+Singuläre Diagonalblöcke werden nicht durch Verschiebungen repariert.
+
+Der äußere Solver ist FGMRES mit Rechtspräkonditionierung. Die approximative
+Blockfaktorisierung ist nicht notwendigerweise symmetrisch oder positiv;
+deshalb passen CG/MINRES hier nicht. Die FGMRES-Quelle \cite{petsc-fgmres}
+dokumentiert die unterstützte Präkonditionierungsseite. Ein nichtleeres Feld
+verwendet FGMRES mit LU, ein leeres System null Iterationen, mehr als zwei
+Felder sind Fehler. Feldpartitionen beziehen sich auf das kondensierte freie
+System; Real-/Imaginärteile eines Feldes werden bei Einbettung nicht als
+unterschiedliche Physikfelder behandelt. Grenzen, Neustarts und Toleranzen
+sind explizite Parameter. Nichtkonvergenz wird als Fehler weitergegeben.
+
+Die unabhängigen kleinen Paritätstests und der vorhandene Vier-Netze-Wärmefall
+prüfen reale/komplexe und direkte/iterative Pfade. Sie sind kein MPI-, AMG-
+oder allgemeiner Großmodell-Skalierungsnachweis. Getestete native Umgebung:
+PETSc 3.19.6 in der separaten CI; aktuelle Online-Dokumentation ist eine
+Methodenquelle, keine Behauptung eines Versionsupdates der Toolbox.
+
+\section{Physikalische Residuen und Rundungsbudget}
+Die unskalierte Originalgleichung liefert $\mathbf r=\mathbf A\mathbf x-\mathbf b$.
+Für einen Backend-Feldindexsatz $I$ lautet der Rückwärtsfehler
+\begin{equation}\label{eq:backward-error}
+\eta_I=\frac{\|\mathbf r_I\|_2}
+{\|(|\mathbf A||\mathbf x|+|\mathbf b|)_I\|_2}.
+\end{equation}
+Bei Nenner null ist das Verhältnis null nur für Residuum null, sonst unendlich.
+Normen werden intern gegen gemeinsamen Über-/Unterlauf skaliert.
+Backend und Physikadapter verlangen geeignete freie bzw. kondensierte
+Feldresiduen; die Backend-Grenze ist $10^{-9}$.
+Einzelfeld-Physikberichte besitzen ihre spezifischen dokumentierten
+Nenner-/Freiselektionen; sie sind nicht immer numerisch identisch mit dem
+Backendbericht. KSP-Erfolg prüft zunächst das skalierte System, danach folgt
+diese Originalkontrolle. Mechanische Trägheit gehört im dynamischen Residuum
+zur Originalgleichung. Bilanztoleranzen kombinieren physikalische Lastskalen
+mit einem Rundungsterm aus absoluten, ungekürzten Matrixprodukten.
+Sie werden nicht aus einer eventuell exakt null resultierenden Nettoladung
+allein abgeleitet.
+
+\section{Residualindikator für stationäre Tet4-Wärme}
+Zielgröße ist die Energienorm
+$\|e_T\|_E^2=\int\nabla e_T^T\mathbf k\nabla e_T$ in W K.
+In einer affinen Tet4-Zelle mit konstantem Material ist
+$\nabla\cdot\mathbf q_h=0$; die Quelle und inneren Flusssprünge bleiben.
+Mit $\lambda_K=\lambda_{\min}(\mathbf k_K)$ und
+$\lambda_F=\min(\lambda_K,\lambda_{K'})$ lautet die implementierte Gewichtung
+\begin{align}\label{eq:indicator}
+\eta_K^2={}&\frac{h_K^2}{\lambda_K}\int_K Q^2\,\mathrm dV
++\frac12\sum_{F\ {\rm innen}}\frac{h_F}{\lambda_F}
+\int_F[\mathbf q_h\cdot\mathbf n]^2\,\mathrm dA\\
+&+\sum_{F\ {\rm Neumann/Robin}}\frac{h_F}{\lambda_K}
+\int_F r_F^2\,\mathrm dA,\qquad
+r_F=\mathbf q_h\cdot\mathbf n-\bar q-h(T_h-T_\infty).\nonumber
+\end{align}
+$h_K,h_F$ sind maximale Kantenlängen. Der Sprung summiert die beiden nach
+außen gerichteten Normalflüsse; innere Beiträge werden einmal berechnet und
+hälftig auf beide Zellen verteilt. An Materialgrenzen vergleicht man Fluss,
+nicht Gradient. Jeder Summand hat W K. Dirichlet-Flächen sind ausdrücklich
+markiert und tragen keinen Randresidualterm; der vollständige äußere Rand
+muss vorhanden sein. Quadraturgrade gelten für das \emph{quadrierte} Residuum.
+\index{Wärmeindikator}
+
+Die API bietet keine Zuverlässigkeits- oder Effizienzkonstanten, keine garantierte
+Fehlerschranke, Datenoszillation oder Robustheit für beliebige Anisotropie und
+Materialkontraste. Tet10, Transienten und Kopplungen sind ausgeschlossen.
+Markierung wählt die kleinste Zahl von Zellen mit
+$\sum_{K\in\mathcal M}\eta_K^2\ge\vartheta\sum_K\eta_K^2$, $0<\vartheta\le1$;
+Gleichstände folgen Zellindex, eine exakte Nullsumme markiert nichts.
+Eine verborgene dimensionsbehaftete Rauschschwelle oder ein Remeshing-Zyklus
+wird nicht ergänzt. Beispielsweise liefern Indikatoren $(3,2,1)$ und
+$\vartheta=1/2$ die erste Zelle, da $9\ge7$.
+
+\section{Genauigkeit und Kosten sinnvoll vergleichen}
+Für glatte Lösungen auf regulären Netzen werden bei P1 ungefähr
+L2-Ordnung zwei und H1-Ordnung eins erwartet, bei P2 drei bzw. zwei.
+Das sind asymptotische Feldaussagen, keine Garantie bei Singularitäten.
+Der beobachtete Exponent ist
+$p=\log(e_{h_1}/e_{h_2})/\log(h_1/h_2)$.
+Eine Eigenfrequenz-/Harmonik-Zielgröße kann schneller konvergieren als die
+H1-Feldnorm; die bestehenden P2-Stab-Zielgrößenordnungen um vier dürfen
+nicht als Feldordnung vier ausgegeben werden.
+
+Der unveränderte Vergleich aus Doc/54 misst Wärme und Biegung auf drei Größen,
+Tet4/Tet10 und SciPy/PETSc direkt, drei Wiederholungen in frischen Prozessen.
+Messzeit umfasst Solve-Pipeline, nicht Netzaufbau oder Fehlerquadratur;
+RSS ist Prozesshoch, kein inkrementeller Solverbedarf. Faire Vergleiche
+verwenden gleiche Fehlerziele oder explizite Zeit-/Speicherbudgets.
+Nicht erreichte Ziele bleiben sichtbar. Die Rohdaten unter
+\path{benchmarks/baselines/m7-37c-linux-arm64.json} zeigen ein begrenztes Raster;
+es wird keine universelle Überlegenheit einer Ordnung oder eines Backends
+abgeleitet und kein Benchmark neu als Leistungsmessung ausgeführt.
+
+\subsection*{Implementierung und Nachweise.}
+{\small\raggedright
+\path{src/fem_toolbox/solvers/linear_backend.py},
+\path{src/fem_toolbox/solvers/petsc_backend.py},
+\path{src/fem_toolbox/post/heat_indicator.py};
+\path{tests/unit/test_linear_backend.py},
+\path{tests/unit/test_heat_indicator.py}, \path{tests/petsc},
+\path{tests/convergence/test_heat_indicator_convergence.py} und
+\path{tests/regression/test_accuracy_cost.py}.
+
+\par}

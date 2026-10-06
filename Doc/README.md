@@ -147,8 +147,10 @@ Verifikationsdokumente benennen ihren jeweiligen Nachweisumfang ausdrücklich.
 
 - [M8-Freigabebericht, Kompatibilität und Release-Gate](64_M8_RELEASE_VERIFICATION.md)
 
-## M9 — Handbuchstruktur (Kandidat)
+## M9 — Handbuch (Kandidat)
 
 - [LaTeX-Bände, reproduzierbarer PDF-Build und Quellenmatrix (#206)](latex/README.md)
+- [Mathematischer Theorieband: Herleitungen und Nachweise (#207)](latex/THEORY_VERIFICATION.md)
 
-Die Fachbände #207–#210 und die redaktionelle Gesamtabnahme #211 bleiben offen.
+Anwendungs-, API- und Nachweisband #208–#210 und die redaktionelle
+Gesamtabnahme #211 bleiben offen.

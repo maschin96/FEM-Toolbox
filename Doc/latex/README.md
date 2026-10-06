@@ -1,7 +1,11 @@
-# M9-Handbuchstruktur und PDF-Build (#206)
+# M9-Handbuch und PDF-Build (#206, #207)
 
-Status: Struktur und geprüfter Musterteil; **Kandidat**, keine M9-Freigabe.
-Die Fachinhalte aus #207–#210 und die Gesamtabnahme #211 bleiben offen.
+Status: Struktur und ausgearbeiteter mathematischer Theorieband; **Kandidat**,
+keine M9-Freigabe. Anwendungs-, API- und Nachweisband (#208–#210) sowie
+die Gesamtabnahme #211 bleiben offen. Der Theorieband enthält zehn Kapitel,
+SI-/Voigt-Konventionen, starke/schwache Formen, Diskretisierung, Dynamik,
+Solver, Indikatoren und M8-Surrogate. Herkunft und fachliche Eigenprüfung:
+[Theorie-Nachweis](THEORY_VERIFICATION.md), [Themenmatrix](theory-map.json).
 `main.tex` integriert die vier separat baubaren Bände `theory.tex`,
 `application.tex`, `api.tex`, `verification.tex`. Deutsche Sprache, API-Namen
 unverändert. In diesem stabilen Quellstand heißt das Python-Paket weiterhin
@@ -91,8 +95,9 @@ Kandidatenartefakte. CI ersetzt das visuelle/fachliche Review nicht.
 `coverage.json` ist die maschinenprüfbare initiale Abdeckungs-/Quellenmatrix.
 Jeder bestehende Doc-Eintrag (einschließlich historischer Releases und lokaler
 Nachweis-/Markenassets), README/INSTALL und jede öffentliche API-Gruppe besitzt
-Zielband, kanonische Quelle, Pflegeverantwortung und Status. Die konkrete
-Kapitelgliederung innerhalb der Zielbände entsteht in #207–#210. M8-Studien,
+Zielband, kanonische Quelle, Pflegeverantwortung und Status. Die Theoriegliederung
+liegt in `chapters/theory/`; die weiteren Bände werden in #208–#210 ausgearbeitet.
+M8-Studien,
 Berichte, Surrogate und Visualisierung sind explizit enthalten. M9-Datenvertrag,
 Unsicherheit und Validierung bleiben geplante Inhalte im Nachweisband.
 
@@ -113,8 +118,10 @@ Unsicherheit und Validierung bleiben geplante Inhalte im Nachweisband.
    Verantwortliche; sie sind keine erfundenen benannten Reviewer.
 5. Build, Negativprüfungen, Inhalts-/Linkprüfung und visuelles Review ausführen;
    Quellen und wissenschaftliche Aussagen am dokumentierten Commit prüfen.
-   `open` erst nach fachlicher Abnahme in #207–#210 ersetzen; der Validator
-   verwendet hier bewusst nur `open`, `sample`, `historical` für den Initialstand.
+   Die ursprünglichen Statuswerte `open`, `sample`, `historical` bleiben als
+   Herkunftsstand erhalten. Das ergänzende Feld `theory_coverage` kennzeichnet
+   ausgearbeitete Theoriezuordnungen, ohne eine Fremdfreigabe zu behaupten.
+   `theory-map.json` enthält die konkrete Kapitel-/Modul-/Testzuordnung.
 
 ## Lizenzen und Weitergabe
 

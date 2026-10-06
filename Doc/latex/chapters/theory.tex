@@ -1,59 +1,11 @@
-\chapter{Theorie: geprüfter Musterteil}\label{chap:theory}
-\section{Stationäre Wärmeleitung}\label{sec:heat}
-Dieser Musterteil übernimmt die Vorzeichenkonvention aus
-\path{Doc/02_MATHEMATICAL_MODEL.md}; die vollständige Herleitung folgt in Issue 207.
-Für symmetrisch positiv definite Leitfähigkeit $\mathbf k$ gilt
-\begin{equation}\label{eq:heat}
--\nabla\cdot(\mathbf k\nabla T)=Q,\qquad
-\mathbf q=-\mathbf k\nabla T,\qquad
-\bar q=\mathbf q\cdot\mathbf n.
-\end{equation}
-Der Wärmestrom $\bar q$ ist positiv nach außen. Für Testfunktionen $w$, die
-auf dem Temperatur-Dirichlet-Rand verschwinden, folgt durch partielle Integration
-\begin{equation}\label{eq:weak}
-\int_\Omega \nabla w\cdot\mathbf k\nabla T\,\mathrm d\Omega
-=\int_\Omega wQ\,\mathrm d\Omega-\int_{\Gamma_q}w\bar q\,\mathrm d\Gamma.
-\end{equation}
-Das Minuszeichen in Gleichung~\ref{eq:weak} folgt aus
-$\mathbf k\nabla T\cdot\mathbf n=-\bar q$ in Gleichung~\ref{eq:heat}.
-Dies ist eine Modellkonvention und kein experimenteller Validierungsnachweis.
-\index{Wärmeleitung}\index{Neumann-Randbedingung}
-
-\begin{table}[htbp]\centering
-\begin{tabular}{lll}\toprule Größe & Symbol & SI-Einheit\\\midrule
-Temperatur & $T$ & K\\
-Leitfähigkeit & $k$ & W/(m K)\\
-Quelle & $Q$ & W/m$^3$\\
-Wärmestromdichte & $\bar q$ & W/m$^2$\\\bottomrule
-\end{tabular}
-\caption{Einheiten des stationären Wärmeproblems.}\label{tab:units}
-\end{table}
-
-\begin{figure}[htbp]\centering
-\setlength{\unitlength}{1mm}
-\begin{picture}(125,30)
-\put(10,5){\framebox(85,20){$\Omega$: Wärmeleitung}}
-\put(97,15){\vector(1,0){18}}
-\put(100,20){$\mathbf n$}
-\put(10,28){$T=\bar T$}
-\put(95,0){$\bar q>0$}
-\end{picture}
-\caption{Schematischer Rand mit nach außen positiver Wärmestromdichte.}
-\label{fig:boundary}
-\end{figure}
-Abbildung~\ref{fig:boundary} zeigt die Orientierung; Tabelle~\ref{tab:units}
-legt die Einheiten fest. Beide sind lokale, selbst erstellte Inhalte.
-
-\section{Ausführbare Bezeichner und Quellen}
-\begin{lstlisting}[language=Python,caption={SI-Konvention im Python-Einstieg.},label={code:example}]
-from fem_toolbox.model import Model
-model = Model.from_file("model.toml")
-result = model.solve()
-\end{lstlisting}
-Listing~\ref{code:example} zeigt den Einstieg; eine vollständige Eingabedatei
-und deren Ausführung gehören zu Issue 208, nicht zu diesem Strukturmuster.
-Die Bibliografieverwaltung verwendet BibTeX; die technische Quelle
-\cite{latex-project} dokumentiert das LaTeX-System.
-\section{Offener Fachumfang (Issue 207)}
-Kinematik, Tet4/Tet10, Mechanik, Elektrostatik, Piezo-Kopplung,
-Transienten, PETSc und M8-Studien sind noch auszuarbeiten.
+% Mathematischer Theorieband (#207); independently authored derivations.
+\input{chapters/theory/conventions}
+\input{chapters/theory/geometry}
+\input{chapters/theory/scalar}
+\input{chapters/theory/mechanics}
+\input{chapters/theory/coupling}
+\input{chapters/theory/algebra}
+\input{chapters/theory/dynamics}
+\input{chapters/theory/solvers}
+\input{chapters/theory/surrogates}
+\input{chapters/theory/evidence}
