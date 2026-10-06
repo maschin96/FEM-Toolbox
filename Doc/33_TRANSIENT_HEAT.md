@@ -57,6 +57,14 @@ result = solve_transient_heat(
   einem anderen endlichen Zeitpunkt als null ist zulässig.
 - `Step(time,before,after)` ist rechtsstetig. `Ramp(start,end,start_value,end_value)`
   interpoliert linear und hält außerhalb des Rampenintervalls die Endwerte.
+  Alle vier Rampenparameter und Abfragezeiten müssen endlich sein; `end > start`
+  ist erforderlich. Auch endliche Zeitgrenzen mit überlaufender Differenz werden
+  durch gemeinsame Skalierung korrekt interpoliert (#221). End-/Haltewerte
+  und konstante Amplituden werden exakt erhalten; die Amplitudenrechnung
+  vermeidet überlaufende Zwischendifferenzen bzw. gleichnamige Summen.
+  Nichtendliche Eingaben und ungeordnete Grenzen führen zu `ValidationError`.
+  Dies erweitert nicht den Solverzeitbereich: Integrationsraster benötigen
+  weiterhin endliche darstellbare positive Zeitschritte.
 - `TimeSeries(times,values,interpolation="linear",extrapolation="error",unit=...)`
   speichert unveränderliche Messwerte. `previous` wählt rechtsstetige
   stückweise konstante Werte; `hold` muss für Extrapolation explizit gewählt werden.
