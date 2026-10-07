@@ -7,7 +7,13 @@
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "Doc/01_SCOPE_AND_REQUIREMENTS.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
+      }
     },
     {
       "source": "Doc/02_MATHEMATICAL_MODEL.md",
@@ -212,6 +218,12 @@
         "status": "documented-candidate",
         "chapter": "Doc/latex/chapters/theory/algebra.tex",
         "map": "Doc/latex/theory-map.json"
+      },
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
       }
     },
     {
@@ -231,14 +243,26 @@
       "target": "Doc/latex/chapters/api.tex",
       "canonical": "Doc/23_MODEL_PREFLIGHT.md",
       "owner": "API-Maintainer",
-      "status": "open"
+      "status": "open",
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
+      }
     },
     {
       "source": "Doc/24_RESULT_BUNDLE.md",
       "target": "Doc/latex/chapters/api.tex",
       "canonical": "Doc/24_RESULT_BUNDLE.md",
       "owner": "API-Maintainer",
-      "status": "open"
+      "status": "open",
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
+      }
     },
     {
       "source": "Doc/25_THERMOPIEZO_CONVERGENCE.md",
@@ -323,6 +347,12 @@
         "status": "documented-candidate",
         "chapter": "Doc/latex/chapters/theory/dynamics.tex",
         "map": "Doc/latex/theory-map.json"
+      },
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
       }
     },
     {
@@ -335,6 +365,12 @@
         "status": "documented-candidate",
         "chapter": "Doc/latex/chapters/theory/dynamics.tex",
         "map": "Doc/latex/theory-map.json"
+      },
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
       }
     },
     {
@@ -383,6 +419,12 @@
         "status": "documented-candidate",
         "chapter": "Doc/latex/chapters/theory/solvers.tex",
         "map": "Doc/latex/theory-map.json"
+      },
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
       }
     },
     {
@@ -395,6 +437,12 @@
         "status": "documented-candidate",
         "chapter": "Doc/latex/chapters/theory/solvers.tex",
         "map": "Doc/latex/theory-map.json"
+      },
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
       }
     },
     {
@@ -402,7 +450,13 @@
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "Doc/40_TET10_TOPOLOGY.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
+      }
     },
     {
       "source": "Doc/41_TET10_GEOMETRY.md",
@@ -414,6 +468,12 @@
         "status": "documented-candidate",
         "chapter": "Doc/latex/chapters/theory/geometry.tex",
         "map": "Doc/latex/theory-map.json"
+      },
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
       }
     },
     {
@@ -426,6 +486,12 @@
         "status": "documented-candidate",
         "chapter": "Doc/latex/chapters/theory/geometry.tex",
         "map": "Doc/latex/theory-map.json"
+      },
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
       }
     },
     {
@@ -438,6 +504,12 @@
         "status": "documented-candidate",
         "chapter": "Doc/latex/chapters/theory/solvers.tex",
         "map": "Doc/latex/theory-map.json"
+      },
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
       }
     },
     {
@@ -445,35 +517,65 @@
       "target": "Doc/latex/chapters/verification.tex",
       "canonical": "Doc/44_GEOMETRY_PERFORMANCE.md",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "historical"
+      "status": "historical",
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
+      }
     },
     {
       "source": "Doc/45_TET10_HEAT_INTEGRATION.md",
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "Doc/45_TET10_HEAT_INTEGRATION.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
+      }
     },
     {
       "source": "Doc/46_TET10_ELECTROSTATICS.md",
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "Doc/46_TET10_ELECTROSTATICS.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
+      }
     },
     {
       "source": "Doc/47_TET10_ELASTICITY.md",
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "Doc/47_TET10_ELASTICITY.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
+      }
     },
     {
       "source": "Doc/48_TET10_THERMOMECHANICS.md",
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "Doc/48_TET10_THERMOMECHANICS.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
+      }
     },
     {
       "source": "Doc/49_TET10_PIEZOELECTRIC.md",
@@ -485,6 +587,12 @@
         "status": "documented-candidate",
         "chapter": "Doc/latex/chapters/theory/dynamics.tex",
         "map": "Doc/latex/theory-map.json"
+      },
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
       }
     },
     {
@@ -497,6 +605,12 @@
         "status": "documented-candidate",
         "chapter": "Doc/latex/chapters/theory/dynamics.tex",
         "map": "Doc/latex/theory-map.json"
+      },
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
       }
     },
     {
@@ -509,6 +623,12 @@
         "status": "documented-candidate",
         "chapter": "Doc/latex/chapters/theory/dynamics.tex",
         "map": "Doc/latex/theory-map.json"
+      },
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
       }
     },
     {
@@ -521,6 +641,12 @@
         "status": "documented-candidate",
         "chapter": "Doc/latex/chapters/theory/dynamics.tex",
         "map": "Doc/latex/theory-map.json"
+      },
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
       }
     },
     {
@@ -533,6 +659,12 @@
         "status": "documented-candidate",
         "chapter": "Doc/latex/chapters/theory/dynamics.tex",
         "map": "Doc/latex/theory-map.json"
+      },
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
       }
     },
     {
@@ -545,6 +677,12 @@
         "status": "documented-candidate",
         "chapter": "Doc/latex/chapters/theory/solvers.tex",
         "map": "Doc/latex/theory-map.json"
+      },
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
       }
     },
     {
@@ -557,6 +695,12 @@
         "status": "documented-candidate",
         "chapter": "Doc/latex/chapters/theory/solvers.tex",
         "map": "Doc/latex/theory-map.json"
+      },
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
       }
     },
     {
@@ -605,6 +749,12 @@
         "status": "documented-candidate",
         "chapter": "Doc/latex/chapters/theory/surrogates.tex",
         "map": "Doc/latex/theory-map.json"
+      },
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
       }
     },
     {
@@ -617,6 +767,12 @@
         "status": "documented-candidate",
         "chapter": "Doc/latex/chapters/theory/surrogates.tex",
         "map": "Doc/latex/theory-map.json"
+      },
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
       }
     },
     {
@@ -629,6 +785,12 @@
         "status": "documented-candidate",
         "chapter": "Doc/latex/chapters/theory/surrogates.tex",
         "map": "Doc/latex/theory-map.json"
+      },
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
       }
     },
     {
@@ -636,7 +798,13 @@
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "Doc/62_FIELD_VISUALIZATION.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
+      }
     },
     {
       "source": "Doc/63_STUDY_RECIPE_ACCEPTANCE.md",
@@ -874,14 +1042,26 @@
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "INSTALL.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
+      }
     },
     {
       "source": "README.md",
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "README.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
+      }
     },
     {
       "source": "src/fem_toolbox/__init__.py",
@@ -1083,6 +1263,17 @@
       "theory_coverage": {
         "status": "documented-candidate",
         "map": "Doc/latex/theory-map.json"
+      }
+    },
+    {
+      "source": "Doc/latex/USER_VERIFICATION.md",
+      "canonical": "Doc/latex/USER_VERIFICATION.md",
+      "target": "Doc/latex/chapters/application/diagnosis.tex",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "user_coverage": {
+        "status": "documented-candidate",
+        "recipes": "Doc/latex/recipes.json"
       }
     }
   ],

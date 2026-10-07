@@ -9,6 +9,8 @@ on:
       - 'src/**'
       - 'scripts/build_handbook.py'
       - 'tests/unit/test_handbook_build.py'
+      - 'tests/unit/test_user_handbook_sources.py'
+      - 'examples/**'
       - '.github/workflows/handbook.yml'
   push:
     branches: [main, codex/milestone-m9]
@@ -20,6 +22,8 @@ on:
       - 'src/**'
       - 'scripts/build_handbook.py'
       - 'tests/unit/test_handbook_build.py'
+      - 'tests/unit/test_user_handbook_sources.py'
+      - 'examples/**'
       - '.github/workflows/handbook.yml'
 permissions:
   contents: read

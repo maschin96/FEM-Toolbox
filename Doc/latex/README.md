@@ -1,7 +1,7 @@
-# M9-Handbuch und PDF-Build (#206, #207)
+# M9-Handbuch und PDF-Build (#206–#208)
 
-Status: Struktur und ausgearbeiteter mathematischer Theorieband; **Kandidat**,
-keine M9-Freigabe. Anwendungs-, API- und Nachweisband (#208–#210) sowie
+Status: Struktur, mathematischer Theorieband und vollständiger Benutzerband;
+**Kandidat**, keine M9-Freigabe. API- und Nachweisband (#209–#210) sowie
 die Gesamtabnahme #211 bleiben offen. Der Theorieband enthält zehn Kapitel,
 SI-/Voigt-Konventionen, starke/schwache Formen, Diskretisierung, Dynamik,
 Solver, Indikatoren und M8-Surrogate. Herkunft und fachliche Eigenprüfung:
@@ -64,7 +64,10 @@ nicht auf Byteidentität normiert. Toolchain-Updates sind eigene überprüfte
 
 Das Archiv enthält alle lokalen TeX-Quellen, Bibliografie, Makefile,
 Pflegeanleitung, Quellenmatrix, erzeugte Metadaten und MIT-Lizenz, ohne
-Buildzwischenstände. Der Musterteil nutzt eine selbst erstellte LaTeX-
+Buildzwischenstände. Alle 63 Benutzerrezeptinputs sind byteidentisch unter
+`examples/` enthalten; `recipes.json` beschreibt Befehle und Sollwerte.
+[Benutzer-Nachweis](USER_VERIFICATION.md) dokumentiert die isolierte Prüfung.
+Der Musterteil nutzt eine selbst erstellte LaTeX-
 Abbildung; externe Medien oder Fonts müssen nicht mitgeliefert werden.
 Nach Entpacken in derselben Toolchain: `make -C handbook` baut alle fünf PDFs.
 Die Makefile dient dem Quellenarchiv; die strikten Diagnose-, PDF- und
@@ -96,7 +99,7 @@ Kandidatenartefakte. CI ersetzt das visuelle/fachliche Review nicht.
 Jeder bestehende Doc-Eintrag (einschließlich historischer Releases und lokaler
 Nachweis-/Markenassets), README/INSTALL und jede öffentliche API-Gruppe besitzt
 Zielband, kanonische Quelle, Pflegeverantwortung und Status. Die Theoriegliederung
-liegt in `chapters/theory/`; die weiteren Bände werden in #208–#210 ausgearbeitet.
+liegt in `chapters/theory/`; der Benutzerband in `chapters/application/`. API/V&V werden in #209–#210 ausgearbeitet.
 M8-Studien,
 Berichte, Surrogate und Visualisierung sind explizit enthalten. M9-Datenvertrag,
 Unsicherheit und Validierung bleiben geplante Inhalte im Nachweisband.
@@ -139,3 +142,14 @@ nachvollziehbar. Poppler (GPL), Python (PSF), Debian-Bestand behalten ihre
 Lizenzen. Der Container wird hier nicht als Release-Artefakt weitergegeben;
 PDFs enthalten eingebettete Latin-Modern-Schriften. Bei späterem Vertrieb eines
 Containers sind dessen vollständige Lizenz-/Quellpflichten gesondert zu erfüllen.
+
+## Benutzerbeispiele aktualisieren (#208)
+
+Bei Änderungen unter `examples/` die gleichnamigen Dateien nach
+`Doc/latex/examples/` übernehmen, SHA-256 in `recipes.json` aktualisieren und
+Rezepttext/Befehle/Sollwerte prüfen. `tests/unit/test_user_handbook_sources.py`
+erkennt fehlende oder abweichende Kopien und nicht eingebundene Programme.
+Nicht nur Hashes erneuern: die Rezepte aus dem gebauten Wheel ausführen und
+`USER_VERIFICATION.md` mit Runtime und Resultaten aktualisieren. Das PDF und
+der Quellenarchiv-Roundtrip sind anschließend erneut zu prüfen. Nach #64 den
+synthetischen Unsicherheits-Lernworkflow samt Quellenprüfung ergänzen.

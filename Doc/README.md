@@ -152,5 +152,7 @@ Verifikationsdokumente benennen ihren jeweiligen Nachweisumfang ausdrücklich.
 - [LaTeX-Bände, reproduzierbarer PDF-Build und Quellenmatrix (#206)](latex/README.md)
 - [Mathematischer Theorieband: Herleitungen und Nachweise (#207)](latex/THEORY_VERIFICATION.md)
 
-Anwendungs-, API- und Nachweisband #208–#210 und die redaktionelle
-Gesamtabnahme #211 bleiben offen.
+- [Benutzerband: Installation, Modelle, Rezepte und unabhängige Artefaktprüfung (#208)](latex/USER_VERIFICATION.md)
+
+API- und Nachweisband #209–#210 und die redaktionelle Gesamtabnahme #211
+bleiben offen; der Unsicherheitsworkflow wird nach #64 ergänzt.
