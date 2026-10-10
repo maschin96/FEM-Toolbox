@@ -1,0 +1,746 @@
+{
+  "schema": 1,
+  "canonical": "Doc/29_PUBLIC_API_CONTRACT.md plus Doc/33/34/59–62/67",
+  "modules": {
+    "fem_toolbox": {
+      "classification": "stable",
+      "stable_symbols": [
+        "__version__"
+      ],
+      "rationale": "Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.",
+      "contract": "Doc/latex/chapters/api/overview.tex",
+      "examples": [
+        "examples/steady_heat.py"
+      ]
+    },
+    "fem_toolbox.assembly": {
+      "classification": "research",
+      "stable_symbols": [],
+      "rationale": "Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.",
+      "contract": "Doc/latex/chapters/api/development.tex",
+      "examples": [
+        "tests/unit/test_assembly.py"
+      ]
+    },
+    "fem_toolbox.boundary": {
+      "classification": "mixed",
+      "stable_symbols": [
+        "Dirichlet",
+        "Electrode"
+      ],
+      "rationale": "Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.",
+      "contract": "Doc/latex/chapters/api/mesh-materials.tex",
+      "examples": [
+        "examples/piezo_d33.py"
+      ]
+    },
+    "fem_toolbox.boundary.electrodes": {
+      "classification": "research",
+      "stable_symbols": [],
+      "rationale": "Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.",
+      "contract": "Doc/latex/chapters/api/mesh-materials.tex",
+      "examples": [
+        "examples/piezo_d33.py"
+      ]
+    },
+    "fem_toolbox.conventions": {
+      "classification": "research",
+      "stable_symbols": [],
+      "rationale": "Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.",
+      "contract": "Doc/latex/chapters/api/development.tex",
+      "examples": [
+        "Doc/latex/examples/developer_extension.py"
+      ]
+    },
+    "fem_toolbox.dynamic_result": {
+      "classification": "stable",
+      "stable_symbols": [
+        "PiezoDynamicResult"
+      ],
+      "rationale": "Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.",
+      "contract": "Doc/latex/chapters/api/solvers.tex",
+      "examples": [
+        "examples/transient_heat/run.py"
+      ]
+    },
+    "fem_toolbox.elements": {
+      "classification": "research",
+      "stable_symbols": [],
+      "rationale": "Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.",
+      "contract": "Doc/latex/chapters/api/development.tex",
+      "examples": [
+        "Doc/latex/examples/developer_extension.py"
+      ]
+    },
+    "fem_toolbox.elements.elasticity": {
+      "classification": "research",
+      "stable_symbols": [],
+      "rationale": "Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.",
+      "contract": "Doc/latex/chapters/api/development.tex",
+      "examples": [
+        "Doc/latex/examples/developer_extension.py"
+      ]
+    },
+    "fem_toolbox.elements.electrostatics": {
+      "classification": "research",
+      "stable_symbols": [],
+      "rationale": "Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.",
+      "contract": "Doc/latex/chapters/api/development.tex",
+      "examples": [
+        "Doc/latex/examples/developer_extension.py"
+      ]
+    },
+    "fem_toolbox.elements.heat": {
+      "classification": "research",
+      "stable_symbols": [],
+      "rationale": "Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.",
+      "contract": "Doc/latex/chapters/api/development.tex",
+      "examples": [
+        "Doc/latex/examples/developer_extension.py"
+      ]
+    },
+    "fem_toolbox.elements.piezoelectric": {
+      "classification": "research",
+      "stable_symbols": [],
+      "rationale": "Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.",
+      "contract": "Doc/latex/chapters/api/development.tex",
+      "examples": [
+        "Doc/latex/examples/developer_extension.py"
+      ]
+    },
+    "fem_toolbox.elements.quadratic": {
+      "classification": "research",
+      "stable_symbols": [],
+      "rationale": "Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.",
+      "contract": "Doc/latex/chapters/api/development.tex",
+      "examples": [
+        "tests/unit/test_tet10_operators.py"
+      ]
+    },
+    "fem_toolbox.elements.quadrature": {
+      "classification": "research",
+      "stable_symbols": [],
+      "rationale": "Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.",
+      "contract": "Doc/latex/chapters/api/development.tex",
+      "examples": [
+        "Doc/latex/examples/developer_extension.py"
+      ]
+    },
+    "fem_toolbox.elements.storage": {
+      "classification": "research",
+      "stable_symbols": [],
+      "rationale": "Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.",
+      "contract": "Doc/latex/chapters/api/development.tex",
+      "examples": [
+        "Doc/latex/examples/developer_extension.py"
+      ]
+    },
+    "fem_toolbox.elements.tet10": {
+      "classification": "research",
+      "stable_symbols": [],
+      "rationale": "Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.",
+      "contract": "Doc/latex/chapters/api/development.tex",
+      "examples": [
+        "Doc/latex/examples/developer_extension.py"
+      ]
+    },
+    "fem_toolbox.elements.tet4": {
+      "classification": "research",
+      "stable_symbols": [],
+      "rationale": "Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.",
+      "contract": "Doc/latex/chapters/api/development.tex",
+      "examples": [
+        "Doc/latex/examples/developer_extension.py"
+      ]
+    },
+    "fem_toolbox.errors": {
+      "classification": "stable",
+      "stable_symbols": [
+        "FEMToolboxError",
+        "ValidationError",
+        "ShapeError",
+        "UnitError",
+        "ProvenanceError",
+        "MeshValidationError",
+        "ConnectivityError",
+        "SelectionError",
+        "BoundaryTopologyError",
+        "MaterialAssignmentError",
+        "ModelSchemaError",
+        "MeshIOError",
+        "UnsupportedCellTypeError",
+        "ElementGeometryError",
+        "DegenerateElementError",
+        "ThermalNullspaceError",
+        "ElectricGaugeError"
+      ],
+      "rationale": "Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.",
+      "contract": "Doc/latex/chapters/api/overview.tex",
+      "examples": [
+        "examples/steady_heat.py"
+      ]
+    },
+    "fem_toolbox.fields": {
+      "classification": "research",
+      "stable_symbols": [],
+      "rationale": "Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.",
+      "contract": "Doc/latex/chapters/api/development.tex",
+      "examples": [
+        "Doc/latex/examples/developer_extension.py"
+      ]
+    },
+    "fem_toolbox.io": {
+      "classification": "mixed",
+      "stable_symbols": [
+        "read_gmsh",
+        "write_vtu",
+        "export_result_bundle"
+      ],
+      "rationale": "Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.",
+      "contract": "Doc/latex/chapters/api/artifacts.tex",
+      "examples": [
+        "examples/thermopiezoelectric/run.py"
+      ]
+    },
+    "fem_toolbox.io.heat_series": {
+      "classification": "stable",
+      "stable_symbols": [
+        "HeatSeriesWriter",
+        "export_heat_series"
+      ],
+      "rationale": "Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.",
+      "contract": "Doc/latex/chapters/api/artifacts.tex",
+      "examples": [
+        "examples/thermopiezoelectric/run.py"
+      ]
+    },
+    "fem_toolbox.io.meshio_adapter": {
+      "classification": "research",
+      "stable_symbols": [],
+      "rationale": "Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.",
+      "contract": "Doc/latex/chapters/api/mesh-materials.tex",
+      "examples": [
+        "examples/piezo_d33.py"
+      ]
+    },
+    "fem_toolbox.io.piezo_series": {
+      "classification": "stable",
+      "stable_symbols": [
+        "export_piezo_series"
+      ],
+      "rationale": "Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.",
+      "contract": "Doc/latex/chapters/api/artifacts.tex",
+      "examples": [
+        "examples/thermopiezoelectric/run.py"
+      ]
+    },
+    "fem_toolbox.io.result_bundle": {
+      "classification": "internal",
+      "stable_symbols": [],
+      "rationale": "Interne Validierungs-/Reduktions-/Adaptergrenze; keine eigene stabile Importzusage. Öffentliche Wrapper oder experimentelle Hooks führen auf diese Umsetzung.",
+      "contract": "Doc/latex/chapters/api/artifacts.tex",
+      "examples": [
+        "examples/thermopiezoelectric/run.py"
+      ]
+    },
+    "fem_toolbox.materials": {
+      "classification": "stable",
+      "stable_symbols": [
+        "ThermalMaterial",
+        "ElasticMaterial",
+        "DielectricMaterial",
+        "PiezoelectricMaterial",
+        "ThermalExpansion",
+        "MaterialAssignment",
+        "assign_region_materials"
+      ],
+      "rationale": "Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.",
+      "contract": "Doc/latex/chapters/api/mesh-materials.tex",
+      "examples": [
+        "examples/piezo_d33.py",
+        "examples/thermal_expansion.py",
+        "tests/unit/test_material_regions.py"
+      ]
+    },
+    "fem_toolbox.materials.catalog": {
+      "classification": "mixed",
+      "stable_symbols": [
+        "material_catalog",
+        "thermal_material"
+      ],
+      "rationale": "Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.",
+      "contract": "Doc/latex/chapters/api/mesh-materials.tex",
+      "examples": [
+        "examples/piezo_d33.py"
+      ]
+    },
+    "fem_toolbox.materials.electrostatics": {
+      "classification": "research",
+      "stable_symbols": [],
+      "rationale": "Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.",
+      "contract": "Doc/latex/chapters/api/mesh-materials.tex",
+      "examples": [
+        "examples/piezo_d33.py"
+      ]
+    },
+    "fem_toolbox.materials.heat": {
+      "classification": "research",
+      "stable_symbols": [],
+      "rationale": "Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.",
+      "contract": "Doc/latex/chapters/api/mesh-materials.tex",
+      "examples": [
+        "examples/piezo_d33.py"
+      ]
+    },
+    "fem_toolbox.materials.piezoelectric": {
+      "classification": "research",
+      "stable_symbols": [],
+      "rationale": "Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.",
+      "contract": "Doc/latex/chapters/api/mesh-materials.tex",
+      "examples": [
+        "examples/piezo_d33.py"
+      ]
+    },
+    "fem_toolbox.materials.regions": {
+      "classification": "research",
+      "stable_symbols": [],
+      "rationale": "Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.",
+      "contract": "Doc/latex/chapters/api/mesh-materials.tex",
+      "examples": [
+        "examples/piezo_d33.py"
+      ]
+    },
+    "fem_toolbox.mesh": {
+      "classification": "mixed",
+      "stable_symbols": [
+        "Mesh",
+        "inspect_boundary_topology"
+      ],
+      "rationale": "Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.",
+      "contract": "Doc/latex/chapters/api/mesh-materials.tex",
+      "examples": [
+        "examples/piezo_d33.py"
+      ]
+    },
+    "fem_toolbox.mesh.model": {
+      "classification": "research",
+      "stable_symbols": [],
+      "rationale": "Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.",
+      "contract": "Doc/latex/chapters/api/mesh-materials.tex",
+      "examples": [
+        "examples/piezo_d33.py"
+      ]
+    },
+    "fem_toolbox.mesh.quadratic": {
+      "classification": "internal",
+      "stable_symbols": [],
+      "rationale": "Interne Validierungs-/Reduktions-/Adaptergrenze; keine eigene stabile Importzusage. Öffentliche Wrapper oder experimentelle Hooks führen auf diese Umsetzung.",
+      "contract": "Doc/latex/chapters/api/mesh-materials.tex",
+      "examples": [
+        "examples/piezo_d33.py"
+      ]
+    },
+    "fem_toolbox.mesh.topology": {
+      "classification": "research",
+      "stable_symbols": [],
+      "rationale": "Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.",
+      "contract": "Doc/latex/chapters/api/mesh-materials.tex",
+      "examples": [
+        "examples/piezo_d33.py"
+      ]
+    },
+    "fem_toolbox.model": {
+      "classification": "mixed",
+      "stable_symbols": [
+        "Model",
+        "ModelResult"
+      ],
+      "rationale": "Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.",
+      "contract": "Doc/latex/chapters/api/workflows.tex",
+      "examples": [
+        "examples/thermopiezoelectric/run.py",
+        "examples/transient_heat/run.py",
+        "examples/piezo_dynamics/run.py"
+      ]
+    },
+    "fem_toolbox.model_preflight": {
+      "classification": "internal",
+      "stable_symbols": [],
+      "rationale": "Interne Validierungs-/Reduktions-/Adaptergrenze; keine eigene stabile Importzusage. Öffentliche Wrapper oder experimentelle Hooks führen auf diese Umsetzung.",
+      "contract": "Doc/latex/chapters/api/development.tex",
+      "examples": [
+        "Doc/latex/examples/developer_extension.py"
+      ]
+    },
+    "fem_toolbox.physics": {
+      "classification": "research",
+      "stable_symbols": [],
+      "rationale": "Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.",
+      "contract": "Doc/latex/chapters/api/development.tex",
+      "examples": [
+        "Doc/latex/examples/developer_extension.py"
+      ]
+    },
+    "fem_toolbox.physics.elasticity": {
+      "classification": "research",
+      "stable_symbols": [],
+      "rationale": "Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.",
+      "contract": "Doc/latex/chapters/api/development.tex",
+      "examples": [
+        "Doc/latex/examples/developer_extension.py"
+      ]
+    },
+    "fem_toolbox.physics.electrostatics": {
+      "classification": "research",
+      "stable_symbols": [],
+      "rationale": "Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.",
+      "contract": "Doc/latex/chapters/api/development.tex",
+      "examples": [
+        "Doc/latex/examples/developer_extension.py"
+      ]
+    },
+    "fem_toolbox.physics.heat": {
+      "classification": "research",
+      "stable_symbols": [],
+      "rationale": "Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.",
+      "contract": "Doc/latex/chapters/api/development.tex",
+      "examples": [
+        "Doc/latex/examples/developer_extension.py"
+      ]
+    },
+    "fem_toolbox.physics.quadratic": {
+      "classification": "research",
+      "stable_symbols": [],
+      "rationale": "Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.",
+      "contract": "Doc/latex/chapters/api/development.tex",
+      "examples": [
+        "Doc/latex/examples/developer_extension.py"
+      ]
+    },
+    "fem_toolbox.piezo_dynamic_model": {
+      "classification": "internal",
+      "stable_symbols": [],
+      "rationale": "Interne Validierungs-/Reduktions-/Adaptergrenze; keine eigene stabile Importzusage. Öffentliche Wrapper oder experimentelle Hooks führen auf diese Umsetzung.",
+      "contract": "Doc/latex/chapters/api/workflows.tex",
+      "examples": [
+        "examples/surrogate_heat/run.py"
+      ]
+    },
+    "fem_toolbox.post": {
+      "classification": "research",
+      "stable_symbols": [],
+      "rationale": "Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.",
+      "contract": "Doc/latex/chapters/api/workflows.tex",
+      "examples": [
+        "examples/surrogate_heat/run.py"
+      ]
+    },
+    "fem_toolbox.post.heat_indicator": {
+      "classification": "research",
+      "stable_symbols": [],
+      "rationale": "Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.",
+      "contract": "Doc/latex/chapters/api/workflows.tex",
+      "examples": [
+        "examples/surrogate_heat/run.py"
+      ]
+    },
+    "fem_toolbox.post.visualization": {
+      "classification": "stable",
+      "stable_symbols": [
+        "FieldPlot",
+        "plot_field",
+        "save_jpeg"
+      ],
+      "rationale": "Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.",
+      "contract": "Doc/latex/chapters/api/workflows.tex",
+      "examples": [
+        "examples/field_visualization/run.py"
+      ]
+    },
+    "fem_toolbox.provenance": {
+      "classification": "mixed",
+      "stable_symbols": [
+        "RunProvenance"
+      ],
+      "rationale": "Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.",
+      "contract": "Doc/latex/chapters/api/artifacts.tex",
+      "examples": [
+        "examples/thermopiezoelectric/run.py"
+      ]
+    },
+    "fem_toolbox.solvers": {
+      "classification": "research",
+      "stable_symbols": [],
+      "rationale": "Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.",
+      "contract": "Doc/latex/chapters/api/solvers.tex",
+      "examples": [
+        "examples/transient_heat/run.py"
+      ]
+    },
+    "fem_toolbox.solvers.elasticity": {
+      "classification": "stable",
+      "stable_symbols": [
+        "mechanical_dofs",
+        "ElasticResult",
+        "solve_elasticity"
+      ],
+      "rationale": "Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.",
+      "contract": "Doc/latex/chapters/api/solvers.tex",
+      "examples": [
+        "examples/elastic_tension.py"
+      ]
+    },
+    "fem_toolbox.solvers.electric_elements": {
+      "classification": "internal",
+      "stable_symbols": [],
+      "rationale": "Interne Validierungs-/Reduktions-/Adaptergrenze; keine eigene stabile Importzusage. Öffentliche Wrapper oder experimentelle Hooks führen auf diese Umsetzung.",
+      "contract": "Doc/latex/chapters/api/solvers.tex",
+      "examples": [
+        "examples/transient_heat/run.py"
+      ]
+    },
+    "fem_toolbox.solvers.electrostatics": {
+      "classification": "stable",
+      "stable_symbols": [
+        "electric_dofs",
+        "ElectrostaticResult",
+        "solve_electrostatics"
+      ],
+      "rationale": "Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.",
+      "contract": "Doc/latex/chapters/api/solvers.tex",
+      "examples": [
+        "examples/parallel_plate.py"
+      ]
+    },
+    "fem_toolbox.solvers.heat": {
+      "classification": "stable",
+      "stable_symbols": [
+        "thermal_dofs",
+        "HeatResult",
+        "solve_heat"
+      ],
+      "rationale": "Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.",
+      "contract": "Doc/latex/chapters/api/solvers.tex",
+      "examples": [
+        "examples/steady_heat.py"
+      ]
+    },
+    "fem_toolbox.solvers.linear_backend": {
+      "classification": "internal",
+      "stable_symbols": [],
+      "rationale": "Interne Validierungs-/Reduktions-/Adaptergrenze; keine eigene stabile Importzusage. Öffentliche Wrapper oder experimentelle Hooks führen auf diese Umsetzung.",
+      "contract": "Doc/latex/chapters/api/solvers.tex",
+      "examples": [
+        "tests/unit/test_linear_backend.py"
+      ]
+    },
+    "fem_toolbox.solvers.mechanical_elements": {
+      "classification": "internal",
+      "stable_symbols": [],
+      "rationale": "Interne Validierungs-/Reduktions-/Adaptergrenze; keine eigene stabile Importzusage. Öffentliche Wrapper oder experimentelle Hooks führen auf diese Umsetzung.",
+      "contract": "Doc/latex/chapters/api/solvers.tex",
+      "examples": [
+        "examples/transient_heat/run.py"
+      ]
+    },
+    "fem_toolbox.solvers.petsc_backend": {
+      "classification": "internal",
+      "stable_symbols": [],
+      "rationale": "Interne Validierungs-/Reduktions-/Adaptergrenze; keine eigene stabile Importzusage. Öffentliche Wrapper oder experimentelle Hooks führen auf diese Umsetzung.",
+      "contract": "Doc/latex/chapters/api/solvers.tex",
+      "examples": [
+        "tests/petsc/test_fieldsplit.py"
+      ]
+    },
+    "fem_toolbox.solvers.piezo_dynamics": {
+      "classification": "mixed",
+      "stable_symbols": [
+        "PiezoelectricModes",
+        "solve_piezoelectric_modes"
+      ],
+      "rationale": "Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.",
+      "contract": "Doc/latex/chapters/api/solvers.tex",
+      "examples": [
+        "examples/piezo_dynamics/run.py"
+      ]
+    },
+    "fem_toolbox.solvers.piezo_harmonic": {
+      "classification": "stable",
+      "stable_symbols": [
+        "HarmonicPiezoelectricResult",
+        "solve_harmonic_piezoelectric"
+      ],
+      "rationale": "Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.",
+      "contract": "Doc/latex/chapters/api/solvers.tex",
+      "examples": [
+        "examples/piezo_dynamics/run.py"
+      ]
+    },
+    "fem_toolbox.solvers.piezo_transient": {
+      "classification": "stable",
+      "stable_symbols": [
+        "KinematicValues",
+        "TransientPiezoelectricResult",
+        "solve_transient_piezoelectric"
+      ],
+      "rationale": "Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.",
+      "contract": "Doc/latex/chapters/api/solvers.tex",
+      "examples": [
+        "examples/piezo_dynamics/run.py"
+      ]
+    },
+    "fem_toolbox.solvers.piezoelectric": {
+      "classification": "stable",
+      "stable_symbols": [
+        "piezoelectric_dofs",
+        "PiezoelectricResult",
+        "solve_piezoelectric"
+      ],
+      "rationale": "Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.",
+      "contract": "Doc/latex/chapters/api/solvers.tex",
+      "examples": [
+        "examples/piezo_d33.py"
+      ]
+    },
+    "fem_toolbox.solvers.piezoelectric_elements": {
+      "classification": "internal",
+      "stable_symbols": [],
+      "rationale": "Interne Validierungs-/Reduktions-/Adaptergrenze; keine eigene stabile Importzusage. Öffentliche Wrapper oder experimentelle Hooks führen auf diese Umsetzung.",
+      "contract": "Doc/latex/chapters/api/solvers.tex",
+      "examples": [
+        "examples/piezo_dynamics/run.py"
+      ]
+    },
+    "fem_toolbox.solvers.thermal_elements": {
+      "classification": "internal",
+      "stable_symbols": [],
+      "rationale": "Interne Validierungs-/Reduktions-/Adaptergrenze; keine eigene stabile Importzusage. Öffentliche Wrapper oder experimentelle Hooks führen auf diese Umsetzung.",
+      "contract": "Doc/latex/chapters/api/solvers.tex",
+      "examples": [
+        "examples/transient_heat/run.py"
+      ]
+    },
+    "fem_toolbox.solvers.thermomechanics": {
+      "classification": "stable",
+      "stable_symbols": [
+        "ThermomechanicalResult",
+        "solve_thermomechanics"
+      ],
+      "rationale": "Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.",
+      "contract": "Doc/latex/chapters/api/solvers.tex",
+      "examples": [
+        "examples/thermal_expansion.py",
+        "tests/unit/test_public_api_contract.py"
+      ]
+    },
+    "fem_toolbox.solvers.thermopiezoelectric": {
+      "classification": "stable",
+      "stable_symbols": [
+        "ThermopiezoelectricResult",
+        "solve_thermopiezoelectric"
+      ],
+      "rationale": "Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.",
+      "contract": "Doc/latex/chapters/api/solvers.tex",
+      "examples": [
+        "examples/thermopiezoelectric/run.py"
+      ]
+    },
+    "fem_toolbox.solvers.transient_heat": {
+      "classification": "mixed",
+      "stable_symbols": [
+        "TemperatureBC",
+        "TransientConvection",
+        "TransientHeatResult",
+        "solve_transient_heat"
+      ],
+      "rationale": "Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.",
+      "contract": "Doc/latex/chapters/api/solvers.tex",
+      "examples": [
+        "examples/transient_heat/run.py"
+      ]
+    },
+    "fem_toolbox.studies": {
+      "classification": "stable",
+      "stable_symbols": [
+        "Study"
+      ],
+      "rationale": "Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.",
+      "contract": "Doc/latex/chapters/api/workflows.tex",
+      "examples": [
+        "examples/parameter_study/run.py",
+        "tests/unit/test_studies.py"
+      ]
+    },
+    "fem_toolbox.study_reports": {
+      "classification": "stable",
+      "stable_symbols": [
+        "Quantity",
+        "read_study_table",
+        "export_study_table"
+      ],
+      "rationale": "Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.",
+      "contract": "Doc/latex/chapters/api/workflows.tex",
+      "examples": [
+        "examples/parameter_study/report.py",
+        "tests/unit/test_study_reports.py"
+      ]
+    },
+    "fem_toolbox.surrogates": {
+      "classification": "stable",
+      "stable_symbols": [
+        "Variable",
+        "SurrogateData",
+        "DataSplit",
+        "split_cases",
+        "Prediction",
+        "PolynomialSurrogate",
+        "fit_surrogate"
+      ],
+      "rationale": "Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.",
+      "contract": "Doc/latex/chapters/api/workflows.tex",
+      "examples": [
+        "examples/surrogate_heat/run.py"
+      ]
+    },
+    "fem_toolbox.time": {
+      "classification": "mixed",
+      "stable_symbols": [
+        "Step",
+        "Ramp",
+        "TimeSeries",
+        "integration_times"
+      ],
+      "rationale": "Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.",
+      "contract": "Doc/latex/chapters/api/solvers.tex",
+      "examples": [
+        "examples/transient_heat/run.py"
+      ]
+    },
+    "fem_toolbox.transient_model": {
+      "classification": "internal",
+      "stable_symbols": [],
+      "rationale": "Interne Validierungs-/Reduktions-/Adaptergrenze; keine eigene stabile Importzusage. Öffentliche Wrapper oder experimentelle Hooks führen auf diese Umsetzung.",
+      "contract": "Doc/latex/chapters/api/workflows.tex",
+      "examples": [
+        "examples/surrogate_heat/run.py"
+      ]
+    },
+    "fem_toolbox.uncertainty": {
+      "classification": "stable",
+      "stable_symbols": [
+        "Normal",
+        "Uniform",
+        "UncertainParameter",
+        "SamplingPlan",
+        "summarize_samples",
+        "local_sensitivity",
+        "UncertaintyStudy"
+      ],
+      "rationale": "Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.",
+      "contract": "Doc/latex/chapters/api/workflows.tex",
+      "examples": [
+        "examples/uncertainty_heat/run.py"
+      ]
+    }
+  }
+}

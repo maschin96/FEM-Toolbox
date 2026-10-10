@@ -1,0 +1,72 @@
+\chapter{Netz-, Material- und Randverträge}
+\label{api:mesh}\index{Mesh}\index{Material}\index{Dirichlet}
+\begingroup\raggedright
+\section{Mesh und Topologie}
+\texttt{Mesh} besitzt endliche reelle \texttt{points[n,3]} in m;
+\texttt{tetra4[e,4]}, \texttt{tetra10[e,10]}, \texttt{triangle3[f,3]} und
+\texttt{triangle6[f,6]} sind Integer-Konnektivitäten. Optionale IDs/Tags haben
+je Entitätszahl eine Zeile, Sätze enthalten eindeutige nullbasierte Indizes.
+Eingaben werden kopiert; Arrays/Satzzuordnungen sind unveränderlich. Leere
+optionale Zellblöcke sind zulässig, doppelte/topologisch ungültige Entitäten nicht.
+Solver verlangen passende aktive Volumenzellen; gemischte Elementordnungen
+sind ausgeschlossen. Geometrische Entartung wird in den Elementen/Importern
+geprüft. \texttt{inspect\_boundary\_topology} bindet Außenflächen an Zellen,
+bewahrt Satzmitgliedschaft und diagnostiziert innenliegende, nichtmannigfaltige
+oder falsch gebundene Flächen. BoundaryFace/BoundaryTopology sind Daten des
+Topologieberichts; Einheiten und Arraytypen stehen im Inventar.
+
+Geradkantige Tet10 verwenden feste Kantenreihenfolge und mittige Zwischenknoten;
+keine gekrümmte Geometrie. \texttt{Mesh.cells}, \texttt{cell\_ids},
+\texttt{n\_cells}, \texttt{element\_order} vereinheitlichen den aktiven Zelltyp.
+Tiefe Geometrie-/Quadratur-/Assembly-Bausteine sind Forschungs-API, auch wenn
+Anwendungsbeispiele sie zur Lehre importieren. Mindestqualität, Orientierung
+und Außen-Normalen gelten gemäß Theorieband und Doc/40--42.
+Minimalbeispiel: \nolinkurl{examples/steady_heat.py}; Import und Datenformen
+werden durch \nolinkurl{tests/unit/test_mesh_io.py} geprüft.
+
+\section{Materialtensoren und Regionen}
+\texttt{ThermalMaterial}: symmetrische positiv definite Leitfähigkeit $k[3,3]$
+in W/(m K), optional positive Dichte kg/m$^3$ und Wärmekapazität J/(kg K) für
+transiente Modelle. Quellen-/Katalogmetadaten beschreiben konstante Werte und
+deren Gültigkeit; sie erzeugen kein temperaturabhängiges Gesetz.
+\texttt{ElasticMaterial}: $C[6,6]$ in Pa, symmetrisch positiv definit;
+\texttt{isotropic(young, poisson)} prüft $E>0$, $-1<\nu<1/2$.
+\texttt{DielectricMaterial}: $\kappa[3,3]$ in F/m, SPD.
+\texttt{PiezoelectricMaterial}: Stress-Charge-Form $C[6,6]$, $e[3,6]$
+in C/m$^2$, $\kappa[3,3]$; Rotation/Data-Sheet-Konversion behandelt
+Voigt-/Schub-/Permittivitätsbedingungen ausdrücklich. Eine strain-charge-
+Datenblattpermittivität bei konstanter Spannung wird nicht ungeprüft als
+stress-charge-Permittivität übernommen. Dichte ist für Dynamik erforderlich.
+\texttt{ThermalExpansion}: $\alpha[6]$ in 1/K und absolute Referenztemperatur
+in K, isotrope/principale Konstruktoren und Achsrotation gemäß Doc/18.
+
+Homogenes Material oder genau ein Objekt pro Eingabezelle. Regionen müssen
+vollständig/eindeutig zugeordnet sein; sich widersprechende Überlappungen und
+Lücken erzeugen \texttt{MaterialAssignmentError}. \texttt{assign\_region\_materials}
+liefert MaterialAssignment in Zellreihenfolge mit Zuordnungsprovenienz.
+\texttt{Model} konvertiert nur erlaubte Einheiten; Direktobjekte erwarten SI.
+Arrays sind owned/readonly; Quelle und Achsen bleiben prüfbare Metadaten.
+Minimalbeispiele: \nolinkurl{examples/piezo_d33.py},
+\nolinkurl{examples/thermal_expansion.py}; vollständige tensorielle
+Konstruktoren stehen in den Signaturen/Docstrings des Inventars.
+
+\section{Dirichlet, Elektroden und Lasten}
+\texttt{Dirichlet(dofs, values)} bindet globale Feld-DOF-Indizes an SI-Werte.
+Konflikte werden abgelehnt. Für $u$: m, $T$: K, $\phi$: V.
+\texttt{Electrode} wählt Außen-Dreiecksflächen: festes Potential in V oder
+schwebende Gesamtladung in C. Ausgedehnte Elektrode ist equipotential;
+überlappende Konflikte und ungebundene Innenflächen sind Fehler. Schwebende
+Elektroden benötigen weiterhin eine elektrische Referenz; Elektrode ist
+kein beliebiger Ein-Knoten-Potentialzwang. ElectrodeState beschreibt
+intern die Kondensation, ohne eigene stabile Anwenderzusage.
+
+Lasten: volumetrische Wärmequelle W/m$^3$, äußerer Wärmestrom W/m$^2$,
+Konvektion W/(m$^2$ K) mit Umgebung K; Volumenkraft N/m$^3$, Traktion N/m$^2$,
+Punktkraft N; Volumenladung C/m$^3$, Oberflächenladung C/m$^2$.
+Mappings adressieren Außenflächen-Zeilen oder globale Knoten gemäß Signatur.
+Callbacks erhalten physische Punkte in m und liefern endliche SI-Werte;
+Assembly friert effektive diskrete Lasten in Provenienz ein, keinen Python-
+Quellcode eines Callbacks. \texttt{Convection} ist ein
+Lastdatensatz des Wärmevertrags; niedrige Lastintegrationsfunktionen
+bleiben Forschungsbausteine. Beispiel: \nolinkurl{examples/thermopiezoelectric/run.py}.
+\endgroup
