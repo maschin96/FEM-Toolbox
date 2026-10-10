@@ -1,0 +1,48 @@
+{
+  "retrieved_date": "2026-10-10",
+  "url": "https://zenodo.org/api/records/7920056",
+  "record_id": "7920056",
+  "title": "Dataset for: \"Additively manufactured degradable piezoelectric microsystems for sensing and actuating\"",
+  "license": {
+    "id": "cc-by-4.0"
+  },
+  "creators": [
+    {
+      "name": "Monroe, Morgan",
+      "affiliation": "EPFL",
+      "orcid": "0009-0009-0708-2401"
+    },
+    {
+      "name": "Fumeaux, Nicolas",
+      "affiliation": "EPFL",
+      "orcid": "0000-0002-4684-3076"
+    },
+    {
+      "name": "Villanueva, L. Guillermo",
+      "affiliation": "EPFL",
+      "orcid": "0000-0003-3340-2930"
+    },
+    {
+      "name": "Briand, Danick",
+      "affiliation": "EPFL",
+      "orcid": "0000-0003-2628-0170"
+    }
+  ],
+  "record_version": null,
+  "doi": "10.5281/zenodo.7920056",
+  "complete_response_sha256": "58b59792b1bf1ee933904b846aa49e3e906c32bbfde7bcc9092eb0ed8aad7904",
+  "files": [
+    {
+      "name": "readme.txt",
+      "size_bytes": 17984,
+      "checksum": "md5:db1c0b9413cf5ec12e78442f33f2ff2b",
+      "download_url": "https://zenodo.org/api/records/7920056/files/readme.txt/content"
+    },
+    {
+      "name": "Dataset.zip",
+      "size_bytes": 776186165,
+      "checksum": "md5:9dc2ebf484f770fc3fe2eaddce3d5e20",
+      "download_url": "https://zenodo.org/api/records/7920056/files/Dataset.zip/content"
+    }
+  ]
+}

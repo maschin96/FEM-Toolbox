@@ -1084,6 +1084,83 @@
         "status": "documented-candidate",
         "map": "Doc/latex/theory-map.json"
       }
+    },
+    {
+      "source": "Doc/65_VALIDATION_DATA_CONTRACT.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/65_VALIDATION_DATA_CONTRACT.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "open"
+    },
+    {
+      "source": "Doc/66_M9_DATA_SEARCH_AND_RELEASE_OPTIONS.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/66_M9_DATA_SEARCH_AND_RELEASE_OPTIONS.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "open"
+    },
+    {
+      "source": "Doc/evidence/issue63/README.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/evidence/issue63/README.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "open"
+    },
+    {
+      "source": "Doc/evidence/issue63/research-2026-10-10.json",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/evidence/issue63/research-2026-10-10.json",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "open"
+    },
+    {
+      "source": "Doc/evidence/issue63/screening-2026-10-10/lightfilm-Figure_4d_540nm.txt",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/evidence/issue63/screening-2026-10-10/lightfilm-Figure_4d_540nm.txt",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "open"
+    },
+    {
+      "source": "Doc/evidence/issue63/screening-2026-10-10/polaron-Fig3-A-displacement.csv",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/evidence/issue63/screening-2026-10-10/polaron-Fig3-A-displacement.csv",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "open"
+    },
+    {
+      "source": "Doc/evidence/issue63/screening-2026-10-10/polaron-figS2-d33-U-f.csv",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/evidence/issue63/screening-2026-10-10/polaron-figS2-d33-U-f.csv",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "open"
+    },
+    {
+      "source": "Doc/evidence/issue63/screening-2026-10-10/polaron-metadata-excerpt.json",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/evidence/issue63/screening-2026-10-10/polaron-metadata-excerpt.json",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "open"
+    },
+    {
+      "source": "Doc/evidence/issue63/screening-2026-10-10/greenpiezo-metadata-excerpt.json",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/evidence/issue63/screening-2026-10-10/greenpiezo-metadata-excerpt.json",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "open"
+    },
+    {
+      "source": "Doc/evidence/issue63/screening-2026-10-10/lightfilm-metadata-excerpt.json",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/evidence/issue63/screening-2026-10-10/lightfilm-metadata-excerpt.json",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "open"
+    },
+    {
+      "source": "Doc/evidence/issue63/screening-2026-10-10/relaxor-metadata-excerpt.json",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/evidence/issue63/screening-2026-10-10/relaxor-metadata-excerpt.json",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "open"
     }
   ],
   "planned": [

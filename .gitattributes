@@ -1,0 +1,4 @@
+# Preserve third-party screening originals byte-for-byte, including CRLF and spaces.
+Doc/evidence/issue63/screening-2026-10-10/lightfilm-Figure_4d_540nm.txt -text -diff
+Doc/evidence/issue63/screening-2026-10-10/polaron-Fig3-A-displacement.csv -text -diff
+Doc/evidence/issue63/screening-2026-10-10/polaron-figS2-d33-U-f.csv -text -diff

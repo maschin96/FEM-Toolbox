@@ -1,0 +1,33 @@
+{
+  "retrieved_date": "2026-10-10",
+  "url": "https://api.figshare.com/v2/articles/19346039",
+  "record_id": "19346039",
+  "title": "Source Data.xlsx",
+  "license": {
+    "value": 1,
+    "name": "CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+  },
+  "creators": [
+    {
+      "id": 12230573,
+      "full_name": "Gang Liu",
+      "first_name": "Gang",
+      "last_name": "Liu",
+      "is_active": true,
+      "url_name": "Gang_Liu",
+      "orcid_id": ""
+    }
+  ],
+  "record_version": 1,
+  "doi": "10.6084/m9.figshare.19346039.v1",
+  "complete_response_sha256": "4e8cca7f5b08919799105a6bd7419a0c15ab5e271b9a143f31c05ef6a9cb94c4",
+  "files": [
+    {
+      "name": "Source Data.xlsx",
+      "size_bytes": 1553846,
+      "checksum": "c3360780ef8b35dc1cb35a457725d5a2",
+      "download_url": "https://ndownloader.figshare.com/files/34356314"
+    }
+  ]
+}

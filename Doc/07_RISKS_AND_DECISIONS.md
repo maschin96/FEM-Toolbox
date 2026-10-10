@@ -639,3 +639,23 @@ Registry-Zugriff, Marken-/Bildrechte und Eigentümerfreigaben sind vor externer
 Veröffentlichung nachzuweisen. Keine numerischen oder SI-Konventionen ändern
 sich. Unabhängiges Review dieser Entscheidung steht bis PR-Abnahme aus.
 [Inventar, Befunde und vollständiger Vertrag](77_FEMANTIS_MIGRATION_CONTRACT.md).
+
+## ADR-054 — M9 ohne unbelegten experimentellen Freigabeanspruch (10.10.2026)
+
+Der Eigentümer hat nach erneuter Recherche und Sichtung öffentlich
+lizenzierten Rohmaterials ausdrücklich „M9 wie vorgeschlagen neu planen“
+genehmigt. v1.4.0 umfasst den generischen verifizierten Unsicherheitsworkflow
+#64 und die vollständig abgenommenen vier Fachbände #206–#211. #63/#65 bleiben
+als experimenteller Folgeumfang offen; es gibt keine ausgewählten angenommenen
+Messdaten und keine experimentelle Fallfreigabe. Die bisherige Pflichtkopplung
+von #64 und Dokumentationsabschluss an einen erfolgreichen Messvergleich wird
+explizit aufgehoben, nicht als bestanden bezeichnet.
+
+Erwartung/Varianz, Sensitivität, Sampling-Konvergenz, Seeds, zulässige
+Parameter-/Korrelationsverträge, getrennte numerische Fehlerbudgets und
+reproduzierbare Artefakte sind weiterhin vorab zu verifizieren. Synthetische
+Lehrfälle werden ausdrücklich so bezeichnet; Quellen, Testfehler und
+Verifikationsnachweise werden nicht zu Messdaten umetikettiert. #66 benötigt
+nach wie vor erfolgreiche CI, integrierte Pflichtpakete, Artefaktinstallation,
+vollständige PDF-/Quellenabnahme und Zielcommitprüfung vor Release/Tag.
+[Befunde und vollständiger genehmigter Umfang](66_M9_DATA_SEARCH_AND_RELEASE_OPTIONS.md).
