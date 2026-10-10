@@ -1,0 +1,261 @@
+{
+  "retrieved_date": "2026-10-10",
+  "url": "https://zenodo.org/api/records/15526822",
+  "record_id": "15526822",
+  "title": "Raw data for Light-annealed piezoelectric films on flexible glass",
+  "license": {
+    "id": "cc-by-4.0"
+  },
+  "creators": [
+    {
+      "name": "Cardoletti, Juliette",
+      "affiliation": "Luxembourg Institute of Science and Technology",
+      "orcid": "0000-0002-7305-6094"
+    },
+    {
+      "name": "Song, Longfei",
+      "affiliation": "Luxembourg Institute of Science and Technology",
+      "orcid": "0000-0001-6898-8375"
+    },
+    {
+      "name": "Philippe, Adrian-Marie",
+      "affiliation": "Luxembourg Institute of Science and Technology",
+      "orcid": "0000-0002-9703-659X"
+    },
+    {
+      "name": "GIROD, Stéphanie",
+      "affiliation": "Luxembourg Institute of Science and Technology",
+      "orcid": "0000-0002-9544-9227"
+    },
+    {
+      "name": "Malic, Barbara",
+      "affiliation": "Jožef Stefan Institute",
+      "orcid": "0000-0002-3438-8846"
+    },
+    {
+      "name": "Defay, Emmanuel",
+      "affiliation": "Luxembourg Institute of Science and Technology",
+      "orcid": "0000-0003-1462-8969"
+    },
+    {
+      "name": "Glinsek, Sebastjan",
+      "affiliation": "Luxembourg Institute of Science and Technology",
+      "orcid": "0000-0002-5614-0825"
+    }
+  ],
+  "record_version": null,
+  "doi": "10.5281/zenodo.15526822",
+  "complete_response_sha256": "1cf31f097882aae4ebdbf63ccd0b8bdd93ecee3f78c432185a58148e0c4d1b83",
+  "files": [
+    {
+      "name": "Figure_1a_2-step.txt",
+      "size_bytes": 14528,
+      "checksum": "md5:0820d98870f4261ea435b747e7edde00",
+      "download_url": "https://zenodo.org/api/records/15526822/files/Figure_1a_2-step.txt/content"
+    },
+    {
+      "name": "Figure_3b_PTO_on_top.txt",
+      "size_bytes": 4763,
+      "checksum": "md5:24248beb7cee95e7c14bab2a2a9caeaa",
+      "download_url": "https://zenodo.org/api/records/15526822/files/Figure_3b_PTO_on_top.txt/content"
+    },
+    {
+      "name": "Figure_3d_PTO_on_top.txt",
+      "size_bytes": 8429,
+      "checksum": "md5:e3007f1bd0894824e273fa0273b41730",
+      "download_url": "https://zenodo.org/api/records/15526822/files/Figure_3d_PTO_on_top.txt/content"
+    },
+    {
+      "name": "Figure_1e_1-step.txt",
+      "size_bytes": 4633,
+      "checksum": "md5:267ddfd1e32744ed2b4038fcf2e5bffb",
+      "download_url": "https://zenodo.org/api/records/15526822/files/Figure_1e_1-step.txt/content"
+    },
+    {
+      "name": "Figure_3c_no_PTO.txt",
+      "size_bytes": 14081,
+      "checksum": "md5:5e349e831bc77bfb4d763dd4c2fd1173",
+      "download_url": "https://zenodo.org/api/records/15526822/files/Figure_3c_no_PTO.txt/content"
+    },
+    {
+      "name": "Figure_2b_PTO_on_top.txt",
+      "size_bytes": 14590,
+      "checksum": "md5:257beab86716451b6beebf3e93a40a7c",
+      "download_url": "https://zenodo.org/api/records/15526822/files/Figure_2b_PTO_on_top.txt/content"
+    },
+    {
+      "name": "Figure_2b_PTO_below.txt",
+      "size_bytes": 14424,
+      "checksum": "md5:ee269734eb8fd421ee4799492cbf32ec",
+      "download_url": "https://zenodo.org/api/records/15526822/files/Figure_2b_PTO_below.txt/content"
+    },
+    {
+      "name": "Supplementary_Figure_S5_Willow.txt",
+      "size_bytes": 14558,
+      "checksum": "md5:ef59c7348bdb05d72cc30376c4aa76be",
+      "download_url": "https://zenodo.org/api/records/15526822/files/Supplementary_Figure_S5_Willow.txt/content"
+    },
+    {
+      "name": "Supplementary_Figure_S2_2-step.txt",
+      "size_bytes": 1894,
+      "checksum": "md5:9e8dd82d14a24fb2536df4cf6efcfcd5",
+      "download_url": "https://zenodo.org/api/records/15526822/files/Supplementary_Figure_S2_2-step.txt/content"
+    },
+    {
+      "name": "Figure_1a_1-step.txt",
+      "size_bytes": 14580,
+      "checksum": "md5:5804e801ab98c785dfddedc4abf0c418",
+      "download_url": "https://zenodo.org/api/records/15526822/files/Figure_1a_1-step.txt/content"
+    },
+    {
+      "name": "Figure_1e_2-step.txt",
+      "size_bytes": 4644,
+      "checksum": "md5:f9ef75cae2845bd58072b816c16917d5",
+      "download_url": "https://zenodo.org/api/records/15526822/files/Figure_1e_2-step.txt/content"
+    },
+    {
+      "name": "Figure_2g_PTO_on_top.txt",
+      "size_bytes": 13666,
+      "checksum": "md5:e6d3889f3fec706a5f3ab91f87d43a41",
+      "download_url": "https://zenodo.org/api/records/15526822/files/Figure_2g_PTO_on_top.txt/content"
+    },
+    {
+      "name": "Figure_2g_no_PTO.txt",
+      "size_bytes": 13637,
+      "checksum": "md5:b1a7ce7b4aeb0b9c86d3ad48b56c8f78",
+      "download_url": "https://zenodo.org/api/records/15526822/files/Figure_2g_no_PTO.txt/content"
+    },
+    {
+      "name": "Figure_4d_540nm.txt",
+      "size_bytes": 8497,
+      "checksum": "md5:1322ccdb313f2a734fbc4fc04f63899d",
+      "download_url": "https://zenodo.org/api/records/15526822/files/Figure_4d_540nm.txt/content"
+    },
+    {
+      "name": "Supplementary_Figure_S2_1-step.txt",
+      "size_bytes": 3880,
+      "checksum": "md5:66b5e32ff763243c9a437f81d8bb6ddd",
+      "download_url": "https://zenodo.org/api/records/15526822/files/Supplementary_Figure_S2_1-step.txt/content"
+    },
+    {
+      "name": "Figure_3a_PTO_on_top.txt",
+      "size_bytes": 14616,
+      "checksum": "md5:d85f48ad3ea74434a91939d4cefec374",
+      "download_url": "https://zenodo.org/api/records/15526822/files/Figure_3a_PTO_on_top.txt/content"
+    },
+    {
+      "name": "Figure_4a_540nm.txt",
+      "size_bytes": 14525,
+      "checksum": "md5:9b3bbc6123ef86c733d102393555d85c",
+      "download_url": "https://zenodo.org/api/records/15526822/files/Figure_4a_540nm.txt/content"
+    },
+    {
+      "name": "Figure_1f_2-step.txt",
+      "size_bytes": 13637,
+      "checksum": "md5:fdb6d372d42d901a7da22553510c9992",
+      "download_url": "https://zenodo.org/api/records/15526822/files/Figure_1f_2-step.txt/content"
+    },
+    {
+      "name": "Figure_4a_170nm.txt",
+      "size_bytes": 14375,
+      "checksum": "md5:b491089969cf0f68ef87099283a6f41b",
+      "download_url": "https://zenodo.org/api/records/15526822/files/Figure_4a_170nm.txt/content"
+    },
+    {
+      "name": "Figure_1f_1-step.txt",
+      "size_bytes": 12576,
+      "checksum": "md5:c2b9e153bb48109152bf072d825744e3",
+      "download_url": "https://zenodo.org/api/records/15526822/files/Figure_1f_1-step.txt/content"
+    },
+    {
+      "name": "Supplementary_Figure_S4_PTO_on_first_layer.txt",
+      "size_bytes": 14405,
+      "checksum": "md5:a50e1d4012d81c50ac13b59324b4bdc0",
+      "download_url": "https://zenodo.org/api/records/15526822/files/Supplementary_Figure_S4_PTO_on_first_layer.txt/content"
+    },
+    {
+      "name": "Figure_2b_no_PTO.txt",
+      "size_bytes": 14528,
+      "checksum": "md5:1ffa30c7a4478a65d06f5e987437fd0e",
+      "download_url": "https://zenodo.org/api/records/15526822/files/Figure_2b_no_PTO.txt/content"
+    },
+    {
+      "name": "Figure_3a_no_PTO.txt",
+      "size_bytes": 14476,
+      "checksum": "md5:2f810907d03438a20b104e2c8c9c145d",
+      "download_url": "https://zenodo.org/api/records/15526822/files/Figure_3a_no_PTO.txt/content"
+    },
+    {
+      "name": "Figure_2f_no_PTO.txt",
+      "size_bytes": 4644,
+      "checksum": "md5:96b1dc7ef3bbe70d54b2b8c2a6bec68f",
+      "download_url": "https://zenodo.org/api/records/15526822/files/Figure_2f_no_PTO.txt/content"
+    },
+    {
+      "name": "Figure_3d_no_PTO.txt",
+      "size_bytes": 8429,
+      "checksum": "md5:eff43e27f3cae73a8b08795339e4683e",
+      "download_url": "https://zenodo.org/api/records/15526822/files/Figure_3d_no_PTO.txt/content"
+    },
+    {
+      "name": "Figure_2f_PTO_on_top.txt",
+      "size_bytes": 4657,
+      "checksum": "md5:4edeebcd6cd4476fcbcc02e71cc33316",
+      "download_url": "https://zenodo.org/api/records/15526822/files/Figure_2f_PTO_on_top.txt/content"
+    },
+    {
+      "name": "Figure_3b_no_PTO.txt",
+      "size_bytes": 4766,
+      "checksum": "md5:69c9508379430337083dd3cfe27bd0b8",
+      "download_url": "https://zenodo.org/api/records/15526822/files/Figure_3b_no_PTO.txt/content"
+    },
+    {
+      "name": "Figure_3c_PTO_on_top.txt",
+      "size_bytes": 14002,
+      "checksum": "md5:b805123e135739f6ec67b24f78b9ea25",
+      "download_url": "https://zenodo.org/api/records/15526822/files/Figure_3c_PTO_on_top.txt/content"
+    },
+    {
+      "name": "Figure_4b_540nm.txt",
+      "size_bytes": 4774,
+      "checksum": "md5:f2c19a3b23471fa2df7aade8ef67c2de",
+      "download_url": "https://zenodo.org/api/records/15526822/files/Figure_4b_540nm.txt/content"
+    },
+    {
+      "name": "Figure_4c_170nm.txt",
+      "size_bytes": 13642,
+      "checksum": "md5:59b5140f3f13ecf2a4273893be727530",
+      "download_url": "https://zenodo.org/api/records/15526822/files/Figure_4c_170nm.txt/content"
+    },
+    {
+      "name": "Figure_4b_170nm.txt",
+      "size_bytes": 4621,
+      "checksum": "md5:00dcb349f6eba179c5b0df4075734928",
+      "download_url": "https://zenodo.org/api/records/15526822/files/Figure_4b_170nm.txt/content"
+    },
+    {
+      "name": "Figure_4c_540nm.txt",
+      "size_bytes": 13920,
+      "checksum": "md5:0a00c7b037b05b39e252c0d687d22fea",
+      "download_url": "https://zenodo.org/api/records/15526822/files/Figure_4c_540nm.txt/content"
+    },
+    {
+      "name": "Supplementary_Figure_S3b.txt",
+      "size_bytes": 7008,
+      "checksum": "md5:10a816ca2ca66508ccfb2e34efaf80bb",
+      "download_url": "https://zenodo.org/api/records/15526822/files/Supplementary_Figure_S3b.txt/content"
+    },
+    {
+      "name": "Supplementary_Figure_S4_PTO_on_each_layer.txt",
+      "size_bytes": 14406,
+      "checksum": "md5:ccd17896e0722f4618168f0dff81bc0f",
+      "download_url": "https://zenodo.org/api/records/15526822/files/Supplementary_Figure_S4_PTO_on_each_layer.txt/content"
+    },
+    {
+      "name": "Supplementary_Figure_S5_AF32.txt",
+      "size_bytes": 14558,
+      "checksum": "md5:3d1baad2d6ceb61e167da98bb4610f8f",
+      "download_url": "https://zenodo.org/api/records/15526822/files/Supplementary_Figure_S5_AF32.txt/content"
+    }
+  ]
+}

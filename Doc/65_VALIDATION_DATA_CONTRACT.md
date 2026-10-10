@@ -1,6 +1,6 @@
 # M9: Validierungsfall, Messdatenvertrag und Datenauswahl (#63)
 
-Stand: 6. Oktober 2026. **Vorbereitung; Datengate nicht erfüllt.**
+Stand: 10. Oktober 2026. **Vorbereitung; Datengate nicht erfüllt.**
 Kanonische Grundlage: [V&V](05_VERIFICATION_AND_VALIDATION.md),
 [Konventionen](02_MATHEMATICAL_MODEL.md),
 [Piezo-Material](15_PIEZOELECTRIC_MATERIAL.md),
@@ -12,7 +12,17 @@ liefert bislang keinen für den gesamten Vertrag qualifizierten Datensatz.
 Das ist keine Behauptung, dass geeignete Daten grundsätzlich nicht existieren.
 Es wurden keine Messwerte erfunden, keine Kurven digitalisiert und keine
 Materialparameter an Beobachtungen angepasst. #63, #64, #65 und das M9-Releasegate
-bleiben offen. #208/#209 setzen die integrierte #64-Funktion ausdrücklich voraus.
+bleiben offen. Gemäß Eigentümerauftrag vom 6. Oktober dokumentieren #208/#209
+vorgezogen den vorhandenen Stand; ihre Unsicherheitsabschnitte werden in #64
+nachgeführt. Das hebt dessen Abhängigkeit vom angenommenen Messdatenvertrag
+nicht auf.
+
+Die [erneute Recherche vom 10. Oktober](66_M9_DATA_SEARCH_AND_RELEASE_OPTIONS.md)
+ergänzt Rohdatei-Sichtungen und API-Lizenzbelege. Auch damit ist noch kein
+Datensatz für den vollständigen Vertrag angenommen. Der dort formulierte
+alternative Releaseumfang wurde anschließend am 10. Oktober vom Eigentümer
+genehmigt. Dieser Messdatenvertrag bleibt für den experimentellen Folgeumfang
+verbindlich; #63/#65 sind nicht mehr Pflichtgates des neu geplanten v1.4.0.
 
 ## 1. Abgegrenzter Zielversuch
 
@@ -130,7 +140,7 @@ Eignungsbewertung für den abgegrenzten Fall, kein Qualitätsurteil über die St
 
 | Quelle | Beobachtung und Entscheidung |
 | --- | --- |
-| [EPFL Green Piezo, Zenodo v1, DOI 10.5281/zenodo.7920056](https://zenodo.org/records/7920056) | Gedruckte KNbO3-Geräte auf Papier, Kraftpulse/Spannungsantwort, Geometrie- und Charakterisierungsdateien. Weiterer Kandidat; vollständige unabhängige Tensoren, Messunsicherheiten und Abbildung der Messschaltung auf einen linearen quasistatischen Fall bisher nicht nachgewiesen. Lizenzfeld im gelesenen Text ohne auswertbaren Wert; daher keine Lizenzfreigabe behauptet. |
+| [EPFL Green Piezo, Zenodo v1, DOI 10.5281/zenodo.7920056](https://zenodo.org/records/7920056) | Gedruckte KNbO3-Geräte auf Papier, Kraftpulse/Spannungsantwort, Geometrie- und Charakterisierungsdateien. Weiterer Kandidat; vollständige unabhängige Tensoren, Messunsicherheiten und Abbildung der Messschaltung auf einen linearen quasistatischen Fall bisher nicht nachgewiesen. Ergänzung 10.10.: Die Repository-API weist ausdrücklich `cc-by-4.0` aus; die zuvor offene Lizenzfrage ist damit geklärt. Kein vollständiges Audit des 776-MB-Archivs und keine Fallannahme. |
 | [Serien-/Parallelschaltungen, DOI 10.5281/zenodo.13830840](https://zenodo.org/records/13830840) | Frequenz-/Lastwiderstandsabhängige Strom-/Spannungsdaten. In dieser Form dynamischer Schaltungsfall, kein statischer d33-Verschiebungsnachweis. |
 | [Pz26-Stacks, Mendeley v1, DOI 10.17632/yfr68bw58c.1](https://data.mendeley.com/datasets/yfr68bw58c/1) | CC BY 4.0, Geometrie und Messgeräte beschrieben; frequenzgetriebene Platten, Glas/Kleber und nachgiebige Klemmung. Keine ausreichend bestimmte statische Lagerung und Unsicherheitsbeschreibung im gelesenen Eintrag; nicht angenommen. |
 | [Preisach-Identifikation, Mendeley v9, DOI 10.17632/kzf668wggx.9](https://data.mendeley.com/datasets/kzf668wggx/9) | Hysterese-/Identifikationsdaten, Generator-Spannung vor Verstärkung, CC BY NC 3.0. Keine allgemeine Weitergabelizenz oder unabhängige lineare FEM-Validierung daraus abgeleitet. |
