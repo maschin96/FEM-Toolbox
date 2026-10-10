@@ -1,0 +1,30 @@
+schema_version = 1
+units = "SI"
+physics = "heat"
+
+[mesh]
+path = "body.msh"
+length_scale_to_m = 1.0
+length_unit = "m"
+
+[materials.T.synthetic]
+conductivity = 2.0
+unit = "W/(m K)"
+
+[regions.T]
+body = "synthetic"
+
+[loads.source]
+value = -4.0
+unit = "W/m^3"
+
+[[boundary.dirichlet]]
+field = "T"
+set = "left"
+value = 300.0
+unit = "K"
+
+[[boundary.flux]]
+set = "right"
+value = -4.0
+unit = "W/m^2"

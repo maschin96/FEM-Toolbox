@@ -219,7 +219,7 @@ elektrisches Potential `phi` mit feldweiser Freiheitsgradverwaltung.
 | M6 | v1.1.0 | Transiente Wärme, Piezo-Dynamik/Harmonik (reziproke Thermoelastizität zurückgestellt) | Freigegeben |
 | M7 | v1.2.0 | PETSc-Backend, Tet10, Wärmeindikatoren und gemessene Skalierung | Freigegeben |
 | M8 | v1.3.0 | Parameterstudien, Visualisierung und Surrogatmodelle | Implementiert und verifiziert; Release-Abschluss siehe Freigabebericht |
-| M9 | v1.4.0* | Experimentelle Validierung und Unsicherheit | Geplant |
+| M9 | v1.4.0* | Verifizierter Unsicherheitsworkflow und Gesamtdokumentation | In Arbeit |
 | M10 | v1.5.0* | Kontrollierte adaptive Netzstudien | Geplant |
 | M11 | Offen | Topologieoptimierung | Grober Horizont |
 | M12 | Offen | RANS-CFD mit Fluid-Struktur-Kopplung | Grober Horizont |

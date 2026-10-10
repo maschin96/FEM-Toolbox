@@ -155,12 +155,16 @@ Verifikationsdokumente benennen ihren jeweiligen Nachweisumfang ausdrücklich.
 - [LaTeX-Bände, reproduzierbarer PDF-Build und Quellenmatrix (#206)](latex/README.md)
 - [Mathematischer Theorieband: Herleitungen und Nachweise (#207)](latex/THEORY_VERIFICATION.md)
 
-Anwendungs-, API- und Nachweisband #208–#210 und die redaktionelle
-Gesamtabnahme #211 bleiben offen.
+- [Benutzerband: Installation, Modelle, Rezepte und unabhängige Artefaktprüfung (#208)](latex/USER_VERIFICATION.md)
 
-## M9 — Messdaten und Validierung
+API- und Nachweisband #209–#210 und die redaktionelle Gesamtabnahme #211
+bleiben offen; der Unsicherheitsworkflow wird nach #64 ergänzt.
+
+## M9 — Unsicherheit und offener experimenteller Folgeumfang
 
 - [Messdatenvertrag, Kandidatensuche und offenes Datengate (#63)](65_VALIDATION_DATA_CONTRACT.md)
+- [Erneute Datensuche und genehmigte M9-Neuplanung](66_M9_DATA_SEARCH_AND_RELEASE_OPTIONS.md)
 
-Es liegt noch kein qualifizierter Messdatensatz vor; Unsicherheits-API und
-experimentelle Abnahme bleiben offen.
+M9/v1.4.0 umfasst den verifizierten generischen Unsicherheitsworkflow und die
+vollständige Gesamtdokumentation. #63/#65 bleiben außerhalb M9 offen; eine
+experimentelle Validierungsfreigabe wird nicht behauptet.

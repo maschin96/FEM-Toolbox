@@ -23,6 +23,7 @@
 \input{metadata}
 \hypersetup{pdftitle={FEM Toolbox -- Handbuchkandidat},pdfauthor={FEM Toolbox},pdfsubject={Version \ToolboxVersion; Commit \SourceCommit; KANDIDAT}}
 \lstset{basicstyle=\small\ttfamily,breaklines=true,frame=single,columns=fullflexible}
+\lstset{literate={²}{{$^2$}}1 {³}{{$^3$}}1 {µ}{{$\mu$}}1 {Δ}{{$\Delta$}}1 {α}{{$\alpha$}}1 {ε}{{$\varepsilon$}}1 {κ}{{$\kappa$}}1 {ᵀ}{{$^T$}}1}
 \makeindex
 \AtBeginDocument{\renewcommand{\indexname}{Sachregister}}
 \newcommand{\BookTitle}{Gesamthandbuch}
@@ -35,14 +36,14 @@
 Version \ToolboxVersion\\[4mm]
 Quellcommit: {\small\ttfamily\SourceCommit}\\[4mm]
 Quellzustand: \SourceState\\[4mm]
-M9 / Issues 206--207. Theorie ausgearbeitet; andere Fachbände offen.\\
+M9 / Issues 206--208. Theorie und Anwendung ausgearbeitet; API/V\&V offen.\\
 Keine experimentelle Validierungsfreigabe.\\[8mm]
 Deutschsprachige Referenz mit englischen API-Bezeichnern.
 \end{titlepage}
 \tableofcontents\listoffigures\listoftables
 \chapter{Lesehinweise und Status}
-Der Theorieband (Issue 207) ist ausgearbeitet und wird separat geprüft.
-Anwendung (208), API/Entwicklung (209) und Nachweise (210) bleiben offen.
+Theorie (207) und Anwendung (208) sind ausgearbeitet und werden separat geprüft.
+API/Entwicklung (209) und Nachweise (210) bleiben offen.
 Redaktionelle Gesamtabnahme: 211. Der Kandidatenstatus gilt weiter;
 das Gesamtdokument ist noch kein vollständig abgenommenes Handbuch.
 \section{Symbole und Abkürzungen}
