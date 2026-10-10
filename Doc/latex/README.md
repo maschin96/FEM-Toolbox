@@ -1,8 +1,7 @@
-# M9-Handbuch und PDF-Build (#206–#208)
+# M9-Handbuch und PDF-Build (#206–#210)
 
-Status: Struktur, mathematischer Theorieband und vollständiger Benutzerband;
-**Kandidat**, keine M9-Freigabe. API- und Nachweisband (#209–#210) sowie
-die Gesamtabnahme #211 bleiben offen. Der Theorieband enthält zehn Kapitel,
+Status: Struktur und alle vier Fachbände sind ausgearbeitet;
+**Kandidat**, keine M9-Freigabe. Die Gesamtabnahme #211 bleibt offen. Der Theorieband enthält zehn Kapitel,
 SI-/Voigt-Konventionen, starke/schwache Formen, Diskretisierung, Dynamik,
 Solver, Indikatoren und M8-Surrogate. Herkunft und fachliche Eigenprüfung:
 [Theorie-Nachweis](THEORY_VERIFICATION.md), [Themenmatrix](theory-map.json).
@@ -64,11 +63,12 @@ nicht auf Byteidentität normiert. Toolchain-Updates sind eigene überprüfte
 
 Das Archiv enthält alle lokalen TeX-Quellen, Bibliografie, Makefile,
 Pflegeanleitung, Quellenmatrix, erzeugte Metadaten und MIT-Lizenz, ohne
-Buildzwischenstände. Alle 63 Benutzerrezeptinputs sind byteidentisch unter
+Buildzwischenstände. Alle Benutzerrezeptinputs sind byteidentisch unter
 `examples/` enthalten; `recipes.json` beschreibt Befehle und Sollwerte.
 [Benutzer-Nachweis](USER_VERIFICATION.md) dokumentiert die isolierte Prüfung.
-Der Musterteil nutzt eine selbst erstellte LaTeX-
-Abbildung; externe Medien oder Fonts müssen nicht mitgeliefert werden.
+Eigene wissenschaftliche Abbildungen, historische Benchmarkrohwerte und der
+synthetische UQ-Bericht liegen im Quellenarchiv. Die Schriften sind in den PDFs
+eingebettet. Fremde Messdaten werden entsprechend dem Suchvertrag referenziert.
 Nach Entpacken in derselben Toolchain: `make -C handbook` baut alle fünf PDFs.
 Die Makefile dient dem Quellenarchiv; die strikten Diagnose-, PDF- und
 Negativprüfungen übernimmt der oben dokumentierte Python-Befehl im Repository.
@@ -153,3 +153,11 @@ Nicht nur Hashes erneuern: die Rezepte aus dem gebauten Wheel ausführen und
 `USER_VERIFICATION.md` mit Runtime und Resultaten aktualisieren. Das PDF und
 der Quellenarchiv-Roundtrip sind anschließend erneut zu prüfen. Bei Änderungen an #64 den
 synthetischen Unsicherheits-Lernworkflow samt Quellenprüfung ergänzen.
+
+## Nachweisband
+
+[Nachweisprotokoll](VV_VERIFICATION.md), [Fachmatrix](verification-map.json) und
+[quellengebundene Auswertung](verification-data.json) dokumentieren M7-Kosten,
+M8-Surrogatfehler, M9-Sampling/Sensitivität und offene experimentelle Validierung.
+`python scripts/verification_artifacts.py` prüft Quellen, Tabellen, Figuren und
+den unveränderten 72-Lauf-Bestand; der PDF-Build führt denselben Audit aus.

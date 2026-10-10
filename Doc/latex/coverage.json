@@ -56,6 +56,12 @@
         "status": "documented-candidate",
         "chapter": "Doc/latex/chapters/theory/evidence.tex",
         "map": "Doc/latex/theory-map.json"
+      },
+      "verification_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/verification.tex",
+        "map": "Doc/latex/verification-map.json",
+        "evidence": "Doc/latex/VV_VERIFICATION.md"
       }
     },
     {
@@ -353,6 +359,12 @@
         "chapter": "Doc/latex/chapters/application.tex",
         "recipes": "Doc/latex/recipes.json",
         "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "verification_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/verification.tex",
+        "map": "Doc/latex/verification-map.json",
+        "evidence": "Doc/latex/VV_VERIFICATION.md"
       }
     },
     {
@@ -443,6 +455,12 @@
         "chapter": "Doc/latex/chapters/application.tex",
         "recipes": "Doc/latex/recipes.json",
         "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "verification_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/verification.tex",
+        "map": "Doc/latex/verification-map.json",
+        "evidence": "Doc/latex/VV_VERIFICATION.md"
       }
     },
     {
@@ -474,6 +492,12 @@
         "chapter": "Doc/latex/chapters/application.tex",
         "recipes": "Doc/latex/recipes.json",
         "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "verification_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/verification.tex",
+        "map": "Doc/latex/verification-map.json",
+        "evidence": "Doc/latex/VV_VERIFICATION.md"
       }
     },
     {
@@ -510,6 +534,12 @@
         "chapter": "Doc/latex/chapters/application.tex",
         "recipes": "Doc/latex/recipes.json",
         "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "verification_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/verification.tex",
+        "map": "Doc/latex/verification-map.json",
+        "evidence": "Doc/latex/VV_VERIFICATION.md"
       }
     },
     {
@@ -536,6 +566,12 @@
         "chapter": "Doc/latex/chapters/application.tex",
         "recipes": "Doc/latex/recipes.json",
         "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "verification_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/verification.tex",
+        "map": "Doc/latex/verification-map.json",
+        "evidence": "Doc/latex/VV_VERIFICATION.md"
       }
     },
     {
@@ -549,6 +585,12 @@
         "chapter": "Doc/latex/chapters/application.tex",
         "recipes": "Doc/latex/recipes.json",
         "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "verification_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/verification.tex",
+        "map": "Doc/latex/verification-map.json",
+        "evidence": "Doc/latex/VV_VERIFICATION.md"
       }
     },
     {
@@ -562,6 +604,12 @@
         "chapter": "Doc/latex/chapters/application.tex",
         "recipes": "Doc/latex/recipes.json",
         "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "verification_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/verification.tex",
+        "map": "Doc/latex/verification-map.json",
+        "evidence": "Doc/latex/VV_VERIFICATION.md"
       }
     },
     {
@@ -575,6 +623,12 @@
         "chapter": "Doc/latex/chapters/application.tex",
         "recipes": "Doc/latex/recipes.json",
         "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "verification_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/verification.tex",
+        "map": "Doc/latex/verification-map.json",
+        "evidence": "Doc/latex/VV_VERIFICATION.md"
       }
     },
     {
@@ -593,6 +647,12 @@
         "chapter": "Doc/latex/chapters/application.tex",
         "recipes": "Doc/latex/recipes.json",
         "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "verification_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/verification.tex",
+        "map": "Doc/latex/verification-map.json",
+        "evidence": "Doc/latex/VV_VERIFICATION.md"
       }
     },
     {
@@ -611,6 +671,12 @@
         "chapter": "Doc/latex/chapters/application.tex",
         "recipes": "Doc/latex/recipes.json",
         "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "verification_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/verification.tex",
+        "map": "Doc/latex/verification-map.json",
+        "evidence": "Doc/latex/VV_VERIFICATION.md"
       }
     },
     {
@@ -629,6 +695,12 @@
         "chapter": "Doc/latex/chapters/application.tex",
         "recipes": "Doc/latex/recipes.json",
         "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "verification_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/verification.tex",
+        "map": "Doc/latex/verification-map.json",
+        "evidence": "Doc/latex/VV_VERIFICATION.md"
       }
     },
     {
@@ -647,6 +719,12 @@
         "chapter": "Doc/latex/chapters/application.tex",
         "recipes": "Doc/latex/recipes.json",
         "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "verification_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/verification.tex",
+        "map": "Doc/latex/verification-map.json",
+        "evidence": "Doc/latex/VV_VERIFICATION.md"
       }
     },
     {
@@ -665,6 +743,12 @@
         "chapter": "Doc/latex/chapters/application.tex",
         "recipes": "Doc/latex/recipes.json",
         "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "verification_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/verification.tex",
+        "map": "Doc/latex/verification-map.json",
+        "evidence": "Doc/latex/VV_VERIFICATION.md"
       }
     },
     {
@@ -683,6 +767,12 @@
         "chapter": "Doc/latex/chapters/application.tex",
         "recipes": "Doc/latex/recipes.json",
         "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "verification_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/verification.tex",
+        "map": "Doc/latex/verification-map.json",
+        "evidence": "Doc/latex/VV_VERIFICATION.md"
       }
     },
     {
@@ -773,6 +863,12 @@
         "chapter": "Doc/latex/chapters/application.tex",
         "recipes": "Doc/latex/recipes.json",
         "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "verification_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/verification.tex",
+        "map": "Doc/latex/verification-map.json",
+        "evidence": "Doc/latex/VV_VERIFICATION.md"
       }
     },
     {
@@ -791,6 +887,12 @@
         "chapter": "Doc/latex/chapters/application.tex",
         "recipes": "Doc/latex/recipes.json",
         "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "verification_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/verification.tex",
+        "map": "Doc/latex/verification-map.json",
+        "evidence": "Doc/latex/VV_VERIFICATION.md"
       }
     },
     {
@@ -1442,14 +1544,26 @@
       "target": "Doc/latex/chapters/verification.tex",
       "canonical": "Doc/65_VALIDATION_DATA_CONTRACT.md",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "open"
+      "status": "open",
+      "verification_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/verification.tex",
+        "map": "Doc/latex/verification-map.json",
+        "evidence": "Doc/latex/VV_VERIFICATION.md"
+      }
     },
     {
       "source": "Doc/66_M9_DATA_SEARCH_AND_RELEASE_OPTIONS.md",
       "target": "Doc/latex/chapters/verification.tex",
       "canonical": "Doc/66_M9_DATA_SEARCH_AND_RELEASE_OPTIONS.md",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "open"
+      "status": "open",
+      "verification_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/verification.tex",
+        "map": "Doc/latex/verification-map.json",
+        "evidence": "Doc/latex/VV_VERIFICATION.md"
+      }
     },
     {
       "source": "Doc/evidence/issue63/README.md",
@@ -1528,6 +1642,12 @@
       "api_coverage": {
         "status": "documented-candidate",
         "contract": "Doc/latex/uncertainty-api.json"
+      },
+      "verification_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/verification.tex",
+        "map": "Doc/latex/verification-map.json",
+        "evidence": "Doc/latex/VV_VERIFICATION.md"
       }
     },
     {
@@ -2229,6 +2349,13 @@
         "status": "documented-candidate",
         "map": "Doc/latex/api-map.json"
       }
+    },
+    {
+      "source": "Doc/latex/VV_VERIFICATION.md",
+      "target": "Doc/latex/chapters/verification/reproduction.tex",
+      "canonical": "Doc/latex/VV_VERIFICATION.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "sample"
     }
   ],
   "planned": [

@@ -1,0 +1,66 @@
+\chapter{Reproduktion, Prüfprotokoll und offene Gates}
+\index{Provenienz}\index{Release!Nachweise}
+\section{Versionierte Auswertung}
+Das Prüfwerkzeug verwendet ausschließlich die Standardbibliothek von Python:
+\begin{quote}\path{scripts/verification_artifacts.py}\end{quote}
+Es prüft
+die 17 Nachweisgruppen, 72 historischen Messungen, Tabellen, Quellenhashes und
+eingebetteten Abbildungen. Jede Änderung einer gebundenen Quelle erfordert
+eine bewusste fachliche Prüfung und Neugenerierung; bloßes Aktualisieren eines
+Hashes ist keine Abnahme. Die Originalzeiten werden nicht erneut gemessen.
+
+\begin{lstlisting}[language=bash]
+python scripts/verification_artifacts.py
+python scripts/build_handbook.py --check-matrix
+PYTHONPATH=src python -m pytest -q \
+  tests/unit/test_verification_artifacts.py \
+  tests/unit/test_uncertainty.py \
+  tests/regression/test_uncertainty_study.py \
+  tests/regression/test_accuracy_cost.py
+\end{lstlisting}
+Zur bewussten Neugenerierung werden die Entwicklungsabhängigkeiten und das
+Visualisierungsextra benötigt. Der Befehl reproduziert die analytische
+UQ-Stichprobe und zeichnet die eigenen Abbildungen:
+\begin{lstlisting}[language=bash]
+python scripts/verification_artifacts.py --write
+PYTHONPATH=src python -m pytest -q
+python scripts/build_handbook.py --self-test
+\end{lstlisting}
+Der letzte Befehl nutzt die festgelegte Docker/TeX-Werkzeugkette, baut alle fünf
+PDFs und prüft negative Dokumentfälle. Ruff, Formatprüfung, mypy und Pakettests
+ergänzen die numerischen Tests. Native PETSc-Tests brauchen die dokumentierte
+native Umgebung; übersprungene Tests sind keine erfolgreichen Nachweise.
+
+\section{Archiv und Herkunft}
+\path{Doc/latex/verification-data.json} hält die vollständige historische
+Umgebung, neu berechnete Gruppen/Budgetauswahlen, UQ-Ergebnisse und SHA-256
+aller gebundenen Quellen sowie beider Abbildungen fest. Die bytegleiche
+Benchmarkkopie \path{Doc/latex/evidence/m7-37c-linux-arm64.json} und der
+synthetische UQ-Bericht werden mit den LaTeX-Quellen archiviert.
+Die historischen Produktions- und Messcommits sind von dem auf der Titelseite
+angegebenen Dokumentationscommit zu unterscheiden.
+
+Das Handbucharchiv enthält die fertigen Tabellen und PDF-Abbildungen; zum
+erneuten Setzen benötigt es keine Matplotlib-Installation. Die erneute
+fachliche Auswertung benötigt dagegen das zugehörige Repository mit Quellen,
+Tests und Auswertungsskript. Der Hash der UQ-Samplebytes ermöglicht den
+Vergleich einer neu erzeugten Stichprobe; das Archiv behauptet keine
+experimentellen Rohdaten für diesen Lehrfall.
+
+\section{Tatsächlicher Reviewstatus}
+Das Prüfprotokoll \path{Doc/latex/VV_VERIFICATION.md} dokumentiert lokale
+Reproduktionen, Quellabgleich, Layoutprüfung und den zugeordneten CI-Stand.
+Die neuen ausführbaren Prüfwerkzeuge folgen Red--Green--Refactor.
+Die Dokumentation erhält keine künstlichen Tests, die nur ihre Formulierungen
+duplizieren. Ein unabhängiges fachliches Review liegt nicht vor; eigene
+Quellenprüfung und CI werden nicht als solches bezeichnet.
+
+\section{Abnahme und Freigabe}
+Dieser Band dokumentiert auch unerreichte Genauigkeitsziele, begrenzte
+Backendprüfungen, unbekannte Fehlerbudgets und die fehlende experimentelle
+Fallannahme. Sein vollständiger ehrlicher Abschluss kann Issue 210 erfüllen.
+Die redaktionelle Gesamtabnahme aller Fachbände ist Issue 211; die Veröffentlichung
+mit grünem Hauptzweig, Paketartefakten, Handbucharchiv, Prüfsummen und
+annotiertem Versionstag liegt bei Issue 66. Die Titelseite bezeichnet bis dahin
+den tatsächlichen Kandidatenstatus. Eine Dokumentationsabnahme allein ist keine
+Veröffentlichung und keine experimentelle Validierung.

@@ -1,0 +1,1701 @@
+{
+  "schema": 1,
+  "measurement_date": "2026-09-28",
+  "experimental_validation": "not_performed",
+  "benchmark_environment": {
+    "platform": "Linux-6.12.76-linuxkit-aarch64-with-glibc2.39",
+    "machine": "aarch64",
+    "logical_cpus": 10,
+    "python": "3.12.3",
+    "versions": {
+      "numpy": "1.26.4",
+      "scipy": "1.14.1",
+      "meshio": "5.3.5"
+    },
+    "thread_environment": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "BLIS_NUM_THREADS": "1"
+    },
+    "numpy_configuration": {
+      "Compilers": {
+        "c": {
+          "name": "gcc",
+          "linker": "ld.bfd",
+          "version": "13.2.0",
+          "commands": "cc",
+          "args": "-g, -O2, -fno-omit-frame-pointer, -mno-omit-leaf-frame-pointer, -ffile-prefix-map=/build/numpy-dNTtzb/numpy-1.26.4+ds=., -flto=auto, -ffat-lto-objects, -fstack-protector-strong, -fstack-clash-protection, -Wformat, -Werror=format-security, -mbranch-protection=standard, -fdebug-prefix-map=/build/numpy-dNTtzb/numpy-1.26.4+ds=/usr/src/numpy-1:1.26.4+ds-6ubuntu1, -Wdate-time, -D_FORTIFY_SOURCE=3",
+          "linker args": "-Wl,-Bsymbolic-functions, -flto=auto, -ffat-lto-objects, -Wl,-z,relro, -g, -O2, -fno-omit-frame-pointer, -mno-omit-leaf-frame-pointer, -ffile-prefix-map=/build/numpy-dNTtzb/numpy-1.26.4+ds=., -flto=auto, -ffat-lto-objects, -fstack-protector-strong, -fstack-clash-protection, -Wformat, -Werror=format-security, -mbranch-protection=standard, -fdebug-prefix-map=/build/numpy-dNTtzb/numpy-1.26.4+ds=/usr/src/numpy-1:1.26.4+ds-6ubuntu1, -Wdate-time, -D_FORTIFY_SOURCE=3"
+        },
+        "cython": {
+          "name": "cython",
+          "linker": "cython",
+          "version": "3.0.8",
+          "commands": "cython"
+        },
+        "c++": {
+          "name": "gcc",
+          "linker": "ld.bfd",
+          "version": "13.2.0",
+          "commands": "c++",
+          "args": "-g, -O2, -fno-omit-frame-pointer, -mno-omit-leaf-frame-pointer, -ffile-prefix-map=/build/numpy-dNTtzb/numpy-1.26.4+ds=., -flto=auto, -ffat-lto-objects, -fstack-protector-strong, -fstack-clash-protection, -Wformat, -Werror=format-security, -mbranch-protection=standard, -fdebug-prefix-map=/build/numpy-dNTtzb/numpy-1.26.4+ds=/usr/src/numpy-1:1.26.4+ds-6ubuntu1, -Wdate-time, -D_FORTIFY_SOURCE=3",
+          "linker args": "-Wl,-Bsymbolic-functions, -flto=auto, -ffat-lto-objects, -Wl,-z,relro, -g, -O2, -fno-omit-frame-pointer, -mno-omit-leaf-frame-pointer, -ffile-prefix-map=/build/numpy-dNTtzb/numpy-1.26.4+ds=., -flto=auto, -ffat-lto-objects, -fstack-protector-strong, -fstack-clash-protection, -Wformat, -Werror=format-security, -mbranch-protection=standard, -fdebug-prefix-map=/build/numpy-dNTtzb/numpy-1.26.4+ds=/usr/src/numpy-1:1.26.4+ds-6ubuntu1, -Wdate-time, -D_FORTIFY_SOURCE=3"
+        }
+      },
+      "Machine Information": {
+        "host": {
+          "cpu": "aarch64",
+          "family": "aarch64",
+          "endian": "little",
+          "system": "linux"
+        },
+        "build": {
+          "cpu": "aarch64",
+          "family": "aarch64",
+          "endian": "little",
+          "system": "linux"
+        }
+      },
+      "Build Dependencies": {
+        "blas": {
+          "name": "blas",
+          "found": true,
+          "version": "unknown",
+          "detection method": "system",
+          "include directory": "unknown",
+          "lib directory": "unknown",
+          "openblas configuration": "unknown",
+          "pc file directory": "unknown"
+        },
+        "lapack": {
+          "name": "dep281473403552352",
+          "found": true,
+          "version": "1.26.4",
+          "detection method": "internal",
+          "include directory": "unknown",
+          "lib directory": "unknown",
+          "openblas configuration": "unknown",
+          "pc file directory": "unknown"
+        }
+      },
+      "Python Information": {
+        "path": "/usr/bin/python3.12",
+        "version": "3.12"
+      },
+      "SIMD Extensions": {
+        "baseline": [
+          "NEON",
+          "NEON_FP16",
+          "NEON_VFPV4",
+          "ASIMD"
+        ],
+        "found": [
+          "ASIMDHP",
+          "ASIMDFHM"
+        ]
+      }
+    },
+    "package_path": "/opt/petsc-test/lib/python3.12/site-packages/fem_toolbox/__init__.py",
+    "production_sha256": "e7551b756568ee75d2648df3cad2f1e4df71d25815a6d450339cf44b1faa6c76",
+    "benchmark_sha256": "d6c0e8a68fc0ebff621b6fd7e3447b729ffae919991b2620f02d3824cfd11720",
+    "mesh_generator_sha256": "746eb54ec420bbcbde836890e8ff072b1d6fdfd271b815ff7f3f57fdf24fbbaf",
+    "revision": "98ca442fe8954dcac15316cd1367f2b7819a21ab",
+    "petsc_scalar": "real"
+  },
+  "sources_sha256": {
+    "Doc/33_TRANSIENT_HEAT.md": "6372912c2b639d050271df9f634486861876b96e440bd5fa320aee01b9569043",
+    "Doc/39_PETSC_FIELDSPLIT.md": "bbbdd1bee0559333f6b49c4e1e5c0f35a82fd207fab18c3105979b41bec08b38",
+    "Doc/41_TET10_GEOMETRY.md": "2cb80a236f099eea9a3b0c82509f0719a102ae86d975a41851832c0821936d39",
+    "Doc/43_HEAT_INDICATOR.md": "ee5f34c57fd3ac8d7479d8c25261ab1651703722b785a03dad46b3120915e205",
+    "Doc/45_TET10_HEAT_INTEGRATION.md": "b740d900480199dbb4a230fe8f47ccadb91aec0697e435467af39490e57a338b",
+    "Doc/46_TET10_ELECTROSTATICS.md": "59e5e887eb33363d3cf70727dfdd135e585ae398173472ad44528612de3b80b2",
+    "Doc/47_TET10_ELASTICITY.md": "49fd8f6402a1ff69e970a85b027538c9ed578f25b9fb9501989ee59fb8f41dcb",
+    "Doc/48_TET10_THERMOMECHANICS.md": "215b46bbe0fd4d15c402203fafd4b9d847f574f0f28d4c6c555ee0957e5ce55f",
+    "Doc/49_TET10_PIEZOELECTRIC.md": "1de96cae52b67ca595985a0f833071ca681b4e38b37e874100222629732dfa4f",
+    "Doc/50_TET10_THERMOPIEZOELECTRIC.md": "d25b9082d154e6a74a1f07cdad8fb3692de81f1884e93a84bfe2ffb642dc11f1",
+    "Doc/51_TET10_MODES.md": "03e36310c9cd57a36b593a18358973c01423130e16901a734aa982b58ba446e5",
+    "Doc/52_TET10_NEWMARK.md": "a2b67028596be0287dcaca94b220a44db025110d625c80fa32d5c629d5cc069b",
+    "Doc/53_TET10_HARMONIC.md": "4d9e0eed0c549eb46b5088212fe7a668ca7c58fdc987b886ee2c2330d4f98fba",
+    "Doc/54_ACCURACY_COST_COMPARISON.md": "28cc79c6c8831ba33c176a0d1e062d755e8d5f8deb68515e73d78f606a9cb743",
+    "Doc/55_TET10_ACCEPTANCE.md": "cae3f59aff77a856a000c9707e14a9f06e0b99541034ad5319a74f20b977cac3",
+    "Doc/60_STUDY_REPORTS.md": "21c20f7e89e2fd161807ff00f994d6f1b831e9c5acdf7fe0766925ff3f3f8bbe",
+    "Doc/61_SURROGATE_MODELS.md": "feef2553cf318127e215df4592174fb77996eec77aaad0161b591b307f4a01d6",
+    "Doc/65_VALIDATION_DATA_CONTRACT.md": "07b575beb0c23286b1b737f7defed4893d9ee8309b3d7096330f676c1ca092a0",
+    "Doc/66_M9_DATA_SEARCH_AND_RELEASE_OPTIONS.md": "c592c490e7fd8022dc9759e3ebecfca5f8f9e3693d4b1febbca65eae210703f6",
+    "Doc/67_UNCERTAINTY_WORKFLOW.md": "9b587364917718477195a406d1ecb7945c4a8b91318d5a212af897df9f367829",
+    "Doc/latex/evidence/m7-37c-linux-arm64.json": "a7080296e64963be12d7b5c51772fa737dc323360ae412792694f3d0ebc8c2bd",
+    "Doc/latex/evidence/uq-linear.json": "c96e3601c2b31d38ee6efb02571d8c322db6d81876b1a1e4d325b4337d70e5d7",
+    "Doc/latex/verification-map.json": "505a99a7ca22ad862d10572e60a0901464aea2ed3534d705e52100744936ea86",
+    "benchmarks/accuracy_cost.py": "d6c0e8a68fc0ebff621b6fd7e3447b729ffae919991b2620f02d3824cfd11720",
+    "benchmarks/baselines/m7-37c-linux-arm64.json": "a7080296e64963be12d7b5c51772fa737dc323360ae412792694f3d0ebc8c2bd",
+    "scripts/verification_artifacts.py": "a7432f6d84e62ec3c48979400e9cb18e9b5298c6cde850fcad714eb1dd63a408",
+    "src/fem_toolbox/uncertainty.py": "68d5e979da8feabec3894a1e63d1ccf916de51025b9b0b4a359449dfb43fc3d2",
+    "tests/convergence/test_elasticity_convergence.py": "73bd589cff769fccab4545e4195dc05f8571592501caf6f71330a2f96e27204b",
+    "tests/convergence/test_electrostatics_convergence.py": "b2e2b63540579d68d167512a5145f1ff80589f75607908a8282a5e451c11a32e",
+    "tests/convergence/test_heat_convergence.py": "c2a2e9608fce59a9bbb2b681d4b94be74c76859b530d23569a64c4edea34855b",
+    "tests/convergence/test_heat_indicator_convergence.py": "7ab1e0e1b2f3a5232ebd09e926b17f41536d335acf259ba0c06eb444be78a623",
+    "tests/convergence/test_piezo_modal_convergence.py": "f5f788eeae4ced73c0df91d1430724a282cf13a5ad2e473d3211791bf766c15e",
+    "tests/convergence/test_tet10_elasticity.py": "1e892d462a101eb77c9db87e406c13ab3fb8f4fd5604cd56b620d4e61f41875d",
+    "tests/convergence/test_tet10_electrostatics.py": "eb3499d1325b58abcc0b14b01bf6ebcd590cb3deeff1747f350c423f8f4233ea",
+    "tests/convergence/test_tet10_harmonic_convergence.py": "2bb919442d626733e358f8b7de3d7710462bea597bf19783e056eb56e99630f6",
+    "tests/convergence/test_tet10_heat_operator.py": "f86c4d70aa932aaa7a864689f03d4ea6e0a0145a4b896758d61605a1f9e3223a",
+    "tests/convergence/test_tet10_modal.py": "e02c02de1cac89a0444f5316f65d4f32030aebdc8a8ccc316c6c6add84f4de11",
+    "tests/convergence/test_tet10_piezoelectric.py": "6b3484758c5e76c5d69684a50183ce2da260a70207820e66a50d433fa0f90592",
+    "tests/convergence/test_tet10_thermomechanics.py": "0ed9df62a9d8af0660e43e55b7b9f2efe45d604770895f9b69b51fe6d2ce2532",
+    "tests/convergence/test_tet10_thermopiezoelectric.py": "e968818e93a5802f9936bf349b2a567b1b60a4cc4a3caa8a747cd89cd6a94457",
+    "tests/convergence/test_tet10_transient_heat.py": "fbe72e74de56d3d2fe79f4008a729f6aa41a072f62ed3e396f02b07fd069fc72",
+    "tests/convergence/test_thermomechanics_convergence.py": "d2cce72caee2b794c755bdea57b8604b8e62051fe9869f6c4722db0b34853bf0",
+    "tests/convergence/test_thermopiezo_model_convergence.py": "0b6376138f2c52a9fd5f1041be9e17fba2b568e4875031e1e12d128ea6305709",
+    "tests/convergence/test_transient_heat_convergence.py": "874386701035fa218c931248196aedd1e66f3310de455d4469d5f9b28bb90491",
+    "tests/patch/test_elasticity_patch.py": "1c78547e8cbe24377e719daa0e289353aad4ca630575aa0899764bd7c00ca9af",
+    "tests/patch/test_electrodes.py": "1d22d445c139153b59b04d01c8f17d22787f820ddfacd046faae7193c3c9cadd",
+    "tests/patch/test_electrostatics_patch.py": "0b8a3e085d49717e546fef20d8975dc3cc37f0a39d38a3692afe60574446dc3c",
+    "tests/patch/test_heat_patch.py": "ec9b3df8632415809fcb8ea10a53b18a0a0749c05c86029e9692824d342513af",
+    "tests/patch/test_piezo_element_patch.py": "4d924345c9ae744db063e1ccdadabcdbc37defd244f6585e02a63b6c61c211a9",
+    "tests/patch/test_piezo_solver_patch.py": "02598db806d30bebd09820ff51e1e837ab8449178213ae90ff7867e6e93dc277",
+    "tests/patch/test_thermomechanics_patch.py": "91893ce89db44f38648b88122ccb53e4bd34e63c6e3446035318ee35aacb267b",
+    "tests/petsc/test_convergence.py": "7cd2b01f5c85006269688162c15b5305f6b4f0e407df91494132b3f0c6cd5eb9",
+    "tests/petsc/test_fieldsplit.py": "b8b06f889bf3ad60937daa98f79b8ca052e3d0767beec42946be9a2a859a525f",
+    "tests/petsc/test_native_accuracy_cost.py": "4a081936b0c841449c6ba4b6123746c968c167720e9a4537f6fe69466d76df27",
+    "tests/petsc/test_physics.py": "11a1779c9bb6a0c0a67215215c43ca19196062487c4c8ffd8d402589eb726817",
+    "tests/regression/test_accuracy_cost.py": "9626543ae537ab93f06895c32ffb8099ba558b737a2efca51266b04202c05a17",
+    "tests/regression/test_piezo_d33_benchmark.py": "621d3624b58ac858b130712c384d7de6d2ca69b54b4adfadb30ec4aa502d1d2d",
+    "tests/regression/test_study_recipes.py": "3bc9e3a13e300783c18fb12349480452132781966a2f990a8406a09e65060677",
+    "tests/regression/test_surrogate_example.py": "fba1ec98c7d1f6eb4184e36bce542982bcd4cf6b102d62883354ef6bed4036ed",
+    "tests/regression/test_uncertainty_study.py": "5942ef5808fe7ac1687e44379c88b02220f9d45fb8fcea7951365245b558dd1f",
+    "tests/unit/test_assembly.py": "8827170462df7f045d00556e594d8ae3cfe6ab66b1579d46a0d8e4f2331eba94",
+    "tests/unit/test_heat_indicator.py": "6be96f9c0c2043a7f3382e28c656552d7149a50d0f6e576ce2b229552797c03d",
+    "tests/unit/test_linear_backend.py": "881d7dac2e614f03b7711d47245aacb744258a6daefe2542312384368a35ba88",
+    "tests/unit/test_material_regions.py": "30255407caacdb092595c0a814b527585cb291d436c02ac6d8dc72d516729480",
+    "tests/unit/test_piezo_harmonic.py": "28fb9e4ee719251c862972bc0ebb0ab68ec927af31f886d60ec1e12c15dbf782",
+    "tests/unit/test_piezo_material.py": "0a67d1d19dcaf47ac4bbb68e32e9a87b74e139a06259a7ecc3cca3d5dd8ac205",
+    "tests/unit/test_piezo_modal.py": "4f35f9d1c5d417e97cf528b8e2311cbec7fed15057cbaaa9c10202319e45842f",
+    "tests/unit/test_piezo_newmark.py": "83547fe9dfbb6c321bcd2e955fe1efe60b1e15c5a568d8d2079a1f6a68918f10",
+    "tests/unit/test_studies.py": "fb5f5dbde08ddf3edc8c5c4a0bf96a69764bcdbc48a7361b0a41b935585c4b6f",
+    "tests/unit/test_study_reports.py": "c3af7de8e6468f3c1f73a0ca2b184bd3f33cb2c379c2d69867a627582b3b9289",
+    "tests/unit/test_surrogates.py": "ca4530a7e018049388c42f1ffb77d39c74b87d0de674e276f4c0d6dc5a4866e2",
+    "tests/unit/test_tet10_geometry.py": "948238710e5a254a58e568fa3fa61dcc03dbd6623054a5004fa094d8da3bc1f4",
+    "tests/unit/test_tet10_newmark.py": "d01d0d75c31280d441973278d4e24f1d5a5b67f0facd41ced23e2b7954aeae3d",
+    "tests/unit/test_tet10_operators.py": "cccfcb20c50fa6d7a02d69ccaab2e63fc69c047b8dfb9c16795deddd5e23f7b7",
+    "tests/unit/test_thermopiezoelectric.py": "92faad67ac45dedd9cdbc750b5ab3e1a062da7afac348ed813fc68833178a50c",
+    "tests/unit/test_transient_heat.py": "e4dc0b3d124ebc8ec79264aa3e63ebc27db9dd7f5d68e7a08130f680c62ae3eb",
+    "tests/unit/test_uncertainty.py": "68b75cbae9f4a81c57189a3cb60e2e01682161e602cab3bf742b01260895c643"
+  },
+  "figure_sha256": "fc7d8a09877cbca0f91dba916be06278d08481482476969dd46c1b9822c0f4a2",
+  "uq_figure_sha256": "1b4b9154ededf0c4089673fe26231b6e2c38f0416d94ed09a384e985ff5570c1",
+  "uq_reference": {
+    "scope": "synthetic linear probability reference, no experiment",
+    "formula": "4+2X-Y",
+    "expected_mean_K": 8,
+    "expected_variance_K2": 13,
+    "sampling": {
+      "sampling_schema_version": 1,
+      "method": "Monte_Carlo",
+      "generator": "PCG64/standard_normal/normal_CDF_uniform/eigh_PSD",
+      "size": 100000,
+      "seed": 641,
+      "numpy_version": "2.4.6",
+      "scipy_version": "1.18.1",
+      "correlation": [
+        [
+          1.0,
+          0.5
+        ],
+        [
+          0.5,
+          1.0
+        ]
+      ],
+      "parameters": [
+        {
+          "name": "x",
+          "target": "loads.x.value",
+          "unit": "1",
+          "distribution": {
+            "kind": "normal",
+            "mean": 1.0,
+            "standard_deviation": 2.0
+          },
+          "justification": "Synthetic analytic verification; no measured material"
+        },
+        {
+          "name": "y",
+          "target": "loads.y.value",
+          "unit": "1",
+          "distribution": {
+            "kind": "normal",
+            "mean": -2.0,
+            "standard_deviation": 3.0
+          },
+          "justification": "Synthetic analytic verification; no measured material"
+        }
+      ]
+    },
+    "sample_sha256": "3df0bd38ba79e99b0f2e97fc695e04bf7137396558248e03ff63f3e346c830d0",
+    "summary": {
+      "size": 100000,
+      "unit": "K",
+      "mean": 8.007392184773114,
+      "variance": 13.005819137120481,
+      "quantile_probabilities": [
+        0.025,
+        0.5,
+        0.975
+      ],
+      "quantiles": [
+        0.9583248597815567,
+        8.012778392453052,
+        15.071799332382518
+      ],
+      "numerical_error_bound": 0.01,
+      "convergence": [
+        {
+          "size": 2,
+          "mean": 7.129734949078942,
+          "variance": 7.828527826659314
+        },
+        {
+          "size": 4,
+          "mean": 6.647447531274956,
+          "variance": 12.003370072308462
+        },
+        {
+          "size": 8,
+          "mean": 8.215854639579407,
+          "variance": 34.25758873743864
+        },
+        {
+          "size": 16,
+          "mean": 6.939682321895885,
+          "variance": 21.073179559406373
+        },
+        {
+          "size": 32,
+          "mean": 7.85501353838016,
+          "variance": 18.822476479265134
+        },
+        {
+          "size": 64,
+          "mean": 7.860789801855319,
+          "variance": 15.920520543391936
+        },
+        {
+          "size": 128,
+          "mean": 7.740402064667357,
+          "variance": 15.43145204216516
+        },
+        {
+          "size": 256,
+          "mean": 8.00324447501022,
+          "variance": 14.669536638818226
+        },
+        {
+          "size": 512,
+          "mean": 8.190409222488377,
+          "variance": 13.914882409948834
+        },
+        {
+          "size": 1024,
+          "mean": 8.106843908099288,
+          "variance": 13.66014023462369
+        },
+        {
+          "size": 2048,
+          "mean": 8.03862917503794,
+          "variance": 13.487705896597406
+        },
+        {
+          "size": 4096,
+          "mean": 8.001619068830045,
+          "variance": 13.004653846618462
+        },
+        {
+          "size": 8192,
+          "mean": 7.9976546832487365,
+          "variance": 13.111828284128036
+        },
+        {
+          "size": 16384,
+          "mean": 7.969726479426979,
+          "variance": 13.006941811170066
+        },
+        {
+          "size": 32768,
+          "mean": 8.011510422478874,
+          "variance": 13.007839068760894
+        },
+        {
+          "size": 65536,
+          "mean": 8.008316874682738,
+          "variance": 12.957510102964946
+        },
+        {
+          "size": 100000,
+          "mean": 8.007392184773114,
+          "variance": 13.005819137120481
+        }
+      ]
+    },
+    "sensitivity": {
+      "method": "central_difference",
+      "center": [
+        1.0,
+        -2.0
+      ],
+      "steps": [
+        0.01,
+        0.02
+      ],
+      "gradient": [
+        1.9999999999999574,
+        -0.9999999999999787
+      ]
+    }
+  },
+  "sample_count": 72,
+  "groups": [
+    {
+      "case": "bending",
+      "backend": "petsc",
+      "order": 1,
+      "size": 2,
+      "repeats": 3,
+      "h1_relative": 0.4891924064479291,
+      "rss_max_bytes": 103092224,
+      "wall_s": {
+        "median": 0.009712707999995018,
+        "min": 0.00951479200000449,
+        "max": 0.009781042000000184,
+        "stdev": 0.00013828071756796234
+      }
+    },
+    {
+      "case": "bending",
+      "backend": "petsc",
+      "order": 1,
+      "size": 4,
+      "repeats": 3,
+      "h1_relative": 0.24741675234734067,
+      "rss_max_bytes": 109989888,
+      "wall_s": {
+        "median": 0.056631082999999194,
+        "min": 0.05556245799999715,
+        "max": 0.05690483299999016,
+        "stdev": 0.0007093270394924407
+      }
+    },
+    {
+      "case": "bending",
+      "backend": "petsc",
+      "order": 1,
+      "size": 6,
+      "repeats": 3,
+      "h1_relative": 0.16529037005448483,
+      "rss_max_bytes": 131870720,
+      "wall_s": {
+        "median": 0.19263050000000703,
+        "min": 0.19087754199999551,
+        "max": 0.19759145899999453,
+        "stdev": 0.0034823521129699365
+      }
+    },
+    {
+      "case": "bending",
+      "backend": "petsc",
+      "order": 2,
+      "size": 2,
+      "repeats": 3,
+      "h1_relative": 0.04966996338993913,
+      "rss_max_bytes": 107765760,
+      "wall_s": {
+        "median": 0.3397010839999979,
+        "min": 0.3300849580000005,
+        "max": 0.348638459,
+        "stdev": 0.009278819523476325
+      }
+    },
+    {
+      "case": "bending",
+      "backend": "petsc",
+      "order": 2,
+      "size": 4,
+      "repeats": 3,
+      "h1_relative": 0.012417490847484784,
+      "rss_max_bytes": 154050560,
+      "wall_s": {
+        "median": 2.6823140850000016,
+        "min": 2.6814939599999974,
+        "max": 2.6902692510000037,
+        "stdev": 0.004847043828252657
+      }
+    },
+    {
+      "case": "bending",
+      "backend": "petsc",
+      "order": 2,
+      "size": 6,
+      "repeats": 3,
+      "h1_relative": 0.0055188848211043424,
+      "rss_max_bytes": 296988672,
+      "wall_s": {
+        "median": 9.172279795000009,
+        "min": 9.093741004000009,
+        "max": 9.406712545999994,
+        "stdev": 0.1628282543740549
+      }
+    },
+    {
+      "case": "bending",
+      "backend": "scipy",
+      "order": 1,
+      "size": 2,
+      "repeats": 3,
+      "h1_relative": 0.4891924064479291,
+      "rss_max_bytes": 68538368,
+      "wall_s": {
+        "median": 0.008788375000008841,
+        "min": 0.008580334000001244,
+        "max": 0.009197375000013608,
+        "stdev": 0.00031392718194519733
+      }
+    },
+    {
+      "case": "bending",
+      "backend": "scipy",
+      "order": 1,
+      "size": 4,
+      "repeats": 3,
+      "h1_relative": 0.24741675234734065,
+      "rss_max_bytes": 72171520,
+      "wall_s": {
+        "median": 0.05610991599999693,
+        "min": 0.05597437500000524,
+        "max": 0.05636112499999513,
+        "stdev": 0.0001962366287805875
+      }
+    },
+    {
+      "case": "bending",
+      "backend": "scipy",
+      "order": 1,
+      "size": 6,
+      "repeats": 3,
+      "h1_relative": 0.16529037005448485,
+      "rss_max_bytes": 96112640,
+      "wall_s": {
+        "median": 0.18992074999999886,
+        "min": 0.18936766600000965,
+        "max": 0.19558162500000265,
+        "stdev": 0.0034391058462509764
+      }
+    },
+    {
+      "case": "bending",
+      "backend": "scipy",
+      "order": 2,
+      "size": 2,
+      "repeats": 3,
+      "h1_relative": 0.049669963389939134,
+      "rss_max_bytes": 70860800,
+      "wall_s": {
+        "median": 0.33792795899999817,
+        "min": 0.32911083399999086,
+        "max": 0.3385101669999955,
+        "stdev": 0.005266689666605747
+      }
+    },
+    {
+      "case": "bending",
+      "backend": "scipy",
+      "order": 2,
+      "size": 4,
+      "repeats": 3,
+      "h1_relative": 0.012417490847484784,
+      "rss_max_bytes": 117829632,
+      "wall_s": {
+        "median": 2.663060709000007,
+        "min": 2.640698376000003,
+        "max": 2.6837607929999905,
+        "stdev": 0.021536554864888965
+      }
+    },
+    {
+      "case": "bending",
+      "backend": "scipy",
+      "order": 2,
+      "size": 6,
+      "repeats": 3,
+      "h1_relative": 0.005518884821104342,
+      "rss_max_bytes": 259362816,
+      "wall_s": {
+        "median": 8.982301879000005,
+        "min": 8.971770129000006,
+        "max": 8.998957671,
+        "stdev": 0.013708243293793035
+      }
+    },
+    {
+      "case": "heat",
+      "backend": "petsc",
+      "order": 1,
+      "size": 2,
+      "repeats": 3,
+      "h1_relative": 0.4770105475773047,
+      "rss_max_bytes": 102834176,
+      "wall_s": {
+        "median": 0.0068631250000024124,
+        "min": 0.006377957999994521,
+        "max": 0.007348165999999878,
+        "stdev": 0.00048510400136630386
+      }
+    },
+    {
+      "case": "heat",
+      "backend": "petsc",
+      "order": 1,
+      "size": 4,
+      "repeats": 3,
+      "h1_relative": 0.2517334919643442,
+      "rss_max_bytes": 104148992,
+      "wall_s": {
+        "median": 0.03954841699999889,
+        "min": 0.03772816600000084,
+        "max": 0.03971941700000059,
+        "stdev": 0.0011036028307317275
+      }
+    },
+    {
+      "case": "heat",
+      "backend": "petsc",
+      "order": 1,
+      "size": 6,
+      "repeats": 3,
+      "h1_relative": 0.1694656833312629,
+      "rss_max_bytes": 108662784,
+      "wall_s": {
+        "median": 0.13115920900000333,
+        "min": 0.1269740420000005,
+        "max": 0.13375266600000657,
+        "stdev": 0.003420316392826756
+      }
+    },
+    {
+      "case": "heat",
+      "backend": "petsc",
+      "order": 2,
+      "size": 2,
+      "repeats": 3,
+      "h1_relative": 0.08270272039923082,
+      "rss_max_bytes": 103251968,
+      "wall_s": {
+        "median": 0.13926641699999465,
+        "min": 0.13647299999999518,
+        "max": 0.140232625000003,
+        "stdev": 0.0019524137443964892
+      }
+    },
+    {
+      "case": "heat",
+      "backend": "petsc",
+      "order": 2,
+      "size": 4,
+      "repeats": 3,
+      "h1_relative": 0.02116389148702744,
+      "rss_max_bytes": 109592576,
+      "wall_s": {
+        "median": 1.1198280429999983,
+        "min": 1.117989332999997,
+        "max": 1.1297393329999963,
+        "stdev": 0.006320298304248884
+      }
+    },
+    {
+      "case": "heat",
+      "backend": "petsc",
+      "order": 2,
+      "size": 6,
+      "repeats": 3,
+      "h1_relative": 0.009450049250395819,
+      "rss_max_bytes": 129687552,
+      "wall_s": {
+        "median": 3.812684419,
+        "min": 3.744584250999992,
+        "max": 3.819899835000001,
+        "stdev": 0.04155745481247377
+      }
+    },
+    {
+      "case": "heat",
+      "backend": "scipy",
+      "order": 1,
+      "size": 2,
+      "repeats": 3,
+      "h1_relative": 0.4770105475773047,
+      "rss_max_bytes": 65593344,
+      "wall_s": {
+        "median": 0.006025167000004217,
+        "min": 0.005906082999999285,
+        "max": 0.006412000000004525,
+        "stdev": 0.0002645035538011779
+      }
+    },
+    {
+      "case": "heat",
+      "backend": "scipy",
+      "order": 1,
+      "size": 4,
+      "repeats": 3,
+      "h1_relative": 0.2517334919643442,
+      "rss_max_bytes": 69361664,
+      "wall_s": {
+        "median": 0.03747266599999932,
+        "min": 0.036422375000000784,
+        "max": 0.03944537499999967,
+        "stdev": 0.0015347758242033039
+      }
+    },
+    {
+      "case": "heat",
+      "backend": "scipy",
+      "order": 1,
+      "size": 6,
+      "repeats": 3,
+      "h1_relative": 0.16946568333126288,
+      "rss_max_bytes": 73981952,
+      "wall_s": {
+        "median": 0.13116079199999575,
+        "min": 0.12800416599999664,
+        "max": 0.13422220799999707,
+        "stdev": 0.0031091424847456916
+      }
+    },
+    {
+      "case": "heat",
+      "backend": "scipy",
+      "order": 2,
+      "size": 2,
+      "repeats": 3,
+      "h1_relative": 0.08270272039923081,
+      "rss_max_bytes": 68612096,
+      "wall_s": {
+        "median": 0.14146508300000704,
+        "min": 0.13661683299999794,
+        "max": 0.14226270800000407,
+        "stdev": 0.003055531547289896
+      }
+    },
+    {
+      "case": "heat",
+      "backend": "scipy",
+      "order": 2,
+      "size": 4,
+      "repeats": 3,
+      "h1_relative": 0.02116389148702744,
+      "rss_max_bytes": 75198464,
+      "wall_s": {
+        "median": 1.113277709000002,
+        "min": 1.107751625000006,
+        "max": 1.1153738759999996,
+        "stdev": 0.0039376437703656396
+      }
+    },
+    {
+      "case": "heat",
+      "backend": "scipy",
+      "order": 2,
+      "size": 6,
+      "repeats": 3,
+      "h1_relative": 0.009450049250395822,
+      "rss_max_bytes": 97079296,
+      "wall_s": {
+        "median": 3.737477835,
+        "min": 3.732134961,
+        "max": 3.821291168000002,
+        "stdev": 0.05000341711286057
+      }
+    }
+  ],
+  "accuracy": [
+    {
+      "case": "bending",
+      "backend": "petsc",
+      "order": 1,
+      "target": 0.5,
+      "selected": {
+        "case": "bending",
+        "backend": "petsc",
+        "order": 1,
+        "size": 2,
+        "repeats": 3,
+        "h1_relative": 0.4891924064479291,
+        "rss_max_bytes": 103092224,
+        "wall_s": {
+          "median": 0.009712707999995018,
+          "min": 0.00951479200000449,
+          "max": 0.009781042000000184,
+          "stdev": 0.00013828071756796234
+        }
+      }
+    },
+    {
+      "case": "bending",
+      "backend": "petsc",
+      "order": 1,
+      "target": 0.25,
+      "selected": {
+        "case": "bending",
+        "backend": "petsc",
+        "order": 1,
+        "size": 4,
+        "repeats": 3,
+        "h1_relative": 0.24741675234734067,
+        "rss_max_bytes": 109989888,
+        "wall_s": {
+          "median": 0.056631082999999194,
+          "min": 0.05556245799999715,
+          "max": 0.05690483299999016,
+          "stdev": 0.0007093270394924407
+        }
+      }
+    },
+    {
+      "case": "bending",
+      "backend": "petsc",
+      "order": 1,
+      "target": 0.125,
+      "selected": null
+    },
+    {
+      "case": "bending",
+      "backend": "petsc",
+      "order": 2,
+      "target": 0.5,
+      "selected": {
+        "case": "bending",
+        "backend": "petsc",
+        "order": 2,
+        "size": 2,
+        "repeats": 3,
+        "h1_relative": 0.04966996338993913,
+        "rss_max_bytes": 107765760,
+        "wall_s": {
+          "median": 0.3397010839999979,
+          "min": 0.3300849580000005,
+          "max": 0.348638459,
+          "stdev": 0.009278819523476325
+        }
+      }
+    },
+    {
+      "case": "bending",
+      "backend": "petsc",
+      "order": 2,
+      "target": 0.25,
+      "selected": {
+        "case": "bending",
+        "backend": "petsc",
+        "order": 2,
+        "size": 2,
+        "repeats": 3,
+        "h1_relative": 0.04966996338993913,
+        "rss_max_bytes": 107765760,
+        "wall_s": {
+          "median": 0.3397010839999979,
+          "min": 0.3300849580000005,
+          "max": 0.348638459,
+          "stdev": 0.009278819523476325
+        }
+      }
+    },
+    {
+      "case": "bending",
+      "backend": "petsc",
+      "order": 2,
+      "target": 0.125,
+      "selected": {
+        "case": "bending",
+        "backend": "petsc",
+        "order": 2,
+        "size": 2,
+        "repeats": 3,
+        "h1_relative": 0.04966996338993913,
+        "rss_max_bytes": 107765760,
+        "wall_s": {
+          "median": 0.3397010839999979,
+          "min": 0.3300849580000005,
+          "max": 0.348638459,
+          "stdev": 0.009278819523476325
+        }
+      }
+    },
+    {
+      "case": "bending",
+      "backend": "scipy",
+      "order": 1,
+      "target": 0.5,
+      "selected": {
+        "case": "bending",
+        "backend": "scipy",
+        "order": 1,
+        "size": 2,
+        "repeats": 3,
+        "h1_relative": 0.4891924064479291,
+        "rss_max_bytes": 68538368,
+        "wall_s": {
+          "median": 0.008788375000008841,
+          "min": 0.008580334000001244,
+          "max": 0.009197375000013608,
+          "stdev": 0.00031392718194519733
+        }
+      }
+    },
+    {
+      "case": "bending",
+      "backend": "scipy",
+      "order": 1,
+      "target": 0.25,
+      "selected": {
+        "case": "bending",
+        "backend": "scipy",
+        "order": 1,
+        "size": 4,
+        "repeats": 3,
+        "h1_relative": 0.24741675234734065,
+        "rss_max_bytes": 72171520,
+        "wall_s": {
+          "median": 0.05610991599999693,
+          "min": 0.05597437500000524,
+          "max": 0.05636112499999513,
+          "stdev": 0.0001962366287805875
+        }
+      }
+    },
+    {
+      "case": "bending",
+      "backend": "scipy",
+      "order": 1,
+      "target": 0.125,
+      "selected": null
+    },
+    {
+      "case": "bending",
+      "backend": "scipy",
+      "order": 2,
+      "target": 0.5,
+      "selected": {
+        "case": "bending",
+        "backend": "scipy",
+        "order": 2,
+        "size": 2,
+        "repeats": 3,
+        "h1_relative": 0.049669963389939134,
+        "rss_max_bytes": 70860800,
+        "wall_s": {
+          "median": 0.33792795899999817,
+          "min": 0.32911083399999086,
+          "max": 0.3385101669999955,
+          "stdev": 0.005266689666605747
+        }
+      }
+    },
+    {
+      "case": "bending",
+      "backend": "scipy",
+      "order": 2,
+      "target": 0.25,
+      "selected": {
+        "case": "bending",
+        "backend": "scipy",
+        "order": 2,
+        "size": 2,
+        "repeats": 3,
+        "h1_relative": 0.049669963389939134,
+        "rss_max_bytes": 70860800,
+        "wall_s": {
+          "median": 0.33792795899999817,
+          "min": 0.32911083399999086,
+          "max": 0.3385101669999955,
+          "stdev": 0.005266689666605747
+        }
+      }
+    },
+    {
+      "case": "bending",
+      "backend": "scipy",
+      "order": 2,
+      "target": 0.125,
+      "selected": {
+        "case": "bending",
+        "backend": "scipy",
+        "order": 2,
+        "size": 2,
+        "repeats": 3,
+        "h1_relative": 0.049669963389939134,
+        "rss_max_bytes": 70860800,
+        "wall_s": {
+          "median": 0.33792795899999817,
+          "min": 0.32911083399999086,
+          "max": 0.3385101669999955,
+          "stdev": 0.005266689666605747
+        }
+      }
+    },
+    {
+      "case": "heat",
+      "backend": "petsc",
+      "order": 1,
+      "target": 0.5,
+      "selected": {
+        "case": "heat",
+        "backend": "petsc",
+        "order": 1,
+        "size": 2,
+        "repeats": 3,
+        "h1_relative": 0.4770105475773047,
+        "rss_max_bytes": 102834176,
+        "wall_s": {
+          "median": 0.0068631250000024124,
+          "min": 0.006377957999994521,
+          "max": 0.007348165999999878,
+          "stdev": 0.00048510400136630386
+        }
+      }
+    },
+    {
+      "case": "heat",
+      "backend": "petsc",
+      "order": 1,
+      "target": 0.25,
+      "selected": {
+        "case": "heat",
+        "backend": "petsc",
+        "order": 1,
+        "size": 6,
+        "repeats": 3,
+        "h1_relative": 0.1694656833312629,
+        "rss_max_bytes": 108662784,
+        "wall_s": {
+          "median": 0.13115920900000333,
+          "min": 0.1269740420000005,
+          "max": 0.13375266600000657,
+          "stdev": 0.003420316392826756
+        }
+      }
+    },
+    {
+      "case": "heat",
+      "backend": "petsc",
+      "order": 1,
+      "target": 0.125,
+      "selected": null
+    },
+    {
+      "case": "heat",
+      "backend": "petsc",
+      "order": 2,
+      "target": 0.5,
+      "selected": {
+        "case": "heat",
+        "backend": "petsc",
+        "order": 2,
+        "size": 2,
+        "repeats": 3,
+        "h1_relative": 0.08270272039923082,
+        "rss_max_bytes": 103251968,
+        "wall_s": {
+          "median": 0.13926641699999465,
+          "min": 0.13647299999999518,
+          "max": 0.140232625000003,
+          "stdev": 0.0019524137443964892
+        }
+      }
+    },
+    {
+      "case": "heat",
+      "backend": "petsc",
+      "order": 2,
+      "target": 0.25,
+      "selected": {
+        "case": "heat",
+        "backend": "petsc",
+        "order": 2,
+        "size": 2,
+        "repeats": 3,
+        "h1_relative": 0.08270272039923082,
+        "rss_max_bytes": 103251968,
+        "wall_s": {
+          "median": 0.13926641699999465,
+          "min": 0.13647299999999518,
+          "max": 0.140232625000003,
+          "stdev": 0.0019524137443964892
+        }
+      }
+    },
+    {
+      "case": "heat",
+      "backend": "petsc",
+      "order": 2,
+      "target": 0.125,
+      "selected": {
+        "case": "heat",
+        "backend": "petsc",
+        "order": 2,
+        "size": 2,
+        "repeats": 3,
+        "h1_relative": 0.08270272039923082,
+        "rss_max_bytes": 103251968,
+        "wall_s": {
+          "median": 0.13926641699999465,
+          "min": 0.13647299999999518,
+          "max": 0.140232625000003,
+          "stdev": 0.0019524137443964892
+        }
+      }
+    },
+    {
+      "case": "heat",
+      "backend": "scipy",
+      "order": 1,
+      "target": 0.5,
+      "selected": {
+        "case": "heat",
+        "backend": "scipy",
+        "order": 1,
+        "size": 2,
+        "repeats": 3,
+        "h1_relative": 0.4770105475773047,
+        "rss_max_bytes": 65593344,
+        "wall_s": {
+          "median": 0.006025167000004217,
+          "min": 0.005906082999999285,
+          "max": 0.006412000000004525,
+          "stdev": 0.0002645035538011779
+        }
+      }
+    },
+    {
+      "case": "heat",
+      "backend": "scipy",
+      "order": 1,
+      "target": 0.25,
+      "selected": {
+        "case": "heat",
+        "backend": "scipy",
+        "order": 1,
+        "size": 6,
+        "repeats": 3,
+        "h1_relative": 0.16946568333126288,
+        "rss_max_bytes": 73981952,
+        "wall_s": {
+          "median": 0.13116079199999575,
+          "min": 0.12800416599999664,
+          "max": 0.13422220799999707,
+          "stdev": 0.0031091424847456916
+        }
+      }
+    },
+    {
+      "case": "heat",
+      "backend": "scipy",
+      "order": 1,
+      "target": 0.125,
+      "selected": null
+    },
+    {
+      "case": "heat",
+      "backend": "scipy",
+      "order": 2,
+      "target": 0.5,
+      "selected": {
+        "case": "heat",
+        "backend": "scipy",
+        "order": 2,
+        "size": 2,
+        "repeats": 3,
+        "h1_relative": 0.08270272039923081,
+        "rss_max_bytes": 68612096,
+        "wall_s": {
+          "median": 0.14146508300000704,
+          "min": 0.13661683299999794,
+          "max": 0.14226270800000407,
+          "stdev": 0.003055531547289896
+        }
+      }
+    },
+    {
+      "case": "heat",
+      "backend": "scipy",
+      "order": 2,
+      "target": 0.25,
+      "selected": {
+        "case": "heat",
+        "backend": "scipy",
+        "order": 2,
+        "size": 2,
+        "repeats": 3,
+        "h1_relative": 0.08270272039923081,
+        "rss_max_bytes": 68612096,
+        "wall_s": {
+          "median": 0.14146508300000704,
+          "min": 0.13661683299999794,
+          "max": 0.14226270800000407,
+          "stdev": 0.003055531547289896
+        }
+      }
+    },
+    {
+      "case": "heat",
+      "backend": "scipy",
+      "order": 2,
+      "target": 0.125,
+      "selected": {
+        "case": "heat",
+        "backend": "scipy",
+        "order": 2,
+        "size": 2,
+        "repeats": 3,
+        "h1_relative": 0.08270272039923081,
+        "rss_max_bytes": 68612096,
+        "wall_s": {
+          "median": 0.14146508300000704,
+          "min": 0.13661683299999794,
+          "max": 0.14226270800000407,
+          "stdev": 0.003055531547289896
+        }
+      }
+    }
+  ],
+  "cost": [
+    {
+      "case": "bending",
+      "backend": "petsc",
+      "order": 1,
+      "seconds": 1.0,
+      "memory_bytes": 536870912,
+      "selected": {
+        "case": "bending",
+        "backend": "petsc",
+        "order": 1,
+        "size": 6,
+        "repeats": 3,
+        "h1_relative": 0.16529037005448483,
+        "rss_max_bytes": 131870720,
+        "wall_s": {
+          "median": 0.19263050000000703,
+          "min": 0.19087754199999551,
+          "max": 0.19759145899999453,
+          "stdev": 0.0034823521129699365
+        }
+      }
+    },
+    {
+      "case": "bending",
+      "backend": "petsc",
+      "order": 1,
+      "seconds": 5.0,
+      "memory_bytes": 536870912,
+      "selected": {
+        "case": "bending",
+        "backend": "petsc",
+        "order": 1,
+        "size": 6,
+        "repeats": 3,
+        "h1_relative": 0.16529037005448483,
+        "rss_max_bytes": 131870720,
+        "wall_s": {
+          "median": 0.19263050000000703,
+          "min": 0.19087754199999551,
+          "max": 0.19759145899999453,
+          "stdev": 0.0034823521129699365
+        }
+      }
+    },
+    {
+      "case": "bending",
+      "backend": "petsc",
+      "order": 1,
+      "seconds": 20.0,
+      "memory_bytes": 536870912,
+      "selected": {
+        "case": "bending",
+        "backend": "petsc",
+        "order": 1,
+        "size": 6,
+        "repeats": 3,
+        "h1_relative": 0.16529037005448483,
+        "rss_max_bytes": 131870720,
+        "wall_s": {
+          "median": 0.19263050000000703,
+          "min": 0.19087754199999551,
+          "max": 0.19759145899999453,
+          "stdev": 0.0034823521129699365
+        }
+      }
+    },
+    {
+      "case": "bending",
+      "backend": "petsc",
+      "order": 2,
+      "seconds": 1.0,
+      "memory_bytes": 536870912,
+      "selected": {
+        "case": "bending",
+        "backend": "petsc",
+        "order": 2,
+        "size": 2,
+        "repeats": 3,
+        "h1_relative": 0.04966996338993913,
+        "rss_max_bytes": 107765760,
+        "wall_s": {
+          "median": 0.3397010839999979,
+          "min": 0.3300849580000005,
+          "max": 0.348638459,
+          "stdev": 0.009278819523476325
+        }
+      }
+    },
+    {
+      "case": "bending",
+      "backend": "petsc",
+      "order": 2,
+      "seconds": 5.0,
+      "memory_bytes": 536870912,
+      "selected": {
+        "case": "bending",
+        "backend": "petsc",
+        "order": 2,
+        "size": 4,
+        "repeats": 3,
+        "h1_relative": 0.012417490847484784,
+        "rss_max_bytes": 154050560,
+        "wall_s": {
+          "median": 2.6823140850000016,
+          "min": 2.6814939599999974,
+          "max": 2.6902692510000037,
+          "stdev": 0.004847043828252657
+        }
+      }
+    },
+    {
+      "case": "bending",
+      "backend": "petsc",
+      "order": 2,
+      "seconds": 20.0,
+      "memory_bytes": 536870912,
+      "selected": {
+        "case": "bending",
+        "backend": "petsc",
+        "order": 2,
+        "size": 6,
+        "repeats": 3,
+        "h1_relative": 0.0055188848211043424,
+        "rss_max_bytes": 296988672,
+        "wall_s": {
+          "median": 9.172279795000009,
+          "min": 9.093741004000009,
+          "max": 9.406712545999994,
+          "stdev": 0.1628282543740549
+        }
+      }
+    },
+    {
+      "case": "bending",
+      "backend": "scipy",
+      "order": 1,
+      "seconds": 1.0,
+      "memory_bytes": 536870912,
+      "selected": {
+        "case": "bending",
+        "backend": "scipy",
+        "order": 1,
+        "size": 6,
+        "repeats": 3,
+        "h1_relative": 0.16529037005448485,
+        "rss_max_bytes": 96112640,
+        "wall_s": {
+          "median": 0.18992074999999886,
+          "min": 0.18936766600000965,
+          "max": 0.19558162500000265,
+          "stdev": 0.0034391058462509764
+        }
+      }
+    },
+    {
+      "case": "bending",
+      "backend": "scipy",
+      "order": 1,
+      "seconds": 5.0,
+      "memory_bytes": 536870912,
+      "selected": {
+        "case": "bending",
+        "backend": "scipy",
+        "order": 1,
+        "size": 6,
+        "repeats": 3,
+        "h1_relative": 0.16529037005448485,
+        "rss_max_bytes": 96112640,
+        "wall_s": {
+          "median": 0.18992074999999886,
+          "min": 0.18936766600000965,
+          "max": 0.19558162500000265,
+          "stdev": 0.0034391058462509764
+        }
+      }
+    },
+    {
+      "case": "bending",
+      "backend": "scipy",
+      "order": 1,
+      "seconds": 20.0,
+      "memory_bytes": 536870912,
+      "selected": {
+        "case": "bending",
+        "backend": "scipy",
+        "order": 1,
+        "size": 6,
+        "repeats": 3,
+        "h1_relative": 0.16529037005448485,
+        "rss_max_bytes": 96112640,
+        "wall_s": {
+          "median": 0.18992074999999886,
+          "min": 0.18936766600000965,
+          "max": 0.19558162500000265,
+          "stdev": 0.0034391058462509764
+        }
+      }
+    },
+    {
+      "case": "bending",
+      "backend": "scipy",
+      "order": 2,
+      "seconds": 1.0,
+      "memory_bytes": 536870912,
+      "selected": {
+        "case": "bending",
+        "backend": "scipy",
+        "order": 2,
+        "size": 2,
+        "repeats": 3,
+        "h1_relative": 0.049669963389939134,
+        "rss_max_bytes": 70860800,
+        "wall_s": {
+          "median": 0.33792795899999817,
+          "min": 0.32911083399999086,
+          "max": 0.3385101669999955,
+          "stdev": 0.005266689666605747
+        }
+      }
+    },
+    {
+      "case": "bending",
+      "backend": "scipy",
+      "order": 2,
+      "seconds": 5.0,
+      "memory_bytes": 536870912,
+      "selected": {
+        "case": "bending",
+        "backend": "scipy",
+        "order": 2,
+        "size": 4,
+        "repeats": 3,
+        "h1_relative": 0.012417490847484784,
+        "rss_max_bytes": 117829632,
+        "wall_s": {
+          "median": 2.663060709000007,
+          "min": 2.640698376000003,
+          "max": 2.6837607929999905,
+          "stdev": 0.021536554864888965
+        }
+      }
+    },
+    {
+      "case": "bending",
+      "backend": "scipy",
+      "order": 2,
+      "seconds": 20.0,
+      "memory_bytes": 536870912,
+      "selected": {
+        "case": "bending",
+        "backend": "scipy",
+        "order": 2,
+        "size": 6,
+        "repeats": 3,
+        "h1_relative": 0.005518884821104342,
+        "rss_max_bytes": 259362816,
+        "wall_s": {
+          "median": 8.982301879000005,
+          "min": 8.971770129000006,
+          "max": 8.998957671,
+          "stdev": 0.013708243293793035
+        }
+      }
+    },
+    {
+      "case": "heat",
+      "backend": "petsc",
+      "order": 1,
+      "seconds": 1.0,
+      "memory_bytes": 536870912,
+      "selected": {
+        "case": "heat",
+        "backend": "petsc",
+        "order": 1,
+        "size": 6,
+        "repeats": 3,
+        "h1_relative": 0.1694656833312629,
+        "rss_max_bytes": 108662784,
+        "wall_s": {
+          "median": 0.13115920900000333,
+          "min": 0.1269740420000005,
+          "max": 0.13375266600000657,
+          "stdev": 0.003420316392826756
+        }
+      }
+    },
+    {
+      "case": "heat",
+      "backend": "petsc",
+      "order": 1,
+      "seconds": 5.0,
+      "memory_bytes": 536870912,
+      "selected": {
+        "case": "heat",
+        "backend": "petsc",
+        "order": 1,
+        "size": 6,
+        "repeats": 3,
+        "h1_relative": 0.1694656833312629,
+        "rss_max_bytes": 108662784,
+        "wall_s": {
+          "median": 0.13115920900000333,
+          "min": 0.1269740420000005,
+          "max": 0.13375266600000657,
+          "stdev": 0.003420316392826756
+        }
+      }
+    },
+    {
+      "case": "heat",
+      "backend": "petsc",
+      "order": 1,
+      "seconds": 20.0,
+      "memory_bytes": 536870912,
+      "selected": {
+        "case": "heat",
+        "backend": "petsc",
+        "order": 1,
+        "size": 6,
+        "repeats": 3,
+        "h1_relative": 0.1694656833312629,
+        "rss_max_bytes": 108662784,
+        "wall_s": {
+          "median": 0.13115920900000333,
+          "min": 0.1269740420000005,
+          "max": 0.13375266600000657,
+          "stdev": 0.003420316392826756
+        }
+      }
+    },
+    {
+      "case": "heat",
+      "backend": "petsc",
+      "order": 2,
+      "seconds": 1.0,
+      "memory_bytes": 536870912,
+      "selected": {
+        "case": "heat",
+        "backend": "petsc",
+        "order": 2,
+        "size": 2,
+        "repeats": 3,
+        "h1_relative": 0.08270272039923082,
+        "rss_max_bytes": 103251968,
+        "wall_s": {
+          "median": 0.13926641699999465,
+          "min": 0.13647299999999518,
+          "max": 0.140232625000003,
+          "stdev": 0.0019524137443964892
+        }
+      }
+    },
+    {
+      "case": "heat",
+      "backend": "petsc",
+      "order": 2,
+      "seconds": 5.0,
+      "memory_bytes": 536870912,
+      "selected": {
+        "case": "heat",
+        "backend": "petsc",
+        "order": 2,
+        "size": 6,
+        "repeats": 3,
+        "h1_relative": 0.009450049250395819,
+        "rss_max_bytes": 129687552,
+        "wall_s": {
+          "median": 3.812684419,
+          "min": 3.744584250999992,
+          "max": 3.819899835000001,
+          "stdev": 0.04155745481247377
+        }
+      }
+    },
+    {
+      "case": "heat",
+      "backend": "petsc",
+      "order": 2,
+      "seconds": 20.0,
+      "memory_bytes": 536870912,
+      "selected": {
+        "case": "heat",
+        "backend": "petsc",
+        "order": 2,
+        "size": 6,
+        "repeats": 3,
+        "h1_relative": 0.009450049250395819,
+        "rss_max_bytes": 129687552,
+        "wall_s": {
+          "median": 3.812684419,
+          "min": 3.744584250999992,
+          "max": 3.819899835000001,
+          "stdev": 0.04155745481247377
+        }
+      }
+    },
+    {
+      "case": "heat",
+      "backend": "scipy",
+      "order": 1,
+      "seconds": 1.0,
+      "memory_bytes": 536870912,
+      "selected": {
+        "case": "heat",
+        "backend": "scipy",
+        "order": 1,
+        "size": 6,
+        "repeats": 3,
+        "h1_relative": 0.16946568333126288,
+        "rss_max_bytes": 73981952,
+        "wall_s": {
+          "median": 0.13116079199999575,
+          "min": 0.12800416599999664,
+          "max": 0.13422220799999707,
+          "stdev": 0.0031091424847456916
+        }
+      }
+    },
+    {
+      "case": "heat",
+      "backend": "scipy",
+      "order": 1,
+      "seconds": 5.0,
+      "memory_bytes": 536870912,
+      "selected": {
+        "case": "heat",
+        "backend": "scipy",
+        "order": 1,
+        "size": 6,
+        "repeats": 3,
+        "h1_relative": 0.16946568333126288,
+        "rss_max_bytes": 73981952,
+        "wall_s": {
+          "median": 0.13116079199999575,
+          "min": 0.12800416599999664,
+          "max": 0.13422220799999707,
+          "stdev": 0.0031091424847456916
+        }
+      }
+    },
+    {
+      "case": "heat",
+      "backend": "scipy",
+      "order": 1,
+      "seconds": 20.0,
+      "memory_bytes": 536870912,
+      "selected": {
+        "case": "heat",
+        "backend": "scipy",
+        "order": 1,
+        "size": 6,
+        "repeats": 3,
+        "h1_relative": 0.16946568333126288,
+        "rss_max_bytes": 73981952,
+        "wall_s": {
+          "median": 0.13116079199999575,
+          "min": 0.12800416599999664,
+          "max": 0.13422220799999707,
+          "stdev": 0.0031091424847456916
+        }
+      }
+    },
+    {
+      "case": "heat",
+      "backend": "scipy",
+      "order": 2,
+      "seconds": 1.0,
+      "memory_bytes": 536870912,
+      "selected": {
+        "case": "heat",
+        "backend": "scipy",
+        "order": 2,
+        "size": 2,
+        "repeats": 3,
+        "h1_relative": 0.08270272039923081,
+        "rss_max_bytes": 68612096,
+        "wall_s": {
+          "median": 0.14146508300000704,
+          "min": 0.13661683299999794,
+          "max": 0.14226270800000407,
+          "stdev": 0.003055531547289896
+        }
+      }
+    },
+    {
+      "case": "heat",
+      "backend": "scipy",
+      "order": 2,
+      "seconds": 5.0,
+      "memory_bytes": 536870912,
+      "selected": {
+        "case": "heat",
+        "backend": "scipy",
+        "order": 2,
+        "size": 6,
+        "repeats": 3,
+        "h1_relative": 0.009450049250395822,
+        "rss_max_bytes": 97079296,
+        "wall_s": {
+          "median": 3.737477835,
+          "min": 3.732134961,
+          "max": 3.821291168000002,
+          "stdev": 0.05000341711286057
+        }
+      }
+    },
+    {
+      "case": "heat",
+      "backend": "scipy",
+      "order": 2,
+      "seconds": 20.0,
+      "memory_bytes": 536870912,
+      "selected": {
+        "case": "heat",
+        "backend": "scipy",
+        "order": 2,
+        "size": 6,
+        "repeats": 3,
+        "h1_relative": 0.009450049250395822,
+        "rss_max_bytes": 97079296,
+        "wall_s": {
+          "median": 3.737477835,
+          "min": 3.732134961,
+          "max": 3.821291168000002,
+          "stdev": 0.05000341711286057
+        }
+      }
+    }
+  ]
+}
