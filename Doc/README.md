@@ -19,6 +19,9 @@ Eintrag im Entscheidungsprotokoll.
 
 ## Produktplanung
 
+- [M9: erneute Messdatensuche und konkrete Optionen für v1.4.0 (#63/#66)](66_M9_DATA_SEARCH_AND_RELEASE_OPTIONS.md)
+- [M9: verbindlicher Messdatenvertrag und offenes Datengate (#63)](65_VALIDATION_DATA_CONTRACT.md)
+
 - [Femantis: vollständige Corporate Identity mit Original-Bildtafel](75_FEMANTIS_CORPORATE_IDENTITY.md)
 - [Femantis: vollständiger Code-/Paket-/GitHub-Umbenennungsplan](76_FEMANTIS_RENAMING_PLAN.md)
 - [Femantis: Namensinventar und Migrationsvertrag (#235, ADR-053)](77_FEMANTIS_MIGRATION_CONTRACT.md)
@@ -156,3 +159,13 @@ Verifikationsdokumente benennen ihren jeweiligen Nachweisumfang ausdrücklich.
 
 API- und Nachweisband #209–#210 und die redaktionelle Gesamtabnahme #211
 bleiben offen; der Unsicherheitsworkflow wird nach #64 ergänzt.
+
+## M9 — Unsicherheit und offener experimenteller Folgeumfang
+
+- [Messdatenvertrag, Kandidatensuche und offenes Datengate (#63)](65_VALIDATION_DATA_CONTRACT.md)
+- [Erneute Datensuche und genehmigte M9-Neuplanung](66_M9_DATA_SEARCH_AND_RELEASE_OPTIONS.md)
+
+M9/v1.4.0 umfasst den verifizierten generischen Unsicherheitsworkflow und die
+vollständige Gesamtdokumentation. #63/#65 bleiben außerhalb M9 offen; eine
+experimentelle Validierungsfreigabe wird nicht behauptet.
+
