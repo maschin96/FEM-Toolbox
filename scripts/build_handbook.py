@@ -7,6 +7,7 @@ import hashlib
 import json
 import os
 import re
+import runpy
 import shutil
 import subprocess
 import tarfile
@@ -315,6 +316,7 @@ def main() -> None:
     parser.add_argument("--epoch", default="")
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
+    runpy.run_path(str(root / "scripts/api_contracts.py"))["validate_reference"](root)
     matrix = json.loads((root / "Doc/latex/coverage.json").read_text())
     validate_matrix(root, matrix)
     if args.check_matrix:

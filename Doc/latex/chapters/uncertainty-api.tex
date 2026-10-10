@@ -10,7 +10,7 @@ positive Standardabweichung, unbeschränktes Normalgesetz, unveränderlicher Dat
 Breite, unveränderlicher Datensatz. Keine automatische Rechtfertigung des Gesetzes.
 \paragraph{UncertainParameter} Name (ASCII), vorhandener skalarer M8-Zielpfad,
 SI-Einheit, Normal-/Uniformgesetz und Pflichtbegründung. Frozen-Datensatz.
-\paragraph{SamplingPlan}
+\subsubsection*{SamplingPlan}
 \begin{lstlisting}
 SamplingPlan(parameters, *, size, seed, correlation=None)
 \end{lstlisting}
@@ -19,7 +19,7 @@ $R\in\mathbb R^{p\times p}$ symmetrisch, PSD, Einserdiagonale; absolute
 Rundungstoleranz $10^{-12}$. Nichtidentität nur für alle-normal; singulär erlaubt.
 \texttt{sample()} liefert bytebasiertes unveränderliches float64$[n,p]$.
 \texttt{to\_document()} liefert getrennte veränderbare JSON-Metadaten.
-\paragraph{Stichprobenstatistik}
+\subsubsection*{Stichprobenstatistik}
 \begin{lstlisting}
 summarize_samples(values, *, unit, numerical_error_bound,
                   quantile_probabilities=(.025,.5,.975))
@@ -28,14 +28,14 @@ Reeller endlicher Vektor $[n\ge2]$, explizite SI-Einheit. Budget nichtnegativ
 oder \texttt{None}; geordnete Quantile in $[0,1]$, Default $(.025,.5,.975)$.
 Mittel, unverzerrte Varianz (Einheit$^2$), linear interpolierte Quantile und
 Präfixmomente; keine Konfidenz-/Fehlergrenze. Budget bleibt getrennt.
-\paragraph{Lokale Sensitivität}
+\subsubsection*{Lokale Sensitivität}
 \begin{lstlisting}
 local_sensitivity(evaluate, *, center, steps)
 \end{lstlisting}
 Reelle endliche Vektoren $[p]$, positive unterscheidbare Perturbationen;
 genau $2p$ skalare Callback-Ausgaben. Lokaler zentraler Gradient;
 Einheit Ausgabe/Eingabe. Callbackfehler propagieren.
-\paragraph{UncertaintyStudy}
+\subsubsection*{UncertaintyStudy}
 \begin{lstlisting}
 UncertaintyStudy(plan, *, model, root)
 run(output, *, quantities, numerical_error_bounds,

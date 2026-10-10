@@ -1,0 +1,62 @@
+\chapter{API-Grenzen, Konventionen und Fehler}
+\label{api:overview}\index{API}\index{Kompatibilität}
+\begingroup\raggedright
+Diese Referenz beschreibt den tatsächlich vorhandenen M0--M8-Umfang und den
+integrierten generischen M9-Unsicherheitsworkflow. Version und Commit stehen auf
+dem Titelblatt; Paketversion, Model-Schema und Ergebnisformat sind getrennte
+Verträge. Der Paketroot exportiert nur \texttt{\_\_version\_\_}; Solver werden
+aus ihren Modulen importiert. Der kanonische Stabilitätsvertrag ist
+\nolinkurl{Doc/29_PUBLIC_API_CONTRACT.md}, ergänzt durch die dort referenzierten
+M6--M9-Verträge. Das maschinelle Inventar enthält auch Forschungsbausteine und
+interne Schnittstellen. Deren Erreichbarkeit bedeutet keine SemVer-Zusage.
+
+Die Inventarmatrix \nolinkurl{Doc/latex/api-map.json} ordnet alle Quellmodule
+explizit zu: stabil, gemischt, Forschung oder intern. Reexportierte Klassen
+führen auf dieselbe Definition; stabile Importpfade bleiben maßgeblich.
+Incidental Imports wie \texttt{numpy}, \texttt{Path} oder \texttt{dataclass}
+sind keine Toolbox-Einstiegspunkte. Unterstrich-Helfer sind Implementierungsdetails.
+Öffentliche Datentypen, Konstanten, Signaturen, Felder, Konstruktoren und Methoden
+werden quellenbasiert inventarisiert; direkt gefundene Raise-Stellen sind keine
+vollständige transitive Exception-Liste. Hier gelten zusätzlich die manuellen
+Fachverträge und die validierenden Adapter.
+
+\section{Einheiten, Reihenfolge und Veränderlichkeit}
+Direkte Python-Solver erwarten SI ohne Umrechnung. Model/TOML konvertiert nur
+explizit unterstützte Einheiten. Netzkoordinaten sind Meter, Indizes nullbasiert,
+externe IDs getrennte Metadaten. Aktive Knoten sind sortiert; Rohfelder verweisen
+über \texttt{node\_ids} auf das Netz. Zellergebnisse folgen Eingabezellreihenfolge.
+DOFs sind feldweise, innerhalb $u$ je Knoten $x,y,z$; elektrische/thermische
+Felder besitzen je einen skalaren DOF. Eine \texttt{Dirichlet}-Liste muss aus
+der passenden DOF-Map kommen, nicht aus ungeprüften Netzindizes.
+
+Voigt: $xx,yy,zz,yz,xz,xy$; Dehnungen verwenden technische Schubanteile.
+$\mathbf E=-\nabla\phi$, $\mathbf q=-k\nabla T$. Wärmestrom nach außen positiv.
+$\mathbf D\cdot\mathbf n_{\mathrm{out}}$ ist Flächenladung; angrenzende ideale
+Elektrodenladung hat umgekehrtes Vorzeichen. Harmonik verwendet komplexe
+Spitzenwertphasoren und $e^{+i\omega t}$; reale/komplexe Größen nicht vermischen.
+
+Mesh-/Material-/Ergebnisarrays werden nach den jeweiligen Klassenverträgen
+kopiert und auf unveränderlichen Bytes gespeichert. Frozen-Datensätze allein
+machen eingebettete externe Objekte nicht automatisch tief unveränderlich;
+das Inventar nennt Dekoratoren und Typen, der Fachvertrag erläutert Besitz.
+Model-Dokumente und JSON-Berichte werden als getrennte Kopien herausgegeben.
+Ein Study liest Inputs bei jeder Auflösung neu. Plotobjekte enthalten mutable
+Matplotlib-Objekte, die der Aufrufer schließen muss.
+
+\section{Diagnostischer Fehlervertrag}
+\texttt{FEMToolboxError} ist die fachliche Basis; \texttt{ValidationError}
+erweitert \texttt{ValueError} um \texttt{field}. Shape-/Unit-/Provenance-/Mesh-
+und Material-Unterklassen präzisieren Ursachen. \texttt{ModelSchemaError}
+nennt \texttt{path}. Dateien können zusätzlich normale I/O-Fehler erzeugen.
+\texttt{ThermalNullspaceError} und \texttt{ElectricGaugeError} unterscheiden
+unverankerte Komponenten und kompatible/inkompatible Lasten. Fehlende Lagerung
+wird abgelehnt; keine künstliche Stabilisierung oder automatische Gauge.
+Backendfehler werden sichtbar propagiert; kein stiller Ersatz einer angeforderten
+PETSc-Methode durch SciPy. Fehlendes Visualisierungs-Extra erzeugt einen
+konkreten Importfehler mit Installationshinweis.
+
+Study-Fälle können physisch fehlschlagen und persistieren diesen Status.
+Schema-, Pfad-, Lock- und korruptionsbedingte Fehler sind keine erfolgreich
+übersprungenen Fälle. Mengentabellen behalten fehlende Werte samt Grund;
+Surrogat/UQ akzeptieren keine unmarkierte Auswahl der verbliebenen Werte.
+\endgroup
