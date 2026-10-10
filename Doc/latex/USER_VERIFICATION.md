@@ -2,7 +2,9 @@
 
 Umfang: vorhandener M8-Funktionsstand und integrierte M9-Korrekturen,
 Basiscommit `9daeffd`, Paketversion 1.3.0. Kandidat, keine M9-Release-Freigabe.
-Der Unsicherheitsworkflow #64 ist ausdrücklich geplant; Messvalidierung #63
+Dieser historische #208-Nachweis dokumentiert den damaligen vorgezogenen Stand.
+Der Unsicherheitsworkflow #64 ist inzwischen im Kandidaten ergänzt; seine neuen
+Nachweise stehen in Doc/67_UNCERTAINTY_WORKFLOW.md. Messvalidierung #63
 wird weder durch synthetische Beispiele noch durch Surrogatfehler ersetzt.
 
 ## Quellen und Driftprüfung

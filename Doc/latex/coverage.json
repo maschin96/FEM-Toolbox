@@ -1352,6 +1352,70 @@
       "canonical": "Doc/evidence/issue63/screening-2026-10-10/relaxor-metadata-excerpt.json",
       "owner": "V&V- und Release-Verantwortliche",
       "status": "open"
+    },
+    {
+      "source": "Doc/67_UNCERTAINTY_WORKFLOW.md",
+      "canonical": "Doc/67_UNCERTAINTY_WORKFLOW.md",
+      "target": "Doc/latex/chapters/uncertainty-api.tex",
+      "owner": "Fachliche Maintainer",
+      "status": "open",
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application/studies.tex",
+        "recipes": "Doc/latex/recipes.json"
+      },
+      "api_coverage": {
+        "status": "documented-candidate",
+        "contract": "Doc/latex/uncertainty-api.json"
+      }
+    },
+    {
+      "source": "Doc/latex/uncertainty-api.json",
+      "canonical": "Doc/latex/uncertainty-api.json",
+      "target": "Doc/latex/chapters/uncertainty-api.tex",
+      "owner": "Fachliche Maintainer",
+      "status": "open",
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application/studies.tex",
+        "recipes": "Doc/latex/recipes.json"
+      },
+      "api_coverage": {
+        "status": "documented-candidate",
+        "contract": "Doc/latex/uncertainty-api.json"
+      }
+    },
+    {
+      "source": "examples/uncertainty_heat/README.md",
+      "canonical": "examples/uncertainty_heat/README.md",
+      "target": "Doc/latex/chapters/uncertainty-api.tex",
+      "owner": "Fachliche Maintainer",
+      "status": "open",
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application/studies.tex",
+        "recipes": "Doc/latex/recipes.json"
+      },
+      "api_coverage": {
+        "status": "documented-candidate",
+        "contract": "Doc/latex/uncertainty-api.json"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/uncertainty.py",
+      "canonical": "src/fem_toolbox/uncertainty.py",
+      "target": "Doc/latex/chapters/uncertainty-api.tex",
+      "owner": "Fachliche Maintainer",
+      "status": "open",
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application/studies.tex",
+        "recipes": "Doc/latex/recipes.json"
+      },
+      "api_coverage": {
+        "status": "documented-candidate",
+        "contract": "Doc/latex/uncertainty-api.json"
+      }
     }
   ],
   "planned": [
@@ -1367,7 +1431,8 @@
       "topic": "Unsicherheits- und Sensitivitätsstudien",
       "target": "Doc/latex/chapters/verification.tex",
       "status": "open",
-      "owner": "Fachliche Maintainer"
+      "owner": "Fachliche Maintainer",
+      "candidate_status": "implemented-verified"
     },
     {
       "issue": 65,

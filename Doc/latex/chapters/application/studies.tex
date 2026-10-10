@@ -96,12 +96,54 @@ unzureichender Rang und inkonsistente Einheiten dürfen nicht durch geschönte
 Berichte verdeckt werden. Konstante Zielgrößen sind möglich; deren relative
 Fehlerinterpretation benötigt den dokumentierten Maßstab.
 
-\section{Noch offener Unsicherheitsworkflow}
-M9-Issue 64 ist nicht implementiert. Es gibt hier keine ausführbare
-Unsicherheits-API, keine angenommenen Messunsicherheiten und keine aus
-fehlenden Messungen abgeleiteten Konfidenzintervalle. Der aktuelle
-Surrogat-Testfehler ist numerischer Approximationsfehler, keine experimentelle
-Unsicherheit. Nach \#64 sind Benutzerrezept mit ausdrücklich synthetischen
-Lerndaten, API-Referenz und Quellen-/Rezeptprüfungen gemeinsam nachzuziehen.
-Unabhängige Piezo-Messdaten samt Nutzungsrechten und Metadaten bleiben die
-Voraussetzung der experimentellen M9-Validierung (\#63).
+\section{Explizite Eingabeunsicherheit (M9)}
+\index{Unsicherheit}\index{Monte Carlo}
+\texttt{fem\_toolbox.uncertainty} stellt den generischen Workflow bereit.
+Der Anwender begründet jede Verteilung selbst: \texttt{Normal} fordert
+Mittelwert und positive Standardabweichung, \texttt{Uniform} wachsende
+Intervallgrenzen. Ein Intervall allein begründet keine Gleichverteilung.
+\texttt{UncertainParameter} bindet Name, skalaren M8-Zielpfad, SI-Einheit,
+Gesetz und Begründung. \texttt{SamplingPlan} erhält Größe und Seed.
+Standardmäßig sind Eingaben unabhängig; nichttriviale Korrelation wird
+nur für ausschließlich normale Eingaben unterstützt. Gemeinsame
+Stichprobenzeilen bleiben erhalten, ohne kartesisches Produkt.
+
+\texttt{UncertaintyStudy.run} nutzt M8 für stationäre Modellläufe,
+Provenienz und Wiederaufnahme. Jede Zielgröße benötigt ein explizites
+numerisches Fehlerbudget in ihrer SI-Einheit oder \texttt{None}, wenn unbekannt.
+Geänderte Modelle invalidieren die Ergebnisübernahme. Fehlerfälle bleiben
+sichtbar und verhindern eine unbenannte Teilmengenstatistik.
+
+Mittel, unverzerrte Varianz, empirische Quantile und Präfixkonvergenz stehen
+in \texttt{uncertainty.json}. Ein Quantilband schätzt Ausgangswahrscheinlichkeiten
+unter den angenommenen Gesetzen; es ist kein Konfidenzintervall oder
+Netzfehlernachweis. Numerischer Fehler und Modellabweichung werden nicht
+zur Eingabevarianz addiert. Lokale zentrale Sensitivitäten benötigen explizite
+Zentren und positive Schritte; der Anwender prüft Schrittverfeinerung.
+Der Surrogat-Testfehler bleibt ein getrennter Approximationsfehler.
+
+\subsection{Synthetisches Wärmerezept}
+\label{recipe:uncertainty-heat}
+128 Zeilen mit Seed 64: Quelle $Q\sim U(4,12)$ W/m$^3$ und Randtemperatur
+$T_0\sim N(300,1)$ K, unabhängig. Konstante Leitfähigkeit 2 W/(m K).
+Für den diskreten Tet4-Fall gilt $T_{\max}=T_0+Q/8$,
+$\mathbb E[T_{\max}]=301$ K und $\operatorname{Var}(T_{\max})=13/12$ K$^2$.
+Dies ist eine ausdrücklich synthetische Lernannahme, keine Messunsicherheit.
+Der Kontinuums-Netzfehler bleibt unbekannt.
+\begin{lstlisting}
+python -I examples/uncertainty_heat/run.py --output uq-output
+\end{lstlisting}
+Das Skript prüft jede diskrete FEM-Antwort mit $10^{-11}$ K und lokale
+Ableitungen $[1/8,1]$ mit $2\cdot10^{-10}$ in den jeweiligen SI-Einheiten.
+\texttt{sampling.json} enthält Gesetze, Begründungen, Korrelation, Versionen,
+Generator und Seed. Kataloge, Tabellen und Ergebnisbündel bleiben prüfbar.
+Ein identischer Folgeaufruf übernimmt erfolgreiche FEM-Fälle; ein anderer
+Samplingplan benötigt ein neues Verzeichnis. Fehlende Größen und unphysikalische
+Fälle sind sichtbar, kein erfolgreicher Unsicherheitsnachweis.
+\lstinputlisting{examples/uncertainty_heat/run.py}
+\lstinputlisting{examples/uncertainty_heat/model.toml}
+
+Experimentelle Validierung bleibt in \#63/\#65 außerhalb M9 offen.
+Gemäß genehmigter Neuplanung vom 10.10.2026 ersetzt dieses Rezept keine Messung.
+Der vollständige API-/Artefaktvertrag steht im API-Band und in
+\nolinkurl{Doc/67_UNCERTAINTY_WORKFLOW.md}.
