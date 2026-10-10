@@ -66,7 +66,10 @@
     "examples/transient_heat/body.msh": "9bb7c44ca294ae59bc7a24ab267b2d35e4b0eb9d508644ad503db7f94cc970fe",
     "examples/transient_heat/model.toml": "3c6344ec29358407c9fb1fff511c830afd748a721134fb1a1d1cf3ee23c9a1ff",
     "examples/transient_heat/run.py": "32997039a84bec21dfaa0d68cad4ff06db8adcc61500fb6f3601fe3e8e62f932",
-    "examples/transient_heat/source.csv": "83f0a188304cf463e97dae184ccb27e790333b0bfcee354cd3cdabe3bb25d434"
+    "examples/transient_heat/source.csv": "83f0a188304cf463e97dae184ccb27e790333b0bfcee354cd3cdabe3bb25d434",
+    "examples/uncertainty_heat/mesh.msh": "280468c994742594912ab6311ae1de85b108c6b079cc10375483485d4baf4c63",
+    "examples/uncertainty_heat/model.toml": "fb1221002108573da4b42d5c95acf5b90a1bcae47b433c14edf28fa93fd3d0e8",
+    "examples/uncertainty_heat/run.py": "30f26c19aa66b7cfe41820b5111ae675c1eb7bba44383e318db8688d3c9977c0"
   },
   "recipes": [
     {
@@ -625,6 +628,31 @@
       ],
       "runtime_budget_seconds": 90,
       "extra": "visualization"
+    },
+    {
+      "id": "uncertainty-heat",
+      "script": "examples/uncertainty_heat/run.py",
+      "command": [
+        "python",
+        "-I",
+        "examples/uncertainty_heat/run.py",
+        "--output",
+        "uncertainty-heat-output"
+      ],
+      "inputs": [
+        "examples/uncertainty_heat/mesh.msh",
+        "examples/uncertainty_heat/model.toml",
+        "examples/uncertainty_heat/run.py"
+      ],
+      "runtime_budget_seconds": 90,
+      "artifacts": [
+        "uncertainty-heat-output/sampling.json",
+        "uncertainty-heat-output/uncertainty.json",
+        "uncertainty-heat-output/verification.json"
+      ],
+      "expectation": "128 successful joint rows; exact discrete Tmax=T0+Q/8 within 1e-11 K; sensitivity [1/8,1] within 2e-10 in SI; mean 301 K within predeclared 6 standard errors",
+      "limits": "Synthetic distributions; unknown continuum error; no experimental validation or guaranteed quantile convergence",
+      "troubleshooting": "Use new directory for new sampling specification; inspect failed M8 cases and missing quantities; verify no writer before recovering stale lock"
     }
   ],
   "follow_up": {

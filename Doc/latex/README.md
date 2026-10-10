@@ -151,5 +151,5 @@ Rezepttext/Befehle/Sollwerte prüfen. `tests/unit/test_user_handbook_sources.py`
 erkennt fehlende oder abweichende Kopien und nicht eingebundene Programme.
 Nicht nur Hashes erneuern: die Rezepte aus dem gebauten Wheel ausführen und
 `USER_VERIFICATION.md` mit Runtime und Resultaten aktualisieren. Das PDF und
-der Quellenarchiv-Roundtrip sind anschließend erneut zu prüfen. Nach #64 den
+der Quellenarchiv-Roundtrip sind anschließend erneut zu prüfen. Bei Änderungen an #64 den
 synthetischen Unsicherheits-Lernworkflow samt Quellenprüfung ergänzen.

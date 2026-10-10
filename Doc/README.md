@@ -158,7 +158,7 @@ Verifikationsdokumente benennen ihren jeweiligen Nachweisumfang ausdrücklich.
 - [Benutzerband: Installation, Modelle, Rezepte und unabhängige Artefaktprüfung (#208)](latex/USER_VERIFICATION.md)
 
 API- und Nachweisband #209–#210 und die redaktionelle Gesamtabnahme #211
-bleiben offen; der Unsicherheitsworkflow wird nach #64 ergänzt.
+bleiben offen. Der generische Unsicherheitsworkflow #64 ist im Kandidatenstand ergänzt.
 
 ## M9 — Unsicherheit und offener experimenteller Folgeumfang
 
@@ -168,3 +168,5 @@ bleiben offen; der Unsicherheitsworkflow wird nach #64 ergänzt.
 M9/v1.4.0 umfasst den verifizierten generischen Unsicherheitsworkflow und die
 vollständige Gesamtdokumentation. #63/#65 bleiben außerhalb M9 offen; eine
 experimentelle Validierungsfreigabe wird nicht behauptet.
+
+- [Generischer Unsicherheitsworkflow: API, Annahmen und analytische Verifikation (#64)](67_UNCERTAINTY_WORKFLOW.md)
