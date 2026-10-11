@@ -4,7 +4,7 @@ Dieses Benutzerhandbuch beschreibt Version \ToolboxVersion\ am angegebenen
 Quellcommit. Es umfasst den integrierten M8-Funktionsstand und die vorhandenen
 M9-Korrekturen. API-Bezeichner bleiben englisch. Der Paketimport heißt
 \path{fem_toolbox}; die geplante Femantis-Umbenennung ist kein Bestandteil
-dieses Kandidaten. Die mathematischen Konventionen stehen im Theorieband;
+dieses Quellstands. Die mathematischen Konventionen stehen im Theorieband;
 Installation und wiederholbare Arbeitsschritte stehen hier.
 
 \section{Support und optionale Werkzeuge}
@@ -14,7 +14,7 @@ Installation und wiederholbare Arbeitsschritte stehen hier.
 Umgebung & Umfang und Nachweis\\\midrule
 CPython 3.11--3.13 & Unterstützter Paketbereich; Linux-CI prüft Kern,
 Wheel und sdist für jede Version.\\
-macOS arm64, 3.13 & Lokaler Kandidatennachweis mit frisch installiertem Wheel;
+macOS arm64, 3.13 & Lokaler Paketnachweis mit frisch installiertem Wheel;
 kein Versprechen für alle macOS-/Python-Kombinationen.\\
 Windows & Keine eigenständige CI-Matrix. Die angegebenen Interpreterpfade
 sind Installationshinweise, kein behaupteter Windows-Nachweis.\\
@@ -38,7 +38,7 @@ pip-Extra: native Bibliothek, Scalar-Typ und ABI müssen zusammenpassen.
 
 \section{Artefaktinstallation statt Quellbaumimport}
 Wheel und Handbuch-Quellenarchiv müssen zum gleichen geprüften Commit gehören.
-Der Kandidat wird über GitHub-CI-Artefakte bzw. lokal mit
+Der Paketstand wird über GitHub-Release-/CI-Artefakte bzw. lokal mit
 \path{python -m build} gebaut; das Handbuch behauptet keine Veröffentlichung
 von M9 auf PyPI. Nach dem Entpacken heißt das Verzeichnis \path{handbook}.
 Die Beispielprogramme sind Teil dieses Quellenarchivs, nicht des Wheels.
@@ -61,7 +61,7 @@ aktiviert werden. \path{-I} verhindert versehentlichen Import aus dem
 Arbeitsverzeichnis oder \path{PYTHONPATH}; bestehende Benutzereinstellungen
 ersetzen keinen isolierten Installationsnachweis.
 
-Für JPGs installiert man in derselben Umgebung zusätzlich das zum Kandidaten
+Für JPGs installiert man in derselben Umgebung zusätzlich das zum Paketstand
 gehörige Wheel mit Extra, nicht eine andere Paketversion:
 \begin{lstlisting}
 python -m pip install "/ABS/PATH/fem_toolbox-1.4.0-py3-none-any.whl[visualization]"

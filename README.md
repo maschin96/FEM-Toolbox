@@ -331,6 +331,6 @@ ergänzt den M8-Stand. Grenzen und Migration stehen in den Release Notes.
 Das [deutschsprachige M9-Handbuch](Doc/latex/README.md) umfasst Theorie,
 Benutzerrezepte, vollständige API-/Entwicklerreferenz und Verifikation/Unsicherheit.
 Ein Befehl baut Gesamtband, vier Einzelbände, Quellenarchiv und Prüfsummen.
-[Gesamtabnahme und Grenzen](Doc/latex/ACCEPTANCE.md). Die PDFs bleiben bis
-zur Veröffentlichung von v1.4.0 Kandidatenartefakte; experimentelle Validierung
-ist weiterhin offen.
+[Gesamtabnahme und Grenzen](Doc/latex/ACCEPTANCE.md). Finale PDF-/Quellenartefakte
+sind dem v1.4.0-Release zugeordnet; Standardbuilds bleiben Kandidaten.
+Experimentelle Validierung ist weiterhin offen.
