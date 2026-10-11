@@ -150,8 +150,7 @@ zusätzliches verpflichtendes Gate gemäß [ADR-053 und Vertrag](77_FEMANTIS_MIG
 Es entsteht kein konkurrierendes v2.0-Release. Alle v2.x-Versionen behalten den
 Legacy-Importadapter; früheste Entfernung ist v3.0.0 nach separater Entscheidung.
 Namens-, Registry-, Rechte-, Altimport-, Datenkompatibilitäts- und numerische
-Paritätsnachweise gehören vor Veröffentlichung zum vollständigen Gate. Das
-aktuelle Release 1.3.0 und historische Artefakte bleiben unverändert.
+Paritätsnachweise gehören vor Veröffentlichung zum vollständigen Gate. Bereits veröffentlichte Releases und historische Artefakte bleiben unverändert.
 
 ## Dokumentationsartefakte ab M9
 
@@ -160,7 +159,9 @@ Vor dem Release-Merge müssen vier Fachbände und Gesamthandbuch gemäß
 sein. `python scripts/build_handbook.py --self-test` baut fünf PDFs, prüft
 API-/V&V-Drift, Abdeckung, Referenzen, Schriften, drei negative Dokumentfälle
 und den Nachbau aus dem tatsächlichen Quellenarchiv. Der Checkoutzustand
-muss für finale Artefakte sauber sein; Commit und Version werden aus dem
+muss für finale Artefakte sauber sein. Der ausdrückliche Modus
+`--release` lehnt schmutzige oder unvollständig zugeordnete Quellen ab und
+kennzeichnet PDFs und Manifest als Release. Commit und Version werden aus dem
 tatsächlichen geprüften main-Ziel gelesen.
 
 Das Release enthält `main.pdf`, `theory.pdf`, `application.pdf`, `api.pdf`,

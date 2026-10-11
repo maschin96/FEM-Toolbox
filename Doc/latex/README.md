@@ -1,7 +1,7 @@
 # M9-Handbuch und PDF-Build (#206–#211)
 
-Status: Struktur und alle vier Fachbände sind ausgearbeitet;
-**Kandidat**, keine M9-Freigabe. [Gesamtabnahme #211](ACCEPTANCE.md)
+Status: Struktur und alle vier Fachbände sind vollständig abgenommen.
+Standardbuilds sind Kandidaten; der ausdrückliche Releasebuild gehört zu #66. [Gesamtabnahme #211](ACCEPTANCE.md)
 ordnet die abgeschlossenen Einzelbeiträge und Grenzen zu. Der Theorieband enthält zehn Kapitel,
 SI-/Voigt-Konventionen, starke/schwache Formen, Diskretisierung, Dynamik,
 Solver, Indikatoren und M8-Surrogate. Herkunft und fachliche Eigenprüfung:
@@ -24,7 +24,8 @@ python3 scripts/build_handbook.py --self-test
 Das Werkzeug baut die festgelegte Toolchain, prüft die Quellenmatrix und erzeugt
 `build/handbook/`: fünf PDFs, extrahierten PDF-Text, TeX-/Fixture-Logs,
 `manifest.json`, `handbook-source.tar.gz` und `SHA256SUMS`.
-PDFs und Quellen sind Kandidatenartefakte; #66 veröffentlicht erst den Release.
+Standardbuilds erzeugen Kandidatenartefakte; finale Releaseartefakte werden
+mit `--release` aus dem geprüften sauberen main-Stand gebaut (#66).
 Die Python-Kerninstallation bleibt unverändert und benötigt kein TeX.
 Bei Fehlern endet der Befehl ungleich null; ein älteres Erfolgsmanifest wird
 vor dem Neuaufbau entfernt. Im Output verbleibende Dateien sind nur zusammen
@@ -52,7 +53,7 @@ Der Container ist ausschließlich ein Dokumentationswerkzeug.
 Version stammt aus `pyproject.toml`, Commit und Quellzustand aus Git.
 `SOURCE_DATE_EPOCH` stammt aus dem Commit; `FORCE_SOURCE_DATE=1` verhindert
 laufzeitabhängige TeX-Datumsangaben. PDF, Buildmanifest und das im Quellenarchiv
-enthaltene `metadata.tex` nennen Version, Commit und Kandidatenstatus.
+enthaltene `metadata.tex` nennen Version, Commit und Veröffentlichungsstatus.
 Ein schmutziger Checkout ist sichtbar als `dirty` gekennzeichnet; die
 SHA-256-Liste der Eingabedateien im Manifest identifiziert den tatsächlichen
 LaTeX-Stand. Inhaltliche Reproduzierbarkeit ist erforderlich. Byteidentität
@@ -170,3 +171,12 @@ und vollständige visuelle Prüfung. Der Gesamtband enthält den vollständigen
 Quellenanhang; `coverage.json` unterscheidet dokumentierte Fachverträge,
 historische Nachweise, zukünftige Horizonte und offenen experimentellen
 Folgeumfang. Initiale Ownership-Statuswerte bleiben als Planungshistorie erhalten.
+
+## Finale Releaseartefakte
+
+`python scripts/build_handbook.py --self-test --release` baut ausdrücklich
+gekennzeichnete Release-PDFs und ein Release-Manifest. Dieser Modus verlangt
+einen sauberen Checkout, eine finale Version und vollständige Commit-Provenienz.
+Finale Artefakte werden aus dem tatsächlich geprüften main-Zielcommit erzeugt;
+[Freigabenachweis](../68_M9_RELEASE_VERIFICATION.md) und #66 verknüpfen Tag/Release.
+Der Standardbuild bleibt ein Kandidatenbuild, auch wenn die Paketversion final ist.

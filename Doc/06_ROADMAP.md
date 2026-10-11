@@ -216,10 +216,11 @@ Milestone-Release.
 
 M8-Pflichtumfang ist integriert und verifiziert. [Freigabestand v1.3.0](64_M8_RELEASE_VERIFICATION.md); keine transiente Studienausführung, Optimierung oder experimentelle Validierung.
 
-## M9-Dokumentationskandidat
+## M9 / v1.4.0
 
 Vier vollständige deutsche Fachbände und das Gesamthandbuch werden getrennt
 gebaut. [Gesamtabnahme und Herkunft](latex/ACCEPTANCE.md) ordnen die
 Quellenmatrix, Paket-/Rezeptprüfung und PDF-Eigenprüfung dem Kandidaten zu.
-Die Veröffentlichung v1.4.0 bleibt Release-Issue #66; der experimentelle
+[Finaler Freigabenachweis](68_M9_RELEASE_VERIFICATION.md) und Release-Issue #66
+verknüpfen Veröffentlichung und Artefakte; der experimentelle
 Folgeumfang #63/#65 bleibt unabhängig davon offen.

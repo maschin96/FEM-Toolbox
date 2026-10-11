@@ -1,7 +1,7 @@
 # Installation und erster Lauf
 
-Stand: 29. September 2026. Diese Anleitung richtet eine **Entwicklungsumgebung
-aus dem Repository** ein. Der M8-Release-Stand ist **v1.3.0**; der [Freigabebericht](Doc/64_M8_RELEASE_VERIFICATION.md) nennt den Veröffentlichungsstatus. Ein späterer
+Stand: 11. Oktober 2026. Diese Anleitung richtet eine **Entwicklungsumgebung
+aus dem Repository** ein. Der M9-Release-Stand ist **v1.4.0**; der [Freigabebericht](Doc/68_M9_RELEASE_VERIFICATION.md) nennt den Veröffentlichungsstatus. Ein späterer
 Checkout kann bereits weitere Entwicklungsänderungen enthalten.
 [Supportmatrix und Grenzen](Doc/57_M7_RELEASE_CANDIDATE.md).
 Ein PyPI-Release des aktuellen Checkouts wird hier nicht vorausgesetzt.
