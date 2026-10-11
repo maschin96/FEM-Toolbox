@@ -1,0 +1,20 @@
+\chapter{Rezept: adaptive Wärme}\label{recipe:adaptive-heat}
+Installiertes M10-Paket, Python 3.11--3.13; kein optionales Extra erforderlich.
+Der folgende kurze Installationslauf löst je vier adaptive und uniforme Stufen
+für einen glatten und einen lokalisierten analytischen Wärmefall:
+\begin{lstlisting}
+python -I examples/adaptive_heat/run_adaptive.py --steps 4 --output results/adaptive
+\end{lstlisting}
+Vier Stufen enden gezielt mit \path{step_budget}; das ist ein kontrollierter
+Abbruch. Vier Fall-/Strategie-JSON-Dateien speichern Netze und Rohfelder;
+\path{comparison.json} berichtet wahren Energiefehler, Indikator, Effektivität,
+DOFs, Bilanz, Netz-Hash und gesamte Solve-/Refine-Laufzeit. Ein voller Vergleich
+verwendet den Standard von sieben Stufen. Neue Ausgabeziele bewahren frühere
+Evidenz. Bei unerwartetem Status endet das Skript mit Fehler; Netz-/Material-/
+Randzuordnung und Diagnose sind dann zuerst zu prüfen.
+
+Die nach Pilotexploration eingefrorene Fehlergrenze 1.5 sqrt(W K) wird im vollen
+lokalisierten Nachweis mit 514 adaptiven gegenüber 729 uniformen DOFs erreicht.
+Das ist ein fallspezifischer Genauigkeits-/DOF-Vorteil, keine universelle
+Beschleunigung. Der kurze Vier-Stufen-Lauf behauptet diese Grenze noch nicht.
+\lstinputlisting{examples/adaptive_heat/run_adaptive.py}

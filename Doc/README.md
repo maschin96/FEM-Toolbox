@@ -177,3 +177,9 @@ vollständige Gesamtdokumentation. #63/#65 bleiben außerhalb M9 offen; eine
 experimentelle Validierungsfreigabe wird nicht behauptet.
 
 - [Generischer Unsicherheitsworkflow: API, Annahmen und analytische Verifikation (#64)](67_UNCERTAINTY_WORKFLOW.md)
+
+## M10 — Adaptive stationäre Wärme
+
+- [ADR-055: Remeshing-Machbarkeit und Adaptivitätsvertrag (#67)](69_ADAPTIVE_REMESHING_CONTRACT.md)
+- [Adaptive Wärme: API, Fehlerkontrolle und unabhängige Verifikation (#68/#69)](70_ADAPTIVE_HEAT_WORKFLOW.md)
+- [M10-Kandidat und offene endgültige Freigabe (#70)](71_M10_RELEASE_VERIFICATION.md)

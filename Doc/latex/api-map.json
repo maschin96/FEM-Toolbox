@@ -741,6 +741,35 @@
       "examples": [
         "examples/uncertainty_heat/run.py"
       ]
+    },
+    "fem_toolbox.adaptive": {
+      "classification": "mixed",
+      "stable_symbols": [
+        "AdaptiveOptions",
+        "HeatProblem",
+        "AdaptiveStage",
+        "AdaptiveHeatResult",
+        "solve_adaptive_heat"
+      ],
+      "rationale": "Additiver M10-Vertrag für konforme stationäre Tet4-Wärme; Hilfsvalidatoren bleiben Forschung/intern.",
+      "contract": "Doc/latex/chapters/api/adaptive.tex",
+      "examples": [
+        "examples/adaptive_heat/run_adaptive.py",
+        "tests/unit/test_adaptive_heat.py"
+      ]
+    },
+    "fem_toolbox.mesh.refinement": {
+      "classification": "mixed",
+      "stable_symbols": [
+        "Refinement",
+        "refine_tet4"
+      ],
+      "rationale": "Additiver M10-Vertrag für konforme stationäre Tet4-Wärme; Hilfsvalidatoren bleiben Forschung/intern.",
+      "contract": "Doc/latex/chapters/api/adaptive.tex",
+      "examples": [
+        "examples/adaptive_heat/run_adaptive.py",
+        "tests/unit/test_adaptive_heat.py"
+      ]
     }
   }
 }

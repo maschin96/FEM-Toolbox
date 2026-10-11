@@ -12,6 +12,140 @@ Einordnung: stable. Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9
 \begin{lstlisting}
 __version__ = version('fem-toolbox')
 \end{lstlisting}
+\section{fem\_toolbox.adaptive}
+\index{fem_toolbox.adaptive@adaptive}
+Einordnung: mixed. Additiver M10-Vertrag für konforme stationäre Tet4-Wärme; Hilfsvalidatoren bleiben Forschung/intern.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/adaptive.tex}. Beispiele/Tests:
+\nolinkurl{examples/adaptive_heat/run_adaptive.py}.
+\nolinkurl{tests/unit/test_adaptive_heat.py}.
+\subsection*{Datentypen und Konstanten}
+\begin{lstlisting}
+Status = Literal['tolerance', 'dof_budget', 'step_budget', 'stagnation', 'error']
+\end{lstlisting}
+\subsection{AdaptiveOptions}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: dataclass(frozen=True).
+\begin{quote}
+Indicator tolerance sqrt(W K), active DOFs and number of solved meshes.\par Stagnation means eta fails to fall by min\_reduction over stagnation\_window successive refinements. Tolerance is heuristic, never a certified error bound.
+\end{quote}
+\begin{lstlisting}
+tolerance: float = 0.001
+\end{lstlisting}
+\begin{lstlisting}
+max_steps: int = 10
+\end{lstlisting}
+\begin{lstlisting}
+max_dofs: int = 100000
+\end{lstlisting}
+\begin{lstlisting}
+fraction: float = 0.5
+\end{lstlisting}
+\begin{lstlisting}
+min_reduction: float = 0.01
+\end{lstlisting}
+\begin{lstlisting}
+stagnation_window: int = 3
+\end{lstlisting}
+\subsection{HeatProblem}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: dataclass(frozen=True).
+\begin{quote}
+Stationary SI data. Boundary keys are INPUT triangle row indices.\par Dirichlet values (K) may be scalar or point callable. Unlisted facets are insulated. Cellwise material and all facet maps inherit exactly through refinement parents; callable fields are reevaluated at physical points. Point-only constraints are deliberately excluded from this workflow.
+\end{quote}
+\begin{lstlisting}
+material: ThermalMaterial | Sequence[ThermalMaterial]
+\end{lstlisting}
+\begin{lstlisting}
+dirichlet: Mapping[int, ScalarField]
+\end{lstlisting}
+\begin{lstlisting}
+source: ScalarField = 0.0
+\end{lstlisting}
+\begin{lstlisting}
+outward_fluxes: Mapping[int, ScalarField] = field(default_factory=dict)
+\end{lstlisting}
+\begin{lstlisting}
+convection: Mapping[int, Convection] = field(default_factory=dict)
+\end{lstlisting}
+\subsubsection*{refined}
+\begin{lstlisting}
+refined(self, refinement: Refinement) -> HeatProblem
+\end{lstlisting}
+\subsection{mesh\_record}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+mesh_record(mesh: Mesh) -> dict[str, object]
+\end{lstlisting}
+\begin{quote}
+Canonical topology/selection record; hash includes external identity.
+\end{quote}
+\subsection{mesh\_hash}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+mesh_hash(mesh: Mesh) -> str
+\end{lstlisting}
+Zusätzlich gilt der oben verknüpfte manuelle Fachvertrag; kein eigener Quell-Docstring.
+\subsection{AdaptiveStage}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: dataclass(frozen=True).
+\begin{quote}
+Solved immutable mesh/result plus decision and parent evidence.
+\end{quote}
+\begin{lstlisting}
+mesh: Mesh
+\end{lstlisting}
+\begin{lstlisting}
+result: HeatResult
+\end{lstlisting}
+\begin{lstlisting}
+indicator: HeatIndicator
+\end{lstlisting}
+\begin{lstlisting}
+marked: tuple[int, ...]
+\end{lstlisting}
+\begin{lstlisting}
+cell_parents: tuple[int, ...] = ()
+\end{lstlisting}
+\begin{lstlisting}
+facet_parents: tuple[int, ...] = ()
+\end{lstlisting}
+\subsubsection*{to\_dict}
+\begin{lstlisting}
+to_dict(self) -> dict[str, object]
+\end{lstlisting}
+\subsection{AdaptiveHeatResult}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: dataclass(frozen=True).
+Zusätzlich gilt der oben verknüpfte manuelle Fachvertrag; kein eigener Quell-Docstring.
+\begin{lstlisting}
+stages: tuple[AdaptiveStage, ...]
+\end{lstlisting}
+\begin{lstlisting}
+status: Status
+\end{lstlisting}
+\begin{lstlisting}
+diagnostic: str
+\end{lstlisting}
+\begin{lstlisting}
+options: AdaptiveOptions
+\end{lstlisting}
+\subsubsection*{to\_dict}
+\begin{lstlisting}
+to_dict(self) -> dict[str, object]
+\end{lstlisting}
+\subsubsection*{export}
+\begin{lstlisting}
+export(self, path: str | Path) -> Path
+\end{lstlisting}
+Write deterministic strict JSON evidence (meshes and raw SI results).\par This records discrete results and solver input fingerprints. Rerunning callable data requires the original problem script, as for solve\_heat.
+\subsection{solve\_adaptive\_heat}
+stabiler Einstieg.
+\begin{lstlisting}
+solve_adaptive_heat(mesh: Mesh, problem: HeatProblem, options: AdaptiveOptions | None=None, *, remesher: Callable[..., Refinement]=refine_tet4) -> AdaptiveHeatResult
+\end{lstlisting}
+\begin{quote}
+Solve-estimate-mark-refine until tolerance, budget, stagnation or error.\par No partial or overbudget mesh is accepted. Validation/solver/adapter failures return error with previous solved stages intact; programming errors propagate. The remesher hook must return exact parent inheritance and conforming Tet4 geometry, obey max\_points, and preserve domain/groups (see refinement ADR).
+\end{quote}
 \section{fem\_toolbox.assembly}
 \index{fem_toolbox.assembly@assembly}
 Einordnung: research. Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.
@@ -1594,6 +1728,54 @@ reordered_tet10(nodes: NDArray[np.int64], corners: NDArray[np.int64]) -> NDArray
 \begin{quote}
 Transport all six edge nodes with a corner permutation.
 \end{quote}
+\section{fem\_toolbox.mesh.refinement}
+\index{fem_toolbox.mesh.refinement@mesh.\protect\allowbreak{}refinement}
+Einordnung: mixed. Additiver M10-Vertrag für konforme stationäre Tet4-Wärme; Hilfsvalidatoren bleiben Forschung/intern.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/adaptive.tex}. Beispiele/Tests:
+\nolinkurl{examples/adaptive_heat/run_adaptive.py}.
+\nolinkurl{tests/unit/test_adaptive_heat.py}.
+\subsection{Refinement}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: dataclass(frozen=True).
+\begin{quote}
+Child-to-input row maps; external IDs are deliberately not reused.
+\end{quote}
+\begin{lstlisting}
+mesh: Mesh
+\end{lstlisting}
+\begin{lstlisting}
+cell_parents: NDArray[np.int64]
+\end{lstlisting}
+\begin{lstlisting}
+facet_parents: NDArray[np.int64]
+\end{lstlisting}
+\subsection{validate\_tet4}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+validate_tet4(mesh: Mesh) -> None
+\end{lstlisting}
+\begin{quote}
+Require nonempty, complete affine Tet4 topology and nondegenerate cells.
+\end{quote}
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\subsection{refine\_tet4}
+stabiler Einstieg.
+\begin{lstlisting}
+refine_tet4(mesh: Mesh, marked: ArrayLike, *, max_points: int | None=None) -> Refinement
+\end{lstlisting}
+\begin{quote}
+Bisect each marked cell's longest edge, including its entire edge star.\par Edges are chosen on the INPUT mesh, ties by sorted node pair, processed in sorted order. Every incident volume and boundary simplex is split at the same midpoint, so no hanging nodes arise. Closure may refine unmarked cells. Cell/facet tags and overlapping named sets are inherited via parent rows. Geometry and material interfaces are preserved exactly for straight elements. No smoothing, coarsening, curved surfaces or uniform shape-quality bound. max\_points limits active thermal DOFs; exceeded budget leaves input untouched. External IDs are removed: child identity is given by the returned parent maps.
+\end{quote}
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\subsection{validate\_refinement}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+validate_refinement(original: Mesh, result: Refinement) -> None
+\end{lstlisting}
+\begin{quote}
+Reject invalid parentage, domain changes and lost physical groups.\par Children must lie in their parent simplex; summed child measures must equal each parent measure. Together with complete conforming boundary topology this checks the edge-bisection adapter contract, not arbitrary mesh intersection.
+\end{quote}
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
 \section{fem\_toolbox.mesh.topology}
 \index{fem_toolbox.mesh.topology@mesh.\protect\allowbreak{}topology}
 Einordnung: research. Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.

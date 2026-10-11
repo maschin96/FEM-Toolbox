@@ -224,3 +224,9 @@ Quellenmatrix, Paket-/Rezeptprüfung und PDF-Eigenprüfung dem Kandidaten zu.
 [Finaler Freigabenachweis](68_M9_RELEASE_VERIFICATION.md) und Release-Issue #66
 verknüpfen Veröffentlichung und Artefakte; der experimentelle
 Folgeumfang #63/#65 bleibt unabhängig davon offen.
+
+## M10 / v1.5.0 — Implementierter Entwicklungskandidat
+
+`1.5.0.dev1` enthält konforme Tet4-Verfeinerung und kontrollierte stationäre
+Wärmeadaptivität (#67–#69). [Kandidatennachweis und offene Release-Gates](71_M10_RELEASE_VERIFICATION.md).
+Die endgültige Freigabe #70, main-CI und der v1.5.0-Tag sind noch offen.

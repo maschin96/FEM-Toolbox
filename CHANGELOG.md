@@ -4,7 +4,18 @@ Alle wesentlichen Änderungen dieses Projekts werden hier dokumentiert. Das
 Format orientiert sich an [Keep a Changelog](https://keepachangelog.com/) und die
 Versionierung an [Semantic Versioning](https://semver.org/).
 
-## Unreleased
+## Unreleased — 1.5.0.dev1 (M10)
+
+### Added
+
+- Konforme lokale Tet4-Kantenverfeinerung mit Erhalt von Rand-/Materialtags und benannten Gruppen (#67).
+- Kontrollierter adaptiver stationärer Wärmeablauf mit Toleranz-, DOF-, Schritt-, Stagnations- und Fehlerstatus sowie deterministischem Stufenexport (#68).
+- Unabhängige glatte/lokalisierte Fehlervergleiche gegen uniforme Verfeinerung, analytische Materialgrenzen- und Randwertnachweise (#69).
+
+### Limits
+
+- Residualindikator ist heuristisch; ausschließlich affine Tet4 und stationäre Wärme.
+- Freigabe v1.5.0, main-CI und Tag bleiben bis zum vollständigen Release-Gate #70 offen.
 
 ## [1.4.0] - 2026-10-11
 

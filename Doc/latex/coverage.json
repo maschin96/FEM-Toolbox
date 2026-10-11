@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "scope": "M0–M9 supported code and documentation; experimental validation deferred; M10–M14 future/historical only",
+  "scope": "M0–M10 implementation candidate; M10 release gate pending; experimental validation deferred",
   "entries": [
     {
       "source": "Doc/01_SCOPE_AND_REQUIREMENTS.md",
@@ -3322,6 +3322,48 @@
         "disposition": "Release-Nachweis / Freigabereihenfolge und Grenzen",
         "evidence": "Doc/68_M9_RELEASE_VERIFICATION.md"
       }
+    },
+    {
+      "source": "src/fem_toolbox/adaptive.py",
+      "target": "Doc/latex/chapters/api/adaptive.tex",
+      "canonical": "src/fem_toolbox/adaptive.py",
+      "owner": "M10 Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/69_ADAPTIVE_REMESHING_CONTRACT.md",
+      "target": "Doc/latex/chapters/theory/adaptive.tex",
+      "canonical": "Doc/69_ADAPTIVE_REMESHING_CONTRACT.md",
+      "owner": "M10 Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/70_ADAPTIVE_HEAT_WORKFLOW.md",
+      "target": "Doc/latex/chapters/verification/adaptive.tex",
+      "canonical": "Doc/70_ADAPTIVE_HEAT_WORKFLOW.md",
+      "owner": "M10 Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/evidence/m10/comparison.json",
+      "target": "Doc/latex/chapters/verification/adaptive.tex",
+      "canonical": "Doc/evidence/m10/comparison.json",
+      "owner": "M10 Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/evidence/m10/environment.json",
+      "target": "Doc/latex/chapters/verification/adaptive.tex",
+      "canonical": "Doc/evidence/m10/environment.json",
+      "owner": "M10 Maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/71_M10_RELEASE_VERIFICATION.md",
+      "target": "Doc/latex/chapters/verification/adaptive.tex",
+      "canonical": "Doc/71_M10_RELEASE_VERIFICATION.md",
+      "owner": "M10 Maintainer",
+      "status": "open"
     }
   ],
   "planned": [

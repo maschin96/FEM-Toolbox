@@ -221,7 +221,7 @@ elektrisches Potential `phi` mit feldweiser Freiheitsgradverwaltung.
 | M7 | v1.2.0 | PETSc-Backend, Tet10, Wärmeindikatoren und gemessene Skalierung | Freigegeben |
 | M8 | v1.3.0 | Parameterstudien, Visualisierung und Surrogatmodelle | Implementiert und verifiziert; Release-Abschluss siehe Freigabebericht |
 | M9 | v1.4.0 | Verifizierter Unsicherheitsworkflow und Gesamtdokumentation | Implementiert und verifiziert; Veröffentlichung siehe Freigabebericht |
-| M10 | v1.5.0* | Kontrollierte adaptive Netzstudien | Geplant |
+| M10 | v1.5.0* | Kontrollierte adaptive Netzstudien | Implementierter Entwicklungskandidat; Release-Gate offen |
 | M11 | Offen | Topologieoptimierung | Grober Horizont |
 | M12 | Offen | RANS-CFD mit Fluid-Struktur-Kopplung | Grober Horizont |
 
@@ -334,3 +334,18 @@ Ein Befehl baut Gesamtband, vier Einzelbände, Quellenarchiv und Prüfsummen.
 [Gesamtabnahme und Grenzen](Doc/latex/ACCEPTANCE.md). Finale PDF-/Quellenartefakte
 sind dem v1.4.0-Release zugeordnet; Standardbuilds bleiben Kandidaten.
 Experimentelle Validierung ist weiterhin offen.
+
+## Adaptive stationäre Wärme (M10-Kandidat)
+
+`fem_toolbox.adaptive` bietet `HeatProblem`, `AdaptiveOptions` und
+`solve_adaptive_heat` für konforme Tet4-Verfeinerung. Material- und Randgruppen
+werden vererbt; Budgets, Stagnation und Fehler liefern eindeutige Endstatus.
+Die Indikatortoleranz ist keine garantierte Fehlerschranke.
+
+```sh
+python examples/adaptive_heat/run_adaptive.py --output results/adaptive_heat
+```
+
+Das Beispiel vergleicht sieben adaptive und uniforme Stufen mit zwei analytischen
+Referenzen. [Vertrag](Doc/69_ADAPTIVE_REMESHING_CONTRACT.md),
+[API und Verifikation](Doc/70_ADAPTIVE_HEAT_WORKFLOW.md).
