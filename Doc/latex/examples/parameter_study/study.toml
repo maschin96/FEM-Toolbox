@@ -1,0 +1,7 @@
+study_schema_version = 1
+model = "model.toml"
+[[parameters]]
+name = "conductivity"
+target = "materials.T.thermal.conductivity"
+unit = "W/(m K)"
+values = [2.0, 4.0]

@@ -1,0 +1,118 @@
+\chapter{Numerische Kriterien und Fehlertrennung}
+\index{Konvergenz}\index{Residuum}\index{Bilanz}
+\section{Normen und beobachtete Ordnung}
+Für ein skalares Feld $w$ und seine diskrete Approximation $w_h$ seien
+\begin{align}
+ e_{L^2}&=\left(\int_\Omega |w-w_h|^2\,dV\right)^{1/2},\\
+ e_{H^1}&=\left(\int_\Omega |\nabla w-\nabla w_h|^2\,dV\right)^{1/2}.
+\end{align}
+Die zweite Größe ist ein Halbnormfehler. Relative Fehler teilen durch die
+entsprechende Norm der exakten Referenz; eine verschwindende Referenznorm
+benötigt einen gesonderten absoluten Vergleich. Für Vektoren wird komponentenweise
+summiert, für Gradienten die Frobeniusnorm verwendet. Ein Knotenmaximum ist
+eine andere Zielgröße und darf nicht als integrierte Norm bezeichnet werden.
+
+Für zwei aufeinanderfolgende Netze ergibt sich
+\begin{equation}
+ p_{h,H}=\frac{\log(e_H/e_h)}{\log(H/h)}.
+\end{equation}
+Der Nenner muss zum tatsächlichen Verfeinerungsfaktor passen. Die letzten zwei
+Intervalle einer vorab gewählten Viernetzfolge dienen in den glatten räumlichen
+Tests zur Prüfung der asymptotischen Ordnung. Positivität und monotone
+Fehlerabnahme werden zusätzlich geprüft; nachträglich ausgewählte günstige
+Intervalle wären kein gleichwertiger Nachweis.
+
+\section{Räumliche Konvergenz}
+Die glatten Tet4-Referenzen erwarten $L^2$-Ordnung 2 und $H^1$-Ordnung 1.
+Typische vorab festgelegte Fenster sind $[1.8,2.2]$ und $[0.85,1.15]$.
+Materialgrenzen und gekoppelte Tests besitzen ihre eigenen dokumentierten
+Fenster; beispielsweise nutzt der historische Thermopiezo-Modelltest
+$[1.75,2.25]$, $[0.75,1.25]$ und für den Energiefehler $[1.5,2.5]$.
+Diese Kriterien werden nicht auf einen anderen Fall übertragen oder gelockert.
+
+Tet10 nutzt in den glatten Feldtests vier Netze mit $N=1,2,3,4$ und die Fenster
+$[2.7,3.3]$ für $L^2$ sowie $[1.8,2.2]$ für $H^1$. Der historische
+M7-Abnahmebericht \path{Doc/55_TET10_ACCEPTANCE.md} dokumentiert am
+28. September 2026 elf Konvergenztests. Sein damaliger Commit und seine damalige
+Suite sind historische Nachweise, keine aktuelle Gesamtzahl.
+
+\begin{table}[htbp]\centering
+\begin{tabular}{lrr}\toprule
+Historischer letzter Schritt $N=3\to4$ & $p_{L^2}$ & $p_{H^1}$\\\midrule
+Wärme / Elektrostatik & 2.985 & 1.978\\
+Elastizität / thermomechanisches $u$ & 2.989 & 1.980\\
+Piezoelektrisches $u$ & 3.007 & 1.994\\
+Thermopiezoelektrisches $u$ & 3.008 & 1.994\\
+Piezoelektrisches $\phi$ / thermisches $T$ & 2.985 & 1.978\\
+\bottomrule\end{tabular}
+\caption{Gerundete Werte des versionierten M7-Berichts; glatte synthetische Felder.}
+\end{table}
+Sie sind keine Fehlergrenzen für reale Materialübergänge, Singularitäten an
+Einspannungen oder beliebige unstrukturierte Netze.
+
+\section{Zeitfehler und dynamische Zielgrößen}
+Backward Euler besitzt hier Zeitordnung 1. Ein Tet10-Test mit exakt räumlich
+darstellbarem $T=t^2$ trennt sie vom Raumfehler: bei 10, 20, 40 und 80 Schritten
+ist der Endzeitfehler proportional zu $1/n$, mit Ordnungsfenster $[0.99,1.01]$.
+Der Tet4-Abkühlungsfall verwendet das eigene Fenster $[0.9,1.1]$.
+Kapazitäts- und Leistungsbilanz sowie zeitabhängige Randereignisse werden
+gesondert geprüft. Ein Zeitkonvergenztest mit festem grobem Netz kann sonst
+auf einem räumlichen Fehlerplateau enden.
+
+Newmark mit $\beta=1/4$, $\gamma=1/2$ wird am analytischen Ein-DOF-Oszillator
+geprüft. Bei Halbierung des Zeitschritts soll das Verhältnis der Fehler im
+vorgegebenen Test zwischen 3.8 und 4.2 liegen, entsprechend Ordnung 2.
+Energie und dynamisches Residuum sind zusätzliche Kriterien, keine alternative
+Definition derselben Ordnung. Bewegte Dirichlet-Ränder und Lastwechsel
+brauchen die korrekte Anfangsbeschleunigung und die konsistenten Randterme.
+
+Tet10-Moden und harmonische Stabantworten zeigen für bestimmte skalare
+Fehler der Frequenzen oder Endverschiebungen höhere Ordnungen. Das vorgegebene Fenster
+$[3.5,4.5]$ beschreibt diese Zielgrößen und darf nicht als $H^1$-Ordnung 4
+des gesamten Feldes ausgegeben werden. Nullfrequenz, Phasenlage, Ladungsbilanz
+und Resonanzablehnung bleiben eigenständige Prüfungen.
+
+\section{Residuen, Reaktionen und physikalische Bilanzen}
+Für das freie lineare System lautet ein normierter Rückwärtsfehler
+\begin{equation}
+ \eta=\frac{\|Kx-f\|}{\|K\|\,\|x\|+\|f\|}.
+\end{equation}
+Ein kleines $\eta$ bedeutet, dass ein nahes algebraisches Problem gelöst wurde.
+Die Konditionierung bestimmt, wie daraus ein Vorwärtsfehler entsteht.
+Reaktionen werden aus dem ursprünglichen System vor Dirichlet-Elimination
+berechnet. Bei skalierten gekoppelten Systemen muss für physikalische Residuen
+auf die ursprünglichen Felder und Einheiten zurückgegangen werden.
+
+Wärmebilanzen vergleichen Leistungen in W, Elektrostatik Ladungen in C und
+Mechanik Kräfte in N bzw. Momente in N\,m. Energie in J ist eine andere Größe.
+Ein gemeinsamer absoluter Grenzwert für gemischte Feldkomponenten hätte keine
+einheitliche physikalische Bedeutung. Das Vorzeichen richtet sich nach dem
+im Theorieband festgelegten äußeren Fluss und den Originalreaktionen.
+
+Die Toleranzwahl berücksichtigt analytische Genauigkeit, Quadratur,
+Rundung in Gleitkommaarithmetik, Größenordnung und Konditionierung. Ein Einheitsproblem mit
+O(1)-Matrizen kann $10^{-12}$ tragen; starke Materialkontraste und gekoppelte
+Blöcke benötigen eine eigene Skalierungsbetrachtung. Die historischen
+Benchmarkbilanzen verlangen $10^{-9}$ in ihrer jeweiligen SI-Einheit.
+Das ist weder eine universelle Solvervorgabe noch ein Netzfehlerbudget.
+
+\section{Surrogatfehler und stationäre Studien}
+\index{Surrogat!Nachweis}
+Die M8-Studientests sichern Kennwertdefinitionen, Einheiten, Modell- und
+Tabellenhashes, Fehlerstatus und Wiederaufnahme. Sie belegen nicht automatisch
+die Netzunabhängigkeit jeder in einer Studie erzeugten Antwort.
+
+Ein Surrogat benötigt getrennte Trainings- und Testfälle. Gleiche
+Parametergruppen dürfen nicht über beide Mengen verteilt werden; eine
+Trainingsgüte ist kein unabhängiger Testfehler. Die bestehenden Tests prüfen
+analytische Interaktionen und einen echten FEM-Durchlauf mit sechs Trainings-
+und zwei zurückgehaltenen Fällen. Ein absichtlich zu schwaches lineares Modell
+für eine quadratische Antwort muss die Abweichung sichtbar berichten.
+
+MAE, RMSE und maximaler absoluter Fehler besitzen die Einheit der Zielgröße.
+Sie beschreiben den gewählten Testbestand. Ein Fehlerbalken für alle zukünftigen
+Parameter folgt daraus nicht. Die zulässige Parameterbox garantiert außerdem
+keine Abdeckung ihres gesamten Inneren durch Trainingspunkte.
+Rangdefizite, ungültige Zeilen und Extrapolation werden ausdrücklich behandelt.
+Surrogatfehler, FEM-Diskretisierungsfehler und experimentelle Modellabweichung
+bleiben drei unterschiedliche Nachweise.

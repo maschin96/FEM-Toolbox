@@ -1,0 +1,71 @@
+\begingroup
+\raggedright
+\section{Unsicherheits-API und Artefakte (M9 / 64)}
+\index{SamplingPlan}\index{UncertaintyStudy}\index{Sensitivität}
+Modul \texttt{fem\_toolbox.uncertainty}; der Paketroot bleibt unverändert.
+
+\paragraph{Normal} \texttt{Normal(mean, standard\_deviation)}. Endliche reelle SI-Skalare,
+positive Standardabweichung, unbeschränktes Normalgesetz, unveränderlicher Datensatz.
+\paragraph{Uniform} \texttt{Uniform(lower, upper)}. Endliches wachsendes SI-Intervall mit endlicher
+Breite, unveränderlicher Datensatz. Keine automatische Rechtfertigung des Gesetzes.
+\paragraph{UncertainParameter} Name (ASCII), vorhandener skalarer M8-Zielpfad,
+SI-Einheit, Normal-/Uniformgesetz und Pflichtbegründung. Frozen-Datensatz.
+\subsubsection*{SamplingPlan}
+\begin{lstlisting}
+SamplingPlan(parameters, *, size, seed, correlation=None)
+\end{lstlisting}
+$n\ge2$, nichtnegativer Integer-Seed, eindeutige Namen/Ziele. Reelle
+$R\in\mathbb R^{p\times p}$ symmetrisch, PSD, Einserdiagonale; absolute
+Rundungstoleranz $10^{-12}$. Nichtidentität nur für alle-normal; singulär erlaubt.
+\texttt{sample()} liefert bytebasiertes unveränderliches float64$[n,p]$.
+\texttt{to\_document()} liefert getrennte veränderbare JSON-Metadaten.
+\subsubsection*{Stichprobenstatistik}
+\begin{lstlisting}
+summarize_samples(values, *, unit, numerical_error_bound,
+                  quantile_probabilities=(.025,.5,.975))
+\end{lstlisting}
+Reeller endlicher Vektor $[n\ge2]$, explizite SI-Einheit. Budget nichtnegativ
+oder \texttt{None}; geordnete Quantile in $[0,1]$, Default $(.025,.5,.975)$.
+Mittel, unverzerrte Varianz (Einheit$^2$), linear interpolierte Quantile und
+Präfixmomente; keine Konfidenz-/Fehlergrenze. Budget bleibt getrennt.
+\subsubsection*{Lokale Sensitivität}
+\begin{lstlisting}
+local_sensitivity(evaluate, *, center, steps)
+\end{lstlisting}
+Reelle endliche Vektoren $[p]$, positive unterscheidbare Perturbationen;
+genau $2p$ skalare Callback-Ausgaben. Lokaler zentraler Gradient;
+Einheit Ausgabe/Eingabe. Callbackfehler propagieren.
+\subsubsection*{UncertaintyStudy}
+\begin{lstlisting}
+UncertaintyStudy(plan, *, model, root)
+run(output, *, quantities, numerical_error_bounds,
+    sensitivity_center=None, sensitivity_steps=None)
+\end{lstlisting} Relatives stationäres TOML-Modell
+mit M8-Pfad-/SI-Vertrag. Die Methode \texttt{run}
+fordert eindeutige Quantity-Definitionen und Budget/None für jedes Ziel;
+Sensitivitätszentrum/-schritte müssen gemeinsam $[p]$ sein.
+
+Bool/complex/NaN, falsche Formen, doppelte Identitäten und unzulässige
+Verteilungen erzeugen \texttt{ValueError}. M8-Schemafehler propagieren;
+physisch ungültige Fälle bleiben als Ergebnisstatus sichtbar. I/O-/Hashfehler
+propagieren, konkurrierende Writer erzeugen \texttt{FileExistsError}.
+
+Schema 1: \texttt{sampling.json} hält Gesetze, Begründungen, Reihenfolge, $R$,
+PCG64/Transformationsmethode, $n$, Seed, NumPy-/SciPy-Versionen fest.
+\texttt{uncertainty.json} enthält Samplingprovenienz, Little-Endian-float64-
+Stichprobenhash, Quantity-Verträge, gemeinsame Zeilen mit M8-Provenienz,
+Katalog-/Tabellenpfaden und Hashes, Statistik sowie Sensitivitätsbelege.
+\texttt{complete=false} unterdrückt Statistik, sobald ein Fall oder eine Größe
+fehlt; keine still ausgewählte Restmenge. Misslungene zusätzliche Perturbationen
+setzen \texttt{sensitivity\_status=incomplete}. Geänderte Modelle invalidieren
+M8-Ergebnisübernahme; geänderte Samplingpläne brauchen neue Ausgaben.
+\texttt{.uncertainty.lock} schützt Writer. Nach hartem Abbruch vor manueller
+Lock-Entfernung einen verbleibenden Prozess ausschließen.
+
+Die neue öffentliche Modulgruppe und der Quellenvertrag sind in der
+Abdeckungsmatrix enthalten. Signaturdrift dieses Moduls wird durch den AST-Vertrag
+\nolinkurl{Doc/latex/uncertainty-api.json} geprüft (Funktionen, Felder und Methoden).
+Das vollständige API-Inventar aller Module folgt in \#209. Das Benutzerrezept und die unabhängigen
+analytischen Tests gehören bereits zum Pflichtumfang von \#64.
+
+\endgroup

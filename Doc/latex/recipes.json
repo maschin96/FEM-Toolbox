@@ -1,0 +1,661 @@
+{
+  "schema": 1,
+  "candidate_version": "1.3.0",
+  "base_commit": "9daeffd",
+  "cwd": "extracted handbook directory, with separately installed wheel",
+  "inputs": {
+    "examples/elastic_tension.py": "eccc13e97c3c84e5ff9eee8eccdfb569edfadad99b511bfde13facca224dbc1c",
+    "examples/field_visualization/case.toml": "239f08e7e93d950c52fae1de5f53a2603081e05e098fca5df75fbbde987a052e",
+    "examples/field_visualization/mesh.msh": "280468c994742594912ab6311ae1de85b108c6b079cc10375483485d4baf4c63",
+    "examples/field_visualization/run.py": "12e17a9a6bcd157f8d583c128e80ab255518391111c875d18083582f811bd65b",
+    "examples/parallel_plate.py": "906de6f9e04e16db3e77cfbc59b3b9d2213dcf4540dd54ac3fa017120ca1a677",
+    "examples/parameter_study/mesh.msh": "280468c994742594912ab6311ae1de85b108c6b079cc10375483485d4baf4c63",
+    "examples/parameter_study/model.toml": "fb1221002108573da4b42d5c95acf5b90a1bcae47b433c14edf28fa93fd3d0e8",
+    "examples/parameter_study/report.py": "1d0ab7ca114e7cccbc0b158210568bd2b25ffea60edab90db1dc11a365c1b0b7",
+    "examples/parameter_study/run.py": "fdf3a4bfbcd0c9f0c86ea4d251e16ef09b1d0df17ce7c5eab965a94927cdd706",
+    "examples/parameter_study/study.toml": "65027edb8d23a10d24463715ac020bc69bcf8b6eaf7e99bc58051aa058e185c6",
+    "examples/piezo_d33.py": "eea0580937f8501a34a81d01166faecdc8150b831a94f4304b2aa31a43817f06",
+    "examples/piezo_dynamics/drive.csv": "f593c5e0da53687a8ba894e87a343f1b616266d855e7fc365c16a2eaf120a1ff",
+    "examples/piezo_dynamics/mesh.msh": "280468c994742594912ab6311ae1de85b108c6b079cc10375483485d4baf4c63",
+    "examples/piezo_dynamics/model.toml": "4e1b2682318932689f2f281709acfa1d5671d645d0a13dc3fa42cc564b206034",
+    "examples/piezo_dynamics/run.py": "135dabf44ead1d7f0ddd3a82224b32d82f19f9b74dfe29480849084af0192256",
+    "examples/steady_heat.py": "9a574006a4d3a7ab6f904a672e43dcad128e64aab5d169feb04f4b221fc940f7",
+    "examples/study_recipes/heat/mesh.msh": "280468c994742594912ab6311ae1de85b108c6b079cc10375483485d4baf4c63",
+    "examples/study_recipes/heat/model.toml": "fb1221002108573da4b42d5c95acf5b90a1bcae47b433c14edf28fa93fd3d0e8",
+    "examples/study_recipes/heat/study.toml": "65027edb8d23a10d24463715ac020bc69bcf8b6eaf7e99bc58051aa058e185c6",
+    "examples/study_recipes/piezo/long.msh": "0a33a4fd16d26025b02a3e598bb0181444b24abe2541d7234780939685745ac3",
+    "examples/study_recipes/piezo/model.toml": "cc954057aba2ec65db33bd6335f1f4b2c51455166228f231b0e2ca851794fccf",
+    "examples/study_recipes/piezo/short.msh": "afc5402226a11f3a15d04c26396e5c87c467b2cf2b28d94b1048c19cf4f368ca",
+    "examples/study_recipes/piezo/study.toml": "751ea000b5e30809bb1261995478c6cbae9fbc5c866833f5079845d213cb9c2e",
+    "examples/study_recipes/run.py": "f8e34f99c05d83fa813106858ae7ebeff23aa523e2f9ffaf641947aa58228e94",
+    "examples/surrogate_heat/mesh.msh": "280468c994742594912ab6311ae1de85b108c6b079cc10375483485d4baf4c63",
+    "examples/surrogate_heat/model.toml": "fb1221002108573da4b42d5c95acf5b90a1bcae47b433c14edf28fa93fd3d0e8",
+    "examples/surrogate_heat/run.py": "d55080ca24bf620a388b3e42e78b0225afc1eb4949f67e20b9035d2f3c23c48d",
+    "examples/surrogate_heat/study.toml": "fedd9b58c80a0368496de694d73ad46afdd3c26db07e1f61a48866fd90b621ec",
+    "examples/tet10_elasticity/body.msh": "ada9a6ae4ab8d49ee4329b487d4dad05eb6c48b8d6702c16cec6e9e637f4f770",
+    "examples/tet10_elasticity/model.toml": "8af4de1a833092c6d43f043f263f25fe81747ae04d01728fbaf9ee677f1e9e67",
+    "examples/tet10_elasticity/run.py": "87260bdf69ad0d03d413b5c69ad2ca2fcd11f1af9e41d554fc4b87025f90db87",
+    "examples/tet10_electrostatics/body.msh": "ada9a6ae4ab8d49ee4329b487d4dad05eb6c48b8d6702c16cec6e9e637f4f770",
+    "examples/tet10_electrostatics/model.toml": "d688884d2cd7e6759f3fbc922b70d8f9333eaa8462769e37d2a619b119343307",
+    "examples/tet10_electrostatics/run.py": "a5863c1b06489f9caecce108353b5e414480ff6cfd6d68feb9fb405f84b2f0e0",
+    "examples/tet10_harmonic/body.msh": "0b63da22ceee6e5b53e4eb360cce2bf59aef32b61ac0f1bb56665921ffe3a8da",
+    "examples/tet10_harmonic/model.toml": "b31f054adb256166967df5f8267c95e1c8e9d7686d787472d9d86e7e641d702b",
+    "examples/tet10_harmonic/run.py": "754ac5bfee2d31f36b221beae4de6cc7964a8d40ab838595fdc62e448d904372",
+    "examples/tet10_heat/body.msh": "ada9a6ae4ab8d49ee4329b487d4dad05eb6c48b8d6702c16cec6e9e637f4f770",
+    "examples/tet10_heat/run.py": "800750d4ed7a838d60120cfa2f367d40a176cb0bb24964fce4186ddc2e837855",
+    "examples/tet10_heat/stationary.toml": "a3c0168ddb7bccc2965b632ed476399c2b648aeb8ccc223a407628ee8c87cb32",
+    "examples/tet10_heat/transient.toml": "cdf30d0a05cf1876eb490fedbb81ea1372bc3b37650d129252fa94497e3a2ff6",
+    "examples/tet10_modes/body.msh": "0b63da22ceee6e5b53e4eb360cce2bf59aef32b61ac0f1bb56665921ffe3a8da",
+    "examples/tet10_modes/model.toml": "fbf99249d580debf26e6d08bda9bc2caebd860a8c37c3f8e8c20369fe3fe49d6",
+    "examples/tet10_modes/run.py": "5c60ffa2b2b4d90d5f01c6a9469446179755c91010f7915762e0faa900aecfa5",
+    "examples/tet10_newmark/body.msh": "0b63da22ceee6e5b53e4eb360cce2bf59aef32b61ac0f1bb56665921ffe3a8da",
+    "examples/tet10_newmark/model.toml": "660da37c4e1125ea75601bf8469b15ff1dba3b6aab0251e30e771a3b85fc5673",
+    "examples/tet10_newmark/run.py": "d1d6681c31e929fef37cfe85863eb631a849e63c751cf1d3670d28163741cdf8",
+    "examples/tet10_piezoelectric/body.msh": "ada9a6ae4ab8d49ee4329b487d4dad05eb6c48b8d6702c16cec6e9e637f4f770",
+    "examples/tet10_piezoelectric/model.toml": "9728aab365e28f5d7eb7b3db13de647b2037455eddbdc31bfea880ccac9b4aac",
+    "examples/tet10_piezoelectric/run.py": "ad97b60e8724e4f2a8374482c6864cbeabfefdd296ca63b155b4d92d1f4b6576",
+    "examples/tet10_thermomechanics/body.msh": "ada9a6ae4ab8d49ee4329b487d4dad05eb6c48b8d6702c16cec6e9e637f4f770",
+    "examples/tet10_thermomechanics/run.py": "bdf6dc331e9cb39a1e7f96f65544b725fad3c5aab87ade2f127122bb9ac90469",
+    "examples/tet10_thermopiezoelectric/body.msh": "ada9a6ae4ab8d49ee4329b487d4dad05eb6c48b8d6702c16cec6e9e637f4f770",
+    "examples/tet10_thermopiezoelectric/model.toml": "6c8b056146e7d92a75a58d41dbe3b1df9566bf47dbde1112d623b4c29ba25cd4",
+    "examples/tet10_thermopiezoelectric/run.py": "27bde15d4e64f71c1ebdb7cff1d2a417e1e767c7518690cc5bd39295d6875509",
+    "examples/thermal_expansion.py": "ed0a9135aca936a1977ccf115c24e0d20ea99046d6f67ec86a67c9edd47c3d19",
+    "examples/thermopiezoelectric/case.toml": "239f08e7e93d950c52fae1de5f53a2603081e05e098fca5df75fbbde987a052e",
+    "examples/thermopiezoelectric/mesh.msh": "280468c994742594912ab6311ae1de85b108c6b079cc10375483485d4baf4c63",
+    "examples/thermopiezoelectric/run.py": "d113286823e721ac92e9431b549548bab9838475a3e7bd4d82c4faba9f997546",
+    "examples/transient_heat/body.msh": "9bb7c44ca294ae59bc7a24ab267b2d35e4b0eb9d508644ad503db7f94cc970fe",
+    "examples/transient_heat/model.toml": "3c6344ec29358407c9fb1fff511c830afd748a721134fb1a1d1cf3ee23c9a1ff",
+    "examples/transient_heat/run.py": "32997039a84bec21dfaa0d68cad4ff06db8adcc61500fb6f3601fe3e8e62f932",
+    "examples/transient_heat/source.csv": "83f0a188304cf463e97dae184ccb27e790333b0bfcee354cd3cdabe3bb25d434",
+    "examples/uncertainty_heat/mesh.msh": "280468c994742594912ab6311ae1de85b108c6b079cc10375483485d4baf4c63",
+    "examples/uncertainty_heat/model.toml": "fb1221002108573da4b42d5c95acf5b90a1bcae47b433c14edf28fa93fd3d0e8",
+    "examples/uncertainty_heat/run.py": "30f26c19aa66b7cfe41820b5111ae675c1eb7bba44383e318db8688d3c9977c0"
+  },
+  "recipes": [
+    {
+      "id": "steady-heat",
+      "script": "examples/steady_heat.py",
+      "command": [
+        "python",
+        "-I",
+        "examples/steady_heat.py"
+      ],
+      "artifacts": [
+        "steady_heat.vtu"
+      ],
+      "expectation": "Wärme mit Robin-Rand: T=400-40x K, 320 bis 400 K; q_x=80 W/m²; 960 W Abfluss, Bilanz ≤1e-10 W. Temperaturtoleranz 3e-12 K.",
+      "limits": "Stationärer homogener Quader 2×3×4 m; kein Strahlungs- oder Temperaturabhängigkeitsmodell.",
+      "troubleshooting": "Neue Ausgabeziele verwenden; Eingaben unverändert lassen. Bei Schema-/Materialfehlern Kapitel Diagnose, bei Residuen/Bilanzen Kapitel Ergebnisse anwenden.",
+      "inputs": [
+        "examples/steady_heat.py"
+      ],
+      "runtime_budget_seconds": 90,
+      "extra": null
+    },
+    {
+      "id": "elastic-tension",
+      "script": "examples/elastic_tension.py",
+      "command": [
+        "python",
+        "-I",
+        "examples/elastic_tension.py"
+      ],
+      "artifacts": [
+        "elastic_tension.vtu"
+      ],
+      "expectation": "Zug: E=1000 Pa, ν=0.25, Traktion 10 Pa. u=(0.01x,-0.0025y,-0.0025z) m; Energie 0.05 J. Verschiebungstoleranz 1e-15 m plus Skript-rtol, Kraftbilanz 1e-12 N.",
+      "limits": "Lineare kleine Dehnungen; synthetisches Material; keine Kontakt- oder plastische Analyse.",
+      "troubleshooting": "Neue Ausgabeziele verwenden; Eingaben unverändert lassen. Bei Schema-/Materialfehlern Kapitel Diagnose, bei Residuen/Bilanzen Kapitel Ergebnisse anwenden.",
+      "inputs": [
+        "examples/elastic_tension.py"
+      ],
+      "runtime_budget_seconds": 90,
+      "extra": null
+    },
+    {
+      "id": "capacitor",
+      "script": "examples/parallel_plate.py",
+      "command": [
+        "python",
+        "-I",
+        "examples/parallel_plate.py"
+      ],
+      "artifacts": [
+        "parallel_plate.vtu"
+      ],
+      "expectation": "Kondensator: Abstand 0.002 m, Fläche 0.0012 m², κ=2e-11 F/m, Spannung 100 V; C=12 pF, Q=1.2 nC, U=60 nJ. Konkrete relative/absolute Assert-Toleranzen stehen im eingebetteten Skript.",
+      "limits": "Seitlich D·n=0, ohne Randfeldkorrektur; absolute Permittivität.",
+      "troubleshooting": "Neue Ausgabeziele verwenden; Eingaben unverändert lassen. Bei Schema-/Materialfehlern Kapitel Diagnose, bei Residuen/Bilanzen Kapitel Ergebnisse anwenden.",
+      "inputs": [
+        "examples/parallel_plate.py"
+      ],
+      "runtime_budget_seconds": 90,
+      "extra": null
+    },
+    {
+      "id": "expansion",
+      "script": "examples/thermal_expansion.py",
+      "command": [
+        "python",
+        "-I",
+        "examples/thermal_expansion.py"
+      ],
+      "artifacts": [
+        "thermal_expansion.vtu"
+      ],
+      "expectation": "Thermische Expansion bei 313.15 K: u=(0.0002x,0.0004y,0) m; freie Expansion spannungsfrei. Skript prüft Verschiebung, Spannung und Bilanzen mit expliziten Toleranzen.",
+      "limits": "Stationäre Einwegkopplung Wärme → Mechanik, anisotrope synthetische Ausdehnung.",
+      "troubleshooting": "Neue Ausgabeziele verwenden; Eingaben unverändert lassen. Bei Schema-/Materialfehlern Kapitel Diagnose, bei Residuen/Bilanzen Kapitel Ergebnisse anwenden.",
+      "inputs": [
+        "examples/thermal_expansion.py"
+      ],
+      "runtime_budget_seconds": 90,
+      "extra": null
+    },
+    {
+      "id": "piezo-d33",
+      "script": "examples/piezo_d33.py",
+      "command": [
+        "python",
+        "-I",
+        "examples/piezo_d33.py"
+      ],
+      "artifacts": [
+        "piezo_d33.vtu"
+      ],
+      "expectation": "Piezo: L=0.02 m, A=1e-4 m², C33=1e9 Pa, e33=5 C/m², κ33=1e-8 F/m. Bei 100 V: u_z=-0.5 µm, Q=17.5 nC. Bei 10 N/Kurzschluss: u_z=2 µm, Q=-50 nC. Skript prüft beide Fälle und Reziprozität.",
+      "limits": "Querbewegung gesperrt; Stress-Charge-Konvention, keine echte PZT-Kalibrierung.",
+      "troubleshooting": "Neue Ausgabeziele verwenden; Eingaben unverändert lassen. Bei Schema-/Materialfehlern Kapitel Diagnose, bei Residuen/Bilanzen Kapitel Ergebnisse anwenden.",
+      "inputs": [
+        "examples/piezo_d33.py"
+      ],
+      "runtime_budget_seconds": 90,
+      "extra": null
+    },
+    {
+      "id": "thermopiezo",
+      "script": "examples/thermopiezoelectric/run.py",
+      "command": [
+        "python",
+        "-I",
+        "examples/thermopiezoelectric/run.py",
+        "--output",
+        "results/thermopiezo"
+      ],
+      "artifacts": [
+        "results/thermopiezo/fields.vtu",
+        "results/thermopiezo/report.json"
+      ],
+      "expectation": "Ein Tet4: T=(300,310,300,300) K; u_x=-9/440 m, φ=5/22 V, q_x=-20 W/m². Für u, φ und q gilt absolute SI-Toleranz 1e-12, rtol=0; globale Bilanzen ≤1e-10 in ihrer SI-Einheit.",
+      "limits": "Alle Temperaturen vorgeschrieben, synthetische Tensoren; Bericht ist examplespezifisch und kein generisches Ergebnisbündel.",
+      "troubleshooting": "Neue Ausgabeziele verwenden; Eingaben unverändert lassen. Bei Schema-/Materialfehlern Kapitel Diagnose, bei Residuen/Bilanzen Kapitel Ergebnisse anwenden.",
+      "inputs": [
+        "examples/thermopiezoelectric/case.toml",
+        "examples/thermopiezoelectric/mesh.msh",
+        "examples/thermopiezoelectric/run.py"
+      ],
+      "runtime_budget_seconds": 90,
+      "extra": null
+    },
+    {
+      "id": "transient-heat",
+      "script": "examples/transient_heat/run.py",
+      "command": [
+        "python",
+        "-I",
+        "examples/transient_heat/run.py"
+      ],
+      "artifacts": [
+        "transient_heat_results/heat.pvd",
+        "transient_heat_results/probes.csv"
+      ],
+      "expectation": "Aluminium-Preset, T0=293.15 K, Zeitschritte 0.5 s bis 10 s; CSV-Quelle 0 bis 2e6 W/m³; Umgebungssprung 298.15 K ab 5 s, h=20 W/(m² K). Zeit-/Bilanznachweis im Rezept-Prüflog; keine gemessene Endtemperatur vorgegeben.",
+      "limits": "Impliziter Euler, konstante Stoffwerte; CSV ist synthetische Eingangskurve, keine unabhängige Messvalidierung.",
+      "troubleshooting": "Neue Ausgabeziele verwenden; Eingaben unverändert lassen. Bei Schema-/Materialfehlern Kapitel Diagnose, bei Residuen/Bilanzen Kapitel Ergebnisse anwenden.",
+      "inputs": [
+        "examples/transient_heat/body.msh",
+        "examples/transient_heat/model.toml",
+        "examples/transient_heat/run.py",
+        "examples/transient_heat/source.csv"
+      ],
+      "runtime_budget_seconds": 90,
+      "extra": null
+    },
+    {
+      "id": "piezo-dynamics",
+      "script": "examples/piezo_dynamics/run.py",
+      "command": [
+        "python",
+        "-I",
+        "examples/piezo_dynamics/run.py",
+        "--output",
+        "results/dynamics"
+      ],
+      "artifacts": [
+        "results/dynamics/transient/piezo.pvd",
+        "results/dynamics/harmonic/piezo.pvd",
+        "results/dynamics/modes/piezo.pvd"
+      ],
+      "expectation": "Tet4 mit C=10 Pa, e=2 C/m², κ=4 F/m, ρ=6 kg/m³: ein Modus ω=√(55/3) rad/s; normiertes u=√10, φ=√10/2. Zusätzlich CSV-getriebenes Newmark und Frequenzgang. Modalvergleich rtol=1e-12.",
+      "limits": "Kleiner dichter Referenzfall; keine experimentelle Resonanz oder Genauigkeitszusage für einen beliebigen Zeitschritt.",
+      "troubleshooting": "Neue Ausgabeziele verwenden; Eingaben unverändert lassen. Bei Schema-/Materialfehlern Kapitel Diagnose, bei Residuen/Bilanzen Kapitel Ergebnisse anwenden.",
+      "inputs": [
+        "examples/piezo_dynamics/drive.csv",
+        "examples/piezo_dynamics/mesh.msh",
+        "examples/piezo_dynamics/model.toml",
+        "examples/piezo_dynamics/run.py"
+      ],
+      "runtime_budget_seconds": 90,
+      "extra": null
+    },
+    {
+      "id": "tet10-heat",
+      "script": "examples/tet10_heat/run.py",
+      "command": [
+        "python",
+        "-I",
+        "examples/tet10_heat/run.py",
+        "--output",
+        "results/tet10-heat"
+      ],
+      "artifacts": [
+        "results/tet10-heat/stationary.vtu",
+        "results/tet10-heat/transient/heat.pvd"
+      ],
+      "expectation": "Gerader Tet10: T=300+x² K, q_x=-4x W/m²; instationär T=300+t K. Skript: 4e-12 K, 5e-12 W/m², stationäre Bilanz 2e-11 W, transiente 2e-10 W.",
+      "limits": "Quadratischer Patch auf gerader Geometrie; keine Netzkonvergenzbehauptung.",
+      "troubleshooting": "Neue Ausgabeziele verwenden; Eingaben unverändert lassen. Bei Schema-/Materialfehlern Kapitel Diagnose, bei Residuen/Bilanzen Kapitel Ergebnisse anwenden.",
+      "inputs": [
+        "examples/tet10_heat/body.msh",
+        "examples/tet10_heat/run.py",
+        "examples/tet10_heat/stationary.toml",
+        "examples/tet10_heat/transient.toml"
+      ],
+      "runtime_budget_seconds": 90,
+      "extra": null
+    },
+    {
+      "id": "tet10-electric",
+      "script": "examples/tet10_electrostatics/run.py",
+      "command": [
+        "python",
+        "-I",
+        "examples/tet10_electrostatics/run.py",
+        "--output",
+        "results/tet10-electric"
+      ],
+      "artifacts": [
+        "results/tet10-electric/electric.vtu"
+      ],
+      "expectation": "φ=x² V, E_x=-2x V/m, D=2e-11 E C/m²; U=4e-11/3 J. Skript: φ 2e-13 V, E 2e-12 V/m, D 1e-22 C/m²; Energie 2e-24 J.",
+      "limits": "Gerader Tet10, konstanter Dielektrizitätstensor.",
+      "troubleshooting": "Neue Ausgabeziele verwenden; Eingaben unverändert lassen. Bei Schema-/Materialfehlern Kapitel Diagnose, bei Residuen/Bilanzen Kapitel Ergebnisse anwenden.",
+      "inputs": [
+        "examples/tet10_electrostatics/body.msh",
+        "examples/tet10_electrostatics/model.toml",
+        "examples/tet10_electrostatics/run.py"
+      ],
+      "runtime_budget_seconds": 90,
+      "extra": null
+    },
+    {
+      "id": "tet10-elastic",
+      "script": "examples/tet10_elasticity/run.py",
+      "command": [
+        "python",
+        "-I",
+        "examples/tet10_elasticity/run.py",
+        "--output",
+        "results/tet10-elastic"
+      ],
+      "artifacts": [
+        "results/tet10-elastic/solid.vtu"
+      ],
+      "expectation": "u_x=0.01x² m, σ_xx=2x Pa, U=0.02/3 J; Toleranzen u 2e-14 m, σ 2e-11 Pa, Energie 2e-15 J, Kraft/Moment 2e-12 SI.",
+      "limits": "Kleine Dehnungen und synthetischer quadratischer Patch.",
+      "troubleshooting": "Neue Ausgabeziele verwenden; Eingaben unverändert lassen. Bei Schema-/Materialfehlern Kapitel Diagnose, bei Residuen/Bilanzen Kapitel Ergebnisse anwenden.",
+      "inputs": [
+        "examples/tet10_elasticity/body.msh",
+        "examples/tet10_elasticity/model.toml",
+        "examples/tet10_elasticity/run.py"
+      ],
+      "runtime_budget_seconds": 90,
+      "extra": null
+    },
+    {
+      "id": "tet10-piezo",
+      "script": "examples/tet10_piezoelectric/run.py",
+      "command": [
+        "python",
+        "-I",
+        "examples/tet10_piezoelectric/run.py",
+        "--output",
+        "results/tet10-piezo"
+      ],
+      "artifacts": [
+        "results/tet10-piezo/piezo.vtu"
+      ],
+      "expectation": "u_x=-0.02x m, φ=x V, σ=0; elektrische Enthalpie -1.52 J; Elektrodenladung 3.04 C. Skript: u 2e-13 m, φ 2e-12 V, H 2e-12 J, Ladung 2e-11 C.",
+      "limits": "Äquipotentiale schwebende Elektrode; keine unabhängige Materialmessung.",
+      "troubleshooting": "Neue Ausgabeziele verwenden; Eingaben unverändert lassen. Bei Schema-/Materialfehlern Kapitel Diagnose, bei Residuen/Bilanzen Kapitel Ergebnisse anwenden.",
+      "inputs": [
+        "examples/tet10_piezoelectric/body.msh",
+        "examples/tet10_piezoelectric/model.toml",
+        "examples/tet10_piezoelectric/run.py"
+      ],
+      "runtime_budget_seconds": 90,
+      "extra": null
+    },
+    {
+      "id": "tet10-thermomechanics",
+      "script": "examples/tet10_thermomechanics/run.py",
+      "command": [
+        "python",
+        "-I",
+        "examples/tet10_thermomechanics/run.py",
+        "--output",
+        "results/tet10-expansion"
+      ],
+      "artifacts": [
+        "results/tet10-expansion/coupled.vtu"
+      ],
+      "expectation": "T=1+x² K, u_x=0.01x² m, σ_xx=2x-x² Pa; U=0.008/3 J. Skript: T 4e-12 K, u 1e-13 m, σ 2e-11 Pa, Energie 2e-14 J.",
+      "limits": "Direkte Python-API; kein eigenständiger thermomechanics-TOML-Modus; 1 K ist ein mathematischer Patch.",
+      "troubleshooting": "Neue Ausgabeziele verwenden; Eingaben unverändert lassen. Bei Schema-/Materialfehlern Kapitel Diagnose, bei Residuen/Bilanzen Kapitel Ergebnisse anwenden.",
+      "inputs": [
+        "examples/tet10_thermomechanics/body.msh",
+        "examples/tet10_thermomechanics/run.py"
+      ],
+      "runtime_budget_seconds": 90,
+      "extra": null
+    },
+    {
+      "id": "tet10-thermopiezo",
+      "script": "examples/tet10_thermopiezoelectric/run.py",
+      "command": [
+        "python",
+        "-I",
+        "examples/tet10_thermopiezoelectric/run.py",
+        "--output",
+        "results/tet10-thermopiezo"
+      ],
+      "artifacts": [
+        "results/tet10-thermopiezo/coupled.vtu"
+      ],
+      "expectation": "T=1+x K, φ=-0.01x²/3 V, u=0, D=0, σ_xx=-76x/75 Pa. Enthalpie 0.005/3+0.0002/9 J; Feldtoleranzen im Skript, H 2e-13 J.",
+      "limits": "Einwegkopplung mit thermischem Beitrag zu D; keine Pyroelektrizitäts- oder Rückkopplungsanalyse.",
+      "troubleshooting": "Neue Ausgabeziele verwenden; Eingaben unverändert lassen. Bei Schema-/Materialfehlern Kapitel Diagnose, bei Residuen/Bilanzen Kapitel Ergebnisse anwenden.",
+      "inputs": [
+        "examples/tet10_thermopiezoelectric/body.msh",
+        "examples/tet10_thermopiezoelectric/model.toml",
+        "examples/tet10_thermopiezoelectric/run.py"
+      ],
+      "runtime_budget_seconds": 90,
+      "extra": null
+    },
+    {
+      "id": "tet10-modes",
+      "script": "examples/tet10_modes/run.py",
+      "command": [
+        "python",
+        "-I",
+        "examples/tet10_modes/run.py",
+        "--output",
+        "results/tet10-modes"
+      ],
+      "artifacts": [
+        "results/tet10-modes/piezo.pvd"
+      ],
+      "expectation": "Ein freier Eck-DOF: m=6/420, k=(10+4/3)/10, ω=√(238/3) rad/s; u=√70, φ=(2/3)√70. Skript rtol=3e-14.",
+      "limits": "Massennormierte Mode; Amplitude ist keine erzwungene physikalische Verschiebung.",
+      "troubleshooting": "Neue Ausgabeziele verwenden; Eingaben unverändert lassen. Bei Schema-/Materialfehlern Kapitel Diagnose, bei Residuen/Bilanzen Kapitel Ergebnisse anwenden.",
+      "inputs": [
+        "examples/tet10_modes/body.msh",
+        "examples/tet10_modes/model.toml",
+        "examples/tet10_modes/run.py"
+      ],
+      "runtime_budget_seconds": 90,
+      "extra": null
+    },
+    {
+      "id": "tet10-newmark",
+      "script": "examples/tet10_newmark/run.py",
+      "command": [
+        "python",
+        "-I",
+        "examples/tet10_newmark/run.py",
+        "--output",
+        "results/tet10-newmark"
+      ],
+      "artifacts": [
+        "results/tet10-newmark/piezo.pvd"
+      ],
+      "expectation": "Freier Oszillator, Δt=0.01 s; u_n=0.01 cos(2n arctan(ωΔt/2)) m, φ=2u/3; Energie k·0.01²/2 J konstant, rtol=3e-12, u-atol=1e-14 m.",
+      "limits": "Diskrete Newmark-Referenz statt behaupteter exakter kontinuierlicher Phase.",
+      "troubleshooting": "Neue Ausgabeziele verwenden; Eingaben unverändert lassen. Bei Schema-/Materialfehlern Kapitel Diagnose, bei Residuen/Bilanzen Kapitel Ergebnisse anwenden.",
+      "inputs": [
+        "examples/tet10_newmark/body.msh",
+        "examples/tet10_newmark/model.toml",
+        "examples/tet10_newmark/run.py"
+      ],
+      "runtime_budget_seconds": 90,
+      "extra": null
+    },
+    {
+      "id": "tet10-harmonic",
+      "script": "examples/tet10_harmonic/run.py",
+      "command": [
+        "python",
+        "-I",
+        "examples/tet10_harmonic/run.py",
+        "--output",
+        "results/tet10-harmonic"
+      ],
+      "artifacts": [
+        "results/tet10-harmonic/piezo.pvd"
+      ],
+      "expectation": "Komplexe Antwort u=-0.05(1+2i)/(k-mω²) m und φ=2u/3; Skript rtol=3e-14; Auswertung e^(+iωt).",
+      "limits": "Singuläre ungedämpfte Resonanz wird abgelehnt; Phasen sind Radiant, Frequenzen im Modell Hz.",
+      "troubleshooting": "Neue Ausgabeziele verwenden; Eingaben unverändert lassen. Bei Schema-/Materialfehlern Kapitel Diagnose, bei Residuen/Bilanzen Kapitel Ergebnisse anwenden.",
+      "inputs": [
+        "examples/tet10_harmonic/body.msh",
+        "examples/tet10_harmonic/model.toml",
+        "examples/tet10_harmonic/run.py"
+      ],
+      "runtime_budget_seconds": 90,
+      "extra": null
+    },
+    {
+      "id": "study-resume",
+      "script": "examples/parameter_study/run.py",
+      "command": [
+        "python",
+        "-I",
+        "examples/parameter_study/run.py",
+        "--output",
+        "results/study",
+        "--max-cases",
+        "1"
+      ],
+      "artifacts": [
+        "results/study/catalog.json"
+      ],
+      "expectation": "k=[2,4] W/(m K), Q=8 W/m³, T_max=300+2/k K: 301 und 300.5 K. Erst ein Fall, danach derselbe Befehl ohne --max-cases; dritter Aufruf übernimmt Ergebnisse. T-atol und Bilanz 1e-11 SI.",
+      "limits": "Stationäre lokale sequenzielle Studie, kein Scheduler und kein PETSc-TOML.",
+      "troubleshooting": "Neue Ausgabeziele verwenden; Eingaben unverändert lassen. Bei Schema-/Materialfehlern Kapitel Diagnose, bei Residuen/Bilanzen Kapitel Ergebnisse anwenden.",
+      "inputs": [
+        "examples/parameter_study/mesh.msh",
+        "examples/parameter_study/model.toml",
+        "examples/parameter_study/report.py",
+        "examples/parameter_study/run.py",
+        "examples/parameter_study/study.toml"
+      ],
+      "runtime_budget_seconds": 90,
+      "extra": null,
+      "continuation_commands": [
+        [
+          "python",
+          "-I",
+          "examples/parameter_study/run.py",
+          "--output",
+          "results/study"
+        ],
+        [
+          "python",
+          "-I",
+          "examples/parameter_study/run.py",
+          "--output",
+          "results/study"
+        ]
+      ]
+    },
+    {
+      "id": "study-report",
+      "script": "examples/parameter_study/report.py",
+      "command": [
+        "python",
+        "-I",
+        "examples/parameter_study/report.py",
+        "--study",
+        "results/study",
+        "--output",
+        "results/table"
+      ],
+      "artifacts": [
+        "results/table/metadata.json",
+        "results/table/values.csv"
+      ],
+      "expectation": "Erst vollständige study-resume-Studie herstellen. Tabelle enthält T_max=301/300.5 K und ausgeglichene Leistung (atol 1e-11 W). Lesen gespeicherter Resultate ohne erneuten Solve.",
+      "limits": "Reduktion über aktive Knoten; fehlende/fehlgeschlagene Ergebnisse bleiben sichtbar, keine Nullersatzwerte.",
+      "troubleshooting": "Neue Ausgabeziele verwenden; Eingaben unverändert lassen. Bei Schema-/Materialfehlern Kapitel Diagnose, bei Residuen/Bilanzen Kapitel Ergebnisse anwenden.",
+      "inputs": [
+        "examples/parameter_study/mesh.msh",
+        "examples/parameter_study/model.toml",
+        "examples/parameter_study/report.py",
+        "examples/parameter_study/run.py",
+        "examples/parameter_study/study.toml"
+      ],
+      "runtime_budget_seconds": 90,
+      "extra": null
+    },
+    {
+      "id": "study-recipes",
+      "script": "examples/study_recipes/run.py",
+      "command": [
+        "python",
+        "-I",
+        "examples/study_recipes/run.py",
+        "heat",
+        "--output",
+        "results/heat-study"
+      ],
+      "artifacts": [
+        "results/heat-study/verification.json",
+        "results/heat-study/table/metadata.json"
+      ],
+      "expectation": "Heat und anschließend piezo mit eigenem Ausgabeziel: analytische Größen, unabhängiger Direktlauf, Wiederaufnahme ohne neue Versuche, Fingerprintänderungen sowie absichtlich fehlerhafte Materialien werden im Skript geprüft.",
+      "limits": "Negativfälle gehören zum Nachweis; ein Fehlfall darf nicht als erfolgreicher Nullwert gezählt werden.",
+      "troubleshooting": "Neue Ausgabeziele verwenden; Eingaben unverändert lassen. Bei Schema-/Materialfehlern Kapitel Diagnose, bei Residuen/Bilanzen Kapitel Ergebnisse anwenden.",
+      "inputs": [
+        "examples/study_recipes/heat/mesh.msh",
+        "examples/study_recipes/heat/model.toml",
+        "examples/study_recipes/heat/study.toml",
+        "examples/study_recipes/piezo/long.msh",
+        "examples/study_recipes/piezo/model.toml",
+        "examples/study_recipes/piezo/short.msh",
+        "examples/study_recipes/piezo/study.toml",
+        "examples/study_recipes/run.py"
+      ],
+      "runtime_budget_seconds": 90,
+      "extra": null,
+      "continuation_commands": [
+        [
+          "python",
+          "-I",
+          "examples/study_recipes/run.py",
+          "piezo",
+          "--output",
+          "results/piezo-study"
+        ]
+      ]
+    },
+    {
+      "id": "surrogate",
+      "script": "examples/surrogate_heat/run.py",
+      "command": [
+        "python",
+        "-I",
+        "examples/surrogate_heat/run.py",
+        "--output",
+        "results/surrogate"
+      ],
+      "artifacts": [
+        "results/surrogate/surrogate.json",
+        "results/surrogate/report.json"
+      ],
+      "expectation": "k=2; Training Q=0,2,4,6,8,10 W/m³, Test Q=3,7. T=300+Q/8 K, P=Q/6 W; geladenes Modell Q=5: [300.625 K,0.833333333333 W]. T-atol 1e-10 K, P-atol 1e-12 W.",
+      "limits": "Grad 1, ridge=0; Parameterbox [0,10], Extrapolation standardmäßig verboten. Synthetischer Surrogatnachweis ohne Konfidenzintervall.",
+      "troubleshooting": "Neue Ausgabeziele verwenden; Eingaben unverändert lassen. Bei Schema-/Materialfehlern Kapitel Diagnose, bei Residuen/Bilanzen Kapitel Ergebnisse anwenden.",
+      "inputs": [
+        "examples/surrogate_heat/mesh.msh",
+        "examples/surrogate_heat/model.toml",
+        "examples/surrogate_heat/run.py",
+        "examples/surrogate_heat/study.toml"
+      ],
+      "runtime_budget_seconds": 90,
+      "extra": null
+    },
+    {
+      "id": "field-images",
+      "script": "examples/field_visualization/run.py",
+      "command": [
+        "python",
+        "-I",
+        "examples/field_visualization/run.py",
+        "--output",
+        "results/images"
+      ],
+      "artifacts": [
+        "results/images/temperature.jpg"
+      ],
+      "expectation": "Sechs JPG, je 1200×900 Pixel; gemeinsame Temperaturskala 300–310 K für zwei Läufe; Einheiten in Titeln. Skript prüft Rohfelder und Figurenlebensdauer. Dateinamen siehe Skript.",
+      "limits": "Matplotlib-Extra erforderlich; Flächenfarben sind Darstellungen, keine unabhängigen Bilanz- oder Genauigkeitsnachweise.",
+      "troubleshooting": "Neue Ausgabeziele verwenden; Eingaben unverändert lassen. Bei Schema-/Materialfehlern Kapitel Diagnose, bei Residuen/Bilanzen Kapitel Ergebnisse anwenden.",
+      "inputs": [
+        "examples/field_visualization/case.toml",
+        "examples/field_visualization/mesh.msh",
+        "examples/field_visualization/run.py"
+      ],
+      "runtime_budget_seconds": 90,
+      "extra": "visualization"
+    },
+    {
+      "id": "uncertainty-heat",
+      "script": "examples/uncertainty_heat/run.py",
+      "command": [
+        "python",
+        "-I",
+        "examples/uncertainty_heat/run.py",
+        "--output",
+        "uncertainty-heat-output"
+      ],
+      "inputs": [
+        "examples/uncertainty_heat/mesh.msh",
+        "examples/uncertainty_heat/model.toml",
+        "examples/uncertainty_heat/run.py"
+      ],
+      "runtime_budget_seconds": 90,
+      "artifacts": [
+        "uncertainty-heat-output/sampling.json",
+        "uncertainty-heat-output/uncertainty.json",
+        "uncertainty-heat-output/verification.json"
+      ],
+      "expectation": "128 successful joint rows; exact discrete Tmax=T0+Q/8 within 1e-11 K; sensitivity [1/8,1] within 2e-10 in SI; mean 301 K within predeclared 6 standard errors",
+      "limits": "Synthetic distributions; unknown continuum error; no experimental validation or guaranteed quantile convergence",
+      "troubleshooting": "Use new directory for new sampling specification; inspect failed M8 cases and missing quantities; verify no writer before recovering stale lock"
+    }
+  ],
+  "follow_up": {
+    "64": "Planned uncertainty workflow; no executable uncertainty API in this candidate"
+  }
+}

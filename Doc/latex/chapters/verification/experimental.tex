@@ -1,0 +1,83 @@
+\chapter{Offener Messdatenvertrag und Suchbefunde}
+\index{Messdaten}\index{Kalibrierung}
+\section{Stand der Fallannahme}
+Die maßgeblichen Quellen sind \path{Doc/65_VALIDATION_DATA_CONTRACT.md} und
+\path{Doc/66_M9_DATA_SEARCH_AND_RELEASE_OPTIONS.md}. Weder die ursprüngliche
+noch die erneute öffentliche Suche hat einen vollständigen unabhängigen
+quasistatischen Piezofall zur Annahme geführt. Issues 63 und 65 bleiben offen
+außerhalb des neu geplanten M9. Ihre ursprünglichen Anforderungen wurden
+nicht durch den synthetischen Unsicherheitsfall erfüllt.
+
+Die erneute Sichtung vom 10. Oktober 2026 prüfte Repository-Metadaten,
+zwei kleine CSVs, eine TXT-Datei und die Blatt-/Textstruktur eines XLSX-Archivs.
+Sie führte keine fremden Auswertungsskripte aus, digitalisierte keine Kurven,
+fittete keine Materialwerte und berechnete keinen Messvergleich. Eine
+zugängliche Datei mit Datenlizenz ist nur ein Teil des Annahmevertrags.
+
+\section{Kandidaten und konkrete Ablehnungsgrenzen}
+\subsection*{Green Piezo, Zenodo 7920056 v1.}
+CC BY 4.0 und Design und Charakterisierungsdaten sind nachgewiesen.
+Das 776-MB-Archiv wurde nicht vollständig auditiert; unabhängige vollständige
+Tensoren, Unsicherheiten und quasistatische Messschaltung bleiben unqualifiziert.
+\subsection*{Light-Annealed Films, Zenodo 15526822.}
+Die gesichtete Feld-/Verschiebungsdatei ist unter CC BY 4.0 und nennt 100 Hz.
+Das belegt allein keinen quasistatischen Zustand. Der aus derselben
+Verschiebung abgeleitete effektive Koeffizient wäre keine unabhängige Eingabe
+für die Prüfung genau dieser Antwort.
+\subsection*{Polaron-defect complexes, Zenodo 21454715 v2.}
+CC BY 4.0; reale räumliche Verschiebungs- sowie Dateien für Bias und Frequenz.
+Die beschriebene DC-aktivierte elektrostriktive Kilohertz-Antwort besitzt
+keinen angenommenen linearen quasistatischen Probenvertrag.
+\subsection*{Relaxor-Kristalle, Figshare 19346039 v1.}
+CC BY 4.0 und 14 Abbildungsblätter mit Materialcharakterisierung.
+Die gesichtete Struktur belegt keinen vollständigen unabhängigen statischen
+Gerätevergleich mit allen erforderlichen Metadaten.
+\subsection*{Quarz-Stimmgabel, arXiv:1203.5767v1.}
+Ein wissenschaftlich interessanter statischer Kalibrierfall mit Unsicherheit.
+Ein separat lizenziertes Rohdatenarchiv und der vollständige unabhängige
+Geometrie, Elektroden, Kristallachsen und Tensoren wurden nicht angenommen.
+\subsection*{Duval et al., Southampton 263266.}
+Messungen an PZT-Mikrocantilevern sind publiziert. Der Repository-Volltext ist
+auf Mitarbeiter beschränkt; zugängliche Rohdateien und Rechte fehlen im Nachweis.
+\subsection*{Gesing, Figshare 5766708.}
+Die Repositorybeschreibung nennt CC BY 4.0 und einen frequenzabhängigen
+Beschleunigungssensor. Das ist kein statischer d33-Verschiebungsfall;
+Rohdateizugriff wurde in dieser Recherche nicht erfolgreich geprüft.
+Die sechs früheren Kandidaten bleiben mit ihren damaligen Prüfgrenzen im
+Messdatenvertrag erhalten. Numerische und DFT-Daten werden trotz offenen
+Downloads nicht als experimentelle Messungen bezeichnet.
+
+\section{Herkunft und Nutzungsrechte}
+Die Evidenzliste \path{Doc/evidence/issue63/research-2026-10-10.json} enthält
+URLs, Versionen, Rechte und SHA-256 tatsächlich gesichteter Dateien.
+Die kleinen unveränderten Textdateien im Repository tragen Attribution;
+das XLSX wird referenziert. Ausschnitt-Snapshots der APIs besitzen eigene
+Hashes, getrennt vom Hash der vollständigen abgerufenen Antwort.
+Keiner dieser Bestände ist ein eingefrorener angenommener Validierungsfall.
+
+Dieses Handbuch enthält eigene Abbildungen aus eigenen synthetischen
+Auswertungen und eigene Benchmarkrohwerte unter der Projektlizenz MIT.
+Fremde Messdateien werden im Handbuch nicht erneut abgebildet oder als
+eigene Werte verarbeitet. Die Primärlinks und Dateiattribution stehen im
+versionierten Suchbericht. Verfügbarkeit einer Publikation ersetzt keine
+gesonderte Prüfung der Datenrechte.
+
+\section{Anforderungen an einen späteren Vergleich}
+Vor einer Rechnung sind Geometrie und tolerierte Maße, Materialtensoren und
+deren unabhängige Herkunft, SI-Einheiten, Voigt-/Achsenkonventionen,
+Einspannung, Elektroden, tatsächlich anliegende Spannung und Messschaltung
+festzulegen. Sensorposition und Messoperator müssen zur FEM-Zielgröße passen:
+ein flächengemittelter Weg ist kein Knotenmaximum.
+
+Kalibrier- und Validierungsläufe sind getrennt einzufrieren. Materialparameter
+aus der zu prüfenden Zielantwort nachzufitten und dieselbe Antwort anschließend
+als Validierung zu verwenden, verletzt die Unabhängigkeit. Ein späterer
+Holdout muss vor der Anpassung gewählt und von ihr unberührt bleiben.
+
+Für eine Differenz $\Delta=F_{\mathrm{FEM}}-F_{\mathrm{Messung}}$ sind
+Numerik und Messunsicherheit, Eingangskovarianzen und mögliche gemeinsame
+Fehlerquellen zu dokumentieren. Nur unter begründeten Unabhängigkeitsannahmen
+dürfen passende Varianzen summiert werden. Eine zulässige Abweichung braucht
+einen vorab definierten Verwendungszweck und Messvertrag; das Handbuch erfindet
+keine universelle Akzeptanzzahl. Ein vollständiger zukünftiger Nachweis benötigt
+ein positives Datengate und die separate experimentelle Studie.

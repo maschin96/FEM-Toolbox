@@ -1,0 +1,150 @@
+\chapter{Netz, Materialien und Modellaufbau}\label{sec:app-models}
+\index{Model}\index{Randbedingungen}\index{Elektrode}
+\section{Netze erstellen oder importieren}
+Direkte Python-Rezepte bauen \path{Mesh(points=..., tetra4=...)} aus SI-Koordinaten
+und nullbasierten Knotenverbindungen. Die stationären Quaderbeispiele zeigen
+die vollständige Erzeugung. Ein \path{Mesh} kann Tet4 oder geradkantige Tet10
+und die zugehörigen Triangle3-/Triangle6-Randflächen enthalten. Volumenzell-
+und Flächensätze sind benannte Auswahlmengen, keine Materialobjekte.
+Ungenutzte Knoten tragen keine Feldfreiheitsgrade. Tet10-Kantenknoten müssen
+mittig auf geraden Kanten liegen; gekrümmte isoparametrische Elemente gehören
+nicht zu diesem Funktionsstand. Geometrie- und Orientierungskonventionen
+stehen im Theorieband.
+
+Gmsh 2.2 und 4.1 werden über \path{read_gmsh} importiert. Für eine neue
+Geometrie kann Gmsh mit \path{gmsh body.geo -3 -format msh2 -o body.msh}
+ein lineares Netz erzeugen. Volume- und Surface-Physical-Groups müssen im
+\path{.geo} vorgegeben werden; deren Namen werden in TOML referenziert.
+Das ist ein optionaler Vorbereitungsschritt, kein mit dem Wheel geliefertes
+Meshing-Programm. Für die eingebetteten Rezepte sind alle \path{.msh}-Dateien
+bereits enthalten. Bei eigener Tet10-Erzeugung vor dem Solve geradkantige
+mittige Kantenknoten und vollständige Triangle6-Ränder kontrollieren.
+
+\path{read_gmsh(path, length_scale_to_m=...)} verlangt eine explizite positive
+Längenskala. Ein Netz in mm verwendet $10^{-3}$; Materialwerte, Lasten und
+Anschlussflächen bleiben dennoch SI. Die Skala verändert alle geometrischen
+Volumina und Flächen. Bei einem fehlerhaft als m interpretierten mm-Netz
+korrigiert daher kein nachträglicher Faktor am Verschiebungsplot die Rechnung.
+
+\section{Direkte Python-API oder deklaratives Modell}
+Die direkten Solver akzeptieren Materialobjekte, Mesh, DOF-basierte
+Dirichlet-Bedingungen und optional räumliche Callables. Beispiele wie
+\ref{recipe:expansion} und \ref{recipe:tet10-thermomechanics} verwenden
+\path{solve_thermomechanics} direkt. Für Studien und wiederholbare
+Dateiverträge verwenden die übrigen Rezepte \path{Model.from_file}.
+\begin{lstlisting}
+from fem_toolbox.model import Model
+model = Model.from_file("examples/thermopiezoelectric/case.toml")
+run = model.solve()
+result = run.field_result
+print(result.heat.temperature)
+print(result.piezoelectric.potential)
+\end{lstlisting}
+Dieses Kurzbeispiel ist ein Ausschnitt aus dem vollständigen eingebetteten
+Programm \ref{recipe:thermopiezo}. \path{to_document()} liefert eine unabhängige
+Dokumentkopie. Nach bewussten Änderungen konstruiert
+\path{Model(mesh=model.mesh, document=document)} ein neues Modell; es validiert
+erneut. Der relative Netzpfad wird beim Dateiladen aus dem Modellverzeichnis
+aufgelöst. Dateien, die fremde Eingaben referenzieren, werden nicht zu
+beliebigen Python-Programmen ausgewertet.
+
+\section{Drei explizite Modellschemata}
+\begin{longtable}{p{.12\linewidth}p{.32\linewidth}p{.46\linewidth}}
+\toprule Schema & Physik & Dokumentstruktur\\\midrule\endhead
+1 & \path{heat}, \path{elasticity}, \path{electrostatics},
+\path{piezoelectric}, \path{thermopiezoelectric}
+& \path{units="SI"}, Netz, feldweise Materialien/Regionen,
+\path{boundary}, \path{loads}; stationär.\\
+2 & \path{transient_heat}
+& Netz, Materialkapazität, \path{regions}, Zeitachse, Anfangstemperatur,
+Zeitprofile, Probes und Ausgabesteuerung.\\
+3 & \path{piezo_modes}, \path{transient_piezoelectric},
+\path{harmonic_piezoelectric}
+& Netz und Dichte, eingebetteter stationärer Schema-1-Piezoteil
+\path{base}, analyseabhängige \path{analysis}.\\\bottomrule
+\caption{Modellschemata sind Physikverträge, keine Paketversionsnummern.}
+\end{longtable}
+Schema 1 ist nicht durch 2 oder 3 ersetzt. Alte stationäre Dateien behalten
+ihre Bedeutung. Eine andere Zahl einzutragen migriert weder einen
+stationären Wärmelauf in einen transienten Lauf noch eine statische
+Piezorechnung in Dynamik. Unbekannte Schlüssel, Einheiten oder Versionen
+werden abgelehnt. Die frühen Vertragsdokumente zu Schema 1 sind durch die
+späteren Schema-2/-3- und Tet10-Erweiterungen ergänzt; diese Übersicht beschreibt
+den aktuellen Gesamtstand. Es gibt keinen eigenständigen
+\path{physics="thermomechanics"}-TOML-Modus.
+
+Schema 2 braucht positive Dichte und Wärmekapazität. Ein Preset wie
+\path{aluminium_6060_t6_20c} darf nicht gleichzeitig mit individuellen
+Stoffwerten vermischt werden. Eigene Werte verwenden Leitfähigkeit in
+W/(m K), Dichte in kg/m$^3$, Wärmekapazität in J/(kg K). \path{time.values}
+sind streng steigende Sekunden; \path{initial_temperature} ist Kelvin.
+\path{boundary.temperature} ersetzt den stationären Dirichlet-Eintrag.
+\path{kind="csv"} verlangt eine Zeitspalte und explizite Wertspalte mit
+SI-Einheit; die CSV-Auflösung erfolgt nur beim Dateiladen innerhalb des
+Modellverzeichnisses. Eingebettete CSVs sind synthetische Lastkurven.
+\path{linear} bzw. \path{previous} beschreiben Interpolation;
+Extrapolation ist standardmäßig ein Fehler und \path{hold} muss explizit sein.
+Profilereignisse werden ins Raster aufgenommen. Quellen/Flüsse wirken am
+Intervallende linksseitig, vorgegebene Temperaturen rechtsstetig.
+Diese Ereignisbehandlung ersetzt keinen Zeitkonvergenznachweis.
+
+Schema 3 benötigt Dichte in kg/m$^3$. Modal gelten homogene Randstörungen
+und \path{analysis.count}; Frequenzen werden in Hz ausgegeben, Kreisfrequenzen
+in rad/s. Transient werden Zeiten in s und optional kinematische Daten
+vorgegeben; elektrische Anfangswerte sind kein unabhängiger Massenzustand.
+Harmonisch sind Frequenzen nichtnegativ und strikt steigend; komplexe
+Lastfaktoren bestehen aus \path{real}/\path{imag}. Allgemeine Lastvektoren und
+bewegte Ränder stehen zusätzlich über die direkten Solver zur Verfügung.
+
+\section{Materialzuordnung und SI-Konventionen}
+Jede aktive Volumenzelle benötigt pro Feld genau eine Materialzuordnung.
+\path{regions.T}, \path{regions.u}, \path{regions.phi} bzw.
+\path{regions.piezo} ordnen Physical-Groups den jeweiligen Katalognamen zu;
+\path{regions.expansion} benennt bei Kopplungen den Ausdehnungsdatensatz.
+Fehlende Zellen oder widersprüchliche Überlappungen sind Eingabefehler.
+Ein Materialwechsel erzeugt keine automatische neue Grenzflächenbedingung.
+
+Direkte Python-Materialobjekte erwarten SI. Model-Schema 1 besitzt nur die
+explizit dokumentierten Umrechnungen, etwa GPa oder absolute \path{degC}.
+\path{degC} addiert 273.15; Temperaturdifferenzen dürfen nicht mit diesem
+Offset behandelt werden. \path{1/delta_degC} entspricht \path{1/K},
+\path{1/degC} ist unzulässig. Relative Permittivität ist dimensionslos und
+wird nur ausdrücklich als \path{relative} mit dem Schemawert von
+$\varepsilon_0$ in F/m umgerechnet. Absolute Permittivität erhält die Einheit
+F/m. Ein Zahlenwert in pC/N ist kein Stress-Charge-Koeffizient in C/m$^2$.
+
+Piezo verwendet standardmäßig Stress-Charge: $C^E$, $e$, $\kappa^S$.
+Strain-Charge-Daten werden vor dem Solve vollständig umgerechnet; die
+Koeffizienten dürfen nicht zwischen Formen gemischt werden. Die mechanische
+Voigt-Reihenfolge ist $xx,yy,zz,yz,xz,xy$ mit Engineering-Schubdehnungen.
+\path{axes} enthält die lokalen Materialachsen als Spalten in globalen
+Koordinaten; die dritte lokale Achse ist die übliche Polungsachse.
+Provenienz erfasst Eingabewerte, Konversion und effektive globale Tensoren.
+Synthetische Werte der Rezepte sind keine Herstellerempfehlung.
+
+\section{Randwerte, Elektroden und Preflight}
+\path{boundary.dirichlet} wählt entweder nullbasierte Netzknoten oder einen
+benannten Flächensatz. Für \path{u} sind Teilkomponenten \path{x,y,z}
+möglich; ein voller mechanischer Knoten besitzt drei DOFs. Feldindizes
+nicht mit geometrischen Knotenindizes verwechseln. Direkte Solver verwenden
+\path{thermal_dofs}, \path{mechanical_dofs}, \path{electric_dofs} bzw.
+\path{piezoelectric_dofs} zur korrekten Abbildung.
+Positiver Wärmefluss zeigt nach außen. Traktion ist N/m$^2$, Volumenkraft
+N/m$^3$, Oberflächenladung C/m$^2$, Volumenladung C/m$^3$.
+
+Eine Elektrode mit festem Potential ist äquipotentiell. Eine schwebende
+Elektrode mit \path{charge=0} setzt die \emph{Gesamtladung} null;
+sie ist weder punktweise $D\cdot n=0$ noch eine elektrische Referenz.
+Ohne Elektrodenbeschreibung ist eine isolierte Fläche kein idealer Leiter.
+Überlappende Elektroden, widersprüchliche Potentiale oder zusätzliche
+Flächenladung auf derselben Elektrodenfläche werden abgelehnt.
+
+Bereits die Konstruktion von \path{Model} prüft Schema, Materialien,
+Geometriezuordnung und feldweise Verankerung. Jede zusammenhängende
+stationäre Wärme-Komponente braucht Temperaturvorgabe oder wirksame
+Konvektion; Mechanik braucht die sechs Starrkörpermoden verankert;
+Potential braucht eine feste Gauge. Transiente Wärme kann durch positive
+Kapazität ohne stationäre Temperaturreferenz lösbar sein. Preflight setzt
+keine Erdung und korrigiert keine Randbedingungen. Er prüft Struktur,
+keine vollständige Lastkompatibilität oder Kondition. Erst der Solve und
+physikalische Nachweis beantworten die weiteren Fragen.

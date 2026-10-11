@@ -1,0 +1,3649 @@
+\chapter{Versionsgenaues API-Inventar}
+\label{api:inventory}
+\begingroup\raggedright
+\lstset{basicstyle=\scriptsize\ttfamily,breaklines=true,breakatwhitespace=false}
+Automatisch aus AST-Signaturen und Quell-Dokumentation erzeugt; keine optionalen Laufzeitimporte. Englische Quellverträge bleiben zur exakten Synchronisation erhalten. Manuelle SI-/Form-/Fehler-/Mutabilitätsregeln stehen in den vorherigen Kapiteln. Forschungs- und interne Einträge erhalten dadurch keine Stabilitätszusage.
+\section{fem\_toolbox}
+\index{fem_toolbox@fem\_\protect\allowbreak{}toolbox}
+Einordnung: stable. Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/overview.tex}. Beispiele/Tests:
+\nolinkurl{examples/steady_heat.py}.
+\subsection*{Datentypen und Konstanten}
+\begin{lstlisting}
+__version__ = version('fem-toolbox')
+\end{lstlisting}
+\section{fem\_toolbox.assembly}
+\index{fem_toolbox.assembly@assembly}
+Einordnung: research. Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/development.tex}. Beispiele/Tests:
+\nolinkurl{tests/unit/test_assembly.py}.
+\subsection{indices}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+indices(value: ArrayLike, size: int | None=None) -> NDArray[np.int64]
+\end{lstlisting}
+\begin{quote}
+Validate a one-dimensional sequence of nonnegative integer indices.
+\end{quote}
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\subsection{real\_array}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+real_array(value: ArrayLike, shape: tuple[int, ...]) -> NDArray[np.float64]
+\end{lstlisting}
+\begin{quote}
+Copy finite real data with the required shape; reject complex values.
+\end{quote}
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\subsection{MatrixBlock}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True).
+\begin{quote}
+Local matrix (nrow, ncol) with separate global row/column DOFs.
+\end{quote}
+\begin{lstlisting}
+rows: ArrayLike
+\end{lstlisting}
+\begin{lstlisting}
+columns: ArrayLike
+\end{lstlisting}
+\begin{lstlisting}
+values: ArrayLike
+\end{lstlisting}
+\subsection{VectorBlock}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True).
+\begin{quote}
+Integrated local load (ndof,); repeated DOFs accumulate.
+\end{quote}
+\begin{lstlisting}
+dofs: ArrayLike
+\end{lstlisting}
+\begin{lstlisting}
+values: ArrayLike
+\end{lstlisting}
+\subsection{LinearSystem}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: keine.
+\begin{quote}
+Owned sparse matrix and RHS; accessors return independent copies.
+\end{quote}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, matrix: sparse.spmatrix, rhs: ArrayLike) -> None
+\end{lstlisting}
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\subsubsection*{matrix}
+\begin{lstlisting}
+matrix(self) -> sparse.spmatrix
+\end{lstlisting}
+Independent sparse matrix copy.
+\subsubsection*{rhs}
+\begin{lstlisting}
+rhs(self) -> NDArray[np.float64]
+\end{lstlisting}
+Independent load vector copy, shape (size,).
+\subsubsection*{size}
+\begin{lstlisting}
+size(self) -> int
+\end{lstlisting}
+Number of global DOFs.
+\subsubsection*{residual}
+\begin{lstlisting}
+residual(self, solution: ArrayLike) -> NDArray[np.float64]
+\end{lstlisting}
+Return K x - f in equation units, including constrained reactions.
+\subsection{assemble}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+assemble(size: int, matrices: Iterable[MatrixBlock], vectors: Iterable[VectorBlock]=(), *, format: Literal['csr', 'csc']='csr') -> LinearSystem
+\end{lstlisting}
+\begin{quote}
+Sum local blocks through COO into CSR/CSC; no inactive DOFs are added.\par Invalid shapes, indices or nonfinite values raise ValidationError. Empty systems and repeated indices are supported. No symmetry is assumed.
+\end{quote}
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.boundary}
+\index{fem_toolbox.boundary@boundary}
+Einordnung: mixed. Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/mesh-materials.tex}. Beispiele/Tests:
+\nolinkurl{examples/piezo_d33.py}.
+\subsection*{Reexportierte Einstiegspunkte}
+\noindent\nolinkurl{Electrode} $\to$ \nolinkurl{fem_toolbox.boundary.electrodes.Electrode}\par
+\noindent\nolinkurl{ElectrodeState} $\to$ \nolinkurl{fem_toolbox.boundary.electrodes.ElectrodeState}\par
+\subsection{Dirichlet}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: dataclass(frozen=True).
+\begin{quote}
+Global DOFs and prescribed SI field values, each shape (n,).\par Resolve field selections with DofMap.indices; evaluate spatial/time callables before constructing this algebraic condition. Duplicate values must agree exactly; no implicit unit-dependent conflict tolerance is applied.
+\end{quote}
+\begin{lstlisting}
+dofs: ArrayLike
+\end{lstlisting}
+\begin{lstlisting}
+values: ArrayLike
+\end{lstlisting}
+\subsection{eliminate\_dirichlet}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+eliminate_dirichlet(system: LinearSystem, conditions: Iterable[Dirichlet]) -> LinearSystem
+\end{lstlisting}
+\begin{quote}
+Return P K P + I\_fixed and P(f-K g)+g; preserve original reactions.\par P selects free DOFs and g holds prescribed values (zero elsewhere). Both rows and columns are eliminated, so symmetry is retained. No solve occurs.
+\end{quote}
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.boundary.electrodes}
+\index{fem_toolbox.boundary.electrodes@boundary.\protect\allowbreak{}electrodes}
+Einordnung: research. Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/mesh-materials.tex}. Beispiele/Tests:
+\nolinkurl{examples/piezo_d33.py}.
+\subsection{Electrode}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True).
+\begin{quote}
+Named exterior Triangle3/Triangle6 set with fixed potential (V) or total charge (C).\par ``facets`` is a named mesh facet set or active surface row indices. Exactly one of ``potential`` and ``charge`` must be supplied. A floating open-circuit electrode has ``charge=0``; no potential reference is inferred.
+\end{quote}
+\begin{lstlisting}
+name: str
+\end{lstlisting}
+\begin{lstlisting}
+facets: str | ArrayLike
+\end{lstlisting}
+\begin{lstlisting}
+potential: float | None = None
+\end{lstlisting}
+\begin{lstlisting}
+charge: float | None = None
+\end{lstlisting}
+\subsection{ElectrodeState}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True).
+\begin{quote}
+Solved common electrode potential (V) and adjacent conductor charge (C).
+\end{quote}
+\begin{lstlisting}
+name: str
+\end{lstlisting}
+\begin{lstlisting}
+potential: float
+\end{lstlisting}
+\begin{lstlisting}
+charge: float
+\end{lstlisting}
+\begin{lstlisting}
+prescribed_charge: float | None
+\end{lstlisting}
+\section{fem\_toolbox.conventions}
+\index{fem_toolbox.conventions@conventions}
+Einordnung: research. Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/development.tex}. Beispiele/Tests:
+\nolinkurl{Doc/latex/examples/developer_extension.py}.
+\subsection*{Datentypen und Konstanten}
+\begin{lstlisting}
+SPATIAL_DIMENSION: Final = 3
+\end{lstlisting}
+\begin{lstlisting}
+SPATIAL_COMPONENTS: Final = ('x', 'y', 'z')
+\end{lstlisting}
+\begin{lstlisting}
+VOIGT_SIZE: Final = 6
+\end{lstlisting}
+\begin{lstlisting}
+VOIGT_COMPONENTS: Final = ('xx', 'yy', 'zz', 'yz', 'xz', 'xy')
+\end{lstlisting}
+\begin{lstlisting}
+SHEAR_STRAIN_CONVENTION: Final = 'engineering'
+\end{lstlisting}
+\begin{lstlisting}
+ELECTRIC_FIELD_DEFINITION: Final = 'E = -grad(phi)'
+\end{lstlisting}
+\begin{lstlisting}
+UNIT_SYSTEM: Final = 'SI'
+\end{lstlisting}
+\begin{lstlisting}
+SI_UNITS: Final[Mapping[str, str]] = MappingProxyType({'length': 'm', 'displacement': 'm', 'density': 'kg/m^3', 'stress': 'Pa', 'young_modulus': 'Pa', 'temperature_difference': 'K', 'thermal_conductivity': 'W/(m K)', 'specific_heat': 'J/(kg K)', 'electric_potential': 'V', 'electric_field': 'V/m', 'electric_displacement': 'C/m^2', 'permittivity': 'F/m', 'piezoelectric_stress': 'C/m^2'})
+\end{lstlisting}
+\subsection{VoigtIndex}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: IntEnum. Dekoratoren: keine.
+\begin{quote}
+Indices for engineering-strain and stress vectors in three dimensions.
+\end{quote}
+\section{fem\_toolbox.dynamic\_result}
+\index{fem_toolbox.dynamic_result@dynamic\_\protect\allowbreak{}result}
+Einordnung: stable. Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/solvers.tex}. Beispiele/Tests:
+\nolinkurl{examples/transient_heat/run.py}.
+\subsection{PiezoDynamicResult}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, eq=False).
+\begin{quote}
+Dynamic solution bound to the exact mesh and effective cell materials.\par solution is a modal result, transient history, or ordered tuple of harmonic states. Provenance includes the resolved schema-3 document and solver hashes.
+\end{quote}
+\begin{lstlisting}
+mesh: Mesh
+\end{lstlisting}
+\begin{lstlisting}
+materials: tuple[PiezoelectricMaterial, ...]
+\end{lstlisting}
+\begin{lstlisting}
+solution: PiezoelectricModes | TransientPiezoelectricResult | tuple[HarmonicPiezoelectricResult, ...]
+\end{lstlisting}
+\begin{lstlisting}
+provenance: RunProvenance
+\end{lstlisting}
+\section{fem\_toolbox.elements}
+\index{fem_toolbox.elements@elements}
+Einordnung: research. Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/development.tex}. Beispiele/Tests:
+\nolinkurl{Doc/latex/examples/developer_extension.py}.
+\subsection*{Reexportierte Einstiegspunkte}
+\noindent\nolinkurl{DEFAULT_DEGENERACY_TOLERANCE} $\to$ \nolinkurl{fem_toolbox.elements.tet4.DEFAULT_DEGENERACY_TOLERANCE}\par
+\noindent\nolinkurl{QuadratureRule} $\to$ \nolinkurl{fem_toolbox.elements.quadrature.QuadratureRule}\par
+\noindent\nolinkurl{Tet4Face} $\to$ \nolinkurl{fem_toolbox.elements.tet4.Tet4Face}\par
+\noindent\nolinkurl{Tet4Geometry} $\to$ \nolinkurl{fem_toolbox.elements.tet4.Tet4Geometry}\par
+\noindent\nolinkurl{Tet4Quality} $\to$ \nolinkurl{fem_toolbox.elements.tet4.Tet4Quality}\par
+\noindent\nolinkurl{Tet10Face} $\to$ \nolinkurl{fem_toolbox.elements.tet10.Tet10Face}\par
+\noindent\nolinkurl{Tet10Geometry} $\to$ \nolinkurl{fem_toolbox.elements.tet10.Tet10Geometry}\par
+\noindent\nolinkurl{Triangle6Geometry} $\to$ \nolinkurl{fem_toolbox.elements.tet10.Triangle6Geometry}\par
+\noindent\nolinkurl{tetrahedron_quadrature} $\to$ \nolinkurl{fem_toolbox.elements.quadrature.tetrahedron_quadrature}\par
+\noindent\nolinkurl{triangle_quadrature} $\to$ \nolinkurl{fem_toolbox.elements.quadrature.triangle_quadrature}\par
+\section{fem\_toolbox.elements.elasticity}
+\index{fem_toolbox.elements.elasticity@elements.\protect\allowbreak{}elasticity}
+Einordnung: research. Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/development.tex}. Beispiele/Tests:
+\nolinkurl{Doc/latex/examples/developer_extension.py}.
+\subsection{strain\_matrix}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+strain_matrix(geometry: Tet4Geometry) -> NDArray[np.float64]
+\end{lstlisting}
+\begin{quote}
+Return B (6,12), in 1/m, using the geometry's original node order.
+\end{quote}
+\subsection{stiffness\_matrix}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+stiffness_matrix(geometry: Tet4Geometry, material: ElasticMaterial) -> NDArray[np.float64]
+\end{lstlisting}
+\begin{quote}
+Return exactly integrated V B.T C B (12,12), in N/m.
+\end{quote}
+\section{fem\_toolbox.elements.electrostatics}
+\index{fem_toolbox.elements.electrostatics@elements.\protect\allowbreak{}electrostatics}
+Einordnung: research. Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/development.tex}. Beispiele/Tests:
+\nolinkurl{Doc/latex/examples/developer_extension.py}.
+\subsection{dielectric\_matrix}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+dielectric_matrix(geometry: Tet4Geometry, material: DielectricMaterial) -> NDArray[np.float64]
+\end{lstlisting}
+\begin{quote}
+Return V G.T k G (4,4), in F, in original local node order.
+\end{quote}
+\section{fem\_toolbox.elements.heat}
+\index{fem_toolbox.elements.heat@elements.\protect\allowbreak{}heat}
+Einordnung: research. Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/development.tex}. Beispiele/Tests:
+\nolinkurl{Doc/latex/examples/developer_extension.py}.
+\subsection{conductance\_matrix}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+conductance_matrix(geometry: Tet4Geometry, material: ThermalMaterial) -> NDArray[np.float64]
+\end{lstlisting}
+\begin{quote}
+Return V G.T k G (4,4), in W/K, in original local node order.
+\end{quote}
+\section{fem\_toolbox.elements.piezoelectric}
+\index{fem_toolbox.elements.piezoelectric@elements.\protect\allowbreak{}piezoelectric}
+Einordnung: research. Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/development.tex}. Beispiele/Tests:
+\nolinkurl{Doc/latex/examples/developer_extension.py}.
+\subsection{piezoelectric\_matrix}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+piezoelectric_matrix(geometry: Tet4Geometry, material: PiezoelectricMaterial) -> NDArray[np.float64]
+\end{lstlisting}
+\begin{quote}
+Return the signed symmetric (16,16) local tangent in [u(12), phi(4)] order.\par With B (6,12), G (3,4), and volume V, the blocks are ``V B.T C B``, ``V B.T e.T G``, its transpose, and ``-V G.T kappa G``. Mechanical rows have N/m for u columns and N/V for phi columns; electric rows have C/m for u columns and C/V for phi columns. Invalid geometry or material types raise ValidationError. Geometry itself validates orientation and degeneracy on construction.
+\end{quote}
+\subsection{piezoelectric\_thermal\_load}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+piezoelectric_thermal_load(geometry: Tet4Geometry, material: PiezoelectricMaterial, thermal_strain: ArrayLike, *, electric_thermal_strain: bool=False) -> NDArray[np.float64]
+\end{lstlisting}
+\begin{quote}
+Return local thermal RHS (16,) for a constant engineering-Voigt strain.\par The mechanical part is ``V B.T C epsilon\_th`` in N. If the explicit electric switch is enabled, the electric part is ``V G.T e epsilon\_th`` in C; otherwise it is exactly zero. This switch selects whether D uses total strain or mechanical strain. The stiffness matrix is unchanged.
+\end{quote}
+\subsection{PiezoelectricElementResponse}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True, eq=False).
+\begin{quote}
+Constant fields and integrated electric enthalpy terms of one Tet4.\par ``strain`` uses engineering Voigt order (6,), ``electric\_field`` and ``electric\_displacement`` are (3,), and ``stress`` is (6,). Energies are in J: mechanical, coupling, negative dielectric, and their sum.
+\end{quote}
+\begin{lstlisting}
+strain: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+electric_field: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+stress: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+electric_displacement: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+mechanical_energy: float
+\end{lstlisting}
+\begin{lstlisting}
+coupling_energy: float
+\end{lstlisting}
+\begin{lstlisting}
+dielectric_enthalpy: float
+\end{lstlisting}
+\begin{lstlisting}
+total_enthalpy: float
+\end{lstlisting}
+\subsection{piezoelectric\_response}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+piezoelectric_response(geometry: Tet4Geometry, material: PiezoelectricMaterial, displacement: ArrayLike, potential: ArrayLike, *, thermal_strain: ArrayLike | None=None, electric_thermal_strain: bool=False) -> PiezoelectricElementResponse
+\end{lstlisting}
+\begin{quote}
+Evaluate constant fields and integrated electric enthalpy for one Tet4.\par ``displacement`` has shape (4,3) in m, ``potential`` (4,) in V, and the optional constant ``thermal\_strain`` (6,) is dimensionless. If enabled, D uses strain minus thermal strain; otherwise D uses total strain. In both cases stress uses mechanical strain. Invalid shapes or a missing strain for the enabled switch raise ValidationError.
+\end{quote}
+\section{fem\_toolbox.elements.quadratic}
+\index{fem_toolbox.elements.quadratic@elements.\protect\allowbreak{}quadratic}
+Einordnung: research. Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/development.tex}. Beispiele/Tests:
+\nolinkurl{tests/unit/test_tet10_operators.py}.
+\subsection*{Datentypen und Konstanten}
+\begin{lstlisting}
+FloatArray = NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+Lumping = Literal['consistent', 'hrz']
+\end{lstlisting}
+\subsection{strain\_matrix}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+strain_matrix(geometry: Tet10Geometry, point: ArrayLike) -> FloatArray
+\end{lstlisting}
+\begin{quote}
+B (6,30) in 1/m at physical point (3,), engineering Voigt yz,xz,xy.
+\end{quote}
+\subsection{conductance\_matrix}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+conductance_matrix(geometry: Tet10Geometry, material: ThermalMaterial) -> FloatArray
+\end{lstlisting}
+\begin{quote}
+Integral G.T k G (10,10), W/K; constant anisotropic conductivity.
+\end{quote}
+\subsection{dielectric\_matrix}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+dielectric_matrix(geometry: Tet10Geometry, material: DielectricMaterial) -> FloatArray
+\end{lstlisting}
+\begin{quote}
+Positive integral G.T kappa G (10,10), F; piezo uses its negative.
+\end{quote}
+\subsection{stiffness\_matrix}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+stiffness_matrix(geometry: Tet10Geometry, material: ElasticMaterial) -> FloatArray
+\end{lstlisting}
+\begin{quote}
+Integral B.T C B (30,30), N/m; constant engineering-Voigt stiffness.
+\end{quote}
+\subsection{piezoelectric\_matrix}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+piezoelectric_matrix(geometry: Tet10Geometry, material: PiezoelectricMaterial) -> FloatArray
+\end{lstlisting}
+\begin{quote}
+Signed symmetric tangent (40,40), [u,phi], with +B.T e.T G coupling.\par Mechanical block is integral B.T C B, dielectric block -G.T kappa G. Units: N/m, N/V (C/m), C/V in the corresponding blocks. E=-grad(phi).
+\end{quote}
+\subsection{thermal\_load}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+thermal_load(geometry: Tet10Geometry, material: ElasticMaterial | PiezoelectricMaterial, temperature: ArrayLike, expansion: ThermalExpansion, *, electric_thermal_strain: bool=False) -> FloatArray
+\end{lstlisting}
+\begin{quote}
+Thermal RHS (30,) N or (40,) [N,C] from nodal temperature (10,) K.\par Integrates B.T C alpha*(N.T-Tref). For piezo, the explicit electric switch adds G.T e alpha*(N.T-Tref), matching mechanical-strain D convention. Default D uses total strain. No pyroelectricity or thermal feedback. Constant expansion in engineering Voigt and reference temperature are SI. Invalid geometry, material, temperature, expansion or switch raise ValidationError.
+\end{quote}
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\subsection{mass\_matrix}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+mass_matrix(geometry: Tet10Geometry, density: float, *, lumping: Lumping='consistent') -> FloatArray
+\end{lstlisting}
+\begin{quote}
+Mechanical (30,30) mass in kg; positive rho [kg/m³], no electric mass.\par Default: exact rho Ni Nj tensor I3. 'hrz' scales the positive consistent diagonal to conserve total mass per direction; not P1 row-sum lumping.
+\end{quote}
+\subsection{capacity\_matrix}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+capacity_matrix(geometry: Tet10Geometry, density: float, specific_heat: float, *, lumping: Lumping='consistent') -> FloatArray
+\end{lstlisting}
+\begin{quote}
+(10,10) capacity in J/K; positive rho [kg/m³], c [J/(kg K)].\par 'consistent' integrates rho c Ni Nj; explicit 'hrz' conserves total capacity by scaling its positive diagonal. Invalid or unrepresentable values fail.
+\end{quote}
+\section{fem\_toolbox.elements.quadrature}
+\index{fem_toolbox.elements.quadrature@elements.\protect\allowbreak{}quadrature}
+Einordnung: research. Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/development.tex}. Beispiele/Tests:
+\nolinkurl{Doc/latex/examples/developer_extension.py}.
+\subsection{QuadratureRule}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True).
+\begin{quote}
+Points (n, d), weights (n,) and guaranteed total polynomial degree.\par Reference weights integrate d-dimensional reference measure (1/6 for a tetrahedron, 1/2 for a triangle). Geometry methods return physical points in metres and weights in m³ or m². Arrays returned by the factory functions and geometry methods are immutable. No normalization to unit weight.
+\end{quote}
+\begin{lstlisting}
+points: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+weights: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+degree: int
+\end{lstlisting}
+\subsection{tetrahedron\_quadrature}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+tetrahedron_quadrature() -> QuadratureRule
+\end{lstlisting}
+\begin{quote}
+64 positive points on x,y,z >= 0, x+y+z <= 1; exact through degree 5.\par Four Gauss points per collapsed coordinate integrate degrees up to seven; the Jacobian adds at most two powers, giving total simplex degree five. This includes degree-four products of quadratic shape functions.
+\end{quote}
+\subsection{triangle\_quadrature}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+triangle_quadrature() -> QuadratureRule
+\end{lstlisting}
+\begin{quote}
+Nine positive points on x,y >= 0, x+y <= 1; exact through degree 4.
+\end{quote}
+\section{fem\_toolbox.elements.storage}
+\index{fem_toolbox.elements.storage@elements.\protect\allowbreak{}storage}
+Einordnung: research. Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/development.tex}. Beispiele/Tests:
+\nolinkurl{Doc/latex/examples/developer_extension.py}.
+\subsection{mass\_matrix}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+mass_matrix(geometry: Tet4Geometry, density: float, *, lumped: bool=False) -> NDArray[np.float64]
+\end{lstlisting}
+\begin{quote}
+Return mechanical mass (12,12) in kg, node-major xyz local order.\par Density is constant on the element, finite and positive in kg/m³. The default integrates rho Ni Nj exactly; lumped=True selects row-sum lumping. Invalid inputs or unrepresentable storage raise ValidationError. Electrical DOFs carry no mass and are not part of this operator.
+\end{quote}
+\subsection{capacity\_matrix}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+capacity_matrix(geometry: Tet4Geometry, density: float, specific_heat: float, *, lumped: bool=False) -> NDArray[np.float64]
+\end{lstlisting}
+\begin{quote}
+Return thermal capacity (4,4) in J/K in original local node order.\par Density [kg/m³] and specific\_heat [J/(kg K)] must be finite positive constants on this element. Default: exact integral rho c Ni Nj; lumped=True selects row-sum lumping. Invalid inputs and unrepresentable storage raise ValidationError. No temperature dependence is implied.
+\end{quote}
+\section{fem\_toolbox.elements.tet10}
+\index{fem_toolbox.elements.tet10@elements.\protect\allowbreak{}tet10}
+Einordnung: research. Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/development.tex}. Beispiele/Tests:
+\nolinkurl{Doc/latex/examples/developer_extension.py}.
+\subsection*{Datentypen und Konstanten}
+\begin{lstlisting}
+FloatArray = NDArray[np.float64]
+\end{lstlisting}
+\subsection{Tet10Face}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True).
+\begin{quote}
+Six outward-oriented local nodes, opposite corner and affine face data.
+\end{quote}
+\begin{lstlisting}
+local_nodes: tuple[int, ...]
+\end{lstlisting}
+\begin{lstlisting}
+opposite_node: int
+\end{lstlisting}
+\begin{lstlisting}
+area: float
+\end{lstlisting}
+\begin{lstlisting}
+unit_normal: FloatArray
+\end{lstlisting}
+\begin{lstlisting}
+centroid: FloatArray
+\end{lstlisting}
+\subsection{Tet10Geometry}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: keine.
+\begin{quote}
+Straight Tet10 with VTK node order: corners then 01,12,20,03,13,23.\par Coordinates are (10,3) in metres. Shape values and point-dependent physical gradients retain input ordering, including negative orientation. Curved or non-midpoint edges are rejected at relative edge tolerance 1e-10. Corner degeneracy uses the Tet4 dimensionless criterion. Evaluation outside the element is polynomial extrapolation, not an inclusion test.
+\end{quote}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, coordinates: ArrayLike, *, entity_id: int | None=None, degeneracy_tolerance: float=DEFAULT_DEGENERACY_TOLERANCE) -> None
+\end{lstlisting}
+\subsubsection*{coordinates}
+\begin{lstlisting}
+coordinates(self) -> FloatArray
+\end{lstlisting}
+Immutable (10,3) input coordinates in metres.
+\subsubsection*{volume}
+\begin{lstlisting}
+volume(self) -> float
+\end{lstlisting}
+Positive volume in m³.
+\subsubsection*{signed\_volume}
+\begin{lstlisting}
+signed_volume(self) -> float
+\end{lstlisting}
+Signed volume of the input corner ordering in m³.
+\subsubsection*{quality}
+\begin{lstlisting}
+quality(self) -> Tet4Quality
+\end{lstlisting}
+Affine corner-simplex quality, independent of interpolation degree.
+\subsubsection*{oriented\_node\_order}
+\begin{lstlisting}
+oriented_node_order(self) -> tuple[int, ...]
+\end{lstlisting}
+Ten-node permutation giving positive corner orientation.
+\subsubsection*{oriented\_coordinates}
+\begin{lstlisting}
+oriented_coordinates(self) -> FloatArray
+\end{lstlisting}
+Immutable coordinates consistently permuted to positive orientation.
+\subsubsection*{faces}
+\begin{lstlisting}
+faces(self) -> tuple[Tet10Face, ...]
+\end{lstlisting}
+Four outward-oriented six-node faces.
+\subsubsection*{oriented\_connectivity}
+\begin{lstlisting}
+oriented_connectivity(self, connectivity: ArrayLike) -> NDArray[np.int64]
+\end{lstlisting}
+Permute ten unique integer indices with the geometry; retain IDs.
+Direkte Raise-Stellen: ElementGeometryError, ShapeError; transitive Fehler siehe Fachvertrag.
+\subsubsection*{shape\_values}
+\begin{lstlisting}
+shape_values(self, point: ArrayLike) -> FloatArray
+\end{lstlisting}
+Ten dimensionless shape values at a physical (3,) point in metres.
+\subsubsection*{shape\_gradients}
+\begin{lstlisting}
+shape_gradients(self, point: ArrayLike) -> FloatArray
+\end{lstlisting}
+Physical gradients (10,3), one row per input node, in 1/m.
+\subsubsection*{gradient\_matrix}
+\begin{lstlisting}
+gradient_matrix(self, point: ArrayLike) -> FloatArray
+\end{lstlisting}
+Scalar field gradient operator (3,10) in 1/m.
+\subsubsection*{quadrature}
+\begin{lstlisting}
+quadrature(self) -> QuadratureRule
+\end{lstlisting}
+Physical points and positive m³ weights, exact through degree five.
+\subsection{Triangle6Geometry}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: keine.
+\begin{quote}
+Planar straight Triangle6: corners 0,1,2 then edge nodes 01,12,20.\par Coordinates are (6,3) in metres; input corner order defines the normal. Gradients are tangential vectors in ambient 3D. Off-plane evaluation is rejected at 1e-10 of the maximum edge length. In-plane extrapolation is allowed. Curved edges and relative area <= 1e-12 are rejected.
+\end{quote}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, coordinates: ArrayLike) -> None
+\end{lstlisting}
+Direkte Raise-Stellen: ElementGeometryError; transitive Fehler siehe Fachvertrag.
+\subsubsection*{coordinates}
+\begin{lstlisting}
+coordinates(self) -> FloatArray
+\end{lstlisting}
+Immutable (6,3) input coordinates in metres.
+\subsubsection*{area}
+\begin{lstlisting}
+area(self) -> float
+\end{lstlisting}
+Positive surface measure in m².
+\subsubsection*{unit\_normal}
+\begin{lstlisting}
+unit_normal(self) -> FloatArray
+\end{lstlisting}
+Immutable unit normal following the input corner ordering.
+\subsubsection*{shape\_values}
+\begin{lstlisting}
+shape_values(self, point: ArrayLike) -> FloatArray
+\end{lstlisting}
+Six dimensionless values at a physical (3,) point in the plane.
+\subsubsection*{shape\_gradients}
+\begin{lstlisting}
+shape_gradients(self, point: ArrayLike) -> FloatArray
+\end{lstlisting}
+Tangential physical gradients (6,3) in 1/m, in input node order.
+\subsubsection*{quadrature}
+\begin{lstlisting}
+quadrature(self) -> QuadratureRule
+\end{lstlisting}
+Physical points and m² weights, exact through degree four.
+\section{fem\_toolbox.elements.tet4}
+\index{fem_toolbox.elements.tet4@elements.\protect\allowbreak{}tet4}
+Einordnung: research. Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/development.tex}. Beispiele/Tests:
+\nolinkurl{Doc/latex/examples/developer_extension.py}.
+\subsection*{Datentypen und Konstanten}
+\begin{lstlisting}
+FloatArray = NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+IndexArray = NDArray[np.int64]
+\end{lstlisting}
+\begin{lstlisting}
+DEFAULT_DEGENERACY_TOLERANCE = 1e-12
+\end{lstlisting}
+\subsection{Tet4Face}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True).
+\begin{quote}
+Geometry of one face, identified by local nodes and opposite node.
+\end{quote}
+\begin{lstlisting}
+local_nodes: tuple[int, int, int]
+\end{lstlisting}
+\begin{lstlisting}
+opposite_node: int
+\end{lstlisting}
+\begin{lstlisting}
+area: float
+\end{lstlisting}
+\begin{lstlisting}
+unit_normal: FloatArray
+\end{lstlisting}
+\begin{lstlisting}
+centroid: FloatArray
+\end{lstlisting}
+\subsection{Tet4Quality}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True).
+\begin{quote}
+Permutation-, rotation-, translation-, and scale-invariant quality data.
+\end{quote}
+\begin{lstlisting}
+min_edge_length: float
+\end{lstlisting}
+\begin{lstlisting}
+max_edge_length: float
+\end{lstlisting}
+\begin{lstlisting}
+aspect_ratio: float
+\end{lstlisting}
+\begin{lstlisting}
+scaled_volume: float
+\end{lstlisting}
+\begin{lstlisting}
+condition_number: float
+\end{lstlisting}
+\subsection{Tet4Geometry}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: keine.
+\begin{quote}
+Validated constant geometry operators for one Tet4 element.\par ``shape\_gradients`` stores one physical gradient per node in a ``(4, 3)`` array. ``gradient\_matrix`` exposes the equivalent FEM convention ``G`` with shape ``(3, 4)``. The raw signed volume retains the input orientation; ``oriented\_node\_order`` and ``oriented\_coordinates`` provide a positive orientation without mutating the input.
+\end{quote}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, coordinates: ArrayLike, *, entity_id: int | None=None, degeneracy_tolerance: float=DEFAULT_DEGENERACY_TOLERANCE) -> None
+\end{lstlisting}
+Direkte Raise-Stellen: DegenerateElementError, ElementGeometryError; transitive Fehler siehe Fachvertrag.
+\subsubsection*{coordinates}
+\begin{lstlisting}
+coordinates(self) -> FloatArray
+\end{lstlisting}
+Immutable input coordinates with shape ``(4, 3)`` in metres.
+\subsubsection*{entity\_id}
+\begin{lstlisting}
+entity_id(self) -> int | None
+\end{lstlisting}
+Optional mesh entity ID used in diagnostics.
+\subsubsection*{signed\_volume}
+\begin{lstlisting}
+signed_volume(self) -> float
+\end{lstlisting}
+Oriented input volume in cubic metres.
+\subsubsection*{volume}
+\begin{lstlisting}
+volume(self) -> float
+\end{lstlisting}
+Positive element volume in cubic metres.
+\subsubsection*{shape\_gradients}
+\begin{lstlisting}
+shape_gradients(self) -> FloatArray
+\end{lstlisting}
+Constant physical gradients as rows ``[grad(N\_0), ..., grad(N\_3)]``.
+\subsubsection*{gradient\_matrix}
+\begin{lstlisting}
+gradient_matrix(self) -> FloatArray
+\end{lstlisting}
+Constant scalar-field operator ``G`` with shape ``(3, 4)``.
+\subsubsection*{quality}
+\begin{lstlisting}
+quality(self) -> Tet4Quality
+\end{lstlisting}
+Dimensionless and edge-length quality indicators.
+\subsubsection*{oriented\_node\_order}
+\begin{lstlisting}
+oriented_node_order(self) -> tuple[int, int, int, int]
+\end{lstlisting}
+Local permutation that yields a positive orientation.
+\subsubsection*{oriented\_coordinates}
+\begin{lstlisting}
+oriented_coordinates(self) -> FloatArray
+\end{lstlisting}
+Coordinates permuted to positive orientation.
+\subsubsection*{faces}
+\begin{lstlisting}
+faces(self) -> tuple[Tet4Face, ...]
+\end{lstlisting}
+Four outward faces, computed on first access and retained per instance.\par Volume-only operations do not construct faces. The unchanged geometric calculation uses owned immutable coordinates; no external invalidation or shared cache is needed. Concurrent first access may duplicate work.
+\subsubsection*{shape\_values}
+\begin{lstlisting}
+shape_values(self, point: ArrayLike) -> FloatArray
+\end{lstlisting}
+Evaluate the four affine shape functions at a physical point.
+\subsubsection*{oriented\_connectivity}
+\begin{lstlisting}
+oriented_connectivity(self, connectivity: ArrayLike) -> IndexArray
+\end{lstlisting}
+Return four node indices permuted consistently with the geometry.
+Direkte Raise-Stellen: ElementGeometryError, ShapeError; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.errors}
+\index{fem_toolbox.errors@errors}
+Einordnung: stable. Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/overview.tex}. Beispiele/Tests:
+\nolinkurl{examples/steady_heat.py}.
+\subsection{FEMToolboxError}
+stabiler Einstieg.
+Basistypen: Exception. Dekoratoren: keine.
+\begin{quote}
+Base class for errors intentionally raised by the toolbox.
+\end{quote}
+\subsection{ValidationError}
+stabiler Einstieg.
+Basistypen: FEMToolboxError, ValueError. Dekoratoren: keine.
+\begin{quote}
+Base class for invalid user or model data.\par Args:     message: Human-readable failure description.     field: Stable field identifier for programmatic error handling.
+\end{quote}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, message: str, *, field: str) -> None
+\end{lstlisting}
+\subsection{ShapeError}
+stabiler Einstieg.
+Basistypen: ValidationError. Dekoratoren: keine.
+\begin{quote}
+An array or tensor has an incompatible shape.
+\end{quote}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, *, field: str, expected: str, actual: tuple[int, ...]) -> None
+\end{lstlisting}
+\subsection{UnitError}
+stabiler Einstieg.
+Basistypen: ValidationError. Dekoratoren: keine.
+\begin{quote}
+A physical quantity is not expressed in the required SI unit.
+\end{quote}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, *, field: str, expected: str, actual: str) -> None
+\end{lstlisting}
+\subsection{ProvenanceError}
+stabiler Einstieg.
+Basistypen: ValidationError. Dekoratoren: keine.
+\begin{quote}
+Simulation provenance is incomplete or cannot be serialized safely.
+\end{quote}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, *, field: str, reason: str) -> None
+\end{lstlisting}
+\subsection{MeshValidationError}
+stabiler Einstieg.
+Basistypen: ValidationError. Dekoratoren: keine.
+\begin{quote}
+Mesh topology or metadata violates the in-memory data contract.
+\end{quote}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, *, field: str, reason: str) -> None
+\end{lstlisting}
+\subsection{ConnectivityError}
+stabiler Einstieg.
+Basistypen: MeshValidationError. Dekoratoren: keine.
+\begin{quote}
+A cell or facet connectivity row is invalid.\par ``entity\_id`` is the external entity ID when supplied and otherwise the zero-based internal row index. ``duplicate\_of`` follows the same rule.
+\end{quote}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, *, entity_kind: str, entity_id: int, reason: str, duplicate_of: int | None=None) -> None
+\end{lstlisting}
+\subsection{SelectionError}
+stabiler Einstieg.
+Basistypen: MeshValidationError. Dekoratoren: keine.
+\begin{quote}
+A named volume or facet selection contains invalid internal indices.
+\end{quote}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, *, field: str, selection_name: str, reason: str) -> None
+\end{lstlisting}
+\subsection{BoundaryTopologyError}
+stabiler Einstieg.
+Basistypen: MeshValidationError. Dekoratoren: keine.
+\begin{quote}
+A surface simplex is not a unique exterior volume face, or is missing.
+\end{quote}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, *, kind: str, entity_id: int | None, cell_id: int | None, groups: tuple[str, ...], nodes: tuple[int, int, int]) -> None
+\end{lstlisting}
+\subsection{MaterialAssignmentError}
+stabiler Einstieg.
+Basistypen: ValidationError. Dekoratoren: keine.
+\begin{quote}
+A named volume region does not yield one valid material per active cell.
+\end{quote}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, *, kind: str, field: str, reason: str, cell_id: int | None=None, regions: tuple[str, ...]=()) -> None
+\end{lstlisting}
+\subsection{ModelSchemaError}
+stabiler Einstieg.
+Basistypen: ValidationError. Dekoratoren: keine.
+\begin{quote}
+A versioned declarative model contains invalid or unsupported data.
+\end{quote}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, *, path: str, reason: str) -> None
+\end{lstlisting}
+\subsection{MeshIOError}
+stabiler Einstieg.
+Basistypen: FEMToolboxError. Dekoratoren: keine.
+\begin{quote}
+A mesh could not be converted at an external-format boundary.
+\end{quote}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, *, operation: str, reason: str) -> None
+\end{lstlisting}
+\subsection{UnsupportedCellTypeError}
+stabiler Einstieg.
+Basistypen: MeshIOError. Dekoratoren: keine.
+\begin{quote}
+An input mesh contains cell types outside the supported simplex families.
+\end{quote}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, cell_types: tuple[str, ...]) -> None
+\end{lstlisting}
+\subsection{ElementGeometryError}
+stabiler Einstieg.
+Basistypen: ValidationError. Dekoratoren: keine.
+\begin{quote}
+Element coordinates or geometry settings are numerically invalid.
+\end{quote}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, *, field: str, reason: str) -> None
+\end{lstlisting}
+\subsection{DegenerateElementError}
+stabiler Einstieg.
+Basistypen: ElementGeometryError. Dekoratoren: keine.
+\begin{quote}
+A Tet4 has insufficient dimensionless volume for stable operators.
+\end{quote}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, *, entity_id: int | None, signed_volume: float, scaled_volume: float, tolerance: float) -> None
+\end{lstlisting}
+\subsection{ThermalNullspaceError}
+stabiler Einstieg.
+Basistypen: ValidationError. Dekoratoren: keine.
+\begin{quote}
+An unanchored connected thermal component has a constant null mode.\par compatible identifies a balanced Neumann problem with an undetermined temperature offset; otherwise no steady solution exists. net\_power and tolerance are in W; component is its zero-based connected-component index.
+\end{quote}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, *, component: int, compatible: bool, net_power: float, tolerance: float) -> None
+\end{lstlisting}
+\subsection{ElectricGaugeError}
+stabiler Einstieg.
+Basistypen: ValidationError. Dekoratoren: keine.
+\begin{quote}
+Unreferenced electrical component: compatible free gauge or charge defect.\par net\_charge = volume charge minus prescribed outward D-flux, in C. tolerance is in C; component is the zero-based connected-component index.
+\end{quote}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, *, component: int, compatible: bool, net_charge: float, tolerance: float) -> None
+\end{lstlisting}
+\section{fem\_toolbox.fields}
+\index{fem_toolbox.fields@fields}
+Einordnung: research. Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/development.tex}. Beispiele/Tests:
+\nolinkurl{Doc/latex/examples/developer_extension.py}.
+\subsection{Field}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True).
+\begin{quote}
+Active nodal field with ordered components/nodes and SI unit metadata.\par Node IDs are internal zero-based mesh indices; the caller selects only the participating nodes. Empty support is allowed. Names and unit must be nonempty.
+\end{quote}
+\begin{lstlisting}
+name: str
+\end{lstlisting}
+\begin{lstlisting}
+components: tuple[str, ...]
+\end{lstlisting}
+\begin{lstlisting}
+nodes: tuple[int, ...]
+\end{lstlisting}
+\begin{lstlisting}
+unit: str
+\end{lstlisting}
+\subsection{DofMap}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: keine.
+\begin{quote}
+Allocate exactly the supplied fields in input order, without padding.
+\end{quote}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, fields: Sequence[Field]) -> None
+\end{lstlisting}
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\subsubsection*{size}
+\begin{lstlisting}
+size(self) -> int
+\end{lstlisting}
+Total number of active DOFs.
+\subsubsection*{block}
+\begin{lstlisting}
+block(self, field: str) -> slice
+\end{lstlisting}
+Contiguous field slice, suitable for subsequent block solvers.
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\subsubsection*{indices}
+\begin{lstlisting}
+indices(self, field: str, nodes: ArrayLike, components: Sequence[str] | None=None) -> NDArray[np.int64]
+\end{lstlisting}
+Flatten requested nodes/components in supplied order.\par Unknown fields, inactive nodes and unknown components raise ValidationError.
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.io}
+\index{fem_toolbox.io@io}
+Einordnung: mixed. Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/artifacts.tex}. Beispiele/Tests:
+\nolinkurl{examples/thermopiezoelectric/run.py}.
+\subsection*{Reexportierte Einstiegspunkte}
+\noindent\nolinkurl{read_gmsh} $\to$ \nolinkurl{fem_toolbox.io.meshio_adapter.read_gmsh}\par
+\noindent\nolinkurl{read_vtu} $\to$ \nolinkurl{fem_toolbox.io.meshio_adapter.read_vtu}\par
+\noindent\nolinkurl{write_vtu} $\to$ \nolinkurl{fem_toolbox.io.meshio_adapter.write_vtu}\par
+\subsection{export\_result\_bundle}
+stabiler Einstieg.
+\begin{lstlisting}
+export_result_bundle(path: str | Path, mesh: Mesh, result: object) -> tuple[Path, Path]
+\end{lstlisting}
+\begin{quote}
+Export raw SI fields and a versioned JSON manifest beside a VTU file.
+\end{quote}
+\section{fem\_toolbox.io.heat\_series}
+\index{fem_toolbox.io.heat_series@io.\protect\allowbreak{}heat\_\protect\allowbreak{}series}
+Einordnung: stable. Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/artifacts.tex}. Beispiele/Tests:
+\nolinkurl{examples/thermopiezoelectric/run.py}.
+\subsection{HeatSeriesWriter}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: keine.
+\begin{quote}
+Write into a new directory; existing paths are never overwritten.\par Pass write as solve\_transient\_heat(on\_frame=writer.write), then call finish(result). Failures leave a readable series marked incomplete. Probe/balance CSV and final provenance are published only on finish. Inactive mesh nodes/triangle fields are zero-filled with validity masks.
+\end{quote}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, path: str | Path, mesh: Mesh) -> None
+\end{lstlisting}
+\subsubsection*{write}
+\begin{lstlisting}
+write(self, frame: HeatFrame) -> None
+\end{lstlisting}
+Publish one complete frame before adding its PVD/manifest entry.
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\subsubsection*{finish}
+\begin{lstlisting}
+finish(self, result: TransientHeatResult) -> Path
+\end{lstlisting}
+Mark a matching completed run after writing all probe/balance records.
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\subsection{export\_heat\_series}
+stabiler Einstieg.
+\begin{lstlisting}
+export_heat_series(path: str | Path, mesh: Mesh, result: TransientHeatResult) -> Path
+\end{lstlisting}
+\begin{quote}
+Export completed fields and measurements into a new directory.
+\end{quote}
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.io.meshio\_adapter}
+\index{fem_toolbox.io.meshio_adapter@io.\protect\allowbreak{}meshio\_\protect\allowbreak{}adapter}
+Einordnung: research. Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/mesh-materials.tex}. Beispiele/Tests:
+\nolinkurl{examples/piezo_d33.py}.
+\subsection{read\_gmsh}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+read_gmsh(path: str | Path, *, length_scale_to_m: float=1.0) -> Mesh
+\end{lstlisting}
+\begin{quote}
+Read one Tet4/Triangle3 or straight Tet10/Triangle6 Gmsh family.\par Coordinates are multiplied by ``length\_scale\_to\_m`` and stored in metres. Physical names become immutable volume or facet selection sets. Gmsh 4.1 entities belonging to several physical groups remain in every corresponding set, while the singular compatibility tags retain meshio's first physical tag. Negative volume orientations are normalized, including all Tet10 edge nodes. Curved quadratic geometry and degenerate volume cells are rejected.
+\end{quote}
+Direkte Raise-Stellen: MeshIOError; transitive Fehler siehe Fachvertrag.
+\subsection{read\_vtu}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+read_vtu(path: str | Path) -> Mesh
+\end{lstlisting}
+\begin{quote}
+Read mesh topology and Toolbox metadata from VTU, without changing ordering.\par Restores optional IDs, tags and overlapping/empty sets written by write\_vtu. Result arrays remain accessible through meshio; this function returns Mesh.
+\end{quote}
+Direkte Raise-Stellen: MeshIOError; transitive Fehler siehe Fachvertrag.
+\subsection{write\_vtu}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+write_vtu(path: str | Path, mesh: Mesh, *, point_data: Mapping[str, ArrayLike] | None=None, cell_data: Mapping[str, Mapping[str, ArrayLike]] | None=None, binary: bool=True) -> None
+\end{lstlisting}
+\begin{quote}
+Write a mesh and numeric result arrays to an unstructured VTK file.\par Every cell result field must provide arrays for all non-empty internal cell types, keyed by the active ``tetra4``/``triangle3`` or ``tetra10``/``triangle6`` family. Selection sets are exported as independent ``fem\_toolbox:set:<name>`` masks, so overlapping memberships remain lossless in the VTU output.
+\end{quote}
+Direkte Raise-Stellen: MeshIOError; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.io.piezo\_series}
+\index{fem_toolbox.io.piezo_series@io.\protect\allowbreak{}piezo\_\protect\allowbreak{}series}
+Einordnung: stable. Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/artifacts.tex}. Beispiele/Tests:
+\nolinkurl{examples/thermopiezoelectric/run.py}.
+\subsection{export\_piezo\_series}
+stabiler Einstieg.
+\begin{lstlisting}
+export_piezo_series(path: str | Path, result: ModelResult, *, probes: Mapping[str, int | ArrayLike] | None=None) -> Path
+\end{lstlisting}
+\begin{quote}
+Write a new directory with PVD/VTU fields, probe CSV and manifest.\par Requires a schema-3 ModelResult bound to its solved mesh/materials. Probe locations are mesh node indices or points (3,) m inside Tet4/Tet10 cells. Interpolate complex u/v/a/phi before computing amplitude/phase. Cell strain/stress/E/D are unsmoothed Tet4 constants or explicitly labelled Tet10 centroid samples. Inactive nodes/facets are zero-filled with validity masks. Amplitude and phase are componentwise (peak, radians); zero amplitude has phase=0 and phase\_valid=0. Real modes/transients only emit *\_real, never a fictitious phase.\par ParaView's collection coordinate is time\_s, frequency\_hz or mode\_index, explicitly distinguished in the manifest. Modal vectors are mass-normalized shapes, not physical amplitudes. Existing directories are never overwritten; an interrupted export remains marked incomplete with its completed frames.
+\end{quote}
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.io.result\_bundle}
+\index{fem_toolbox.io.result_bundle@io.\protect\allowbreak{}result\_\protect\allowbreak{}bundle}
+Einordnung: internal. Interne Validierungs-/Reduktions-/Adaptergrenze; keine eigene stabile Importzusage. Öffentliche Wrapper oder experimentelle Hooks führen auf diese Umsetzung.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/artifacts.tex}. Beispiele/Tests:
+\nolinkurl{examples/thermopiezoelectric/run.py}.
+\subsection{export\_result\_bundle}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+export_result_bundle(path: str | Path, mesh: Mesh, result: object) -> tuple[Path, Path]
+\end{lstlisting}
+\begin{quote}
+Write `<path>.vtu` and `<path>.json` with raw SI fields and metrics.\par The destination parent must exist; existing output files are never replaced. Fields are staged first and rolled back if final publication fails. Inactive mesh nodes are zero padded in VTU and listed by active ID in the manifest.
+\end{quote}
+Direkte Raise-Stellen: ValidationError, ValueError; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.materials}
+\index{fem_toolbox.materials@materials}
+Einordnung: stable. Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/mesh-materials.tex}. Beispiele/Tests:
+\nolinkurl{examples/piezo_d33.py}.
+\nolinkurl{examples/thermal_expansion.py}.
+\nolinkurl{tests/unit/test_material_regions.py}.
+\subsection*{Reexportierte Einstiegspunkte}
+\noindent\nolinkurl{DielectricMaterial} $\to$ \nolinkurl{fem_toolbox.materials.electrostatics.DielectricMaterial}\par
+\noindent\nolinkurl{ThermalMaterial} $\to$ \nolinkurl{fem_toolbox.materials.heat.ThermalMaterial}\par
+\noindent\nolinkurl{PiezoelectricMaterial} $\to$ \nolinkurl{fem_toolbox.materials.piezoelectric.PiezoelectricMaterial}\par
+\noindent\nolinkurl{MaterialAssignment} $\to$ \nolinkurl{fem_toolbox.materials.regions.MaterialAssignment}\par
+\noindent\nolinkurl{assign_region_materials} $\to$ \nolinkurl{fem_toolbox.materials.regions.assign_region_materials}\par
+\subsection{ElasticMaterial}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, init=False, eq=False).
+\begin{quote}
+Symmetric positive-definite 6x6 stiffness in Pa.\par Voigt order is xx, yy, zz, yz, xz, xy with engineering shear strains. Anisotropic data must already be expressed in the global coordinate frame. Symmetry tolerance is 1e-12 times the largest coefficient; accepted rounding asymmetry is averaged. Eigenvalues <= 1e-12 times the largest eigenvalue are rejected as numerically unstable. Storage is copied onto immutable bytes.
+\end{quote}
+\begin{lstlisting}
+stiffness: NDArray[np.float64]
+\end{lstlisting}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, stiffness: ArrayLike) -> None
+\end{lstlisting}
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\subsubsection*{isotropic}
+\begin{lstlisting}
+isotropic(cls, young: float, poisson: float) -> 'ElasticMaterial'
+\end{lstlisting}
+Construct from Young's modulus (Pa) and Poisson ratio (dimensionless).\par Requires E > 0 and -1 < nu < 0.49; nearly incompressible Tet4 inputs are rejected to avoid presenting a locking-prone formulation as suitable.
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\subsection{ThermalExpansion}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, init=False, eq=False).
+\begin{quote}
+Global engineering-Voigt expansion (6,) in 1/K and reference T in K.\par Material-axis tensors must be rotated into global axes by the caller. ``source\_axes`` records the local-to-global rotation only for values constructed through ``from\_principal``; direct inputs are already global.
+\end{quote}
+\begin{lstlisting}
+alpha: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+reference_temperature: float
+\end{lstlisting}
+\begin{lstlisting}
+source_axes: NDArray[np.float64] | None
+\end{lstlisting}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, alpha: ArrayLike, reference_temperature: float) -> None
+\end{lstlisting}
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\subsubsection*{from\_principal}
+\begin{lstlisting}
+from_principal(cls, principal_alpha: ArrayLike, reference_temperature: float, axes: ArrayLike) -> 'ThermalExpansion'
+\end{lstlisting}
+Rotate principal expansion (3,) in 1/K; axes columns are local axes.
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.materials.catalog}
+\index{fem_toolbox.materials.catalog@materials.\protect\allowbreak{}catalog}
+Einordnung: mixed. Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/mesh-materials.tex}. Beispiele/Tests:
+\nolinkurl{examples/piezo_d33.py}.
+\subsection*{Datentypen und Konstanten}
+\begin{lstlisting}
+CATALOG_VERSION = 1
+\end{lstlisting}
+\subsection{ThermalPreset}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True).
+\begin{quote}
+SI scalar data: density kg/m³, specific\_heat J/(kg K), conductivity W/(m K).
+\end{quote}
+\begin{lstlisting}
+key: str
+\end{lstlisting}
+\begin{lstlisting}
+name: str
+\end{lstlisting}
+\begin{lstlisting}
+density: float
+\end{lstlisting}
+\begin{lstlisting}
+specific_heat: float
+\end{lstlisting}
+\begin{lstlisting}
+conductivity: float
+\end{lstlisting}
+\begin{lstlisting}
+reference_temperature: float
+\end{lstlisting}
+\begin{lstlisting}
+source_url: str
+\end{lstlisting}
+\begin{lstlisting}
+note: str
+\end{lstlisting}
+\subsubsection*{thermal\_material}
+\begin{lstlisting}
+thermal_material(self) -> ThermalMaterial
+\end{lstlisting}
+Build an immutable isotropic material with storage and source metadata.
+\subsection{material\_catalog}
+stabiler Einstieg.
+\begin{lstlisting}
+material_catalog() -> tuple[ThermalPreset, ...]
+\end{lstlisting}
+\begin{quote}
+Return the immutable version-1 preset catalog (no network access).
+\end{quote}
+\subsection{thermal\_material}
+stabiler Einstieg.
+\begin{lstlisting}
+thermal_material(key: str) -> ThermalMaterial
+\end{lstlisting}
+\begin{quote}
+Build a preset by exact key; unknown names raise ValidationError.
+\end{quote}
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.materials.electrostatics}
+\index{fem_toolbox.materials.electrostatics@materials.\protect\allowbreak{}electrostatics}
+Einordnung: research. Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/mesh-materials.tex}. Beispiele/Tests:
+\nolinkurl{examples/piezo_d33.py}.
+\subsection{DielectricMaterial}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, init=False, eq=False).
+\begin{quote}
+Immutable symmetric positive-definite (3,3) permittivity in F/m.\par Symmetry tolerance is 1e-12 times the largest coefficient. Accepted roundoff asymmetry is averaged; eigenvalue ratios <= 1e-12 are rejected. Input arrays are copied. Material-axis rotation and field dependence are not implicit.
+\end{quote}
+\begin{lstlisting}
+permittivity: NDArray[np.float64]
+\end{lstlisting}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, permittivity: ArrayLike) -> None
+\end{lstlisting}
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\subsubsection*{isotropic}
+\begin{lstlisting}
+isotropic(cls, permittivity: float) -> 'DielectricMaterial'
+\end{lstlisting}
+Construct from a positive finite scalar permittivity in F/m.
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.materials.heat}
+\index{fem_toolbox.materials.heat@materials.\protect\allowbreak{}heat}
+Einordnung: research. Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/mesh-materials.tex}. Beispiele/Tests:
+\nolinkurl{examples/piezo_d33.py}.
+\subsection{ThermalSource}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True).
+\begin{quote}
+Traceable preset identity and source; no claim of a validity interval.
+\end{quote}
+\begin{lstlisting}
+key: str
+\end{lstlisting}
+\begin{lstlisting}
+source_url: str
+\end{lstlisting}
+\begin{lstlisting}
+reference_temperature: float
+\end{lstlisting}
+\begin{lstlisting}
+note: str
+\end{lstlisting}
+\subsection{ThermalMaterial}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, init=False, eq=False).
+\begin{quote}
+Immutable symmetric positive-definite (3,3) conductivity in W/(m K).\par Optional density [kg/m³] and specific\_heat [J/(kg K)] must be supplied together, finite and positive, for transient analysis.\par Symmetry tolerance is 1e-12 times the largest coefficient. Accepted roundoff asymmetry is averaged; eigenvalue ratios <= 1e-12 are rejected. Input arrays are copied. Material-axis rotation and temperature dependence are not implicit.
+\end{quote}
+\begin{lstlisting}
+conductivity: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+density: float | None
+\end{lstlisting}
+\begin{lstlisting}
+specific_heat: float | None
+\end{lstlisting}
+\begin{lstlisting}
+source: ThermalSource | None
+\end{lstlisting}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, conductivity: ArrayLike, *, density: float | None=None, specific_heat: float | None=None, source: ThermalSource | None=None) -> None
+\end{lstlisting}
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\subsubsection*{isotropic}
+\begin{lstlisting}
+isotropic(cls, conductivity: float, *, density: float | None=None, specific_heat: float | None=None, source: ThermalSource | None=None) -> 'ThermalMaterial'
+\end{lstlisting}
+Construct from a positive finite scalar conductivity in W/(m K).
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.materials.piezoelectric}
+\index{fem_toolbox.materials.piezoelectric@materials.\protect\allowbreak{}piezoelectric}
+Einordnung: research. Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/mesh-materials.tex}. Beispiele/Tests:
+\nolinkurl{examples/piezo_d33.py}.
+\subsection{PiezoelectricMaterial}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, init=False, eq=False).
+\begin{quote}
+Immutable stress-charge tensors in global Cartesian axes.\par ``stiffness`` is C\textasciicircum{}E (6,6) Pa, ``stress\_coupling`` is e (3,6) C/m², and ``permittivity`` is kappa\textasciicircum{}S (3,3) F/m. Strain uses engineering shear and Voigt order xx, yy, zz, yz, xz, xy. Electric components are x, y, z. The constitutive laws are sigma=C\textasciicircum{}E epsilon-e.T E and D=e epsilon+kappa\textasciicircum{}S E. ``axes`` columns are local basis vectors in global coordinates; omitted axes mean input tensors already use global axes. Invalid shape, symmetry, stability, axes, or nonfinite data raise ValidationError. All arrays are owned read-only copies.
+\end{quote}
+\begin{lstlisting}
+stiffness: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+stress_coupling: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+permittivity: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+axes: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+source_form: Literal['stress_charge', 'strain_charge']
+\end{lstlisting}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, stiffness: ArrayLike, stress_coupling: ArrayLike, permittivity: ArrayLike, *, axes: ArrayLike | None=None) -> None
+\end{lstlisting}
+\subsubsection*{from\_strain\_charge}
+\begin{lstlisting}
+from_strain_charge(cls, compliance: ArrayLike, strain_coupling: ArrayLike, permittivity_at_stress: ArrayLike, *, axes: ArrayLike | None=None) -> PiezoelectricMaterial
+\end{lstlisting}
+Convert s\textasciicircum{}E (1/Pa), d (C/N), kappa\textasciicircum{}T (F/m) to stress-charge.\par Requires both s\textasciicircum{}E and the resulting kappa\textasciicircum{}S = kappa\textasciicircum{}T-d C\textasciicircum{}E d.T to be positive definite. Conversion uses linear solves, not an explicit inverse, and retains the supplied local tensors in provenance.
+\subsubsection*{as\_strain\_charge}
+\begin{lstlisting}
+as_strain_charge(self) -> tuple[NDArray[np.float64], NDArray[np.float64], NDArray[np.float64]]
+\end{lstlisting}
+Return detached global s\textasciicircum{}E, d, kappa\textasciicircum{}T tensors in SI units.
+\subsubsection*{to\_provenance\_dict}
+\begin{lstlisting}
+to_provenance_dict(self) -> dict[str, object]
+\end{lstlisting}
+Return detached JSON-compatible local inputs and global tensors.
+\section{fem\_toolbox.materials.regions}
+\index{fem_toolbox.materials.regions@materials.\protect\allowbreak{}regions}
+Einordnung: research. Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/mesh-materials.tex}. Beispiele/Tests:
+\nolinkurl{examples/piezo_d33.py}.
+\subsection*{Datentypen und Konstanten}
+\begin{lstlisting}
+Material: TypeAlias = ThermalMaterial | ElasticMaterial | DielectricMaterial | PiezoelectricMaterial | ThermalExpansion
+\end{lstlisting}
+\subsection{MaterialAssignment}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True).
+\begin{quote}
+Per-cell materials and provenance in input volume-cell row order.
+\end{quote}
+\begin{lstlisting}
+field: str
+\end{lstlisting}
+\begin{lstlisting}
+cell_ids: tuple[int, ...]
+\end{lstlisting}
+\begin{lstlisting}
+cell_materials: tuple[Material, ...]
+\end{lstlisting}
+\begin{lstlisting}
+material_names: tuple[str, ...]
+\end{lstlisting}
+\begin{lstlisting}
+region_names: tuple[tuple[str, ...], ...]
+\end{lstlisting}
+\subsubsection*{to\_provenance\_dict}
+\begin{lstlisting}
+to_provenance_dict(self) -> dict[str, Any]
+\end{lstlisting}
+Return JSON-safe effective cell mapping and SI material tensors.
+\subsection{assign\_region\_materials}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+assign_region_materials(mesh: Mesh, field: str, regions: Mapping[str, str], materials: Mapping[str, Material]) -> MaterialAssignment
+\end{lstlisting}
+\begin{quote}
+Map named volume sets onto all volume cells before field assembly.\par ``field`` is ``T``, ``u``, ``phi``, ``piezo`` or ``expansion``. Every region names one catalog entry of the matching immutable SI material type. Overlapping sets are allowed only when they name the same catalog entry. Unknown sets/materials, uncovered cells, conflicts and unused definitions raise :class:`MaterialAssignmentError` with the external volume-cell ID where applicable. Existing solvers accept ``cell\_materials`` directly.
+\end{quote}
+Direkte Raise-Stellen: MaterialAssignmentError; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.mesh}
+\index{fem_toolbox.mesh@mesh}
+Einordnung: mixed. Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/mesh-materials.tex}. Beispiele/Tests:
+\nolinkurl{examples/piezo_d33.py}.
+\subsection*{Reexportierte Einstiegspunkte}
+\noindent\nolinkurl{BoundaryFace} $\to$ \nolinkurl{fem_toolbox.mesh.topology.BoundaryFace}\par
+\noindent\nolinkurl{BoundaryTopology} $\to$ \nolinkurl{fem_toolbox.mesh.topology.BoundaryTopology}\par
+\noindent\nolinkurl{Mesh} $\to$ \nolinkurl{fem_toolbox.mesh.model.Mesh}\par
+\noindent\nolinkurl{inspect_boundary_topology} $\to$ \nolinkurl{fem_toolbox.mesh.topology.inspect_boundary_topology}\par
+\section{fem\_toolbox.mesh.model}
+\index{fem_toolbox.mesh.model@mesh.\protect\allowbreak{}model}
+Einordnung: research. Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/mesh-materials.tex}. Beispiele/Tests:
+\nolinkurl{examples/piezo_d33.py}.
+\subsection*{Datentypen und Konstanten}
+\begin{lstlisting}
+FloatArray = NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+IndexArray = NDArray[np.int64]
+\end{lstlisting}
+\begin{lstlisting}
+SelectionMap = Mapping[str, IndexArray]
+\end{lstlisting}
+\subsection{Mesh}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: keine.
+\begin{quote}
+Immutable topology for one Tet4/Triangle3 or Tet10/Triangle6 family.\par Connectivity and selections always contain zero-based internal indices. Optional external IDs remain separate so importer-specific numbering cannot leak into numerical kernels. Inputs are copied into read-only canonical ``float64`` and ``int64`` arrays.
+\end{quote}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, *, points: ArrayLike, tetra4: ArrayLike | None=None, triangle3: ArrayLike | None=None, tetra10: ArrayLike | None=None, triangle6: ArrayLike | None=None, tetra10_ids: ArrayLike | None=None, triangle6_ids: ArrayLike | None=None, point_ids: ArrayLike | None=None, tetra4_ids: ArrayLike | None=None, triangle3_ids: ArrayLike | None=None, cell_tags: ArrayLike | None=None, facet_tags: ArrayLike | None=None, volume_sets: Mapping[str, ArrayLike] | None=None, facet_sets: Mapping[str, ArrayLike] | None=None) -> None
+\end{lstlisting}
+Direkte Raise-Stellen: MeshValidationError; transitive Fehler siehe Fachvertrag.
+\subsubsection*{empty}
+\begin{lstlisting}
+empty(cls) -> Mesh
+\end{lstlisting}
+Create an empty mesh with canonical array shapes.
+\subsubsection*{points}
+\begin{lstlisting}
+points(self) -> FloatArray
+\end{lstlisting}
+Point coordinates in metres with shape ``(n\_points, 3)``.
+\subsubsection*{tetra4}
+\begin{lstlisting}
+tetra4(self) -> IndexArray
+\end{lstlisting}
+Zero-based Tet4 node connectivity with shape ``(n\_tetra4, 4)``.
+\subsubsection*{triangle3}
+\begin{lstlisting}
+triangle3(self) -> IndexArray
+\end{lstlisting}
+Zero-based Triangle3 node connectivity with shape ``(n\_triangle3, 3)``.
+\subsubsection*{point\_ids}
+\begin{lstlisting}
+point_ids(self) -> IndexArray | None
+\end{lstlisting}
+Optional importer-provided point IDs, separate from internal indices.
+\subsubsection*{tetra4\_ids}
+\begin{lstlisting}
+tetra4_ids(self) -> IndexArray | None
+\end{lstlisting}
+Optional importer-provided Tet4 IDs.
+\subsubsection*{triangle3\_ids}
+\begin{lstlisting}
+triangle3_ids(self) -> IndexArray | None
+\end{lstlisting}
+Optional importer-provided Triangle3 IDs.
+\subsubsection*{cell\_tags}
+\begin{lstlisting}
+cell_tags(self) -> IndexArray | None
+\end{lstlisting}
+Optional integer region tag for every active volume cell.
+\subsubsection*{facet\_tags}
+\begin{lstlisting}
+facet_tags(self) -> IndexArray | None
+\end{lstlisting}
+Optional integer boundary tag for every active surface facet.
+\subsubsection*{volume\_sets}
+\begin{lstlisting}
+volume_sets(self) -> SelectionMap
+\end{lstlisting}
+Named active-volume selections containing zero-based internal cell indices.
+\subsubsection*{facet\_sets}
+\begin{lstlisting}
+facet_sets(self) -> SelectionMap
+\end{lstlisting}
+Named active-surface selections containing zero-based internal facet indices.
+\subsubsection*{n\_points}
+\begin{lstlisting}
+n_points(self) -> int
+\end{lstlisting}
+Number of mesh points.
+\subsubsection*{n\_tetra4}
+\begin{lstlisting}
+n_tetra4(self) -> int
+\end{lstlisting}
+Number of Tet4 cells.
+\subsubsection*{n\_triangle3}
+\begin{lstlisting}
+n_triangle3(self) -> int
+\end{lstlisting}
+Number of Triangle3 facets.
+\subsubsection*{tetra10}
+\begin{lstlisting}
+tetra10(self) -> IndexArray
+\end{lstlisting}
+Tet10 rows: corners 0..3, edge nodes 01,12,20,03,13,23 (VTK order).
+\subsubsection*{triangle6}
+\begin{lstlisting}
+triangle6(self) -> IndexArray
+\end{lstlisting}
+Triangle6 rows: corners 0..2, edge nodes 01,12,20.
+\subsubsection*{tetra10\_ids}
+\begin{lstlisting}
+tetra10_ids(self) -> IndexArray | None
+\end{lstlisting}
+Optional external Tet10 IDs.
+\subsubsection*{triangle6\_ids}
+\begin{lstlisting}
+triangle6_ids(self) -> IndexArray | None
+\end{lstlisting}
+Optional external Triangle6 IDs.
+\subsubsection*{n\_tetra10}
+\begin{lstlisting}
+n_tetra10(self) -> int
+\end{lstlisting}
+\subsubsection*{n\_triangle6}
+\begin{lstlisting}
+n_triangle6(self) -> int
+\end{lstlisting}
+\subsubsection*{cell\_type}
+\begin{lstlisting}
+cell_type(self) -> str
+\end{lstlisting}
+Active volume family; empty meshes default to tetra4.
+\subsubsection*{facet\_type}
+\begin{lstlisting}
+facet_type(self) -> str
+\end{lstlisting}
+\subsubsection*{cells}
+\begin{lstlisting}
+cells(self) -> IndexArray
+\end{lstlisting}
+Active volume rows addressed by cell\_tags and volume\_sets.
+\subsubsection*{facets}
+\begin{lstlisting}
+facets(self) -> IndexArray
+\end{lstlisting}
+Active surface rows addressed by facet\_tags and facet\_sets.
+\subsubsection*{cell\_ids}
+\begin{lstlisting}
+cell_ids(self) -> IndexArray | None
+\end{lstlisting}
+\subsubsection*{facet\_ids}
+\begin{lstlisting}
+facet_ids(self) -> IndexArray | None
+\end{lstlisting}
+\subsubsection*{n\_cells}
+\begin{lstlisting}
+n_cells(self) -> int
+\end{lstlisting}
+\subsubsection*{n\_facets}
+\begin{lstlisting}
+n_facets(self) -> int
+\end{lstlisting}
+\section{fem\_toolbox.mesh.quadratic}
+\index{fem_toolbox.mesh.quadratic@mesh.\protect\allowbreak{}quadratic}
+Einordnung: internal. Interne Validierungs-/Reduktions-/Adaptergrenze; keine eigene stabile Importzusage. Öffentliche Wrapper oder experimentelle Hooks führen auf diese Umsetzung.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/mesh-materials.tex}. Beispiele/Tests:
+\nolinkurl{examples/piezo_d33.py}.
+\subsection*{Datentypen und Konstanten}
+\begin{lstlisting}
+TET10_EDGES = ((0, 1), (1, 2), (2, 0), (0, 3), (1, 3), (2, 3))
+\end{lstlisting}
+\begin{lstlisting}
+TRI6_EDGES = ((0, 1), (1, 2), (2, 0))
+\end{lstlisting}
+\subsection{edge\_nodes}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+edge_nodes(nodes: NDArray[np.int64]) -> dict[tuple[int, ...], int]
+\end{lstlisting}
+\begin{quote}
+Map endpoint IDs to midpoint IDs in VTK/meshio local ordering.
+\end{quote}
+\subsection{validate\_edge\_incidence}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+validate_edge_incidence(cells: NDArray[np.int64], ids: NDArray[np.int64] | None) -> None
+\end{lstlisting}
+\begin{quote}
+Reject hanging/duplicated edge DOFs and a midpoint reused as a vertex.
+\end{quote}
+Direkte Raise-Stellen: ConnectivityError; transitive Fehler siehe Fachvertrag.
+\subsection{require\_straight}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+require_straight(points: NDArray[np.float64], nodes: NDArray[np.int64]) -> None
+\end{lstlisting}
+\begin{quote}
+Require mid-edge coordinates within 1e-10 of each local edge length.\par Compare relative coordinates so absolute translation does not relax the tolerance. Curved geometry needs separate quadrature and is unsupported.
+\end{quote}
+Direkte Raise-Stellen: MeshValidationError; transitive Fehler siehe Fachvertrag.
+\subsection{reordered\_tet10}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+reordered_tet10(nodes: NDArray[np.int64], corners: NDArray[np.int64]) -> NDArray[np.int64]
+\end{lstlisting}
+\begin{quote}
+Transport all six edge nodes with a corner permutation.
+\end{quote}
+\section{fem\_toolbox.mesh.topology}
+\index{fem_toolbox.mesh.topology@mesh.\protect\allowbreak{}topology}
+Einordnung: research. Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/mesh-materials.tex}. Beispiele/Tests:
+\nolinkurl{examples/piezo_d33.py}.
+\subsection*{Datentypen und Konstanten}
+\begin{lstlisting}
+FloatArray = NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+FaceKey = tuple[int, int, int]
+\end{lstlisting}
+\subsection{BoundaryFace}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True).
+\begin{quote}
+Exterior face, oriented away from its unique tetrahedral owner.\par ``cell\_index`` and ``triangle\_index`` are zero-based rows; IDs retain the imported entity numbers where present. ``triangle\_index`` is absent for an exterior face with no surface entry.
+\end{quote}
+\begin{lstlisting}
+nodes: tuple[int, ...]
+\end{lstlisting}
+\begin{lstlisting}
+cell_index: int
+\end{lstlisting}
+\begin{lstlisting}
+cell_id: int
+\end{lstlisting}
+\begin{lstlisting}
+opposite_node: int
+\end{lstlisting}
+\begin{lstlisting}
+area: float
+\end{lstlisting}
+\begin{lstlisting}
+unit_normal: FloatArray
+\end{lstlisting}
+\begin{lstlisting}
+triangle_index: int | None = None
+\end{lstlisting}
+\begin{lstlisting}
+triangle_id: int | None = None
+\end{lstlisting}
+\begin{lstlisting}
+groups: tuple[str, ...] = ()
+\end{lstlisting}
+\subsection{BoundaryTopology}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True).
+\begin{quote}
+Preflight result with stable canonical order and triangle-row lookup.
+\end{quote}
+\begin{lstlisting}
+facet_incidence: Mapping[FaceKey, tuple[int, ...]]
+\end{lstlisting}
+\begin{lstlisting}
+exterior_faces: tuple[BoundaryFace, ...]
+\end{lstlisting}
+\begin{lstlisting}
+triangle_faces: tuple[BoundaryFace, ...]
+\end{lstlisting}
+\subsection{inspect\_boundary\_topology}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+inspect_boundary_topology(mesh: Mesh, *, require_complete: bool=False) -> BoundaryTopology
+\end{lstlisting}
+\begin{quote}
+Validate each surface simplex against the unique exterior volume incidence.\par Set ``require\_complete`` when every exterior volume face must have a surface row. Partial boundary meshes remain valid by default. Named groups may overlap; conflicting boundary conditions belong to Model validation, where their physical meaning is known.
+\end{quote}
+Direkte Raise-Stellen: BoundaryTopologyError; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.model}
+\index{fem_toolbox.model@model}
+Einordnung: mixed. Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/workflows.tex}. Beispiele/Tests:
+\nolinkurl{examples/thermopiezoelectric/run.py}.
+\nolinkurl{examples/transient_heat/run.py}.
+\nolinkurl{examples/piezo_dynamics/run.py}.
+\subsection*{Datentypen und Konstanten}
+\begin{lstlisting}
+Physics = Literal['heat', 'elasticity', 'electrostatics', 'piezoelectric', 'thermopiezoelectric', 'transient_heat', 'piezo_modes', 'transient_piezoelectric', 'harmonic_piezoelectric']
+\end{lstlisting}
+\begin{lstlisting}
+FieldResult = HeatResult | ElasticResult | ElectrostaticResult | PiezoelectricResult | ThermopiezoelectricResult | TransientHeatResult | PiezoDynamicResult
+\end{lstlisting}
+\subsection{ModelResult}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True).
+\begin{quote}
+A field result with schema-aware, deterministic model provenance.
+\end{quote}
+\begin{lstlisting}
+physics: Physics
+\end{lstlisting}
+\begin{lstlisting}
+field_result: FieldResult
+\end{lstlisting}
+\begin{lstlisting}
+provenance: RunProvenance
+\end{lstlisting}
+\subsection{Model}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: keine.
+\begin{quote}
+Validated Model from a Gmsh-backed TOML file or Python mapping.\par ``document`` has SI units: schema 1 for stationary fields, schema 2 for heat transients and schema 3 for piezo dynamics. The Python constructor takes an already validated ``Mesh``; ``from\_file`` imports the declared relative Gmsh path. No global settings or implicit material assignments.
+\end{quote}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, *, mesh: Mesh, document: Mapping[str, object]) -> None
+\end{lstlisting}
+Direkte Raise-Stellen: ModelSchemaError; transitive Fehler siehe Fachvertrag.
+\subsubsection*{from\_file}
+\begin{lstlisting}
+from_file(cls, path: str | Path) -> Model
+\end{lstlisting}
+Load a UTF-8 TOML model and resolve its Gmsh path beside the file.
+Direkte Raise-Stellen: ModelSchemaError; transitive Fehler siehe Fachvertrag.
+\subsubsection*{to\_document}
+\begin{lstlisting}
+to_document(self) -> dict[str, Any]
+\end{lstlisting}
+Return a detached, JSON-safe copy for review or Python roundtrip.
+\subsubsection*{solve}
+\begin{lstlisting}
+solve(self) -> ModelResult
+\end{lstlisting}
+Run the selected validated stationary or transient reference solver.
+\section{fem\_toolbox.model\_preflight}
+\index{fem_toolbox.model_preflight@model\_\protect\allowbreak{}preflight}
+Einordnung: internal. Interne Validierungs-/Reduktions-/Adaptergrenze; keine eigene stabile Importzusage. Öffentliche Wrapper oder experimentelle Hooks führen auf diese Umsetzung.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/development.tex}. Beispiele/Tests:
+\nolinkurl{Doc/latex/examples/developer_extension.py}.
+\subsection{PrescribedDof}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True).
+\begin{quote}
+One resolved Dirichlet value with a path back to the model document.
+\end{quote}
+\begin{lstlisting}
+field: Literal['T', 'u', 'phi']
+\end{lstlisting}
+\begin{lstlisting}
+dof: int
+\end{lstlisting}
+\begin{lstlisting}
+node: int
+\end{lstlisting}
+\begin{lstlisting}
+value: float
+\end{lstlisting}
+\begin{lstlisting}
+path: str
+\end{lstlisting}
+\begin{lstlisting}
+selection: str | None
+\end{lstlisting}
+\subsection{validate\_model\_constraints}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+validate_model_constraints(mesh: Mesh, physics: str, prescribed: tuple[PrescribedDof, ...], convection: dict[int, Convection], electrodes: tuple[Electrode, ...], surface_charges: dict[int, float]) -> None
+\end{lstlisting}
+\begin{quote}
+Reject ambiguous values and missing references before solver assembly.\par Structural checks use the same component and rigid-mode semantics as the direct solvers. Load-dependent compatibility remains a solver diagnostic.
+\end{quote}
+Direkte Raise-Stellen: ModelSchemaError; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.physics}
+\index{fem_toolbox.physics@physics}
+Einordnung: research. Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/development.tex}. Beispiele/Tests:
+\nolinkurl{Doc/latex/examples/developer_extension.py}.
+\subsection{VolumeLoad}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: Protocol. Dekoratoren: keine.
+\begin{quote}
+Integrate one Tet4 volume contribution, including its weak-form sign.\par cell is a zero-based mesh.tetra4 row. Returned values are integrated SI equation loads; the adapter owns quadrature, field and material conventions.
+\end{quote}
+\subsubsection*{integrate}
+\begin{lstlisting}
+integrate(self, mesh: Mesh, cell: int, dofs: DofMap) -> VectorBlock
+\end{lstlisting}
+Return local global-DOF indices and integrated values.
+\subsection{SurfaceLoad}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: Protocol. Dekoratoren: keine.
+\begin{quote}
+Integrate one Triangle3 load; facet is a zero-based mesh.triangle3 row.\par The implementation owns outward orientation and weak-form sign, as well as quadrature. No universal thermal/electric sign is imposed by assembly.
+\end{quote}
+\subsubsection*{integrate}
+\begin{lstlisting}
+integrate(self, mesh: Mesh, facet: int, dofs: DofMap) -> VectorBlock
+\end{lstlisting}
+Return local global-DOF indices and integrated SI equation loads.
+\section{fem\_toolbox.physics.elasticity}
+\index{fem_toolbox.physics.elasticity@physics.\protect\allowbreak{}elasticity}
+Einordnung: research. Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/development.tex}. Beispiele/Tests:
+\nolinkurl{Doc/latex/examples/developer_extension.py}.
+\subsection*{Datentypen und Konstanten}
+\begin{lstlisting}
+VectorField: TypeAlias = ArrayLike | Callable[[NDArray[np.float64]], ArrayLike]
+\end{lstlisting}
+\subsection{body\_load}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+body_load(geometry: Tet4Geometry, force: VectorField) -> NDArray[np.float64]
+\end{lstlisting}
+\begin{quote}
+Integrate body force (N/m³) to a (12,) nodal force vector (N).\par Constant forces are exact; callables receive x (3,) in metres. Four-point degree-two tetrahedral quadrature is exact for affine force distributions. More general spatial loads require a separate quadrature convergence check.
+\end{quote}
+\subsection{traction\_load}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+traction_load(coordinates: ArrayLike, traction: VectorField) -> NDArray[np.float64]
+\end{lstlisting}
+\begin{quote}
+Integrate prescribed global traction (N/m²) on Triangle3 to (9,) N.\par No pressure/normal sign is inferred. Swapping triangle orientation only permutes nodal forces. Three-point degree-two quadrature integrates affine tractions exactly. Degenerate triangles and invalid vectors are rejected.
+\end{quote}
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.physics.electrostatics}
+\index{fem_toolbox.physics.electrostatics@physics.\protect\allowbreak{}electrostatics}
+Einordnung: research. Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/development.tex}. Beispiele/Tests:
+\nolinkurl{Doc/latex/examples/developer_extension.py}.
+\subsection*{Datentypen und Konstanten}
+\begin{lstlisting}
+ChargeDensity: TypeAlias = float | Callable[[NDArray[np.float64]], float]
+\end{lstlisting}
+\subsection{volume\_charge\_load}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+volume_charge_load(geometry: Tet4Geometry, density: ChargeDensity) -> NDArray[np.float64]
+\end{lstlisting}
+\begin{quote}
+Return -integral N rho (4,) C; rho in C/m³, callable x (3,) in m.\par Four-point degree-two quadrature integrates affine density exactly.
+\end{quote}
+\subsection{surface\_charge\_load}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+surface_charge_load(coordinates: ArrayLike, outward_displacement: ChargeDensity) -> NDArray[np.float64]
+\end{lstlisting}
+\begin{quote}
+Return +integral N omega (3,) C; omega = D.n\_out in C/m².\par omega is the outward dielectric displacement, not the opposite-signed free charge on an adjacent conductor. Three-point degree-two triangle quadrature integrates affine density exactly, independent of triangle orientation.
+\end{quote}
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.physics.heat}
+\index{fem_toolbox.physics.heat@physics.\protect\allowbreak{}heat}
+Einordnung: research. Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/development.tex}. Beispiele/Tests:
+\nolinkurl{Doc/latex/examples/developer_extension.py}.
+\subsection*{Datentypen und Konstanten}
+\begin{lstlisting}
+ScalarField: TypeAlias = float | Callable[[NDArray[np.float64]], float]
+\end{lstlisting}
+\subsection{source\_load}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+source_load(geometry: Tet4Geometry, source: ScalarField) -> NDArray[np.float64]
+\end{lstlisting}
+\begin{quote}
+Integrate Q (W/m³, positive heat generation) to (4,) nodal power in W.\par Callables receive x (3,) in metres. Degree-two four-point quadrature is exact for affine sources. Higher variation requires quadrature verification.
+\end{quote}
+\subsection{flux\_load}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+flux_load(coordinates: ArrayLike, outward_flux: ScalarField) -> NDArray[np.float64]
+\end{lstlisting}
+\begin{quote}
+Return -(integral N q\_out) (3,) W; q\_out in W/m² is positive OUTWARD.\par Uses degree-two triangle quadrature; exact for affine fluxes. The sign is independent of triangle node ordering because q\_out is a prescribed scalar.
+\end{quote}
+\subsection{Convection}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True).
+\begin{quote}
+Robin law q\_out=h*(T-T\_inf): h >= 0 in W/(m² K), ambient in K.\par h is constant on a facet; ambient is a finite scalar or spatial callable. Temperature and ambient use the same reference (absolute K by default).
+\end{quote}
+\begin{lstlisting}
+coefficient: float
+\end{lstlisting}
+\begin{lstlisting}
+ambient: ScalarField
+\end{lstlisting}
+\subsection{convection\_terms}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+convection_terms(coordinates: ArrayLike, convection: Convection) -> tuple[NDArray[np.float64], NDArray[np.float64]]
+\end{lstlisting}
+\begin{quote}
+Return boundary conductance (3,3) W/K and ambient load (3,) W.\par Constant h gives the exact consistent triangle mass matrix. The load is integrated at degree two, exact for affine ambient temperatures.
+\end{quote}
+\section{fem\_toolbox.physics.quadratic}
+\index{fem_toolbox.physics.quadratic@physics.\protect\allowbreak{}quadratic}
+Einordnung: research. Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/development.tex}. Beispiele/Tests:
+\nolinkurl{Doc/latex/examples/developer_extension.py}.
+\subsection*{Datentypen und Konstanten}
+\begin{lstlisting}
+FloatArray = NDArray[np.float64]
+\end{lstlisting}
+\subsection{source\_load}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+source_load(geometry: Tet10Geometry, source: ScalarField) -> FloatArray
+\end{lstlisting}
+\begin{quote}
+Integral N Q (10,) W; positive generation Q in W/m³.
+\end{quote}
+\subsection{body\_load}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+body_load(geometry: Tet10Geometry, force: VectorField) -> FloatArray
+\end{lstlisting}
+\begin{quote}
+Integral N body force (30,) N; Cartesian force density in N/m³.
+\end{quote}
+\subsection{volume\_charge\_load}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+volume_charge_load(geometry: Tet10Geometry, density: ScalarField) -> FloatArray
+\end{lstlisting}
+\begin{quote}
+Negative integral N rho (10,) C; charge density in C/m³.
+\end{quote}
+\subsection{flux\_load}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+flux_load(geometry: Triangle6Geometry, outward_flux: ScalarField) -> FloatArray
+\end{lstlisting}
+\begin{quote}
+Negative integral N q\_out (6,) W; outward heat flux in W/m².
+\end{quote}
+\subsection{surface\_charge\_load}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+surface_charge_load(geometry: Triangle6Geometry, outward_displacement: ScalarField) -> FloatArray
+\end{lstlisting}
+\begin{quote}
+Positive integral N (D.n\_out) (6,) C; input in C/m².\par Adjacent conductor charge has the opposite sign. Orientation never changes the sign of a supplied scalar boundary datum.
+\end{quote}
+\subsection{traction\_load}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+traction_load(geometry: Triangle6Geometry, traction: VectorField) -> FloatArray
+\end{lstlisting}
+\begin{quote}
+Integral N prescribed Cartesian traction (18,) N; datum in N/m².
+\end{quote}
+\subsection{convection\_terms}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+convection_terms(geometry: Triangle6Geometry, convection: Convection) -> tuple[FloatArray, FloatArray]
+\end{lstlisting}
+\begin{quote}
+Boundary conductance (6,6) W/K and ambient load (6,) W, h>=0.\par Existing Convection carries constant h [W/(m² K)] and ambient K. Matrix is exactly integrated; ambient polynomials through degree two are exact.
+\end{quote}
+\section{fem\_toolbox.piezo\_dynamic\_model}
+\index{fem_toolbox.piezo_dynamic_model@piezo\_\protect\allowbreak{}dynamic\_\protect\allowbreak{}model}
+Einordnung: internal. Interne Validierungs-/Reduktions-/Adaptergrenze; keine eigene stabile Importzusage. Öffentliche Wrapper oder experimentelle Hooks führen auf diese Umsetzung.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/workflows.tex}. Beispiele/Tests:
+\nolinkurl{examples/surrogate_heat/run.py}.
+\subsection{PiezoDynamicModel}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: keine.
+\begin{quote}
+Internal schema adapter, reached through Model and Model.from\_file.
+\end{quote}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, mesh: Mesh, document: Mapping[str, Any]) -> None
+\end{lstlisting}
+Direkte Raise-Stellen: ModelSchemaError; transitive Fehler siehe Fachvertrag.
+\subsubsection*{solve}
+\begin{lstlisting}
+solve(self) -> PiezoDynamicResult
+\end{lstlisting}
+Direkte Raise-Stellen: ModelSchemaError; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.post}
+\index{fem_toolbox.post@post}
+Einordnung: research. Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/workflows.tex}. Beispiele/Tests:
+\nolinkurl{examples/surrogate_heat/run.py}.
+\subsection*{Reexportierte Einstiegspunkte}
+\noindent\nolinkurl{HeatIndicator} $\to$ \nolinkurl{fem_toolbox.post.heat_indicator.HeatIndicator}\par
+\noindent\nolinkurl{heat_indicator} $\to$ \nolinkurl{fem_toolbox.post.heat_indicator.heat_indicator}\par
+\noindent\nolinkurl{mark_bulk} $\to$ \nolinkurl{fem_toolbox.post.heat_indicator.mark_bulk}\par
+\section{fem\_toolbox.post.heat\_indicator}
+\index{fem_toolbox.post.heat_indicator@post.\protect\allowbreak{}heat\_\protect\allowbreak{}indicator}
+Einordnung: research. Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/workflows.tex}. Beispiele/Tests:
+\nolinkurl{examples/surrogate_heat/run.py}.
+\subsection{HeatIndicator}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True).
+\begin{quote}
+Cell-row indicators sqrt(W K), squared contributions W K, global l2 norm.\par Arrays own immutable storage. Interior-face contributions are divided equally between their two owners. This is a heuristic energy-error indicator, without reliability/efficiency constants or robustness guarantees for high contrast.
+\end{quote}
+\begin{lstlisting}
+volume_squared: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+interior_squared: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+boundary_squared: NDArray[np.float64]
+\end{lstlisting}
+\subsubsection*{cell}
+\begin{lstlisting}
+cell(self) -> NDArray[np.float64]
+\end{lstlisting}
+Local indicator eta\_K in sqrt(W K), ordered as mesh.tetra4.
+\subsubsection*{total}
+\begin{lstlisting}
+total(self) -> float
+\end{lstlisting}
+Global indicator sqrt(sum\_K eta\_K²) in sqrt(W K).
+\subsection{mark\_bulk}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+mark_bulk(indicators: ArrayLike, *, fraction: float=0.5) -> NDArray[np.int64]
+\end{lstlisting}
+\begin{quote}
+Minimal-cardinality Dörfler set capturing fraction of sum eta\_K².\par Nonnegative finite eta\_K; 0 < fraction <= 1. Ties favor lower cell rows; returned rows are sorted ascending. Zero total gives an empty set. Rescaling before squaring avoids overflow/underflow under a common unit-scale change. No numerical noise cutoff is inferred from dimensional values.
+\end{quote}
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\subsection{heat\_indicator}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+heat_indicator(mesh: Mesh, temperature: ArrayLike, material: ThermalMaterial | Sequence[ThermalMaterial], *, source: ScalarField=0.0, dirichlet_facets: Iterable[int]=(), outward_fluxes: Mapping[int, ScalarField] | None=None, convection: Mapping[int, Convection] | None=None) -> HeatIndicator
+\end{lstlisting}
+\begin{quote}
+Estimate stationary Tet4 heat energy error from full-mesh nodal T (K).\par Temperature has shape (mesh.n\_points,). Conductivity is cellwise constant, symmetric positive definite, in W/(m K). Source Q is W/m³, prescribed outward flux W/m². Boundary arguments address triangle3 rows; full exterior coverage is mandatory. Explicit Dirichlet facets have no residual term; other facets default to insulation. Flux and Robin terms add, as in solve\_heat. Dirichlet cannot overlap either. Caller must supply the actual problem's boundary data.\par eta\_K² = h\_K²/lambda\_K * integral\_K Q²   + 1/2 sum\_inner h\_F/lambda\_F * integral\_F jump(q.n)²   + sum\_N/R h\_F/lambda\_K * integral\_F (q.n-q\_pres-h*(T-T\_inf))². h denotes diameter, lambda\_K=min eig(k\_K), lambda\_F=min of adjacent values. q=-k grad(T\_h); div(q)=0 inside affine Tet4 cells. Volume degree-5 and surface degree-4 quadrature integrate squared residuals; nonpolynomial data require separate quadrature assessment. Norm targets sqrt(integral grad(e).k.grad(e)) with units sqrt(W K); no certified error bound, data-oscillation correction, transient, coupled, Tet10 or automatic remeshing support is implied.
+\end{quote}
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.post.visualization}
+\index{fem_toolbox.post.visualization@post.\protect\allowbreak{}visualization}
+Einordnung: stable. Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/workflows.tex}. Beispiele/Tests:
+\nolinkurl{examples/field_visualization/run.py}.
+\subsection{FieldPlot}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: dataclass.
+\begin{quote}
+Owned figure; call close after saving. Face arrays describe raw colors.
+\end{quote}
+\begin{lstlisting}
+figure: Figure
+\end{lstlisting}
+\begin{lstlisting}
+axes: Axes3D
+\end{lstlisting}
+\begin{lstlisting}
+artist: Poly3DCollection
+\end{lstlisting}
+\begin{lstlisting}
+faces: NDArray[np.int64]
+\end{lstlisting}
+\begin{lstlisting}
+face_values: NDArray[np.float64]
+\end{lstlisting}
+\subsubsection*{close}
+\begin{lstlisting}
+close(self) -> None
+\end{lstlisting}
+Release figure artists; figures are never registered with pyplot.
+\subsection{plot\_field}
+stabiler Einstieg.
+\begin{lstlisting}
+plot_field(mesh: Mesh, values: ArrayLike, *, association: str, name: str, unit: str, nodes: ArrayLike | None=None, component: str | None=None, limits: tuple[float, float] | None=None, cmap: str='viridis', view: tuple[float, float]=(25, -60), figsize: tuple[float, float]=(8, 6)) -> FieldPlot
+\end{lstlisting}
+\begin{quote}
+Render real scalar, xyz vector or Voigt stress on Tet4 exterior.\par Node rows follow explicitly supplied active ``nodes`` (default: sorted volume nodes); cell rows follow tetra4. Every active node is required. Scalar nodal colors are arithmetic face means *after* component/magnitude reduction. Cell colors use the owning volume, without smoothing. Limits are finite and strictly increasing; clipped colors have colorbar extensions. Constant automatic ranges expand by max(1, abs(value))*1e-6. Angles are elevation/azimuth in degrees; size is in inches. No show(), pyplot registration, style or backend changes occur.
+\end{quote}
+Direkte Raise-Stellen: ImportError, ValueError; transitive Fehler siehe Fachvertrag.
+\subsection{save\_jpeg}
+stabiler Einstieg.
+\begin{lstlisting}
+save_jpeg(plot: FieldPlot, path: str | Path, *, dpi: float=150, overwrite: bool=False) -> None
+\end{lstlisting}
+\begin{quote}
+Save JPEG in existing directory; exclusive creation unless overwrite=True.\par Pixel size is figure inches times DPI. OS write errors propagate with path. The caller retains ownership and must close the plot.
+\end{quote}
+Direkte Raise-Stellen: ValueError; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.provenance}
+\index{fem_toolbox.provenance@provenance}
+Einordnung: mixed. Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/artifacts.tex}. Beispiele/Tests:
+\nolinkurl{examples/thermopiezoelectric/run.py}.
+\subsection*{Datentypen und Konstanten}
+\begin{lstlisting}
+PROVENANCE_SCHEMA_VERSION = 1
+\end{lstlisting}
+\subsection{RunProvenance}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True).
+\begin{quote}
+Minimal reproducibility record for one solver invocation.\par Args:     input\_sha256: Lowercase SHA-256 digest of the canonical model input.     solver\_name: Stable fully qualified solver identifier.     solver\_parameters: JSON-compatible parameters that affect the result.     toolbox\_version: Installed FEM Toolbox distribution version.\par The record deliberately excludes timestamps and host-specific paths so that identical inputs and solver settings yield identical serialized metadata.
+\end{quote}
+\begin{lstlisting}
+input_sha256: str
+\end{lstlisting}
+\begin{lstlisting}
+solver_name: str
+\end{lstlisting}
+\begin{lstlisting}
+solver_parameters: Mapping[str, object]
+\end{lstlisting}
+\begin{lstlisting}
+toolbox_version: str = field(default=__version__)
+\end{lstlisting}
+\begin{lstlisting}
+schema_version: int = field(default=PROVENANCE_SCHEMA_VERSION, init=False)
+\end{lstlisting}
+\subsubsection*{from\_input\_bytes}
+\begin{lstlisting}
+from_input_bytes(cls, model_input: bytes, *, solver_name: str, solver_parameters: Mapping[str, object], toolbox_version: str=__version__) -> RunProvenance
+\end{lstlisting}
+Build provenance from canonical model-input bytes.
+\subsubsection*{to\_dict}
+\begin{lstlisting}
+to_dict(self) -> dict[str, object]
+\end{lstlisting}
+Return a detached structure accepted by strict JSON serializers.
+\section{fem\_toolbox.solvers}
+\index{fem_toolbox.solvers@solvers}
+Einordnung: research. Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/solvers.tex}. Beispiele/Tests:
+\nolinkurl{examples/transient_heat/run.py}.
+\section{fem\_toolbox.solvers.elasticity}
+\index{fem_toolbox.solvers.elasticity@solvers.\protect\allowbreak{}elasticity}
+Einordnung: stable. Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/solvers.tex}. Beispiele/Tests:
+\nolinkurl{examples/elastic_tension.py}.
+\subsection{mechanical\_dofs}
+stabiler Einstieg.
+\begin{lstlisting}
+mechanical_dofs(mesh: Mesh) -> DofMap
+\end{lstlisting}
+\begin{quote}
+Allocate u=(x,y,z) on sorted active Tet4/Tet10 node indices, in metres.\par Mesh points unused by volume cells receive no displacement DOFs.
+\end{quote}
+\subsection{ElasticResult}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: dataclass(frozen=True).
+\begin{quote}
+Raw, immutable results in active-node / input-cell order.\par node\_ids: (nactive,) mesh indices; displacement: (nactive,3) m; strain/stress: (ncells,6), total engineering Voigt strain and Pa stress; Tet4 strain/stress are cell constants (field\_points=None); Tet10 uses raw centroid samples located by field\_points (ncells,3) in metres. element\_energy: (ncells,) integrated mechanical-strain energy J; reactions/applied\_loads/residual: (nactive,3) N. Reactions are zero at free DOFs; residual retains their equilibrium error. force\_balance (3,) N and moment\_balance (3,) N m include external loads and reactions. relative\_residual is the free residual norm divided by || |K| |u| + |f| || (zero for an exactly unloaded state). This backward-error scale remains meaningful for rigid motions with cancelling internal forces.
+\end{quote}
+\begin{lstlisting}
+node_ids: NDArray[np.int64]
+\end{lstlisting}
+\begin{lstlisting}
+displacement: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+strain: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+stress: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+element_energy: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+reactions: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+applied_loads: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+residual: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+force_balance: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+moment_balance: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+relative_residual: float
+\end{lstlisting}
+\begin{lstlisting}
+provenance: RunProvenance
+\end{lstlisting}
+\begin{lstlisting}
+field_points: NDArray[np.float64] | None = None
+\end{lstlisting}
+\subsubsection*{energy}
+\begin{lstlisting}
+energy(self) -> float
+\end{lstlisting}
+Total strain energy in joules.
+\subsection{solve\_elasticity}
+stabiler Einstieg.
+\begin{lstlisting}
+solve_elasticity(mesh: Mesh, material: ElasticMaterial | Sequence[ElasticMaterial], conditions: Iterable[Dirichlet], *, backend: LinearBackend | None=None, body_force: VectorField=(0.0, 0.0, 0.0), tractions: Mapping[int, VectorField] | None=None, point_loads: Mapping[int, ArrayLike] | None=None, expansion: ThermalExpansion | Sequence[ThermalExpansion] | None=None, temperature: ArrayLike | None=None) -> ElasticResult
+\end{lstlisting}
+\begin{quote}
+Solve static linear elasticity on Tet4 or straight Tet10 cells, in SI units.\par ``backend`` is an experimental linear-backend hook; None selects SciPy. Reduction, physical residuals and result units remain this solver's contract.\par material is homogeneous or one material per input cell. conditions use mechanical\_dofs(mesh); nonzero displacement values are allowed. tractions maps boundary triangle row indices to global traction vectors/callables. point\_loads maps active mesh node indices to forces (3,) N. Contributions add, including loads on prescribed DOFs. No pressure or follower loads.\par Invalid materials, loads, conflicting conditions, missing supports and numerically singular systems raise ValidationError. Optional temperature is nodal absolute K; expansion may be homogeneous or per input cell. The thermal eigenstrain for Tet4 is alpha times the cell-average temperature difference. Tet10 interpolates temperature quadratically at quadrature points for thermal loads and mechanical-strain energy. Reported eigenstrain/stress is sampled at the centroid, not obtained from an arithmetic nodal average. Tet10 body/surface quadrature has degree five/four; Tet4 degree two. Diagonally equilibrated LU rejects relative pivots <= 1e-12; very poorly conditioned models require reformulation rather than a silent solution.
+\end{quote}
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.solvers.electric\_elements}
+\index{fem_toolbox.solvers.electric_elements@solvers.\protect\allowbreak{}electric\_\protect\allowbreak{}elements}
+Einordnung: internal. Interne Validierungs-/Reduktions-/Adaptergrenze; keine eigene stabile Importzusage. Öffentliche Wrapper oder experimentelle Hooks führen auf diese Umsetzung.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/solvers.tex}. Beispiele/Tests:
+\nolinkurl{examples/transient_heat/run.py}.
+\subsection*{Datentypen und Konstanten}
+\begin{lstlisting}
+ElectricGeometry = Tet4Geometry | Tet10Geometry
+\end{lstlisting}
+\begin{lstlisting}
+FloatArray = NDArray[np.float64]
+\end{lstlisting}
+\subsection{dielectric\_matrix}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+dielectric_matrix(g: ElectricGeometry, material: DielectricMaterial) -> FloatArray
+\end{lstlisting}
+Zusätzlich gilt der oben verknüpfte manuelle Fachvertrag; kein eigener Quell-Docstring.
+\subsection{volume\_charge\_load}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+volume_charge_load(g: ElectricGeometry, charge: loads.ChargeDensity) -> FloatArray
+\end{lstlisting}
+Zusätzlich gilt der oben verknüpfte manuelle Fachvertrag; kein eigener Quell-Docstring.
+\subsection{surface\_charge\_load}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+surface_charge_load(points: FloatArray, charge: loads.ChargeDensity) -> FloatArray
+\end{lstlisting}
+Zusätzlich gilt der oben verknüpfte manuelle Fachvertrag; kein eigener Quell-Docstring.
+\subsection{electric\_field}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+electric_field(g: ElectricGeometry, potential: FloatArray) -> FloatArray
+\end{lstlisting}
+Zusätzlich gilt der oben verknüpfte manuelle Fachvertrag; kein eigener Quell-Docstring.
+\subsection{stored\_energy}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+stored_energy(g: ElectricGeometry, material: DielectricMaterial, potential: FloatArray) -> float
+\end{lstlisting}
+Zusätzlich gilt der oben verknüpfte manuelle Fachvertrag; kein eigener Quell-Docstring.
+\section{fem\_toolbox.solvers.electrostatics}
+\index{fem_toolbox.solvers.electrostatics@solvers.\protect\allowbreak{}electrostatics}
+Einordnung: stable. Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/solvers.tex}. Beispiele/Tests:
+\nolinkurl{examples/parallel_plate.py}.
+\subsection{electric\_dofs}
+stabiler Einstieg.
+\begin{lstlisting}
+electric_dofs(mesh: Mesh) -> DofMap
+\end{lstlisting}
+\begin{quote}
+Allocate phi (V) on sorted active Tet4/Tet10 nodes, without unused DOFs.
+\end{quote}
+\subsection{ElectrostaticResult}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: dataclass(frozen=True).
+\begin{quote}
+Immutable nodal and raw element results in SI.\par node\_ids (nactive,) map potential (nactive,) V to mesh nodes. electric\_field and electric\_displacement (ncells,3) are E=-grad(phi) V/m and D=kappa E C/m². Tet4 fields are elementwise constant (field\_points=None); Tet10 fields are raw centroid samples located by field\_points (ncells,3) in metres. element\_energy (ncells,) integrates positive stored energy (J) over each entire cell, not electric enthalpy or energy evaluated at its centroid. reactions and residual (nactive,) are C for the ORIGINAL negative electric equation. reactions are unknown outward D-flux contributions at fixed DOFs (zero on free DOFs). Adjacent conductor charges are their NEGATIVE. volume\_charge, prescribed\_surface\_charge and dirichlet\_outward\_charge are C. charge\_balance = prescribed surface + Dirichlet outward - volume charge. relative\_residual = ||r\_free|| / || |A| |phi| + |f| ||, A=-K\_phi.
+\end{quote}
+\begin{lstlisting}
+node_ids: NDArray[np.int64]
+\end{lstlisting}
+\begin{lstlisting}
+potential: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+electric_field: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+electric_displacement: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+element_energy: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+reactions: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+electrode_charges: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+residual: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+volume_charge: float
+\end{lstlisting}
+\begin{lstlisting}
+prescribed_surface_charge: float
+\end{lstlisting}
+\begin{lstlisting}
+dirichlet_outward_charge: float
+\end{lstlisting}
+\begin{lstlisting}
+charge_balance: float
+\end{lstlisting}
+\begin{lstlisting}
+relative_residual: float
+\end{lstlisting}
+\begin{lstlisting}
+provenance: RunProvenance
+\end{lstlisting}
+\begin{lstlisting}
+field_points: NDArray[np.float64] | None = None
+\end{lstlisting}
+\subsubsection*{energy}
+\begin{lstlisting}
+energy(self) -> float
+\end{lstlisting}
+Total stored electrostatic field energy in J.
+\subsection{solve\_electrostatics}
+stabiler Einstieg.
+\begin{lstlisting}
+solve_electrostatics(mesh: Mesh, material: DielectricMaterial | Sequence[DielectricMaterial], conditions: Iterable[Dirichlet], *, backend: LinearBackend | None=None, volume_charge: ChargeDensity=0.0, surface_charges: Mapping[int, ChargeDensity] | None=None) -> ElectrostaticResult
+\end{lstlisting}
+\begin{quote}
+Solve div(D)=rho, D=-kappa grad(phi), with the negative electric block.\par ``backend`` is an experimental linear-backend hook; None selects SciPy. Reduction, physical residuals and result units remain this solver's contract.\par Permittivity is homogeneous or one material per input cell (absolute F/m). Dirichlet DOFs use electric\_dofs(mesh). volume\_charge is rho C/m³; surface mappings address exterior triangle rows and prescribe omega=D.n\_out C/m², not adjacent conductor charge. Callables receive x (3,) m. Tet4 load rules have degree two; Tet10 volume/surface rules have degree five/four. Only straight Tet10 is supported. Unspecified boundaries have D.n=0.\par Each connected component needs a supplied potential reference. Missing gauges raise ElectricGaugeError before factorization; no automatic pinning occurs. Invalid input, conditioning or failed residual/charge balance raises ValidationError. No piezoelectric coupling or floating electrodes.
+\end{quote}
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.solvers.heat}
+\index{fem_toolbox.solvers.heat@solvers.\protect\allowbreak{}heat}
+Einordnung: stable. Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/solvers.tex}. Beispiele/Tests:
+\nolinkurl{examples/steady_heat.py}.
+\subsection{thermal\_dofs}
+stabiler Einstieg.
+\begin{lstlisting}
+thermal_dofs(mesh: Mesh) -> DofMap
+\end{lstlisting}
+\begin{quote}
+One T DOF per sorted active Tet4/Tet10 mesh node, in K; no unused-node DOFs.
+\end{quote}
+\subsection{HeatResult}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: dataclass(frozen=True).
+\begin{quote}
+Immutable raw thermal results with explicit SI units.\par node\_ids (nactive,) map temperature (nactive,) K back to the mesh. gradient/heat\_flux (ncells,3) are K/m and W/m² in input cell order. Tet4 values are elementwise constant (field\_points=None). Tet10 values are raw centroid samples; field\_points (ncells,3) gives their physical locations in metres. They are neither nodal projections nor constant Tet10 fields. reactions/residual (nactive,) are W; reaction is zero on free DOFs and positive for heat supplied by a prescribed-temperature reservoir. source\_power, prescribed\_outflow, convection\_outflow, dirichlet\_inflow and power\_balance are W. Balance = source + Dirichlet - prescribed - convection. relative\_residual is the free residual norm / || |K| |T| + |f| ||. provenance records the effective discrete model, not callable source code.
+\end{quote}
+\begin{lstlisting}
+node_ids: NDArray[np.int64]
+\end{lstlisting}
+\begin{lstlisting}
+temperature: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+gradient: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+heat_flux: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+reactions: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+residual: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+source_power: float
+\end{lstlisting}
+\begin{lstlisting}
+prescribed_outflow: float
+\end{lstlisting}
+\begin{lstlisting}
+convection_outflow: float
+\end{lstlisting}
+\begin{lstlisting}
+dirichlet_inflow: float
+\end{lstlisting}
+\begin{lstlisting}
+power_balance: float
+\end{lstlisting}
+\begin{lstlisting}
+relative_residual: float
+\end{lstlisting}
+\begin{lstlisting}
+provenance: RunProvenance
+\end{lstlisting}
+\begin{lstlisting}
+field_points: NDArray[np.float64] | None = None
+\end{lstlisting}
+\subsection{solve\_heat}
+stabiler Einstieg.
+\begin{lstlisting}
+solve_heat(mesh: Mesh, material: ThermalMaterial | Sequence[ThermalMaterial], conditions: Iterable[Dirichlet], *, backend: LinearBackend | None=None, source: ScalarField=0.0, outward_fluxes: Mapping[int, ScalarField] | None=None, convection: Mapping[int, Convection] | None=None) -> HeatResult
+\end{lstlisting}
+\begin{quote}
+Solve -div(k grad T)=Q on a homogeneous Tet4 or straight Tet10 mesh with SI data.\par ``backend`` is an experimental linear-backend hook; None selects SciPy. Reduction, physical residuals and result units remain this solver's contract.\par Material is homogeneous or one per input cell. Dirichlet indices come from thermal\_dofs(mesh). Surface mappings address exterior triangle row indices. Positive outward flux removes heat. Robin law is q\_out=h*(T-T\_inf); surface contributions may add (including prescribed flux on a convecting surface). Tet4 load quadrature is degree two; Tet10 volume/surface rules are degree five/four. Temperatures share the same reference, normally absolute kelvin; no reference is invented.\par ValidationError rejects invalid input, singularity or failed residual/balance checks. ThermalNullspaceError diagnoses each first unanchored component as compatible or incompatible before sparse factorization. Pure Neumann systems are not automatically pinned, even when compatible. No transient coupling.
+\end{quote}
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.solvers.linear\_backend}
+\index{fem_toolbox.solvers.linear_backend@solvers.\protect\allowbreak{}linear\_\protect\allowbreak{}backend}
+Einordnung: internal. Interne Validierungs-/Reduktions-/Adaptergrenze; keine eigene stabile Importzusage. Öffentliche Wrapper oder experimentelle Hooks führen auf diese Umsetzung.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/solvers.tex}. Beispiele/Tests:
+\nolinkurl{tests/unit/test_linear_backend.py}.
+\subsection*{Datentypen und Konstanten}
+\begin{lstlisting}
+Numeric = NDArray[Any]
+\end{lstlisting}
+\begin{lstlisting}
+Kind = Literal['general', 'positive_definite']
+\end{lstlisting}
+\subsection{SolveReport}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True).
+\begin{quote}
+Unscaled residuals; each norm ratio uses || |A||x|+|b| || on that field.\par Matrix RHS uses the Frobenius norm. Residual has RHS shape and equation units (N, W or signed C as supplied). Direct methods have no iterations. Failure raises ValidationError rather than returning a false success.
+\end{quote}
+\begin{lstlisting}
+backend: str
+\end{lstlisting}
+\begin{lstlisting}
+method: str
+\end{lstlisting}
+\begin{lstlisting}
+converged: bool
+\end{lstlisting}
+\begin{lstlisting}
+reason: str
+\end{lstlisting}
+\begin{lstlisting}
+iterations: int | None
+\end{lstlisting}
+\begin{lstlisting}
+relative_residual: float
+\end{lstlisting}
+\begin{lstlisting}
+field_relative_residuals: Mapping[str, float]
+\end{lstlisting}
+\begin{lstlisting}
+residual: Numeric
+\end{lstlisting}
+\subsection{LinearSolution}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True).
+\begin{quote}
+Owned immutable solution and residual report in original unknown units.
+\end{quote}
+\begin{lstlisting}
+values: Numeric
+\end{lstlisting}
+\begin{lstlisting}
+report: SolveReport
+\end{lstlisting}
+\subsection{FactorizedOperator}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: Protocol. Dekoratoren: keine.
+Zusätzlich gilt der oben verknüpfte manuelle Fachvertrag; kein eigener Quell-Docstring.
+\subsubsection*{solve}
+\begin{lstlisting}
+solve(self, rhs: ArrayLike) -> LinearSolution
+\end{lstlisting}
+Solve finite (n,) or (n,nrhs) RHS; reject invalid or failed solves.
+\subsection{LinearBackend}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: Protocol. Dekoratoren: keine.
+Zusätzlich gilt der oben verknüpfte manuelle Fachvertrag; kein eigener Quell-Docstring.
+\subsubsection*{name}
+\begin{lstlisting}
+name(self) -> str
+\end{lstlisting}
+\subsubsection*{factorize}
+\begin{lstlisting}
+factorize(self, operator: Any, *, fields: Mapping[str, ArrayLike], scale: ArrayLike | None=None, kind: Kind='general', pivot_tolerance: float=0.0, relative_pivot: bool=False) -> FactorizedOperator
+\end{lstlisting}
+Snapshot a square finite operator and its complete field partition.
+\subsection{ScipyBackend}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: keine.
+\begin{quote}
+Sparse LU or dense positive-definite Cholesky; no optional dependencies.
+\end{quote}
+\subsubsection*{factorize}
+\begin{lstlisting}
+factorize(self, operator: Any, *, fields: Mapping[str, ArrayLike], scale: ArrayLike | None=None, kind: Kind='general', pivot_tolerance: float=0.0, relative_pivot: bool=False) -> FactorizedOperator
+\end{lstlisting}
+\subsection{solve\_linear}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+solve_linear(operator: Any, rhs: ArrayLike, *, fields: Mapping[str, ArrayLike], scale: ArrayLike | None=None, kind: Kind='general', pivot_tolerance: float=0.0, relative_pivot: bool=False, backend: LinearBackend | None=None) -> LinearSolution
+\end{lstlisting}
+\begin{quote}
+Factor and solve once; use backend.factorize explicitly for reuse.
+\end{quote}
+\section{fem\_toolbox.solvers.mechanical\_elements}
+\index{fem_toolbox.solvers.mechanical_elements@solvers.\protect\allowbreak{}mechanical\_\protect\allowbreak{}elements}
+Einordnung: internal. Interne Validierungs-/Reduktions-/Adaptergrenze; keine eigene stabile Importzusage. Öffentliche Wrapper oder experimentelle Hooks führen auf diese Umsetzung.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/solvers.tex}. Beispiele/Tests:
+\nolinkurl{examples/transient_heat/run.py}.
+\subsection*{Datentypen und Konstanten}
+\begin{lstlisting}
+MechanicalGeometry = Tet4Geometry | Tet10Geometry
+\end{lstlisting}
+\begin{lstlisting}
+FloatArray = NDArray[np.float64]
+\end{lstlisting}
+\subsection{stiffness\_matrix}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+stiffness_matrix(g: MechanicalGeometry, material: ElasticMaterial) -> FloatArray
+\end{lstlisting}
+Zusätzlich gilt der oben verknüpfte manuelle Fachvertrag; kein eigener Quell-Docstring.
+\subsection{strain\_matrix}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+strain_matrix(g: MechanicalGeometry) -> FloatArray
+\end{lstlisting}
+Zusätzlich gilt der oben verknüpfte manuelle Fachvertrag; kein eigener Quell-Docstring.
+\subsection{body\_load}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+body_load(g: MechanicalGeometry, force: loads.VectorField) -> FloatArray
+\end{lstlisting}
+Zusätzlich gilt der oben verknüpfte manuelle Fachvertrag; kein eigener Quell-Docstring.
+\subsection{traction\_load}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+traction_load(points: FloatArray, traction: loads.VectorField) -> FloatArray
+\end{lstlisting}
+Zusätzlich gilt der oben verknüpfte manuelle Fachvertrag; kein eigener Quell-Docstring.
+\subsection{quadratic\_energy}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+quadratic_energy(g: Tet10Geometry, material: ElasticMaterial, displacement: FloatArray, *, temperature: FloatArray | None=None, expansion: ThermalExpansion | None=None) -> float
+\end{lstlisting}
+Zusätzlich gilt der oben verknüpfte manuelle Fachvertrag; kein eigener Quell-Docstring.
+\subsection{thermal\_terms}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+thermal_terms(g: MechanicalGeometry, material: ElasticMaterial, temperature: FloatArray, expansion: ThermalExpansion) -> tuple[FloatArray, FloatArray]
+\end{lstlisting}
+\begin{quote}
+Return reported eigenstrain and consistent load; Tet10 report is a sample.
+\end{quote}
+\section{fem\_toolbox.solvers.petsc\_backend}
+\index{fem_toolbox.solvers.petsc_backend@solvers.\protect\allowbreak{}petsc\_\protect\allowbreak{}backend}
+Einordnung: internal. Interne Validierungs-/Reduktions-/Adaptergrenze; keine eigene stabile Importzusage. Öffentliche Wrapper oder experimentelle Hooks führen auf diese Umsetzung.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/solvers.tex}. Beispiele/Tests:
+\nolinkurl{tests/petsc/test_fieldsplit.py}.
+\subsection{PetscBackend}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: keine.
+\begin{quote}
+Experimental native sequential LU; requires petsc4py and double PETSc.\par Instantiation diagnoses missing/incompatible installations. Importing this module does not load petsc4py. Factors may be reused and explicitly closed; finalization also releases their native resources. No PETSc options database is read by the solver and no alternative factor package is selected.
+\end{quote}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self) -> None
+\end{lstlisting}
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\subsubsection*{factorize}
+\begin{lstlisting}
+factorize(self, operator: Any, *, fields: Mapping[str, ArrayLike], scale: ArrayLike | None=None, kind: Kind='general', pivot_tolerance: float=0.0, relative_pivot: bool=False) -> _PetscFactor
+\end{lstlisting}
+Snapshot/validate original data and factor the scaled sequential system.
+\subsection{PetscFieldSplitBackend}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: PetscBackend. Dekoratoren: keine.
+\begin{quote}
+FGMRES with full Schur block factorization and A11 preconditioning.\par Two nonempty fields use native FieldSplit with explicit local index sets; a single remaining field uses LU preconditioning. Both block inverses are native sequential LU. Physical adapters must remove rigid/gauge nullspaces; no loads are projected and no missing boundary conditions are invented. Tolerances apply to the scaled KSP residual; original field residuals must additionally satisfy the shared contract. Limits apply per native RHS solve.
+\end{quote}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, *, rtol: float=1e-13, atol: float=0.0, max_iterations: int=500, restart: int=50) -> None
+\end{lstlisting}
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.solvers.piezo\_dynamics}
+\index{fem_toolbox.solvers.piezo_dynamics@solvers.\protect\allowbreak{}piezo\_\protect\allowbreak{}dynamics}
+Einordnung: mixed. Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/solvers.tex}. Beispiele/Tests:
+\nolinkurl{examples/piezo_dynamics/run.py}.
+\subsection*{Datentypen und Konstanten}
+\begin{lstlisting}
+MAX_DENSE_DOFS = 2048
+\end{lstlisting}
+\subsection{PiezoelectricModes}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, eq=False).
+\begin{quote}
+Mass-normalized real eigenvectors in sorted active-node order.\par Arrays: displacement (nmodes,nactive,3), potential (nmodes,nactive), angular\_frequencies (nmodes,) rad/s, frequencies\_hz (nmodes,) Hz. Modal amplitudes satisfy u.T M u=1 (SI mass metric); they are shapes, not a physical displacement/voltage excitation. The largest mechanical component is positive. Degenerate eigenspaces have no unique basis. Electrical residuals are evaluated after tying conducting electrodes; conductor charge is minus the sum of original electrical residuals. All arrays are owned immutable snapshots. No experimental validation.
+\end{quote}
+\begin{lstlisting}
+node_ids: NDArray[np.int64]
+\end{lstlisting}
+\begin{lstlisting}
+displacement: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+potential: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+angular_frequencies: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+frequencies_hz: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+relative_residual_u: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+relative_residual_phi: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+electrode_names: tuple[str, ...]
+\end{lstlisting}
+\begin{lstlisting}
+electrode_potentials: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+electrode_charges: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+provenance: RunProvenance
+\end{lstlisting}
+\subsection{solve\_piezoelectric\_modes}
+stabiler Einstieg.
+\begin{lstlisting}
+solve_piezoelectric_modes(mesh: Mesh, material: PiezoelectricMaterial | Sequence[PiezoelectricMaterial], density: ArrayLike, conditions: Iterable[Dirichlet], *, backend: LinearBackend | None=None, count: int=6, electrodes: Sequence[Electrode] | None=None) -> PiezoelectricModes
+\end{lstlisting}
+\begin{quote}
+Solve the lowest ``count`` supported, undamped natural modes.\par ``backend`` is an experimental linear-backend hook; None selects SciPy. Reduction, physical residuals and result units remain this solver's contract.\par Constant density: positive scalar or (ncells,) kg/m³. Dirichlet indices use piezoelectric\_dofs(mesh); all prescribed values/charges must be zero (homogeneous perturbations). Electrode(potential=0) is shorted to the reference, Electrode(charge=0) is a floating equipotential open circuit. Every connected component needs an explicit potential reference and supports eliminating rigid-body modes. Uncovered electric boundaries have D.n=0; these are not automatically conducting electrodes.\par Only mechanical DOFs carry consistent Tet4/Tet10 mass. Eliminate free electric DOFs via K\_eff=Kuu+B D\textasciicircum{}-1 B.T, then solve K\_eff u=omega² M u using a symmetric definite eigensolver. Reconstruct phi=D\textasciicircum{}-1 B.T u. The dense reference rejects more than 2048 active total DOFs before allocation. Invalid inputs, nonpositive eigenvalues or failed field residuals raise ValidationError; a missing gauge raises ElectricGaugeError.
+\end{quote}
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.solvers.piezo\_harmonic}
+\index{fem_toolbox.solvers.piezo_harmonic@solvers.\protect\allowbreak{}piezo\_\protect\allowbreak{}harmonic}
+Einordnung: stable. Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/solvers.tex}. Beispiele/Tests:
+\nolinkurl{examples/piezo_dynamics/run.py}.
+\subsection{HarmonicPiezoelectricResult}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, eq=False).
+\begin{quote}
+Complex peak phasors (not RMS) with x(t)=Re(x\_hat exp(+i omega t)).\par Nodal u/v/a are (nactive,3) in m, m/s, m/s²; potential (nactive,) in V. Original residuals contain mechanical support reactions [N] and signed electric residuals [C]; conductor charge is their negative nodal sum. Hz and rad/s are explicit scalar fields. Arrays are immutable snapshots.
+\end{quote}
+\begin{lstlisting}
+node_ids: NDArray[np.int64]
+\end{lstlisting}
+\begin{lstlisting}
+frequency_hz: float
+\end{lstlisting}
+\begin{lstlisting}
+angular_frequency: float
+\end{lstlisting}
+\begin{lstlisting}
+displacement: NDArray[np.complex128]
+\end{lstlisting}
+\begin{lstlisting}
+velocity: NDArray[np.complex128]
+\end{lstlisting}
+\begin{lstlisting}
+acceleration: NDArray[np.complex128]
+\end{lstlisting}
+\begin{lstlisting}
+potential: NDArray[np.complex128]
+\end{lstlisting}
+\begin{lstlisting}
+residual_u: NDArray[np.complex128]
+\end{lstlisting}
+\begin{lstlisting}
+residual_phi: NDArray[np.complex128]
+\end{lstlisting}
+\begin{lstlisting}
+relative_residual_u: float
+\end{lstlisting}
+\begin{lstlisting}
+relative_residual_phi: float
+\end{lstlisting}
+\begin{lstlisting}
+provenance: RunProvenance
+\end{lstlisting}
+\subsection{solve\_harmonic\_piezoelectric}
+stabiler Einstieg.
+\begin{lstlisting}
+solve_harmonic_piezoelectric(mesh: Mesh, material: PiezoelectricMaterial | Sequence[PiezoelectricMaterial], density: ArrayLike, conditions: Iterable[Dirichlet], frequency_hz: float, *, backend: LinearBackend | None=None, electrodes: Sequence[Electrode] | None=None, loads: ArrayLike | None=None, prescribed: ArrayLike | None=None) -> HarmonicPiezoelectricResult
+\end{lstlisting}
+\begin{quote}
+Solve one undamped harmonic state, including DC (frequency\_hz=0).\par ``backend`` is an experimental linear-backend hook; None selects SciPy. Reduction, physical residuals and result units remain this solver's contract.\par Straight Tet4/Tet10 cells carry consistent mechanical mass, no electric mass. Topology uses homogeneous conditions/electrodes; loads and prescribed arrays are finite real/complex (4*nactive,) in [u,phi] DOF order. Loads are integrated force [N] and signed electric RHS [C], prescribed values are displacement [m] and potential [V] and zero outside fixed DOFs. Floating electrode charge Q is a -Q load on one tied potential DOF. Support acceleration is -omega²*u\_c and its inertia is included.\par Additive complex infrastructure preserves LinearSystem's real contract. The dynamic Schur matrix is K\_eff-omega² M; no damping is added to hide resonance. A diagonal energy scaling gives a dimensionless symmetric matrix; |lambda\_min|<=1e-10 is rejected as resonance/ill-conditioning, even with zero forcing. No infinite response is returned. The dense 2048-total-DOF bound and modal gauge/support contract apply.
+\end{quote}
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.solvers.piezo\_transient}
+\index{fem_toolbox.solvers.piezo_transient@solvers.\protect\allowbreak{}piezo\_\protect\allowbreak{}transient}
+Einordnung: stable. Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/solvers.tex}. Beispiele/Tests:
+\nolinkurl{examples/piezo_dynamics/run.py}.
+\subsection{KinematicValues}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: dataclass(frozen=True).
+\begin{quote}
+Prescribed arrays in active-node order: u [m], v [m/s], a [m/s²], phi [V].\par Mechanical arrays have shape (nactive,3), potential (nactive,). Entries outside the corresponding fixed DOFs must be zero. The caller supplies consistent derivatives; finite jumps in prescribed u or v are unsupported.
+\end{quote}
+\begin{lstlisting}
+displacement: ArrayLike
+\end{lstlisting}
+\begin{lstlisting}
+velocity: ArrayLike
+\end{lstlisting}
+\begin{lstlisting}
+acceleration: ArrayLike
+\end{lstlisting}
+\begin{lstlisting}
+potential: ArrayLike
+\end{lstlisting}
+\subsection{TransientPiezoelectricResult}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, eq=False).
+\begin{quote}
+Owned time histories, SI units, active-node order, no damping.\par Mechanical fields and original residuals: (ntime,nactive,3); potential and electric residual: (ntime,nactive). Residual\_u includes inertia and contains support reactions. Minus residual\_phi gives conductor charge contributions; floating electrodes require summation over their nodes. Total energy [J] is .5*v'Mv + .5*u'Kuu*u + .5*phi'D*phi, conserved for undriven homogeneous boundaries. Residual metrics use condensed electrodes.
+\end{quote}
+\begin{lstlisting}
+node_ids: NDArray[np.int64]
+\end{lstlisting}
+\begin{lstlisting}
+times: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+displacement: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+velocity: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+acceleration: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+potential: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+residual_u: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+residual_phi: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+total_energy: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+relative_residual_u: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+relative_residual_phi: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+provenance: RunProvenance
+\end{lstlisting}
+\subsection{solve\_transient\_piezoelectric}
+stabiler Einstieg.
+\begin{lstlisting}
+solve_transient_piezoelectric(mesh: Mesh, material: PiezoelectricMaterial | Sequence[PiezoelectricMaterial], density: ArrayLike, conditions: Iterable[Dirichlet], times: ArrayLike, *, backend: LinearBackend | None=None, electrodes: Sequence[Electrode] | None=None, initial_displacement: ArrayLike | None=None, initial_velocity: ArrayLike | None=None, loads: Callable[[float], ArrayLike] | None=None, prescribed: Callable[[float], KinematicValues] | None=None, events: ArrayLike=()) -> TransientPiezoelectricResult
+\end{lstlisting}
+\begin{quote}
+Integrate with beta=1/4, gamma=1/2, no physical or numerical damping.\par ``backend`` is an experimental linear-backend hook; None selects SciPy. Reduction, physical residuals and result units remain this solver's contract.\par Straight Tet4/Tet10 cells use consistent mechanical mass, no electric mass. Topology uses homogeneous Dirichlet/electrode declarations as in modes. loads(t) returns integrated signed [force (N), electric RHS (C)] of shape (4*nactive,); for total floating conductor charge Q put -Q on one of its potential DOFs. Contributions on tied nodes sum. No implicit volume/area integration is performed. prescribed(t) supplies KinematicValues, including voltage values on fixed potential DOFs. Defaults are all zero.\par Initial u/v have shape (nactive,3) and must match supports to 1e-12 SI; omitted arrays equal the prescribed state. Electric potential and mechanical acceleration are solved consistently at t0, never independent initial data. Every load/voltage jump or measured-curve knot must be listed in events [s]; interior events are inserted. Integration uses the left limit at an interval end; stored potential/acceleration are the right-continuous state. u and v remain continuous. Step/Ramp/TimeSeries may be used inside load callbacks; pass their knots as events. Smooth callbacks are sampled at the grid only.\par At most 2048 active DOFs and 2,000,000 stored scalar state entries; arrays are retained in memory. Invalid data and failed residuals raise ValidationError.
+\end{quote}
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.solvers.piezoelectric}
+\index{fem_toolbox.solvers.piezoelectric@solvers.\protect\allowbreak{}piezoelectric}
+Einordnung: stable. Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/solvers.tex}. Beispiele/Tests:
+\nolinkurl{examples/piezo_d33.py}.
+\subsection{piezoelectric\_dofs}
+stabiler Einstieg.
+\begin{lstlisting}
+piezoelectric_dofs(mesh: Mesh) -> DofMap
+\end{lstlisting}
+\begin{quote}
+Return field-major [u (m), phi (V)] DOFs on sorted active Tet4/Tet10 nodes.
+\end{quote}
+\subsection{PiezoelectricResult}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, eq=False).
+\begin{quote}
+Raw monolithic solution and physical checks in active-node/cell order.\par Nodal displacement is (nactive,3) m and potential (nactive,) V; cell fields follow stress-charge SI units. Tet4 fields are constant (field\_points=None); Tet10 fields are centroid samples at field\_points (ncells,3) in m. All energy arrays are volume integrals in J, not centroid approximations. Reactions and residuals belong to the original signed equations, with mechanical rows in N and electric rows in C. ``electrode\_charges`` is the negative electric residual on fixed and floating electrode nodes; ``electrode\_states`` sums these by conductor. Fieldwise relative residuals use independent backward-error denominators. ``mechanical\_scale`` and ``electric\_scale`` are positive characteristic diagonal block values in N/m and C/V; they equal 1 when scaling is off.
+\end{quote}
+\begin{lstlisting}
+node_ids: NDArray[np.int64]
+\end{lstlisting}
+\begin{lstlisting}
+displacement: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+potential: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+strain: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+stress: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+electric_field: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+electric_displacement: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+mechanical_energy: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+coupling_energy: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+dielectric_enthalpy: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+residual_u: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+residual_phi: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+reactions_u: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+reactions_phi: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+electrode_charges: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+applied_force: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+applied_electric_load: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+force_balance: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+moment_balance: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+charge_balance: float
+\end{lstlisting}
+\begin{lstlisting}
+relative_residual_u: float
+\end{lstlisting}
+\begin{lstlisting}
+relative_residual_phi: float
+\end{lstlisting}
+\begin{lstlisting}
+mechanical_scale: float
+\end{lstlisting}
+\begin{lstlisting}
+electric_scale: float
+\end{lstlisting}
+\begin{lstlisting}
+electrode_states: tuple[ElectrodeState, ...]
+\end{lstlisting}
+\begin{lstlisting}
+provenance: RunProvenance
+\end{lstlisting}
+\begin{lstlisting}
+field_points: NDArray[np.float64] | None = None
+\end{lstlisting}
+\subsubsection*{total\_enthalpy}
+\begin{lstlisting}
+total_enthalpy(self) -> float
+\end{lstlisting}
+Integrated electric enthalpy in J, not positive stored energy.
+\subsection{solve\_piezoelectric}
+stabiler Einstieg.
+\begin{lstlisting}
+solve_piezoelectric(mesh: Mesh, material: PiezoelectricMaterial | Sequence[PiezoelectricMaterial], conditions: Iterable[Dirichlet], *, backend: LinearBackend | None=None, body_force: VectorField=(0.0, 0.0, 0.0), tractions: Mapping[int, VectorField] | None=None, point_loads: Mapping[int, ArrayLike] | None=None, volume_charge: ChargeDensity=0.0, surface_charges: Mapping[int, ChargeDensity] | None=None, electrodes: Sequence[Electrode] | None=None, expansion: ThermalExpansion | Sequence[ThermalExpansion] | None=None, temperature: ArrayLike | None=None, electric_thermal_strain: bool=False, block_scaling: bool=True, method: str='direct') -> PiezoelectricResult
+\end{lstlisting}
+\begin{quote}
+Solve the symmetric-indefinite static u-phi Tet4/Tet10 system with sparse LU.\par ``backend`` is an experimental linear-backend hook; None selects SciPy. Reduction, physical residuals and result units remain this solver's contract.\par Dirichlet DOFs use ``piezoelectric\_dofs(mesh)`` and retain their original signed reactions. Mechanical loads are N/m³, N/m², and nodal N; ``volume\_charge`` is C/m³ and ``surface\_charges`` prescribe outward D.n in C/m² on exterior triangle rows. A potential reference and sufficient mechanical supports are required on every disconnected component. ``expansion`` and nodal absolute temperature must be supplied together. Fixed electrodes share a prescribed potential; floating electrodes share an unknown potential and prescribe their total adjacent conductor charge. The optional thermal-electric contribution to D is explicitly selected. Tet10 interpolates nodal temperature at every integration point for thermal loads and enthalpy; field values are sampled at the centroid. Straight Tet10 geometry and Triangle6 faces are required. The only supported method is direct LU: CG is invalid for this saddle system; MINRES awaits a verified block preconditioner. Invalid inputs, missing constraints, singularity, or excessive field residuals raise ValidationError (ElectricGaugeError for a missing potential reference).
+\end{quote}
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.solvers.piezoelectric\_elements}
+\index{fem_toolbox.solvers.piezoelectric_elements@solvers.\protect\allowbreak{}piezoelectric\_\protect\allowbreak{}elements}
+Einordnung: internal. Interne Validierungs-/Reduktions-/Adaptergrenze; keine eigene stabile Importzusage. Öffentliche Wrapper oder experimentelle Hooks führen auf diese Umsetzung.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/solvers.tex}. Beispiele/Tests:
+\nolinkurl{examples/piezo_dynamics/run.py}.
+\subsection{piezoelectric\_matrix}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+piezoelectric_matrix(geometry: MechanicalGeometry, material: PiezoelectricMaterial) -> NDArray[np.float64]
+\end{lstlisting}
+Zusätzlich gilt der oben verknüpfte manuelle Fachvertrag; kein eigener Quell-Docstring.
+\subsection{piezoelectric\_response}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+piezoelectric_response(geometry: MechanicalGeometry, material: PiezoelectricMaterial, displacement: ArrayLike, potential: ArrayLike, *, thermal_strain: ArrayLike | None=None, temperature: ArrayLike | None=None, expansion: ThermalExpansion | None=None, electric_thermal_strain: bool=False) -> PiezoelectricElementResponse
+\end{lstlisting}
+Zusätzlich gilt der oben verknüpfte manuelle Fachvertrag; kein eigener Quell-Docstring.
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.solvers.thermal\_elements}
+\index{fem_toolbox.solvers.thermal_elements@solvers.\protect\allowbreak{}thermal\_\protect\allowbreak{}elements}
+Einordnung: internal. Interne Validierungs-/Reduktions-/Adaptergrenze; keine eigene stabile Importzusage. Öffentliche Wrapper oder experimentelle Hooks führen auf diese Umsetzung.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/solvers.tex}. Beispiele/Tests:
+\nolinkurl{examples/transient_heat/run.py}.
+\subsection*{Datentypen und Konstanten}
+\begin{lstlisting}
+ThermalGeometry: TypeAlias = Tet4Geometry | Tet10Geometry
+\end{lstlisting}
+\begin{lstlisting}
+Lumping: TypeAlias = Literal['consistent', 'hrz']
+\end{lstlisting}
+\begin{lstlisting}
+FloatArray: TypeAlias = NDArray[np.float64]
+\end{lstlisting}
+\subsection{conductance\_matrix}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+conductance_matrix(g: ThermalGeometry, material: ThermalMaterial) -> FloatArray
+\end{lstlisting}
+Zusätzlich gilt der oben verknüpfte manuelle Fachvertrag; kein eigener Quell-Docstring.
+\subsection{capacity\_matrix}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+capacity_matrix(g: ThermalGeometry, density: float, specific_heat: float, *, lumped: bool=False, lumping: Lumping | None=None) -> FloatArray
+\end{lstlisting}
+Zusätzlich gilt der oben verknüpfte manuelle Fachvertrag; kein eigener Quell-Docstring.
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\subsection{source\_load}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+source_load(g: ThermalGeometry, source: loads.ScalarField) -> FloatArray
+\end{lstlisting}
+Zusätzlich gilt der oben verknüpfte manuelle Fachvertrag; kein eigener Quell-Docstring.
+\subsection{flux\_load}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+flux_load(points: FloatArray, flux: loads.ScalarField) -> FloatArray
+\end{lstlisting}
+Zusätzlich gilt der oben verknüpfte manuelle Fachvertrag; kein eigener Quell-Docstring.
+\subsection{convection\_terms}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+convection_terms(points: FloatArray, condition: loads.Convection) -> tuple[FloatArray, FloatArray]
+\end{lstlisting}
+Zusätzlich gilt der oben verknüpfte manuelle Fachvertrag; kein eigener Quell-Docstring.
+\subsection{temperature\_gradient}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+temperature_gradient(g: ThermalGeometry, temperature: FloatArray) -> FloatArray
+\end{lstlisting}
+Zusätzlich gilt der oben verknüpfte manuelle Fachvertrag; kein eigener Quell-Docstring.
+\subsection{contains}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+contains(g: ThermalGeometry, point: FloatArray) -> bool
+\end{lstlisting}
+Zusätzlich gilt der oben verknüpfte manuelle Fachvertrag; kein eigener Quell-Docstring.
+\section{fem\_toolbox.solvers.thermomechanics}
+\index{fem_toolbox.solvers.thermomechanics@solvers.\protect\allowbreak{}thermomechanics}
+Einordnung: stable. Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/solvers.tex}. Beispiele/Tests:
+\nolinkurl{examples/thermal_expansion.py}.
+\nolinkurl{tests/unit/test_public_api_contract.py}.
+\subsection{ThermomechanicalResult}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: dataclass(frozen=True).
+Zusätzlich gilt der oben verknüpfte manuelle Fachvertrag; kein eigener Quell-Docstring.
+\begin{lstlisting}
+heat: HeatResult
+\end{lstlisting}
+\begin{lstlisting}
+elasticity: ElasticResult
+\end{lstlisting}
+\subsection{solve\_thermomechanics}
+stabiler Einstieg.
+\begin{lstlisting}
+solve_thermomechanics(mesh: Mesh, thermal_material: ThermalMaterial | Sequence[ThermalMaterial], elastic_material: ElasticMaterial | Sequence[ElasticMaterial], expansion: ThermalExpansion | Sequence[ThermalExpansion], thermal_conditions: Iterable[Dirichlet], mechanical_conditions: Iterable[Dirichlet], *, thermal_backend: LinearBackend | None=None, mechanical_backend: LinearBackend | None=None, source: ScalarField=0.0, outward_fluxes: Mapping[int, ScalarField] | None=None, convection: Mapping[int, Convection] | None=None, body_force: VectorField=(0.0, 0.0, 0.0), tractions: Mapping[int, VectorField] | None=None, point_loads: Mapping[int, ArrayLike] | None=None) -> ThermomechanicalResult
+\end{lstlisting}
+\begin{quote}
+Solve heat then mechanics, transferring absolute nodal K on the same mesh.\par Optional thermal\_backend/mechanical\_backend select independent linear backends; None uses SciPy. Coupling is one-way, stationary, without thermal feedback from deformation. Tet10 interpolates all ten nodal temperatures in the eigenstrain integral; mechanical energy is integrated independently.
+\end{quote}
+\section{fem\_toolbox.solvers.thermopiezoelectric}
+\index{fem_toolbox.solvers.thermopiezoelectric@solvers.\protect\allowbreak{}thermopiezoelectric}
+Einordnung: stable. Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/solvers.tex}. Beispiele/Tests:
+\nolinkurl{examples/thermopiezoelectric/run.py}.
+\subsection{ThermopiezoelectricResult}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True).
+\begin{quote}
+Thermal and coupled results, each with its own residuals and SI balances.
+\end{quote}
+\begin{lstlisting}
+heat: HeatResult
+\end{lstlisting}
+\begin{lstlisting}
+piezoelectric: PiezoelectricResult
+\end{lstlisting}
+\subsection{solve\_thermopiezoelectric}
+stabiler Einstieg.
+\begin{lstlisting}
+solve_thermopiezoelectric(mesh: Mesh, thermal_material: ThermalMaterial | Sequence[ThermalMaterial], piezoelectric_material: PiezoelectricMaterial | Sequence[PiezoelectricMaterial], expansion: ThermalExpansion | Sequence[ThermalExpansion], thermal_conditions: Iterable[Dirichlet], piezoelectric_conditions: Iterable[Dirichlet], *, thermal_backend: LinearBackend | None=None, piezoelectric_backend: LinearBackend | None=None, source: ScalarField=0.0, outward_fluxes: Mapping[int, ScalarField] | None=None, convection: Mapping[int, Convection] | None=None, body_force: VectorField=(0.0, 0.0, 0.0), tractions: Mapping[int, VectorField] | None=None, point_loads: Mapping[int, ArrayLike] | None=None, volume_charge: ChargeDensity=0.0, surface_charges: Mapping[int, ChargeDensity] | None=None, electrodes: Sequence[Electrode] | None=None, electric_thermal_strain: bool=False, block_scaling: bool=True, method: str='direct') -> ThermopiezoelectricResult
+\end{lstlisting}
+\begin{quote}
+Solve heat first, then transfer absolute nodal K on the same Tet4/Tet10 mesh.\par Expansion is defined per cell in global engineering-Voigt order (1/K) with a reference temperature (K). ``electric\_thermal\_strain`` controls the optional thermal contribution to electric displacement explicitly. Separate optional thermal\_backend/piezoelectric\_backend hooks select linear backends (None uses SciPy). There is no reciprocal heat feedback or time dependence.
+\end{quote}
+\section{fem\_toolbox.solvers.transient\_heat}
+\index{fem_toolbox.solvers.transient_heat@solvers.\protect\allowbreak{}transient\_\protect\allowbreak{}heat}
+Einordnung: mixed. Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/solvers.tex}. Beispiele/Tests:
+\nolinkurl{examples/transient_heat/run.py}.
+\subsection*{Datentypen und Konstanten}
+\begin{lstlisting}
+SpaceTimeField: TypeAlias = TimeSignal | Callable[[NDArray[np.float64], float], float]
+\end{lstlisting}
+\subsection{TemperatureBC}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: dataclass(frozen=True).
+\begin{quote}
+Mesh node indices with one prescribed history in K (not global DOFs).
+\end{quote}
+\begin{lstlisting}
+nodes: ArrayLike
+\end{lstlisting}
+\begin{lstlisting}
+value: TimeSignal
+\end{lstlisting}
+\subsection{TransientConvection}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: dataclass(frozen=True).
+\begin{quote}
+Uniform facet coefficient W/(m² K) and ambient K, optionally time-varying.
+\end{quote}
+\begin{lstlisting}
+coefficient: TimeSignal
+\end{lstlisting}
+\begin{lstlisting}
+ambient: TimeSignal
+\end{lstlisting}
+\subsection{HeatFrame}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True).
+\begin{quote}
+A stored time state: temperature K, gradient K/m, heat\_flux W/m².\par temperature/reactions/residual use active node order; element fields use input cell order. Tet4 element fields are constant (field\_points=None). Tet10 fields are raw centroid samples; field\_points (ncells,3) locates them in metres. Initial reactions/residual are zero (not evaluated).
+\end{quote}
+\begin{lstlisting}
+mesh_sha256: str
+\end{lstlisting}
+\begin{lstlisting}
+index: int
+\end{lstlisting}
+\begin{lstlisting}
+time: float
+\end{lstlisting}
+\begin{lstlisting}
+temperature: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+gradient: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+heat_flux: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+reactions: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+residual: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+field_points: NDArray[np.float64] | None = None
+\end{lstlisting}
+\subsection{HeatBalance}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True).
+\begin{quote}
+Per-step powers in W; stored\_energy\_change in J relative to initial T.
+\end{quote}
+\begin{lstlisting}
+time: float
+\end{lstlisting}
+\begin{lstlisting}
+dt: float
+\end{lstlisting}
+\begin{lstlisting}
+source_power: float
+\end{lstlisting}
+\begin{lstlisting}
+prescribed_outflow: float
+\end{lstlisting}
+\begin{lstlisting}
+convection_outflow: float
+\end{lstlisting}
+\begin{lstlisting}
+dirichlet_inflow: float
+\end{lstlisting}
+\begin{lstlisting}
+storage_power: float
+\end{lstlisting}
+\begin{lstlisting}
+balance: float
+\end{lstlisting}
+\begin{lstlisting}
+relative_residual: float
+\end{lstlisting}
+\begin{lstlisting}
+stored_energy_change: float
+\end{lstlisting}
+\subsection{TransientHeatResult}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: dataclass(frozen=True).
+\begin{quote}
+Complete time grid; retained output frames; probes (ntime,nprobe) in K.\par Probes and balances are recorded at every integration step, independently of output\_every. node\_ids maps frame nodal arrays to zero-based mesh nodes.
+\end{quote}
+\begin{lstlisting}
+mesh_sha256: str
+\end{lstlisting}
+\begin{lstlisting}
+times: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+node_ids: NDArray[np.int64]
+\end{lstlisting}
+\begin{lstlisting}
+frames: tuple[HeatFrame, ...]
+\end{lstlisting}
+\begin{lstlisting}
+balances: tuple[HeatBalance, ...]
+\end{lstlisting}
+\begin{lstlisting}
+probe_names: tuple[str, ...]
+\end{lstlisting}
+\begin{lstlisting}
+probe_temperature: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+provenance: RunProvenance
+\end{lstlisting}
+\subsection{heat\_mesh\_fingerprint}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+heat_mesh_fingerprint(mesh: Mesh) -> str
+\end{lstlisting}
+\begin{quote}
+Hash ordered geometry/topology to prevent exporting fields on another mesh.
+\end{quote}
+\subsection{solve\_transient\_heat}
+stabiler Einstieg.
+\begin{lstlisting}
+solve_transient_heat(mesh: Mesh, material: ThermalMaterial | Sequence[ThermalMaterial], times: ArrayLike, initial_temperature: ArrayLike, *, backend: LinearBackend | None=None, conditions: Sequence[TemperatureBC]=(), source: SpaceTimeField=0.0, outward_fluxes: Mapping[int, SpaceTimeField] | None=None, convection: Mapping[int, TransientConvection] | None=None, probes: Mapping[str, int | ArrayLike] | None=None, lumped: bool=False, lumping: Lumping | None=None, output_every: int=1, max_history_bytes: int=256 * 1024 * 1024, on_frame: Callable[[HeatFrame], None] | None=None) -> TransientHeatResult
+\end{lstlisting}
+\begin{quote}
+Solve C Tdot + K T = f by backward Euler on an event-enriched time grid.\par ``backend`` is an experimental linear-backend hook; None selects SciPy. Reduction, physical residuals and result units remain this solver's contract.\par Straight Tet10 uses consistent capacity by default; lumping="hrz" selects conservative diagonal scaling. Tet10 rejects lumped=True (negative row-sum masses). Tet4 retains its boolean lumped option and rejects explicit lumping. HRZ conserves total storage but does not preserve consistent source moments.\par SI: time s, initial\_temperature K (scalar or active-node vector), source W/m³, outward flux W/m². Spatial sources/fluxes may be f(x,t); explicitly include their discontinuities in times. Profile knots are inserted for Step/Ramp/TimeSeries. Loads use the left limit at the interval endpoint; Dirichlet histories are right-continuous. No artificial thermal reference is imposed on insulated components. Positive rho/c required per cell.\par The initial state must match t0 Dirichlet values (1e-10 K absolute tolerance); it is never projected silently. Full residuals include C dT/dt. Output includes first/final frames and every output\_every step; optional on\_frame permits incremental export. max\_history\_bytes bounds estimated retained numerical history, not factorization/workspace memory.
+\end{quote}
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.studies}
+\index{fem_toolbox.studies@studies}
+Einordnung: stable. Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/workflows.tex}. Beispiele/Tests:
+\nolinkurl{examples/parameter_study/run.py}.
+\nolinkurl{tests/unit/test_studies.py}.
+\subsection{Study}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: keine.
+\begin{quote}
+A detached schema-1 manifest; input files are reread on each resolution.\par ``manifest`` has study\_schema\_version=1, a relative TOML ``model`` path, and ``parameters`` (name, target, SI unit, finite nonempty values). Parameters form a Cartesian product in declaration order (last parameter varies fastest). Targets address existing whole properties, e.g. boundary.dirichlet.0.value. ``root`` is the manifest directory; the base model must stay inside it. Schema/IO errors raise ModelSchemaError. Physical case errors are recorded by run(). No expressions, transient models, remote execution or new meshing.
+\end{quote}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, manifest: Mapping[str, object], *, root: str | Path) -> None
+\end{lstlisting}
+\subsubsection*{from\_file}
+\begin{lstlisting}
+from_file(cls, path: str | Path) -> Study
+\end{lstlisting}
+Read a UTF-8 .toml manifest with paths relative to its directory.
+\subsubsection*{resolve}
+\begin{lstlisting}
+resolve(self) -> list[dict[str, Any]]
+\end{lstlisting}
+Return detached deterministic case records, without solving any model.\par Case IDs hash named parameter values/units/targets; input fingerprints additionally cover complete model data, mesh bytes, scale, explicit solver settings, schema/toolbox/dependency versions and study revision. A changed base input invalidates reuse while retaining the case ID.
+Direkte Raise-Stellen: ModelSchemaError; transitive Fehler siehe Fachvertrag.
+\subsubsection*{run}
+\begin{lstlisting}
+run(self, output: str | Path, *, max_cases: int | None=None) -> dict[str, Any]
+\end{lstlisting}
+Run/retry cases serially and return the persisted schema-1 catalog.\par ``max\_cases`` limits newly attempted cases, not cached successes. None runs all cases. Case exceptions are persisted and subsequent cases run; KeyboardInterrupt/SystemExit persist ``interrupted`` and are re-raised. Catalog/locking errors propagate. A lock prevents concurrent writers; after a hard process kill remove .study.lock only after checking no writer remains. Partial attempt directories are retained, never reused.
+Direkte Raise-Stellen: FileExistsError; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.study\_reports}
+\index{fem_toolbox.study_reports@study\_\protect\allowbreak{}reports}
+Einordnung: stable. Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/workflows.tex}. Beispiele/Tests:
+\nolinkurl{examples/parameter_study/report.py}.
+\nolinkurl{tests/unit/test_study_reports.py}.
+\subsection{Quantity}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: dataclass(frozen=True).
+\begin{quote}
+One scalar output definition; indices are global nodes or volume-cell rows.\par Metric fields use dotted bundle paths (e.g. heat.power\_balance\_W). Point/cell fields use exported array names. Select a vector component by its metadata name or 'norm'. No selection means all active nodes/volume cells; no padding or smoothing. scalar requires exactly one selected value. Tolerances, if supplied, evaluate abs(value) <= tolerance in this quantity's SI unit.
+\end{quote}
+\begin{lstlisting}
+name: str
+\end{lstlisting}
+\begin{lstlisting}
+source: Literal['metric', 'point', 'cell']
+\end{lstlisting}
+\begin{lstlisting}
+field: str
+\end{lstlisting}
+\begin{lstlisting}
+unit: str
+\end{lstlisting}
+\begin{lstlisting}
+definition: str
+\end{lstlisting}
+\begin{lstlisting}
+reduction: Literal['scalar', 'min', 'max', 'mean', 'sum', 'max_abs'] = 'scalar'
+\end{lstlisting}
+\begin{lstlisting}
+component: str = 'scalar'
+\end{lstlisting}
+\begin{lstlisting}
+indices: tuple[int, ...] | None = None
+\end{lstlisting}
+\begin{lstlisting}
+absolute_tolerance: float | None = None
+\end{lstlisting}
+\subsection{export\_study\_table}
+stabiler Einstieg.
+\begin{lstlisting}
+export_study_table(catalog_path: str | Path, output: str | Path, quantities: Sequence[Quantity]) -> Path
+\end{lstlisting}
+\begin{quote}
+Write values.csv, metadata.json and report.md into a new output directory.\par All active catalog cases are retained; unavailable quantities are null with reasons, encoded as empty CSV cells. Existing directories are never replaced. Invalid bundles remain visible; models are never solved. Returned path points to metadata.json. A failed write can leave an incomplete directory, which must not be consumed until metadata.json and the CSV hash validate.
+\end{quote}
+Direkte Raise-Stellen: ValueError; transitive Fehler siehe Fachvertrag.
+\subsection{read\_study\_table}
+stabiler Einstieg.
+\begin{lstlisting}
+read_study_table(directory: str | Path) -> dict[str, Any]
+\end{lstlisting}
+\begin{quote}
+Read schema-1 metadata and verify the matching CSV, without FEM execution.\par Raises ValueError for unsupported/corrupt data, OSError for missing files. Returned JSON data includes column contracts, per-case values and provenance.
+\end{quote}
+Direkte Raise-Stellen: ValueError; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.surrogates}
+\index{fem_toolbox.surrogates@surrogates}
+Einordnung: stable. Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/workflows.tex}. Beispiele/Tests:
+\nolinkurl{examples/surrogate_heat/run.py}.
+\subsection{Variable}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: dataclass(frozen=True).
+\begin{quote}
+Explicit column identity, SI unit and physical definition (no conversion).
+\end{quote}
+\begin{lstlisting}
+name: str
+\end{lstlisting}
+\begin{lstlisting}
+unit: str
+\end{lstlisting}
+\begin{lstlisting}
+definition: str
+\end{lstlisting}
+\subsection{SurrogateData}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: keine.
+\begin{quote}
+Validated owned data X[n,p], Y[n,q], IDs and mandatory source provenance.\par X/Y must be finite real matrices, never complex/bool/object or empty. Data and metadata are detached from caller mutation; array storage is read-only. Every row needs a unique nonempty case ID. Units are explicit SI declarations, not a unit-conversion engine. Raises ValueError for incompatible data.
+\end{quote}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, X: ArrayLike, Y: ArrayLike, case_ids: Sequence[str], parameters: Sequence[Variable], targets: Sequence[Variable], *, provenance: Mapping[str, object]) -> None
+\end{lstlisting}
+Direkte Raise-Stellen: ValueError; transitive Fehler siehe Fachvertrag.
+\subsubsection*{from\_table}
+\begin{lstlisting}
+from_table(cls, directory: str | Path, *, parameter_columns: Sequence[str], target_columns: Sequence[str], exclude_invalid: bool=False) -> SurrogateData
+\end{lstlisting}
+Load selected scalar columns from a verified \#60 CSV/JSON table.\par Failed/unavailable cases, explicitly failed balance checks and missing, nonfinite or nonscalar selected values are rejected by default. Explicit exclusion records every excluded case and all reasons in provenance. Unchecked balances remain visibly unchecked, never promoted to passed.
+Direkte Raise-Stellen: ValueError; transitive Fehler siehe Fachvertrag.
+\subsubsection*{X}
+\begin{lstlisting}
+X(self) -> NDArray[np.float64]
+\end{lstlisting}
+Read-only parameters in declared SI units, shape [n,p].
+\subsubsection*{Y}
+\begin{lstlisting}
+Y(self) -> NDArray[np.float64]
+\end{lstlisting}
+Read-only targets in declared SI units, shape [n,q].
+\subsubsection*{provenance}
+\begin{lstlisting}
+provenance(self) -> dict[str, Any]
+\end{lstlisting}
+Detached source metadata, including any table exclusion log.
+\subsubsection*{fingerprint}
+\begin{lstlisting}
+fingerprint(self) -> str
+\end{lstlisting}
+SHA-256 of values, row/column identity, definitions and provenance.
+\subsection{DataSplit}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: dataclass(frozen=True).
+\begin{quote}
+Explicit train/test ID partition; seed records optional random splitting.
+\end{quote}
+\begin{lstlisting}
+train_ids: tuple[str, ...]
+\end{lstlisting}
+\begin{lstlisting}
+test_ids: tuple[str, ...]
+\end{lstlisting}
+\begin{lstlisting}
+seed: int | None = None
+\end{lstlisting}
+\subsection{split\_cases}
+stabiler Einstieg.
+\begin{lstlisting}
+split_cases(data: SurrogateData, *, test_fraction: float, seed: int) -> DataSplit
+\end{lstlisting}
+\begin{quote}
+Seeded split of distinct X groups; duplicate inputs always stay together.\par Fraction applies to groups, rounded up, with at least one group on each side. Order within each side follows the original dataset. No fitting is performed.
+\end{quote}
+Direkte Raise-Stellen: ValueError; transitive Fehler siehe Fachvertrag.
+\subsection{Prediction}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: dataclass(frozen=True).
+\begin{quote}
+Values [n,q] in target units and an outside-training-box flag per row.
+\end{quote}
+\begin{lstlisting}
+values: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+extrapolated: NDArray[np.bool_]
+\end{lstlisting}
+\begin{lstlisting}
+parameters: tuple[Variable, ...]
+\end{lstlisting}
+\begin{lstlisting}
+targets: tuple[Variable, ...]
+\end{lstlisting}
+\subsection{PolynomialSurrogate}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: keine.
+\begin{quote}
+Polynomial fitted by fit\_surrogate; prediction needs only its artifact.\par Min/max checks are box checks, not guarantees of accuracy inside the box. Test errors are empirical errors, never uncertainty intervals/error bounds.
+\end{quote}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, document: Mapping[str, Any]) -> None
+\end{lstlisting}
+\subsubsection*{report}
+\begin{lstlisting}
+report(self) -> dict[str, Any]
+\end{lstlisting}
+Detached training/test errors, split, source and version provenance.
+\subsubsection*{to\_document}
+\begin{lstlisting}
+to_document(self) -> dict[str, Any]
+\end{lstlisting}
+Return an inspectable detached JSON document.
+\subsubsection*{save}
+\begin{lstlisting}
+save(self, path: str | Path, *, overwrite: bool=False) -> None
+\end{lstlisting}
+Atomically save schema-1 JSON/checksum; default refuses overwriting.\par Parent must exist. No pickle, executable data or training files required. Overwrite uses atomic replacement; exclusive publication uses a hard link.
+Direkte Raise-Stellen: ValueError; transitive Fehler siehe Fachvertrag.
+\subsubsection*{load}
+\begin{lstlisting}
+load(cls, path: str | Path) -> PolynomialSurrogate
+\end{lstlisting}
+Validate checksum, version and complete model structure from JSON.\par Raises ValueError for damaged/incompatible artifacts; filesystem errors propagate. A checksum detects accidental damage, not hostile tampering.
+Direkte Raise-Stellen: ValueError; transitive Fehler siehe Fachvertrag.
+\subsubsection*{predict}
+\begin{lstlisting}
+predict(self, X: ArrayLike, *, allow_extrapolation: bool=False) -> Prediction
+\end{lstlisting}
+Predict one [p] or several [n,p] points; always return [n,q] values.\par Outside-box input raises ValueError by default. Explicit permission returns per-row flags. Columns must follow the exposed parameter order. Complex, nonfinite, empty and dimensionally incompatible arrays fail.
+Direkte Raise-Stellen: ValueError; transitive Fehler siehe Fachvertrag.
+\subsection{fit\_surrogate}
+stabiler Einstieg.
+\begin{lstlisting}
+fit_surrogate(data: SurrogateData, split: DataSplit, *, degree: int=1, ridge: float=0.0) -> PolynomialSurrogate
+\end{lstlisting}
+\begin{quote}
+Fit total-degree 1/2 polynomial with train-only box scaling and intercept.\par Ridge solves ||A B - Y||² + ridge*||B[1:]||² by augmented least squares; intercept is unpenalized. No normal equations or automatic tuning. At least as many distinct training points as basis terms are required, even for ridge. Constant parameters are rejected (remove them explicitly); constant outputs are allowed. Unregularized rank deficiency raises ValueError. Test data is used only for the returned evaluation report, never scaling or fitting.
+\end{quote}
+Direkte Raise-Stellen: ValueError; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.time}
+\index{fem_toolbox.time@time}
+Einordnung: mixed. Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/solvers.tex}. Beispiele/Tests:
+\nolinkurl{examples/transient_heat/run.py}.
+\subsection*{Datentypen und Konstanten}
+\begin{lstlisting}
+Side = Literal['left', 'right']
+\end{lstlisting}
+\begin{lstlisting}
+TimeSignal: TypeAlias = float | Step | Ramp | TimeSeries
+\end{lstlisting}
+\subsection{Step}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: dataclass(frozen=True).
+\begin{quote}
+Right-continuous scalar step; time in s, before/after in caller's SI unit.
+\end{quote}
+\begin{lstlisting}
+time: float
+\end{lstlisting}
+\begin{lstlisting}
+before: float
+\end{lstlisting}
+\begin{lstlisting}
+after: float
+\end{lstlisting}
+\subsubsection*{knots}
+\begin{lstlisting}
+knots(self) -> tuple[float, ...]
+\end{lstlisting}
+\subsubsection*{value}
+\begin{lstlisting}
+value(self, time: float, *, side: Side='right') -> float
+\end{lstlisting}
+\subsubsection*{\_\_call\_\_}
+\begin{lstlisting}
+__call__(self, time: float) -> float
+\end{lstlisting}
+\subsection{Ramp}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: dataclass(frozen=True).
+\begin{quote}
+Linear ramp on [start,end] s, held constant before and after.\par Finite ordered time limits and finite scalar amplitudes are required. Overflowing intermediate spans are normalized; exact endpoints and constant amplitudes are retained. This does not extend a solver's time-grid support.
+\end{quote}
+\begin{lstlisting}
+start: float
+\end{lstlisting}
+\begin{lstlisting}
+end: float
+\end{lstlisting}
+\begin{lstlisting}
+start_value: float
+\end{lstlisting}
+\begin{lstlisting}
+end_value: float
+\end{lstlisting}
+\subsubsection*{knots}
+\begin{lstlisting}
+knots(self) -> tuple[float, ...]
+\end{lstlisting}
+\subsubsection*{value}
+\begin{lstlisting}
+value(self, time: float, *, side: Side='right') -> float
+\end{lstlisting}
+\subsubsection*{\_\_call\_\_}
+\begin{lstlisting}
+__call__(self, time: float) -> float
+\end{lstlisting}
+\subsection{TimeSeries}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, init=False, eq=False).
+\begin{quote}
+Immutable measured scalar samples. Times in seconds, values in stated SI unit.\par Linear interpolation is default; previous is right-continuous zero-order hold. Extrapolation defaults to error; hold must be selected explicitly. Duplicate/nonfinite times, nonfinite values and unknown modes are rejected.
+\end{quote}
+\begin{lstlisting}
+times: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+values: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+interpolation: Literal['linear', 'previous']
+\end{lstlisting}
+\begin{lstlisting}
+extrapolation: Literal['error', 'hold']
+\end{lstlisting}
+\begin{lstlisting}
+unit: str
+\end{lstlisting}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, times: ArrayLike, values: ArrayLike, *, interpolation: Literal['linear', 'previous']='linear', extrapolation: Literal['error', 'hold']='error', unit: str='1') -> None
+\end{lstlisting}
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\subsubsection*{knots}
+\begin{lstlisting}
+knots(self) -> tuple[float, ...]
+\end{lstlisting}
+\subsubsection*{value}
+\begin{lstlisting}
+value(self, time: float, *, side: Side='right') -> float
+\end{lstlisting}
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\subsubsection*{\_\_call\_\_}
+\begin{lstlisting}
+__call__(self, time: float) -> float
+\end{lstlisting}
+\subsubsection*{from\_csv}
+\begin{lstlisting}
+from_csv(cls, path: str | Path, *, value_column: str, unit: str, time_column: str='time_s', delimiter: str=',', interpolation: Literal['linear', 'previous']='linear', extrapolation: Literal['error', 'hold']='error') -> TimeSeries
+\end{lstlisting}
+Read numeric UTF-8 CSV columns, explicitly in s and the given SI unit.
+Direkte Raise-Stellen: ValidationError, ValueError; transitive Fehler siehe Fachvertrag.
+\subsection{signal\_value}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+signal_value(signal: TimeSignal, time: float, *, side: Side='right') -> float
+\end{lstlisting}
+\begin{quote}
+Evaluate a finite scalar history at a specified side of an event.
+\end{quote}
+\subsection{integration\_times}
+stabiler Einstieg.
+\begin{lstlisting}
+integration_times(times: ArrayLike, signals: Iterable[TimeSignal]=()) -> NDArray[np.float64]
+\end{lstlisting}
+\begin{quote}
+Validate times and insert all interior signal knots, without rounding.
+\end{quote}
+\section{fem\_toolbox.transient\_model}
+\index{fem_toolbox.transient_model@transient\_\protect\allowbreak{}model}
+Einordnung: internal. Interne Validierungs-/Reduktions-/Adaptergrenze; keine eigene stabile Importzusage. Öffentliche Wrapper oder experimentelle Hooks führen auf diese Umsetzung.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/workflows.tex}. Beispiele/Tests:
+\nolinkurl{examples/surrogate_heat/run.py}.
+\subsection{resolve\_csv\_profiles}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+resolve_csv_profiles(value: Any, root: Path) -> Any
+\end{lstlisting}
+\begin{quote}
+Embed CSV samples in a detached document; only files under model root.
+\end{quote}
+Direkte Raise-Stellen: ModelSchemaError; transitive Fehler siehe Fachvertrag.
+\subsection{TransientHeatModel}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: keine.
+\begin{quote}
+Implementation behind Model(physics='transient\_heat', schema\_version=2).
+\end{quote}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, mesh: Mesh, document: Mapping[str, Any]) -> None
+\end{lstlisting}
+Direkte Raise-Stellen: ModelSchemaError; transitive Fehler siehe Fachvertrag.
+\subsubsection*{solve}
+\begin{lstlisting}
+solve(self) -> TransientHeatResult
+\end{lstlisting}
+Solve with model/document and material-source provenance included.
+\section{fem\_toolbox.uncertainty}
+\index{fem_toolbox.uncertainty@uncertainty}
+Einordnung: stable. Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/workflows.tex}. Beispiele/Tests:
+\nolinkurl{examples/uncertainty_heat/run.py}.
+\subsection{Normal}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: dataclass(frozen=True).
+\begin{quote}
+Unbounded normal law with finite mean and positive standard deviation.\par Values are in the parameter's declared SI unit. Negative/otherwise unphysical samples are not clipped; a model may reject them explicitly.
+\end{quote}
+\begin{lstlisting}
+mean: float
+\end{lstlisting}
+\begin{lstlisting}
+standard_deviation: float
+\end{lstlisting}
+\subsection{Uniform}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: dataclass(frozen=True).
+\begin{quote}
+Uniform probability law on a finite increasing SI interval.\par An interval alone does not justify a uniform law; the caller must state why this probability assumption is appropriate for the intended study.
+\end{quote}
+\begin{lstlisting}
+lower: float
+\end{lstlisting}
+\begin{lstlisting}
+upper: float
+\end{lstlisting}
+\subsection{UncertainParameter}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: dataclass(frozen=True).
+\begin{quote}
+Scalar M8 target, explicit SI unit, law and mandatory justification.
+\end{quote}
+\begin{lstlisting}
+name: str
+\end{lstlisting}
+\begin{lstlisting}
+target: str
+\end{lstlisting}
+\begin{lstlisting}
+unit: str
+\end{lstlisting}
+\begin{lstlisting}
+distribution: Normal | Uniform
+\end{lstlisting}
+\begin{lstlisting}
+justification: str
+\end{lstlisting}
+\subsection{SamplingPlan}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: keine.
+\begin{quote}
+Detached joint Monte Carlo specification with PCG64 and explicit seed.\par ``size`` is an integer >=2, ``seed`` a nonnegative integer. Default inputs are independent. An optional real correlation[p,p] must be symmetric, PSD and have unit diagonal (absolute roundoff tolerance 1e-12). Nonidentity correlation is supported only for all-normal inputs. Singular normal correlation is valid; eigenvalues in [-1e-12,0] are rounded to zero. ``sample`` returns immutable float64 rows [size,p], detached from callers. No distribution fitting, truncation or automatic unit conversion.
+\end{quote}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, parameters: Sequence[UncertainParameter], *, size: int, seed: int, correlation: ArrayLike | None=None) -> None
+\end{lstlisting}
+Direkte Raise-Stellen: ValueError; transitive Fehler siehe Fachvertrag.
+\subsubsection*{parameters}
+\begin{lstlisting}
+parameters(self) -> tuple[UncertainParameter, ...]
+\end{lstlisting}
+\subsubsection*{size}
+\begin{lstlisting}
+size(self) -> int
+\end{lstlisting}
+\subsubsection*{seed}
+\begin{lstlisting}
+seed(self) -> int
+\end{lstlisting}
+\subsubsection*{to\_document}
+\begin{lstlisting}
+to_document(self) -> dict[str, Any]
+\end{lstlisting}
+Return detached schema-1 provenance, including laws and RNG method.
+\subsubsection*{sample}
+\begin{lstlisting}
+sample(self) -> NDArray[np.float64]
+\end{lstlisting}
+Generate joint samples; same specification/runtime gives same bytes.
+Direkte Raise-Stellen: ValueError; transitive Fehler siehe Fachvertrag.
+\subsection{summarize\_samples}
+stabiler Einstieg.
+\begin{lstlisting}
+summarize_samples(values: ArrayLike, *, unit: str, numerical_error_bound: float | None, quantile_probabilities: Sequence[float]=(0.025, 0.5, 0.975)) -> dict[str, Any]
+\end{lstlisting}
+\begin{quote}
+Summarize finite real output rows; never omit failed/nonfinite samples.\par Variance is unbiased (ddof=1); quantiles use NumPy linear interpolation. Quantile bands are output probability estimates, not confidence intervals or guaranteed bounds. Prefix moments document sample convergence, not a proof that sampling error is negligible. ``numerical\_error\_bound`` is an externally justified deterministic bound in ``unit``, or None if unknown; it is reported separately and is never added to statistical variance.
+\end{quote}
+Direkte Raise-Stellen: ValueError; transitive Fehler siehe Fachvertrag.
+\subsection{local\_sensitivity}
+stabiler Einstieg.
+\begin{lstlisting}
+local_sensitivity(evaluate: Callable[[NDArray[np.float64]], float], *, center: ArrayLike, steps: ArrayLike) -> dict[str, Any]
+\end{lstlisting}
+\begin{quote}
+Central finite-difference gradient at explicit SI center and positive steps.\par Each derivative has output-unit/input-unit; it is local, not a global variance decomposition. The caller must establish step convergence and admissibility of center +/- step. Callback exceptions propagate. Exactly 2*p scalar evaluations; callback inputs are detached copies.
+\end{quote}
+Direkte Raise-Stellen: ValueError; transitive Fehler siehe Fachvertrag.
+\subsection{UncertaintyStudy}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: keine.
+\begin{quote}
+Joint scalar sampling on the public stationary M8 Study/Quantity APIs.\par The relative ``model`` TOML and its mesh must remain inside ``root``. Each joint row runs as a one-case Study, so correlations are retained without a Cartesian product. M8 owns validation, retry, provenance and hashed result reuse. Reusing an output directory requires identical sampling provenance; changed model/mesh bytes invalidate cached M8 results. Normal-law physical failures stay visible and suppress all uncertainty statistics (no silent clipping or conditional subset). Results are not an experimental claim.
+\end{quote}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, plan: SamplingPlan, *, model: str, root: str | Path) -> None
+\end{lstlisting}
+Direkte Raise-Stellen: ValueError; transitive Fehler siehe Fachvertrag.
+\subsubsection*{run}
+\begin{lstlisting}
+run(self, output: str | Path, *, quantities: Sequence[Quantity], numerical_error_bounds: Mapping[str, float | None], sensitivity_center: ArrayLike | None=None, sensitivity_steps: ArrayLike | None=None) -> dict[str, Any]
+\end{lstlisting}
+Write sampling.json and atomic uncertainty.json; return detached data.\par Every quantity requires an explicit deterministic numerical-error bound in its SI unit or None (unknown), never a default zero. Optional local sensitivities require center[p] and positive steps[p] together; each quantity derivative uses its output unit divided by the input unit. Caller establishes admissibility and step convergence. Sensitivities are suppressed if a perturbation fails; sampling statistics may still be complete. Tables/case receipts and fingerprints remain inspectable.\par An exclusive lock rejects concurrent writers. Interrupted case runs retain their M8 recovery state; rerunning resumes successes. After a hard kill, verify no writer remains before manually removing the lock. Schema errors propagate, physical failures appear in the report.
+Direkte Raise-Stellen: ValueError; transitive Fehler siehe Fachvertrag.
+\endgroup

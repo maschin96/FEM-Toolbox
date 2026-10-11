@@ -1,0 +1,3353 @@
+{
+  "schema": 1,
+  "scope": "M0–M9 supported code and documentation; experimental validation deferred; M10–M14 future/historical only",
+  "entries": [
+    {
+      "source": "Doc/01_SCOPE_AND_REQUIREMENTS.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/01_SCOPE_AND_REQUIREMENTS.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/02_MATHEMATICAL_MODEL.md",
+      "target": "Doc/latex/chapters/theory/scalar.tex",
+      "canonical": "Doc/02_MATHEMATICAL_MODEL.md",
+      "owner": "Fachliche Maintainer",
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/scalar.tex",
+        "map": "Doc/latex/theory-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/03_TET4_FORMULATION.md",
+      "target": "Doc/latex/chapters/theory/geometry.tex",
+      "canonical": "Doc/03_TET4_FORMULATION.md",
+      "owner": "Fachliche Maintainer",
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/geometry.tex",
+        "map": "Doc/latex/theory-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/04_SOFTWARE_ARCHITECTURE.md",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "Doc/04_SOFTWARE_ARCHITECTURE.md",
+      "owner": "API-Maintainer",
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/05_VERIFICATION_AND_VALIDATION.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/05_VERIFICATION_AND_VALIDATION.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/evidence.tex",
+        "map": "Doc/latex/theory-map.json"
+      },
+      "verification_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/verification.tex",
+        "map": "Doc/latex/verification-map.json",
+        "evidence": "Doc/latex/VV_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/06_ROADMAP.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/06_ROADMAP.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Planung / spätere Horizonte ausdrücklich abgegrenzt",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/07_RISKS_AND_DECISIONS.md",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "Doc/07_RISKS_AND_DECISIONS.md",
+      "owner": "API-Maintainer",
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/conventions.tex",
+        "map": "Doc/latex/theory-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/08_REFERENCES.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/08_REFERENCES.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/09_RELEASE_PROCESS.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/09_RELEASE_PROCESS.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/10_LINEAR_ELASTICITY.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/10_LINEAR_ELASTICITY.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/scalar.tex",
+        "map": "Doc/latex/theory-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/11_STEADY_HEAT.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/11_STEADY_HEAT.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/mechanics.tex",
+        "map": "Doc/latex/theory-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/12_ELECTROSTATICS.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/12_ELECTROSTATICS.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/scalar.tex",
+        "map": "Doc/latex/theory-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/13_PRODUCT_VISION.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/13_PRODUCT_VISION.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Planung / spätere Horizonte ausdrücklich abgegrenzt",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/14_THERMOMECHANICS.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/14_THERMOMECHANICS.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/mechanics.tex",
+        "map": "Doc/latex/theory-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/15_PIEZOELECTRIC_MATERIAL.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/15_PIEZOELECTRIC_MATERIAL.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/coupling.tex",
+        "map": "Doc/latex/theory-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/16_PIEZOELECTRIC_ELEMENT.md",
+      "target": "Doc/latex/chapters/theory/geometry.tex",
+      "canonical": "Doc/16_PIEZOELECTRIC_ELEMENT.md",
+      "owner": "Fachliche Maintainer",
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/geometry.tex",
+        "map": "Doc/latex/theory-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/17_PIEZOELECTRIC_SOLVER.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/17_PIEZOELECTRIC_SOLVER.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/solvers.tex",
+        "map": "Doc/latex/theory-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/18_PIEZO_D33_VERIFICATION.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/18_PIEZO_D33_VERIFICATION.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/19_MATERIAL_REGIONS.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/19_MATERIAL_REGIONS.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/20_ELECTRODES.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/20_ELECTRODES.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/coupling.tex",
+        "map": "Doc/latex/theory-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/21_MODEL_SCHEMA.md",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "Doc/21_MODEL_SCHEMA.md",
+      "owner": "API-Maintainer",
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/algebra.tex",
+        "map": "Doc/latex/theory-map.json"
+      },
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/22_THERMOPIEZOELECTRIC.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/22_THERMOPIEZOELECTRIC.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/coupling.tex",
+        "map": "Doc/latex/theory-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/23_MODEL_PREFLIGHT.md",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "Doc/23_MODEL_PREFLIGHT.md",
+      "owner": "API-Maintainer",
+      "status": "open",
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/24_RESULT_BUNDLE.md",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "Doc/24_RESULT_BUNDLE.md",
+      "owner": "API-Maintainer",
+      "status": "open",
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/25_THERMOPIEZO_CONVERGENCE.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/25_THERMOPIEZO_CONVERGENCE.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/evidence.tex",
+        "map": "Doc/latex/theory-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/26_VALIDITY_AND_LIMITS.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/26_VALIDITY_AND_LIMITS.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/27_DISTRIBUTION_INVENTORY.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/27_DISTRIBUTION_INVENTORY.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/28_DEPENDENCY_COMPATIBILITY.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/28_DEPENDENCY_COMPATIBILITY.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/29_PUBLIC_API_CONTRACT.md",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "Doc/29_PUBLIC_API_CONTRACT.md",
+      "owner": "API-Maintainer",
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/29_RELEASE_ARTIFACTS_AND_PROTECTION.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/29_RELEASE_ARTIFACTS_AND_PROTECTION.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/30_M6_M7_DEVELOPMENT_PLAN.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/30_M6_M7_DEVELOPMENT_PLAN.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Planung / spätere Horizonte ausdrücklich abgegrenzt",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/31_TET4_STORAGE.md",
+      "target": "Doc/latex/chapters/theory/dynamics.tex",
+      "canonical": "Doc/31_TET4_STORAGE.md",
+      "owner": "Fachliche Maintainer",
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/dynamics.tex",
+        "map": "Doc/latex/theory-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/32_MATERIAL_LIBRARY.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/32_MATERIAL_LIBRARY.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/33_TRANSIENT_HEAT.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/33_TRANSIENT_HEAT.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/dynamics.tex",
+        "map": "Doc/latex/theory-map.json"
+      },
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "verification_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/verification.tex",
+        "map": "Doc/latex/verification-map.json",
+        "evidence": "Doc/latex/VV_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/34_PIEZO_DYNAMICS.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/34_PIEZO_DYNAMICS.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/dynamics.tex",
+        "map": "Doc/latex/theory-map.json"
+      },
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/35_M6_RELEASE_VERIFICATION.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/35_M6_RELEASE_VERIFICATION.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/dynamics.tex",
+        "map": "Doc/latex/theory-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/36_PERFORMANCE_BASELINE.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/36_PERFORMANCE_BASELINE.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/dynamics.tex",
+        "map": "Doc/latex/theory-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/37_LINEAR_BACKEND.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/37_LINEAR_BACKEND.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/solvers.tex",
+        "map": "Doc/latex/theory-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/38_PETSC_BACKEND.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/38_PETSC_BACKEND.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/solvers.tex",
+        "map": "Doc/latex/theory-map.json"
+      },
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/39_PETSC_FIELDSPLIT.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/39_PETSC_FIELDSPLIT.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/solvers.tex",
+        "map": "Doc/latex/theory-map.json"
+      },
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "verification_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/verification.tex",
+        "map": "Doc/latex/verification-map.json",
+        "evidence": "Doc/latex/VV_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/40_TET10_TOPOLOGY.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/40_TET10_TOPOLOGY.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/41_TET10_GEOMETRY.md",
+      "target": "Doc/latex/chapters/theory/geometry.tex",
+      "canonical": "Doc/41_TET10_GEOMETRY.md",
+      "owner": "Fachliche Maintainer",
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/geometry.tex",
+        "map": "Doc/latex/theory-map.json"
+      },
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "verification_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/verification.tex",
+        "map": "Doc/latex/verification-map.json",
+        "evidence": "Doc/latex/VV_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/42_TET10_OPERATORS.md",
+      "target": "Doc/latex/chapters/theory/geometry.tex",
+      "canonical": "Doc/42_TET10_OPERATORS.md",
+      "owner": "Fachliche Maintainer",
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/geometry.tex",
+        "map": "Doc/latex/theory-map.json"
+      },
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/43_HEAT_INDICATOR.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/43_HEAT_INDICATOR.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/solvers.tex",
+        "map": "Doc/latex/theory-map.json"
+      },
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "verification_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/verification.tex",
+        "map": "Doc/latex/verification-map.json",
+        "evidence": "Doc/latex/VV_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/44_GEOMETRY_PERFORMANCE.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/44_GEOMETRY_PERFORMANCE.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical",
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/45_TET10_HEAT_INTEGRATION.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/45_TET10_HEAT_INTEGRATION.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "verification_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/verification.tex",
+        "map": "Doc/latex/verification-map.json",
+        "evidence": "Doc/latex/VV_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/46_TET10_ELECTROSTATICS.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/46_TET10_ELECTROSTATICS.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "verification_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/verification.tex",
+        "map": "Doc/latex/verification-map.json",
+        "evidence": "Doc/latex/VV_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/47_TET10_ELASTICITY.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/47_TET10_ELASTICITY.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "verification_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/verification.tex",
+        "map": "Doc/latex/verification-map.json",
+        "evidence": "Doc/latex/VV_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/48_TET10_THERMOMECHANICS.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/48_TET10_THERMOMECHANICS.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "verification_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/verification.tex",
+        "map": "Doc/latex/verification-map.json",
+        "evidence": "Doc/latex/VV_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/49_TET10_PIEZOELECTRIC.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/49_TET10_PIEZOELECTRIC.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/dynamics.tex",
+        "map": "Doc/latex/theory-map.json"
+      },
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "verification_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/verification.tex",
+        "map": "Doc/latex/verification-map.json",
+        "evidence": "Doc/latex/VV_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/50_TET10_THERMOPIEZOELECTRIC.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/50_TET10_THERMOPIEZOELECTRIC.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/dynamics.tex",
+        "map": "Doc/latex/theory-map.json"
+      },
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "verification_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/verification.tex",
+        "map": "Doc/latex/verification-map.json",
+        "evidence": "Doc/latex/VV_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/51_TET10_MODES.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/51_TET10_MODES.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/dynamics.tex",
+        "map": "Doc/latex/theory-map.json"
+      },
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "verification_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/verification.tex",
+        "map": "Doc/latex/verification-map.json",
+        "evidence": "Doc/latex/VV_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/52_TET10_NEWMARK.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/52_TET10_NEWMARK.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/dynamics.tex",
+        "map": "Doc/latex/theory-map.json"
+      },
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "verification_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/verification.tex",
+        "map": "Doc/latex/verification-map.json",
+        "evidence": "Doc/latex/VV_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/53_TET10_HARMONIC.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/53_TET10_HARMONIC.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/dynamics.tex",
+        "map": "Doc/latex/theory-map.json"
+      },
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "verification_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/verification.tex",
+        "map": "Doc/latex/verification-map.json",
+        "evidence": "Doc/latex/VV_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/54_ACCURACY_COST_COMPARISON.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/54_ACCURACY_COST_COMPARISON.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/solvers.tex",
+        "map": "Doc/latex/theory-map.json"
+      },
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "verification_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/verification.tex",
+        "map": "Doc/latex/verification-map.json",
+        "evidence": "Doc/latex/VV_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/55_TET10_ACCEPTANCE.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/55_TET10_ACCEPTANCE.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/solvers.tex",
+        "map": "Doc/latex/theory-map.json"
+      },
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/56_PERFORMANCE_ACCEPTANCE.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/56_PERFORMANCE_ACCEPTANCE.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/surrogates.tex",
+        "map": "Doc/latex/theory-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/57_M7_RELEASE_CANDIDATE.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/57_M7_RELEASE_CANDIDATE.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/surrogates.tex",
+        "map": "Doc/latex/theory-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/58_M7_RELEASE_VERIFICATION.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/58_M7_RELEASE_VERIFICATION.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/surrogates.tex",
+        "map": "Doc/latex/theory-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/59_PARAMETER_STUDIES.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/59_PARAMETER_STUDIES.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/surrogates.tex",
+        "map": "Doc/latex/theory-map.json"
+      },
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/60_STUDY_REPORTS.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/60_STUDY_REPORTS.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/surrogates.tex",
+        "map": "Doc/latex/theory-map.json"
+      },
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "verification_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/verification.tex",
+        "map": "Doc/latex/verification-map.json",
+        "evidence": "Doc/latex/VV_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/61_SURROGATE_MODELS.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/61_SURROGATE_MODELS.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/surrogates.tex",
+        "map": "Doc/latex/theory-map.json"
+      },
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "verification_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/verification.tex",
+        "map": "Doc/latex/verification-map.json",
+        "evidence": "Doc/latex/VV_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/62_FIELD_VISUALIZATION.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/62_FIELD_VISUALIZATION.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/63_STUDY_RECIPE_ACCEPTANCE.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/63_STUDY_RECIPE_ACCEPTANCE.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/64_M8_RELEASE_VERIFICATION.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/64_M8_RELEASE_VERIFICATION.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/75_FEMANTIS_CORPORATE_IDENTITY.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/75_FEMANTIS_CORPORATE_IDENTITY.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Planung / spätere Horizonte ausdrücklich abgegrenzt",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/76_FEMANTIS_RENAMING_PLAN.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/76_FEMANTIS_RENAMING_PLAN.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Planung / spätere Horizonte ausdrücklich abgegrenzt",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/77_FEMANTIS_MIGRATION_CONTRACT.md",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "Doc/77_FEMANTIS_MIGRATION_CONTRACT.md",
+      "owner": "API-Maintainer",
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Planung / spätere Horizonte ausdrücklich abgegrenzt",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/README.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/README.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/brand/README.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/brand/README.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Planung / spätere Horizonte ausdrücklich abgegrenzt",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/brand/assets/femantis-brand-board-reference.png",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/brand/assets/femantis-brand-board-reference.png",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Planung / spätere Horizonte ausdrücklich abgegrenzt",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/brand/femantis-name-inventory.json",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "Doc/brand/femantis-name-inventory.json",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Planung / spätere Horizonte ausdrücklich abgegrenzt",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/evidence/issue61/artifacts.json",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/evidence/issue61/artifacts.json",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/evidence/issue61/sdist-heat.json",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/evidence/issue61/sdist-heat.json",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/evidence/issue61/sdist-piezo.json",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/evidence/issue61/sdist-piezo.json",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/evidence/issue61/wheel-heat.json",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/evidence/issue61/wheel-heat.json",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/evidence/issue61/wheel-piezo.json",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/evidence/issue61/wheel-piezo.json",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/evidence/issue62/artifacts.json",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/evidence/issue62/artifacts.json",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/evidence/issue62/sdist-heat.json",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/evidence/issue62/sdist-heat.json",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/evidence/issue62/sdist-piezo.json",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/evidence/issue62/sdist-piezo.json",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/evidence/issue62/sdist-surrogate.json",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/evidence/issue62/sdist-surrogate.json",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/evidence/issue62/wheel-heat.json",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/evidence/issue62/wheel-heat.json",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/evidence/issue62/wheel-piezo.json",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/evidence/issue62/wheel-piezo.json",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/evidence/issue62/wheel-surrogate.json",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/evidence/issue62/wheel-surrogate.json",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/latex/README.md",
+      "target": "Doc/latex/chapters/theory.tex",
+      "canonical": "Doc/latex/README.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "sample",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Dokumentationsnachweis / Kandidatenpflege",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/latex/VERIFICATION.md",
+      "canonical": "Doc/latex/VERIFICATION.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "owner": "Dokumentations-Maintainer",
+      "status": "sample",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Dokumentationsnachweis / Kandidatenpflege",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/releases/v0.1.0.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/releases/v0.1.0.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/releases/v0.2.0.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/releases/v0.2.0.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/releases/v0.3.0.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/releases/v0.3.0.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/releases/v0.4.0.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/releases/v0.4.0.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/releases/v0.5.0.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/releases/v0.5.0.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/releases/v1.0.0-draft.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/releases/v1.0.0-draft.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/releases/v1.0.0.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/releases/v1.0.0.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/releases/v1.1.0.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/releases/v1.1.0.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/releases/v1.2.0.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/releases/v1.2.0.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/releases/v1.3.0.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/releases/v1.3.0.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "INSTALL.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "INSTALL.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "README.md",
+      "target": "Doc/latex/chapters/application.tex",
+      "canonical": "README.md",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application.tex",
+        "recipes": "Doc/latex/recipes.json",
+        "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/__init__.py",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "src/fem_toolbox/__init__.py",
+      "owner": "API-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/overview.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/assembly/__init__.py",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "src/fem_toolbox/assembly/__init__.py",
+      "owner": "API-Maintainer",
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/algebra.tex",
+        "map": "Doc/latex/theory-map.json"
+      },
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.assembly",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/development.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/boundary/__init__.py",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "src/fem_toolbox/boundary/__init__.py",
+      "owner": "API-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.boundary",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/mesh-materials.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/conventions.py",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "src/fem_toolbox/conventions.py",
+      "owner": "API-Maintainer",
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/conventions.tex",
+        "map": "Doc/latex/theory-map.json"
+      },
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.conventions",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/development.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/dynamic_result.py",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "src/fem_toolbox/dynamic_result.py",
+      "owner": "API-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.dynamic_result",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/solvers.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/elements/__init__.py",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "src/fem_toolbox/elements/__init__.py",
+      "owner": "API-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.elements",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/development.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/errors.py",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "src/fem_toolbox/errors.py",
+      "owner": "API-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.errors",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/overview.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/fields/__init__.py",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "src/fem_toolbox/fields/__init__.py",
+      "owner": "API-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.fields",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/development.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/io/__init__.py",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "src/fem_toolbox/io/__init__.py",
+      "owner": "API-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.io",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/artifacts.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/materials/__init__.py",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "src/fem_toolbox/materials/__init__.py",
+      "owner": "API-Maintainer",
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/conventions.tex",
+        "map": "Doc/latex/theory-map.json"
+      },
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.materials",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/mesh-materials.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/mesh/__init__.py",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "src/fem_toolbox/mesh/__init__.py",
+      "owner": "API-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.mesh",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/mesh-materials.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/model.py",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "src/fem_toolbox/model.py",
+      "owner": "API-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.model",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/workflows.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/model_preflight.py",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "src/fem_toolbox/model_preflight.py",
+      "owner": "API-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.model_preflight",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/development.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/physics/__init__.py",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "src/fem_toolbox/physics/__init__.py",
+      "owner": "API-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.physics",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/development.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/piezo_dynamic_model.py",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "src/fem_toolbox/piezo_dynamic_model.py",
+      "owner": "API-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.piezo_dynamic_model",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/workflows.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/post/__init__.py",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "src/fem_toolbox/post/__init__.py",
+      "owner": "API-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.post",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/workflows.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/provenance.py",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "src/fem_toolbox/provenance.py",
+      "owner": "API-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.provenance",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/artifacts.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/solvers/__init__.py",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "src/fem_toolbox/solvers/__init__.py",
+      "owner": "API-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.solvers",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/solvers.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/studies.py",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "src/fem_toolbox/studies.py",
+      "owner": "API-Maintainer",
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/surrogates.tex",
+        "map": "Doc/latex/theory-map.json"
+      },
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.studies",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/workflows.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/study_reports.py",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "src/fem_toolbox/study_reports.py",
+      "owner": "API-Maintainer",
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/surrogates.tex",
+        "map": "Doc/latex/theory-map.json"
+      },
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.study_reports",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/workflows.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/surrogates.py",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "src/fem_toolbox/surrogates.py",
+      "owner": "API-Maintainer",
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/theory/surrogates.tex",
+        "map": "Doc/latex/theory-map.json"
+      },
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.surrogates",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/workflows.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/time.py",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "src/fem_toolbox/time.py",
+      "owner": "API-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.time",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/solvers.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/transient_model.py",
+      "target": "Doc/latex/chapters/api.tex",
+      "canonical": "src/fem_toolbox/transient_model.py",
+      "owner": "API-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.transient_model",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/workflows.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/latex/THEORY_VERIFICATION.md",
+      "target": "Doc/latex/chapters/theory/evidence.tex",
+      "canonical": "Doc/latex/THEORY_VERIFICATION.md",
+      "owner": "Fachliche Maintainer",
+      "status": "open",
+      "theory_coverage": {
+        "status": "documented-candidate",
+        "map": "Doc/latex/theory-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Dokumentationsnachweis / Kandidatenpflege",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/latex/USER_VERIFICATION.md",
+      "canonical": "Doc/latex/USER_VERIFICATION.md",
+      "target": "Doc/latex/chapters/application/diagnosis.tex",
+      "owner": "Dokumentations-Maintainer",
+      "status": "open",
+      "user_coverage": {
+        "status": "documented-candidate",
+        "recipes": "Doc/latex/recipes.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Dokumentationsnachweis / Kandidatenpflege",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/65_VALIDATION_DATA_CONTRACT.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/65_VALIDATION_DATA_CONTRACT.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "open",
+      "verification_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/verification.tex",
+        "map": "Doc/latex/verification-map.json",
+        "evidence": "Doc/latex/VV_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Beschaffungssichtung / experimenteller Folgeumfang offen",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/66_M9_DATA_SEARCH_AND_RELEASE_OPTIONS.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/66_M9_DATA_SEARCH_AND_RELEASE_OPTIONS.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "open",
+      "verification_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/verification.tex",
+        "map": "Doc/latex/verification-map.json",
+        "evidence": "Doc/latex/VV_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Beschaffungssichtung / experimenteller Folgeumfang offen",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/evidence/issue63/README.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/evidence/issue63/README.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Beschaffungssichtung / experimenteller Folgeumfang offen",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/evidence/issue63/research-2026-10-10.json",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/evidence/issue63/research-2026-10-10.json",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Beschaffungssichtung / experimenteller Folgeumfang offen",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/evidence/issue63/screening-2026-10-10/lightfilm-Figure_4d_540nm.txt",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/evidence/issue63/screening-2026-10-10/lightfilm-Figure_4d_540nm.txt",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Beschaffungssichtung / experimenteller Folgeumfang offen",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/evidence/issue63/screening-2026-10-10/polaron-Fig3-A-displacement.csv",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/evidence/issue63/screening-2026-10-10/polaron-Fig3-A-displacement.csv",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Beschaffungssichtung / experimenteller Folgeumfang offen",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/evidence/issue63/screening-2026-10-10/polaron-figS2-d33-U-f.csv",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/evidence/issue63/screening-2026-10-10/polaron-figS2-d33-U-f.csv",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Beschaffungssichtung / experimenteller Folgeumfang offen",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/evidence/issue63/screening-2026-10-10/polaron-metadata-excerpt.json",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/evidence/issue63/screening-2026-10-10/polaron-metadata-excerpt.json",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Beschaffungssichtung / experimenteller Folgeumfang offen",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/evidence/issue63/screening-2026-10-10/greenpiezo-metadata-excerpt.json",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/evidence/issue63/screening-2026-10-10/greenpiezo-metadata-excerpt.json",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Beschaffungssichtung / experimenteller Folgeumfang offen",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/evidence/issue63/screening-2026-10-10/lightfilm-metadata-excerpt.json",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/evidence/issue63/screening-2026-10-10/lightfilm-metadata-excerpt.json",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Beschaffungssichtung / experimenteller Folgeumfang offen",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/evidence/issue63/screening-2026-10-10/relaxor-metadata-excerpt.json",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/evidence/issue63/screening-2026-10-10/relaxor-metadata-excerpt.json",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Beschaffungssichtung / experimenteller Folgeumfang offen",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/67_UNCERTAINTY_WORKFLOW.md",
+      "canonical": "Doc/67_UNCERTAINTY_WORKFLOW.md",
+      "target": "Doc/latex/chapters/uncertainty-api.tex",
+      "owner": "Fachliche Maintainer",
+      "status": "open",
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application/studies.tex",
+        "recipes": "Doc/latex/recipes.json"
+      },
+      "api_coverage": {
+        "status": "documented-candidate",
+        "contract": "Doc/latex/uncertainty-api.json"
+      },
+      "verification_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/verification.tex",
+        "map": "Doc/latex/verification-map.json",
+        "evidence": "Doc/latex/VV_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/latex/uncertainty-api.json",
+      "canonical": "Doc/latex/uncertainty-api.json",
+      "target": "Doc/latex/chapters/uncertainty-api.tex",
+      "owner": "Fachliche Maintainer",
+      "status": "open",
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application/studies.tex",
+        "recipes": "Doc/latex/recipes.json"
+      },
+      "api_coverage": {
+        "status": "documented-candidate",
+        "contract": "Doc/latex/uncertainty-api.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Dokumentationsnachweis / Kandidatenpflege",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "examples/uncertainty_heat/README.md",
+      "canonical": "examples/uncertainty_heat/README.md",
+      "target": "Doc/latex/chapters/uncertainty-api.tex",
+      "owner": "Fachliche Maintainer",
+      "status": "open",
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application/studies.tex",
+        "recipes": "Doc/latex/recipes.json"
+      },
+      "api_coverage": {
+        "status": "documented-candidate",
+        "contract": "Doc/latex/uncertainty-api.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/uncertainty.py",
+      "canonical": "src/fem_toolbox/uncertainty.py",
+      "target": "Doc/latex/chapters/uncertainty-api.tex",
+      "owner": "Fachliche Maintainer",
+      "status": "open",
+      "user_coverage": {
+        "status": "documented-candidate",
+        "chapter": "Doc/latex/chapters/application/studies.tex",
+        "recipes": "Doc/latex/recipes.json"
+      },
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.uncertainty",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/workflows.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/boundary/electrodes.py",
+      "canonical": "src/fem_toolbox/boundary/electrodes.py",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.boundary.electrodes",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/mesh-materials.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/elements/elasticity.py",
+      "canonical": "src/fem_toolbox/elements/elasticity.py",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.elements.elasticity",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/development.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/elements/electrostatics.py",
+      "canonical": "src/fem_toolbox/elements/electrostatics.py",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.elements.electrostatics",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/development.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/elements/heat.py",
+      "canonical": "src/fem_toolbox/elements/heat.py",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.elements.heat",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/development.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/elements/piezoelectric.py",
+      "canonical": "src/fem_toolbox/elements/piezoelectric.py",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.elements.piezoelectric",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/development.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/elements/quadratic.py",
+      "canonical": "src/fem_toolbox/elements/quadratic.py",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.elements.quadratic",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/development.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/elements/quadrature.py",
+      "canonical": "src/fem_toolbox/elements/quadrature.py",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.elements.quadrature",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/development.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/elements/storage.py",
+      "canonical": "src/fem_toolbox/elements/storage.py",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.elements.storage",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/development.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/elements/tet10.py",
+      "canonical": "src/fem_toolbox/elements/tet10.py",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.elements.tet10",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/development.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/elements/tet4.py",
+      "canonical": "src/fem_toolbox/elements/tet4.py",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.elements.tet4",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/development.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/io/heat_series.py",
+      "canonical": "src/fem_toolbox/io/heat_series.py",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.io.heat_series",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/artifacts.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/io/meshio_adapter.py",
+      "canonical": "src/fem_toolbox/io/meshio_adapter.py",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.io.meshio_adapter",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/mesh-materials.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/io/piezo_series.py",
+      "canonical": "src/fem_toolbox/io/piezo_series.py",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.io.piezo_series",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/artifacts.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/io/result_bundle.py",
+      "canonical": "src/fem_toolbox/io/result_bundle.py",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.io.result_bundle",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/artifacts.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/materials/catalog.py",
+      "canonical": "src/fem_toolbox/materials/catalog.py",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.materials.catalog",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/mesh-materials.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/materials/electrostatics.py",
+      "canonical": "src/fem_toolbox/materials/electrostatics.py",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.materials.electrostatics",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/mesh-materials.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/materials/heat.py",
+      "canonical": "src/fem_toolbox/materials/heat.py",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.materials.heat",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/mesh-materials.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/materials/piezoelectric.py",
+      "canonical": "src/fem_toolbox/materials/piezoelectric.py",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.materials.piezoelectric",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/mesh-materials.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/materials/regions.py",
+      "canonical": "src/fem_toolbox/materials/regions.py",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.materials.regions",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/mesh-materials.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/mesh/model.py",
+      "canonical": "src/fem_toolbox/mesh/model.py",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.mesh.model",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/mesh-materials.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/mesh/quadratic.py",
+      "canonical": "src/fem_toolbox/mesh/quadratic.py",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.mesh.quadratic",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/mesh-materials.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/mesh/topology.py",
+      "canonical": "src/fem_toolbox/mesh/topology.py",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.mesh.topology",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/mesh-materials.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/physics/elasticity.py",
+      "canonical": "src/fem_toolbox/physics/elasticity.py",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.physics.elasticity",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/development.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/physics/electrostatics.py",
+      "canonical": "src/fem_toolbox/physics/electrostatics.py",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.physics.electrostatics",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/development.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/physics/heat.py",
+      "canonical": "src/fem_toolbox/physics/heat.py",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.physics.heat",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/development.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/physics/quadratic.py",
+      "canonical": "src/fem_toolbox/physics/quadratic.py",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.physics.quadratic",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/development.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/post/heat_indicator.py",
+      "canonical": "src/fem_toolbox/post/heat_indicator.py",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.post.heat_indicator",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/workflows.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/post/visualization.py",
+      "canonical": "src/fem_toolbox/post/visualization.py",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.post.visualization",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/workflows.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/solvers/elasticity.py",
+      "canonical": "src/fem_toolbox/solvers/elasticity.py",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.solvers.elasticity",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/solvers.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/solvers/electric_elements.py",
+      "canonical": "src/fem_toolbox/solvers/electric_elements.py",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.solvers.electric_elements",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/solvers.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/solvers/electrostatics.py",
+      "canonical": "src/fem_toolbox/solvers/electrostatics.py",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.solvers.electrostatics",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/solvers.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/solvers/heat.py",
+      "canonical": "src/fem_toolbox/solvers/heat.py",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.solvers.heat",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/solvers.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/solvers/linear_backend.py",
+      "canonical": "src/fem_toolbox/solvers/linear_backend.py",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.solvers.linear_backend",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/solvers.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/solvers/mechanical_elements.py",
+      "canonical": "src/fem_toolbox/solvers/mechanical_elements.py",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.solvers.mechanical_elements",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/solvers.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/solvers/petsc_backend.py",
+      "canonical": "src/fem_toolbox/solvers/petsc_backend.py",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.solvers.petsc_backend",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/solvers.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/solvers/piezo_dynamics.py",
+      "canonical": "src/fem_toolbox/solvers/piezo_dynamics.py",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.solvers.piezo_dynamics",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/solvers.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/solvers/piezo_harmonic.py",
+      "canonical": "src/fem_toolbox/solvers/piezo_harmonic.py",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.solvers.piezo_harmonic",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/solvers.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/solvers/piezo_transient.py",
+      "canonical": "src/fem_toolbox/solvers/piezo_transient.py",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.solvers.piezo_transient",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/solvers.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/solvers/piezoelectric.py",
+      "canonical": "src/fem_toolbox/solvers/piezoelectric.py",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.solvers.piezoelectric",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/solvers.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/solvers/piezoelectric_elements.py",
+      "canonical": "src/fem_toolbox/solvers/piezoelectric_elements.py",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.solvers.piezoelectric_elements",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/solvers.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/solvers/thermal_elements.py",
+      "canonical": "src/fem_toolbox/solvers/thermal_elements.py",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.solvers.thermal_elements",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/solvers.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/solvers/thermomechanics.py",
+      "canonical": "src/fem_toolbox/solvers/thermomechanics.py",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.solvers.thermomechanics",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/solvers.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/solvers/thermopiezoelectric.py",
+      "canonical": "src/fem_toolbox/solvers/thermopiezoelectric.py",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.solvers.thermopiezoelectric",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/solvers.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "src/fem_toolbox/solvers/transient_heat.py",
+      "canonical": "src/fem_toolbox/solvers/transient_heat.py",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "module": "fem_toolbox.solvers.transient_heat",
+        "inventory": "Doc/latex/api-inventory.json",
+        "map": "Doc/latex/api-map.json",
+        "contract": "Doc/latex/chapters/api/solvers.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/latex/API_VERIFICATION.md",
+      "canonical": "Doc/latex/API_VERIFICATION.md",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "map": "Doc/latex/api-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Dokumentationsnachweis / Kandidatenpflege",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/latex/api-inventory.json",
+      "canonical": "Doc/latex/api-inventory.json",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "map": "Doc/latex/api-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Dokumentationsnachweis / Kandidatenpflege",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/latex/api-map.json",
+      "canonical": "Doc/latex/api-map.json",
+      "target": "Doc/latex/chapters/api/inventory.tex",
+      "owner": "API-/Entwicklungs-Maintainer",
+      "status": "open",
+      "api_coverage": {
+        "status": "documented-candidate",
+        "map": "Doc/latex/api-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Dokumentationsnachweis / Kandidatenpflege",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/latex/VV_VERIFICATION.md",
+      "target": "Doc/latex/chapters/verification/reproduction.tex",
+      "canonical": "Doc/latex/VV_VERIFICATION.md",
+      "owner": "V&V- und Release-Verantwortliche",
+      "status": "sample",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Dokumentationsnachweis / Kandidatenpflege",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/latex/ACCEPTANCE.md",
+      "target": "Doc/latex/chapters/documentation-sources.tex",
+      "canonical": "Doc/latex/ACCEPTANCE.md",
+      "owner": "Dokumentations- und Release-Verantwortliche",
+      "status": "sample",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Dokumentationsnachweis / Kandidatenpflege",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/68_M9_RELEASE_VERIFICATION.md",
+      "target": "Doc/latex/chapters/documentation-sources.tex",
+      "canonical": "Doc/68_M9_RELEASE_VERIFICATION.md",
+      "owner": "Release maintainers",
+      "status": "sample",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Release-Nachweis / Freigabereihenfolge und Grenzen",
+        "evidence": "Doc/68_M9_RELEASE_VERIFICATION.md"
+      }
+    },
+    {
+      "source": "Doc/releases/v1.4.0.md",
+      "target": "Doc/latex/chapters/documentation-sources.tex",
+      "canonical": "Doc/releases/v1.4.0.md",
+      "owner": "Release maintainers",
+      "status": "sample",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Release-Nachweis / Freigabereihenfolge und Grenzen",
+        "evidence": "Doc/68_M9_RELEASE_VERIFICATION.md"
+      }
+    }
+  ],
+  "planned": [
+    {
+      "issue": 63,
+      "topic": "Messdatenvertrag",
+      "target": "Doc/latex/chapters/verification.tex",
+      "status": "open",
+      "owner": "V&V-Verantwortliche",
+      "candidate_status": "deferred-experimental-followup"
+    },
+    {
+      "issue": 64,
+      "topic": "Unsicherheits- und Sensitivitätsstudien",
+      "target": "Doc/latex/chapters/verification.tex",
+      "status": "open",
+      "owner": "Fachliche Maintainer",
+      "candidate_status": "implemented-verified"
+    },
+    {
+      "issue": 65,
+      "topic": "Experimentelle Validierung",
+      "target": "Doc/latex/chapters/verification.tex",
+      "status": "open",
+      "owner": "V&V-Verantwortliche",
+      "candidate_status": "deferred-experimental-followup"
+    }
+  ]
+}

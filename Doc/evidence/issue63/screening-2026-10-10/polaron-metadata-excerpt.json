@@ -1,0 +1,348 @@
+{
+  "retrieved_date": "2026-10-10",
+  "url": "https://zenodo.org/api/records/21454715",
+  "record_id": "21454715",
+  "title": "Dataset for \"Ultrahigh piezoelectricity by polaron-defect complexes.\"",
+  "license": {
+    "id": "cc-by-4.0"
+  },
+  "creators": [
+    {
+      "name": "Shu, Liang",
+      "affiliation": null
+    },
+    {
+      "name": "Peng, Guyang",
+      "affiliation": null
+    }
+  ],
+  "record_version": null,
+  "doi": "10.5281/zenodo.21454715",
+  "complete_response_sha256": "582ad7b93e6270a962364fdb2a06a30c4ccd5f04955be0d57e18e0b1b325e2ff",
+  "files": [
+    {
+      "name": "Fig1-C Freq-dependent piezo.csv",
+      "size_bytes": 1235,
+      "checksum": "md5:2094317a8f44c08e6a2580343bd7a5d8",
+      "download_url": "https://zenodo.org/api/records/21454715/files/Fig1-C%20Freq-dependent%20piezo.csv/content"
+    },
+    {
+      "name": "figS43-shoulder peak.csv",
+      "size_bytes": 10419,
+      "checksum": "md5:9ba1c271a9edae61289c2a931ed6c73d",
+      "download_url": "https://zenodo.org/api/records/21454715/files/figS43-shoulder%20peak.csv/content"
+    },
+    {
+      "name": "figS27-Strain-E.csv",
+      "size_bytes": 475,
+      "checksum": "md5:c2b83c59a3b6af99302c40797ed884c8",
+      "download_url": "https://zenodo.org/api/records/21454715/files/figS27-Strain-E.csv/content"
+    },
+    {
+      "name": "Fig4-F up inset SHG polar.csv",
+      "size_bytes": 5178,
+      "checksum": "md5:3c005edb2ef5c5109cd90d500e8a6b5a",
+      "download_url": "https://zenodo.org/api/records/21454715/files/Fig4-F%20up%20inset%20SHG%20polar.csv/content"
+    },
+    {
+      "name": "Fig2-K EELS right.csv",
+      "size_bytes": 88,
+      "checksum": "md5:5c3b16026b904ea81f91014036ef83b5",
+      "download_url": "https://zenodo.org/api/records/21454715/files/Fig2-K%20EELS%20right.csv/content"
+    },
+    {
+      "name": "figS7-XRD.csv",
+      "size_bytes": 67212,
+      "checksum": "md5:90df2d87f8bca83af2ba31ef05ff2bf2",
+      "download_url": "https://zenodo.org/api/records/21454715/files/figS7-XRD.csv/content"
+    },
+    {
+      "name": "Fig3-C inset Eac-S1st.csv",
+      "size_bytes": 156,
+      "checksum": "md5:f199a8abc4dc5fcf5082c85079de4a34",
+      "download_url": "https://zenodo.org/api/records/21454715/files/Fig3-C%20inset%20Eac-S1st.csv/content"
+    },
+    {
+      "name": "Fig4-G simu d33.csv",
+      "size_bytes": 98,
+      "checksum": "md5:43c7d0e7e2ca6a47ad8085f3d1347bfd",
+      "download_url": "https://zenodo.org/api/records/21454715/files/Fig4-G%20simu%20d33.csv/content"
+    },
+    {
+      "name": "figS17-Dielectric-permittivity-f-E.csv",
+      "size_bytes": 41384,
+      "checksum": "md5:d55c0e1f9dee3d51ca67ea8bd12ba5b0",
+      "download_url": "https://zenodo.org/api/records/21454715/files/figS17-Dielectric-permittivity-f-E.csv/content"
+    },
+    {
+      "name": "figS31-K doping.csv",
+      "size_bytes": 161,
+      "checksum": "md5:45c54b61a7c47c2f93ede4606db5d14b",
+      "download_url": "https://zenodo.org/api/records/21454715/files/figS31-K%20doping.csv/content"
+    },
+    {
+      "name": "figS34-M33-f.csv",
+      "size_bytes": 451,
+      "checksum": "md5:f6ee2aff15432f9b9b1cb8d74081f4ad",
+      "download_url": "https://zenodo.org/api/records/21454715/files/figS34-M33-f.csv/content"
+    },
+    {
+      "name": "figS52-large scale film.csv",
+      "size_bytes": 444,
+      "checksum": "md5:72619a608318ec788cad6bcff21d8c51",
+      "download_url": "https://zenodo.org/api/records/21454715/files/figS52-large%20scale%20film.csv/content"
+    },
+    {
+      "name": "Fig4-F up.csv",
+      "size_bytes": 105,
+      "checksum": "md5:115d17e4ef3411a8770bd9d843e30541",
+      "download_url": "https://zenodo.org/api/records/21454715/files/Fig4-F%20up.csv/content"
+    },
+    {
+      "name": "figS30-XRD.csv",
+      "size_bytes": 62329,
+      "checksum": "md5:00ba6d58d8801b9fb0c93113877e483f",
+      "download_url": "https://zenodo.org/api/records/21454715/files/figS30-XRD.csv/content"
+    },
+    {
+      "name": "figS16-Apparent-dielectric-permittivity-f-E.csv",
+      "size_bytes": 37650,
+      "checksum": "md5:575fbc872acfe7b230e4d6bdebbc87bb",
+      "download_url": "https://zenodo.org/api/records/21454715/files/figS16-Apparent-dielectric-permittivity-f-E.csv/content"
+    },
+    {
+      "name": "Fig3-D bottom f-d33.csv",
+      "size_bytes": 326,
+      "checksum": "md5:7f769249c052ada4cba7a311a0ecd8cb",
+      "download_url": "https://zenodo.org/api/records/21454715/files/Fig3-D%20bottom%20f-d33.csv/content"
+    },
+    {
+      "name": "Fig2-K EELS left.csv",
+      "size_bytes": 5965,
+      "checksum": "md5:c8a32e18e4c89d612746b43fec2a28ca",
+      "download_url": "https://zenodo.org/api/records/21454715/files/Fig2-K%20EELS%20left.csv/content"
+    },
+    {
+      "name": "figS18-I-E.csv",
+      "size_bytes": 28992,
+      "checksum": "md5:650e60bc6326ba9be5de30bf81646ef9",
+      "download_url": "https://zenodo.org/api/records/21454715/files/figS18-I-E.csv/content"
+    },
+    {
+      "name": "figS35-d33-f.csv",
+      "size_bytes": 345,
+      "checksum": "md5:3b8cbe22174cbc163e81da0033593d86",
+      "download_url": "https://zenodo.org/api/records/21454715/files/figS35-d33-f.csv/content"
+    },
+    {
+      "name": "Fig4-B DC-SHG.csv",
+      "size_bytes": 189,
+      "checksum": "md5:84c21a8d40f0759ad4275dc814ab64ad",
+      "download_url": "https://zenodo.org/api/records/21454715/files/Fig4-B%20DC-SHG.csv/content"
+    },
+    {
+      "name": "Fig4-G inset simu d33.csv",
+      "size_bytes": 389,
+      "checksum": "md5:7b3459be688835f801261e297e0e1ad4",
+      "download_url": "https://zenodo.org/api/records/21454715/files/Fig4-G%20inset%20simu%20d33.csv/content"
+    },
+    {
+      "name": "figS49-d33-DC bias.csv",
+      "size_bytes": 683,
+      "checksum": "md5:a7ff3697b66add74d39c682e91579173",
+      "download_url": "https://zenodo.org/api/records/21454715/files/figS49-d33-DC%20bias.csv/content"
+    },
+    {
+      "name": "Fig3-A displacement.csv",
+      "size_bytes": 3893,
+      "checksum": "md5:9d4f7d65d217e0c5fc7a6b8e740b8ea8",
+      "download_url": "https://zenodo.org/api/records/21454715/files/Fig3-A%20displacement.csv/content"
+    },
+    {
+      "name": "figS26-d33-EDC-f.csv",
+      "size_bytes": 195,
+      "checksum": "md5:fe3264df43141e6515a02da822f748d3",
+      "download_url": "https://zenodo.org/api/records/21454715/files/figS26-d33-EDC-f.csv/content"
+    },
+    {
+      "name": "Fig3-B inset FFT.csv",
+      "size_bytes": 25250,
+      "checksum": "md5:919b1faa1fadf90a5937457d863b79f4",
+      "download_url": "https://zenodo.org/api/records/21454715/files/Fig3-B%20inset%20FFT.csv/content"
+    },
+    {
+      "name": "figS24-I-E.csv",
+      "size_bytes": 80326,
+      "checksum": "md5:a0d16185c22ac4c37f9b782d99c3e322",
+      "download_url": "https://zenodo.org/api/records/21454715/files/figS24-I-E.csv/content"
+    },
+    {
+      "name": "Fig2-I Strain line scan.csv",
+      "size_bytes": 535,
+      "checksum": "md5:085098290934c23619a6abaea2778e38",
+      "download_url": "https://zenodo.org/api/records/21454715/files/Fig2-I%20Strain%20line%20scan.csv/content"
+    },
+    {
+      "name": "Fig3-B Eac-strain.csv",
+      "size_bytes": 221,
+      "checksum": "md5:a20c607ded74e4f9d2a96447c533db6f",
+      "download_url": "https://zenodo.org/api/records/21454715/files/Fig3-B%20Eac-strain.csv/content"
+    },
+    {
+      "name": "figS41-SHG comparison.csv",
+      "size_bytes": 465,
+      "checksum": "md5:747233d988ac136a34c3968928cd7f31",
+      "download_url": "https://zenodo.org/api/records/21454715/files/figS41-SHG%20comparison.csv/content"
+    },
+    {
+      "name": "figS15-d33-Duration-time.csv",
+      "size_bytes": 585,
+      "checksum": "md5:19d2cdfeebea1fd1512ed874b5d106e1",
+      "download_url": "https://zenodo.org/api/records/21454715/files/figS15-d33-Duration-time.csv/content"
+    },
+    {
+      "name": "Fig4-C DC-SHG.csv",
+      "size_bytes": 194,
+      "checksum": "md5:c56d369a7ace9347cfe587c57f8398f6",
+      "download_url": "https://zenodo.org/api/records/21454715/files/Fig4-C%20DC-SHG.csv/content"
+    },
+    {
+      "name": "Fig1-D d33-S.csv",
+      "size_bytes": 677,
+      "checksum": "md5:70b8be28f5e00e68c6b71583c1432bcd",
+      "download_url": "https://zenodo.org/api/records/21454715/files/Fig1-D%20d33-S.csv/content"
+    },
+    {
+      "name": "Fig4-F bottom SHG polar.csv",
+      "size_bytes": 5056,
+      "checksum": "md5:6856354e23cacfce89f4abf84e6350af",
+      "download_url": "https://zenodo.org/api/records/21454715/files/Fig4-F%20bottom%20SHG%20polar.csv/content"
+    },
+    {
+      "name": "figS19-P-E.csv",
+      "size_bytes": 50271,
+      "checksum": "md5:eb9c1b351a8b21da34cb2b81836d2912",
+      "download_url": "https://zenodo.org/api/records/21454715/files/figS19-P-E.csv/content"
+    },
+    {
+      "name": "figS28-S-EAC.csv",
+      "size_bytes": 748,
+      "checksum": "md5:bf27dffcdcbb0771de049ab2151921df",
+      "download_url": "https://zenodo.org/api/records/21454715/files/figS28-S-EAC.csv/content"
+    },
+    {
+      "name": "Fig3-C Edc-d33.csv",
+      "size_bytes": 179,
+      "checksum": "md5:4f14ff5fe94e0061fc37f1fbd31af84f",
+      "download_url": "https://zenodo.org/api/records/21454715/files/Fig3-C%20Edc-d33.csv/content"
+    },
+    {
+      "name": "Fig3-D up f-M33.csv",
+      "size_bytes": 904,
+      "checksum": "md5:25cc851607d09c3ab2ba26a87e3d50ae",
+      "download_url": "https://zenodo.org/api/records/21454715/files/Fig3-D%20up%20f-M33.csv/content"
+    },
+    {
+      "name": "Fig3-E f-d33 M33.csv",
+      "size_bytes": 521,
+      "checksum": "md5:70bdd882eb570ee78fcd726266ec7ece",
+      "download_url": "https://zenodo.org/api/records/21454715/files/Fig3-E%20f-d33%20M33.csv/content"
+    },
+    {
+      "name": "Fig3-F.csv",
+      "size_bytes": 145,
+      "checksum": "md5:940dd4a6192b37564eeff1cb074021e1",
+      "download_url": "https://zenodo.org/api/records/21454715/files/Fig3-F.csv/content"
+    },
+    {
+      "name": "Fig4-B inset f-SHG.csv",
+      "size_bytes": 103,
+      "checksum": "md5:462aea3cacf685034aed691344165656",
+      "download_url": "https://zenodo.org/api/records/21454715/files/Fig4-B%20inset%20f-SHG.csv/content"
+    },
+    {
+      "name": "figS2-d33-U-f.csv",
+      "size_bytes": 651,
+      "checksum": "md5:106f24dd0d3888bd9638b5b3b6320c48",
+      "download_url": "https://zenodo.org/api/records/21454715/files/figS2-d33-U-f.csv/content"
+    },
+    {
+      "name": "figS25-d33-E.csv",
+      "size_bytes": 605,
+      "checksum": "md5:e0faa99b27ae30e07ea7a6266f887498",
+      "download_url": "https://zenodo.org/api/records/21454715/files/figS25-d33-E.csv/content"
+    },
+    {
+      "name": "figS33-Mn doping.csv",
+      "size_bytes": 25095,
+      "checksum": "md5:d479f2779a87a000da52e9113c82fccf",
+      "download_url": "https://zenodo.org/api/records/21454715/files/figS33-Mn%20doping.csv/content"
+    },
+    {
+      "name": "figS22-σ-f-EDC.csv",
+      "size_bytes": 95835,
+      "checksum": "md5:c9766563ac40564ee587e8ad57b3dd84",
+      "download_url": "https://zenodo.org/api/records/21454715/files/figS22-%CF%83-f-EDC.csv/content"
+    },
+    {
+      "name": "figS1-State-the-of-art thin films.csv",
+      "size_bytes": 316,
+      "checksum": "md5:9abfcfd01a287163d5dec848b7fc3d47",
+      "download_url": "https://zenodo.org/api/records/21454715/files/figS1-State-the-of-art%20thin%20films.csv/content"
+    },
+    {
+      "name": "figS20-MaxP-E.csv",
+      "size_bytes": 593,
+      "checksum": "md5:e303d14dfbb360a0b0e04edd02c2c9c0",
+      "download_url": "https://zenodo.org/api/records/21454715/files/figS20-MaxP-E.csv/content"
+    },
+    {
+      "name": "figS21-J-E.csv",
+      "size_bytes": 5077,
+      "checksum": "md5:a61d12454322d7ef76844b6fc3f44abe",
+      "download_url": "https://zenodo.org/api/records/21454715/files/figS21-J-E.csv/content"
+    },
+    {
+      "name": "figS40-DC bias.csv",
+      "size_bytes": 496,
+      "checksum": "md5:b2aeb21c5bd3143e81249c2edbaec395",
+      "download_url": "https://zenodo.org/api/records/21454715/files/figS40-DC%20bias.csv/content"
+    },
+    {
+      "name": "figS23-deltaT-DCbias-t.csv",
+      "size_bytes": 987,
+      "checksum": "md5:ed3620ebbca580447c2af47458ecc6ee",
+      "download_url": "https://zenodo.org/api/records/21454715/files/figS23-deltaT-DCbias-t.csv/content"
+    },
+    {
+      "name": "figS32-O-K edge.csv",
+      "size_bytes": 5152,
+      "checksum": "md5:4054a56efb98b80b06283cac520d469b",
+      "download_url": "https://zenodo.org/api/records/21454715/files/figS32-O-K%20edge.csv/content"
+    },
+    {
+      "name": "figS37-σ-f.csv",
+      "size_bytes": 28991,
+      "checksum": "md5:a890dc105a374c9db9fa6be047e9a06b",
+      "download_url": "https://zenodo.org/api/records/21454715/files/figS37-%CF%83-f.csv/content"
+    },
+    {
+      "name": "figS38-Z-f.csv",
+      "size_bytes": 80087,
+      "checksum": "md5:9349c35c2b3ef7966fab391a4f295a42",
+      "download_url": "https://zenodo.org/api/records/21454715/files/figS38-Z-f.csv/content"
+    },
+    {
+      "name": "figS48-x-DC bias.csv",
+      "size_bytes": 82,
+      "checksum": "md5:fad983d7aab5a58a80419b8c9ffe1a2b",
+      "download_url": "https://zenodo.org/api/records/21454715/files/figS48-x-DC%20bias.csv/content"
+    },
+    {
+      "name": "figS51-d33-DC-AC.csv",
+      "size_bytes": 890,
+      "checksum": "md5:7d0d1174fc264b5cd45624f7920583d0",
+      "download_url": "https://zenodo.org/api/records/21454715/files/figS51-d33-DC-AC.csv/content"
+    }
+  ]
+}

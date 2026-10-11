@@ -5,10 +5,10 @@ dreidimensionale Finite-Elemente-Simulationen. Ziel sind verifizierte Modelle f�
 Festkörpermechanik, Wärmeleitung, Elektrostatik und deren thermomechanische und
 piezoelektrische Kopplungen auf Basis linearer **Tet4** und geradkantiger quadratischer **Tet10**.
 
-**v1.3.0 — stationäre Parameterstudien, Feldbilder und Surrogatmodelle.**
-Release-Stand vom 01.10.2026; Veröffentlichungsstatus im [M8-Freigabebericht](Doc/64_M8_RELEASE_VERIFICATION.md).
-[Release-Nachweis](Doc/64_M8_RELEASE_VERIFICATION.md) ·
-[Release Notes](Doc/releases/v1.3.0.md) ·
+**v1.4.0 — verifizierter Unsicherheitsworkflow und Gesamtdokumentation.**
+Release-Stand vom 11.10.2026; Veröffentlichungsstatus im [M9-Freigabebericht](Doc/68_M9_RELEASE_VERIFICATION.md).
+[Release-Nachweis](Doc/68_M9_RELEASE_VERIFICATION.md) ·
+[Release Notes](Doc/releases/v1.4.0.md) ·
 [Supportmatrix](Doc/57_M7_RELEASE_CANDIDATE.md).
 
 Neu gegenüber v1.0: [transiente Wärmeleitung](Doc/33_TRANSIENT_HEAT.md) mit
@@ -34,7 +34,7 @@ verifizierten Annahmen und numerischen Grenzen.
 
 ## Verfügbare Funktionen
 
-| Bereich | Umfang im Freigabestand v1.3.0 |
+| Bereich | Umfang im Freigabestand v1.4.0 |
 |---|---|
 | Netzmodell | Unveränderliche NumPy-Arrays für 3D-Punkte, Tet4/Tet10-Zellen und Triangle3/Triangle6-Flächen; validierte Indizes, externe IDs und Tags |
 | Auswahlsätze | Benannte Volumen- und Flächensätze, auch mit überlappenden Mitgliedschaften |
@@ -49,6 +49,7 @@ verifizierten Annahmen und numerischen Grenzen.
 | Piezoelektrizität | Stress-Charge-Materialdaten, Konversion und Achsrotation; gekoppelte Tet4/Tet10-Operatoren und monolithische Lösung mit SciPy oder optional PETSc mit feldweiser Skalierung, Reaktionen, Ladungs- und Energiebilanzen |
 | Thermopiezoelektrizität | Einseitiger stationärer Ablauf `T → (u, φ)` mit regionsweiser thermischer Eigenverzerrung und getrennten Wärme-, Kraft- und Ladungsbilanzen |
 | Transiente Wärme | Konstante rho/c-Daten, Backward Euler, Model-Schema 2, Zeitprofile, Speicherbilanz und PVD-/Messpunktserien |
+| Unsicherheit | Explizite Normal-/Gleichverteilungen, gemeinsames Sampling, normale Korrelation, Stichprobenstatistik, lokale Sensitivität und stationäre M8-FEM-Studien; keine experimentelle Freigabe |
 | Piezo-Dynamik | Mechanische konsistente Masse, algebraisches Potential, Modal-/Newmark-/Harmonikanalyse, Model-Schema 3 und komplexe Feld-/Messpunktausgabe |
 
 Ein vollständiger deklarativer Lauf mit Gmsh-Eingabe, VTU-Feldern und
@@ -219,7 +220,7 @@ elektrisches Potential `phi` mit feldweiser Freiheitsgradverwaltung.
 | M6 | v1.1.0 | Transiente Wärme, Piezo-Dynamik/Harmonik (reziproke Thermoelastizität zurückgestellt) | Freigegeben |
 | M7 | v1.2.0 | PETSc-Backend, Tet10, Wärmeindikatoren und gemessene Skalierung | Freigegeben |
 | M8 | v1.3.0 | Parameterstudien, Visualisierung und Surrogatmodelle | Implementiert und verifiziert; Release-Abschluss siehe Freigabebericht |
-| M9 | v1.4.0* | Experimentelle Validierung und Unsicherheit | Geplant |
+| M9 | v1.4.0 | Verifizierter Unsicherheitsworkflow und Gesamtdokumentation | Implementiert und verifiziert; Veröffentlichung siehe Freigabebericht |
 | M10 | v1.5.0* | Kontrollierte adaptive Netzstudien | Geplant |
 | M11 | Offen | Topologieoptimierung | Grober Horizont |
 | M12 | Offen | RANS-CFD mit Fluid-Struktur-Kopplung | Grober Horizont |
@@ -326,3 +327,10 @@ Der optionale [Tet4-Feldbildadapter mit JPEG-Export](Doc/62_FIELD_VISUALIZATION.
 ergänzt den M8-Stand. Grenzen und Migration stehen in den Release Notes.
 
 [Zwei reproduzierbare Wärme-/Piezo-Studienrezepte](examples/study_recipes/README.md) und [Abnahmeprotokoll](Doc/63_STUDY_RECIPE_ACCEPTANCE.md) ergänzen den M8-Stand (#61).
+
+Das [deutschsprachige M9-Handbuch](Doc/latex/README.md) umfasst Theorie,
+Benutzerrezepte, vollständige API-/Entwicklerreferenz und Verifikation/Unsicherheit.
+Ein Befehl baut Gesamtband, vier Einzelbände, Quellenarchiv und Prüfsummen.
+[Gesamtabnahme und Grenzen](Doc/latex/ACCEPTANCE.md). Finale PDF-/Quellenartefakte
+sind dem v1.4.0-Release zugeordnet; Standardbuilds bleiben Kandidaten.
+Experimentelle Validierung ist weiterhin offen.

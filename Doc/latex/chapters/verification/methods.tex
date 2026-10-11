@@ -1,0 +1,71 @@
+\chapter{Nachweisumfang und wissenschaftliche Aussagen}
+\label{vv:scope}\index{Verifikation}\index{Validierung}
+Dieser Band beschreibt den nachprüfbaren Stand der linearen FEM Toolbox bis M8
+und des generischen M9-Unsicherheitsworkflows. Er begründet keine experimentelle
+Validierungsfreigabe. Die am 10. Oktober 2026 genehmigte Neuplanung von M9
+trennt die Software- und Dokumentationsfreigabe v1.4.0 vom weiterhin offenen
+Messvergleich in Issues 63 und 65. Das ursprüngliche Messdatengate ist damit
+kein v1.4.0-Releasegate mehr; seine wissenschaftlichen Anforderungen gelten
+unverändert für einen späteren experimentellen Fall.
+
+\section{Drei unterschiedliche Fragen}
+\textbf{Code-Verifikation} fragt, ob die Implementierung die spezifizierten
+Gleichungen korrekt löst. Elementmatrizen, Handrechnungen, Starrkörper- und
+Affinpatches, Bilanzgleichungen und hergestellte Lösungen liefern dazu
+unterschiedliche, einander ergänzende Referenzen. Ein zweiter Solver mit
+denselben assemblierten Matrizen ist eine Backendprüfung, aber keine unabhängige
+Prüfung des Stoffgesetzes.
+
+\textbf{Lösungsverifikation} untersucht den numerischen Fehler einer konkreten
+Rechnung: Netz- und Zeitschrittfolgen, algebraische Genauigkeit und geeignete
+Zielgrößen. Ein kleines Residuum kann bei einem zu groben Netz mit einem großen
+Diskretisierungsfehler zusammenfallen. Ein bestandener analytischer Stabtest
+überträgt seine Fehlergrenze nicht auf beliebige Bauteile.
+
+\textbf{Experimentelle Validierung} vergleicht ein physikalisches Modell mit
+unabhängigen Messungen für einen festgelegten Verwendungszweck. Dafür fehlen
+gegenwärtig angenommene Messdaten mit vollständigem Proben-, Material-,
+Randbedingungs- und Unsicherheitsvertrag. Synthetische Beispiele erfüllen diese
+Aufgabe nicht. Die unten dokumentierten negativen Suchbefunde sind ein
+Beschaffungsbefund, kein Beweis weltweiter Nichtverfügbarkeit.
+
+\section{Unabhängigkeit der Referenzen}
+Die stärksten elementaren Referenzen entstehen außerhalb der Produktionsroutine:
+analytische Tensorrotation, Simplexmomente, direkt integrierte Polynome und
+bekannte eindimensionale Lösungen. Bei der Method of Manufactured Solutions
+wird ein glattes Feld gewählt und die zugehörige rechte Seite durch Einsetzen
+in die Differentialgleichung abgeleitet \cite{sandia-mms}. Die Referenz soll
+nicht durch erneuten Aufruf desselben Operators erzeugt werden.
+
+Für quadratische Tetraeder nutzt die Konvergenzauswertung unter anderem eine
+unabhängige Duffy-Integration mit $6\times6\times6=216$ Punkten. Ein Test gegen
+einen gespeicherten Referenzwert erkennt Regressionen, kann aber einen Fehler
+in der ursprünglichen Referenz konservieren. Deshalb ersetzen solche Tests
+die analytischen und integralen Nachweise nicht.
+
+\section{Leseregel für die Nachweismatrix}
+Die folgenden 17 Gruppen verknüpfen jede unterstützte Physik bzw. wichtige
+Querschnittsfunktion mit ihrem Vertrag und tatsächlich vorhandenen Tests.
+Die Matrix wird aus \path{Doc/latex/verification-map.json} erzeugt; der
+Build prüft Vollständigkeit und Existenz aller Referenzen. Sie bezeichnet den
+\emph{Prüfumfang}, nicht ein unabhängig zertifiziertes Produkt.
+Ein lokaler Lauf ohne PETSc überspringt native Tests und kann diese daher
+nicht als bestanden melden. Native Ergebnisse gehören zum zugehörigen
+CI-Commit und seiner realen oder komplexen PETSc-Umgebung.
+
+\input{chapters/verification/matrix}
+
+\section{Gültigkeitsgrenzen}
+Die Diskretisierung verwendet affine Tet4 und geradkantige Tet10; gekrümmte
+isoparametrische Zellen sind kein belegter Umfang. Die Stoffgesetze sind linear.
+Thermomechanik und Thermopiezoelektrizität übertragen zunächst Temperatur in
+die mechanischen bzw. elektromechanischen Gleichungen. Die hier dokumentierte
+Kopplung enthält keine vollständig rückgekoppelte nichtlineare Thermodynamik.
+Der Wärmeindikator gilt nur für stationäre Tet4 und liefert keine allgemein
+garantierte Fehlerschranke.
+
+Moden und Newmark sind durch die dokumentierten Größenlimits begrenzt.
+Harmonik bezeichnet eine einzelne undämpfte Frequenz mit komplexen
+Spitzenphasoren; Resonanzablehnung ist ein negatives Akzeptanzkriterium.
+Native PETSc-Parität und FieldSplit-Tests belegen kleine unterstützte Fälle.
+Sie begründen weder MPI-Skalierbarkeit noch einen allgemeinen Geschwindigkeitsvorteil.

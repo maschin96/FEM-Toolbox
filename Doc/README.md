@@ -5,6 +5,9 @@ FEM Toolbox. Bei Widersprüchen haben die expliziten Konventionen in der
 mathematischen Modellbeschreibung Vorrang; Änderungen daran benötigen einen
 Eintrag im Entscheidungsprotokoll.
 
+[Aktueller M9-Freigabenachweis v1.4.0](68_M9_RELEASE_VERIFICATION.md) ·
+[Release Notes](releases/v1.4.0.md). Experimentelle Validierung bleibt offen.
+
 ## Lesereihenfolge
 
 1. [01_SCOPE_AND_REQUIREMENTS.md](01_SCOPE_AND_REQUIREMENTS.md)
@@ -18,6 +21,9 @@ Eintrag im Entscheidungsprotokoll.
 9. [09_RELEASE_PROCESS.md](09_RELEASE_PROCESS.md)
 
 ## Produktplanung
+
+- [M9: erneute Messdatensuche und konkrete Optionen für v1.4.0 (#63/#66)](66_M9_DATA_SEARCH_AND_RELEASE_OPTIONS.md)
+- [M9: verbindlicher Messdatenvertrag und offenes Datengate (#63)](65_VALIDATION_DATA_CONTRACT.md)
 
 - [Femantis: vollständige Corporate Identity mit Original-Bildtafel](75_FEMANTIS_CORPORATE_IDENTITY.md)
 - [Femantis: vollständiger Code-/Paket-/GitHub-Umbenennungsplan](76_FEMANTIS_RENAMING_PLAN.md)
@@ -146,3 +152,28 @@ Verifikationsdokumente benennen ihren jeweiligen Nachweisumfang ausdrücklich.
 - [Studienrezepte: Abnahme und saubere Reproduktion](63_STUDY_RECIPE_ACCEPTANCE.md)
 
 - [M8-Freigabebericht, Kompatibilität und Release-Gate](64_M8_RELEASE_VERIFICATION.md)
+
+## M9 — Handbuch (Kandidat)
+
+- [LaTeX-Bände, reproduzierbarer PDF-Build und Quellenmatrix (#206)](latex/README.md)
+- [Mathematischer Theorieband: Herleitungen und Nachweise (#207)](latex/THEORY_VERIFICATION.md)
+
+- [Benutzerband: Installation, Modelle, Rezepte und unabhängige Artefaktprüfung (#208)](latex/USER_VERIFICATION.md)
+
+- [API-/Entwicklerband: vollständiges Inventar, Fachverträge und Driftprüfung (#209)](latex/API_VERIFICATION.md)
+
+- [Verifikation und Unsicherheit: Quellenaudit, Suchbefunde und offene Validierung (#210)](latex/VV_VERIFICATION.md)
+- [Redaktionelle Gesamtabnahme, Archiv und Artefaktprüfung (#211)](latex/ACCEPTANCE.md)
+
+Alle vier Fachbände sind im Kandidatenstand ausgearbeitet; #66 übernimmt die Veröffentlichung.
+
+## M9 — Unsicherheit und offener experimenteller Folgeumfang
+
+- [Messdatenvertrag, Kandidatensuche und offenes Datengate (#63)](65_VALIDATION_DATA_CONTRACT.md)
+- [Erneute Datensuche und genehmigte M9-Neuplanung](66_M9_DATA_SEARCH_AND_RELEASE_OPTIONS.md)
+
+M9/v1.4.0 umfasst den verifizierten generischen Unsicherheitsworkflow und die
+vollständige Gesamtdokumentation. #63/#65 bleiben außerhalb M9 offen; eine
+experimentelle Validierungsfreigabe wird nicht behauptet.
+
+- [Generischer Unsicherheitsworkflow: API, Annahmen und analytische Verifikation (#64)](67_UNCERTAINTY_WORKFLOW.md)

@@ -1,0 +1,96 @@
+\chapter{Architektur und nachvollziehbare Beiträge}
+\label{api:development}\index{Entwicklung}\index{TDD}\index{Assembly}
+\begingroup\raggedright
+\section{Vom Dokument zum prüfbaren Ergebnis}
+Model liest/konvertiert dokumentierte Inputs und Regionen, Preflight prüft
+Lagerung/Gauge/Elektroden. Mesh kennt Topologie und Sätze, Geometrie/Quadratur
+kennen Tetraeder und Flächen. Materialien enthalten validierte SI-Tensoren.
+Felder/DofMap legen Reihenfolge fest; Elemente/Physik erzeugen lokale
+Matrix-/Lastbeiträge. Assembly bildet COO und CSR/CSC. Boundary reduziert
+Dirichlet/Elektroden; Solver wählen Faktorisierung/Zeitverfahren und prüfen
+feldweise Residuen/Bilanzen. Ergebnisobjekte sind owned Daten, IO/Plot
+Adapter mit expliziten Form-/Maskenverträgen. Study/UQ orchestrieren diese
+Pipeline, ändern keine wissenschaftlichen Operatoren. Surrogate verwenden
+prüfbare Tabellen und eigene Trainings-/Testprovenienz.
+
+Interne Erweiterungsgrenzen werden im Inventar klar benannt. Neue Elemente
+brauchen Formfunktionen, Geometrie/Jacobi, Quadratur, lokale Operatoren,
+Last-/Randintegrale, Postprocessing und IO-Formverträge; eine einzige neue
+Steifigkeitsroutine genügt nicht. Neue Physik braucht Felddefinitionen,
+Vorzeichen/SI, Nullraum-/BC-Vertrag, unabhängige Einzeltests und erst dann
+Kopplung. Backends sehen bereits reduzierte Systeme mit Feldpartition;
+physische Reduktion bleibt beim Solver. IO-/Visualisierungsadapter dürfen
+Rohfelder nicht still glätten oder komplexe Komponenten verlieren.
+
+\section{Kleine lokale Erweiterung mit unabhängigem Test}
+Das folgende Lehrbeispiel implementiert einen lokalen linearen Wärmequellen-
+Callback, keinen neuen produktiven Solver. Es nutzt ausdrücklich die
+Forschungs-Lastgrenze und begründet ihren Vertrag: Punkt m, Quelle W/m$^3$,
+Gradient W/m$^4$. Für das Einheitstetraeder mit $Q=2+3x$ sind
+$\int N_iN_j\,dV=V/20$ ($i\ne j$) und $V/10$ ($i=j$).
+Daraus folgt Lastvektor $[13/120,2/15,13/120,13/120]$ W und Summe $11/24$ W.
+Die absolute Grenze $2\cdot10^{-15}$ W deckt Rundung der wenigen
+Quadraturoperationen ab, keine numerisch gelernte Referenz.
+\lstinputlisting{examples/developer_extension.py}
+\begin{lstlisting}
+python -I examples/developer_extension.py
+PYTHONPATH=src python -m pytest tests/unit/test_developer_handbook_example.py
+\end{lstlisting}
+Der Archivaufruf braucht ein separat installiertes Kandidatenpaket; der
+Testaufruf gehört zum Checkout. Der Test wurde zuerst am fehlenden Callback
+rot ausgeführt, dann bestanden Referenzintegration und ungültiger Gradient.
+Der Callback ist nur Lehre, keine neue stabile Produktions-API.
+
+\section{TDD, Teststruktur und wissenschaftliche Toleranzen}
+Entwicklungsinstallation: CPython 3.11--3.13, virtuelle Umgebung, Paket mit
+\texttt{dev}-Extra; optionale Visualisierung/PETSc gezielt und getrennt.
+Unit-Tests prüfen lokal Formen, ungültige Daten, Tensoren und Semantik.
+Patch-Tests prüfen reproduzierbare konstante/affine Felder; Regressionen
+binden tatsächliche Workflows und veröffentlichte Verträge. Convergence
+nutzt mehrere Netze/Zeitschritte und unabhängige Referenzen; Backendtests
+laufen zusätzlich in realen nativen PETSc-Umgebungen. Benchmarks messen
+Zeit/Genauigkeit mit Hardware und Problemgröße, ohne universelle Zusage.
+
+Neue ausführbare Funktion zuerst mit kleinem deterministischem Red-Test,
+Green mit minimal korrekter Implementierung, Refactor bei unveränderter
+Erwartung. Rot muss fehlendes Verhalten zeigen, keinen kaputten Testaufbau.
+Keine künstlichen roten Tests für reine Prosa. Numerische Referenzen aus
+Analytik, unabhängiger Diskretisierung oder Energie/Bilanz/Reziprozität;
+absolute und relative Grenzen mit SI, Konditionierung und Rechengröße
+begründen. Kein blindes Neuschreiben von Goldwerten, Abschalten von Tests
+oder nachträgliches Aufweiten zur Maskierung eines Fehlers.
+\begin{lstlisting}
+python -m pytest
+python -m ruff check .
+python -m ruff format --check .
+python -m mypy src/fem_toolbox
+python scripts/build_handbook.py --check-matrix
+python scripts/build_handbook.py --self-test
+git diff --check
+\end{lstlisting}
+PETSc-lokale Skips sind ausdrücklich zu nennen und kein bestandener nativer
+Nachweis. API-Driftprüfung läuft ohne Import optionaler Bibliotheken;
+Signaturänderung, fehlendes Modul/Reexport oder fehlende Referenz werden abgelehnt.
+Die Extraktion verwendet die Python-AST-Schnittstelle\cite{python-ast};
+das Dokumentensystem ist LaTeX\cite{latex-project}.
+\texttt{api-inventory.json} und daraus erzeugtes Inventarkapitel müssen zum
+Quellstand passen. Manuelle Fachverträge bleiben Pflicht, auch bei grüner AST-Prüfung.
+
+\section{Issue, Milestone, Review und Release}
+Vor Implementierung passendes Issue mit Ziel, Umfang, Nichtzielen,
+Akzeptanzkriterien und Prüfplan. Issue-Branch
+\texttt{codex/<nummer>-<beschreibung>} vom Milestone-Zweig; PR zurück in
+\texttt{codex/milestone-m9}, nicht direkt main. PR nennt Problem, Verhalten,
+Red/Green und tatsächliche Prüflücken. Nur vollständige Arbeitspakete schließen;
+fehlende unabhängige Reviewer offen benennen, keine fremde Freigabe erfinden.
+Anwendbare CI am aktuellen Commit und geklärte Befunde vor Integration.
+
+M9/main erst bei vollständigem Pflichtumfang, aktueller Verifikation und
+Dokumentation. Aktuelles main vorher in M9 aufnehmen und den resultierenden
+Stand prüfen. Nach Merge CI am tatsächlichen main-Zielcommit, saubere
+Wheel-/sdist-Installation, alle Dokumentationsartefakte/Hashes/Commitmetadaten;
+erst dann annotiertes unveränderliches Tag und Release. \#66 zuletzt schließen.
+Experimentelle \#63/\#65 bleiben außerhalb M9 offen; keine Validierungsbehauptung
+in Version, PDF oder Release Notes. Branchschutz ist gemäß ADR-020 kein
+zusätzliches Gate, die Integrationsverantwortung bleibt bestehen.
+\endgroup

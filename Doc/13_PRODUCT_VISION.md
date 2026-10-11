@@ -125,7 +125,14 @@ Toleranzen überein; Fehler werden sichtbar, veränderte Eingaben invalidieren
 Ergebnisse und beide Rezepte laufen aus sauberer Installation. Feldbilder laufen headless, Surrogate prüfen disjunkte Trainings-/Testfälle und geladene Vorhersagen. [Freigabenachweis](64_M8_RELEASE_VERIFICATION.md). Kein Optimierer,
 keine verteilte Ausführung und kein Dashboard als Pflichtumfang.
 
-### M9 — Experimentelle Validierung und Unsicherheit (vorläufig v1.4.0)
+### M9 — Unsicherheitsworkflow und vollständige Dokumentation (v1.4.0-Ziel)
+
+**Aktualisierung 10.10.2026, ADR-054:** Der Eigentümer hat nach erneuter
+Messdatensuche die Neuplanung genehmigt. #64 und #206–#211 gehören zum
+Pflichtumfang von v1.4.0. Die unten beschriebene experimentelle Fallfreigabe
+#63/#65 bleibt offener Folgeumfang und blockiert das neue generische
+Software-/Dokumentationsgate nicht. Sie wird weder als erfüllt noch als durch
+synthetische Fälle ersetzt bezeichnet.
 
 [GitHub M9](https://github.com/maschin96/FEM-Toolbox/milestone/10).
 Voraussetzungen: M5 und M8; geeignete Messdaten mit Nutzungsrechten. Ein linearer
