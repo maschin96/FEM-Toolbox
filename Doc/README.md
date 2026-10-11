@@ -5,6 +5,9 @@ FEM Toolbox. Bei Widersprüchen haben die expliziten Konventionen in der
 mathematischen Modellbeschreibung Vorrang; Änderungen daran benötigen einen
 Eintrag im Entscheidungsprotokoll.
 
+[Aktueller M9-Freigabenachweis v1.4.0](68_M9_RELEASE_VERIFICATION.md) ·
+[Release Notes](releases/v1.4.0.md). Experimentelle Validierung bleibt offen.
+
 ## Lesereihenfolge
 
 1. [01_SCOPE_AND_REQUIREMENTS.md](01_SCOPE_AND_REQUIREMENTS.md)

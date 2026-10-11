@@ -170,3 +170,12 @@ und vollständige visuelle Prüfung. Der Gesamtband enthält den vollständigen
 Quellenanhang; `coverage.json` unterscheidet dokumentierte Fachverträge,
 historische Nachweise, zukünftige Horizonte und offenen experimentellen
 Folgeumfang. Initiale Ownership-Statuswerte bleiben als Planungshistorie erhalten.
+
+## Finale Releaseartefakte
+
+`python scripts/build_handbook.py --self-test --release` baut ausdrücklich
+gekennzeichnete Release-PDFs und ein Release-Manifest. Dieser Modus verlangt
+einen sauberen Checkout, eine finale Version und vollständige Commit-Provenienz.
+Finale Artefakte werden aus dem tatsächlich geprüften main-Zielcommit erzeugt;
+[Freigabenachweis](../68_M9_RELEASE_VERIFICATION.md) und #66 verknüpfen Tag/Release.
+Der Standardbuild bleibt ein Kandidatenbuild, auch wenn die Paketversion final ist.

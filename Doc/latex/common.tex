@@ -21,7 +21,7 @@
 \do\A\do\B\do\C\do\D\do\E\do\F\do\G\do\H\do\I\do\J\do\K\do\L\do\M
 \do\N\do\O\do\P\do\Q\do\R\do\S\do\T\do\U\do\V\do\W\do\X\do\Y\do\Z}
 \input{metadata}
-\hypersetup{pdftitle={FEM Toolbox -- Handbuch},pdfauthor={FEM Toolbox},pdfsubject={Version \ToolboxVersion; Commit \SourceCommit; KANDIDAT}}
+\hypersetup{pdftitle={FEM Toolbox -- Handbuch},pdfauthor={FEM Toolbox},pdfsubject={Version \ToolboxVersion; Commit \SourceCommit; \PublicationLabel}}
 \lstset{basicstyle=\small\ttfamily,breaklines=true,frame=single,columns=fullflexible}
 \lstset{literate={²}{{$^2$}}1 {³}{{$^3$}}1 {µ}{{$\mu$}}1 {Δ}{{$\Delta$}}1 {α}{{$\alpha$}}1 {ε}{{$\varepsilon$}}1 {κ}{{$\kappa$}}1 {ᵀ}{{$^T$}}1}
 \makeatletter
@@ -37,11 +37,11 @@
 \begin{titlepage}
 {\Huge\sffamily\bfseries FEM Toolbox\par}\vspace{12mm}
 {\LARGE\BookTitle\par}\vspace{8mm}
-{\Large KANDIDAT -- Gesamtabnahme\par}\vfill
+{\Large \PublicationLabel\ -- \PublicationSubtitle\par}\vfill
 Version \ToolboxVersion\\[4mm]
 Quellcommit: {\small\ttfamily\SourceCommit}\\[4mm]
 Quellzustand: \SourceState\\[4mm]
-M9 / Issues 206--210. Vier Fachbände; redaktionell geprüfter Kandidat.\\
+M9 / Issues 206--211. Vier Fachbände; redaktionell geprüft.\\
 Keine experimentelle Validierungsfreigabe.\\[8mm]
 Deutschsprachige Referenz mit englischen API-Bezeichnern.
 \end{titlepage}
@@ -51,10 +51,17 @@ Deutschsprachige Referenz mit englischen API-Bezeichnern.
 \chapter{Lesehinweise und Status}
 Die vier Fachbände behandeln Theorie, Anwendung, API/Entwicklung und
 Verifikation bis zum generischen M9-Unsicherheitsworkflow. Die Einzelabnahmen
-206--210 sind integriert. Die redaktionelle Gesamtabnahme 211 wird im
-Quellenarchiv protokolliert; Veröffentlichung und finale Versionsmetadaten
-folgen mit Release-Issue 66. Der Kandidat bezeichnet den angegebenen Commit,
-nicht eine neue Veröffentlichung der auf der Titelseite genannten Paketversion.
+206--211 sind integriert. Die redaktionelle Gesamtabnahme wird im
+Quellenarchiv protokolliert.
+\ifReleasePublication
+Dieser Band gehört zum angegebenen v1.4.0-Releaseumfang. Version, geprüfter
+Quellcommit und sauberer Quellenzustand stehen auf der Titelseite;
+Release-Issue 66 verknüpft den Veröffentlichungsnachweis.
+\else
+Veröffentlichung und finale Versionsmetadaten folgen mit Release-Issue 66.
+Der Kandidat bezeichnet den angegebenen Commit, nicht eine neue
+Veröffentlichung der auf der Titelseite genannten Paketversion.
+\fi
 
 Experimentelle Validierung bleibt außerhalb M9 offen. Spätere Adaptivität,
 Optimierung, RANS/FSI, SPICE und die Femantis-Namensmigration gehören nicht

@@ -9,6 +9,33 @@ import pytest
 API = runpy.run_path(str(Path(__file__).parents[2] / "scripts/build_handbook.py"))
 
 
+def test_publication_metadata_distinguishes_candidate_and_clean_release():
+    metadata = API["publication_metadata"]
+    assert metadata(False, "dirty", "1.4.0", "a" * 40) == (
+        "candidate",
+        "KANDIDAT",
+        "Gesamtabnahme",
+    )
+    assert metadata(True, "clean", "1.4.0", "a" * 40) == (
+        "release",
+        "RELEASESTAND",
+        "Verifizierte Dokumentation",
+    )
+
+
+@pytest.mark.parametrize(
+    "state,version,commit",
+    [
+        ("dirty", "1.4.0", "a" * 40),
+        ("clean", "1.4.0rc1", "a" * 40),
+        ("clean", "1.4.0", "unknown"),
+    ],
+)
+def test_release_metadata_rejects_unverifiable_provenance(state, version, commit):
+    with pytest.raises(ValueError, match="release provenance"):
+        API["publication_metadata"](True, state, version, commit)
+
+
 @pytest.mark.parametrize(
     "message",
     [

@@ -6,6 +6,19 @@ Versionierung an [Semantic Versioning](https://semver.org/).
 
 ## Unreleased
 
+## [1.4.0] - 2026-10-11
+
+### Added
+
+- Verifizierter generischer Unsicherheitsworkflow: explizite Verteilungen, gemeinsames Sampling, normale Korrelation, Statistik, lokale Sensitivität und stationäre FEM-Studien (#64).
+- Vollständige deutschsprachige LaTeX-Gesamtdokumentation mit vier Fachbänden, ausführbaren Rezepten, API-/Quellendriftprüfung und reproduzierbarem Quellenarchiv (#206–#211).
+
+### Compatibility and limits
+
+- Kompatible Minor-Erweiterung; bestehende Model-Schemata 1–3 und Solver bleiben bestehen. Versionsgebundene Studien werden beim Update bewusst neu gerechnet.
+- Experimentelle Validierung bleibt in #63/#65 außerhalb M9 offen gemäß ADR-054. Keine pauschale Validierungsfreigabe.
+- [Release Notes](Doc/releases/v1.4.0.md) und [Freigabebericht](Doc/68_M9_RELEASE_VERIFICATION.md).
+
 ### Fixed
 
 - Rampen interpolieren große endliche Zeitgrenzen und Amplituden ohne stillen

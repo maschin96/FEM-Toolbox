@@ -19,6 +19,21 @@ from typing import Any
 BOOKS = ("main", "theory", "application", "api", "verification")
 
 
+def publication_metadata(
+    release: bool, state: str, version: str, commit: str
+) -> tuple[str, str, str]:
+    """Label releases explicitly and reject incomplete release provenance."""
+    if not release:
+        return "candidate", "KANDIDAT", "Gesamtabnahme"
+    if (
+        state != "clean"
+        or not re.fullmatch(r"\d+\.\d+\.\d+", version)
+        or not re.fullmatch(r"[0-9a-f]{40}", commit)
+    ):
+        raise ValueError("release provenance requires clean source, version and commit")
+    return "release", "RELEASESTAND", "Verifizierte Dokumentation"
+
+
 def check_log(text: str) -> list[str]:
     """Reject unresolved content; preserve layout warnings for human review."""
     fatal = re.search(
@@ -163,6 +178,9 @@ def sha256(path: Path) -> str:
 
 
 def native_build(root: Path, output: Path, args: argparse.Namespace) -> None:
+    status, label, subtitle = publication_metadata(
+        args.release, args.state, args.version, args.commit
+    )
     output.mkdir(parents=True, exist_ok=True)
     # Never ship a prior success manifest after a failed rebuild.
     (output / "manifest.json").unlink(missing_ok=True)
@@ -180,6 +198,18 @@ def native_build(root: Path, output: Path, args: argparse.Namespace) -> None:
             + rf"\newcommand{{\SourceCommit}}{{{tex_escape(args.commit)}}}"
             + "\n"
             + rf"\newcommand{{\SourceState}}{{{tex_escape(args.state)}}}"
+            + "\n"
+            + rf"\newcommand{{\PublicationLabel}}{{{label}}}"
+            + "\n"
+            + rf"\newcommand{{\PublicationSubtitle}}{{{subtitle}}}"
+            + "\n"
+            + r"\newif\ifReleasePublication"
+            + "\n"
+            + (
+                r"\ReleasePublicationtrue"
+                if args.release
+                else r"\ReleasePublicationfalse"
+            )
             + "\n"
         )
         (work / "metadata.tex").write_text(metadata)
@@ -203,7 +233,7 @@ def native_build(root: Path, output: Path, args: argparse.Namespace) -> None:
             for marker in (
                 args.version,
                 args.commit,
-                "KANDIDAT",
+                label,
                 "Wärme",
                 "Literatur",
                 "Sachregister",
@@ -270,7 +300,7 @@ def native_build(root: Path, output: Path, args: argparse.Namespace) -> None:
     }
     manifest = {
         "schema": 1,
-        "status": "candidate",
+        "status": status,
         "version": args.version,
         "commit": args.commit,
         "source_state": args.state,
@@ -308,6 +338,9 @@ def main() -> None:
         "--native", action="store_true", help="inside pinned toolchain only"
     )
     parser.add_argument("--self-test", action="store_true")
+    parser.add_argument(
+        "--release", action="store_true", help="label clean release inputs"
+    )
     parser.add_argument("--check-matrix", action="store_true")
     parser.add_argument("--output", type=Path, default=Path("build/handbook"))
     parser.add_argument("--commit", default="")
@@ -339,6 +372,7 @@ def main() -> None:
     args.version = tomllib.loads((root / "pyproject.toml").read_text())["project"][
         "version"
     ]
+    publication_metadata(args.release, args.state, args.version, args.commit)
     output.mkdir(parents=True, exist_ok=True)
     run(
         [
@@ -382,6 +416,8 @@ def main() -> None:
     ]
     if args.self_test:
         command.append("--self-test")
+    if args.release:
+        command.append("--release")
     print(run(command, root, output / "build-console.log"))
 
 
