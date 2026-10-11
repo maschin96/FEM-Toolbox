@@ -1,0 +1,209 @@
+{
+  "schema": 1,
+  "basis": "M0–M8 + generischer M9-Workflow #64, keine experimentelle Validierung",
+  "entries": [
+    {
+      "id": "heat",
+      "title": "Stationäre Wärme",
+      "scope": "Tet4/Tet10; SciPy; native PETSc-Parität separat",
+      "criterion": "Affine Felder, Fluss-/Leistungsbilanz, vier Netze; P1 L2/H1 2/1, P2 3/2.",
+      "contract": "Doc/45_TET10_HEAT_INTEGRATION.md",
+      "tests": [
+        "tests/patch/test_heat_patch.py",
+        "tests/convergence/test_heat_convergence.py",
+        "tests/convergence/test_tet10_heat_operator.py"
+      ]
+    },
+    {
+      "id": "transient_heat",
+      "title": "Transiente Wärme",
+      "scope": "Tet4/Tet10; Backward Euler",
+      "criterion": "Kapazität/Robin/Ereignisse; räumliche Normen und Zeitordnung 1 getrennt.",
+      "contract": "Doc/33_TRANSIENT_HEAT.md",
+      "tests": [
+        "tests/convergence/test_transient_heat_convergence.py",
+        "tests/convergence/test_tet10_transient_heat.py",
+        "tests/unit/test_transient_heat.py"
+      ]
+    },
+    {
+      "id": "electrostatics",
+      "title": "Elektrostatik",
+      "scope": "Tet4/Tet10; SciPy; native PETSc-Parität separat",
+      "criterion": "Elektrisches Feld und Leiterladung, Energie, Gauge und vier Netze.",
+      "contract": "Doc/46_TET10_ELECTROSTATICS.md",
+      "tests": [
+        "tests/patch/test_electrostatics_patch.py",
+        "tests/convergence/test_electrostatics_convergence.py",
+        "tests/convergence/test_tet10_electrostatics.py"
+      ]
+    },
+    {
+      "id": "elasticity",
+      "title": "Elastizität",
+      "scope": "Tet4/Tet10; linear/stationär",
+      "criterion": "Starrkörper und Affinpatch, Zug und Biegung, integrierte Energie, Kraft und Moment, vier Netze.",
+      "contract": "Doc/47_TET10_ELASTICITY.md",
+      "tests": [
+        "tests/patch/test_elasticity_patch.py",
+        "tests/convergence/test_elasticity_convergence.py",
+        "tests/convergence/test_tet10_elasticity.py"
+      ]
+    },
+    {
+      "id": "thermomechanics",
+      "title": "Thermomechanik",
+      "scope": "Tet4/Tet10; einseitiges T nach u",
+      "criterion": "Freie/behinderte Eigenverzerrung, getrennte Bilanzen und vier Netze.",
+      "contract": "Doc/48_TET10_THERMOMECHANICS.md",
+      "tests": [
+        "tests/patch/test_thermomechanics_patch.py",
+        "tests/convergence/test_thermomechanics_convergence.py",
+        "tests/convergence/test_tet10_thermomechanics.py"
+      ]
+    },
+    {
+      "id": "piezoelectric",
+      "title": "Piezoelektrizität",
+      "scope": "Tet4/Tet10; stationär",
+      "criterion": "d33 direkt/invers, Kurzschluss/Leerlauf, Reziprozität, Enthalpie und vier Netze.",
+      "contract": "Doc/49_TET10_PIEZOELECTRIC.md",
+      "tests": [
+        "tests/patch/test_piezo_element_patch.py",
+        "tests/patch/test_piezo_solver_patch.py",
+        "tests/patch/test_electrodes.py",
+        "tests/regression/test_piezo_d33_benchmark.py",
+        "tests/convergence/test_tet10_piezoelectric.py"
+      ]
+    },
+    {
+      "id": "thermopiezoelectric",
+      "title": "Thermopiezoelektrizität",
+      "scope": "Tet4/Tet10; T nach (u,phi)",
+      "criterion": "Materialgrenze, Elektroden, thermischer Schalter, Feldnormen und getrennte Bilanzen.",
+      "contract": "Doc/50_TET10_THERMOPIEZOELECTRIC.md",
+      "tests": [
+        "tests/convergence/test_thermopiezo_model_convergence.py",
+        "tests/convergence/test_tet10_thermopiezoelectric.py",
+        "tests/unit/test_thermopiezoelectric.py"
+      ]
+    },
+    {
+      "id": "modal",
+      "title": "Piezo-Moden",
+      "scope": "Tet4/Tet10; begrenzte dichte Eigenanalyse",
+      "criterion": "Analytischer Stab, Massennormierung, rekonstruierte Schur-Lösung, vier Netze.",
+      "contract": "Doc/51_TET10_MODES.md",
+      "tests": [
+        "tests/unit/test_piezo_modal.py",
+        "tests/convergence/test_piezo_modal_convergence.py",
+        "tests/convergence/test_tet10_modal.py"
+      ]
+    },
+    {
+      "id": "newmark",
+      "title": "Piezo-Newmark",
+      "scope": "Tet4/Tet10; beta=1/4, gamma=1/2",
+      "criterion": "Ein-DOF-Oszillator, Energie, Zeitordnung 2; bewegte Ränder/Ereignisse.",
+      "contract": "Doc/52_TET10_NEWMARK.md",
+      "tests": [
+        "tests/unit/test_piezo_newmark.py",
+        "tests/unit/test_tet10_newmark.py"
+      ]
+    },
+    {
+      "id": "harmonic",
+      "title": "Piezo-Harmonik",
+      "scope": "Tet4/Tet10; komplexe Spitzenphasoren",
+      "criterion": "Analytischer Stab, DC, Nullamplitude/Phase, Resonanzablehnung, vier Netze.",
+      "contract": "Doc/53_TET10_HARMONIC.md",
+      "tests": [
+        "tests/unit/test_piezo_harmonic.py",
+        "tests/convergence/test_tet10_harmonic_convergence.py"
+      ]
+    },
+    {
+      "id": "geometry",
+      "title": "Geometrie und Materialien",
+      "scope": "Affine Tet4; geradkantige Tet10/Triangle6",
+      "criterion": "Simplexmomente, Polynomreproduktion, Permutationen, Tensor-/Voigtrotation, Negativfälle.",
+      "contract": "Doc/41_TET10_GEOMETRY.md",
+      "tests": [
+        "tests/unit/test_tet10_geometry.py",
+        "tests/unit/test_tet10_operators.py",
+        "tests/unit/test_piezo_material.py",
+        "tests/unit/test_material_regions.py"
+      ]
+    },
+    {
+      "id": "backends",
+      "title": "Assembly und Backends",
+      "scope": "SciPy direkt; PETSc real/complex direkt/FieldSplit",
+      "criterion": "Originalreaktionen, feldweise Residuen und native Parität; keine MPI-/Leistungszusage.",
+      "contract": "Doc/39_PETSC_FIELDSPLIT.md",
+      "tests": [
+        "tests/unit/test_assembly.py",
+        "tests/unit/test_linear_backend.py",
+        "tests/petsc/test_physics.py",
+        "tests/petsc/test_fieldsplit.py",
+        "tests/petsc/test_convergence.py"
+      ]
+    },
+    {
+      "id": "indicator",
+      "title": "Wärmeindikator",
+      "scope": "Nur stationäre Tet4",
+      "criterion": "Residuen, Flächenanteile, Dörfler-Markierung; keine garantierte Fehlerschranke.",
+      "contract": "Doc/43_HEAT_INDICATOR.md",
+      "tests": [
+        "tests/unit/test_heat_indicator.py",
+        "tests/convergence/test_heat_indicator_convergence.py"
+      ]
+    },
+    {
+      "id": "studies",
+      "title": "Studien und Kennwerte",
+      "scope": "Stationäre Model-Schema-1-Fälle",
+      "criterion": "Provenienz, Wiederaufnahme, Fehlerstatus, Tabellenhash und Zieleinheiten.",
+      "contract": "Doc/60_STUDY_REPORTS.md",
+      "tests": [
+        "tests/unit/test_studies.py",
+        "tests/unit/test_study_reports.py",
+        "tests/regression/test_study_recipes.py"
+      ]
+    },
+    {
+      "id": "surrogates",
+      "title": "Polynomiale Surrogate",
+      "scope": "Reelle skalare Ziele; Grad 1/2",
+      "criterion": "Analytische Interaktionen, unabhängige Holdouts, Ridge, Rang/Leckage/Extrapolation.",
+      "contract": "Doc/61_SURROGATE_MODELS.md",
+      "tests": [
+        "tests/unit/test_surrogates.py",
+        "tests/regression/test_surrogate_example.py"
+      ]
+    },
+    {
+      "id": "uncertainty",
+      "title": "Unsicherheitsworkflow",
+      "scope": "Reelle skalare Ziele; stationäre Studien",
+      "criterion": "Analytische Momente, Korrelation/Seeds, lokale Ableitungen, Fehler-/Wiederaufnahmefälle.",
+      "contract": "Doc/67_UNCERTAINTY_WORKFLOW.md",
+      "tests": [
+        "tests/unit/test_uncertainty.py",
+        "tests/regression/test_uncertainty_study.py"
+      ]
+    },
+    {
+      "id": "cost",
+      "title": "Genauigkeit und Kosten",
+      "scope": "Tet4/Tet10; SciPy/PETSc direkt",
+      "criterion": "72 historische Läufe, unabhängige Normen; unveränderte Budgets und unerreichte Ziele.",
+      "contract": "Doc/54_ACCURACY_COST_COMPARISON.md",
+      "tests": [
+        "tests/regression/test_accuracy_cost.py",
+        "tests/petsc/test_native_accuracy_cost.py"
+      ]
+    }
+  ]
+}

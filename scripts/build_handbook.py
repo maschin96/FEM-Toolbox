@@ -317,6 +317,9 @@ def main() -> None:
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
     runpy.run_path(str(root / "scripts/api_contracts.py"))["validate_reference"](root)
+    runpy.run_path(str(root / "scripts/verification_artifacts.py"))["check_artifacts"](
+        root
+    )
     matrix = json.loads((root / "Doc/latex/coverage.json").read_text())
     validate_matrix(root, matrix)
     if args.check_matrix:

@@ -11,11 +11,12 @@ oder Messkontakt vorliegt. Die unten dokumentierte öffentliche Recherche
 liefert bislang keinen für den gesamten Vertrag qualifizierten Datensatz.
 Das ist keine Behauptung, dass geeignete Daten grundsätzlich nicht existieren.
 Es wurden keine Messwerte erfunden, keine Kurven digitalisiert und keine
-Materialparameter an Beobachtungen angepasst. #63, #64, #65 und das M9-Releasegate
-bleiben offen. Gemäß Eigentümerauftrag vom 6. Oktober dokumentieren #208/#209
-vorgezogen den vorhandenen Stand; ihre Unsicherheitsabschnitte werden in #64
-nachgeführt. Das hebt dessen Abhängigkeit vom angenommenen Messdatenvertrag
-nicht auf.
+Materialparameter an Beobachtungen angepasst. Die ursprüngliche Planung vom
+6. Oktober band #64 und das Releasegate an diesen experimentellen Vertrag.
+Diese Abhängigkeit wurde am 10. Oktober für die generische Software ausdrücklich
+aufgehoben: #64 ist mit analytischen und synthetischen Referenzen integriert;
+#63/#65 bleiben offene experimentelle Folgeaufgaben. Die Dokumentationsbände
+beschreiben den tatsächlichen Softwareumfang und das weiterhin negative Datengate.
 
 Die [erneute Recherche vom 10. Oktober](66_M9_DATA_SEARCH_AND_RELEASE_OPTIONS.md)
 ergänzt Rohdatei-Sichtungen und API-Lizenzbelege. Auch damit ist noch kein

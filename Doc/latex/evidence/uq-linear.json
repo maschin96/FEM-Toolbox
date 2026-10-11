@@ -1,0 +1,169 @@
+{
+  "scope": "synthetic linear probability reference, no experiment",
+  "formula": "4+2X-Y",
+  "expected_mean_K": 8,
+  "expected_variance_K2": 13,
+  "sampling": {
+    "sampling_schema_version": 1,
+    "method": "Monte_Carlo",
+    "generator": "PCG64/standard_normal/normal_CDF_uniform/eigh_PSD",
+    "size": 100000,
+    "seed": 641,
+    "numpy_version": "2.4.6",
+    "scipy_version": "1.18.1",
+    "correlation": [
+      [
+        1.0,
+        0.5
+      ],
+      [
+        0.5,
+        1.0
+      ]
+    ],
+    "parameters": [
+      {
+        "name": "x",
+        "target": "loads.x.value",
+        "unit": "1",
+        "distribution": {
+          "kind": "normal",
+          "mean": 1.0,
+          "standard_deviation": 2.0
+        },
+        "justification": "Synthetic analytic verification; no measured material"
+      },
+      {
+        "name": "y",
+        "target": "loads.y.value",
+        "unit": "1",
+        "distribution": {
+          "kind": "normal",
+          "mean": -2.0,
+          "standard_deviation": 3.0
+        },
+        "justification": "Synthetic analytic verification; no measured material"
+      }
+    ]
+  },
+  "sample_sha256": "3df0bd38ba79e99b0f2e97fc695e04bf7137396558248e03ff63f3e346c830d0",
+  "summary": {
+    "size": 100000,
+    "unit": "K",
+    "mean": 8.007392184773114,
+    "variance": 13.005819137120481,
+    "quantile_probabilities": [
+      0.025,
+      0.5,
+      0.975
+    ],
+    "quantiles": [
+      0.9583248597815567,
+      8.012778392453052,
+      15.071799332382518
+    ],
+    "numerical_error_bound": 0.01,
+    "convergence": [
+      {
+        "size": 2,
+        "mean": 7.129734949078942,
+        "variance": 7.828527826659314
+      },
+      {
+        "size": 4,
+        "mean": 6.647447531274956,
+        "variance": 12.003370072308462
+      },
+      {
+        "size": 8,
+        "mean": 8.215854639579407,
+        "variance": 34.25758873743864
+      },
+      {
+        "size": 16,
+        "mean": 6.939682321895885,
+        "variance": 21.073179559406373
+      },
+      {
+        "size": 32,
+        "mean": 7.85501353838016,
+        "variance": 18.822476479265134
+      },
+      {
+        "size": 64,
+        "mean": 7.860789801855319,
+        "variance": 15.920520543391936
+      },
+      {
+        "size": 128,
+        "mean": 7.740402064667357,
+        "variance": 15.43145204216516
+      },
+      {
+        "size": 256,
+        "mean": 8.00324447501022,
+        "variance": 14.669536638818226
+      },
+      {
+        "size": 512,
+        "mean": 8.190409222488377,
+        "variance": 13.914882409948834
+      },
+      {
+        "size": 1024,
+        "mean": 8.106843908099288,
+        "variance": 13.66014023462369
+      },
+      {
+        "size": 2048,
+        "mean": 8.03862917503794,
+        "variance": 13.487705896597406
+      },
+      {
+        "size": 4096,
+        "mean": 8.001619068830045,
+        "variance": 13.004653846618462
+      },
+      {
+        "size": 8192,
+        "mean": 7.9976546832487365,
+        "variance": 13.111828284128036
+      },
+      {
+        "size": 16384,
+        "mean": 7.969726479426979,
+        "variance": 13.006941811170066
+      },
+      {
+        "size": 32768,
+        "mean": 8.011510422478874,
+        "variance": 13.007839068760894
+      },
+      {
+        "size": 65536,
+        "mean": 8.008316874682738,
+        "variance": 12.957510102964946
+      },
+      {
+        "size": 100000,
+        "mean": 8.007392184773114,
+        "variance": 13.005819137120481
+      }
+    ]
+  },
+  "sensitivity": {
+    "method": "central_difference",
+    "center": [
+      1.0,
+      -2.0
+    ],
+    "steps": [
+      0.01,
+      0.02
+    ],
+    "gradient": [
+      1.9999999999999574,
+      -0.9999999999999787
+    ]
+  }
+}
