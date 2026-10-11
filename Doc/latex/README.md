@@ -1,7 +1,8 @@
-# M9-Handbuch und PDF-Build (#206–#210)
+# M9-Handbuch und PDF-Build (#206–#211)
 
 Status: Struktur und alle vier Fachbände sind ausgearbeitet;
-**Kandidat**, keine M9-Freigabe. Die Gesamtabnahme #211 bleibt offen. Der Theorieband enthält zehn Kapitel,
+**Kandidat**, keine M9-Freigabe. [Gesamtabnahme #211](ACCEPTANCE.md)
+ordnet die abgeschlossenen Einzelbeiträge und Grenzen zu. Der Theorieband enthält zehn Kapitel,
 SI-/Voigt-Konventionen, starke/schwache Formen, Diskretisierung, Dynamik,
 Solver, Indikatoren und M8-Surrogate. Herkunft und fachliche Eigenprüfung:
 [Theorie-Nachweis](THEORY_VERIFICATION.md), [Themenmatrix](theory-map.json).
@@ -161,3 +162,11 @@ synthetischen Unsicherheits-Lernworkflow samt Quellenprüfung ergänzen.
 M8-Surrogatfehler, M9-Sampling/Sensitivität und offene experimentelle Validierung.
 `python scripts/verification_artifacts.py` prüft Quellen, Tabellen, Figuren und
 den unveränderten 72-Lauf-Bestand; der PDF-Build führt denselben Audit aus.
+
+## Gesamtabnahme und Quellenzuordnung
+
+[Abnahmebericht](ACCEPTANCE.md) dokumentiert den Kandidatenumfang, Artefakt-
+und vollständige visuelle Prüfung. Der Gesamtband enthält den vollständigen
+Quellenanhang; `coverage.json` unterscheidet dokumentierte Fachverträge,
+historische Nachweise, zukünftige Horizonte und offenen experimentellen
+Folgeumfang. Initiale Ownership-Statuswerte bleiben als Planungshistorie erhalten.

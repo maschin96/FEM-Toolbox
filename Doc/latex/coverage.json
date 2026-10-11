@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "scope": "M0–M8 stable sources; M9 planned; M12/M13/M14 only historical/planned where present",
+  "scope": "M0–M9 supported code and documentation; experimental validation deferred; M10–M14 future/historical only",
   "entries": [
     {
       "source": "Doc/01_SCOPE_AND_REQUIREMENTS.md",
@@ -13,6 +13,11 @@
         "chapter": "Doc/latex/chapters/application.tex",
         "recipes": "Doc/latex/recipes.json",
         "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -25,6 +30,11 @@
         "status": "documented-candidate",
         "chapter": "Doc/latex/chapters/theory/scalar.tex",
         "map": "Doc/latex/theory-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -37,6 +47,11 @@
         "status": "documented-candidate",
         "chapter": "Doc/latex/chapters/theory/geometry.tex",
         "map": "Doc/latex/theory-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -44,7 +59,12 @@
       "target": "Doc/latex/chapters/api.tex",
       "canonical": "Doc/04_SOFTWARE_ARCHITECTURE.md",
       "owner": "API-Maintainer",
-      "status": "open"
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/05_VERIFICATION_AND_VALIDATION.md",
@@ -62,6 +82,11 @@
         "chapter": "Doc/latex/chapters/verification.tex",
         "map": "Doc/latex/verification-map.json",
         "evidence": "Doc/latex/VV_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -69,7 +94,12 @@
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "Doc/06_ROADMAP.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Planung / spätere Horizonte ausdrücklich abgegrenzt",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/07_RISKS_AND_DECISIONS.md",
@@ -81,6 +111,11 @@
         "status": "documented-candidate",
         "chapter": "Doc/latex/chapters/theory/conventions.tex",
         "map": "Doc/latex/theory-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -88,14 +123,24 @@
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "Doc/08_REFERENCES.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/09_RELEASE_PROCESS.md",
       "target": "Doc/latex/chapters/verification.tex",
       "canonical": "Doc/09_RELEASE_PROCESS.md",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "historical"
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/10_LINEAR_ELASTICITY.md",
@@ -107,6 +152,11 @@
         "status": "documented-candidate",
         "chapter": "Doc/latex/chapters/theory/scalar.tex",
         "map": "Doc/latex/theory-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -119,6 +169,11 @@
         "status": "documented-candidate",
         "chapter": "Doc/latex/chapters/theory/mechanics.tex",
         "map": "Doc/latex/theory-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -131,6 +186,11 @@
         "status": "documented-candidate",
         "chapter": "Doc/latex/chapters/theory/scalar.tex",
         "map": "Doc/latex/theory-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -138,7 +198,12 @@
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "Doc/13_PRODUCT_VISION.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Planung / spätere Horizonte ausdrücklich abgegrenzt",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/14_THERMOMECHANICS.md",
@@ -150,6 +215,11 @@
         "status": "documented-candidate",
         "chapter": "Doc/latex/chapters/theory/mechanics.tex",
         "map": "Doc/latex/theory-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -162,6 +232,11 @@
         "status": "documented-candidate",
         "chapter": "Doc/latex/chapters/theory/coupling.tex",
         "map": "Doc/latex/theory-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -174,6 +249,11 @@
         "status": "documented-candidate",
         "chapter": "Doc/latex/chapters/theory/geometry.tex",
         "map": "Doc/latex/theory-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -186,6 +266,11 @@
         "status": "documented-candidate",
         "chapter": "Doc/latex/chapters/theory/solvers.tex",
         "map": "Doc/latex/theory-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -193,14 +278,24 @@
       "target": "Doc/latex/chapters/verification.tex",
       "canonical": "Doc/18_PIEZO_D33_VERIFICATION.md",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "historical"
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/19_MATERIAL_REGIONS.md",
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "Doc/19_MATERIAL_REGIONS.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/20_ELECTRODES.md",
@@ -212,6 +307,11 @@
         "status": "documented-candidate",
         "chapter": "Doc/latex/chapters/theory/coupling.tex",
         "map": "Doc/latex/theory-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -230,6 +330,11 @@
         "chapter": "Doc/latex/chapters/application.tex",
         "recipes": "Doc/latex/recipes.json",
         "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -242,6 +347,11 @@
         "status": "documented-candidate",
         "chapter": "Doc/latex/chapters/theory/coupling.tex",
         "map": "Doc/latex/theory-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -255,6 +365,11 @@
         "chapter": "Doc/latex/chapters/application.tex",
         "recipes": "Doc/latex/recipes.json",
         "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -268,6 +383,11 @@
         "chapter": "Doc/latex/chapters/application.tex",
         "recipes": "Doc/latex/recipes.json",
         "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -280,6 +400,11 @@
         "status": "documented-candidate",
         "chapter": "Doc/latex/chapters/theory/evidence.tex",
         "map": "Doc/latex/theory-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -287,42 +412,72 @@
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "Doc/26_VALIDITY_AND_LIMITS.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/27_DISTRIBUTION_INVENTORY.md",
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "Doc/27_DISTRIBUTION_INVENTORY.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/28_DEPENDENCY_COMPATIBILITY.md",
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "Doc/28_DEPENDENCY_COMPATIBILITY.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/29_PUBLIC_API_CONTRACT.md",
       "target": "Doc/latex/chapters/api.tex",
       "canonical": "Doc/29_PUBLIC_API_CONTRACT.md",
       "owner": "API-Maintainer",
-      "status": "open"
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/29_RELEASE_ARTIFACTS_AND_PROTECTION.md",
       "target": "Doc/latex/chapters/verification.tex",
       "canonical": "Doc/29_RELEASE_ARTIFACTS_AND_PROTECTION.md",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "historical"
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/30_M6_M7_DEVELOPMENT_PLAN.md",
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "Doc/30_M6_M7_DEVELOPMENT_PLAN.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Planung / spätere Horizonte ausdrücklich abgegrenzt",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/31_TET4_STORAGE.md",
@@ -334,6 +489,11 @@
         "status": "documented-candidate",
         "chapter": "Doc/latex/chapters/theory/dynamics.tex",
         "map": "Doc/latex/theory-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -341,7 +501,12 @@
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "Doc/32_MATERIAL_LIBRARY.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/33_TRANSIENT_HEAT.md",
@@ -365,6 +530,11 @@
         "chapter": "Doc/latex/chapters/verification.tex",
         "map": "Doc/latex/verification-map.json",
         "evidence": "Doc/latex/VV_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -383,6 +553,11 @@
         "chapter": "Doc/latex/chapters/application.tex",
         "recipes": "Doc/latex/recipes.json",
         "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -395,6 +570,11 @@
         "status": "documented-candidate",
         "chapter": "Doc/latex/chapters/theory/dynamics.tex",
         "map": "Doc/latex/theory-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -407,6 +587,11 @@
         "status": "documented-candidate",
         "chapter": "Doc/latex/chapters/theory/dynamics.tex",
         "map": "Doc/latex/theory-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -419,6 +604,11 @@
         "status": "documented-candidate",
         "chapter": "Doc/latex/chapters/theory/solvers.tex",
         "map": "Doc/latex/theory-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -437,6 +627,11 @@
         "chapter": "Doc/latex/chapters/application.tex",
         "recipes": "Doc/latex/recipes.json",
         "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -461,6 +656,11 @@
         "chapter": "Doc/latex/chapters/verification.tex",
         "map": "Doc/latex/verification-map.json",
         "evidence": "Doc/latex/VV_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -474,6 +674,11 @@
         "chapter": "Doc/latex/chapters/application.tex",
         "recipes": "Doc/latex/recipes.json",
         "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -498,6 +703,11 @@
         "chapter": "Doc/latex/chapters/verification.tex",
         "map": "Doc/latex/verification-map.json",
         "evidence": "Doc/latex/VV_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -516,6 +726,11 @@
         "chapter": "Doc/latex/chapters/application.tex",
         "recipes": "Doc/latex/recipes.json",
         "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -540,6 +755,11 @@
         "chapter": "Doc/latex/chapters/verification.tex",
         "map": "Doc/latex/verification-map.json",
         "evidence": "Doc/latex/VV_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -553,6 +773,11 @@
         "chapter": "Doc/latex/chapters/application.tex",
         "recipes": "Doc/latex/recipes.json",
         "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -572,6 +797,11 @@
         "chapter": "Doc/latex/chapters/verification.tex",
         "map": "Doc/latex/verification-map.json",
         "evidence": "Doc/latex/VV_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -591,6 +821,11 @@
         "chapter": "Doc/latex/chapters/verification.tex",
         "map": "Doc/latex/verification-map.json",
         "evidence": "Doc/latex/VV_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -610,6 +845,11 @@
         "chapter": "Doc/latex/chapters/verification.tex",
         "map": "Doc/latex/verification-map.json",
         "evidence": "Doc/latex/VV_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -629,6 +869,11 @@
         "chapter": "Doc/latex/chapters/verification.tex",
         "map": "Doc/latex/verification-map.json",
         "evidence": "Doc/latex/VV_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -653,6 +898,11 @@
         "chapter": "Doc/latex/chapters/verification.tex",
         "map": "Doc/latex/verification-map.json",
         "evidence": "Doc/latex/VV_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -677,6 +927,11 @@
         "chapter": "Doc/latex/chapters/verification.tex",
         "map": "Doc/latex/verification-map.json",
         "evidence": "Doc/latex/VV_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -701,6 +956,11 @@
         "chapter": "Doc/latex/chapters/verification.tex",
         "map": "Doc/latex/verification-map.json",
         "evidence": "Doc/latex/VV_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -725,6 +985,11 @@
         "chapter": "Doc/latex/chapters/verification.tex",
         "map": "Doc/latex/verification-map.json",
         "evidence": "Doc/latex/VV_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -749,6 +1014,11 @@
         "chapter": "Doc/latex/chapters/verification.tex",
         "map": "Doc/latex/verification-map.json",
         "evidence": "Doc/latex/VV_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -773,6 +1043,11 @@
         "chapter": "Doc/latex/chapters/verification.tex",
         "map": "Doc/latex/verification-map.json",
         "evidence": "Doc/latex/VV_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -791,6 +1066,11 @@
         "chapter": "Doc/latex/chapters/application.tex",
         "recipes": "Doc/latex/recipes.json",
         "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -803,6 +1083,11 @@
         "status": "documented-candidate",
         "chapter": "Doc/latex/chapters/theory/surrogates.tex",
         "map": "Doc/latex/theory-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -815,6 +1100,11 @@
         "status": "documented-candidate",
         "chapter": "Doc/latex/chapters/theory/surrogates.tex",
         "map": "Doc/latex/theory-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -827,6 +1117,11 @@
         "status": "documented-candidate",
         "chapter": "Doc/latex/chapters/theory/surrogates.tex",
         "map": "Doc/latex/theory-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -845,6 +1140,11 @@
         "chapter": "Doc/latex/chapters/application.tex",
         "recipes": "Doc/latex/recipes.json",
         "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -869,6 +1169,11 @@
         "chapter": "Doc/latex/chapters/verification.tex",
         "map": "Doc/latex/verification-map.json",
         "evidence": "Doc/latex/VV_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -893,6 +1198,11 @@
         "chapter": "Doc/latex/chapters/verification.tex",
         "map": "Doc/latex/verification-map.json",
         "evidence": "Doc/latex/VV_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -906,6 +1216,11 @@
         "chapter": "Doc/latex/chapters/application.tex",
         "recipes": "Doc/latex/recipes.json",
         "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -913,231 +1228,396 @@
       "target": "Doc/latex/chapters/verification.tex",
       "canonical": "Doc/63_STUDY_RECIPE_ACCEPTANCE.md",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "historical"
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/64_M8_RELEASE_VERIFICATION.md",
       "target": "Doc/latex/chapters/verification.tex",
       "canonical": "Doc/64_M8_RELEASE_VERIFICATION.md",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "historical"
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/75_FEMANTIS_CORPORATE_IDENTITY.md",
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "Doc/75_FEMANTIS_CORPORATE_IDENTITY.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Planung / spätere Horizonte ausdrücklich abgegrenzt",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/76_FEMANTIS_RENAMING_PLAN.md",
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "Doc/76_FEMANTIS_RENAMING_PLAN.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Planung / spätere Horizonte ausdrücklich abgegrenzt",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/77_FEMANTIS_MIGRATION_CONTRACT.md",
       "target": "Doc/latex/chapters/api.tex",
       "canonical": "Doc/77_FEMANTIS_MIGRATION_CONTRACT.md",
       "owner": "API-Maintainer",
-      "status": "open"
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Planung / spätere Horizonte ausdrücklich abgegrenzt",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/README.md",
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "Doc/README.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/brand/README.md",
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "Doc/brand/README.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Planung / spätere Horizonte ausdrücklich abgegrenzt",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/brand/assets/femantis-brand-board-reference.png",
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "Doc/brand/assets/femantis-brand-board-reference.png",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Planung / spätere Horizonte ausdrücklich abgegrenzt",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/brand/femantis-name-inventory.json",
       "target": "Doc/latex/chapters/application.tex",
       "canonical": "Doc/brand/femantis-name-inventory.json",
       "owner": "Dokumentations-Maintainer",
-      "status": "open"
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Planung / spätere Horizonte ausdrücklich abgegrenzt",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/evidence/issue61/artifacts.json",
       "target": "Doc/latex/chapters/verification.tex",
       "canonical": "Doc/evidence/issue61/artifacts.json",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "historical"
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/evidence/issue61/sdist-heat.json",
       "target": "Doc/latex/chapters/verification.tex",
       "canonical": "Doc/evidence/issue61/sdist-heat.json",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "historical"
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/evidence/issue61/sdist-piezo.json",
       "target": "Doc/latex/chapters/verification.tex",
       "canonical": "Doc/evidence/issue61/sdist-piezo.json",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "historical"
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/evidence/issue61/wheel-heat.json",
       "target": "Doc/latex/chapters/verification.tex",
       "canonical": "Doc/evidence/issue61/wheel-heat.json",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "historical"
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/evidence/issue61/wheel-piezo.json",
       "target": "Doc/latex/chapters/verification.tex",
       "canonical": "Doc/evidence/issue61/wheel-piezo.json",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "historical"
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/evidence/issue62/artifacts.json",
       "target": "Doc/latex/chapters/verification.tex",
       "canonical": "Doc/evidence/issue62/artifacts.json",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "historical"
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/evidence/issue62/sdist-heat.json",
       "target": "Doc/latex/chapters/verification.tex",
       "canonical": "Doc/evidence/issue62/sdist-heat.json",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "historical"
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/evidence/issue62/sdist-piezo.json",
       "target": "Doc/latex/chapters/verification.tex",
       "canonical": "Doc/evidence/issue62/sdist-piezo.json",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "historical"
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/evidence/issue62/sdist-surrogate.json",
       "target": "Doc/latex/chapters/verification.tex",
       "canonical": "Doc/evidence/issue62/sdist-surrogate.json",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "historical"
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/evidence/issue62/wheel-heat.json",
       "target": "Doc/latex/chapters/verification.tex",
       "canonical": "Doc/evidence/issue62/wheel-heat.json",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "historical"
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/evidence/issue62/wheel-piezo.json",
       "target": "Doc/latex/chapters/verification.tex",
       "canonical": "Doc/evidence/issue62/wheel-piezo.json",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "historical"
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/evidence/issue62/wheel-surrogate.json",
       "target": "Doc/latex/chapters/verification.tex",
       "canonical": "Doc/evidence/issue62/wheel-surrogate.json",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "historical"
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/latex/README.md",
       "target": "Doc/latex/chapters/theory.tex",
       "canonical": "Doc/latex/README.md",
       "owner": "Dokumentations-Maintainer",
-      "status": "sample"
+      "status": "sample",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Dokumentationsnachweis / Kandidatenpflege",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/latex/VERIFICATION.md",
       "canonical": "Doc/latex/VERIFICATION.md",
       "target": "Doc/latex/chapters/verification.tex",
       "owner": "Dokumentations-Maintainer",
-      "status": "sample"
+      "status": "sample",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Dokumentationsnachweis / Kandidatenpflege",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/releases/v0.1.0.md",
       "target": "Doc/latex/chapters/verification.tex",
       "canonical": "Doc/releases/v0.1.0.md",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "historical"
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/releases/v0.2.0.md",
       "target": "Doc/latex/chapters/verification.tex",
       "canonical": "Doc/releases/v0.2.0.md",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "historical"
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/releases/v0.3.0.md",
       "target": "Doc/latex/chapters/verification.tex",
       "canonical": "Doc/releases/v0.3.0.md",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "historical"
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/releases/v0.4.0.md",
       "target": "Doc/latex/chapters/verification.tex",
       "canonical": "Doc/releases/v0.4.0.md",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "historical"
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/releases/v0.5.0.md",
       "target": "Doc/latex/chapters/verification.tex",
       "canonical": "Doc/releases/v0.5.0.md",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "historical"
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/releases/v1.0.0-draft.md",
       "target": "Doc/latex/chapters/verification.tex",
       "canonical": "Doc/releases/v1.0.0-draft.md",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "historical"
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/releases/v1.0.0.md",
       "target": "Doc/latex/chapters/verification.tex",
       "canonical": "Doc/releases/v1.0.0.md",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "historical"
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/releases/v1.1.0.md",
       "target": "Doc/latex/chapters/verification.tex",
       "canonical": "Doc/releases/v1.1.0.md",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "historical"
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/releases/v1.2.0.md",
       "target": "Doc/latex/chapters/verification.tex",
       "canonical": "Doc/releases/v1.2.0.md",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "historical"
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/releases/v1.3.0.md",
       "target": "Doc/latex/chapters/verification.tex",
       "canonical": "Doc/releases/v1.3.0.md",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "historical"
+      "status": "historical",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Historischer Nachweis / keine aktuelle Freigabe",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "INSTALL.md",
@@ -1150,6 +1630,11 @@
         "chapter": "Doc/latex/chapters/application.tex",
         "recipes": "Doc/latex/recipes.json",
         "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1163,6 +1648,11 @@
         "chapter": "Doc/latex/chapters/application.tex",
         "recipes": "Doc/latex/recipes.json",
         "evidence": "Doc/latex/USER_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1177,6 +1667,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/overview.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1196,6 +1691,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/development.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1210,6 +1710,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/mesh-materials.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1229,6 +1734,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/development.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1243,6 +1753,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/solvers.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1257,6 +1772,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/development.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1271,6 +1791,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/overview.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1285,6 +1810,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/development.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1299,6 +1829,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/artifacts.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1318,6 +1853,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/mesh-materials.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1332,6 +1872,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/mesh-materials.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1346,6 +1891,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/workflows.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1360,6 +1910,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/development.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1374,6 +1929,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/development.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1388,6 +1948,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/workflows.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1402,6 +1967,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/workflows.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1416,6 +1986,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/artifacts.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1430,6 +2005,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/solvers.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1449,6 +2029,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/workflows.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1468,6 +2053,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/workflows.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1487,6 +2077,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/workflows.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1501,6 +2096,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/solvers.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1515,6 +2115,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/workflows.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1526,6 +2131,11 @@
       "theory_coverage": {
         "status": "documented-candidate",
         "map": "Doc/latex/theory-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Dokumentationsnachweis / Kandidatenpflege",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1537,6 +2147,11 @@
       "user_coverage": {
         "status": "documented-candidate",
         "recipes": "Doc/latex/recipes.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Dokumentationsnachweis / Kandidatenpflege",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1550,6 +2165,11 @@
         "chapter": "Doc/latex/chapters/verification.tex",
         "map": "Doc/latex/verification-map.json",
         "evidence": "Doc/latex/VV_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Beschaffungssichtung / experimenteller Folgeumfang offen",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1563,6 +2183,11 @@
         "chapter": "Doc/latex/chapters/verification.tex",
         "map": "Doc/latex/verification-map.json",
         "evidence": "Doc/latex/VV_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Beschaffungssichtung / experimenteller Folgeumfang offen",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1570,63 +2195,108 @@
       "target": "Doc/latex/chapters/verification.tex",
       "canonical": "Doc/evidence/issue63/README.md",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "open"
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Beschaffungssichtung / experimenteller Folgeumfang offen",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/evidence/issue63/research-2026-10-10.json",
       "target": "Doc/latex/chapters/verification.tex",
       "canonical": "Doc/evidence/issue63/research-2026-10-10.json",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "open"
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Beschaffungssichtung / experimenteller Folgeumfang offen",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/evidence/issue63/screening-2026-10-10/lightfilm-Figure_4d_540nm.txt",
       "target": "Doc/latex/chapters/verification.tex",
       "canonical": "Doc/evidence/issue63/screening-2026-10-10/lightfilm-Figure_4d_540nm.txt",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "open"
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Beschaffungssichtung / experimenteller Folgeumfang offen",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/evidence/issue63/screening-2026-10-10/polaron-Fig3-A-displacement.csv",
       "target": "Doc/latex/chapters/verification.tex",
       "canonical": "Doc/evidence/issue63/screening-2026-10-10/polaron-Fig3-A-displacement.csv",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "open"
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Beschaffungssichtung / experimenteller Folgeumfang offen",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/evidence/issue63/screening-2026-10-10/polaron-figS2-d33-U-f.csv",
       "target": "Doc/latex/chapters/verification.tex",
       "canonical": "Doc/evidence/issue63/screening-2026-10-10/polaron-figS2-d33-U-f.csv",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "open"
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Beschaffungssichtung / experimenteller Folgeumfang offen",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/evidence/issue63/screening-2026-10-10/polaron-metadata-excerpt.json",
       "target": "Doc/latex/chapters/verification.tex",
       "canonical": "Doc/evidence/issue63/screening-2026-10-10/polaron-metadata-excerpt.json",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "open"
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Beschaffungssichtung / experimenteller Folgeumfang offen",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/evidence/issue63/screening-2026-10-10/greenpiezo-metadata-excerpt.json",
       "target": "Doc/latex/chapters/verification.tex",
       "canonical": "Doc/evidence/issue63/screening-2026-10-10/greenpiezo-metadata-excerpt.json",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "open"
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Beschaffungssichtung / experimenteller Folgeumfang offen",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/evidence/issue63/screening-2026-10-10/lightfilm-metadata-excerpt.json",
       "target": "Doc/latex/chapters/verification.tex",
       "canonical": "Doc/evidence/issue63/screening-2026-10-10/lightfilm-metadata-excerpt.json",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "open"
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Beschaffungssichtung / experimenteller Folgeumfang offen",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/evidence/issue63/screening-2026-10-10/relaxor-metadata-excerpt.json",
       "target": "Doc/latex/chapters/verification.tex",
       "canonical": "Doc/evidence/issue63/screening-2026-10-10/relaxor-metadata-excerpt.json",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "open"
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Beschaffungssichtung / experimenteller Folgeumfang offen",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     },
     {
       "source": "Doc/67_UNCERTAINTY_WORKFLOW.md",
@@ -1648,6 +2318,11 @@
         "chapter": "Doc/latex/chapters/verification.tex",
         "map": "Doc/latex/verification-map.json",
         "evidence": "Doc/latex/VV_VERIFICATION.md"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1664,6 +2339,11 @@
       "api_coverage": {
         "status": "documented-candidate",
         "contract": "Doc/latex/uncertainty-api.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Dokumentationsnachweis / Kandidatenpflege",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1680,6 +2360,11 @@
       "api_coverage": {
         "status": "documented-candidate",
         "contract": "Doc/latex/uncertainty-api.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Fachvertrag / unterstützter Umfang",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1699,6 +2384,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/workflows.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1713,6 +2403,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/mesh-materials.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1727,6 +2422,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/development.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1741,6 +2441,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/development.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1755,6 +2460,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/development.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1769,6 +2479,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/development.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1783,6 +2498,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/development.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1797,6 +2517,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/development.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1811,6 +2536,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/development.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1825,6 +2555,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/development.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1839,6 +2574,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/development.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1853,6 +2593,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/artifacts.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1867,6 +2612,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/mesh-materials.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1881,6 +2631,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/artifacts.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1895,6 +2650,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/artifacts.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1909,6 +2669,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/mesh-materials.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1923,6 +2688,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/mesh-materials.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1937,6 +2707,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/mesh-materials.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1951,6 +2726,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/mesh-materials.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1965,6 +2745,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/mesh-materials.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1979,6 +2764,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/mesh-materials.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -1993,6 +2783,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/mesh-materials.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -2007,6 +2802,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/mesh-materials.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -2021,6 +2821,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/development.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -2035,6 +2840,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/development.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -2049,6 +2859,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/development.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -2063,6 +2878,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/development.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -2077,6 +2897,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/workflows.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -2091,6 +2916,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/workflows.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -2105,6 +2935,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/solvers.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -2119,6 +2954,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/solvers.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -2133,6 +2973,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/solvers.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -2147,6 +2992,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/solvers.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -2161,6 +3011,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/solvers.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -2175,6 +3030,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/solvers.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -2189,6 +3049,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/solvers.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -2203,6 +3068,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/solvers.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -2217,6 +3087,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/solvers.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -2231,6 +3106,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/solvers.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -2245,6 +3125,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/solvers.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -2259,6 +3144,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/solvers.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -2273,6 +3163,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/solvers.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -2287,6 +3182,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/solvers.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -2301,6 +3201,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/solvers.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -2315,6 +3220,11 @@
         "inventory": "Doc/latex/api-inventory.json",
         "map": "Doc/latex/api-map.json",
         "contract": "Doc/latex/chapters/api/solvers.tex"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Öffentliche API / quellengeprüfte Definition",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -2326,6 +3236,11 @@
       "api_coverage": {
         "status": "documented-candidate",
         "map": "Doc/latex/api-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Dokumentationsnachweis / Kandidatenpflege",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -2337,6 +3252,11 @@
       "api_coverage": {
         "status": "documented-candidate",
         "map": "Doc/latex/api-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Dokumentationsnachweis / Kandidatenpflege",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -2348,6 +3268,11 @@
       "api_coverage": {
         "status": "documented-candidate",
         "map": "Doc/latex/api-map.json"
+      },
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Dokumentationsnachweis / Kandidatenpflege",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
       }
     },
     {
@@ -2355,7 +3280,24 @@
       "target": "Doc/latex/chapters/verification/reproduction.tex",
       "canonical": "Doc/latex/VV_VERIFICATION.md",
       "owner": "V&V- und Release-Verantwortliche",
-      "status": "sample"
+      "status": "sample",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Dokumentationsnachweis / Kandidatenpflege",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
+    },
+    {
+      "source": "Doc/latex/ACCEPTANCE.md",
+      "target": "Doc/latex/chapters/documentation-sources.tex",
+      "canonical": "Doc/latex/ACCEPTANCE.md",
+      "owner": "Dokumentations- und Release-Verantwortliche",
+      "status": "sample",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Dokumentationsnachweis / Kandidatenpflege",
+        "evidence": "Doc/latex/ACCEPTANCE.md"
+      }
     }
   ],
   "planned": [
@@ -2364,7 +3306,8 @@
       "topic": "Messdatenvertrag",
       "target": "Doc/latex/chapters/verification.tex",
       "status": "open",
-      "owner": "V&V-Verantwortliche"
+      "owner": "V&V-Verantwortliche",
+      "candidate_status": "deferred-experimental-followup"
     },
     {
       "issue": 64,
@@ -2379,7 +3322,8 @@
       "topic": "Experimentelle Validierung",
       "target": "Doc/latex/chapters/verification.tex",
       "status": "open",
-      "owner": "V&V-Verantwortliche"
+      "owner": "V&V-Verantwortliche",
+      "candidate_status": "deferred-experimental-followup"
     }
   ]
 }
