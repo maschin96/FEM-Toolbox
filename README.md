@@ -332,7 +332,8 @@ Das [deutschsprachige M9-Handbuch](Doc/latex/README.md) umfasst Theorie,
 Benutzerrezepte, vollständige API-/Entwicklerreferenz und Verifikation/Unsicherheit.
 Ein Befehl baut Gesamtband, vier Einzelbände, Quellenarchiv und Prüfsummen.
 [Gesamtabnahme und Grenzen](Doc/latex/ACCEPTANCE.md). Finale PDF-/Quellenartefakte
-sind dem v1.4.0-Release zugeordnet; Standardbuilds bleiben Kandidaten.
+bilden die v1.4.0-Abnahmebasis. Der M10-Kandidat ergänzt Theorie, Anwendung,
+API und Verifikation für adaptive stationäre Wärme; Standardbuilds bleiben Kandidaten.
 Experimentelle Validierung ist weiterhin offen.
 
 ## Adaptive stationäre Wärme (M10-Kandidat)

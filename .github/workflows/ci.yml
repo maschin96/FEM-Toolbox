@@ -182,7 +182,8 @@ jobs:
           "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/surrogate_heat/run.py"
       - name: Install visualization extra and render installed-package example
         run: |
-          "$RUNNER_TEMP/artifact-env/bin/python" -m pip install 'fem-toolbox[visualization]==1.4.0'
+          candidate_version=$("$RUNNER_TEMP/artifact-env/bin/python" -I -c 'from importlib.metadata import version; print(version("fem-toolbox"))')
+          "$RUNNER_TEMP/artifact-env/bin/python" -m pip install "fem-toolbox[visualization]==$candidate_version"
           cd "$RUNNER_TEMP"
           "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/field_visualization/run.py" --output field_images
           "$RUNNER_TEMP/artifact-env/bin/python" -I -c 'from pathlib import Path; from PIL import Image; paths=list(Path("field_images").glob("*.jpg")); assert len(paths)==6; images=[Image.open(p) for p in paths]; assert all(i.format=="JPEG" and i.size==(1200,900) for i in images); [i.close() for i in images]'

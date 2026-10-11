@@ -177,3 +177,12 @@ ausgewählt. Fehlendes PETSc wird beim Backendaufbau ausdrücklich diagnostizier
 
 `python -m pip install '.[visualization]'` ergänzt Matplotlib. Ohne dieses Extra
 bleiben Solver nutzbar. [API und Headless-Beispiel](Doc/62_FIELD_VISUALIZATION.md).
+
+## M10-Entwicklungskandidat
+
+Der Branch `codex/milestone-m10` baut `1.5.0.dev1` mit adaptiver stationärer
+Tet4-Wärme. Dies ist kein final veröffentlichtes v1.5.0-Paket.
+Nach Installation aus dem Kandidaten kann das neue Beispiel mit
+`python examples/adaptive_heat/run_adaptive.py --steps 4 --output results/adaptive`
+ausgeführt werden. [Vertrag und Grenzen](Doc/70_ADAPTIVE_HEAT_WORKFLOW.md),
+[offene endgültige Release-Gates](Doc/71_M10_RELEASE_VERIFICATION.md).
