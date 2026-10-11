@@ -327,7 +327,9 @@ ergänzt den M8-Stand. Grenzen und Migration stehen in den Release Notes.
 
 [Zwei reproduzierbare Wärme-/Piezo-Studienrezepte](examples/study_recipes/README.md) und [Abnahmeprotokoll](Doc/63_STUDY_RECIPE_ACCEPTANCE.md) ergänzen den M8-Stand (#61).
 
-Die [M9-LaTeX-Handbuchstruktur](Doc/latex/README.md) bietet einen getrennten
-PDF-Build und den ausgearbeiteten mathematischen Theorieband (#207).
-Anwendungs-, API- und Nachweisband sowie die Gesamtabnahme bleiben offen;
-die PDFs sind Kandidatenartefakte.
+Das [deutschsprachige M9-Handbuch](Doc/latex/README.md) umfasst Theorie,
+Benutzerrezepte, vollständige API-/Entwicklerreferenz und Verifikation/Unsicherheit.
+Ein Befehl baut Gesamtband, vier Einzelbände, Quellenarchiv und Prüfsummen.
+[Gesamtabnahme und Grenzen](Doc/latex/ACCEPTANCE.md). Die PDFs bleiben bis
+zur Veröffentlichung von v1.4.0 Kandidatenartefakte; experimentelle Validierung
+ist weiterhin offen.

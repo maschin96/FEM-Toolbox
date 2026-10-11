@@ -159,7 +159,10 @@ Verifikationsdokumente benennen ihren jeweiligen Nachweisumfang ausdrücklich.
 
 - [API-/Entwicklerband: vollständiges Inventar, Fachverträge und Driftprüfung (#209)](latex/API_VERIFICATION.md)
 
-Nachweisband #210 und redaktionelle Gesamtabnahme #211 bleiben offen. Der generische Unsicherheitsworkflow #64 ist im Kandidatenstand ergänzt.
+- [Verifikation und Unsicherheit: Quellenaudit, Suchbefunde und offene Validierung (#210)](latex/VV_VERIFICATION.md)
+- [Redaktionelle Gesamtabnahme, Archiv und Artefaktprüfung (#211)](latex/ACCEPTANCE.md)
+
+Alle vier Fachbände sind im Kandidatenstand ausgearbeitet; #66 übernimmt die Veröffentlichung.
 
 ## M9 — Unsicherheit und offener experimenteller Folgeumfang
 

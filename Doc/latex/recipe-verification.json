@@ -1,0 +1,394 @@
+{
+  "schema": 1,
+  "date": "2026-10-11",
+  "basis_commit": "fe045d6",
+  "scope": "Fresh isolated wheel and actual extracted handbook archive; no PYTHONPATH; python -I",
+  "wheel_sha256": "74000b80f22214cd932933ac8c9a6cfcb07c19e391b56b186db88fc3c5e7719e",
+  "versions": {
+    "fem-toolbox": "1.3.0",
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "meshio": "5.3.5",
+    "matplotlib": "3.11.2"
+  },
+  "recipes": [
+    {
+      "id": "steady-heat",
+      "runs": [
+        {
+          "command": [
+            "python",
+            "-I",
+            "examples/steady_heat.py"
+          ],
+          "returncode": 0
+        }
+      ]
+    },
+    {
+      "id": "elastic-tension",
+      "runs": [
+        {
+          "command": [
+            "python",
+            "-I",
+            "examples/elastic_tension.py"
+          ],
+          "returncode": 0
+        }
+      ]
+    },
+    {
+      "id": "capacitor",
+      "runs": [
+        {
+          "command": [
+            "python",
+            "-I",
+            "examples/parallel_plate.py"
+          ],
+          "returncode": 0
+        }
+      ]
+    },
+    {
+      "id": "expansion",
+      "runs": [
+        {
+          "command": [
+            "python",
+            "-I",
+            "examples/thermal_expansion.py"
+          ],
+          "returncode": 0
+        }
+      ]
+    },
+    {
+      "id": "piezo-d33",
+      "runs": [
+        {
+          "command": [
+            "python",
+            "-I",
+            "examples/piezo_d33.py"
+          ],
+          "returncode": 0
+        }
+      ]
+    },
+    {
+      "id": "thermopiezo",
+      "runs": [
+        {
+          "command": [
+            "python",
+            "-I",
+            "examples/thermopiezoelectric/run.py",
+            "--output",
+            "results/thermopiezo"
+          ],
+          "returncode": 0
+        }
+      ]
+    },
+    {
+      "id": "transient-heat",
+      "runs": [
+        {
+          "command": [
+            "python",
+            "-I",
+            "examples/transient_heat/run.py"
+          ],
+          "returncode": 0
+        }
+      ]
+    },
+    {
+      "id": "piezo-dynamics",
+      "runs": [
+        {
+          "command": [
+            "python",
+            "-I",
+            "examples/piezo_dynamics/run.py",
+            "--output",
+            "results/dynamics"
+          ],
+          "returncode": 0
+        }
+      ]
+    },
+    {
+      "id": "tet10-heat",
+      "runs": [
+        {
+          "command": [
+            "python",
+            "-I",
+            "examples/tet10_heat/run.py",
+            "--output",
+            "results/tet10-heat"
+          ],
+          "returncode": 0
+        }
+      ]
+    },
+    {
+      "id": "tet10-electric",
+      "runs": [
+        {
+          "command": [
+            "python",
+            "-I",
+            "examples/tet10_electrostatics/run.py",
+            "--output",
+            "results/tet10-electric"
+          ],
+          "returncode": 0
+        }
+      ]
+    },
+    {
+      "id": "tet10-elastic",
+      "runs": [
+        {
+          "command": [
+            "python",
+            "-I",
+            "examples/tet10_elasticity/run.py",
+            "--output",
+            "results/tet10-elastic"
+          ],
+          "returncode": 0
+        }
+      ]
+    },
+    {
+      "id": "tet10-piezo",
+      "runs": [
+        {
+          "command": [
+            "python",
+            "-I",
+            "examples/tet10_piezoelectric/run.py",
+            "--output",
+            "results/tet10-piezo"
+          ],
+          "returncode": 0
+        }
+      ]
+    },
+    {
+      "id": "tet10-thermomechanics",
+      "runs": [
+        {
+          "command": [
+            "python",
+            "-I",
+            "examples/tet10_thermomechanics/run.py",
+            "--output",
+            "results/tet10-expansion"
+          ],
+          "returncode": 0
+        }
+      ]
+    },
+    {
+      "id": "tet10-thermopiezo",
+      "runs": [
+        {
+          "command": [
+            "python",
+            "-I",
+            "examples/tet10_thermopiezoelectric/run.py",
+            "--output",
+            "results/tet10-thermopiezo"
+          ],
+          "returncode": 0
+        }
+      ]
+    },
+    {
+      "id": "tet10-modes",
+      "runs": [
+        {
+          "command": [
+            "python",
+            "-I",
+            "examples/tet10_modes/run.py",
+            "--output",
+            "results/tet10-modes"
+          ],
+          "returncode": 0
+        }
+      ]
+    },
+    {
+      "id": "tet10-newmark",
+      "runs": [
+        {
+          "command": [
+            "python",
+            "-I",
+            "examples/tet10_newmark/run.py",
+            "--output",
+            "results/tet10-newmark"
+          ],
+          "returncode": 0
+        }
+      ]
+    },
+    {
+      "id": "tet10-harmonic",
+      "runs": [
+        {
+          "command": [
+            "python",
+            "-I",
+            "examples/tet10_harmonic/run.py",
+            "--output",
+            "results/tet10-harmonic"
+          ],
+          "returncode": 0
+        }
+      ]
+    },
+    {
+      "id": "study-resume",
+      "runs": [
+        {
+          "command": [
+            "python",
+            "-I",
+            "examples/parameter_study/run.py",
+            "--output",
+            "results/study",
+            "--max-cases",
+            "1"
+          ],
+          "returncode": 0
+        },
+        {
+          "command": [
+            "python",
+            "-I",
+            "examples/parameter_study/run.py",
+            "--output",
+            "results/study"
+          ],
+          "returncode": 0
+        },
+        {
+          "command": [
+            "python",
+            "-I",
+            "examples/parameter_study/run.py",
+            "--output",
+            "results/study"
+          ],
+          "returncode": 0
+        }
+      ]
+    },
+    {
+      "id": "study-report",
+      "runs": [
+        {
+          "command": [
+            "python",
+            "-I",
+            "examples/parameter_study/report.py",
+            "--study",
+            "results/study",
+            "--output",
+            "results/table"
+          ],
+          "returncode": 0
+        }
+      ]
+    },
+    {
+      "id": "study-recipes",
+      "runs": [
+        {
+          "command": [
+            "python",
+            "-I",
+            "examples/study_recipes/run.py",
+            "heat",
+            "--output",
+            "results/heat-study"
+          ],
+          "returncode": 0
+        },
+        {
+          "command": [
+            "python",
+            "-I",
+            "examples/study_recipes/run.py",
+            "piezo",
+            "--output",
+            "results/piezo-study"
+          ],
+          "returncode": 0
+        }
+      ]
+    },
+    {
+      "id": "surrogate",
+      "runs": [
+        {
+          "command": [
+            "python",
+            "-I",
+            "examples/surrogate_heat/run.py",
+            "--output",
+            "results/surrogate"
+          ],
+          "returncode": 0
+        }
+      ]
+    },
+    {
+      "id": "field-images",
+      "runs": [
+        {
+          "command": [
+            "python",
+            "-I",
+            "examples/field_visualization/run.py",
+            "--output",
+            "results/images"
+          ],
+          "returncode": 0
+        }
+      ]
+    },
+    {
+      "id": "uncertainty-heat",
+      "runs": [
+        {
+          "command": [
+            "python",
+            "-I",
+            "examples/uncertainty_heat/run.py",
+            "--output",
+            "uncertainty-heat-output"
+          ],
+          "returncode": 0
+        }
+      ]
+    },
+    {
+      "id": "developer_extension",
+      "runs": []
+    }
+  ],
+  "workflow_count": 23,
+  "developer_extension": "passed",
+  "experimental_validation": "not_performed",
+  "extracted_recipe_manifest_sha256": "5580ec4adc4bd8b34b7ffae293d1c9f5eb387a96c1b29fecdc97b41d78737a68",
+  "archive_scope": "Actual archive preceding final appendix line-break change; recipe inputs unchanged and verified byte-identical"
+}
