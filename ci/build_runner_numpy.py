@@ -8,6 +8,9 @@ import os
 import platform
 import subprocess
 import sys
+import urllib.request
+import zipfile
+from email.parser import BytesParser
 from pathlib import Path
 
 
@@ -19,11 +22,42 @@ def main() -> None:
     output = Path(os.environ["RUNNER_TEMP"]) / "numpy-wheels"
     source = output / "source"
     source.mkdir(parents=True)
-    run("download", "--no-deps", "--no-binary=numpy", "--dest", str(source), "numpy")
-    archives = list(source.glob("numpy-*.tar.gz"))
-    if len(archives) != 1:
-        raise ValueError("exactly one current NumPy source archive required")
-    archive = archives[0]
+    # Let pip resolve the same current version as the ordinary binary install,
+    # without importing it or compiling metadata with NumPy's default ISA.
+    selection = output / "selection"
+    run(
+        "download",
+        "--no-deps",
+        "--only-binary=:all:",
+        "--dest",
+        str(selection),
+        "numpy",
+    )
+    selected = list(selection.glob("numpy-*.whl"))
+    if len(selected) != 1:
+        raise ValueError("exactly one resolved NumPy wheel required")
+    with zipfile.ZipFile(selected[0]) as archive_metadata:
+        names = [
+            name
+            for name in archive_metadata.namelist()
+            if name.endswith(".dist-info/METADATA")
+        ]
+        if len(names) != 1:
+            raise ValueError("exactly one NumPy metadata record required")
+        version = BytesParser().parsebytes(archive_metadata.read(names[0]))["Version"]
+    with urllib.request.urlopen(
+        f"https://pypi.org/pypi/numpy/{version}/json", timeout=60
+    ) as response:
+        metadata = json.load(response)
+    sdists = [record for record in metadata["urls"] if record["packagetype"] == "sdist"]
+    if len(sdists) != 1:
+        raise ValueError("exactly one official NumPy source archive required")
+    record = sdists[0]
+    archive = source / Path(record["filename"]).name
+    with urllib.request.urlopen(record["url"], timeout=60) as response:
+        archive.write_bytes(response.read())
+    if hashlib.sha256(archive.read_bytes()).hexdigest() != record["digests"]["sha256"]:
+        raise ValueError("NumPy source does not match official PyPI hash")
     run(
         "wheel",
         "--no-deps",
