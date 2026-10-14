@@ -70,8 +70,6 @@ jobs:
     needs: artifact-build
     runs-on: [self-hosted, Linux, X64]
     timeout-minutes: 15
-    env:
-      CANDIDATE_DIR: ${{ runner.temp }}/candidate-${{ github.run_id }}-${{ github.run_attempt }}-${{ strategy.job-index }}
     strategy:
       fail-fast: false
       matrix:
@@ -81,14 +79,16 @@ jobs:
     # Only transferred archives/examples may participate in installed-package tests.
     defaults:
       run:
-        working-directory: ${{ runner.temp }}/candidate-${{ github.run_id }}-${{ github.run_attempt }}-${{ strategy.job-index }}
+        working-directory: ${{ env.CANDIDATE_DIR }}
     steps:
       - name: Set up Python
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: ${{ matrix.python-version }}
       - name: Create isolated artifact directory
-        run: mkdir -p "$CANDIDATE_DIR"
+        run: |
+          candidate_dir=$(mktemp -d "$RUNNER_TEMP/candidate.XXXXXX")
+          echo "CANDIDATE_DIR=$candidate_dir" >> "$GITHUB_ENV"
         working-directory: ${{ runner.temp }}
       - name: Download candidate from this workflow run
         uses: actions/download-artifact@484a0b528fb4d7bd804637ccb632e47a0e638317
