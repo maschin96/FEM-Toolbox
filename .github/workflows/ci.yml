@@ -25,6 +25,8 @@ jobs:
       image: ${{ matrix.python-image }}
       options: --user 1001:1001
     timeout-minutes: 20
+    env:
+      NUMPY_BUILD_IMAGE: ${{ matrix.python-image }}
     strategy:
       fail-fast: false
       matrix:
@@ -48,10 +50,7 @@ jobs:
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: runner-numpy-${{ matrix.python-version }}
-          path: |
-            ${{ runner.temp }}/numpy-wheels/*.whl
-            ${{ runner.temp }}/numpy-wheels/BUILD_INFO.json
-            ${{ runner.temp }}/numpy-wheels/SHA256SUMS
+          path: ${{ runner.temp }}/numpy-artifact/
           if-no-files-found: error
           retention-days: 7
 
@@ -124,21 +123,19 @@ jobs:
         distribution: [wheel, sdist]
     # No checkout; use a fresh directory outside the persistent runner workspace.
     # Only transferred archives/examples may participate in installed-package tests.
-    defaults:
-      run:
-        working-directory: ${{ env.CANDIDATE_DIR }}
     steps:
       - name: Create isolated artifact directory
+        working-directory: ${{ runner.temp }}
         run: |
           candidate_dir=$(mktemp -d "$RUNNER_TEMP/candidate.XXXXXX")
           echo "CANDIDATE_DIR=$candidate_dir" >> "$GITHUB_ENV"
-        working-directory: ${{ runner.temp }}
       - name: Download candidate from this workflow run
         uses: actions/download-artifact@484a0b528fb4d7bd804637ccb632e47a0e638317
         with:
           name: release-candidate
           path: ${{ env.CANDIDATE_DIR }}/candidate
       - name: Verify transfer and create fresh environment
+        working-directory: ${{ env.CANDIDATE_DIR }}
         run: |
           cd candidate
           sha256sum --check SHA256SUMS
@@ -152,17 +149,21 @@ jobs:
           path: ${{ runner.temp }}/numpy-wheels
       - name: Verify and install runner-compatible current NumPy
         if: matrix.dependency_set != 'oldest'
+        working-directory: ${{ env.CANDIDATE_DIR }}
         run: |
           cd "$RUNNER_TEMP/numpy-wheels"
           sha256sum --check SHA256SUMS
           "$RUNNER_TEMP/artifact-env/bin/python" -m pip install numpy-*.whl
       - name: Install wheel
         if: matrix.distribution == 'wheel'
+        working-directory: ${{ env.CANDIDATE_DIR }}
         run: '"$RUNNER_TEMP/artifact-env/bin/python" -m pip install candidate/*.whl'
       - name: Install sdist with isolated build dependencies
         if: matrix.distribution == 'sdist'
+        working-directory: ${{ env.CANDIDATE_DIR }}
         run: '"$RUNNER_TEMP/artifact-env/bin/python" -m pip install candidate/*.tar.gz'
       - name: Verify installed metadata and numerical solver
+        working-directory: ${{ env.CANDIDATE_DIR }}
         run: |
           "$RUNNER_TEMP/artifact-env/bin/python" -m pip check
           "$RUNNER_TEMP/artifact-env/bin/python" -m pip freeze
@@ -249,6 +250,7 @@ jobs:
           "$RUNNER_TEMP/artifact-env/bin/python" -I "$CANDIDATE_DIR/candidate/parameter_study/report.py"
           "$RUNNER_TEMP/artifact-env/bin/python" -I "$CANDIDATE_DIR/candidate/surrogate_heat/run.py"
       - name: Install visualization extra and render installed-package example
+        working-directory: ${{ env.CANDIDATE_DIR }}
         run: |
           "$RUNNER_TEMP/artifact-env/bin/python" -m pip install 'fem-toolbox[visualization]==1.4.0'
           cd "$RUNNER_TEMP"
