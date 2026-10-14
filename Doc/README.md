@@ -177,3 +177,7 @@ vollständige Gesamtdokumentation. #63/#65 bleiben außerhalb M9 offen; eine
 experimentelle Validierungsfreigabe wird nicht behauptet.
 
 - [Generischer Unsicherheitsworkflow: API, Annahmen und analytische Verifikation (#64)](67_UNCERTAINTY_WORKFLOW.md)
+
+## M16 — Projektablauf (Entwurf)
+
+- [Projekt- und Befehlsvertrag: Pfade, Umfang, Resume und Fehlerstatus (#255)](82_PROJECT_COMMAND_CONTRACT.md)

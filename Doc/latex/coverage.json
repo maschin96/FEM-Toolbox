@@ -3322,6 +3322,18 @@
         "disposition": "Release-Nachweis / Freigabereihenfolge und Grenzen",
         "evidence": "Doc/68_M9_RELEASE_VERIFICATION.md"
       }
+    },
+    {
+      "source": "Doc/82_PROJECT_COMMAND_CONTRACT.md",
+      "target": "Doc/latex/chapters/application/studies.tex",
+      "canonical": "Doc/82_PROJECT_COMMAND_CONTRACT.md",
+      "owner": "Projektablauf-Maintainer",
+      "status": "open",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "M16-Entwurf; CLI-Implementierung und unabhängige Nutzerabnahme offen",
+        "evidence": "Doc/82_PROJECT_COMMAND_CONTRACT.md"
+      }
     }
   ],
   "planned": [

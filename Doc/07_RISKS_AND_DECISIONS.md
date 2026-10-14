@@ -659,3 +659,20 @@ Verifikationsnachweise werden nicht zu Messdaten umetikettiert. #66 benötigt
 nach wie vor erfolgreiche CI, integrierte Pflichtpakete, Artefaktinstallation,
 vollständige PDF-/Quellenabnahme und Zielcommitprüfung vor Release/Tag.
 [Befunde und vollständiger genehmigter Umfang](66_M9_DATA_SEARCH_AND_RELEASE_OPTIONS.md).
+
+## ADR-056 — Ein gemeinsamer CLI-Adapter auf vorhandenen Formaten (#255)
+
+14.10.2026: M16 verwendet Model-/Study-TOMLs und vorhandene Sampling-,
+Quantity- und Ergebnisverträge. Kein zweites FEM-Modellformat. Der geplante
+Einstieg `fem-toolbox` und `python -m fem_toolbox` teilen einen Parser; die
+M14-Namensmigration folgt ADR-053. Erste CLI-Physik ist der stationäre
+Model-/Studienumfang, ausschließlich SciPy. Transiente/dynamische Rezepte
+bleiben bis zum gesonderten Serien-/Preflightadapter bei der Python-API.
+
+Neue Ausgabeziele sind Standard; nur explizites Resume darf bestehende
+Studien-/UQ-Ziele mit passender Kennung und geprüften Hashes verwenden. Kein
+Force-Overwrite und kein automatisches Lock-Stehlen. Feld-/Bilanz-/Fehlwerte
+und unvollständige Läufe bleiben sichtbar; Solve-Erfolg ist keine Validierung.
+Der [vollständige Vertrag](82_PROJECT_COMMAND_CONTRACT.md) bindet Befehle und
+Fehlerstatus an reale APIs/Exceptions. #256 implementiert, #258 prüft die
+Nutzerwege unabhängig; dieser Entwurf behauptet keine vorhandene CLI.
