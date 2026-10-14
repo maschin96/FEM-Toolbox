@@ -51,7 +51,8 @@
           "path": "tests/convergence/test_tet10_heat_operator.py",
           "sha256": "f86c4d70aa932aaa7a864689f03d4ea6e0a0145a4b896758d61605a1f9e3223a"
         }
-      ]
+      ],
+      "review_status": "not_available"
     },
     {
       "id": "transient_heat",
@@ -83,7 +84,8 @@
           "path": "tests/unit/test_transient_heat.py",
           "sha256": "e4dc0b3d124ebc8ec79264aa3e63ebc27db9dd7f5d68e7a08130f680c62ae3eb"
         }
-      ]
+      ],
+      "review_status": "not_available"
     },
     {
       "id": "electrostatics",
@@ -115,7 +117,8 @@
           "path": "tests/convergence/test_tet10_electrostatics.py",
           "sha256": "eb3499d1325b58abcc0b14b01bf6ebcd590cb3deeff1747f350c423f8f4233ea"
         }
-      ]
+      ],
+      "review_status": "not_available"
     },
     {
       "id": "elasticity",
@@ -147,7 +150,8 @@
           "path": "tests/convergence/test_tet10_elasticity.py",
           "sha256": "1e892d462a101eb77c9db87e406c13ab3fb8f4fd5604cd56b620d4e61f41875d"
         }
-      ]
+      ],
+      "review_status": "not_available"
     },
     {
       "id": "thermomechanics",
@@ -179,7 +183,8 @@
           "path": "tests/convergence/test_tet10_thermomechanics.py",
           "sha256": "0ed9df62a9d8af0660e43e55b7b9f2efe45d604770895f9b69b51fe6d2ce2532"
         }
-      ]
+      ],
+      "review_status": "not_available"
     },
     {
       "id": "piezoelectric",
@@ -219,7 +224,8 @@
           "path": "tests/convergence/test_tet10_piezoelectric.py",
           "sha256": "6b3484758c5e76c5d69684a50183ce2da260a70207820e66a50d433fa0f90592"
         }
-      ]
+      ],
+      "review_status": "not_available"
     },
     {
       "id": "thermopiezoelectric",
@@ -251,7 +257,8 @@
           "path": "tests/unit/test_thermopiezoelectric.py",
           "sha256": "92faad67ac45dedd9cdbc750b5ab3e1a062da7afac348ed813fc68833178a50c"
         }
-      ]
+      ],
+      "review_status": "not_available"
     },
     {
       "id": "modal",
@@ -283,7 +290,8 @@
           "path": "tests/convergence/test_tet10_modal.py",
           "sha256": "e02c02de1cac89a0444f5316f65d4f32030aebdc8a8ccc316c6c6add84f4de11"
         }
-      ]
+      ],
+      "review_status": "not_available"
     },
     {
       "id": "newmark",
@@ -311,7 +319,8 @@
           "path": "tests/unit/test_tet10_newmark.py",
           "sha256": "d01d0d75c31280d441973278d4e24f1d5a5b67f0facd41ced23e2b7954aeae3d"
         }
-      ]
+      ],
+      "review_status": "not_available"
     },
     {
       "id": "harmonic",
@@ -339,7 +348,8 @@
           "path": "tests/convergence/test_tet10_harmonic_convergence.py",
           "sha256": "2bb919442d626733e358f8b7de3d7710462bea597bf19783e056eb56e99630f6"
         }
-      ]
+      ],
+      "review_status": "not_available"
     },
     {
       "id": "geometry",
@@ -375,7 +385,8 @@
           "path": "tests/unit/test_material_regions.py",
           "sha256": "30255407caacdb092595c0a814b527585cb291d436c02ac6d8dc72d516729480"
         }
-      ]
+      ],
+      "review_status": "not_available"
     },
     {
       "id": "backends",
@@ -415,7 +426,8 @@
           "path": "tests/petsc/test_convergence.py",
           "sha256": "7cd2b01f5c85006269688162c15b5305f6b4f0e407df91494132b3f0c6cd5eb9"
         }
-      ]
+      ],
+      "review_status": "not_available"
     },
     {
       "id": "indicator",
@@ -443,7 +455,8 @@
           "path": "tests/convergence/test_heat_indicator_convergence.py",
           "sha256": "7ab1e0e1b2f3a5232ebd09e926b17f41536d335acf259ba0c06eb444be78a623"
         }
-      ]
+      ],
+      "review_status": "not_available"
     },
     {
       "id": "studies",
@@ -475,7 +488,8 @@
           "path": "tests/regression/test_study_recipes.py",
           "sha256": "3bc9e3a13e300783c18fb12349480452132781966a2f990a8406a09e65060677"
         }
-      ]
+      ],
+      "review_status": "not_available"
     },
     {
       "id": "surrogates",
@@ -503,7 +517,8 @@
           "path": "tests/regression/test_surrogate_example.py",
           "sha256": "fba1ec98c7d1f6eb4184e36bce542982bcd4cf6b102d62883354ef6bed4036ed"
         }
-      ]
+      ],
+      "review_status": "not_available"
     },
     {
       "id": "uncertainty",
@@ -531,7 +546,8 @@
           "path": "tests/regression/test_uncertainty_study.py",
           "sha256": "5942ef5808fe7ac1687e44379c88b02220f9d45fb8fcea7951365245b558dd1f"
         }
-      ]
+      ],
+      "review_status": "not_available"
     },
     {
       "id": "cost",
@@ -559,7 +575,8 @@
           "path": "tests/petsc/test_native_accuracy_cost.py",
           "sha256": "4a081936b0c841449c6ba4b6123746c968c167720e9a4537f6fe69466d76df27"
         }
-      ]
+      ],
+      "review_status": "not_available"
     },
     {
       "id": "adaptive_heat",
@@ -590,7 +607,8 @@
           "sha256": "71780732655e98901bd5967f358a857e6c4f11f3fff322fec3db3f52b626b9b3",
           "source_path": "Doc/evidence/m10/environment.json"
         }
-      ]
+      ],
+      "review_status": "not_available"
     },
     {
       "id": "quad_fv",
@@ -621,7 +639,8 @@
           "sha256": "b7dfa3da7aace7dd57285de212ddc0e2922192ad864d5584b9ac26f710afc292",
           "source_path": "tests/convergence/test_quad_fv_reconstruction.py"
         }
-      ]
+      ],
+      "review_status": "not_available"
     },
     {
       "id": "experimental_piezo",
@@ -636,7 +655,8 @@
       "review": "Kein unabhängiges Messfallreview verfügbar.",
       "verification": "missing_evidence",
       "experimental_validation": "not_performed",
-      "evidence": []
+      "evidence": [],
+      "review_status": "not_available"
     }
   ]
 }

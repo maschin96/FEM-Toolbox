@@ -16,6 +16,8 @@ CATALOG = "Doc/evidence/catalog/catalog.json"
 
 def read_evidence(root: Path, receipt: dict[str, Any]) -> bytes:
     """Bind each local reference to exact bytes inside the source tree."""
+    if not isinstance(receipt, dict):
+        raise ValueError("evidence must be a path/hash record")
     name = receipt.get("path")
     digest = receipt.get("sha256")
     if not isinstance(name, str) or not isinstance(digest, str):
@@ -47,10 +49,16 @@ def validate_catalog(root: Path, data: dict[str, Any]) -> list[dict[str, Any]]:
         raise ValueError("catalog requires entries and releases")
     release_scopes = {}
     for name, release in releases.items():
+        if not isinstance(release, dict):
+            raise ValueError(f"release provenance must be a record: {name}")
         manifest = json.loads(read_evidence(root, release["manifest"]))
         verification = json.loads(read_evidence(root, release["verification"]))
         mapping_bytes = read_evidence(root, release["capability_map"])
         mapping = json.loads(mapping_bytes)
+        if not all(
+            isinstance(value, dict) for value in (manifest, verification, mapping)
+        ):
+            raise ValueError(f"release provenance must contain objects: {name}")
         package = release["source_distribution"]
         read_evidence(root, package)
         with tarfile.open(root / package["path"]) as archive:
@@ -86,6 +94,8 @@ def validate_catalog(root: Path, data: dict[str, Any]) -> list[dict[str, Any]]:
         )
     ids = set()
     for row in entries:
+        if not isinstance(row, dict):
+            raise ValueError("capability entry must be a record")
         identity = row.get("id")
         if not isinstance(identity, str) or not re.fullmatch(
             r"[a-z][a-z0-9_]*", identity
@@ -103,6 +113,12 @@ def validate_catalog(root: Path, data: dict[str, Any]) -> list[dict[str, Any]]:
             raise ValueError(f"{identity}: invalid verification status")
         if row.get("experimental_validation") != "not_performed":
             raise ValueError(f"{identity}: schema 1 has no measurement-validation gate")
+        if row.get("review_status") != "not_available":
+            raise ValueError(f"{identity}: schema 1 has no independent-review receipt")
+        if row["status"] == "planned" and (
+            row.get("commit") is not None or row["verification"] != "missing_evidence"
+        ):
+            raise ValueError(f"{identity}: planned capability has no verified source")
         evidence = row.get("evidence")
         if not isinstance(evidence, list):
             raise ValueError(f"{identity}: invalid evidence")
@@ -172,7 +188,7 @@ def render_catalog(rows: list[dict[str, Any]]) -> str:
             row["criterion"],
             references,
             f"{row['scope']}; {row['limits']}",
-            f"{row['review']}; {row['experimental_validation']}",
+            f"{row['review_status']}: {row['review']}; {row['experimental_validation']}",
         ]
         lines.append("| " + " | ".join(cell(value) for value in values) + " |")
     return "\n".join(lines) + "\n"

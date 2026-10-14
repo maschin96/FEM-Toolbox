@@ -107,6 +107,21 @@ def test_package_hash_must_match_published_verification_receipt():
         api()["validate_catalog"](ROOT, data)
 
 
+@pytest.mark.parametrize("field", ["review_status", "experimental_validation"])
+def test_independent_or_experimental_approval_cannot_be_invented(field):
+    data = catalog()
+    data["entries"][0][field] = "approved"
+    with pytest.raises(ValueError, match=r"receipt|validation gate"):
+        api()["validate_catalog"](ROOT, data)
+
+
+def test_malformed_records_have_catalog_diagnostics():
+    data = catalog()
+    data["entries"][0] = None
+    with pytest.raises(ValueError, match="entry must be a record"):
+        api()["validate_catalog"](ROOT, data)
+
+
 def test_cli_reads_catalog_outside_checkout_and_reports_missing_file(tmp_path):
     command = [sys.executable, str(ROOT / "scripts/capability_catalog.py")]
     result = subprocess.run(

@@ -43,7 +43,8 @@ keine Ausnahme und keine positive Prüfung.
   Die Branch-Snapshots tragen ihren ursprünglichen Pfad; historische Dateien
   werden weder umgeschrieben noch durch heutige Messungen ersetzt.
 - `planned` mit `missing_evidence` bildet fehlende Messdaten ausdrücklich ab.
-  Schema 1 erlaubt ausschließlich `experimental_validation = not_performed`.
+  Schema 1 erlaubt ausschließlich `experimental_validation = not_performed`
+  und `review_status = not_available`; es liegt kein unabhängiger Reviewbeleg vor.
   Eine zukünftige experimentelle Freigabe braucht einen separat beschlossenen
   Messdaten-/Holdout-Vertrag und eine neue Formatversion.
 - Jede lokale Nachweisdatei muss innerhalb des Repositorys liegen und ihren
