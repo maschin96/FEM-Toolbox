@@ -353,6 +353,10 @@ def main() -> None:
     runpy.run_path(str(root / "scripts/verification_artifacts.py"))["check_artifacts"](
         root
     )
+    catalog_api = runpy.run_path(str(root / "scripts/capability_catalog.py"))
+    catalog_api["validate_catalog"](
+        root, json.loads((root / catalog_api["CATALOG"]).read_text())
+    )
     matrix = json.loads((root / "Doc/latex/coverage.json").read_text())
     validate_matrix(root, matrix)
     if args.check_matrix:

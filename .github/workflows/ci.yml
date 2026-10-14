@@ -9,22 +9,66 @@ on:
 permissions:
   contents: read
 
+defaults:
+  run:
+    shell: bash
+
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
+  runner-numpy:
+    name: Runner NumPy source / Python ${{ matrix.python-version }}
+    runs-on: [self-hosted, Linux, X64]
+    container:
+      image: ${{ matrix.python-image }}
+      options: --user 1001:1001
+    timeout-minutes: 20
+    env:
+      NUMPY_BUILD_IMAGE: ${{ matrix.python-image }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - python-version: "3.11"
+            python-image: python:3.11-bookworm@sha256:5887f265d8d44d8b4734d3658b21d668edf5aaf92e4945bc0c984afbfab105d3
+          - python-version: "3.12"
+            python-image: python:3.12-bookworm@sha256:5560e9ab8709f459489e5b8aa696eda8a07ef821e14bb122be62d91234bfa98b
+          - python-version: "3.13"
+            python-image: python:3.13-bookworm@sha256:073ffebb96ae4d0ed73ccad59f08c47bd84af8a79f5258130f8458ac50ad9ff4
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - name: Create isolated builder
+        run: |
+          python -m venv "$RUNNER_TEMP/numpy-builder"
+          echo "$RUNNER_TEMP/numpy-builder/bin" >> "$GITHUB_PATH"
+      - name: Build and verify current NumPy for runner CPU
+        run: python ci/build_runner_numpy.py
+      - name: Transfer audited runner NumPy wheel
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: runner-numpy-${{ matrix.python-version }}
+          path: ${{ runner.temp }}/numpy-artifact/
+          if-no-files-found: error
+          retention-days: 7
+
   artifact-build:
     name: Build release artifacts
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, X64]
+    container:
+      image: python:3.13-bookworm@sha256:073ffebb96ae4d0ed73ccad59f08c47bd84af8a79f5258130f8458ac50ad9ff4
+      # Match machine-1 ownership so native jobs can clean the persistent workspace.
+      options: --user 1001:1001
     timeout-minutes: 10
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - name: Set up Python
-        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
-        with:
-          python-version: "3.13"
+      - name: Create isolated Python environment
+        run: |
+          python -m venv "$RUNNER_TEMP/job-env"
+          echo "$RUNNER_TEMP/job-env/bin" >> "$GITHUB_PATH"
       - name: Build wheel and sdist with isolated build dependencies
         run: |
           python -m pip install --disable-pip-version-check 'pip>=26.2' build
@@ -59,39 +103,67 @@ jobs:
 
   artifacts:
     name: Artifacts / Python ${{ matrix.python-version }} / ${{ matrix.distribution }}
-    needs: artifact-build
-    runs-on: ubuntu-latest
+    needs: [artifact-build, runner-numpy]
+    runs-on: [self-hosted, Linux, X64]
+    container:
+      image: ${{ matrix.python-image }}
+      options: --user 1001:1001
     timeout-minutes: 15
     strategy:
       fail-fast: false
       matrix:
+        include:
+          - python-version: "3.11"
+            python-image: python:3.11-bookworm@sha256:5887f265d8d44d8b4734d3658b21d668edf5aaf92e4945bc0c984afbfab105d3
+          - python-version: "3.12"
+            python-image: python:3.12-bookworm@sha256:5560e9ab8709f459489e5b8aa696eda8a07ef821e14bb122be62d91234bfa98b
+          - python-version: "3.13"
+            python-image: python:3.13-bookworm@sha256:073ffebb96ae4d0ed73ccad59f08c47bd84af8a79f5258130f8458ac50ad9ff4
         python-version: ["3.11", "3.12", "3.13"]
         distribution: [wheel, sdist]
-    # Deliberately no checkout: only the archives and one standalone example
-    # cross the job boundary, never src/, tests/, or an editable installation.
+    # No checkout; use a fresh directory outside the persistent runner workspace.
+    # Only transferred archives/examples may participate in installed-package tests.
     steps:
-      - name: Set up Python
-        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
-        with:
-          python-version: ${{ matrix.python-version }}
+      - name: Create isolated artifact directory
+        working-directory: ${{ runner.temp }}
+        run: |
+          candidate_dir=$(mktemp -d "$RUNNER_TEMP/candidate.XXXXXX")
+          echo "CANDIDATE_DIR=$candidate_dir" >> "$GITHUB_ENV"
       - name: Download candidate from this workflow run
         uses: actions/download-artifact@484a0b528fb4d7bd804637ccb632e47a0e638317
         with:
           name: release-candidate
-          path: candidate
+          path: ${{ env.CANDIDATE_DIR }}/candidate
       - name: Verify transfer and create fresh environment
+        working-directory: ${{ env.CANDIDATE_DIR }}
         run: |
           cd candidate
           sha256sum --check SHA256SUMS
           python -m venv "$RUNNER_TEMP/artifact-env"
           "$RUNNER_TEMP/artifact-env/bin/python" -m pip install --upgrade 'pip>=26.2'
+      - name: Download runner-compatible current NumPy
+        if: matrix.dependency_set != 'oldest'
+        uses: actions/download-artifact@484a0b528fb4d7bd804637ccb632e47a0e638317
+        with:
+          name: runner-numpy-${{ matrix.python-version }}
+          path: ${{ runner.temp }}/numpy-wheels
+      - name: Verify and install runner-compatible current NumPy
+        if: matrix.dependency_set != 'oldest'
+        working-directory: ${{ env.CANDIDATE_DIR }}
+        run: |
+          cd "$RUNNER_TEMP/numpy-wheels"
+          sha256sum --check SHA256SUMS
+          "$RUNNER_TEMP/artifact-env/bin/python" -m pip install numpy-*.whl
       - name: Install wheel
         if: matrix.distribution == 'wheel'
+        working-directory: ${{ env.CANDIDATE_DIR }}
         run: '"$RUNNER_TEMP/artifact-env/bin/python" -m pip install candidate/*.whl'
       - name: Install sdist with isolated build dependencies
         if: matrix.distribution == 'sdist'
+        working-directory: ${{ env.CANDIDATE_DIR }}
         run: '"$RUNNER_TEMP/artifact-env/bin/python" -m pip install candidate/*.tar.gz'
       - name: Verify installed metadata and numerical solver
+        working-directory: ${{ env.CANDIDATE_DIR }}
         run: |
           "$RUNNER_TEMP/artifact-env/bin/python" -m pip check
           "$RUNNER_TEMP/artifact-env/bin/python" -m pip freeze
@@ -132,79 +204,85 @@ jobs:
           print(package, dist.version, dist.metadata["Requires-Python"])
           PY
           cd "$RUNNER_TEMP"
-          "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/study_recipes/run.py" heat --output recipe_heat_results
-          "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/study_recipes/run.py" piezo --output recipe_piezo_results
-          "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/uncertainty_heat/run.py" --output uncertainty_heat_results
-          "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/uncertainty_heat/run.py" --output uncertainty_heat_results
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$CANDIDATE_DIR/candidate/study_recipes/run.py" heat --output recipe_heat_results
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$CANDIDATE_DIR/candidate/study_recipes/run.py" piezo --output recipe_piezo_results
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$CANDIDATE_DIR/candidate/uncertainty_heat/run.py" --output uncertainty_heat_results
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$CANDIDATE_DIR/candidate/uncertainty_heat/run.py" --output uncertainty_heat_results
           test -s uncertainty_heat_results/uncertainty.json
-          "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/steady_heat.py"
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$CANDIDATE_DIR/candidate/steady_heat.py"
           test -s steady_heat.vtu
           for example in elastic_tension parallel_plate thermal_expansion piezo_d33; do
-            "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/$example.py"
+            "$RUNNER_TEMP/artifact-env/bin/python" -I "$CANDIDATE_DIR/candidate/$example.py"
             test -s "$example.vtu"
           done
-          "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/thermopiezoelectric/run.py" --output stationary_model_results
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$CANDIDATE_DIR/candidate/thermopiezoelectric/run.py" --output stationary_model_results
           "$RUNNER_TEMP/artifact-env/bin/python" -I -c 'import json; from math import isclose; r=json.load(open("stationary_model_results/report.json")); m=r["metrics"]; assert isclose(m["free_displacement_x_m"], -9/440, abs_tol=1e-12); assert isclose(m["free_potential_V"], 5/22, abs_tol=1e-12); assert isclose(m["heat_flux_x_W_m2"], -20, abs_tol=1e-12)'
-          "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/transient_heat/run.py"
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$CANDIDATE_DIR/candidate/transient_heat/run.py"
           test -s transient_heat_results/heat.pvd
           test -s transient_heat_results/probes.csv
           test -s transient_heat_results/balance.csv
-          "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/piezo_dynamics/run.py"
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$CANDIDATE_DIR/candidate/piezo_dynamics/run.py"
           test -s piezo_dynamic_results/transient/piezo.pvd
           test -s piezo_dynamic_results/harmonic/probes.csv
           test -s piezo_dynamic_results/modes/manifest.json
-          "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/tet10_heat/run.py"
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$CANDIDATE_DIR/candidate/tet10_heat/run.py"
           test -s tet10_heat_results/stationary.json
           test -s tet10_heat_results/transient/heat.pvd
-          "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/tet10_electrostatics/run.py"
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$CANDIDATE_DIR/candidate/tet10_electrostatics/run.py"
           test -s tet10_electric_results/electric.json
-          "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/tet10_elasticity/run.py"
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$CANDIDATE_DIR/candidate/tet10_elasticity/run.py"
           test -s tet10_elastic_results/solid.json
-          "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/tet10_thermomechanics/run.py"
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$CANDIDATE_DIR/candidate/tet10_thermomechanics/run.py"
           test -s tet10_thermal_expansion_results/coupled.json
-          "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/tet10_piezoelectric/run.py"
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$CANDIDATE_DIR/candidate/tet10_piezoelectric/run.py"
           test -s tet10_piezo_results/piezo.json
-          "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/tet10_thermopiezoelectric/run.py"
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$CANDIDATE_DIR/candidate/tet10_thermopiezoelectric/run.py"
           test -s tet10_thermopiezo_results/coupled.json
-          "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/tet10_modes/run.py"
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$CANDIDATE_DIR/candidate/tet10_modes/run.py"
           test -s tet10_modes_results/manifest.json
-          "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/tet10_newmark/run.py"
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$CANDIDATE_DIR/candidate/tet10_newmark/run.py"
           test -s tet10_newmark_results/manifest.json
-          "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/tet10_harmonic/run.py"
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$CANDIDATE_DIR/candidate/tet10_harmonic/run.py"
           test -s tet10_harmonic_results/manifest.json
-          "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/parameter_study/run.py" --max-cases 1
-          "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/parameter_study/run.py"
-          "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/parameter_study/run.py"
-          "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/parameter_study/report.py"
-          "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/surrogate_heat/run.py"
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$CANDIDATE_DIR/candidate/parameter_study/run.py" --max-cases 1
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$CANDIDATE_DIR/candidate/parameter_study/run.py"
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$CANDIDATE_DIR/candidate/parameter_study/run.py"
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$CANDIDATE_DIR/candidate/parameter_study/report.py"
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$CANDIDATE_DIR/candidate/surrogate_heat/run.py"
       - name: Install visualization extra and render installed-package example
+        working-directory: ${{ env.CANDIDATE_DIR }}
         run: |
           "$RUNNER_TEMP/artifact-env/bin/python" -m pip install 'fem-toolbox[visualization]==1.4.0'
           cd "$RUNNER_TEMP"
-          "$RUNNER_TEMP/artifact-env/bin/python" -I "$GITHUB_WORKSPACE/candidate/field_visualization/run.py" --output field_images
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$CANDIDATE_DIR/candidate/field_visualization/run.py" --output field_images
           "$RUNNER_TEMP/artifact-env/bin/python" -I -c 'from pathlib import Path; from PIL import Image; paths=list(Path("field_images").glob("*.jpg")); assert len(paths)==6; images=[Image.open(p) for p in paths]; assert all(i.format=="JPEG" and i.size==(1200,900) for i in images); [i.close() for i in images]'
 
 
   quality:
     name: Quality / Python 3.13
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, X64]
+    container:
+      image: python:3.13-bookworm@sha256:073ffebb96ae4d0ed73ccad59f08c47bd84af8a79f5258130f8458ac50ad9ff4
+      # Match machine-1 ownership so native jobs can clean the persistent workspace.
+      options: --user 1001:1001
     timeout-minutes: 15
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - name: Set up Python
-        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
-        with:
-          python-version: "3.13"
-          cache: pip
-          cache-dependency-path: pyproject.toml
+      - name: Create isolated Python environment
+        run: |
+          python -m venv "$RUNNER_TEMP/job-env"
+          echo "$RUNNER_TEMP/job-env/bin" >> "$GITHUB_PATH"
 
       - name: Update installer
         run: python -m pip install --disable-pip-version-check --upgrade 'pip>=26.2'
 
       - name: Install project and quality tools
         run: python -m pip install --disable-pip-version-check -e '.[dev,visualization]'
+
+      - name: Audit capability release provenance
+        run: python scripts/capability_catalog.py --format json
 
       - name: Lint
         run: python -m ruff check .
@@ -217,11 +295,22 @@ jobs:
 
   tests:
     name: Tests / Python ${{ matrix.python-version }}
-    runs-on: ubuntu-latest
+    needs: runner-numpy
+    runs-on: [self-hosted, Linux, X64]
+    container:
+      image: ${{ matrix.python-image }}
+      options: --user 1001:1001
     timeout-minutes: 15
     strategy:
       fail-fast: false
       matrix:
+        include:
+          - python-version: "3.11"
+            python-image: python:3.11-bookworm@sha256:5887f265d8d44d8b4734d3658b21d668edf5aaf92e4945bc0c984afbfab105d3
+          - python-version: "3.12"
+            python-image: python:3.12-bookworm@sha256:5560e9ab8709f459489e5b8aa696eda8a07ef821e14bb122be62d91234bfa98b
+          - python-version: "3.13"
+            python-image: python:3.13-bookworm@sha256:073ffebb96ae4d0ed73ccad59f08c47bd84af8a79f5258130f8458ac50ad9ff4
         python-version:
           - "3.11"
           - "3.12"
@@ -230,16 +319,26 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - name: Set up Python
-        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
-        with:
-          python-version: ${{ matrix.python-version }}
-          cache: pip
-          cache-dependency-path: pyproject.toml
+      - name: Create isolated Python environment
+        run: |
+          python -m venv "$RUNNER_TEMP/job-env"
+          echo "$RUNNER_TEMP/job-env/bin" >> "$GITHUB_PATH"
 
       - name: Update installer
         run: python -m pip install --disable-pip-version-check --upgrade 'pip>=26.2'
 
+      - name: Download runner-compatible current NumPy
+        if: matrix.dependency_set != 'oldest'
+        uses: actions/download-artifact@484a0b528fb4d7bd804637ccb632e47a0e638317
+        with:
+          name: runner-numpy-${{ matrix.python-version }}
+          path: ${{ runner.temp }}/numpy-wheels
+      - name: Verify and install runner-compatible current NumPy
+        if: matrix.dependency_set != 'oldest'
+        run: |
+          cd "$RUNNER_TEMP/numpy-wheels"
+          sha256sum --check SHA256SUMS
+          python -m pip install numpy-*.whl
       - name: Install project and test tools
         run: python -m pip install --disable-pip-version-check -e '.[test,visualization]'
 
@@ -248,11 +347,22 @@ jobs:
 
   compatibility:
     name: Compatibility / Python ${{ matrix.python-version }} / ${{ matrix.dependency_set }}
-    runs-on: ubuntu-latest
+    needs: runner-numpy
+    runs-on: [self-hosted, Linux, X64]
+    container:
+      image: ${{ matrix.python-image }}
+      options: --user 1001:1001
     timeout-minutes: 15
     strategy:
       fail-fast: false
       matrix:
+        include:
+          - python-version: "3.11"
+            python-image: python:3.11-bookworm@sha256:5887f265d8d44d8b4734d3658b21d668edf5aaf92e4945bc0c984afbfab105d3
+          - python-version: "3.12"
+            python-image: python:3.12-bookworm@sha256:5560e9ab8709f459489e5b8aa696eda8a07ef821e14bb122be62d91234bfa98b
+          - python-version: "3.13"
+            python-image: python:3.13-bookworm@sha256:073ffebb96ae4d0ed73ccad59f08c47bd84af8a79f5258130f8458ac50ad9ff4
         python-version:
           - "3.11"
           - "3.12"
@@ -264,18 +374,26 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - name: Set up Python
-        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
-        with:
-          python-version: ${{ matrix.python-version }}
-          cache: pip
-          cache-dependency-path: |
-            pyproject.toml
-            ci/oldest-constraints.txt
+      - name: Create isolated Python environment
+        run: |
+          python -m venv "$RUNNER_TEMP/job-env"
+          echo "$RUNNER_TEMP/job-env/bin" >> "$GITHUB_PATH"
 
       - name: Update installer
         run: python -m pip install --disable-pip-version-check --upgrade 'pip>=26.2'
 
+      - name: Download runner-compatible current NumPy
+        if: matrix.dependency_set != 'oldest'
+        uses: actions/download-artifact@484a0b528fb4d7bd804637ccb632e47a0e638317
+        with:
+          name: runner-numpy-${{ matrix.python-version }}
+          path: ${{ runner.temp }}/numpy-wheels
+      - name: Verify and install runner-compatible current NumPy
+        if: matrix.dependency_set != 'oldest'
+        run: |
+          cd "$RUNNER_TEMP/numpy-wheels"
+          sha256sum --check SHA256SUMS
+          python -m pip install numpy-*.whl
       - name: Install oldest supported combination
         if: matrix.dependency_set == 'oldest'
         run: |
@@ -299,7 +417,7 @@ jobs:
 
   petsc:
     name: PETSc / Python 3.12 / ${{ matrix.scalar }}
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, X64]
     timeout-minutes: 20
     strategy:
       fail-fast: false

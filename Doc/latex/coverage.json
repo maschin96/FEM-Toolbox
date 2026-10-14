@@ -3322,6 +3322,90 @@
         "disposition": "Release-Nachweis / Freigabereihenfolge und Grenzen",
         "evidence": "Doc/68_M9_RELEASE_VERIFICATION.md"
       }
+    },
+    {
+      "source": "Doc/81_CAPABILITY_CATALOG.md",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/81_CAPABILITY_CATALOG.md",
+      "owner": "M15 evidence maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/evidence/catalog/v1.4.0-capability-map.json",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/81_CAPABILITY_CATALOG.md",
+      "owner": "M15 evidence maintainer",
+      "status": "historical"
+    },
+    {
+      "source": "Doc/evidence/catalog/fem_toolbox-1.4.0.tar.gz",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/81_CAPABILITY_CATALOG.md",
+      "owner": "M15 evidence maintainer",
+      "status": "historical"
+    },
+    {
+      "source": "Doc/evidence/catalog/quad_fv-test_quad_fv_reconstruction.py.snapshot",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/81_CAPABILITY_CATALOG.md",
+      "owner": "M15 evidence maintainer",
+      "status": "historical"
+    },
+    {
+      "source": "Doc/evidence/catalog/adaptive_heat-environment.json.snapshot",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/81_CAPABILITY_CATALOG.md",
+      "owner": "M15 evidence maintainer",
+      "status": "historical"
+    },
+    {
+      "source": "Doc/evidence/catalog/quad_fv-73_QUAD_FV_OPERATORS.md.snapshot",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/81_CAPABILITY_CATALOG.md",
+      "owner": "M15 evidence maintainer",
+      "status": "historical"
+    },
+    {
+      "source": "Doc/evidence/catalog/manifest.json",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/81_CAPABILITY_CATALOG.md",
+      "owner": "M15 evidence maintainer",
+      "status": "historical"
+    },
+    {
+      "source": "Doc/evidence/catalog/quad_fv-test_quad_fv.py.snapshot",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/81_CAPABILITY_CATALOG.md",
+      "owner": "M15 evidence maintainer",
+      "status": "historical"
+    },
+    {
+      "source": "Doc/evidence/catalog/catalog.json",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/81_CAPABILITY_CATALOG.md",
+      "owner": "M15 evidence maintainer",
+      "status": "open"
+    },
+    {
+      "source": "Doc/evidence/catalog/adaptive_heat-71_M10_RELEASE_VERIFICATION.md.snapshot",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/81_CAPABILITY_CATALOG.md",
+      "owner": "M15 evidence maintainer",
+      "status": "historical"
+    },
+    {
+      "source": "Doc/evidence/catalog/adaptive_heat-comparison.json.snapshot",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/81_CAPABILITY_CATALOG.md",
+      "owner": "M15 evidence maintainer",
+      "status": "historical"
+    },
+    {
+      "source": "Doc/evidence/catalog/RELEASE_VERIFICATION.json",
+      "target": "Doc/latex/chapters/verification.tex",
+      "canonical": "Doc/81_CAPABILITY_CATALOG.md",
+      "owner": "M15 evidence maintainer",
+      "status": "historical"
     }
   ],
   "planned": [
