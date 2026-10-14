@@ -18,6 +18,9 @@ NumPy source for each supported Python, with `cpu-baseline=none`,
 `cpu-dispatch=none` and NumPy's bundled linear-algebra fallback. It checks import,
 matrix multiplication and eigenvalues and publishes wheel/source hashes and
 build settings. This follows the [NumPy CPU build options](https://numpy.org/doc/stable/reference/simd/build-options.html).
+Builds are cached by official source hash, exact Python version, immutable image
+and build settings. Cache reuse verifies source identity and wheel bytes, then
+repeats import and numerical smoke checks; a changed NumPy version rebuilds.
 Consumers verify the transferred hashes and install that exact wheel before
 installing the project. Oldest-dependency jobs continue using the original
 constraints and wheels. Versions are not downgraded to accommodate the runner.
