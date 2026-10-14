@@ -227,6 +227,9 @@ jobs:
       - name: Install project and quality tools
         run: python -m pip install --disable-pip-version-check -e '.[dev,visualization]'
 
+      - name: Audit capability release provenance
+        run: python scripts/capability_catalog.py --format json
+
       - name: Lint
         run: python -m ruff check .
 

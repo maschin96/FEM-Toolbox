@@ -177,3 +177,5 @@ vollständige Gesamtdokumentation. #63/#65 bleiben außerhalb M9 offen; eine
 experimentelle Validierungsfreigabe wird nicht behauptet.
 
 - [Generischer Unsicherheitsworkflow: API, Annahmen und analytische Verifikation (#64)](67_UNCERTAINTY_WORKFLOW.md)
+
+- [Versionierter Nachweiskatalog und Evidenzvertrag](81_CAPABILITY_CATALOG.md) (#252; Implementierungskandidat).

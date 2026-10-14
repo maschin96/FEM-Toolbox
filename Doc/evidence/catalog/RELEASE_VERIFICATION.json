@@ -1,0 +1,628 @@
+{
+  "schema": 1,
+  "date": "2026-10-11",
+  "version": "1.4.0",
+  "commit": "baae07f088a87ce6e256af3c5855a3b110d0f17a",
+  "source_state": "clean",
+  "ci": {
+    "conclusion": "success",
+    "event": "push",
+    "head_sha": "baae07f088a87ce6e256af3c5855a3b110d0f17a",
+    "html_url": "https://github.com/maschin96/FEM-Toolbox/actions/runs/38126023629",
+    "id": 38126023629,
+    "status": "completed"
+  },
+  "ci_jobs": [
+    {
+      "conclusion": "success",
+      "html_url": "https://github.com/maschin96/FEM-Toolbox/actions/runs/38126023629/job/114430441594",
+      "name": "Build release artifacts",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "html_url": "https://github.com/maschin96/FEM-Toolbox/actions/runs/38126023629/job/114430441667",
+      "name": "Tests / Python 3.12",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "html_url": "https://github.com/maschin96/FEM-Toolbox/actions/runs/38126023629/job/114430441683",
+      "name": "PETSc / Python 3.12 / complex",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "html_url": "https://github.com/maschin96/FEM-Toolbox/actions/runs/38126023629/job/114430441702",
+      "name": "PETSc / Python 3.12 / real",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "html_url": "https://github.com/maschin96/FEM-Toolbox/actions/runs/38126023629/job/114430441736",
+      "name": "Tests / Python 3.11",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "html_url": "https://github.com/maschin96/FEM-Toolbox/actions/runs/38126023629/job/114430441746",
+      "name": "Compatibility / Python 3.12 / latest",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "html_url": "https://github.com/maschin96/FEM-Toolbox/actions/runs/38126023629/job/114430441754",
+      "name": "Compatibility / Python 3.11 / oldest",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "html_url": "https://github.com/maschin96/FEM-Toolbox/actions/runs/38126023629/job/114430441772",
+      "name": "Quality / Python 3.13",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "html_url": "https://github.com/maschin96/FEM-Toolbox/actions/runs/38126023629/job/114430441776",
+      "name": "Compatibility / Python 3.13 / latest",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "html_url": "https://github.com/maschin96/FEM-Toolbox/actions/runs/38126023629/job/114430441786",
+      "name": "Tests / Python 3.13",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "html_url": "https://github.com/maschin96/FEM-Toolbox/actions/runs/38126023629/job/114430441818",
+      "name": "Compatibility / Python 3.13 / oldest",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "html_url": "https://github.com/maschin96/FEM-Toolbox/actions/runs/38126023629/job/114430441826",
+      "name": "Compatibility / Python 3.12 / oldest",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "html_url": "https://github.com/maschin96/FEM-Toolbox/actions/runs/38126023629/job/114430441951",
+      "name": "Compatibility / Python 3.11 / latest",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "html_url": "https://github.com/maschin96/FEM-Toolbox/actions/runs/38126023629/job/114430480243",
+      "name": "Artifacts / Python 3.13 / sdist",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "html_url": "https://github.com/maschin96/FEM-Toolbox/actions/runs/38126023629/job/114430480273",
+      "name": "Artifacts / Python 3.13 / wheel",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "html_url": "https://github.com/maschin96/FEM-Toolbox/actions/runs/38126023629/job/114430480291",
+      "name": "Artifacts / Python 3.11 / sdist",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "html_url": "https://github.com/maschin96/FEM-Toolbox/actions/runs/38126023629/job/114430480297",
+      "name": "Artifacts / Python 3.12 / wheel",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "html_url": "https://github.com/maschin96/FEM-Toolbox/actions/runs/38126023629/job/114430480311",
+      "name": "Artifacts / Python 3.12 / sdist",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "html_url": "https://github.com/maschin96/FEM-Toolbox/actions/runs/38126023629/job/114430480325",
+      "name": "Artifacts / Python 3.11 / wheel",
+      "status": "completed"
+    }
+  ],
+  "handbook_ci": {
+    "id": 38126023548,
+    "head_sha": "baae07f088a87ce6e256af3c5855a3b110d0f17a",
+    "conclusion": "success",
+    "url": "https://github.com/maschin96/FEM-Toolbox/actions/runs/38126023548"
+  },
+  "local_suite": {
+    "head": "799fab0aef48f761cf3e95b0944ebeb0e8eb1e5e",
+    "passed": 826,
+    "skipped": 83,
+    "seconds": 103.47
+  },
+  "visual_review": {
+    "candidate_pages": 491,
+    "books": {
+      "main": 242,
+      "theory": 40,
+      "application": 71,
+      "api": 111,
+      "verification": 27
+    },
+    "changed_release_pages": 17,
+    "final_main_title_pages": 5,
+    "final_inputs_match_reviewed_inputs": true
+  },
+  "independent_review": "not available; CI and own review are not independent expert review",
+  "experimental_validation": "open outside M9: #63 and #65; synthetic verification is not measurement validation",
+  "pypi_publication": false,
+  "archive_recipe_verification": {
+    "workflows": 23,
+    "commands": 26,
+    "developer_example": "passed",
+    "python": "3.13.5",
+    "package": "1.4.0",
+    "isolated_import": true,
+    "outside_checkout": true,
+    "visualization_extra": true,
+    "runs": [
+      {
+        "id": "steady-heat",
+        "runs": [
+          {
+            "command": [
+              "python",
+              "-I",
+              "examples/steady_heat.py"
+            ],
+            "returncode": 0,
+            "seconds": 4.018060417000015,
+            "stdout": "Temperature: 320.000000 to 400.000000 K\nConvective outflow: 960.000000 W\nPower balance: 1.023e-12 W\n",
+            "stderr": ""
+          }
+        ]
+      },
+      {
+        "id": "elastic-tension",
+        "runs": [
+          {
+            "command": [
+              "python",
+              "-I",
+              "examples/elastic_tension.py"
+            ],
+            "returncode": 0,
+            "seconds": 0.1641758750010922,
+            "stdout": "Maximum ux: 0.010000 m\nStrain energy: 0.050000 J\nForce balance: [1.33226763e-15 9.19449702e-16 3.20993232e-16] N\n",
+            "stderr": ""
+          }
+        ]
+      },
+      {
+        "id": "capacitor",
+        "runs": [
+          {
+            "command": [
+              "python",
+              "-I",
+              "examples/parallel_plate.py"
+            ],
+            "returncode": 0,
+            "seconds": 0.16226054100116016,
+            "stdout": "Capacitance: 12.000000 pF\nHigh electrode charge: 1.200000 nC\nStored energy: 60.000000 nJ\n",
+            "stderr": ""
+          }
+        ]
+      },
+      {
+        "id": "expansion",
+        "runs": [
+          {
+            "command": [
+              "python",
+              "-I",
+              "examples/thermal_expansion.py"
+            ],
+            "returncode": 0,
+            "seconds": 0.16319204199862725,
+            "stdout": "Maximum displacement: 0.000447214 m\nMaximum stress norm: 1.646e-08 Pa\nHeat power balance: -2.916e-13 W\n",
+            "stderr": ""
+          }
+        ]
+      },
+      {
+        "id": "piezo-d33",
+        "runs": [
+          {
+            "command": [
+              "python",
+              "-I",
+              "examples/piezo_d33.py"
+            ],
+            "returncode": 0,
+            "seconds": 0.167362582998976,
+            "stdout": "Direct: u_top=-0.500 µm, Q_top=17.500 nC\nInverse: u_top=2.000 µm, Q_top=-50.000 nC\n",
+            "stderr": ""
+          }
+        ]
+      },
+      {
+        "id": "thermopiezo",
+        "runs": [
+          {
+            "command": [
+              "python",
+              "-I",
+              "examples/thermopiezoelectric/run.py",
+              "--output",
+              "results/thermopiezo"
+            ],
+            "returncode": 0,
+            "seconds": 0.18671633399935672,
+            "stdout": "results/thermopiezo/fields.vtu\nresults/thermopiezo/report.json\n",
+            "stderr": ""
+          }
+        ]
+      },
+      {
+        "id": "transient-heat",
+        "runs": [
+          {
+            "command": [
+              "python",
+              "-I",
+              "examples/transient_heat/run.py"
+            ],
+            "returncode": 0,
+            "seconds": 0.19733300000007148,
+            "stdout": "ParaView: /private/tmp/m9-main-recipes/handbook/transient_heat_results/heat.pvd\nProbes: /private/tmp/m9-main-recipes/handbook/transient_heat_results/probes.csv\nMaximum balance defect: 1.473e-13 W\n",
+            "stderr": ""
+          }
+        ]
+      },
+      {
+        "id": "piezo-dynamics",
+        "runs": [
+          {
+            "command": [
+              "python",
+              "-I",
+              "examples/piezo_dynamics/run.py",
+              "--output",
+              "results/dynamics"
+            ],
+            "returncode": 0,
+            "seconds": 0.3119677499998943,
+            "stdout": "Transient, harmonic and modal fields/probes: /private/tmp/m9-main-recipes/handbook/results/dynamics\n",
+            "stderr": ""
+          }
+        ]
+      },
+      {
+        "id": "tet10-heat",
+        "runs": [
+          {
+            "command": [
+              "python",
+              "-I",
+              "examples/tet10_heat/run.py",
+              "--output",
+              "results/tet10-heat"
+            ],
+            "returncode": 0,
+            "seconds": 0.222149500001251,
+            "stdout": "Verified Tet10 heat results: results/tet10-heat\n",
+            "stderr": ""
+          }
+        ]
+      },
+      {
+        "id": "tet10-electric",
+        "runs": [
+          {
+            "command": [
+              "python",
+              "-I",
+              "examples/tet10_electrostatics/run.py",
+              "--output",
+              "results/tet10-electric"
+            ],
+            "returncode": 0,
+            "seconds": 0.20374524999897403,
+            "stdout": "Verified Tet10 electrostatics: results/tet10-electric\n",
+            "stderr": ""
+          }
+        ]
+      },
+      {
+        "id": "tet10-elastic",
+        "runs": [
+          {
+            "command": [
+              "python",
+              "-I",
+              "examples/tet10_elasticity/run.py",
+              "--output",
+              "results/tet10-elastic"
+            ],
+            "returncode": 0,
+            "seconds": 0.22442687500006286,
+            "stdout": "Verified Tet10 elasticity: results/tet10-elastic\n",
+            "stderr": ""
+          }
+        ]
+      },
+      {
+        "id": "tet10-piezo",
+        "runs": [
+          {
+            "command": [
+              "python",
+              "-I",
+              "examples/tet10_piezoelectric/run.py",
+              "--output",
+              "results/tet10-piezo"
+            ],
+            "returncode": 0,
+            "seconds": 0.24519916600002034,
+            "stdout": "Verified Tet10 piezoelectricity: results/tet10-piezo\n",
+            "stderr": ""
+          }
+        ]
+      },
+      {
+        "id": "tet10-thermomechanics",
+        "runs": [
+          {
+            "command": [
+              "python",
+              "-I",
+              "examples/tet10_thermomechanics/run.py",
+              "--output",
+              "results/tet10-expansion"
+            ],
+            "returncode": 0,
+            "seconds": 0.24812841699895216,
+            "stdout": "Verified Tet10 thermomechanics: results/tet10-expansion\n",
+            "stderr": ""
+          }
+        ]
+      },
+      {
+        "id": "tet10-thermopiezo",
+        "runs": [
+          {
+            "command": [
+              "python",
+              "-I",
+              "examples/tet10_thermopiezoelectric/run.py",
+              "--output",
+              "results/tet10-thermopiezo"
+            ],
+            "returncode": 0,
+            "seconds": 0.2672040420002304,
+            "stdout": "Verified Tet10 thermopiezoelectricity: results/tet10-thermopiezo\n",
+            "stderr": ""
+          }
+        ]
+      },
+      {
+        "id": "tet10-modes",
+        "runs": [
+          {
+            "command": [
+              "python",
+              "-I",
+              "examples/tet10_modes/run.py",
+              "--output",
+              "results/tet10-modes"
+            ],
+            "returncode": 0,
+            "seconds": 0.19593787499979953,
+            "stdout": "Verified Tet10 modal oscillator: results/tet10-modes\n",
+            "stderr": ""
+          }
+        ]
+      },
+      {
+        "id": "tet10-newmark",
+        "runs": [
+          {
+            "command": [
+              "python",
+              "-I",
+              "examples/tet10_newmark/run.py",
+              "--output",
+              "results/tet10-newmark"
+            ],
+            "returncode": 0,
+            "seconds": 0.5207537909991515,
+            "stdout": "Verified Tet10 Newmark oscillator: results/tet10-newmark\n",
+            "stderr": ""
+          }
+        ]
+      },
+      {
+        "id": "tet10-harmonic",
+        "runs": [
+          {
+            "command": [
+              "python",
+              "-I",
+              "examples/tet10_harmonic/run.py",
+              "--output",
+              "results/tet10-harmonic"
+            ],
+            "returncode": 0,
+            "seconds": 0.2238143750000745,
+            "stdout": "Verified Tet10 harmonic sweep: results/tet10-harmonic\n",
+            "stderr": ""
+          }
+        ]
+      },
+      {
+        "id": "study-resume",
+        "runs": [
+          {
+            "command": [
+              "python",
+              "-I",
+              "examples/parameter_study/run.py",
+              "--output",
+              "results/study",
+              "--max-cases",
+              "1"
+            ],
+            "returncode": 0,
+            "seconds": 0.1805157920007332,
+            "stdout": "a0b12917627bef646006d44d84be3e8d65a5b388ca2ff08dbb70177675cbd249 succeeded attempts=1\n9c3375ca35aad958bc2339ac41f273f9b5b811da7a01fea26a6ab9a81b05848f pending attempts=0\n",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "python",
+              "-I",
+              "examples/parameter_study/run.py",
+              "--output",
+              "results/study"
+            ],
+            "returncode": 0,
+            "seconds": 0.1781980409996322,
+            "stdout": "a0b12917627bef646006d44d84be3e8d65a5b388ca2ff08dbb70177675cbd249 succeeded attempts=1\n9c3375ca35aad958bc2339ac41f273f9b5b811da7a01fea26a6ab9a81b05848f succeeded attempts=1\n",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "python",
+              "-I",
+              "examples/parameter_study/run.py",
+              "--output",
+              "results/study"
+            ],
+            "returncode": 0,
+            "seconds": 0.1704581670001062,
+            "stdout": "a0b12917627bef646006d44d84be3e8d65a5b388ca2ff08dbb70177675cbd249 succeeded attempts=1\n9c3375ca35aad958bc2339ac41f273f9b5b811da7a01fea26a6ab9a81b05848f succeeded attempts=1\n",
+            "stderr": ""
+          }
+        ]
+      },
+      {
+        "id": "study-report",
+        "runs": [
+          {
+            "command": [
+              "python",
+              "-I",
+              "examples/parameter_study/report.py",
+              "--study",
+              "results/study",
+              "--output",
+              "results/table"
+            ],
+            "returncode": 0,
+            "seconds": 0.16846999999870604,
+            "stdout": "a0b12917627bef646006d44d84be3e8d65a5b388ca2ff08dbb70177675cbd249 succeeded {'parameter:conductivity': 2.0, 'power_balance': 1.354472090042691e-14, 'temperature': 301.0}\n9c3375ca35aad958bc2339ac41f273f9b5b811da7a01fea26a6ab9a81b05848f succeeded {'parameter:conductivity': 4.0, 'power_balance': 7.993605777301127e-15, 'temperature': 300.5}\n",
+            "stderr": ""
+          }
+        ]
+      },
+      {
+        "id": "study-recipes",
+        "runs": [
+          {
+            "command": [
+              "python",
+              "-I",
+              "examples/study_recipes/run.py",
+              "heat",
+              "--output",
+              "results/heat-study"
+            ],
+            "returncode": 0,
+            "seconds": 0.2252405830004136,
+            "stdout": "{\n  \"recipe\": \"heat\",\n  \"toolbox_version\": \"1.4.0\",\n  \"package_path\": \"/private/tmp/m9-main-wheel-env/lib/python3.13/site-packages/fem_toolbox/__init__.py\",\n  \"python\": \"3.13.5\",\n  \"platform\": \"macOS-27.0.1-arm64-arm-64bit-Mach-O\",\n  \"numpy\": \"2.5.4\",\n  \"study_seconds\": 0.01907145899895113,\n  \"cases\": [\n    {\n      \"case_id\": \"a0b12917627bef646006d44d84be3e8d65a5b388ca2ff08dbb70177675cbd249\",\n      \"expected\": {\n        \"temperature\": 301.0,\n        \"source\": 1.3333333333333333,\n        \"inflow\": -1.3333333333333333\n      },\n      \"actual\": {\n        \"balance\": 1.354472090042691e-14,\n        \"inflow\": -1.3333333333333197,\n        \"parameter:conductivity\": 2.0,\n        \"source\": 1.3333333333333333,\n        \"temperature\": 301.0\n      },\n      \"direct\": {\n        \"temperature\": 301.0,\n        \"source\": 1.3333333333333333,\n        \"inflow\": -1.3333333333333197,\n        \"balance\": 1.354472090042691e-14\n      },\n      \"absolute_tolerances\": {\n        \"temperature\": 1e-11,\n        \"source\": 1e-11,\n        \"inflow\": 1e-11\n      },\n      \"relative_tolerance\": 2e-11\n    },\n    {\n      \"case_id\": \"9c3375ca35aad958bc2339ac41f273f9b5b811da7a01fea26a6ab9a81b05848f\",\n      \"expected\": {\n        \"temperature\": 300.5,\n        \"source\": 1.3333333333333333,\n        \"inflow\": -1.3333333333333333\n      },\n      \"actual\": {\n        \"balance\": 7.993605777301127e-15,\n        \"inflow\": -1.3333333333333253,\n        \"parameter:conductivity\": 4.0,\n        \"source\": 1.3333333333333333,\n        \"temperature\": 300.5\n      },\n      \"direct\": {\n        \"temperature\": 300.5,\n        \"source\": 1.3333333333333333,\n        \"inflow\": -1.3333333333333253,\n        \"balance\": 7.993605777301127e-15\n      },\n      \"absolute_tolerances\": {\n        \"temperature\": 1e-11,\n        \"source\": 1e-11,\n        \"inflow\": 1e-11\n      },\n      \"relative_tolerance\": 2e-11\n    }\n  ],\n  \"resume_attempts_unchanged\": true,\n  \"input_change_invalidated\": true,\n  \"failed_cases\": 1,\n  \"failure_error\": \"ModelSchemaError: invalid model materials.T.thermal: conductivity must be positive\",\n  \"direct_and_analytic_checks_passed\": true\n}\n",
+            "stderr": ""
+          },
+          {
+            "command": [
+              "python",
+              "-I",
+              "examples/study_recipes/run.py",
+              "piezo",
+              "--output",
+              "results/piezo-study"
+            ],
+            "returncode": 0,
+            "seconds": 0.3230957910000143,
+            "stdout": "{\n  \"recipe\": \"piezo\",\n  \"toolbox_version\": \"1.4.0\",\n  \"package_path\": \"/private/tmp/m9-main-wheel-env/lib/python3.13/site-packages/fem_toolbox/__init__.py\",\n  \"python\": \"3.13.5\",\n  \"platform\": \"macOS-27.0.1-arm64-arm-64bit-Mach-O\",\n  \"numpy\": \"2.5.4\",\n  \"study_seconds\": 0.043866500000149244,\n  \"cases\": [\n    {\n      \"case_id\": \"3c5c9323eebd8e2a490e376e695207badc8ea5bf9c44ffaea5f7c911d728efda\",\n      \"expected\": {\n        \"displacement\": -5e-07,\n        \"charge\": 1.7499999999999998e-08,\n        \"mechanical\": 6.25e-07,\n        \"coupling\": -1.25e-06,\n        \"dielectric\": -2.5e-07\n      },\n      \"actual\": {\n        \"charge\": 1.750000000000003e-08,\n        \"charge_balance\": -8.271806125530277e-25,\n        \"coupling\": -1.250000000000002e-06,\n        \"dielectric\": -2.5000000000000047e-07,\n        \"displacement\": -4.999999999999999e-07,\n        \"force_balance\": 2.498001805406602e-16,\n        \"mechanical\": 6.250000000000009e-07,\n        \"parameter:coupling\": [\n          [\n            0.0,\n            0.0,\n            0.0,\n            0.0,\n            0.0,\n            0.0\n          ],\n          [\n            0.0,\n            0.0,\n            0.0,\n            0.0,\n            0.0,\n            0.0\n          ],\n          [\n            0.0,\n            0.0,\n            5.0,\n            0.0,\n            0.0,\n            0.0\n          ]\n        ],\n        \"parameter:geometry\": \"short.msh\"\n      },\n      \"direct\": {\n        \"displacement\": -4.999999999999999e-07,\n        \"charge\": 1.750000000000003e-08,\n        \"mechanical\": 6.250000000000009e-07,\n        \"coupling\": -1.250000000000002e-06,\n        \"dielectric\": -2.5000000000000047e-07,\n        \"force_balance\": 2.498001805406602e-16,\n        \"charge_balance\": -8.271806125530277e-25\n      },\n      \"absolute_tolerances\": {\n        \"displacement\": 1e-16,\n        \"charge\": 1e-18,\n        \"mechanical\": 1e-16,\n        \"coupling\": 1e-16,\n        \"dielectric\": 1e-16\n      },\n      \"relative_tolerance\": 2e-11\n    },\n    {\n      \"case_id\": \"a4c43aea95ddf9f7f9c32ab7298881dcbc13a17a3622e0cdce6ad9f3a842b459\",\n      \"expected\": {\n        \"displacement\": -1e-06,\n        \"charge\": 5.4999999999999996e-08,\n        \"mechanical\": 2.5e-06,\n        \"coupling\": -5e-06,\n        \"dielectric\": -2.5e-07\n      },\n      \"actual\": {\n        \"charge\": 5.5000000000000095e-08,\n        \"charge_balance\": 4.963083675318166e-24,\n        \"coupling\": -5.000000000000008e-06,\n        \"dielectric\": -2.5000000000000047e-07,\n        \"displacement\": -9.999999999999997e-07,\n        \"force_balance\": 4.996003610813204e-16,\n        \"mechanical\": 2.5000000000000036e-06,\n        \"parameter:coupling\": [\n          [\n            0.0,\n            0.0,\n            0.0,\n            0.0,\n            0.0,\n            0.0\n          ],\n          [\n            0.0,\n            0.0,\n            0.0,\n            0.0,\n            0.0,\n            0.0\n          ],\n          [\n            0.0,\n            0.0,\n            10.0,\n            0.0,\n            0.0,\n            0.0\n          ]\n        ],\n        \"parameter:geometry\": \"short.msh\"\n      },\n      \"direct\": {\n        \"displacement\": -9.999999999999997e-07,\n        \"charge\": 5.5000000000000095e-08,\n        \"mechanical\": 2.5000000000000036e-06,\n        \"coupling\": -5.000000000000008e-06,\n        \"dielectric\": -2.5000000000000047e-07,\n        \"force_balance\": 4.996003610813204e-16,\n        \"charge_balance\": 4.963083675318166e-24\n      },\n      \"absolute_tolerances\": {\n        \"displacement\": 1e-16,\n        \"charge\": 1e-18,\n        \"mechanical\": 1e-16,\n        \"coupling\": 1e-16,\n        \"dielectric\": 1e-16\n      },\n      \"relative_tolerance\": 2e-11\n    },\n    {\n      \"case_id\": \"105842eab0e530a2b9a2ba9d9f31fa83ecf6a16a66ef695a8e3515299f7c4055\",\n      \"expected\": {\n        \"displacement\": -5e-07,\n        \"charge\": 8.749999999999999e-09,\n        \"mechanical\": 3.125e-07,\n        \"coupling\": -6.25e-07,\n        \"dielectric\": -1.25e-07\n      },\n      \"actual\": {\n        \"charge\": 8.750000000000009e-09,\n        \"charge_balance\": -4.1359030627651384e-25,\n        \"coupling\": -6.250000000000007e-07,\n        \"dielectric\": -1.250000000000001e-07,\n        \"displacement\": -5.000000000000003e-07,\n        \"force_balance\": 7.91033905045424e-16,\n        \"mechanical\": 3.125000000000005e-07,\n        \"parameter:coupling\": [\n          [\n            0.0,\n            0.0,\n            0.0,\n            0.0,\n            0.0,\n            0.0\n          ],\n          [\n            0.0,\n            0.0,\n            0.0,\n            0.0,\n            0.0,\n            0.0\n          ],\n          [\n            0.0,\n            0.0,\n            5.0,\n            0.0,\n            0.0,\n            0.0\n          ]\n        ],\n        \"parameter:geometry\": \"long.msh\"\n      },\n      \"direct\": {\n        \"displacement\": -5.000000000000003e-07,\n        \"charge\": 8.750000000000009e-09,\n        \"mechanical\": 3.125000000000005e-07,\n        \"coupling\": -6.250000000000007e-07,\n        \"dielectric\": -1.250000000000001e-07,\n        \"force_balance\": 7.91033905045424e-16,\n        \"charge_balance\": -4.1359030627651384e-25\n      },\n      \"absolute_tolerances\": {\n        \"displacement\": 1e-16,\n        \"charge\": 1e-18,\n        \"mechanical\": 1e-16,\n        \"coupling\": 1e-16,\n        \"dielectric\": 1e-16\n      },\n      \"relative_tolerance\": 2e-11\n    },\n    {\n      \"case_id\": \"2b86435414835598e210f84e18b31206a6fa8cf30e148202418df8d458f6788b\",\n      \"expected\": {\n        \"displacement\": -1e-06,\n        \"charge\": 2.7499999999999998e-08,\n        \"mechanical\": 1.25e-06,\n        \"coupling\": -2.5e-06,\n        \"dielectric\": -1.25e-07\n      },\n      \"actual\": {\n        \"charge\": 2.750000000000003e-08,\n        \"charge_balance\": 1.6543612251060553e-24,\n        \"coupling\": -2.5000000000000027e-06,\n        \"dielectric\": -1.250000000000001e-07,\n        \"displacement\": -1.0000000000000006e-06,\n        \"force_balance\": 1.582067810090848e-15,\n        \"mechanical\": 1.250000000000002e-06,\n        \"parameter:coupling\": [\n          [\n            0.0,\n            0.0,\n            0.0,\n            0.0,\n            0.0,\n            0.0\n          ],\n          [\n            0.0,\n            0.0,\n            0.0,\n            0.0,\n            0.0,\n            0.0\n          ],\n          [\n            0.0,\n            0.0,\n            10.0,\n            0.0,\n            0.0,\n            0.0\n          ]\n        ],\n        \"parameter:geometry\": \"long.msh\"\n      },\n      \"direct\": {\n        \"displacement\": -1.0000000000000006e-06,\n        \"charge\": 2.750000000000003e-08,\n        \"mechanical\": 1.250000000000002e-06,\n        \"coupling\": -2.5000000000000027e-06,\n        \"dielectric\": -1.250000000000001e-07,\n        \"force_balance\": 1.582067810090848e-15,\n        \"charge_balance\": 1.6543612251060553e-24\n      },\n      \"absolute_tolerances\": {\n        \"displacement\": 1e-16,\n        \"charge\": 1e-18,\n        \"mechanical\": 1e-16,\n        \"coupling\": 1e-16,\n        \"dielectric\": 1e-16\n      },\n      \"relative_tolerance\": 2e-11\n    }\n  ],\n  \"resume_attempts_unchanged\": true,\n  \"input_change_invalidated\": true,\n  \"failed_cases\": 1,\n  \"failure_error\": \"ModelSchemaError: invalid model materials.piezo.solid: permittivity must be positive definite and well resolved\",\n  \"direct_and_analytic_checks_passed\": true\n}\n",
+            "stderr": ""
+          }
+        ]
+      },
+      {
+        "id": "surrogate",
+        "runs": [
+          {
+            "command": [
+              "python",
+              "-I",
+              "examples/surrogate_heat/run.py",
+              "--output",
+              "results/surrogate"
+            ],
+            "returncode": 0,
+            "seconds": 0.21736054200118815,
+            "stdout": "Held-out FEM error: {'mae': [0.0, 4.996003610813204e-16], 'max_abs': [0.0, 5.551115123125783e-16], 'rmse': [0.0, 5.026748538604307e-16]}\nLoaded prediction Q=5 W/m³: [[300.62500000000006, 0.8333333333333337]]\n",
+            "stderr": ""
+          }
+        ]
+      },
+      {
+        "id": "field-images",
+        "runs": [
+          {
+            "command": [
+              "python",
+              "-I",
+              "examples/field_visualization/run.py",
+              "--output",
+              "results/images"
+            ],
+            "returncode": 0,
+            "seconds": 13.122421000000031,
+            "stdout": "",
+            "stderr": "Matplotlib is building the font cache; this may take a moment.\n"
+          }
+        ]
+      },
+      {
+        "id": "uncertainty-heat",
+        "runs": [
+          {
+            "command": [
+              "python",
+              "-I",
+              "examples/uncertainty_heat/run.py",
+              "--output",
+              "uncertainty-heat-output"
+            ],
+            "returncode": 0,
+            "seconds": 2.0730060419991787,
+            "stdout": "{\n  \"verification\": {\n    \"sample_count\": 128,\n    \"seed\": 64,\n    \"analytic_mean_K\": 301.0,\n    \"analytic_variance_K2\": 1.0833333333333333,\n    \"maximum_discrete_error_K\": 1.1368683772161603e-13,\n    \"numerical_continuum_error\": \"not established\",\n    \"experimental_validation\": \"not performed\"\n  },\n  \"summary\": {\n    \"convergence\": [\n      {\n        \"mean\": 300.9148485378979,\n        \"size\": 2,\n        \"variance\": 0.17267165612019988\n      },\n      {\n        \"mean\": 301.2834501394291,\n        \"size\": 4,\n        \"variance\": 0.9020128687737984\n      },\n      {\n        \"mean\": 300.89166481379664,\n        \"size\": 8,\n        \"variance\": 0.7569691594507615\n      },\n      {\n        \"mean\": 300.8496760786687,\n        \"size\": 16,\n        \"variance\": 0.9990600452569329\n      },\n      {\n        \"mean\": 301.2567248157144,\n        \"size\": 32,\n        \"variance\": 1.0891014742641805\n      },\n      {\n        \"mean\": 301.31525837700724,\n        \"size\": 64,\n        \"variance\": 1.1216935581679268\n      },\n      {\n        \"mean\": 301.1187507916644,\n        \"size\": 128,\n        \"variance\": 1.0240131920999287\n      }\n    ],\n    \"mean\": 301.1187507916644,\n    \"numerical_error_bound\": null,\n    \"quantile_probabilities\": [\n      0.025,\n      0.5,\n      0.975\n    ],\n    \"quantiles\": [\n      299.43575839988506,\n      301.01931607541667,\n      303.25183967363284\n    ],\n    \"size\": 128,\n    \"unit\": \"K\",\n    \"variance\": 1.0240131920999287\n  }\n}\n",
+            "stderr": ""
+          }
+        ]
+      },
+      {
+        "id": "developer_extension",
+        "stdout": "Linear source extension: independent integral passed\n"
+      }
+    ]
+  },
+  "package_artifacts": {
+    "fem_toolbox-1.4.0-py3-none-any.whl": "ba56338bf7ce8b567785b86d5a1c193c5caf5f3d849fa26093524dba4c02d088",
+    "fem_toolbox-1.4.0.tar.gz": "f4d8f8e2b6867fbe1c44779ca3dc1f20888f52f0668558f15a913a4d44480245"
+  },
+  "handbook_manifest_sha256": "7735a617dc23b2c5efc42f27b90588ff2c3dff0fe3b57b539f74c44f8837aba5",
+  "archive_sha256": "87ae5449af712bc2013fad8b2a0e50504c1ce7bb5ab02c5c86e055675065f682"
+}

@@ -1,0 +1,642 @@
+{
+  "schema": 1,
+  "releases": {
+    "v1.4.0": {
+      "manifest": {
+        "path": "Doc/evidence/catalog/manifest.json",
+        "sha256": "7735a617dc23b2c5efc42f27b90588ff2c3dff0fe3b57b539f74c44f8837aba5"
+      },
+      "verification": {
+        "path": "Doc/evidence/catalog/RELEASE_VERIFICATION.json",
+        "sha256": "9a6b7a07bee72ad2a325fff5c70e6e512345e1a6aca2454d9fcc02a2b0ef52cb"
+      },
+      "capability_map": {
+        "path": "Doc/evidence/catalog/v1.4.0-capability-map.json",
+        "sha256": "505a99a7ca22ad862d10572e60a0901464aea2ed3534d705e52100744936ea86"
+      },
+      "source_distribution": {
+        "path": "Doc/evidence/catalog/fem_toolbox-1.4.0.tar.gz",
+        "sha256": "f4d8f8e2b6867fbe1c44779ca3dc1f20888f52f0668558f15a913a4d44480245"
+      }
+    }
+  },
+  "entries": [
+    {
+      "id": "heat",
+      "title": "Stationäre Wärme",
+      "status": "released",
+      "released_version": "1.4.0",
+      "release": "v1.4.0",
+      "commit": "baae07f088a87ce6e256af3c5855a3b110d0f17a",
+      "scope": "Tet4/Tet10; SciPy; native PETSc-Parität separat",
+      "criterion": "Affine Felder, Fluss-/Leistungsbilanz, vier Netze; P1 L2/H1 2/1, P2 3/2.",
+      "limits": "Nur der angegebene mathematische und numerische Umfang; keine experimentelle Fallvalidierung.",
+      "review": "Keine unabhängige fachliche Freigabe verfügbar; historischer Release-Bericht unverändert.",
+      "verification": "verified",
+      "experimental_validation": "not_performed",
+      "evidence": [
+        {
+          "path": "Doc/45_TET10_HEAT_INTEGRATION.md",
+          "sha256": "b740d900480199dbb4a230fe8f47ccadb91aec0697e435467af39490e57a338b"
+        },
+        {
+          "path": "tests/patch/test_heat_patch.py",
+          "sha256": "ec9b3df8632415809fcb8ea10a53b18a0a0749c05c86029e9692824d342513af"
+        },
+        {
+          "path": "tests/convergence/test_heat_convergence.py",
+          "sha256": "c2a2e9608fce59a9bbb2b681d4b94be74c76859b530d23569a64c4edea34855b"
+        },
+        {
+          "path": "tests/convergence/test_tet10_heat_operator.py",
+          "sha256": "f86c4d70aa932aaa7a864689f03d4ea6e0a0145a4b896758d61605a1f9e3223a"
+        }
+      ]
+    },
+    {
+      "id": "transient_heat",
+      "title": "Transiente Wärme",
+      "status": "released",
+      "released_version": "1.4.0",
+      "release": "v1.4.0",
+      "commit": "baae07f088a87ce6e256af3c5855a3b110d0f17a",
+      "scope": "Tet4/Tet10; Backward Euler",
+      "criterion": "Kapazität/Robin/Ereignisse; räumliche Normen und Zeitordnung 1 getrennt.",
+      "limits": "Nur der angegebene mathematische und numerische Umfang; keine experimentelle Fallvalidierung.",
+      "review": "Keine unabhängige fachliche Freigabe verfügbar; historischer Release-Bericht unverändert.",
+      "verification": "verified",
+      "experimental_validation": "not_performed",
+      "evidence": [
+        {
+          "path": "Doc/33_TRANSIENT_HEAT.md",
+          "sha256": "6372912c2b639d050271df9f634486861876b96e440bd5fa320aee01b9569043"
+        },
+        {
+          "path": "tests/convergence/test_transient_heat_convergence.py",
+          "sha256": "874386701035fa218c931248196aedd1e66f3310de455d4469d5f9b28bb90491"
+        },
+        {
+          "path": "tests/convergence/test_tet10_transient_heat.py",
+          "sha256": "fbe72e74de56d3d2fe79f4008a729f6aa41a072f62ed3e396f02b07fd069fc72"
+        },
+        {
+          "path": "tests/unit/test_transient_heat.py",
+          "sha256": "e4dc0b3d124ebc8ec79264aa3e63ebc27db9dd7f5d68e7a08130f680c62ae3eb"
+        }
+      ]
+    },
+    {
+      "id": "electrostatics",
+      "title": "Elektrostatik",
+      "status": "released",
+      "released_version": "1.4.0",
+      "release": "v1.4.0",
+      "commit": "baae07f088a87ce6e256af3c5855a3b110d0f17a",
+      "scope": "Tet4/Tet10; SciPy; native PETSc-Parität separat",
+      "criterion": "Elektrisches Feld und Leiterladung, Energie, Gauge und vier Netze.",
+      "limits": "Nur der angegebene mathematische und numerische Umfang; keine experimentelle Fallvalidierung.",
+      "review": "Keine unabhängige fachliche Freigabe verfügbar; historischer Release-Bericht unverändert.",
+      "verification": "verified",
+      "experimental_validation": "not_performed",
+      "evidence": [
+        {
+          "path": "Doc/46_TET10_ELECTROSTATICS.md",
+          "sha256": "59e5e887eb33363d3cf70727dfdd135e585ae398173472ad44528612de3b80b2"
+        },
+        {
+          "path": "tests/patch/test_electrostatics_patch.py",
+          "sha256": "0b8a3e085d49717e546fef20d8975dc3cc37f0a39d38a3692afe60574446dc3c"
+        },
+        {
+          "path": "tests/convergence/test_electrostatics_convergence.py",
+          "sha256": "b2e2b63540579d68d167512a5145f1ff80589f75607908a8282a5e451c11a32e"
+        },
+        {
+          "path": "tests/convergence/test_tet10_electrostatics.py",
+          "sha256": "eb3499d1325b58abcc0b14b01bf6ebcd590cb3deeff1747f350c423f8f4233ea"
+        }
+      ]
+    },
+    {
+      "id": "elasticity",
+      "title": "Elastizität",
+      "status": "released",
+      "released_version": "1.4.0",
+      "release": "v1.4.0",
+      "commit": "baae07f088a87ce6e256af3c5855a3b110d0f17a",
+      "scope": "Tet4/Tet10; linear/stationär",
+      "criterion": "Starrkörper und Affinpatch, Zug und Biegung, integrierte Energie, Kraft und Moment, vier Netze.",
+      "limits": "Nur der angegebene mathematische und numerische Umfang; keine experimentelle Fallvalidierung.",
+      "review": "Keine unabhängige fachliche Freigabe verfügbar; historischer Release-Bericht unverändert.",
+      "verification": "verified",
+      "experimental_validation": "not_performed",
+      "evidence": [
+        {
+          "path": "Doc/47_TET10_ELASTICITY.md",
+          "sha256": "49fd8f6402a1ff69e970a85b027538c9ed578f25b9fb9501989ee59fb8f41dcb"
+        },
+        {
+          "path": "tests/patch/test_elasticity_patch.py",
+          "sha256": "1c78547e8cbe24377e719daa0e289353aad4ca630575aa0899764bd7c00ca9af"
+        },
+        {
+          "path": "tests/convergence/test_elasticity_convergence.py",
+          "sha256": "73bd589cff769fccab4545e4195dc05f8571592501caf6f71330a2f96e27204b"
+        },
+        {
+          "path": "tests/convergence/test_tet10_elasticity.py",
+          "sha256": "1e892d462a101eb77c9db87e406c13ab3fb8f4fd5604cd56b620d4e61f41875d"
+        }
+      ]
+    },
+    {
+      "id": "thermomechanics",
+      "title": "Thermomechanik",
+      "status": "released",
+      "released_version": "1.4.0",
+      "release": "v1.4.0",
+      "commit": "baae07f088a87ce6e256af3c5855a3b110d0f17a",
+      "scope": "Tet4/Tet10; einseitiges T nach u",
+      "criterion": "Freie/behinderte Eigenverzerrung, getrennte Bilanzen und vier Netze.",
+      "limits": "Nur der angegebene mathematische und numerische Umfang; keine experimentelle Fallvalidierung.",
+      "review": "Keine unabhängige fachliche Freigabe verfügbar; historischer Release-Bericht unverändert.",
+      "verification": "verified",
+      "experimental_validation": "not_performed",
+      "evidence": [
+        {
+          "path": "Doc/48_TET10_THERMOMECHANICS.md",
+          "sha256": "215b46bbe0fd4d15c402203fafd4b9d847f574f0f28d4c6c555ee0957e5ce55f"
+        },
+        {
+          "path": "tests/patch/test_thermomechanics_patch.py",
+          "sha256": "91893ce89db44f38648b88122ccb53e4bd34e63c6e3446035318ee35aacb267b"
+        },
+        {
+          "path": "tests/convergence/test_thermomechanics_convergence.py",
+          "sha256": "d2cce72caee2b794c755bdea57b8604b8e62051fe9869f6c4722db0b34853bf0"
+        },
+        {
+          "path": "tests/convergence/test_tet10_thermomechanics.py",
+          "sha256": "0ed9df62a9d8af0660e43e55b7b9f2efe45d604770895f9b69b51fe6d2ce2532"
+        }
+      ]
+    },
+    {
+      "id": "piezoelectric",
+      "title": "Piezoelektrizität",
+      "status": "released",
+      "released_version": "1.4.0",
+      "release": "v1.4.0",
+      "commit": "baae07f088a87ce6e256af3c5855a3b110d0f17a",
+      "scope": "Tet4/Tet10; stationär",
+      "criterion": "d33 direkt/invers, Kurzschluss/Leerlauf, Reziprozität, Enthalpie und vier Netze.",
+      "limits": "Nur der angegebene mathematische und numerische Umfang; keine experimentelle Fallvalidierung.",
+      "review": "Keine unabhängige fachliche Freigabe verfügbar; historischer Release-Bericht unverändert.",
+      "verification": "verified",
+      "experimental_validation": "not_performed",
+      "evidence": [
+        {
+          "path": "Doc/49_TET10_PIEZOELECTRIC.md",
+          "sha256": "1de96cae52b67ca595985a0f833071ca681b4e38b37e874100222629732dfa4f"
+        },
+        {
+          "path": "tests/patch/test_piezo_element_patch.py",
+          "sha256": "4d924345c9ae744db063e1ccdadabcdbc37defd244f6585e02a63b6c61c211a9"
+        },
+        {
+          "path": "tests/patch/test_piezo_solver_patch.py",
+          "sha256": "02598db806d30bebd09820ff51e1e837ab8449178213ae90ff7867e6e93dc277"
+        },
+        {
+          "path": "tests/patch/test_electrodes.py",
+          "sha256": "1d22d445c139153b59b04d01c8f17d22787f820ddfacd046faae7193c3c9cadd"
+        },
+        {
+          "path": "tests/regression/test_piezo_d33_benchmark.py",
+          "sha256": "621d3624b58ac858b130712c384d7de6d2ca69b54b4adfadb30ec4aa502d1d2d"
+        },
+        {
+          "path": "tests/convergence/test_tet10_piezoelectric.py",
+          "sha256": "6b3484758c5e76c5d69684a50183ce2da260a70207820e66a50d433fa0f90592"
+        }
+      ]
+    },
+    {
+      "id": "thermopiezoelectric",
+      "title": "Thermopiezoelektrizität",
+      "status": "released",
+      "released_version": "1.4.0",
+      "release": "v1.4.0",
+      "commit": "baae07f088a87ce6e256af3c5855a3b110d0f17a",
+      "scope": "Tet4/Tet10; T nach (u,phi)",
+      "criterion": "Materialgrenze, Elektroden, thermischer Schalter, Feldnormen und getrennte Bilanzen.",
+      "limits": "Nur der angegebene mathematische und numerische Umfang; keine experimentelle Fallvalidierung.",
+      "review": "Keine unabhängige fachliche Freigabe verfügbar; historischer Release-Bericht unverändert.",
+      "verification": "verified",
+      "experimental_validation": "not_performed",
+      "evidence": [
+        {
+          "path": "Doc/50_TET10_THERMOPIEZOELECTRIC.md",
+          "sha256": "d25b9082d154e6a74a1f07cdad8fb3692de81f1884e93a84bfe2ffb642dc11f1"
+        },
+        {
+          "path": "tests/convergence/test_thermopiezo_model_convergence.py",
+          "sha256": "0b6376138f2c52a9fd5f1041be9e17fba2b568e4875031e1e12d128ea6305709"
+        },
+        {
+          "path": "tests/convergence/test_tet10_thermopiezoelectric.py",
+          "sha256": "e968818e93a5802f9936bf349b2a567b1b60a4cc4a3caa8a747cd89cd6a94457"
+        },
+        {
+          "path": "tests/unit/test_thermopiezoelectric.py",
+          "sha256": "92faad67ac45dedd9cdbc750b5ab3e1a062da7afac348ed813fc68833178a50c"
+        }
+      ]
+    },
+    {
+      "id": "modal",
+      "title": "Piezo-Moden",
+      "status": "released",
+      "released_version": "1.4.0",
+      "release": "v1.4.0",
+      "commit": "baae07f088a87ce6e256af3c5855a3b110d0f17a",
+      "scope": "Tet4/Tet10; begrenzte dichte Eigenanalyse",
+      "criterion": "Analytischer Stab, Massennormierung, rekonstruierte Schur-Lösung, vier Netze.",
+      "limits": "Nur der angegebene mathematische und numerische Umfang; keine experimentelle Fallvalidierung.",
+      "review": "Keine unabhängige fachliche Freigabe verfügbar; historischer Release-Bericht unverändert.",
+      "verification": "verified",
+      "experimental_validation": "not_performed",
+      "evidence": [
+        {
+          "path": "Doc/51_TET10_MODES.md",
+          "sha256": "03e36310c9cd57a36b593a18358973c01423130e16901a734aa982b58ba446e5"
+        },
+        {
+          "path": "tests/unit/test_piezo_modal.py",
+          "sha256": "4f35f9d1c5d417e97cf528b8e2311cbec7fed15057cbaaa9c10202319e45842f"
+        },
+        {
+          "path": "tests/convergence/test_piezo_modal_convergence.py",
+          "sha256": "f5f788eeae4ced73c0df91d1430724a282cf13a5ad2e473d3211791bf766c15e"
+        },
+        {
+          "path": "tests/convergence/test_tet10_modal.py",
+          "sha256": "e02c02de1cac89a0444f5316f65d4f32030aebdc8a8ccc316c6c6add84f4de11"
+        }
+      ]
+    },
+    {
+      "id": "newmark",
+      "title": "Piezo-Newmark",
+      "status": "released",
+      "released_version": "1.4.0",
+      "release": "v1.4.0",
+      "commit": "baae07f088a87ce6e256af3c5855a3b110d0f17a",
+      "scope": "Tet4/Tet10; beta=1/4, gamma=1/2",
+      "criterion": "Ein-DOF-Oszillator, Energie, Zeitordnung 2; bewegte Ränder/Ereignisse.",
+      "limits": "Nur der angegebene mathematische und numerische Umfang; keine experimentelle Fallvalidierung.",
+      "review": "Keine unabhängige fachliche Freigabe verfügbar; historischer Release-Bericht unverändert.",
+      "verification": "verified",
+      "experimental_validation": "not_performed",
+      "evidence": [
+        {
+          "path": "Doc/52_TET10_NEWMARK.md",
+          "sha256": "a2b67028596be0287dcaca94b220a44db025110d625c80fa32d5c629d5cc069b"
+        },
+        {
+          "path": "tests/unit/test_piezo_newmark.py",
+          "sha256": "83547fe9dfbb6c321bcd2e955fe1efe60b1e15c5a568d8d2079a1f6a68918f10"
+        },
+        {
+          "path": "tests/unit/test_tet10_newmark.py",
+          "sha256": "d01d0d75c31280d441973278d4e24f1d5a5b67f0facd41ced23e2b7954aeae3d"
+        }
+      ]
+    },
+    {
+      "id": "harmonic",
+      "title": "Piezo-Harmonik",
+      "status": "released",
+      "released_version": "1.4.0",
+      "release": "v1.4.0",
+      "commit": "baae07f088a87ce6e256af3c5855a3b110d0f17a",
+      "scope": "Tet4/Tet10; komplexe Spitzenphasoren",
+      "criterion": "Analytischer Stab, DC, Nullamplitude/Phase, Resonanzablehnung, vier Netze.",
+      "limits": "Nur der angegebene mathematische und numerische Umfang; keine experimentelle Fallvalidierung.",
+      "review": "Keine unabhängige fachliche Freigabe verfügbar; historischer Release-Bericht unverändert.",
+      "verification": "verified",
+      "experimental_validation": "not_performed",
+      "evidence": [
+        {
+          "path": "Doc/53_TET10_HARMONIC.md",
+          "sha256": "4d9e0eed0c549eb46b5088212fe7a668ca7c58fdc987b886ee2c2330d4f98fba"
+        },
+        {
+          "path": "tests/unit/test_piezo_harmonic.py",
+          "sha256": "28fb9e4ee719251c862972bc0ebb0ab68ec927af31f886d60ec1e12c15dbf782"
+        },
+        {
+          "path": "tests/convergence/test_tet10_harmonic_convergence.py",
+          "sha256": "2bb919442d626733e358f8b7de3d7710462bea597bf19783e056eb56e99630f6"
+        }
+      ]
+    },
+    {
+      "id": "geometry",
+      "title": "Geometrie und Materialien",
+      "status": "released",
+      "released_version": "1.4.0",
+      "release": "v1.4.0",
+      "commit": "baae07f088a87ce6e256af3c5855a3b110d0f17a",
+      "scope": "Affine Tet4; geradkantige Tet10/Triangle6",
+      "criterion": "Simplexmomente, Polynomreproduktion, Permutationen, Tensor-/Voigtrotation, Negativfälle.",
+      "limits": "Nur der angegebene mathematische und numerische Umfang; keine experimentelle Fallvalidierung.",
+      "review": "Keine unabhängige fachliche Freigabe verfügbar; historischer Release-Bericht unverändert.",
+      "verification": "verified",
+      "experimental_validation": "not_performed",
+      "evidence": [
+        {
+          "path": "Doc/41_TET10_GEOMETRY.md",
+          "sha256": "2cb80a236f099eea9a3b0c82509f0719a102ae86d975a41851832c0821936d39"
+        },
+        {
+          "path": "tests/unit/test_tet10_geometry.py",
+          "sha256": "948238710e5a254a58e568fa3fa61dcc03dbd6623054a5004fa094d8da3bc1f4"
+        },
+        {
+          "path": "tests/unit/test_tet10_operators.py",
+          "sha256": "cccfcb20c50fa6d7a02d69ccaab2e63fc69c047b8dfb9c16795deddd5e23f7b7"
+        },
+        {
+          "path": "tests/unit/test_piezo_material.py",
+          "sha256": "0a67d1d19dcaf47ac4bbb68e32e9a87b74e139a06259a7ecc3cca3d5dd8ac205"
+        },
+        {
+          "path": "tests/unit/test_material_regions.py",
+          "sha256": "30255407caacdb092595c0a814b527585cb291d436c02ac6d8dc72d516729480"
+        }
+      ]
+    },
+    {
+      "id": "backends",
+      "title": "Assembly und Backends",
+      "status": "released",
+      "released_version": "1.4.0",
+      "release": "v1.4.0",
+      "commit": "baae07f088a87ce6e256af3c5855a3b110d0f17a",
+      "scope": "SciPy direkt; PETSc real/complex direkt/FieldSplit",
+      "criterion": "Originalreaktionen, feldweise Residuen und native Parität; keine MPI-/Leistungszusage.",
+      "limits": "Nur der angegebene mathematische und numerische Umfang; keine experimentelle Fallvalidierung.",
+      "review": "Keine unabhängige fachliche Freigabe verfügbar; historischer Release-Bericht unverändert.",
+      "verification": "verified",
+      "experimental_validation": "not_performed",
+      "evidence": [
+        {
+          "path": "Doc/39_PETSC_FIELDSPLIT.md",
+          "sha256": "bbbdd1bee0559333f6b49c4e1e5c0f35a82fd207fab18c3105979b41bec08b38"
+        },
+        {
+          "path": "tests/unit/test_assembly.py",
+          "sha256": "8827170462df7f045d00556e594d8ae3cfe6ab66b1579d46a0d8e4f2331eba94"
+        },
+        {
+          "path": "tests/unit/test_linear_backend.py",
+          "sha256": "881d7dac2e614f03b7711d47245aacb744258a6daefe2542312384368a35ba88"
+        },
+        {
+          "path": "tests/petsc/test_physics.py",
+          "sha256": "11a1779c9bb6a0c0a67215215c43ca19196062487c4c8ffd8d402589eb726817"
+        },
+        {
+          "path": "tests/petsc/test_fieldsplit.py",
+          "sha256": "b8b06f889bf3ad60937daa98f79b8ca052e3d0767beec42946be9a2a859a525f"
+        },
+        {
+          "path": "tests/petsc/test_convergence.py",
+          "sha256": "7cd2b01f5c85006269688162c15b5305f6b4f0e407df91494132b3f0c6cd5eb9"
+        }
+      ]
+    },
+    {
+      "id": "indicator",
+      "title": "Wärmeindikator",
+      "status": "released",
+      "released_version": "1.4.0",
+      "release": "v1.4.0",
+      "commit": "baae07f088a87ce6e256af3c5855a3b110d0f17a",
+      "scope": "Nur stationäre Tet4",
+      "criterion": "Residuen, Flächenanteile, Dörfler-Markierung; keine garantierte Fehlerschranke.",
+      "limits": "Nur der angegebene mathematische und numerische Umfang; keine experimentelle Fallvalidierung.",
+      "review": "Keine unabhängige fachliche Freigabe verfügbar; historischer Release-Bericht unverändert.",
+      "verification": "verified",
+      "experimental_validation": "not_performed",
+      "evidence": [
+        {
+          "path": "Doc/43_HEAT_INDICATOR.md",
+          "sha256": "ee5f34c57fd3ac8d7479d8c25261ab1651703722b785a03dad46b3120915e205"
+        },
+        {
+          "path": "tests/unit/test_heat_indicator.py",
+          "sha256": "6be96f9c0c2043a7f3382e28c656552d7149a50d0f6e576ce2b229552797c03d"
+        },
+        {
+          "path": "tests/convergence/test_heat_indicator_convergence.py",
+          "sha256": "7ab1e0e1b2f3a5232ebd09e926b17f41536d335acf259ba0c06eb444be78a623"
+        }
+      ]
+    },
+    {
+      "id": "studies",
+      "title": "Studien und Kennwerte",
+      "status": "released",
+      "released_version": "1.4.0",
+      "release": "v1.4.0",
+      "commit": "baae07f088a87ce6e256af3c5855a3b110d0f17a",
+      "scope": "Stationäre Model-Schema-1-Fälle",
+      "criterion": "Provenienz, Wiederaufnahme, Fehlerstatus, Tabellenhash und Zieleinheiten.",
+      "limits": "Nur der angegebene mathematische und numerische Umfang; keine experimentelle Fallvalidierung.",
+      "review": "Keine unabhängige fachliche Freigabe verfügbar; historischer Release-Bericht unverändert.",
+      "verification": "verified",
+      "experimental_validation": "not_performed",
+      "evidence": [
+        {
+          "path": "Doc/60_STUDY_REPORTS.md",
+          "sha256": "21c20f7e89e2fd161807ff00f994d6f1b831e9c5acdf7fe0766925ff3f3f8bbe"
+        },
+        {
+          "path": "tests/unit/test_studies.py",
+          "sha256": "fb5f5dbde08ddf3edc8c5c4a0bf96a69764bcdbc48a7361b0a41b935585c4b6f"
+        },
+        {
+          "path": "tests/unit/test_study_reports.py",
+          "sha256": "c3af7de8e6468f3c1f73a0ca2b184bd3f33cb2c379c2d69867a627582b3b9289"
+        },
+        {
+          "path": "tests/regression/test_study_recipes.py",
+          "sha256": "3bc9e3a13e300783c18fb12349480452132781966a2f990a8406a09e65060677"
+        }
+      ]
+    },
+    {
+      "id": "surrogates",
+      "title": "Polynomiale Surrogate",
+      "status": "released",
+      "released_version": "1.4.0",
+      "release": "v1.4.0",
+      "commit": "baae07f088a87ce6e256af3c5855a3b110d0f17a",
+      "scope": "Reelle skalare Ziele; Grad 1/2",
+      "criterion": "Analytische Interaktionen, unabhängige Holdouts, Ridge, Rang/Leckage/Extrapolation.",
+      "limits": "Nur der angegebene mathematische und numerische Umfang; keine experimentelle Fallvalidierung.",
+      "review": "Keine unabhängige fachliche Freigabe verfügbar; historischer Release-Bericht unverändert.",
+      "verification": "verified",
+      "experimental_validation": "not_performed",
+      "evidence": [
+        {
+          "path": "Doc/61_SURROGATE_MODELS.md",
+          "sha256": "feef2553cf318127e215df4592174fb77996eec77aaad0161b591b307f4a01d6"
+        },
+        {
+          "path": "tests/unit/test_surrogates.py",
+          "sha256": "ca4530a7e018049388c42f1ffb77d39c74b87d0de674e276f4c0d6dc5a4866e2"
+        },
+        {
+          "path": "tests/regression/test_surrogate_example.py",
+          "sha256": "fba1ec98c7d1f6eb4184e36bce542982bcd4cf6b102d62883354ef6bed4036ed"
+        }
+      ]
+    },
+    {
+      "id": "uncertainty",
+      "title": "Unsicherheitsworkflow",
+      "status": "released",
+      "released_version": "1.4.0",
+      "release": "v1.4.0",
+      "commit": "baae07f088a87ce6e256af3c5855a3b110d0f17a",
+      "scope": "Reelle skalare Ziele; stationäre Studien",
+      "criterion": "Analytische Momente, Korrelation/Seeds, lokale Ableitungen, Fehler-/Wiederaufnahmefälle.",
+      "limits": "Nur der angegebene mathematische und numerische Umfang; keine experimentelle Fallvalidierung.",
+      "review": "Keine unabhängige fachliche Freigabe verfügbar; historischer Release-Bericht unverändert.",
+      "verification": "verified",
+      "experimental_validation": "not_performed",
+      "evidence": [
+        {
+          "path": "Doc/67_UNCERTAINTY_WORKFLOW.md",
+          "sha256": "9b587364917718477195a406d1ecb7945c4a8b91318d5a212af897df9f367829"
+        },
+        {
+          "path": "tests/unit/test_uncertainty.py",
+          "sha256": "68b75cbae9f4a81c57189a3cb60e2e01682161e602cab3bf742b01260895c643"
+        },
+        {
+          "path": "tests/regression/test_uncertainty_study.py",
+          "sha256": "5942ef5808fe7ac1687e44379c88b02220f9d45fb8fcea7951365245b558dd1f"
+        }
+      ]
+    },
+    {
+      "id": "cost",
+      "title": "Genauigkeit und Kosten",
+      "status": "released",
+      "released_version": "1.4.0",
+      "release": "v1.4.0",
+      "commit": "baae07f088a87ce6e256af3c5855a3b110d0f17a",
+      "scope": "Tet4/Tet10; SciPy/PETSc direkt",
+      "criterion": "72 historische Läufe, unabhängige Normen; unveränderte Budgets und unerreichte Ziele.",
+      "limits": "Nur der angegebene mathematische und numerische Umfang; keine experimentelle Fallvalidierung.",
+      "review": "Keine unabhängige fachliche Freigabe verfügbar; historischer Release-Bericht unverändert.",
+      "verification": "verified",
+      "experimental_validation": "not_performed",
+      "evidence": [
+        {
+          "path": "Doc/54_ACCURACY_COST_COMPARISON.md",
+          "sha256": "28cc79c6c8831ba33c176a0d1e062d755e8d5f8deb68515e73d78f606a9cb743"
+        },
+        {
+          "path": "tests/regression/test_accuracy_cost.py",
+          "sha256": "9626543ae537ab93f06895c32ffb8099ba558b737a2efca51266b04202c05a17"
+        },
+        {
+          "path": "tests/petsc/test_native_accuracy_cost.py",
+          "sha256": "4a081936b0c841449c6ba4b6123746c968c167720e9a4537f6fe69466d76df27"
+        }
+      ]
+    },
+    {
+      "id": "adaptive_heat",
+      "title": "Adaptive stationäre Wärme",
+      "status": "branch_candidate",
+      "released_version": null,
+      "release": null,
+      "commit": "88457958c92a6cbe89fd8b503de8072900de8316",
+      "scope": "Affine Tet4, stationäre Wärme; heuristischer Residualindikator",
+      "criterion": "Lokalisierte analytische Energiefehlergrenze 1.5 sqrt(W K): 514 adaptive gegenüber 729 uniformen DOFs.",
+      "limits": "Branch-Nachweis ist keine veröffentlichte Produktfähigkeit; keine experimentelle Validierung.",
+      "review": "Keine unabhängige fachliche Freigabe verfügbar.",
+      "verification": "verified",
+      "experimental_validation": "not_performed",
+      "evidence": [
+        {
+          "path": "Doc/evidence/catalog/adaptive_heat-71_M10_RELEASE_VERIFICATION.md.snapshot",
+          "sha256": "0ed85155bb6bd25195028203cd55f9a0fe2090a7799e3223624c8b4a1c6c627e",
+          "source_path": "Doc/71_M10_RELEASE_VERIFICATION.md"
+        },
+        {
+          "path": "Doc/evidence/catalog/adaptive_heat-comparison.json.snapshot",
+          "sha256": "63e50958c3b7cfecf299c89320eb3c427c7bdb1fa18857fe29ccc1d246a58c3f",
+          "source_path": "Doc/evidence/m10/comparison.json"
+        },
+        {
+          "path": "Doc/evidence/catalog/adaptive_heat-environment.json.snapshot",
+          "sha256": "71780732655e98901bd5967f358a857e6c4f11f3fff322fec3db3f52b626b9b3",
+          "source_path": "Doc/evidence/m10/environment.json"
+        }
+      ]
+    },
+    {
+      "id": "quad_fv",
+      "title": "Quad-FV-Grundoperatoren",
+      "status": "branch_candidate",
+      "released_version": null,
+      "release": null,
+      "commit": "783c183195288f288a24551638c8bf46ceadae7d",
+      "scope": "2D körperangepasste Quad-FV-Grundoperatoren; kein abgenommener SIMPLE-Strömungssolver",
+      "criterion": "Operator- und Rekonstruktionsprüfungen; Strömungsabnahme #230 bleibt offen.",
+      "limits": "Branch-Nachweis ist keine veröffentlichte Produktfähigkeit; keine experimentelle Validierung.",
+      "review": "Keine unabhängige fachliche Freigabe verfügbar.",
+      "verification": "verified",
+      "experimental_validation": "not_performed",
+      "evidence": [
+        {
+          "path": "Doc/evidence/catalog/quad_fv-73_QUAD_FV_OPERATORS.md.snapshot",
+          "sha256": "b3c80d3c33366db11715e7eeb9363e43c44a859247cf652e6424c92163b93cc1",
+          "source_path": "Doc/73_QUAD_FV_OPERATORS.md"
+        },
+        {
+          "path": "Doc/evidence/catalog/quad_fv-test_quad_fv.py.snapshot",
+          "sha256": "bd01cd35a54d568e1425f30554d7ca2143865eff98191d68f17c68381e98a29f",
+          "source_path": "tests/unit/test_quad_fv.py"
+        },
+        {
+          "path": "Doc/evidence/catalog/quad_fv-test_quad_fv_reconstruction.py.snapshot",
+          "sha256": "b7dfa3da7aace7dd57285de212ddc0e2922192ad864d5584b9ac26f710afc292",
+          "source_path": "tests/convergence/test_quad_fv_reconstruction.py"
+        }
+      ]
+    },
+    {
+      "id": "experimental_piezo",
+      "title": "Experimentelle Piezo-Fallvalidierung",
+      "status": "planned",
+      "released_version": null,
+      "release": null,
+      "commit": null,
+      "scope": "Abgegrenzter Messfall nach #63/#65",
+      "criterion": "Messdaten, Unsicherheitsbudget und disjunkter Holdout fehlen weiterhin.",
+      "limits": "Keine experimentelle Freigabe ohne qualifizierte Messdaten und Vergleichsnachweis.",
+      "review": "Kein unabhängiges Messfallreview verfügbar.",
+      "verification": "missing_evidence",
+      "experimental_validation": "not_performed",
+      "evidence": []
+    }
+  ]
+}
