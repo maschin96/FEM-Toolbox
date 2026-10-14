@@ -21,14 +21,14 @@ jobs:
   artifact-build:
     name: Build release artifacts
     runs-on: [self-hosted, Linux, X64]
+    container:
+      image: python:3.13-bookworm@sha256:073ffebb96ae4d0ed73ccad59f08c47bd84af8a79f5258130f8458ac50ad9ff4
+      # Match machine-1 ownership so native jobs can clean the persistent workspace.
+      options: --user 1001:1001
     timeout-minutes: 10
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - name: Set up Python
-        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
-        with:
-          python-version: "3.13"
       - name: Create isolated Python environment
         run: |
           python -m venv "$RUNNER_TEMP/job-env"
@@ -69,10 +69,20 @@ jobs:
     name: Artifacts / Python ${{ matrix.python-version }} / ${{ matrix.distribution }}
     needs: artifact-build
     runs-on: [self-hosted, Linux, X64]
+    container:
+      image: ${{ matrix.python-image }}
+      options: --user 1001:1001
     timeout-minutes: 15
     strategy:
       fail-fast: false
       matrix:
+        include:
+          - python-version: "3.11"
+            python-image: python:3.11-bookworm@sha256:5887f265d8d44d8b4734d3658b21d668edf5aaf92e4945bc0c984afbfab105d3
+          - python-version: "3.12"
+            python-image: python:3.12-bookworm@sha256:5560e9ab8709f459489e5b8aa696eda8a07ef821e14bb122be62d91234bfa98b
+          - python-version: "3.13"
+            python-image: python:3.13-bookworm@sha256:073ffebb96ae4d0ed73ccad59f08c47bd84af8a79f5258130f8458ac50ad9ff4
         python-version: ["3.11", "3.12", "3.13"]
         distribution: [wheel, sdist]
     # No checkout; use a fresh directory outside the persistent runner workspace.
@@ -81,10 +91,6 @@ jobs:
       run:
         working-directory: ${{ env.CANDIDATE_DIR }}
     steps:
-      - name: Set up Python
-        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
-        with:
-          python-version: ${{ matrix.python-version }}
       - name: Create isolated artifact directory
         run: |
           candidate_dir=$(mktemp -d "$RUNNER_TEMP/candidate.XXXXXX")
@@ -204,17 +210,14 @@ jobs:
   quality:
     name: Quality / Python 3.13
     runs-on: [self-hosted, Linux, X64]
+    container:
+      image: python:3.13-bookworm@sha256:073ffebb96ae4d0ed73ccad59f08c47bd84af8a79f5258130f8458ac50ad9ff4
+      # Match machine-1 ownership so native jobs can clean the persistent workspace.
+      options: --user 1001:1001
     timeout-minutes: 15
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-
-      - name: Set up Python
-        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
-        with:
-          python-version: "3.13"
-          cache: pip
-          cache-dependency-path: pyproject.toml
 
       - name: Create isolated Python environment
         run: |
@@ -242,10 +245,20 @@ jobs:
   tests:
     name: Tests / Python ${{ matrix.python-version }}
     runs-on: [self-hosted, Linux, X64]
+    container:
+      image: ${{ matrix.python-image }}
+      options: --user 1001:1001
     timeout-minutes: 15
     strategy:
       fail-fast: false
       matrix:
+        include:
+          - python-version: "3.11"
+            python-image: python:3.11-bookworm@sha256:5887f265d8d44d8b4734d3658b21d668edf5aaf92e4945bc0c984afbfab105d3
+          - python-version: "3.12"
+            python-image: python:3.12-bookworm@sha256:5560e9ab8709f459489e5b8aa696eda8a07ef821e14bb122be62d91234bfa98b
+          - python-version: "3.13"
+            python-image: python:3.13-bookworm@sha256:073ffebb96ae4d0ed73ccad59f08c47bd84af8a79f5258130f8458ac50ad9ff4
         python-version:
           - "3.11"
           - "3.12"
@@ -253,13 +266,6 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-
-      - name: Set up Python
-        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
-        with:
-          python-version: ${{ matrix.python-version }}
-          cache: pip
-          cache-dependency-path: pyproject.toml
 
       - name: Create isolated Python environment
         run: |
@@ -278,10 +284,20 @@ jobs:
   compatibility:
     name: Compatibility / Python ${{ matrix.python-version }} / ${{ matrix.dependency_set }}
     runs-on: [self-hosted, Linux, X64]
+    container:
+      image: ${{ matrix.python-image }}
+      options: --user 1001:1001
     timeout-minutes: 15
     strategy:
       fail-fast: false
       matrix:
+        include:
+          - python-version: "3.11"
+            python-image: python:3.11-bookworm@sha256:5887f265d8d44d8b4734d3658b21d668edf5aaf92e4945bc0c984afbfab105d3
+          - python-version: "3.12"
+            python-image: python:3.12-bookworm@sha256:5560e9ab8709f459489e5b8aa696eda8a07ef821e14bb122be62d91234bfa98b
+          - python-version: "3.13"
+            python-image: python:3.13-bookworm@sha256:073ffebb96ae4d0ed73ccad59f08c47bd84af8a79f5258130f8458ac50ad9ff4
         python-version:
           - "3.11"
           - "3.12"
@@ -292,15 +308,6 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-
-      - name: Set up Python
-        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
-        with:
-          python-version: ${{ matrix.python-version }}
-          cache: pip
-          cache-dependency-path: |
-            pyproject.toml
-            ci/oldest-constraints.txt
 
       - name: Create isolated Python environment
         run: |
