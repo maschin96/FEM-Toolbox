@@ -55,10 +55,12 @@ def problem_document(problem: TopologyProblem) -> dict[str, Any]:
                 ],
                 "body_force_N_m3": np.asarray(c.body_force).tolist(),
                 "tractions_N_m2": {
-                    str(k): list(v) for k, v in (c.tractions or {}).items()
+                    str(k): np.asarray(v).tolist()
+                    for k, v in (c.tractions or {}).items()
                 },
                 "point_loads_N": {
-                    str(k): list(v) for k, v in (c.point_loads or {}).items()
+                    str(k): np.asarray(v).tolist()
+                    for k, v in (c.point_loads or {}).items()
                 },
             }
             for c in problem.cases

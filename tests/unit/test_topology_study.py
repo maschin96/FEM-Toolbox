@@ -1,8 +1,5 @@
 """Persisted design inputs and results are hash bound and reproducible."""
 
-import json
-
-import numpy as np
 import pytest
 from numpy.testing import assert_allclose
 
@@ -52,6 +49,7 @@ def test_unknown_or_escaping_configuration_is_rejected(tmp_path):
 
 def test_model_snapshot_and_declared_recipe_roundtrip():
     from pathlib import Path
+
     from fem_toolbox.model import Model
 
     root = Path(__file__).parents[2] / "examples/topology/reference"

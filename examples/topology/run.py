@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 
 from fem_toolbox.errors import ValidationError
+from fem_toolbox.topology_geometry import export_reanalyses
 from fem_toolbox.topology_study import TopologyStudy
 
 parser = argparse.ArgumentParser(description=__doc__)
@@ -16,6 +17,7 @@ args = parser.parse_args()
 try:
     study = TopologyStudy.from_file(args.config)
     result = study.run(args.output)
+    geometry = export_reanalyses(study.problem, result.final, args.output / "geometry")
 except (OSError, ValueError, ValidationError, KeyError, TypeError) as error:
     parser.exit(2, f"topology study: {error}\n")
 print(

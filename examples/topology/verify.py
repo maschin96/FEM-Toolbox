@@ -147,5 +147,7 @@ report.update(
     and steps[-1]["relative_error"] <= 2e-4
     and steps[-1]["absolute_volume_derivative_error"] <= 2e-9,
 )
-(output / "verification.json").write_text(json.dumps(report, indent=2) + "\n")
+(output / "verification.json").write_text(
+    json.dumps(report, indent=2, default=lambda x: x.item()) + "\n"
+)
 raise SystemExit(0 if report["gates_passed"] else 2)

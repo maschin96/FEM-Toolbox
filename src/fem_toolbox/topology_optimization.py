@@ -73,6 +73,7 @@ def optimize_topology(
     start = problem.evaluate(x)
     if start.volume_fraction > volume_fraction + 1e-10:
         raise ValidationError("initial design violates volume budget", field="initial")
+    coordinate_scale = float(np.sqrt(max(1, len(problem.free))))
     cached = start
     best = start
     evaluations = 1
@@ -108,7 +109,7 @@ def optimize_topology(
     def evaluate(z: NDArray[np.float64]) -> DensityEvaluation:
         nonlocal cached, best, evaluations
         trial = x.copy()
-        trial[problem.free] = np.clip(z, 0, 1)
+        trial[problem.free] = np.clip(z * coordinate_scale, 0, 1)
         if np.array_equal(trial, cached.density):
             return cached
         if evaluations >= options.max_evaluations:
@@ -126,14 +127,15 @@ def optimize_topology(
         state = evaluate(z)
         return state.objective / start.objective, state.objective_gradient[
             problem.free
-        ] / start.objective
+        ] * coordinate_scale / start.objective
 
     def constraint(z: NDArray[np.float64]) -> float:
         # The density filter and fixed-region overrides are affine.
         return float(
             volume_fraction
             - start.volume_fraction
-            - problem.volume_gradient[problem.free] @ (z - x[problem.free])
+            - problem.volume_gradient[problem.free]
+            @ (z * coordinate_scale - x[problem.free])
         )
 
     status = "converged"
@@ -142,15 +144,17 @@ def optimize_topology(
         try:
             solved = minimize(
                 objective,
-                x[problem.free],
+                x[problem.free] / coordinate_scale,
                 jac=True,
                 method="SLSQP",
-                bounds=[(0.0, 1.0)] * len(problem.free),
+                bounds=[(0.0, 1.0 / coordinate_scale)] * len(problem.free),
                 constraints=[
                     {
                         "type": "ineq",
                         "fun": constraint,
-                        "jac": lambda z: -problem.volume_gradient[problem.free],
+                        "jac": lambda z: (
+                            -problem.volume_gradient[problem.free] * coordinate_scale
+                        ),
                     }
                 ],
                 callback=lambda z: record(evaluate(z)),

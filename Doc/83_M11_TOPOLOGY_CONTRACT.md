@@ -71,3 +71,28 @@ Zustandsfehler und Budgets werden eindeutig protokolliert. Geometrie-No-go separ
 Artefaktinstallation, aktuelle CI und Dokumentations-/Versions-/Reviewnachweise.
 Offene Gates verhindern Release/Tag. M11 ist die Themenkennung; die im Backlog
 vorläufige v1.9.0 ist keine automatisch festgelegte Veröffentlichungsnummer.
+
+## Implementierungsbefund zur Variablenskalierung (19.10.2026)
+
+Der erste Matrixlauf ohne Koordinatenskalierung erreichte auf feineren Netzen
+innerhalb von 100 Iterationen nur Budgetstopps. Diese Läufe sind No-go und
+werden nicht umetikettiert. SLSQP verwendet deshalb z=x/sqrt(n_free): die
+quadratische Schrittnorm entspricht der mittleren statt der aufsummierten
+Zellvariation. Gradienten, lineare Restriktion und Schranken werden vollständig
+zurücktransformiert; Ziel C/C_start, ftol, Budgets und Gates bleiben unverändert.
+Dies ist eine Konditionierung des gleichen Problems, keine Grenzweitung.
+Nichtkonvexe lokale Minima können sich durch die Suchkoordinaten unterscheiden.
+
+## Expliziter zweiter Geometrieweg vor seiner Verifikation
+
+Reine Schwellengeometrien bleiben mit ihrem ursprünglichen No-go sichtbar.
+Als gesonderter, optionaler Weg wird nach Schwellenbildung ein deterministischer
+Flächenpfad ergänzt: Dijkstra über den ursprünglichen Tet4-Flächengraphen,
+Zielzellkosten V*(1-rho+1e-3), stabile Zellindexreihenfolge, Verbindung der
+Komponente mit kleinstem Index zur billigsten weiteren Komponente bis zur
+Zusammenhängigkeit. Feste Leergebiete werden nie aufgefüllt. Alle hinzugefügten
+Zellen werden ausgewiesen. Schwelle, Material, Lasten, Reanalyse und Grenzen
+(C-Verhältnis<=2, Gesamtvolumen<=0.9) bleiben unverändert. Das ist eine
+explizite Geometrieänderung, keine behauptete Reanalyse des reinen Schwellenfeldes.
+Die Mindestabnahme erlaubt einen erfolgreichen der beiden dokumentierten Wege;
+fehlgeschlagene reine Schwellen werden weder gelöscht noch als bestanden gezählt.

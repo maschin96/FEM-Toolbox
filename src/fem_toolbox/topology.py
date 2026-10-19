@@ -6,10 +6,8 @@ solver. It is intentionally limited to small, deterministic local studies.
 
 from __future__ import annotations
 
-from collections import Counter
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
-from itertools import combinations
 from types import MappingProxyType
 from typing import TYPE_CHECKING, Any
 
