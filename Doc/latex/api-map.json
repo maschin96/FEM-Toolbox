@@ -770,6 +770,57 @@
         "examples/adaptive_heat/run_adaptive.py",
         "tests/unit/test_adaptive_heat.py"
       ]
+    },
+    "fem_toolbox.topology": {
+      "classification": "mixed",
+      "stable_symbols": [
+        "LoadCase",
+        "DensityEvaluation",
+        "TopologyProblem"
+      ],
+      "rationale": "Additive M11-Oberfläche ab v1.6.0; SI, Tet4, feste Totlasten und eigene Schema-1-Exporte.",
+      "contract": "Doc/latex/chapters/api/topology.tex",
+      "examples": [
+        "examples/topology/run.py"
+      ]
+    },
+    "fem_toolbox.topology_optimization": {
+      "classification": "mixed",
+      "stable_symbols": [
+        "OptimizationOptions",
+        "OptimizationResult",
+        "optimize_topology"
+      ],
+      "rationale": "Additive M11-Oberfläche ab v1.6.0; SI, Tet4, feste Totlasten und eigene Schema-1-Exporte.",
+      "contract": "Doc/latex/chapters/api/topology.tex",
+      "examples": [
+        "examples/topology/run.py"
+      ]
+    },
+    "fem_toolbox.topology_study": {
+      "classification": "mixed",
+      "stable_symbols": [
+        "TopologyStudy",
+        "read_topology_result"
+      ],
+      "rationale": "Additive M11-Oberfläche ab v1.6.0; SI, Tet4, feste Totlasten und eigene Schema-1-Exporte.",
+      "contract": "Doc/latex/chapters/api/topology.tex",
+      "examples": [
+        "examples/topology/run.py"
+      ]
+    },
+    "fem_toolbox.topology_geometry": {
+      "classification": "mixed",
+      "stable_symbols": [
+        "GeometryResult",
+        "reanalyze_geometry",
+        "export_reanalyses"
+      ],
+      "rationale": "Additive M11-Oberfläche ab v1.6.0; SI, Tet4, feste Totlasten und eigene Schema-1-Exporte.",
+      "contract": "Doc/latex/chapters/api/topology.tex",
+      "examples": [
+        "examples/topology/run.py"
+      ]
     }
   }
 }

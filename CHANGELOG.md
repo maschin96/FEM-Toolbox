@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.6.0] - 2026-10-19
+
+- [Kurze SIMP-Einführung](Doc/86_SIMP_EINFUEHRUNG.md); [Release Notes](Doc/releases/v1.6.0.md).
+
+- Gefilterte Tet4-SIMP-Mehrlastfalloptimierung mit Volumenrestriktion und vollständiger Gradientenkette.
+- Model-basierte TOML-Studien, deterministische SI-Provenienz, JSON-/VTU-Export und klare Abbruchstatus.
+- Getrennte Schwellen-/Verbindungsgeometrien mit unabhängiger Vollmaterial-Reanalyse.
+- Drei-Netze-/Zwei-Radien-Nachweis; keine experimentelle, Festigkeits- oder Fertigungsfreigabe.
+
 Alle wesentlichen Änderungen dieses Projekts werden hier dokumentiert. Das
 Format orientiert sich an [Keep a Changelog](https://keepachangelog.com/) und die
 Versionierung an [Semantic Versioning](https://semver.org/).

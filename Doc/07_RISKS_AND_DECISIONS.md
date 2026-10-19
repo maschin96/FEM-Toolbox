@@ -659,3 +659,13 @@ Verifikationsnachweise werden nicht zu Messdaten umetikettiert. #66 benötigt
 nach wie vor erfolgreiche CI, integrierte Pflichtpakete, Artefaktinstallation,
 vollständige PDF-/Quellenabnahme und Zielcommitprüfung vor Release/Tag.
 [Befunde und vollständiger genehmigter Umfang](66_M9_DATA_SEARCH_AND_RELEASE_OPTIONS.md).
+
+## ADR-056 — M11: gefilterte SIMP-Nachgiebigkeit und SLSQP (19.10.2026)
+
+Für Tet4-Mehrlastfallmechanik werden ein volumengewichteter linearer
+Dichtefilter, positive SIMP-Untergrenze und vollständige adjungierte
+Sensitivitäten gewählt. SLSQP behandelt Volumen und Schranken mit analytischen
+Ableitungen. Keine harte Projektionsfunktion, globale Optimalitätsbehauptung
+oder Fertigungsfreigabe. Die Schwellengeometrie wird mit unverändertem
+Mechaniksolver erneut gerechnet; Reststeifigkeit zählt nicht als Geometrie.
+[Formeln, Alternativen und vorab festgelegte Gates](83_M11_TOPOLOGY_CONTRACT.md).

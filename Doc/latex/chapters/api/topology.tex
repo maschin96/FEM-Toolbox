@@ -1,0 +1,33 @@
+\chapter{API für Struktur-Topologieoptimierung}\label{api:topology}
+Version 1.6.0 ergänzt die Module \path{topology},
+\path{topology_optimization}, \path{topology_study} und \path{topology_geometry}.
+Alle Dichte-/Gradientenvektoren haben Form \((n_{\rm Zellen},)\), die
+Eingabezellfolge bleibt erhalten. \path{LoadCase} enthält konstante SI-Lasten
+und homogene Dirichlet-DOFs; \path{TopologyProblem} validiert Tet4, positive
+Tensoren, Gewichte, Radius sowie feste Voll-/Leergebiete.
+\path{TopologyProblem.from_models} verwendet den additiven Snapshot
+\path{Model.elasticity_inputs()}; Material- und Lastparser bleiben gemeinsam.
+\path{evaluate} liefert unveränderliche Dichten, Compliance in J,
+Volumenfraktion und vollständige Ableitungen sowie je ein \path{ElasticResult}.
+
+\path{OptimizationOptions} begrenzt Iterationen/Auswertungen und definiert die
+skalierte SLSQP-Toleranz. \path{optimize_topology} bewahrt den besten zulässigen
+Zustand bei Budget-/Solverstopp. Status sind \path{converged},
+\path{iteration_limit}, \path{evaluation_limit} und \path{solver_failed}.
+Ein ungültiger Anfangszustand wirft \path{ValidationError}.
+\begin{lstlisting}
+study = TopologyStudy.from_file("study.toml")
+result = study.run("new-output")
+record = read_topology_result("new-output")
+export_reanalyses(study.problem, result.final,
+                  "new-output/geometry")
+\end{lstlisting}
+TOML und Ergebnis verwenden eigene Schema-Version 1. Eingaben enthalten
+vollständige effektive SI-Daten, Solverparameter und Quellhashes;
+\path{RunProvenance} bindet sie deterministisch. JSON/VTU erhalten eine
+SHA-256-Inventardatei. Vorhandene Ausgabeordner werden abgelehnt.
+\path{reanalyze_geometry(..., connect=False)} prüft die reine Schwelle;
+\path{connect=True} ergänzt ausdrücklich protokollierte Verbindungszellen.
+\path{GeometryResult} enthält das volle diskrete Netz, Originalzellzeilen,
+Zustände, Nachgiebigkeit, Volumen und rohe von-Mises-Spannung. Kein CAD,
+keine Spannungs-/Fertigungsfreigabe und keine implizite Änderung alter Formate.

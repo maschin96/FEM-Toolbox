@@ -1,0 +1,40 @@
+\chapter{Gefilterte Struktur-Topologieoptimierung}\label{theory:topology}
+Die stationäre Tet4-Mechanik löst für feste Totlasten \(K(\rho)u_l=f_l\).
+Homogene Lagerungen sind Voraussetzung der selbstadjungierten
+Nachgiebigkeit \(C=\sum_l w_l f_l^T u_l=2\sum_l w_l U_l\) in Joule.
+Das physische Volumen ist \(v=\sum_e V_e\rho_e/\sum_e V_e\).
+Ein positiver Gewichtsfaktor wird nicht automatisch normiert.
+Für Zellzentren \(c_e\) und Radius \(r>0\) in Metern gilt
+\[
+ H_{ej}=\max(0,r-\lVert c_e-c_j\rVert)V_j,\qquad
+ P_{ej}=H_{ej}/\sum_k H_{ek},\qquad \rho=Px.
+\]
+Feste Entwurfswerte sind 0 oder 1; nach der Filterung werden ihre physischen
+Zeilen exakt überschrieben. Mit der freien Diagonalmaske \(M\) ist die
+Jacobi-Matrix daher \(J=MPM\). Das berücksichtigt Randzeilen,
+ungleiche Zellvolumina und konstante Beiträge fester Nachbarzellen.
+SIMP setzt \(K_e=a_e K_e^0\),
+\(a_e=\epsilon+(1-\epsilon)\rho_e^p\), standardmäßig \(p=3\),
+\(\epsilon=10^{-3}\). Auch eine Leerzelle hat numerische Reststeifigkeit.
+Mit der gewichteten Zellenergie \(U_e=\sum_l w_l U_{el}\) liefert
+Differenzieren des Zustands bei festen Kräften
+\[
+ \frac{\partial C}{\partial\rho_e}
+ =-\frac{2U_e}{a_e}p(1-\epsilon)\rho_e^{p-1},\qquad
+ \nabla_x C=J^T\nabla_\rho C,\quad
+ \nabla_x v=J^TV/\sum_e V_e.
+\]
+SLSQP minimiert \(C/C_0\) mit Bounds und linearer Volumenrestriktion.
+Die Koordinaten \(z=x/\sqrt{n_{\rm frei}}\) konditionieren die Schrittnorm;
+Gradienten und Schranken werden vollständig transformiert. Ein lokaler Stopp
+beweist keine globale Optimalität. Der lineare Filter ist eine Regularisierung,
+keine garantierte Mindestwandstärke. Zwischenmaterial und Netzeinfluss müssen
+separat ausgewiesen werden.
+
+Für eine diskrete Geometrie werden Zellen über drei feste Schwellen gewählt.
+Getrennte Teile sind ein No-go. Ein ausdrücklich optionaler zweiter Weg ergänzt
+Flächenpfade mit Kosten \(V(1-\rho+10^{-3})\) im Ursprungsnetz, ohne feste
+Leergebiete aufzufüllen. Alle Ergänzungen werden protokolliert. Danach rechnet
+der unveränderte Mechaniksolver Vollmaterial, dieselben Lasten und Lagerungen.
+Geometrievolumen und Nachgiebigkeit erhalten eigene Grenzen; sie sind kein
+Nachweis der ursprünglichen Dichtevolumenrestriktion oder der Festigkeit.

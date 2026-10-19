@@ -5,10 +5,10 @@ dreidimensionale Finite-Elemente-Simulationen. Ziel sind verifizierte Modelle f�
 Festkörpermechanik, Wärmeleitung, Elektrostatik und deren thermomechanische und
 piezoelektrische Kopplungen auf Basis linearer **Tet4** und geradkantiger quadratischer **Tet10**.
 
-**v1.5.0 — kontrollierte adaptive Netzstudien für stationäre Tet4-Wärme.**
-Version 1.5.0 vom 19.10.2026; Veröffentlichungsstatus in [#70](https://github.com/maschin96/FEM-Toolbox/issues/70).
-[Release-Nachweis](Doc/71_M10_RELEASE_VERIFICATION.md) ·
-[Release Notes](Doc/releases/v1.5.0.md) ·
+**v1.6.0 — verifizierte Struktur-Topologieoptimierung mit Geometrie-Reanalyse.**
+Version 1.6.0; Veröffentlichungsstatus in [#83](https://github.com/maschin96/FEM-Toolbox/issues/83).
+[Release-Nachweis](Doc/87_M11_RELEASE_VERIFICATION.md) ·
+[Release Notes](Doc/releases/v1.6.0.md) ·
 [Supportmatrix](Doc/57_M7_RELEASE_CANDIDATE.md).
 
 Neu gegenüber v1.0: [transiente Wärmeleitung](Doc/33_TRANSIENT_HEAT.md) mit
@@ -34,7 +34,7 @@ verifizierten Annahmen und numerischen Grenzen.
 
 ## Verfügbare Funktionen
 
-| Bereich | Umfang in v1.5.0 |
+| Bereich | Umfang in v1.6.0 |
 |---|---|
 | Netzmodell | Unveränderliche NumPy-Arrays für 3D-Punkte, Tet4/Tet10-Zellen und Triangle3/Triangle6-Flächen; validierte Indizes, externe IDs und Tags |
 | Auswahlsätze | Benannte Volumen- und Flächensätze, auch mit überlappenden Mitgliedschaften |
@@ -50,6 +50,7 @@ verifizierten Annahmen und numerischen Grenzen.
 | Thermopiezoelektrizität | Einseitiger stationärer Ablauf `T → (u, φ)` mit regionsweiser thermischer Eigenverzerrung und getrennten Wärme-, Kraft- und Ladungsbilanzen |
 | Transiente Wärme | Konstante rho/c-Daten, Backward Euler, Model-Schema 2, Zeitprofile, Speicherbilanz und PVD-/Messpunktserien |
 | Adaptive Wärme | Konforme Tet4-Verfeinerung, Rand-/Materialgruppenvererbung und kontrollierter Abbruch mit Stufenprovenienz; heuristischer Residualindikator |
+| Topologieoptimierung | Volumengewichteter Dichtefilter, SIMP und Mehrlastfall-Nachgiebigkeit auf Tet4; TOML-Studien, geprüfte Gradienten und getrennte Vollmaterial-Reanalyse diskreter Geometrien |
 | Unsicherheit | Explizite Normal-/Gleichverteilungen, gemeinsames Sampling, normale Korrelation, Stichprobenstatistik, lokale Sensitivität und stationäre M8-FEM-Studien; keine experimentelle Freigabe |
 | Piezo-Dynamik | Mechanische konsistente Masse, algebraisches Potential, Modal-/Newmark-/Harmonikanalyse, Model-Schema 3 und komplexe Feld-/Messpunktausgabe |
 
@@ -223,7 +224,7 @@ elektrisches Potential `phi` mit feldweiser Freiheitsgradverwaltung.
 | M8 | v1.3.0 | Parameterstudien, Visualisierung und Surrogatmodelle | Implementiert und verifiziert; Release-Abschluss siehe Freigabebericht |
 | M9 | v1.4.0 | Verifizierter Unsicherheitsworkflow und Gesamtdokumentation | Implementiert und verifiziert; Veröffentlichung siehe Freigabebericht |
 | M10 | v1.5.0 | Kontrollierte adaptive Netzstudien | Implementiert und verifiziert; Veröffentlichung siehe #70 |
-| M11 | Offen | Topologieoptimierung | Grober Horizont |
+| M11 | v1.6.0 | Gefilterte Struktur-Topologieoptimierung und Geometrie-Reanalyse | Implementiert und verifiziert; Veröffentlichung siehe #83 |
 | M12 | Offen | RANS-CFD mit Fluid-Struktur-Kopplung | Grober Horizont |
 
 *Vorläufige Zielversionen ohne Terminzusage. Produktvision, Bestandsanalyse,
@@ -351,3 +352,17 @@ python examples/adaptive_heat/run_adaptive.py --output results/adaptive_heat
 Das Beispiel vergleicht sieben adaptive und uniforme Stufen mit zwei analytischen
 Referenzen. [Vertrag](Doc/69_ADAPTIVE_REMESHING_CONTRACT.md),
 [API und Verifikation](Doc/70_ADAPTIVE_HEAT_WORKFLOW.md).
+
+## Struktur-Topologieoptimierung (M11)
+
+Version 1.6.0 ergänzt gefilterte SIMP-Nachgiebigkeitsminimierung
+mit Volumenrestriktion, mehreren Lastfällen, geprüften Sensitivitäten und
+separater FEM-Reanalyse der abgeleiteten Geometrie. Die finale Integration, CI und Veröffentlichung sind in [#83](https://github.com/maschin96/FEM-Toolbox/issues/83) nachvollziehbar.
+
+```sh
+python -I examples/topology/run.py --output results/topology
+```
+
+[Vorbereitetes Beispiel](examples/topology/README.md) ·
+[API und Grenzen](Doc/84_M11_TOPOLOGY_WORKFLOW.md) ·
+[Nachweise und Release-Gate](Doc/85_M11_VERIFICATION.md).
