@@ -251,7 +251,7 @@ class TopologyProblem:
         rho = np.asarray(self._filter @ x).ravel()
         rho[self.solid] = 1
         rho[self.void] = 0
-        return np.clip(rho, 0, 1)
+        return np.asarray(np.clip(rho, 0, 1), dtype=np.float64)
 
     def evaluate(self, density: ArrayLike) -> DensityEvaluation:
         """Solve independent load states and exact filtered compliance gradients."""
