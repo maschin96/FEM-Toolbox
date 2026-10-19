@@ -3453,6 +3453,20 @@
       "canonical": "Doc/85_M11_VERIFICATION.md",
       "owner": "M11 maintainers",
       "status": "open"
+    },
+    {
+      "source": "Doc/86_SIMP_EINFUEHRUNG.md",
+      "target": "Doc/latex/chapters/theory/topology.tex",
+      "canonical": "Doc/86_SIMP_EINFUEHRUNG.md",
+      "owner": "M11 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "Doc/releases/v1.6.0.dev1.md",
+      "target": "Doc/latex/chapters/documentation-sources.tex",
+      "canonical": "Doc/releases/v1.6.0.dev1.md",
+      "owner": "M11 maintainers",
+      "status": "open"
     }
   ],
   "planned": [

@@ -6,6 +6,8 @@ Deshalb ist nach v1.5.0 das nächste Minor-Ziel v1.6.0; die ältere v1.9.0-Angab
 in Planungswelle 3 war vorläufig. Andere Milestones werden nicht als freigegeben
 vorgezogen. [Mathematik und vorab festgelegte Gates](83_M11_TOPOLOGY_CONTRACT.md).
 
+Zum Einstieg: [Was ist SIMP-Optimierung?](86_SIMP_EINFUEHRUNG.md)
+
 ## Vorbereitetes Beispiel
 
 ```sh

@@ -186,6 +186,9 @@ experimentelle Validierungsfreigabe wird nicht behauptet.
 
 ## M11 — Struktur-Topologieoptimierung (Entwicklung)
 
+- [SIMP verständlich erklärt: kurze Einführung](86_SIMP_EINFUEHRUNG.md)
+- [Release Notes zum M11-Entwicklungskandidaten](releases/v1.6.0.dev1.md)
+
 - [Mathematik, Sensitivität und vorab definierte Gates (#76)](83_M11_TOPOLOGY_CONTRACT.md)
 - [Studienworkflow, API, Einheiten und Geometrie-Reanalyse](84_M11_TOPOLOGY_WORKFLOW.md)
 - [Numerische Nachweise und offenes Release-Gate (#83)](85_M11_VERIFICATION.md)
