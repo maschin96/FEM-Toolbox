@@ -351,3 +351,18 @@ python examples/adaptive_heat/run_adaptive.py --output results/adaptive_heat
 Das Beispiel vergleicht sieben adaptive und uniforme Stufen mit zwei analytischen
 Referenzen. [Vertrag](Doc/69_ADAPTIVE_REMESHING_CONTRACT.md),
 [API und Verifikation](Doc/70_ADAPTIVE_HEAT_WORKFLOW.md).
+
+## M11-Entwicklungskandidat: Struktur-Topologieoptimierung
+
+Dieser Entwicklungsbranch ergänzt gefilterte SIMP-Nachgiebigkeitsminimierung
+mit Volumenrestriktion, mehreren Lastfällen, geprüften Sensitivitäten und
+separater FEM-Reanalyse der abgeleiteten Geometrie. Die Paketkennung
+`1.6.0.dev1` bezeichnet keinen neuen veröffentlichten Release.
+
+```sh
+python -I examples/topology/run.py --output results/topology
+```
+
+[Vorbereitetes Beispiel](examples/topology/README.md) ·
+[API und Grenzen](Doc/84_M11_TOPOLOGY_WORKFLOW.md) ·
+[Nachweise und Release-Gate](Doc/85_M11_VERIFICATION.md).

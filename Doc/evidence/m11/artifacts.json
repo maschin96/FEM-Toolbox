@@ -1,0 +1,36 @@
+{
+  "schema": 1,
+  "version": "1.6.0.dev1",
+  "checks": {
+    "wheel": {
+      "artifact": "fem_toolbox-1.6.0.dev1-py3-none-any.whl",
+      "sha256": "d1f15a5ebcd21d7b284862fc5fd319f691c3c9bbd0146391e10a7f88de4a2332",
+      "installation": {
+        "package": "/private/tmp/fem-m11-wheel-env/lib/python3.13/site-packages/fem_toolbox/__init__.py",
+        "version": "1.6.0.dev1",
+        "numpy": "2.5.4",
+        "scipy": "1.18.1"
+      },
+      "status": "converged",
+      "compliance_J": 0.04067542667339966,
+      "volume_fraction": 0.6000000000000003,
+      "geometry_gate_passed": true,
+      "result_sha256": "f906608853eca2a8b3c7c0050a803291b8ae51af85aa1091fc776c649c8950c8"
+    },
+    "sdist": {
+      "artifact": "fem_toolbox-1.6.0.dev1.tar.gz",
+      "sha256": "d6246934adcbecf45c94c2120e69904e683914d6932eca87c385b1ae26380df4",
+      "installation": {
+        "package": "/private/tmp/fem-m11-sdist-env/lib/python3.13/site-packages/fem_toolbox/__init__.py",
+        "version": "1.6.0.dev1",
+        "numpy": "2.5.4",
+        "scipy": "1.18.1"
+      },
+      "status": "converged",
+      "compliance_J": 0.04067542667339966,
+      "volume_fraction": 0.6000000000000003,
+      "geometry_gate_passed": true,
+      "result_sha256": "f906608853eca2a8b3c7c0050a803291b8ae51af85aa1091fc776c649c8950c8"
+    }
+  }
+}

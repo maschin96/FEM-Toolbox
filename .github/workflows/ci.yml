@@ -44,6 +44,7 @@ jobs:
           cp -R examples/surrogate_heat dist/surrogate_heat
           cp -R examples/uncertainty_heat dist/uncertainty_heat
           cp -R examples/adaptive_heat dist/adaptive_heat
+          cp -R examples/topology dist/topology
           cp -R examples/field_visualization dist/field_visualization
           cp -R examples/tet10_heat dist/tet10_heat
           cp -R examples/tet10_electrostatics dist/tet10_electrostatics
@@ -55,7 +56,7 @@ jobs:
           cp -R examples/tet10_newmark dist/tet10_newmark
           cp -R examples/tet10_harmonic dist/tet10_harmonic
           cd dist
-          sha256sum *.whl *.tar.gz *.py thermopiezoelectric/* transient_heat/* piezo_dynamics/* tet10_heat/* tet10_electrostatics/* tet10_elasticity/* tet10_thermomechanics/* tet10_piezoelectric/* tet10_thermopiezoelectric/* tet10_modes/* tet10_newmark/* tet10_harmonic/* parameter_study/* surrogate_heat/* uncertainty_heat/* adaptive_heat/* field_visualization/* study_recipes/*.py study_recipes/*.md study_recipes/heat/* study_recipes/piezo/* > SHA256SUMS
+          sha256sum *.whl *.tar.gz *.py thermopiezoelectric/* transient_heat/* piezo_dynamics/* tet10_heat/* tet10_electrostatics/* tet10_elasticity/* tet10_thermomechanics/* tet10_piezoelectric/* tet10_thermopiezoelectric/* tet10_modes/* tet10_newmark/* tet10_harmonic/* parameter_study/* surrogate_heat/* uncertainty_heat/* adaptive_heat/* field_visualization/* study_recipes/*.py study_recipes/*.md study_recipes/heat/* study_recipes/piezo/* topology/*.py topology/*.md topology/reference/* > SHA256SUMS
       - name: Transfer artifacts and standalone solver example
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
@@ -128,7 +129,7 @@ jobs:
           package = Path(fem_toolbox.__file__).resolve()
           assert package.is_relative_to(Path(sys.prefix).resolve()), package
           dist = distribution("fem-toolbox")
-          assert dist.version == fem_toolbox.__version__ == "1.5.0"
+          assert dist.version == fem_toolbox.__version__ == "1.6.0.dev1"
           assert dist.metadata["License-Expression"] == "MIT"
           licenses = [f for f in dist.files if f.name == "LICENSE"]
           assert len(licenses) == 1, licenses
@@ -160,6 +161,8 @@ jobs:
           test -s uncertainty_heat_results/uncertainty.json
           "$RUNNER_TEMP/artifact-env/bin/python" -I "$CANDIDATE_DIR/candidate/adaptive_heat/run_adaptive.py" --output adaptive_heat_results --steps 4
           test -s adaptive_heat_results/comparison.json
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$CANDIDATE_DIR/candidate/topology/run.py" --output topology_results
+          test -s topology_results/geometry/reanalysis.json
           "$RUNNER_TEMP/artifact-env/bin/python" -I "$CANDIDATE_DIR/candidate/steady_heat.py"
           test -s steady_heat.vtu
           for example in elastic_tension parallel_plate thermal_expansion piezo_d33; do

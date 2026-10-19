@@ -1,0 +1,22 @@
+schema_version = 1
+units = "SI"
+physics = "elasticity"
+[mesh]
+path = "mesh.msh"
+length_scale_to_m = 1.0
+[materials.u.solid]
+young = 1000.0
+poisson = 0.3
+unit = "Pa"
+[regions.u]
+design = "solid"
+passive = "solid"
+[[boundary.dirichlet]]
+field = "u"
+set = "clamp"
+value = 0.0
+unit = "m"
+[[boundary.traction]]
+set = "end"
+value = [0.0, -1.0, 0.0]
+unit = "N/m^2"

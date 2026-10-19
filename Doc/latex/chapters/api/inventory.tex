@@ -1896,6 +1896,12 @@ Direkte Raise-Stellen: ModelSchemaError; transitive Fehler siehe Fachvertrag.
 to_document(self) -> dict[str, Any]
 \end{lstlisting}
 Return a detached, JSON-safe copy for review or Python roundtrip.
+\subsubsection*{elasticity\_inputs}
+\begin{lstlisting}
+elasticity_inputs(self) -> dict[str, Any]
+\end{lstlisting}
+Snapshot validated static mechanics for additive design workflows.\par Returns mesh, immutable per-cell materials, copied Dirichlet conditions, constant SI body force and copied traction vectors. Only elasticity is supported; this does not solve or change the Model document.
+Direkte Raise-Stellen: ModelSchemaError; transitive Fehler siehe Fachvertrag.
 \subsubsection*{solve}
 \begin{lstlisting}
 solve(self) -> ModelResult
@@ -3679,6 +3685,265 @@ integration_times(times: ArrayLike, signals: Iterable[TimeSignal]=()) -> NDArray
 \begin{quote}
 Validate times and insert all interior signal knots, without rounding.
 \end{quote}
+\section{fem\_toolbox.topology}
+\index{fem_toolbox.topology@topology}
+Einordnung: mixed. Additive M11-Kandidatenoberfläche; SI, Tet4, feste Totlasten und eigene Schema-1-Exporte.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/topology.tex}. Beispiele/Tests:
+\nolinkurl{examples/topology/run.py}.
+\subsection{LoadCase}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: dataclass(frozen=True).
+\begin{quote}
+Named homogeneous supports and density-independent SI forces.\par conditions use mechanical\_dofs(mesh). body\_force is N/m³, tractions map Triangle3 rows to N/m², point\_loads map mesh nodes to N. No callable loads.
+\end{quote}
+\begin{lstlisting}
+name: str
+\end{lstlisting}
+\begin{lstlisting}
+conditions: tuple[Dirichlet, ...]
+\end{lstlisting}
+\begin{lstlisting}
+body_force: ArrayLike = (0.0, 0.0, 0.0)
+\end{lstlisting}
+\begin{lstlisting}
+tractions: Mapping[int, ArrayLike] | None = None
+\end{lstlisting}
+\begin{lstlisting}
+point_loads: Mapping[int, ArrayLike] | None = None
+\end{lstlisting}
+\subsection{DensityEvaluation}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: dataclass(frozen=True).
+\begin{quote}
+Densities/gradients in input-cell order; compliance J, volume fraction 1.
+\end{quote}
+\begin{lstlisting}
+density: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+physical_density: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+objective: float
+\end{lstlisting}
+\begin{lstlisting}
+volume_fraction: float
+\end{lstlisting}
+\begin{lstlisting}
+objective_gradient: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+volume_gradient: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+states: tuple[ElasticResult, ...]
+\end{lstlisting}
+\subsection{TopologyProblem}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: keine.
+\begin{quote}
+Volume-weighted linear density filter and SIMP on a fixed Tet4 mesh.\par Variables have shape (ncells,), fixed values included. Radius is metres; weights are positive, not implicitly normalized. Materials are homogeneous or one immutable positive tensor per cell. No projection or continuation.
+\end{quote}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, mesh: Mesh, material: ElasticMaterial | Sequence[ElasticMaterial], cases: Sequence[LoadCase], *, filter_radius: float, weights: ArrayLike | None=None, fixed_solid: ArrayLike=(), fixed_void: ArrayLike=(), penalty: float=3.0, minimum_stiffness: float=0.001) -> None
+\end{lstlisting}
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\subsubsection*{from\_models}
+\begin{lstlisting}
+from_models(cls, models: Sequence[Model], *, weights: ArrayLike | None=None, **options: Any) -> TopologyProblem
+\end{lstlisting}
+Share the validated Model parser; reject different meshes/materials.
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\subsubsection*{physical\_density}
+\begin{lstlisting}
+physical_density(self, density: ArrayLike) -> NDArray[np.float64]
+\end{lstlisting}
+Map bounded design variables to physical densities, no threshold.
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\subsubsection*{evaluate}
+\begin{lstlisting}
+evaluate(self, density: ArrayLike) -> DensityEvaluation
+\end{lstlisting}
+Solve independent load states and exact filtered compliance gradients.
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\subsubsection*{initial\_density}
+\begin{lstlisting}
+initial_density(self, volume_fraction: float) -> NDArray[np.float64]
+\end{lstlisting}
+Find feasible uniform free variables including fixed/filter effects.
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.topology\_geometry}
+\index{fem_toolbox.topology_geometry@topology\_\protect\allowbreak{}geometry}
+Einordnung: mixed. Additive M11-Kandidatenoberfläche; SI, Tet4, feste Totlasten und eigene Schema-1-Exporte.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/topology.tex}. Beispiele/Tests:
+\nolinkurl{examples/topology/run.py}.
+\subsection{GeometryResult}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: dataclass(frozen=True).
+\begin{quote}
+Exact selected-cell geometry with unchanged dead loads and full material.
+\end{quote}
+\begin{lstlisting}
+mesh: Mesh
+\end{lstlisting}
+\begin{lstlisting}
+selected_cells: NDArray[np.int64]
+\end{lstlisting}
+\begin{lstlisting}
+threshold: float
+\end{lstlisting}
+\begin{lstlisting}
+objective: float
+\end{lstlisting}
+\begin{lstlisting}
+compliance_ratio: float
+\end{lstlisting}
+\begin{lstlisting}
+volume_fraction: float
+\end{lstlisting}
+\begin{lstlisting}
+states: tuple[ElasticResult, ...]
+\end{lstlisting}
+\begin{lstlisting}
+von_mises_Pa: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+added_cells: tuple[int, ...] = ()
+\end{lstlisting}
+\begin{lstlisting}
+connection_repair: bool = False
+\end{lstlisting}
+\subsubsection*{maximum\_von\_mises\_Pa}
+\begin{lstlisting}
+maximum_von_mises_Pa(self) -> float
+\end{lstlisting}
+Largest raw cell stress among all cases, not an allowable stress.
+\subsubsection*{to\_record}
+\begin{lstlisting}
+to_record(self) -> dict[str, Any]
+\end{lstlisting}
+Predeclared compliance/volume gate and diagnostic cell indices.
+\subsection{reanalyze\_geometry}
+stabiler Einstieg.
+\begin{lstlisting}
+reanalyze_geometry(problem: TopologyProblem, field: DensityEvaluation, threshold: float, *, connect: bool=False) -> GeometryResult
+\end{lstlisting}
+\begin{quote}
+Keep rho>=threshold, reject disconnected solids or removed loaded faces.\par Newly exposed surfaces are traction-free. Prescribed support components are remapped onto retained active nodes; the original solver checks rigid modes. Body forces on removed volume are rejected rather than silently changed.
+\end{quote}
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\subsection{export\_reanalyses}
+stabiler Einstieg.
+\begin{lstlisting}
+export_reanalyses(problem: TopologyProblem, field: DensityEvaluation, output: str | Path, thresholds: tuple[float, ...]=(0.25, 0.35, 0.45)) -> list[dict[str, Any]]
+\end{lstlisting}
+\begin{quote}
+Export every valid geometry; retain explicit No-go records for others.
+\end{quote}
+\section{fem\_toolbox.topology\_optimization}
+\index{fem_toolbox.topology_optimization@topology\_\protect\allowbreak{}optimization}
+Einordnung: mixed. Additive M11-Kandidatenoberfläche; SI, Tet4, feste Totlasten und eigene Schema-1-Exporte.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/topology.tex}. Beispiele/Tests:
+\nolinkurl{examples/topology/run.py}.
+\subsection{OptimizationOptions}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: dataclass(frozen=True).
+\begin{quote}
+Iteration/design-evaluation budgets and dimensionless SLSQP tolerance.
+\end{quote}
+\begin{lstlisting}
+max_iterations: int = 100
+\end{lstlisting}
+\begin{lstlisting}
+max_evaluations: int = 300
+\end{lstlisting}
+\begin{lstlisting}
+tolerance: float = 1e-07
+\end{lstlisting}
+\subsection{OptimizationResult}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: dataclass(frozen=True).
+\begin{quote}
+Final feasible state, explicit stop status and accepted-step diagnostics.\par A budget stop retains the best feasible state without claiming convergence. Each history row contains SI compliance, fraction, residual and step change.
+\end{quote}
+\begin{lstlisting}
+status: str
+\end{lstlisting}
+\begin{lstlisting}
+message: str
+\end{lstlisting}
+\begin{lstlisting}
+final: DensityEvaluation
+\end{lstlisting}
+\begin{lstlisting}
+initial_objective: float
+\end{lstlisting}
+\begin{lstlisting}
+volume_limit: float
+\end{lstlisting}
+\begin{lstlisting}
+evaluations: int
+\end{lstlisting}
+\begin{lstlisting}
+history: tuple[dict[str, Any], ...]
+\end{lstlisting}
+\begin{lstlisting}
+options: OptimizationOptions
+\end{lstlisting}
+\subsection{optimize\_topology}
+stabiler Einstieg.
+\begin{lstlisting}
+optimize_topology(problem: TopologyProblem, volume_fraction: float, *, initial: ArrayLike | None=None, options: OptimizationOptions | None=None) -> OptimizationResult
+\end{lstlisting}
+\begin{quote}
+Minimize weighted compliance with exact filter gradients and SI states.\par Invalid configurations raise ValidationError. Numerical failures during the search return solver\_failed with the last best feasible state and message. The initial solve itself must succeed; no invalid result is fabricated.
+\end{quote}
+Direkte Raise-Stellen: ValidationError, \_EvaluationLimit; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.topology\_study}
+\index{fem_toolbox.topology_study@topology\_\protect\allowbreak{}study}
+Einordnung: mixed. Additive M11-Kandidatenoberfläche; SI, Tet4, feste Totlasten und eigene Schema-1-Exporte.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/topology.tex}. Beispiele/Tests:
+\nolinkurl{examples/topology/run.py}.
+\subsection{problem\_document}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+problem_document(problem: TopologyProblem) -> dict[str, Any]
+\end{lstlisting}
+\begin{quote}
+Detached effective SI inputs; no hidden Model parsing or host paths.
+\end{quote}
+\subsection{TopologyStudy}
+stabiler Einstieg.
+Basistypen: object. Dekoratoren: keine.
+\begin{quote}
+One explicit local optimization; output directories must be new.
+\end{quote}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, problem: TopologyProblem, volume_fraction: float, *, options: OptimizationOptions | None=None) -> None
+\end{lstlisting}
+\subsubsection*{from\_file}
+\begin{lstlisting}
+from_file(cls, path: str | Path) -> TopologyStudy
+\end{lstlisting}
+Load schema-1 TOML referencing existing static Model TOML files.
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\subsubsection*{run}
+\begin{lstlisting}
+run(self, output: str | Path) -> OptimizationResult
+\end{lstlisting}
+Optimize and save schema-1 JSON/VTU plus SHA-256 inventory.\par Budget/solver status is preserved; no stopped state becomes successful. Invalid initial states raise before an output directory is created.
+Direkte Raise-Stellen: FileExistsError; transitive Fehler siehe Fachvertrag.
+\subsection{read\_topology\_result}
+stabiler Einstieg.
+\begin{lstlisting}
+read_topology_result(path: str | Path) -> dict[str, Any]
+\end{lstlisting}
+\begin{quote}
+Read a schema-1 result only after verifying all bound artifact bytes.
+\end{quote}
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
 \section{fem\_toolbox.transient\_model}
 \index{fem_toolbox.transient_model@transient\_\protect\allowbreak{}model}
 Einordnung: internal. Interne Validierungs-/Reduktions-/Adaptergrenze; keine eigene stabile Importzusage. Öffentliche Wrapper oder experimentelle Hooks führen auf diese Umsetzung.
