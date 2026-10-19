@@ -68,3 +68,9 @@ Die früheren selbst gehosteten Nachweise am Commit
 keine Prüfung des neuen Freigabecommits. Aktuelle PR-/main-Läufe, Tag und
 Veröffentlichungsartefakte werden abschließend im Release-Issue #70 verknüpft.
 Unabhängiges menschliches Fachreview liegt weiterhin nicht vor.
+
+Lokaler Abschlusslauf am finalen Versionsstand: **841 bestanden, 83 optional
+übersprungen**, Ruff/Lint und Formatprüfung bestanden, striktes mypy über
+70 Quelldateien bestanden, Paketabhängigkeiten konsistent und
+Dokumentationsabdeckung (196 Quellen) vollständig. Die ausgelassenen Tests
+betreffen optionale Backends; PETSc wird separat in der CI geprüft.
