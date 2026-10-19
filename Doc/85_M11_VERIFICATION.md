@@ -1,6 +1,7 @@
-# M11: numerische Nachweise und offenes Release-Gate (#83)
+# M11: numerische Nachweise für v1.6.0 (#83)
 
-19.10.2026 · 1.6.0.dev1 · keine finale Veröffentlichung.
+19.10.2026 · numerische Baseline 1.6.0.dev1; unveränderte Solverquellen für v1.6.0.
+[Endgültiger Freigabenachweis](87_M11_RELEASE_VERIFICATION.md).
 
 ## Ergebnis der vorab definierten Matrix
 
@@ -79,7 +80,7 @@ Historische M9-V&V-Manifeste bleiben unverändert; M11 hat sein eigenes Nachweis
 
 ## Freigabezustand
 
-- #76–#82: implementierte und lokal numerisch geprüfte Arbeitspakete im M11-Branch.
+- #76–#82: implementiert, numerisch geprüft und über [PR #284](https://github.com/maschin96/FEM-Toolbox/pull/284) im M11-Branch integriert.
 - Lokale Gesamtsuite: **868 bestanden, 83 optionale Tests übersprungen**.
   Ruff und Formatprüfung bestanden; striktes mypy über 74 Quelldateien bestanden.
 - Wheel und sdist separat frisch installiert: jeweils korrekter isolierter Import,
@@ -88,11 +89,12 @@ Historische M9-V&V-Manifeste bleiben unverändert; M11 hat sein eigenes Nachweis
 - Fünf Handbücher, drei negative Dokumentfälle und Quellenarchiv-Nachbau bestanden.
   Neue Theorie-/Anwendungs-/API-/V&V-Seiten und Titel visuell geprüft; vorhandene
   Layoutwarnungen werden nicht zu einer pauschalen historischen Neuabnahme erklärt.
-- Aktuelle PR-/Integrations-CI bleibt am tatsächlich gepushten Kandidaten zu prüfen.
+- PR #284 am Commit 68d5e1f: alle 20 CI-/Handbuchprüfungen erfolgreich.
+  Finale Release-/main-CI und v1.6.0-Artefakte sind eigene Gates in #83.
 - Unabhängiges menschliches Fachreview liegt nicht vor; unabhängige
   Finitedifferenzen/analytische Invarianten sind keine menschliche Freigabe.
-- Integration nach main, grüne Zielcommit-CI, finale Paketversion, annotierter
-  Tag und veröffentlichte Artefakte sind noch offen. #83 bleibt bis dahin offen.
+- Der tatsächliche Veröffentlichungsabschluss wird in #83 und dem separaten
+  Freigabenachweis verknüpft; historische Kandidatenartefakte werden nicht umgeschrieben.
 
 Kein Tag, kein Release und kein automatisches Schließen von Issues wird aus
 einem lokalen positiven Lauf abgeleitet. Keine experimentelle oder industrielle

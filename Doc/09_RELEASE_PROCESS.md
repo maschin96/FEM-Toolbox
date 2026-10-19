@@ -54,10 +54,11 @@ inkompatible API-Änderung verlangt, wird die SemVer-Nummer vor Freigabe in eine
 Issue und in diesem Dokument korrigiert. Eine niedrigere Version als nach SemVer
 erforderlich ist nicht zulässig.
 
-M11 (Topologieoptimierung) und M12 (RANS-CFD mit Fluid-Struktur-Kopplung)
-sind zunächst reine Milestone-Beschreibungen ohne Zielversion oder Einzelissues.
-Für diese beiden Horizonte wird das Release-Issue erst bei der Detaillierung
-vor Umsetzung angelegt; vor einer Freigabe gelten alle folgenden Gates.
+M11 ist nach dem Eigentümerauftrag vom 19.10.2026 der nächste freizugebende
+Umfang nach M10 und erhält v1.6.0. Additive API und eigene M11-Ergebnisformate
+begründen einen kompatiblen Minor-Schritt; die ursprüngliche vorläufige
+Planungsfolge bis v1.9.0 wird für diesen Milestone nicht als Releasefolge benutzt.
+M12 und weitere Milestones behalten ihre separaten fachlichen Release-Gates.
 
 ## 4. Release-Gate
 

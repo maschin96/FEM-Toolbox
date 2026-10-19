@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "scope": "M11 implementation candidate on released v1.5.0; no M11 release or experimental validation",
+  "scope": "M0–M11 / v1.6.0; no experimental, strength or manufacturing qualification",
   "entries": [
     {
       "source": "Doc/01_SCOPE_AND_REQUIREMENTS.md",
@@ -3466,6 +3466,27 @@
       "target": "Doc/latex/chapters/documentation-sources.tex",
       "canonical": "Doc/releases/v1.6.0.dev1.md",
       "owner": "M11 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "Doc/releases/v1.6.0.md",
+      "target": "Doc/latex/chapters/verification/topology.tex",
+      "canonical": "Doc/releases/v1.6.0.md",
+      "owner": "M11 release maintainers",
+      "status": "open"
+    },
+    {
+      "source": "Doc/87_M11_RELEASE_VERIFICATION.md",
+      "target": "Doc/latex/chapters/verification/topology.tex",
+      "canonical": "Doc/87_M11_RELEASE_VERIFICATION.md",
+      "owner": "M11 release maintainers",
+      "status": "open"
+    },
+    {
+      "source": "Doc/evidence/m11/v1.6.0-local-verification.json",
+      "target": "Doc/latex/chapters/verification/topology.tex",
+      "canonical": "Doc/87_M11_RELEASE_VERIFICATION.md",
+      "owner": "M11 release maintainers",
       "status": "open"
     }
   ],

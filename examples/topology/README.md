@@ -1,4 +1,4 @@
-# Struktur-Topologieoptimierung (M11-Kandidat)
+# Struktur-Topologieoptimierung (M11 / v1.6.0)
 
 Nach Paketinstallation: `python -I examples/topology/run.py --output results/topology`.
 Die vorbereitete TOML-Studie rechnet zwei Lastfälle eines 2x1x1-m-Quaders,
@@ -13,5 +13,5 @@ vorbereitete Netze/Modelle deterministisch.
 
 [API, Formate, Einheiten, Fehler und Grenzen](../../Doc/84_M11_TOPOLOGY_WORKFLOW.md).
 [Vorab festgelegte Referenzen/Toleranzen](../../Doc/83_M11_TOPOLOGY_CONTRACT.md).
-[Verifikation und offenes Release-Gate](../../Doc/85_M11_VERIFICATION.md).
+[Verifikation und Freigabestatus](../../Doc/85_M11_VERIFICATION.md).
 Keine globale Optimalität, garantierte Mindestwandstärke oder Fertigungsfreigabe.

@@ -177,7 +177,7 @@ Eingabewerte. Acht float64-Epsilon als absolute Toleranz nach Normierung auf
 die Endamplitudenskala decken die wenigen arithmetischen Operationen dieser
 Referenzfälle ab; End-/Halte- und konstante Werte werden exakt geprüft.
 
-## Additiver M10-Vertrag (Entwicklungskandidat)
+## Additiver M10-Vertrag ab v1.5.0
 
 | Modul | Stabile Einstiegspunkte | Vertrag |
 |---|---|---|
@@ -187,7 +187,7 @@ Referenzfälle ab; End-/Halte- und konstante Werte werden exakt geprüft.
 Bestehende Solver-, Model- und Persistenzverträge bleiben erhalten. Kein neuer
 transienter, gekoppelter oder Tet10-Adaptivitätsumfang.
 
-## Additive M11-Oberfläche (1.6.0.dev1, Kandidat)
+## Additive M11-Oberfläche ab v1.6.0
 
 | Importpfad | Einstiegspunkte | Vertrag |
 |---|---|---|
@@ -199,5 +199,5 @@ transienter, gekoppelter oder Tet10-Adaptivitätsumfang.
 `Model.elasticity_inputs()` ergänzt einen kopierten validierten Snapshot mit
 Mesh, unveränderlichen Materialtensoren, kopierten Dirichlet-Daten, Körperkraft
 und Traktionen. Er ist nur für stationäre Elastizität gültig und verändert
-weder Model noch Dokument. Der M11-Kandidat erweitert keine existierenden
+weder Model noch Dokument. M11 erweitert keine existierenden
 Persistenzkennungen; seine Schema-1-Dateien sind eigenständig.

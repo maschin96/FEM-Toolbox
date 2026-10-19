@@ -169,7 +169,7 @@ besitzt. Seine gesonderte Geometrievolumengrenze ersetzt nicht das ursprünglich
 Dichtevolumenbudget. Rohe Spannungsspitzen werden berichtet, begründen aber noch
 keine Festigkeitsfreigabe.
 
-Der M11-Kandidat ist damit ein nachvollziehbarer Forschungsworkflow für
+Der M11-Workflow ist damit ein nachvollziehbarer Forschungsworkflow für
 stationäre, lineare Strukturmechanik mit kleinen Verformungen und festen Lasten.
 Er unterstützt eine begründete Entwurfsentscheidung; eine globale Optimalität,
 experimentelle Bauteilvalidierung oder Fertigungsfreigabe folgt daraus nicht.
