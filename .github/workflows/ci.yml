@@ -264,6 +264,9 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
+      - name: Trust the mounted checkout for benchmark provenance
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
       - name: Create isolated Python environment
         run: |
           python -m venv "$RUNNER_TEMP/job-env"
