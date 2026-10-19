@@ -47,3 +47,22 @@ def test_invalid_options_fail():
     ):
         with pytest.raises(ValidationError):
             OptimizationOptions(**kwargs)
+
+
+def test_failed_state_during_search_is_reported(cube_mesh, monkeypatch):
+    design = problem(cube_mesh(1))
+    actual = design.evaluate
+    calls = 0
+
+    def failing(density):
+        nonlocal calls
+        calls += 1
+        if calls > 1:
+            raise ValidationError("state solver failure", field="solver")
+        return actual(density)
+
+    monkeypatch.setattr(design, "evaluate", failing)
+    result = optimize_topology(design, 0.5)
+    assert result.status == "solver_failed"
+    assert "state solver failure" in result.message
+    assert result.final.volume_fraction <= 0.5 + 1e-8

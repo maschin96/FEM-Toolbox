@@ -2861,6 +2861,15 @@
               "documentation": "Return a detached, JSON-safe copy for review or Python roundtrip.",
               "direct_raise_sites": []
             },
+            "elasticity_inputs": {
+              "parameters": "self",
+              "returns": "dict[str, Any]",
+              "decorators": [],
+              "documentation": "Snapshot validated static mechanics for additive design workflows.\n\nReturns mesh, immutable per-cell materials, copied Dirichlet conditions,\nconstant SI body force and copied traction vectors. Only elasticity is\nsupported; this does not solve or change the Model document.",
+              "direct_raise_sites": [
+                "ModelSchemaError"
+              ]
+            },
             "solve": {
               "parameters": "self",
               "returns": "ModelResult",
@@ -5425,6 +5434,385 @@
           "value": "float | Step | Ramp | TimeSeries"
         }
       }
+    },
+    "fem_toolbox.topology": {
+      "source": "src/fem_toolbox/topology.py",
+      "documentation": "Filtered SIMP design for stationary Tet4 elasticity; SI and fixed dead loads.\n\nThe reference implementation delegates every state to the verified elasticity\nsolver. It is intentionally limited to small, deterministic local studies.",
+      "declared_exports": null,
+      "definitions": {
+        "LoadCase": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True)"
+          ],
+          "documentation": "Named homogeneous supports and density-independent SI forces.\n\nconditions use mechanical_dofs(mesh). body_force is N/m³, tractions map\nTriangle3 rows to N/m², point_loads map mesh nodes to N. No callable loads.",
+          "fields": {
+            "name": {
+              "annotation": "str",
+              "default": null
+            },
+            "conditions": {
+              "annotation": "tuple[Dirichlet, ...]",
+              "default": null
+            },
+            "body_force": {
+              "annotation": "ArrayLike",
+              "default": "(0.0, 0.0, 0.0)"
+            },
+            "tractions": {
+              "annotation": "Mapping[int, ArrayLike] | None",
+              "default": "None"
+            },
+            "point_loads": {
+              "annotation": "Mapping[int, ArrayLike] | None",
+              "default": "None"
+            }
+          },
+          "methods": {}
+        },
+        "DensityEvaluation": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True)"
+          ],
+          "documentation": "Densities/gradients in input-cell order; compliance J, volume fraction 1.",
+          "fields": {
+            "density": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "physical_density": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "objective": {
+              "annotation": "float",
+              "default": null
+            },
+            "volume_fraction": {
+              "annotation": "float",
+              "default": null
+            },
+            "objective_gradient": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "volume_gradient": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "states": {
+              "annotation": "tuple[ElasticResult, ...]",
+              "default": null
+            }
+          },
+          "methods": {}
+        },
+        "TopologyProblem": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [],
+          "documentation": "Volume-weighted linear density filter and SIMP on a fixed Tet4 mesh.\n\nVariables have shape (ncells,), fixed values included. Radius is metres;\nweights are positive, not implicitly normalized. Materials are homogeneous\nor one immutable positive tensor per cell. No projection or continuation.",
+          "fields": {},
+          "methods": {
+            "__init__": {
+              "parameters": "self, mesh: Mesh, material: ElasticMaterial | Sequence[ElasticMaterial], cases: Sequence[LoadCase], *, filter_radius: float, weights: ArrayLike | None=None, fixed_solid: ArrayLike=(), fixed_void: ArrayLike=(), penalty: float=3.0, minimum_stiffness: float=0.001",
+              "returns": "None",
+              "decorators": [],
+              "documentation": null,
+              "direct_raise_sites": [
+                "ValidationError"
+              ]
+            },
+            "from_models": {
+              "parameters": "cls, models: Sequence[Model], *, weights: ArrayLike | None=None, **options: Any",
+              "returns": "TopologyProblem",
+              "decorators": [
+                "classmethod"
+              ],
+              "documentation": "Share the validated Model parser; reject different meshes/materials.",
+              "direct_raise_sites": [
+                "ValidationError"
+              ]
+            },
+            "physical_density": {
+              "parameters": "self, density: ArrayLike",
+              "returns": "NDArray[np.float64]",
+              "decorators": [],
+              "documentation": "Map bounded design variables to physical densities, no threshold.",
+              "direct_raise_sites": [
+                "ValidationError"
+              ]
+            },
+            "evaluate": {
+              "parameters": "self, density: ArrayLike",
+              "returns": "DensityEvaluation",
+              "decorators": [],
+              "documentation": "Solve independent load states and exact filtered compliance gradients.",
+              "direct_raise_sites": [
+                "ValidationError"
+              ]
+            },
+            "initial_density": {
+              "parameters": "self, volume_fraction: float",
+              "returns": "NDArray[np.float64]",
+              "decorators": [],
+              "documentation": "Find feasible uniform free variables including fixed/filter effects.",
+              "direct_raise_sites": [
+                "ValidationError"
+              ]
+            }
+          }
+        }
+      },
+      "reexports": {},
+      "aliases": {}
+    },
+    "fem_toolbox.topology_geometry": {
+      "source": "src/fem_toolbox/topology_geometry.py",
+      "documentation": "Thresholded Tet4 geometry and independent full-material elastic reanalysis.",
+      "declared_exports": null,
+      "definitions": {
+        "GeometryResult": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True)"
+          ],
+          "documentation": "Exact selected-cell geometry with unchanged dead loads and full material.",
+          "fields": {
+            "mesh": {
+              "annotation": "Mesh",
+              "default": null
+            },
+            "selected_cells": {
+              "annotation": "NDArray[np.int64]",
+              "default": null
+            },
+            "threshold": {
+              "annotation": "float",
+              "default": null
+            },
+            "objective": {
+              "annotation": "float",
+              "default": null
+            },
+            "compliance_ratio": {
+              "annotation": "float",
+              "default": null
+            },
+            "volume_fraction": {
+              "annotation": "float",
+              "default": null
+            },
+            "states": {
+              "annotation": "tuple[ElasticResult, ...]",
+              "default": null
+            },
+            "von_mises_Pa": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "added_cells": {
+              "annotation": "tuple[int, ...]",
+              "default": "()"
+            },
+            "connection_repair": {
+              "annotation": "bool",
+              "default": "False"
+            }
+          },
+          "methods": {
+            "maximum_von_mises_Pa": {
+              "parameters": "self",
+              "returns": "float",
+              "decorators": [
+                "property"
+              ],
+              "documentation": "Largest raw cell stress among all cases, not an allowable stress.",
+              "direct_raise_sites": []
+            },
+            "to_record": {
+              "parameters": "self",
+              "returns": "dict[str, Any]",
+              "decorators": [],
+              "documentation": "Predeclared compliance/volume gate and diagnostic cell indices.",
+              "direct_raise_sites": []
+            }
+          }
+        },
+        "reanalyze_geometry": {
+          "kind": "function",
+          "parameters": "problem: TopologyProblem, field: DensityEvaluation, threshold: float, *, connect: bool=False",
+          "returns": "GeometryResult",
+          "decorators": [],
+          "documentation": "Keep rho>=threshold, reject disconnected solids or removed loaded faces.\n\nNewly exposed surfaces are traction-free. Prescribed support components are\nremapped onto retained active nodes; the original solver checks rigid modes.\nBody forces on removed volume are rejected rather than silently changed.",
+          "direct_raise_sites": [
+            "ValidationError"
+          ]
+        },
+        "export_reanalyses": {
+          "kind": "function",
+          "parameters": "problem: TopologyProblem, field: DensityEvaluation, output: str | Path, thresholds: tuple[float, ...]=(0.25, 0.35, 0.45)",
+          "returns": "list[dict[str, Any]]",
+          "decorators": [],
+          "documentation": "Export every valid geometry; retain explicit No-go records for others.",
+          "direct_raise_sites": []
+        }
+      },
+      "reexports": {},
+      "aliases": {}
+    },
+    "fem_toolbox.topology_optimization": {
+      "source": "src/fem_toolbox/topology_optimization.py",
+      "documentation": "Bounded, deterministic SLSQP driver for filtered SIMP compliance.",
+      "declared_exports": null,
+      "definitions": {
+        "OptimizationOptions": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True)"
+          ],
+          "documentation": "Iteration/design-evaluation budgets and dimensionless SLSQP tolerance.",
+          "fields": {
+            "max_iterations": {
+              "annotation": "int",
+              "default": "100"
+            },
+            "max_evaluations": {
+              "annotation": "int",
+              "default": "300"
+            },
+            "tolerance": {
+              "annotation": "float",
+              "default": "1e-07"
+            }
+          },
+          "methods": {}
+        },
+        "OptimizationResult": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True)"
+          ],
+          "documentation": "Final feasible state, explicit stop status and accepted-step diagnostics.\n\nA budget stop retains the best feasible state without claiming convergence.\nEach history row contains SI compliance, fraction, residual and step change.",
+          "fields": {
+            "status": {
+              "annotation": "str",
+              "default": null
+            },
+            "message": {
+              "annotation": "str",
+              "default": null
+            },
+            "final": {
+              "annotation": "DensityEvaluation",
+              "default": null
+            },
+            "initial_objective": {
+              "annotation": "float",
+              "default": null
+            },
+            "volume_limit": {
+              "annotation": "float",
+              "default": null
+            },
+            "evaluations": {
+              "annotation": "int",
+              "default": null
+            },
+            "history": {
+              "annotation": "tuple[dict[str, Any], ...]",
+              "default": null
+            },
+            "options": {
+              "annotation": "OptimizationOptions",
+              "default": null
+            }
+          },
+          "methods": {}
+        },
+        "optimize_topology": {
+          "kind": "function",
+          "parameters": "problem: TopologyProblem, volume_fraction: float, *, initial: ArrayLike | None=None, options: OptimizationOptions | None=None",
+          "returns": "OptimizationResult",
+          "decorators": [],
+          "documentation": "Minimize weighted compliance with exact filter gradients and SI states.\n\nInvalid configurations raise ValidationError. Numerical failures during the\nsearch return solver_failed with the last best feasible state and message.\nThe initial solve itself must succeed; no invalid result is fabricated.",
+          "direct_raise_sites": [
+            "ValidationError",
+            "_EvaluationLimit"
+          ]
+        }
+      },
+      "reexports": {},
+      "aliases": {}
+    },
+    "fem_toolbox.topology_study": {
+      "source": "src/fem_toolbox/topology_study.py",
+      "documentation": "Declarative local topology studies with immutable-input and artifact hashes.",
+      "declared_exports": null,
+      "definitions": {
+        "problem_document": {
+          "kind": "function",
+          "parameters": "problem: TopologyProblem",
+          "returns": "dict[str, Any]",
+          "decorators": [],
+          "documentation": "Detached effective SI inputs; no hidden Model parsing or host paths.",
+          "direct_raise_sites": []
+        },
+        "TopologyStudy": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [],
+          "documentation": "One explicit local optimization; output directories must be new.",
+          "fields": {},
+          "methods": {
+            "__init__": {
+              "parameters": "self, problem: TopologyProblem, volume_fraction: float, *, options: OptimizationOptions | None=None",
+              "returns": "None",
+              "decorators": [],
+              "documentation": null,
+              "direct_raise_sites": []
+            },
+            "from_file": {
+              "parameters": "cls, path: str | Path",
+              "returns": "TopologyStudy",
+              "decorators": [
+                "classmethod"
+              ],
+              "documentation": "Load schema-1 TOML referencing existing static Model TOML files.",
+              "direct_raise_sites": [
+                "ValidationError"
+              ]
+            },
+            "run": {
+              "parameters": "self, output: str | Path",
+              "returns": "OptimizationResult",
+              "decorators": [],
+              "documentation": "Optimize and save schema-1 JSON/VTU plus SHA-256 inventory.\n\nBudget/solver status is preserved; no stopped state becomes successful.\nInvalid initial states raise before an output directory is created.",
+              "direct_raise_sites": [
+                "FileExistsError"
+              ]
+            }
+          }
+        },
+        "read_topology_result": {
+          "kind": "function",
+          "parameters": "path: str | Path",
+          "returns": "dict[str, Any]",
+          "decorators": [],
+          "documentation": "Read a schema-1 result only after verifying all bound artifact bytes.",
+          "direct_raise_sites": [
+            "ValidationError"
+          ]
+        }
+      },
+      "reexports": {},
+      "aliases": {}
     },
     "fem_toolbox.transient_model": {
       "source": "src/fem_toolbox/transient_model.py",

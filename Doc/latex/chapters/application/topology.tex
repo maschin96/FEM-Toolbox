@@ -1,0 +1,34 @@
+\chapter{Vom Dichteentwurf zur erneut gerechneten Geometrie}\label{user:topology}
+\chaptermark{Topologie: Dichte und Geometrie}
+Das vorbereitete Beispiel enthält Gmsh-Netz, zwei normale Model-Dateien und
+eine kurze Studien-TOML. Der Quader misst 2 mal 1 mal 1 Meter; die Stirnfläche
+ist fest, zwei getrennte Endlasten besitzen je 1 Newton. Das synthetische
+Material hat \(E=1000\) Pa und \(\nu=0.3\). Der Beispielaufruf lautet:
+\begin{lstlisting}
+python -I examples/topology/run.py --output results/topology
+\end{lstlisting}
+Der neue Ausgabeordner enthält die nachvollziehbaren Eingaben,
+\path{result.json}, \path{design.vtu} und Prüfsummen. Im Unterordner
+\path{geometry} stehen gültige diskrete Netze sowie akzeptierte und
+fehlgeschlagene Reanalysen. Eine bestehende Ausgabe wird nicht überschrieben.
+Exitcode 0 verlangt konvergierte Dichteoptimierung und mindestens einen
+akzeptierten Geometrieweg. Mehr Iterationen, ein kleineres Residuum oder eine
+optisch plausible Form ersetzen keinen erfolgreichen Geometrienachweis.
+
+Die Studien-TOML referenziert beide Model-Dateien mit Gewichten 0.5/0.5,
+setzt das Dichtevolumen auf 0.6, den Radius auf 0.3 m und hält passive Zellen
+an Last und Lagerung voll. Andere Lastfälle teilen Netz und Material.
+Negative Gewichte, unmögliche Volumen, unbekannte Gruppen und bewegte Lager
+werden diagnostiziert. Ein größerer Radius glättet den Entwurf stärker und
+kann mehr Zwischenmaterial ergeben; er garantiert keine Mindestwandstärke.
+Die geometrische 0.9-Volumengrenze ist eine separate Reanalyseentscheidung.
+Keine CAD-Rekonstruktion und keine reale Fertigungsfreigabe werden zugesagt.
+
+\section{Rezept topology-run}\label{recipe:topology-run}
+\lstinputlisting{examples/topology/run.py}
+
+\section{Rezept topology-prepare}\label{recipe:topology-prepare}
+\lstinputlisting{examples/topology/prepare.py}
+
+\section{Rezept topology-verify}\label{recipe:topology-verify}
+\lstinputlisting{examples/topology/verify.py}

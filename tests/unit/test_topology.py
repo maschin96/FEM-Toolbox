@@ -79,3 +79,24 @@ def test_nonzero_support_displacement_is_not_a_compliance_problem(cube_mesh):
             [LoadCase("bad", (Dirichlet([0], [0.01]),))],
             filter_radius=0.5,
         )
+
+
+def test_filter_matches_independent_volume_weighted_formula(cube_mesh):
+    mesh = cube_mesh(2, distort=True)
+    design = problem(mesh, fixed_solid=(0,), fixed_void=(10,))
+    x = np.linspace(0.2, 0.8, mesh.n_cells)
+    x[0] = 1
+    x[10] = 0
+    p = mesh.points[mesh.tetra4]
+    volumes = np.abs(np.linalg.det(p[:, 1:] - p[:, :1])) / 6
+    centers = p.mean(axis=1)
+    distance = np.linalg.norm(centers[:, None] - centers[None, :], axis=2)
+    h = np.maximum(0, 0.6 - distance) * volumes[None, :]
+    expected = (h @ x) / h.sum(axis=1)
+    expected[0] = 1
+    expected[10] = 0
+    actual = design.evaluate(x)
+    assert_allclose(actual.physical_density, expected, rtol=2e-13, atol=2e-15)
+    assert_allclose(
+        actual.volume_fraction, volumes @ expected / volumes.sum(), rtol=2e-13
+    )

@@ -70,7 +70,14 @@
     "examples/uncertainty_heat/mesh.msh": "280468c994742594912ab6311ae1de85b108c6b079cc10375483485d4baf4c63",
     "examples/uncertainty_heat/model.toml": "fb1221002108573da4b42d5c95acf5b90a1bcae47b433c14edf28fa93fd3d0e8",
     "examples/uncertainty_heat/run.py": "30f26c19aa66b7cfe41820b5111ae675c1eb7bba44383e318db8688d3c9977c0",
-    "examples/adaptive_heat/run_adaptive.py": "aa0ecb18a856054b36ee012fc30684f6d205a38a795646c4b5fefc8fdd5416d8"
+    "examples/adaptive_heat/run_adaptive.py": "aa0ecb18a856054b36ee012fc30684f6d205a38a795646c4b5fefc8fdd5416d8",
+    "examples/topology/run.py": "9b096df55d8464455d3589c19990d609548b2ba8f55df80c3529f8b890aaca8e",
+    "examples/topology/verify.py": "2e9177ec552a28c88279974f3e7e759c34735ac230505a57a843e33746b26d48",
+    "examples/topology/prepare.py": "29e16c5730389b550a9824cf8657cd97919c44a9358979aaf5e312ecf89a6f86",
+    "examples/topology/reference/z.toml": "1c102c2a0befaae2c87d7439c54ef3b513ad39504be59edf9dfb7dda14dcec24",
+    "examples/topology/reference/mesh.msh": "2088906ad5b3fce37dd10aed4f758767ee7124b5ff6d6071fbd0bc32c114ac97",
+    "examples/topology/reference/study.toml": "08aae25c7f5446fb23a9ceef9cbf96c7ce6404e8d0a8ec54fdae4a831f1c32a2",
+    "examples/topology/reference/y.toml": "2e453d7bcaa018989d425576440059b0d0cfe08953cd376c73b93c64dd3bd544"
   },
   "recipes": [
     {
@@ -678,6 +685,89 @@
       "expectation": "Vier gelöste Stufen pro Fall/Strategie; step_budget, monotone wahre Energiefehler, unabhängige Fehlerquadraturparität.",
       "limits": "Heuristischer Indikator, affine Tet4 und stationäre Wärme. Vier-Stufen-Smoke ist kein voller Sieben-Stufen-Nutzennachweis.",
       "troubleshooting": "Neue Ausgabeziele verwenden; bei unerwartetem Endstatus Netz/Material/Randzuordnung und Diagnose prüfen."
+    },
+    {
+      "id": "topology-run",
+      "script": "examples/topology/run.py",
+      "command": [
+        "python",
+        "-I",
+        "examples/topology/run.py",
+        "--output",
+        "results/topology"
+      ],
+      "inputs": [
+        "examples/topology/run.py",
+        "examples/topology/verify.py",
+        "examples/topology/prepare.py",
+        "examples/topology/reference/z.toml",
+        "examples/topology/reference/mesh.msh",
+        "examples/topology/reference/study.toml",
+        "examples/topology/reference/y.toml"
+      ],
+      "runtime_budget_seconds": 90,
+      "artifacts": [
+        "results/topology/result.json",
+        "results/topology/geometry/reanalysis.json"
+      ],
+      "expectation": "Deterministic Tet4 mechanics, feasible density volume and explicit geometry diagnostics; verify --quick is smoke only",
+      "limits": "No global optimum, fixed minimum wall thickness, CAD/manufacturing or experimental qualification",
+      "troubleshooting": "Use new output directories; inspect status, volume feasibility, force balances and geometry No-go records"
+    },
+    {
+      "id": "topology-prepare",
+      "script": "examples/topology/prepare.py",
+      "command": [
+        "python",
+        "-I",
+        "examples/topology/prepare.py",
+        "--output",
+        "results/topology-input"
+      ],
+      "inputs": [
+        "examples/topology/run.py",
+        "examples/topology/verify.py",
+        "examples/topology/prepare.py",
+        "examples/topology/reference/z.toml",
+        "examples/topology/reference/mesh.msh",
+        "examples/topology/reference/study.toml",
+        "examples/topology/reference/y.toml"
+      ],
+      "runtime_budget_seconds": 90,
+      "artifacts": [
+        "results/topology-input/study.toml"
+      ],
+      "expectation": "Deterministic Tet4 mechanics, feasible density volume and explicit geometry diagnostics; verify --quick is smoke only",
+      "limits": "No global optimum, fixed minimum wall thickness, CAD/manufacturing or experimental qualification",
+      "troubleshooting": "Use new output directories; inspect status, volume feasibility, force balances and geometry No-go records"
+    },
+    {
+      "id": "topology-verify",
+      "script": "examples/topology/verify.py",
+      "command": [
+        "python",
+        "-I",
+        "examples/topology/verify.py",
+        "--quick",
+        "--output",
+        "results/topology-smoke"
+      ],
+      "inputs": [
+        "examples/topology/run.py",
+        "examples/topology/verify.py",
+        "examples/topology/prepare.py",
+        "examples/topology/reference/z.toml",
+        "examples/topology/reference/mesh.msh",
+        "examples/topology/reference/study.toml",
+        "examples/topology/reference/y.toml"
+      ],
+      "runtime_budget_seconds": 90,
+      "artifacts": [
+        "results/topology-smoke/verification.json"
+      ],
+      "expectation": "Deterministic Tet4 mechanics, feasible density volume and explicit geometry diagnostics; verify --quick is smoke only",
+      "limits": "No global optimum, fixed minimum wall thickness, CAD/manufacturing or experimental qualification",
+      "troubleshooting": "Use new output directories; inspect status, volume feasibility, force balances and geometry No-go records"
     }
   ],
   "follow_up": {

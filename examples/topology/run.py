@@ -26,9 +26,17 @@ print(
             "status": result.status,
             "compliance_J": result.final.objective,
             "volume_fraction": result.final.volume_fraction,
+            "geometry_gate_passed": any(
+                row["status"] == "accepted" for row in geometry
+            ),
             "output": str(args.output),
         },
         indent=2,
     )
 )
-raise SystemExit(0 if result.status == "converged" else 2)
+raise SystemExit(
+    0
+    if result.status == "converged"
+    and any(row["status"] == "accepted" for row in geometry)
+    else 2
+)

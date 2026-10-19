@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.6.0.dev1 — M11-Entwicklungskandidat
+
+- Gefilterte Tet4-SIMP-Mehrlastfalloptimierung mit Volumenrestriktion und vollständiger Gradientenkette.
+- Model-basierte TOML-Studien, deterministische SI-Provenienz, JSON-/VTU-Export und klare Abbruchstatus.
+- Getrennte Schwellen-/Verbindungsgeometrien mit unabhängiger Vollmaterial-Reanalyse.
+- Drei-Netze-/Zwei-Radien-Nachweis; keine neue veröffentlichte oder experimentelle Freigabe.
+
 Alle wesentlichen Änderungen dieses Projekts werden hier dokumentiert. Das
 Format orientiert sich an [Keep a Changelog](https://keepachangelog.com/) und die
 Versionierung an [Semantic Versioning](https://semver.org/).

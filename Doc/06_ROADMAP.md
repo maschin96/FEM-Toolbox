@@ -231,3 +231,12 @@ Folgeumfang #63/#65 bleibt unabhängig davon offen.
 Wärmeadaptivität (#67–#69). [Numerische Nachweise und Veröffentlichung](71_M10_RELEASE_VERIFICATION.md).
 Der endgültige Veröffentlichungsnachweis (main-CI, Tag und Artefakte) wird in
 [Release-Issue #70](https://github.com/maschin96/FEM-Toolbox/issues/70) verknüpft.
+
+## M11 — Entwicklungskandidat vom 19.10.2026
+
+Auf ausdrücklichen Auftrag wird M11 als nächster Implementierungsumfang nach
+v1.5.0 bearbeitet. `1.6.0.dev1` enthält gefilterte Struktur-Topologieoptimierung,
+Mehrlastfälle, geprüfte Gradienten, TOML-Studien und separate Geometrie-Reanalyse.
+[Vertrag](83_M11_TOPOLOGY_CONTRACT.md), [Workflow](84_M11_TOPOLOGY_WORKFLOW.md),
+[Nachweise und offenes Release-Gate](85_M11_VERIFICATION.md). Kein v1.6.0-Tag
+und keine Freigabe anderer Milestones werden dadurch behauptet.

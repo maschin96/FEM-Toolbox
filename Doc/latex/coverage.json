@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "scope": "M0–M10 implementation candidate; M10 release gate pending; experimental validation deferred",
+  "scope": "M11 implementation candidate on released v1.5.0; no M11 release or experimental validation",
   "entries": [
     {
       "source": "Doc/01_SCOPE_AND_REQUIREMENTS.md",
@@ -3376,6 +3376,83 @@
         "disposition": "Release-Nachweis / Freigabereihenfolge und Grenzen",
         "evidence": "Doc/71_M10_RELEASE_VERIFICATION.md"
       }
+    },
+    {
+      "source": "Doc/83_M11_TOPOLOGY_CONTRACT.md",
+      "target": "Doc/latex/chapters/verification/topology.tex",
+      "canonical": "Doc/83_M11_TOPOLOGY_CONTRACT.md",
+      "owner": "M11 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "Doc/84_M11_TOPOLOGY_WORKFLOW.md",
+      "target": "Doc/latex/chapters/verification/topology.tex",
+      "canonical": "Doc/84_M11_TOPOLOGY_WORKFLOW.md",
+      "owner": "M11 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "Doc/85_M11_VERIFICATION.md",
+      "target": "Doc/latex/chapters/verification/topology.tex",
+      "canonical": "Doc/85_M11_VERIFICATION.md",
+      "owner": "M11 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "Doc/evidence/m11/environment.json",
+      "target": "Doc/latex/chapters/verification/topology.tex",
+      "canonical": "Doc/evidence/m11/environment.json",
+      "owner": "M11 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "Doc/evidence/m11/unscaled_no_go.json",
+      "target": "Doc/latex/chapters/verification/topology.tex",
+      "canonical": "Doc/evidence/m11/unscaled_no_go.json",
+      "owner": "M11 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "Doc/evidence/m11/verification.json",
+      "target": "Doc/latex/chapters/verification/topology.tex",
+      "canonical": "Doc/evidence/m11/verification.json",
+      "owner": "M11 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/topology.py",
+      "target": "Doc/latex/chapters/api/topology.tex",
+      "canonical": "src/fem_toolbox/topology.py",
+      "owner": "M11 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/topology_geometry.py",
+      "target": "Doc/latex/chapters/api/topology.tex",
+      "canonical": "src/fem_toolbox/topology_geometry.py",
+      "owner": "M11 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/topology_optimization.py",
+      "target": "Doc/latex/chapters/api/topology.tex",
+      "canonical": "src/fem_toolbox/topology_optimization.py",
+      "owner": "M11 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/topology_study.py",
+      "target": "Doc/latex/chapters/api/topology.tex",
+      "canonical": "src/fem_toolbox/topology_study.py",
+      "owner": "M11 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "Doc/evidence/m11/artifacts.json",
+      "target": "Doc/latex/chapters/verification/topology.tex",
+      "canonical": "Doc/85_M11_VERIFICATION.md",
+      "owner": "M11 maintainers",
+      "status": "open"
     }
   ],
   "planned": [

@@ -186,3 +186,18 @@ Referenzfälle ab; End-/Halte- und konstante Werte werden exakt geprüft.
 
 Bestehende Solver-, Model- und Persistenzverträge bleiben erhalten. Kein neuer
 transienter, gekoppelter oder Tet10-Adaptivitätsumfang.
+
+## Additive M11-Oberfläche (1.6.0.dev1, Kandidat)
+
+| Importpfad | Einstiegspunkte | Vertrag |
+|---|---|---|
+| `fem_toolbox.topology` | `LoadCase`, `DensityEvaluation`, `TopologyProblem` | Tet4, SI-Totlasten, homogener Rand; linearer Volumendichtefilter und SIMP, Dokument 83/84 |
+| `fem_toolbox.topology_optimization` | `OptimizationOptions`, `OptimizationResult`, `optimize_topology` | Analytische Gradienten, Volumen/Budgets und explizite lokale Endstatus |
+| `fem_toolbox.topology_study` | `TopologyStudy`, `read_topology_result` | TOML-/JSON-Schema 1, unveränderte Model-Eingaben, Hashbindung und VTU |
+| `fem_toolbox.topology_geometry` | `GeometryResult`, `reanalyze_geometry`, `export_reanalyses` | Reine Schwelle oder explizite Verbindungszellen; unveränderte Vollmaterialmechanik |
+
+`Model.elasticity_inputs()` ergänzt einen kopierten validierten Snapshot mit
+Mesh, unveränderlichen Materialtensoren, kopierten Dirichlet-Daten, Körperkraft
+und Traktionen. Er ist nur für stationäre Elastizität gültig und verändert
+weder Model noch Dokument. Der M11-Kandidat erweitert keine existierenden
+Persistenzkennungen; seine Schema-1-Dateien sind eigenständig.

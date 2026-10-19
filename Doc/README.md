@@ -183,3 +183,9 @@ experimentelle Validierungsfreigabe wird nicht behauptet.
 - [ADR-055: Remeshing-Machbarkeit und Adaptivitätsvertrag (#67)](69_ADAPTIVE_REMESHING_CONTRACT.md)
 - [Adaptive Wärme: API, Fehlerkontrolle und unabhängige Verifikation (#68/#69)](70_ADAPTIVE_HEAT_WORKFLOW.md)
 - [M10-Nachweise und Veröffentlichungsstatus (#70)](71_M10_RELEASE_VERIFICATION.md)
+
+## M11 — Struktur-Topologieoptimierung (Entwicklung)
+
+- [Mathematik, Sensitivität und vorab definierte Gates (#76)](83_M11_TOPOLOGY_CONTRACT.md)
+- [Studienworkflow, API, Einheiten und Geometrie-Reanalyse](84_M11_TOPOLOGY_WORKFLOW.md)
+- [Numerische Nachweise und offenes Release-Gate (#83)](85_M11_VERIFICATION.md)

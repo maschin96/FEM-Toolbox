@@ -54,18 +54,18 @@ def test_removed_point_load_is_never_silently_dropped(cube_mesh):
         reanalyze_geometry(design, field, 0.5)
 
 
-def test_explicit_connection_repair_is_reported_on_reference(tmp_path):
-    from pathlib import Path
+def test_explicit_connection_repair_is_reported_on_reference(cube_mesh):
+    from fem_toolbox.topology import LoadCase, TopologyProblem
 
-    from fem_toolbox.topology_study import TopologyStudy
-
-    study = TopologyStudy.from_file(
-        Path(__file__).parents[2] / "examples/topology/reference/study.toml"
-    )
-    result = study.run(tmp_path / "density")
+    base = problem(cube_mesh(1))
+    case = LoadCase("end", base.cases[0].conditions, point_loads={7: (0, -1, 0)})
+    design = TopologyProblem(base.mesh, base.materials, [case], filter_radius=1e-4)
+    density = np.zeros(6)
+    density[[0, 3]] = 1
+    field = design.evaluate(density)
     with pytest.raises(ValidationError, match="disconnected"):
-        reanalyze_geometry(study.problem, result.final, 0.45)
-    repaired = reanalyze_geometry(study.problem, result.final, 0.45, connect=True)
+        reanalyze_geometry(design, field, 0.45)
+    repaired = reanalyze_geometry(design, field, 0.45, connect=True)
     record = repaired.to_record()
     assert record["connection_repair"] is True
     assert len(record["added_original_cells"]) > 0

@@ -14,6 +14,8 @@ import numpy as np
 import scipy
 
 from fem_toolbox import __version__
+from fem_toolbox.model import Model
+from fem_toolbox.topology import TopologyProblem
 from fem_toolbox.topology_study import TopologyStudy, read_topology_result
 
 parser = argparse.ArgumentParser(description=__doc__)
@@ -46,6 +48,7 @@ for n in [2] if args.quick else [2, 3, 4]:
         )
         (output / (name + ".log")).write_text(process.stdout + process.stderr)
         record = read_topology_result(output / name)
+        geometry = json.loads((output / name / "geometry/reanalysis.json").read_text())
         residual = max(s["relative_residual"] for s in record["states"])
         force = max(
             float(np.linalg.norm(s["force_balance_N"])) for s in record["states"]
@@ -81,6 +84,8 @@ for n in [2] if args.quick else [2, 3, 4]:
             "maximum_relative_work_energy_error": work,
             "evaluations": record["evaluations"],
             "status": record["status"],
+            "geometry_gate_passed": geometry["gate_passed"],
+            "geometry_thresholds": geometry["thresholds"],
             "gate": "passed" if passed else "failed",
             "result_sha256": hashlib.sha256(
                 (output / name / "result.json").read_bytes()
@@ -138,11 +143,28 @@ for h in (1e-3, 1e-4, 1e-5):
             ),
         }
     )
+# The single-y-load benchmark is separate from the two-load variant.
+single_problem = TopologyProblem.from_models(
+    [Model.from_file(output / "n2-r0.3-input/y.toml")],
+    weights=[1.0],
+    filter_radius=0.3,
+    fixed_solid=study.problem.solid,
+)
+single = TopologyStudy(single_problem, 0.6).run(output / "single-load")
 report = json.loads((output / "verification.json").read_text())
 report.update(
     repeat_relative_error=repeat_error,
     gradient_steps=steps,
-    gates_passed=all(r["gate"] == "passed" for r in rows)
+    single_load={
+        "status": single.status,
+        "compliance_J": single.final.objective,
+        "initial_compliance_J": single.initial_objective,
+        "volume_fraction": single.final.volume_fraction,
+    },
+    gates_passed=all(r["gate"] == "passed" and r["geometry_gate_passed"] for r in rows)
+    and single.status == "converged"
+    and single.final.objective <= 0.99 * single.initial_objective
+    and single.final.volume_fraction <= 0.6 + 1e-8
     and repeat_error <= 1e-10
     and steps[-1]["relative_error"] <= 2e-4
     and steps[-1]["absolute_volume_derivative_error"] <= 2e-9,
