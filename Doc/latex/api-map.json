@@ -778,7 +778,7 @@
         "DensityEvaluation",
         "TopologyProblem"
       ],
-      "rationale": "Additive M11-Kandidatenoberfläche; SI, Tet4, feste Totlasten und eigene Schema-1-Exporte.",
+      "rationale": "Additive M11-Oberfläche ab v1.6.0; SI, Tet4, feste Totlasten und eigene Schema-1-Exporte.",
       "contract": "Doc/latex/chapters/api/topology.tex",
       "examples": [
         "examples/topology/run.py"
@@ -791,7 +791,7 @@
         "OptimizationResult",
         "optimize_topology"
       ],
-      "rationale": "Additive M11-Kandidatenoberfläche; SI, Tet4, feste Totlasten und eigene Schema-1-Exporte.",
+      "rationale": "Additive M11-Oberfläche ab v1.6.0; SI, Tet4, feste Totlasten und eigene Schema-1-Exporte.",
       "contract": "Doc/latex/chapters/api/topology.tex",
       "examples": [
         "examples/topology/run.py"
@@ -803,7 +803,7 @@
         "TopologyStudy",
         "read_topology_result"
       ],
-      "rationale": "Additive M11-Kandidatenoberfläche; SI, Tet4, feste Totlasten und eigene Schema-1-Exporte.",
+      "rationale": "Additive M11-Oberfläche ab v1.6.0; SI, Tet4, feste Totlasten und eigene Schema-1-Exporte.",
       "contract": "Doc/latex/chapters/api/topology.tex",
       "examples": [
         "examples/topology/run.py"
@@ -816,7 +816,7 @@
         "reanalyze_geometry",
         "export_reanalyses"
       ],
-      "rationale": "Additive M11-Kandidatenoberfläche; SI, Tet4, feste Totlasten und eigene Schema-1-Exporte.",
+      "rationale": "Additive M11-Oberfläche ab v1.6.0; SI, Tet4, feste Totlasten und eigene Schema-1-Exporte.",
       "contract": "Doc/latex/chapters/api/topology.tex",
       "examples": [
         "examples/topology/run.py"

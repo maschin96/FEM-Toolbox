@@ -1,6 +1,6 @@
 # M11: Topologie-Studien und Geometrie-Reanalyse
 
-19.10.2026 · 1.6.0.dev1 · Entwicklungskandidat, keine veröffentlichte M11-Version.
+19.10.2026 · Freigabestand 1.6.0 · Veröffentlichungsnachweis in [#83](https://github.com/maschin96/FEM-Toolbox/issues/83).
 Die Themenpriorität M11 wurde ausdrücklich als nächster Ausbau beauftragt.
 Deshalb ist nach v1.5.0 das nächste Minor-Ziel v1.6.0; die ältere v1.9.0-Angabe
 in Planungswelle 3 war vorläufig. Andere Milestones werden nicht als freigegeben
