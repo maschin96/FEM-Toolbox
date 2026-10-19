@@ -3364,6 +3364,18 @@
       "canonical": "Doc/71_M10_RELEASE_VERIFICATION.md",
       "owner": "M10 Maintainer",
       "status": "open"
+    },
+    {
+      "source": "Doc/releases/v1.5.0.md",
+      "target": "Doc/latex/chapters/documentation-sources.tex",
+      "canonical": "Doc/releases/v1.5.0.md",
+      "owner": "Release maintainers",
+      "status": "sample",
+      "candidate_coverage": {
+        "status": "documented",
+        "disposition": "Release-Nachweis / Freigabereihenfolge und Grenzen",
+        "evidence": "Doc/71_M10_RELEASE_VERIFICATION.md"
+      }
     }
   ],
   "planned": [

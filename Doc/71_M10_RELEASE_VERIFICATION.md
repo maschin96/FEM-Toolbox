@@ -52,3 +52,15 @@ Nachweis fixiert; keine blind gewählte Grenze und kein universeller Laufzeitvor
 Die vorhandene lokale Löschung von `AGENTS.md` und `.DS_Store` wurden nicht in
 M10 aufgenommen. Die Implementierung ändert weder alte Ergebnisse noch bestehende
 Solver-/Model-/Persistenzverträge; die zusätzliche JSON-Kennung hat eigenes Schema 1.
+
+## Abschlusslauf am 19.10.2026 (#70)
+
+Der Kandidat wird auf Paketversion 1.5.0 umgestellt. Das Repository ist öffentlich;
+CI und Handbuch verwenden ephemere GitHub-gehostete Ubuntu-24.04-Runner. Die
+Python-Matrix, Artefaktinstallation, PETSc real/complex und Handbuch-Negativfälle
+bleiben erhalten. Main-Handbücher verlangen saubere Release-Provenienz.
+Die früheren selbst gehosteten Nachweise am Commit
+`8820e0075be9c0a3d6db0660cfa6cfa8949ab604` waren erfolgreich; sie ersetzen
+keine Prüfung des neuen Freigabecommits. Aktuelle PR-/main-Läufe, Tag und
+Veröffentlichungsartefakte werden abschließend im Release-Issue #70 verknüpft.
+Unabhängiges menschliches Fachreview liegt weiterhin nicht vor.

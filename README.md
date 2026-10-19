@@ -5,10 +5,10 @@ dreidimensionale Finite-Elemente-Simulationen. Ziel sind verifizierte Modelle f�
 Festkörpermechanik, Wärmeleitung, Elektrostatik und deren thermomechanische und
 piezoelektrische Kopplungen auf Basis linearer **Tet4** und geradkantiger quadratischer **Tet10**.
 
-**v1.4.0 — verifizierter Unsicherheitsworkflow und Gesamtdokumentation.**
-Release-Stand vom 11.10.2026; Veröffentlichungsstatus im [M9-Freigabebericht](Doc/68_M9_RELEASE_VERIFICATION.md).
-[Release-Nachweis](Doc/68_M9_RELEASE_VERIFICATION.md) ·
-[Release Notes](Doc/releases/v1.4.0.md) ·
+**v1.5.0 — kontrollierte adaptive Netzstudien für stationäre Tet4-Wärme.**
+Release-Kandidat vom 19.10.2026; endgültiger Veröffentlichungsstatus in [#70](https://github.com/maschin96/FEM-Toolbox/issues/70).
+[Release-Nachweis](Doc/71_M10_RELEASE_VERIFICATION.md) ·
+[Release Notes](Doc/releases/v1.5.0.md) ·
 [Supportmatrix](Doc/57_M7_RELEASE_CANDIDATE.md).
 
 Neu gegenüber v1.0: [transiente Wärmeleitung](Doc/33_TRANSIENT_HEAT.md) mit
@@ -34,7 +34,7 @@ verifizierten Annahmen und numerischen Grenzen.
 
 ## Verfügbare Funktionen
 
-| Bereich | Umfang im Freigabestand v1.4.0 |
+| Bereich | Umfang in v1.5.0 |
 |---|---|
 | Netzmodell | Unveränderliche NumPy-Arrays für 3D-Punkte, Tet4/Tet10-Zellen und Triangle3/Triangle6-Flächen; validierte Indizes, externe IDs und Tags |
 | Auswahlsätze | Benannte Volumen- und Flächensätze, auch mit überlappenden Mitgliedschaften |
@@ -49,6 +49,7 @@ verifizierten Annahmen und numerischen Grenzen.
 | Piezoelektrizität | Stress-Charge-Materialdaten, Konversion und Achsrotation; gekoppelte Tet4/Tet10-Operatoren und monolithische Lösung mit SciPy oder optional PETSc mit feldweiser Skalierung, Reaktionen, Ladungs- und Energiebilanzen |
 | Thermopiezoelektrizität | Einseitiger stationärer Ablauf `T → (u, φ)` mit regionsweiser thermischer Eigenverzerrung und getrennten Wärme-, Kraft- und Ladungsbilanzen |
 | Transiente Wärme | Konstante rho/c-Daten, Backward Euler, Model-Schema 2, Zeitprofile, Speicherbilanz und PVD-/Messpunktserien |
+| Adaptive Wärme | Konforme Tet4-Verfeinerung, Rand-/Materialgruppenvererbung und kontrollierter Abbruch mit Stufenprovenienz; heuristischer Residualindikator |
 | Unsicherheit | Explizite Normal-/Gleichverteilungen, gemeinsames Sampling, normale Korrelation, Stichprobenstatistik, lokale Sensitivität und stationäre M8-FEM-Studien; keine experimentelle Freigabe |
 | Piezo-Dynamik | Mechanische konsistente Masse, algebraisches Potential, Modal-/Newmark-/Harmonikanalyse, Model-Schema 3 und komplexe Feld-/Messpunktausgabe |
 
