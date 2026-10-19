@@ -177,3 +177,12 @@ ausgewählt. Fehlendes PETSc wird beim Backendaufbau ausdrücklich diagnostizier
 
 `python -m pip install '.[visualization]'` ergänzt Matplotlib. Ohne dieses Extra
 bleiben Solver nutzbar. [API und Headless-Beispiel](Doc/62_FIELD_VISUALIZATION.md).
+
+## M10: adaptive stationäre Wärme
+
+Version `1.5.0` ergänzt adaptive stationäre
+Tet4-Wärme. Dies ist kein final veröffentlichtes v1.5.0-Paket.
+Nach Installation der Version kann das neue Beispiel mit
+`python examples/adaptive_heat/run_adaptive.py --steps 4 --output results/adaptive`
+ausgeführt werden. [Vertrag und Grenzen](Doc/70_ADAPTIVE_HEAT_WORKFLOW.md),
+[offene endgültige Release-Gates](Doc/71_M10_RELEASE_VERIFICATION.md).

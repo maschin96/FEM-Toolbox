@@ -69,7 +69,8 @@
     "examples/transient_heat/source.csv": "83f0a188304cf463e97dae184ccb27e790333b0bfcee354cd3cdabe3bb25d434",
     "examples/uncertainty_heat/mesh.msh": "280468c994742594912ab6311ae1de85b108c6b079cc10375483485d4baf4c63",
     "examples/uncertainty_heat/model.toml": "fb1221002108573da4b42d5c95acf5b90a1bcae47b433c14edf28fa93fd3d0e8",
-    "examples/uncertainty_heat/run.py": "30f26c19aa66b7cfe41820b5111ae675c1eb7bba44383e318db8688d3c9977c0"
+    "examples/uncertainty_heat/run.py": "30f26c19aa66b7cfe41820b5111ae675c1eb7bba44383e318db8688d3c9977c0",
+    "examples/adaptive_heat/run_adaptive.py": "aa0ecb18a856054b36ee012fc30684f6d205a38a795646c4b5fefc8fdd5416d8"
   },
   "recipes": [
     {
@@ -653,6 +654,30 @@
       "expectation": "128 successful joint rows; exact discrete Tmax=T0+Q/8 within 1e-11 K; sensitivity [1/8,1] within 2e-10 in SI; mean 301 K within predeclared 6 standard errors",
       "limits": "Synthetic distributions; unknown continuum error; no experimental validation or guaranteed quantile convergence",
       "troubleshooting": "Use new directory for new sampling specification; inspect failed M8 cases and missing quantities; verify no writer before recovering stale lock"
+    },
+    {
+      "id": "adaptive-heat",
+      "script": "examples/adaptive_heat/run_adaptive.py",
+      "command": [
+        "python",
+        "-I",
+        "examples/adaptive_heat/run_adaptive.py",
+        "--steps",
+        "4",
+        "--output",
+        "results/adaptive"
+      ],
+      "inputs": [
+        "examples/adaptive_heat/run_adaptive.py"
+      ],
+      "runtime_budget_seconds": 90,
+      "artifacts": [
+        "results/adaptive/comparison.json",
+        "results/adaptive/localized-adaptive.json"
+      ],
+      "expectation": "Vier gelöste Stufen pro Fall/Strategie; step_budget, monotone wahre Energiefehler, unabhängige Fehlerquadraturparität.",
+      "limits": "Heuristischer Indikator, affine Tet4 und stationäre Wärme. Vier-Stufen-Smoke ist kein voller Sieben-Stufen-Nutzennachweis.",
+      "troubleshooting": "Neue Ausgabeziele verwenden; bei unerwartetem Endstatus Netz/Material/Randzuordnung und Diagnose prüfen."
     }
   ],
   "follow_up": {

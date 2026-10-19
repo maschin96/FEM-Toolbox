@@ -15,6 +15,208 @@
         }
       }
     },
+    "fem_toolbox.adaptive": {
+      "source": "src/fem_toolbox/adaptive.py",
+      "documentation": "Controlled stationary Tet4 heat adaptation with inherited problem data.",
+      "declared_exports": [
+        "AdaptiveHeatResult",
+        "AdaptiveOptions",
+        "AdaptiveStage",
+        "HeatProblem",
+        "solve_adaptive_heat"
+      ],
+      "definitions": {
+        "AdaptiveOptions": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True)"
+          ],
+          "documentation": "Indicator tolerance sqrt(W K), active DOFs and number of solved meshes.\n\nStagnation means eta fails to fall by min_reduction over stagnation_window\nsuccessive refinements. Tolerance is heuristic, never a certified error bound.",
+          "fields": {
+            "tolerance": {
+              "annotation": "float",
+              "default": "0.001"
+            },
+            "max_steps": {
+              "annotation": "int",
+              "default": "10"
+            },
+            "max_dofs": {
+              "annotation": "int",
+              "default": "100000"
+            },
+            "fraction": {
+              "annotation": "float",
+              "default": "0.5"
+            },
+            "min_reduction": {
+              "annotation": "float",
+              "default": "0.01"
+            },
+            "stagnation_window": {
+              "annotation": "int",
+              "default": "3"
+            }
+          },
+          "methods": {}
+        },
+        "HeatProblem": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True)"
+          ],
+          "documentation": "Stationary SI data. Boundary keys are INPUT triangle row indices.\n\nDirichlet values (K) may be scalar or point callable. Unlisted facets are\ninsulated. Cellwise material and all facet maps inherit exactly through\nrefinement parents; callable fields are reevaluated at physical points.\nPoint-only constraints are deliberately excluded from this workflow.",
+          "fields": {
+            "material": {
+              "annotation": "ThermalMaterial | Sequence[ThermalMaterial]",
+              "default": null
+            },
+            "dirichlet": {
+              "annotation": "Mapping[int, ScalarField]",
+              "default": null
+            },
+            "source": {
+              "annotation": "ScalarField",
+              "default": "0.0"
+            },
+            "outward_fluxes": {
+              "annotation": "Mapping[int, ScalarField]",
+              "default": "field(default_factory=dict)"
+            },
+            "convection": {
+              "annotation": "Mapping[int, Convection]",
+              "default": "field(default_factory=dict)"
+            }
+          },
+          "methods": {
+            "refined": {
+              "parameters": "self, refinement: Refinement",
+              "returns": "HeatProblem",
+              "decorators": [],
+              "documentation": null,
+              "direct_raise_sites": []
+            }
+          }
+        },
+        "mesh_record": {
+          "kind": "function",
+          "parameters": "mesh: Mesh",
+          "returns": "dict[str, object]",
+          "decorators": [],
+          "documentation": "Canonical topology/selection record; hash includes external identity.",
+          "direct_raise_sites": []
+        },
+        "mesh_hash": {
+          "kind": "function",
+          "parameters": "mesh: Mesh",
+          "returns": "str",
+          "decorators": [],
+          "documentation": null,
+          "direct_raise_sites": []
+        },
+        "AdaptiveStage": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True)"
+          ],
+          "documentation": "Solved immutable mesh/result plus decision and parent evidence.",
+          "fields": {
+            "mesh": {
+              "annotation": "Mesh",
+              "default": null
+            },
+            "result": {
+              "annotation": "HeatResult",
+              "default": null
+            },
+            "indicator": {
+              "annotation": "HeatIndicator",
+              "default": null
+            },
+            "marked": {
+              "annotation": "tuple[int, ...]",
+              "default": null
+            },
+            "cell_parents": {
+              "annotation": "tuple[int, ...]",
+              "default": "()"
+            },
+            "facet_parents": {
+              "annotation": "tuple[int, ...]",
+              "default": "()"
+            }
+          },
+          "methods": {
+            "to_dict": {
+              "parameters": "self",
+              "returns": "dict[str, object]",
+              "decorators": [],
+              "documentation": null,
+              "direct_raise_sites": []
+            }
+          }
+        },
+        "AdaptiveHeatResult": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True)"
+          ],
+          "documentation": null,
+          "fields": {
+            "stages": {
+              "annotation": "tuple[AdaptiveStage, ...]",
+              "default": null
+            },
+            "status": {
+              "annotation": "Status",
+              "default": null
+            },
+            "diagnostic": {
+              "annotation": "str",
+              "default": null
+            },
+            "options": {
+              "annotation": "AdaptiveOptions",
+              "default": null
+            }
+          },
+          "methods": {
+            "to_dict": {
+              "parameters": "self",
+              "returns": "dict[str, object]",
+              "decorators": [],
+              "documentation": null,
+              "direct_raise_sites": []
+            },
+            "export": {
+              "parameters": "self, path: str | Path",
+              "returns": "Path",
+              "decorators": [],
+              "documentation": "Write deterministic strict JSON evidence (meshes and raw SI results).\n\nThis records discrete results and solver input fingerprints. Rerunning\ncallable data requires the original problem script, as for solve_heat.",
+              "direct_raise_sites": []
+            }
+          }
+        },
+        "solve_adaptive_heat": {
+          "kind": "function",
+          "parameters": "mesh: Mesh, problem: HeatProblem, options: AdaptiveOptions | None=None, *, remesher: Callable[..., Refinement]=refine_tet4",
+          "returns": "AdaptiveHeatResult",
+          "decorators": [],
+          "documentation": "Solve-estimate-mark-refine until tolerance, budget, stagnation or error.\n\nNo partial or overbudget mesh is accepted. Validation/solver/adapter failures\nreturn error with previous solved stages intact; programming errors propagate.\nThe remesher hook must return exact parent inheritance and conforming Tet4\ngeometry, obey max_points, and preserve domain/groups (see refinement ADR).",
+          "direct_raise_sites": []
+        }
+      },
+      "reexports": {},
+      "aliases": {
+        "Status": {
+          "value": "Literal['tolerance', 'dof_budget', 'step_budget', 'stagnation', 'error']"
+        }
+      }
+    },
     "fem_toolbox.assembly": {
       "source": "src/fem_toolbox/assembly/__init__.py",
       "documentation": "Physics-independent COO assembly and preserved original linear systems.\n\nLocal vectors already include integration and the weak-form sign. Matrix and\nvector entries use the SI units of their respective equations.",
@@ -2438,6 +2640,68 @@
           "value": "((0, 1), (1, 2), (2, 0))"
         }
       }
+    },
+    "fem_toolbox.mesh.refinement": {
+      "source": "src/fem_toolbox/mesh/refinement.py",
+      "documentation": "Deterministic conforming edge-star bisection for affine Tet4 meshes.",
+      "declared_exports": null,
+      "definitions": {
+        "Refinement": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True)"
+          ],
+          "documentation": "Child-to-input row maps; external IDs are deliberately not reused.",
+          "fields": {
+            "mesh": {
+              "annotation": "Mesh",
+              "default": null
+            },
+            "cell_parents": {
+              "annotation": "NDArray[np.int64]",
+              "default": null
+            },
+            "facet_parents": {
+              "annotation": "NDArray[np.int64]",
+              "default": null
+            }
+          },
+          "methods": {}
+        },
+        "validate_tet4": {
+          "kind": "function",
+          "parameters": "mesh: Mesh",
+          "returns": "None",
+          "decorators": [],
+          "documentation": "Require nonempty, complete affine Tet4 topology and nondegenerate cells.",
+          "direct_raise_sites": [
+            "ValidationError"
+          ]
+        },
+        "refine_tet4": {
+          "kind": "function",
+          "parameters": "mesh: Mesh, marked: ArrayLike, *, max_points: int | None=None",
+          "returns": "Refinement",
+          "decorators": [],
+          "documentation": "Bisect each marked cell's longest edge, including its entire edge star.\n\nEdges are chosen on the INPUT mesh, ties by sorted node pair, processed in\nsorted order. Every incident volume and boundary simplex is split at the same\nmidpoint, so no hanging nodes arise. Closure may refine unmarked cells.\nCell/facet tags and overlapping named sets are inherited via parent rows.\nGeometry and material interfaces are preserved exactly for straight elements.\nNo smoothing, coarsening, curved surfaces or uniform shape-quality bound.\nmax_points limits active thermal DOFs; exceeded budget leaves input untouched.\nExternal IDs are removed: child identity is given by the returned parent maps.",
+          "direct_raise_sites": [
+            "ValidationError"
+          ]
+        },
+        "validate_refinement": {
+          "kind": "function",
+          "parameters": "original: Mesh, result: Refinement",
+          "returns": "None",
+          "decorators": [],
+          "documentation": "Reject invalid parentage, domain changes and lost physical groups.\n\nChildren must lie in their parent simplex; summed child measures must equal\neach parent measure. Together with complete conforming boundary topology this\nchecks the edge-bisection adapter contract, not arbitrary mesh intersection.",
+          "direct_raise_sites": [
+            "ValidationError"
+          ]
+        }
+      },
+      "reexports": {},
+      "aliases": {}
     },
     "fem_toolbox.mesh.topology": {
       "source": "src/fem_toolbox/mesh/topology.py",

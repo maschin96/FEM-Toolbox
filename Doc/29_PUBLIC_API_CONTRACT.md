@@ -176,3 +176,13 @@ Die Regressionstests verwenden unabhängige Viertel-/Mittelpunktwerte und
 Eingabewerte. Acht float64-Epsilon als absolute Toleranz nach Normierung auf
 die Endamplitudenskala decken die wenigen arithmetischen Operationen dieser
 Referenzfälle ab; End-/Halte- und konstante Werte werden exakt geprüft.
+
+## Additiver M10-Vertrag (Entwicklungskandidat)
+
+| Modul | Stabile Einstiegspunkte | Vertrag |
+|---|---|---|
+| `fem_toolbox.adaptive` | `AdaptiveOptions`, `HeatProblem`, `AdaptiveStage`, `AdaptiveHeatResult`, `solve_adaptive_heat` | [Adaptive stationäre Tet4-Wärme](70_ADAPTIVE_HEAT_WORKFLOW.md) |
+| `fem_toolbox.mesh.refinement` | `Refinement`, `refine_tet4` | [Konforme Verfeinerung und Elternzuordnung](69_ADAPTIVE_REMESHING_CONTRACT.md) |
+
+Bestehende Solver-, Model- und Persistenzverträge bleiben erhalten. Kein neuer
+transienter, gekoppelter oder Tet10-Adaptivitätsumfang.

@@ -4,7 +4,20 @@ Alle wesentlichen Änderungen dieses Projekts werden hier dokumentiert. Das
 Format orientiert sich an [Keep a Changelog](https://keepachangelog.com/) und die
 Versionierung an [Semantic Versioning](https://semver.org/).
 
-## Unreleased
+## [1.5.0] - 2026-10-19
+
+### Added
+
+- Konforme lokale Tet4-Kantenverfeinerung mit Erhalt von Rand-/Materialtags und benannten Gruppen (#67).
+- Kontrollierter adaptiver stationärer Wärmeablauf mit Toleranz-, DOF-, Schritt-, Stagnations- und Fehlerstatus sowie deterministischem Stufenexport (#68).
+- Unabhängige glatte/lokalisierte Fehlervergleiche gegen uniforme Verfeinerung, analytische Materialgrenzen- und Randwertnachweise (#69).
+
+### Limits
+
+- Residualindikator ist heuristisch; ausschließlich affine Tet4 und stationäre Wärme.
+- Kompatible Minor-Erweiterung; vorhandene Solver- und Model-Verträge bleiben bestehen.
+- GitHub-gehostete Ubuntu-Runner prüfen Python 3.11–3.13, Wheel/sdist, Abhängigkeiten, PETSc und Handbücher.
+- [Release Notes](Doc/releases/v1.5.0.md); Veröffentlichungsnachweise werden in #70 verknüpft.
 
 ## [1.4.0] - 2026-10-11
 
