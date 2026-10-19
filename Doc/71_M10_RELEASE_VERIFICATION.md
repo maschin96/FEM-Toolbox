@@ -1,6 +1,10 @@
-# M10 / v1.5.0 — Implementierungs- und Release-Kandidat (#70)
+# M10 / v1.5.0 — Implementierungs- und Freigabenachweise (#70)
 
-2026-10-11 · **1.5.0.dev1; kein endgültiges Release**
+Stand 19.10.2026 · Paketversion **1.5.0**. Veröffentlichungsstatus und finale
+Commit-/CI-/Artefaktnachweise: [#70](https://github.com/maschin96/FEM-Toolbox/issues/70).
+
+Die folgenden lokalen Nachweise dokumentieren den Kandidaten vom 11.10.2026;
+der Abschlusslauf unten ergänzt die endgültige Version.
 
 ## Erfüllter Implementierungsumfang
 
@@ -35,7 +39,7 @@ Nachweis fixiert; keine blind gewählte Grenze und kein universeller Laufzeitvor
   geprüft. Die historischen Layoutwarnungen bleiben im Build-Manifest sichtbar;
   keine pauschale vollständige Neuabnahme sämtlicher historischer Seiten behauptet.
 
-## Offene endgültige Freigabe
+## Veröffentlichungscheckliste
 
 #70 bleibt offen, bis folgende Veröffentlichungsarbeiten tatsächlich erfolgt sind:
 

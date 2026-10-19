@@ -6,7 +6,7 @@ Festkörpermechanik, Wärmeleitung, Elektrostatik und deren thermomechanische un
 piezoelektrische Kopplungen auf Basis linearer **Tet4** und geradkantiger quadratischer **Tet10**.
 
 **v1.5.0 — kontrollierte adaptive Netzstudien für stationäre Tet4-Wärme.**
-Release-Kandidat vom 19.10.2026; endgültiger Veröffentlichungsstatus in [#70](https://github.com/maschin96/FEM-Toolbox/issues/70).
+Version 1.5.0 vom 19.10.2026; Veröffentlichungsstatus in [#70](https://github.com/maschin96/FEM-Toolbox/issues/70).
 [Release-Nachweis](Doc/71_M10_RELEASE_VERIFICATION.md) ·
 [Release Notes](Doc/releases/v1.5.0.md) ·
 [Supportmatrix](Doc/57_M7_RELEASE_CANDIDATE.md).
@@ -222,7 +222,7 @@ elektrisches Potential `phi` mit feldweiser Freiheitsgradverwaltung.
 | M7 | v1.2.0 | PETSc-Backend, Tet10, Wärmeindikatoren und gemessene Skalierung | Freigegeben |
 | M8 | v1.3.0 | Parameterstudien, Visualisierung und Surrogatmodelle | Implementiert und verifiziert; Release-Abschluss siehe Freigabebericht |
 | M9 | v1.4.0 | Verifizierter Unsicherheitsworkflow und Gesamtdokumentation | Implementiert und verifiziert; Veröffentlichung siehe Freigabebericht |
-| M10 | v1.5.0* | Kontrollierte adaptive Netzstudien | Implementierter Entwicklungskandidat; Release-Gate offen |
+| M10 | v1.5.0 | Kontrollierte adaptive Netzstudien | Implementiert und verifiziert; Veröffentlichung siehe #70 |
 | M11 | Offen | Topologieoptimierung | Grober Horizont |
 | M12 | Offen | RANS-CFD mit Fluid-Struktur-Kopplung | Grober Horizont |
 
@@ -333,11 +333,11 @@ Das [deutschsprachige M9-Handbuch](Doc/latex/README.md) umfasst Theorie,
 Benutzerrezepte, vollständige API-/Entwicklerreferenz und Verifikation/Unsicherheit.
 Ein Befehl baut Gesamtband, vier Einzelbände, Quellenarchiv und Prüfsummen.
 [Gesamtabnahme und Grenzen](Doc/latex/ACCEPTANCE.md). Finale PDF-/Quellenartefakte
-bilden die v1.4.0-Abnahmebasis. Der M10-Kandidat ergänzt Theorie, Anwendung,
+bilden die v1.4.0-Abnahmebasis. M10 ergänzt Theorie, Anwendung,
 API und Verifikation für adaptive stationäre Wärme; Standardbuilds bleiben Kandidaten.
 Experimentelle Validierung ist weiterhin offen.
 
-## Adaptive stationäre Wärme (M10-Kandidat)
+## Adaptive stationäre Wärme (M10)
 
 `fem_toolbox.adaptive` bietet `HeatProblem`, `AdaptiveOptions` und
 `solve_adaptive_heat` für konforme Tet4-Verfeinerung. Material- und Randgruppen
