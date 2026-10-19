@@ -5,8 +5,8 @@ FEM Toolbox. Bei Widersprüchen haben die expliziten Konventionen in der
 mathematischen Modellbeschreibung Vorrang; Änderungen daran benötigen einen
 Eintrag im Entscheidungsprotokoll.
 
-[Aktueller M9-Freigabenachweis v1.4.0](68_M9_RELEASE_VERIFICATION.md) ·
-[Release Notes](releases/v1.4.0.md). Experimentelle Validierung bleibt offen.
+[Aktueller M10-Freigabenachweis v1.5.0](71_M10_RELEASE_VERIFICATION.md) ·
+[Release Notes](releases/v1.5.0.md). Experimentelle Validierung bleibt offen.
 
 ## Lesereihenfolge
 
@@ -182,4 +182,4 @@ experimentelle Validierungsfreigabe wird nicht behauptet.
 
 - [ADR-055: Remeshing-Machbarkeit und Adaptivitätsvertrag (#67)](69_ADAPTIVE_REMESHING_CONTRACT.md)
 - [Adaptive Wärme: API, Fehlerkontrolle und unabhängige Verifikation (#68/#69)](70_ADAPTIVE_HEAT_WORKFLOW.md)
-- [M10-Kandidat und offene endgültige Freigabe (#70)](71_M10_RELEASE_VERIFICATION.md)
+- [M10-Nachweise und Veröffentlichungsstatus (#70)](71_M10_RELEASE_VERIFICATION.md)

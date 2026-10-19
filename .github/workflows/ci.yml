@@ -18,49 +18,11 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  runner-numpy:
-    name: Runner NumPy source / Python ${{ matrix.python-version }}
-    runs-on: [self-hosted, Linux, X64]
-    container:
-      image: ${{ matrix.python-image }}
-      options: --user 1001:1001
-    timeout-minutes: 20
-    env:
-      NUMPY_BUILD_IMAGE: ${{ matrix.python-image }}
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - python-version: "3.11"
-            python-image: python:3.11-bookworm@sha256:5887f265d8d44d8b4734d3658b21d668edf5aaf92e4945bc0c984afbfab105d3
-          - python-version: "3.12"
-            python-image: python:3.12-bookworm@sha256:5560e9ab8709f459489e5b8aa696eda8a07ef821e14bb122be62d91234bfa98b
-          - python-version: "3.13"
-            python-image: python:3.13-bookworm@sha256:073ffebb96ae4d0ed73ccad59f08c47bd84af8a79f5258130f8458ac50ad9ff4
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-      - name: Create isolated builder
-        run: |
-          python -m venv "$RUNNER_TEMP/numpy-builder"
-          echo "$RUNNER_TEMP/numpy-builder/bin" >> "$GITHUB_PATH"
-      - name: Build and verify current NumPy for runner CPU
-        run: python ci/build_runner_numpy.py
-      - name: Transfer audited runner NumPy wheel
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
-        with:
-          name: runner-numpy-${{ matrix.python-version }}
-          path: ${{ runner.temp }}/numpy-artifact/
-          if-no-files-found: error
-          retention-days: 7
-
   artifact-build:
     name: Build release artifacts
-    runs-on: [self-hosted, Linux, X64]
+    runs-on: ubuntu-24.04
     container:
       image: python:3.13-bookworm@sha256:073ffebb96ae4d0ed73ccad59f08c47bd84af8a79f5258130f8458ac50ad9ff4
-      # Match machine-1 ownership so native jobs can clean the persistent workspace.
-      options: --user 1001:1001
     timeout-minutes: 10
     steps:
       - name: Check out repository
@@ -104,11 +66,10 @@ jobs:
 
   artifacts:
     name: Artifacts / Python ${{ matrix.python-version }} / ${{ matrix.distribution }}
-    needs: [artifact-build, runner-numpy]
-    runs-on: [self-hosted, Linux, X64]
+    needs: artifact-build
+    runs-on: ubuntu-24.04
     container:
       image: ${{ matrix.python-image }}
-      options: --user 1001:1001
     timeout-minutes: 15
     strategy:
       fail-fast: false
@@ -142,19 +103,6 @@ jobs:
           sha256sum --check SHA256SUMS
           python -m venv "$RUNNER_TEMP/artifact-env"
           "$RUNNER_TEMP/artifact-env/bin/python" -m pip install --upgrade 'pip>=26.2'
-      - name: Download runner-compatible current NumPy
-        if: matrix.dependency_set != 'oldest'
-        uses: actions/download-artifact@484a0b528fb4d7bd804637ccb632e47a0e638317
-        with:
-          name: runner-numpy-${{ matrix.python-version }}
-          path: ${{ runner.temp }}/numpy-wheels
-      - name: Verify and install runner-compatible current NumPy
-        if: matrix.dependency_set != 'oldest'
-        working-directory: ${{ env.CANDIDATE_DIR }}
-        run: |
-          cd "$RUNNER_TEMP/numpy-wheels"
-          sha256sum --check SHA256SUMS
-          "$RUNNER_TEMP/artifact-env/bin/python" -m pip install numpy-*.whl
       - name: Install wheel
         if: matrix.distribution == 'wheel'
         working-directory: ${{ env.CANDIDATE_DIR }}
@@ -180,7 +128,7 @@ jobs:
           package = Path(fem_toolbox.__file__).resolve()
           assert package.is_relative_to(Path(sys.prefix).resolve()), package
           dist = distribution("fem-toolbox")
-          assert dist.version == fem_toolbox.__version__ == "1.5.0.dev1"
+          assert dist.version == fem_toolbox.__version__ == "1.5.0"
           assert dist.metadata["License-Expression"] == "MIT"
           licenses = [f for f in dist.files if f.name == "LICENSE"]
           assert len(licenses) == 1, licenses
@@ -264,11 +212,9 @@ jobs:
 
   quality:
     name: Quality / Python 3.13
-    runs-on: [self-hosted, Linux, X64]
+    runs-on: ubuntu-24.04
     container:
       image: python:3.13-bookworm@sha256:073ffebb96ae4d0ed73ccad59f08c47bd84af8a79f5258130f8458ac50ad9ff4
-      # Match machine-1 ownership so native jobs can clean the persistent workspace.
-      options: --user 1001:1001
     timeout-minutes: 15
     steps:
       - name: Check out repository
@@ -296,11 +242,9 @@ jobs:
 
   tests:
     name: Tests / Python ${{ matrix.python-version }}
-    needs: runner-numpy
-    runs-on: [self-hosted, Linux, X64]
+    runs-on: ubuntu-24.04
     container:
       image: ${{ matrix.python-image }}
-      options: --user 1001:1001
     timeout-minutes: 15
     strategy:
       fail-fast: false
@@ -320,6 +264,9 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
+      - name: Trust the mounted checkout for benchmark provenance
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
       - name: Create isolated Python environment
         run: |
           python -m venv "$RUNNER_TEMP/job-env"
@@ -328,18 +275,6 @@ jobs:
       - name: Update installer
         run: python -m pip install --disable-pip-version-check --upgrade 'pip>=26.2'
 
-      - name: Download runner-compatible current NumPy
-        if: matrix.dependency_set != 'oldest'
-        uses: actions/download-artifact@484a0b528fb4d7bd804637ccb632e47a0e638317
-        with:
-          name: runner-numpy-${{ matrix.python-version }}
-          path: ${{ runner.temp }}/numpy-wheels
-      - name: Verify and install runner-compatible current NumPy
-        if: matrix.dependency_set != 'oldest'
-        run: |
-          cd "$RUNNER_TEMP/numpy-wheels"
-          sha256sum --check SHA256SUMS
-          python -m pip install numpy-*.whl
       - name: Install project and test tools
         run: python -m pip install --disable-pip-version-check -e '.[test,visualization]'
 
@@ -348,11 +283,9 @@ jobs:
 
   compatibility:
     name: Compatibility / Python ${{ matrix.python-version }} / ${{ matrix.dependency_set }}
-    needs: runner-numpy
-    runs-on: [self-hosted, Linux, X64]
+    runs-on: ubuntu-24.04
     container:
       image: ${{ matrix.python-image }}
-      options: --user 1001:1001
     timeout-minutes: 15
     strategy:
       fail-fast: false
@@ -383,18 +316,6 @@ jobs:
       - name: Update installer
         run: python -m pip install --disable-pip-version-check --upgrade 'pip>=26.2'
 
-      - name: Download runner-compatible current NumPy
-        if: matrix.dependency_set != 'oldest'
-        uses: actions/download-artifact@484a0b528fb4d7bd804637ccb632e47a0e638317
-        with:
-          name: runner-numpy-${{ matrix.python-version }}
-          path: ${{ runner.temp }}/numpy-wheels
-      - name: Verify and install runner-compatible current NumPy
-        if: matrix.dependency_set != 'oldest'
-        run: |
-          cd "$RUNNER_TEMP/numpy-wheels"
-          sha256sum --check SHA256SUMS
-          python -m pip install numpy-*.whl
       - name: Install oldest supported combination
         if: matrix.dependency_set == 'oldest'
         run: |
@@ -418,7 +339,7 @@ jobs:
 
   petsc:
     name: PETSc / Python 3.12 / ${{ matrix.scalar }}
-    runs-on: [self-hosted, Linux, X64]
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     strategy:
       fail-fast: false

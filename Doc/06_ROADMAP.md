@@ -225,8 +225,9 @@ Quellenmatrix, Paket-/Rezeptprüfung und PDF-Eigenprüfung dem Kandidaten zu.
 verknüpfen Veröffentlichung und Artefakte; der experimentelle
 Folgeumfang #63/#65 bleibt unabhängig davon offen.
 
-## M10 / v1.5.0 — Implementierter Entwicklungskandidat
+## M10 / v1.5.0 — Kontrollierte adaptive Wärme
 
-`1.5.0.dev1` enthält konforme Tet4-Verfeinerung und kontrollierte stationäre
-Wärmeadaptivität (#67–#69). [Kandidatennachweis und offene Release-Gates](71_M10_RELEASE_VERIFICATION.md).
-Die endgültige Freigabe #70, main-CI und der v1.5.0-Tag sind noch offen.
+`1.5.0` enthält konforme Tet4-Verfeinerung und kontrollierte stationäre
+Wärmeadaptivität (#67–#69). [Numerische Nachweise und Veröffentlichung](71_M10_RELEASE_VERIFICATION.md).
+Der endgültige Veröffentlichungsnachweis (main-CI, Tag und Artefakte) wird in
+[Release-Issue #70](https://github.com/maschin96/FEM-Toolbox/issues/70) verknüpft.

@@ -4,7 +4,7 @@ Alle wesentlichen Änderungen dieses Projekts werden hier dokumentiert. Das
 Format orientiert sich an [Keep a Changelog](https://keepachangelog.com/) und die
 Versionierung an [Semantic Versioning](https://semver.org/).
 
-## Unreleased — 1.5.0.dev1 (M10)
+## [1.5.0] - 2026-10-19
 
 ### Added
 
@@ -15,7 +15,9 @@ Versionierung an [Semantic Versioning](https://semver.org/).
 ### Limits
 
 - Residualindikator ist heuristisch; ausschließlich affine Tet4 und stationäre Wärme.
-- Freigabe v1.5.0, main-CI und Tag bleiben bis zum vollständigen Release-Gate #70 offen.
+- Kompatible Minor-Erweiterung; vorhandene Solver- und Model-Verträge bleiben bestehen.
+- GitHub-gehostete Ubuntu-Runner prüfen Python 3.11–3.13, Wheel/sdist, Abhängigkeiten, PETSc und Handbücher.
+- [Release Notes](Doc/releases/v1.5.0.md); Veröffentlichungsnachweise werden in #70 verknüpft.
 
 ## [1.4.0] - 2026-10-11
 
