@@ -322,7 +322,7 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ["3.11", "3.12", "3.13"]
-        case: [poiseuille, central, linear-upwind, variable-mu, sa-mms, sa-channel]
+        case: [poiseuille, central, linear-upwind, variable-mu, sa-mms, sa-channel, sa-dns]
         include:
           - case: poiseuille
             node: test_quad_poiseuille_four_meshes
@@ -336,6 +336,8 @@ jobs:
             node: sa-mms
           - case: sa-channel
             node: sa-channel
+          - case: sa-dns
+            node: sa-dns
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -353,6 +355,9 @@ jobs:
             python -m pytest -vv -s --durations=5 -o junit_family=legacy --junitxml=cfd-results.xml tests/convergence/test_sa_transport_convergence.py
           elif [ "$CFD_TEST_NODE" = "sa-channel" ]; then
             python -m pytest -vv -s --durations=5 -o junit_family=legacy --junitxml=cfd-results.xml tests/convergence/test_rans_channel.py
+          elif [ "$CFD_TEST_NODE" = "sa-dns" ]; then
+            curl --fail --location --retry 3 --output "$RUNNER_TEMP/m12-chan590.means" https://turbulence.oden.utexas.edu/data/MKM/chan590/profiles/chan590.means
+            M12_DNS_PROFILE="$RUNNER_TEMP/m12-chan590.means" python -m pytest -vv -s --durations=5 -o junit_family=legacy --junitxml=cfd-results.xml tests/convergence/test_rans_dns.py
           else
             python -m pytest -vv -s --durations=5 -o junit_family=legacy --junitxml=cfd-results.xml "tests/convergence/test_quad_flow_convergence.py::$CFD_TEST_NODE"
           fi

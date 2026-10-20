@@ -98,3 +98,39 @@ def test_rans_channel_relaxation_repeat(record_property):
     )
     assert delta < 1e-6
     record_property("relative_velocity_repeat_difference", delta)
+
+
+def test_rans_small_si_channel_for_fsi_has_the_same_reference_branch(record_property):
+    # Fixed before this scaling check: H=0.1 m, u_tau=0.01 m/s, same Re_tau.
+    # Lref=H and Uref=20*u_tau; no change to the model or physical gates.
+    nu = 0.0005 / 587.19
+    domain = channel_domain(
+        32, half_height_m=0.05, kinematic_viscosity_m2_s=nu, pressure_drive_N_m3=0.002
+    )
+    reference = solve_channel_reference(
+        half_height_m=0.05, kinematic_viscosity_m2_s=nu, pressure_drive_N_m3=0.002
+    )
+    result = solve_rans(
+        domain,
+        initial_nu_tilde_m2_s=3 * nu,
+        velocity_scale_m_s=0.2,
+        length_scale_m=0.1,
+        sa_relaxation=0.1,
+    )
+    expected, _ = reference.evaluate(domain.mesh.cell_centres_m[:, 1])
+    weights = domain.mesh.cell_areas_m2
+    relative = float(
+        np.sqrt(
+            np.sum(weights * (result.flow.velocity_m_s[:, 0] - expected) ** 2)
+            / np.sum(weights * expected**2)
+        )
+    )
+    assert relative < 0.005
+    assert result.wall_y_plus.max() <= 1
+    assert np.max(np.abs(result.sa_residual_m2_s2)) <= 1e-8 * 0.2 * nu / 0.1
+    record_property("relative_rms_u", relative)
+    record_property("maximum_y_plus", float(result.wall_y_plus.max()))
+    print(
+        f"RANS small SI channel: relative RMS={relative}, y+={result.wall_y_plus.max()}",
+        flush=True,
+    )

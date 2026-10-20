@@ -1,0 +1,141 @@
+{
+  "schema": 1,
+  "date": "2026-10-20",
+  "version": "1.7.0.dev1",
+  "scope": "RANS verification, not M12 release or experimental validation",
+  "source_sha256": {
+    "src/fem_toolbox/cfd/__init__.py": "498c7a0c99acff7c022d8486dcf9f96957ee22c7c5b665c6b412b43d63b1c40c",
+    "src/fem_toolbox/cfd/channel.py": "29b57dedbefebf3df41896a1953b1d7a5acb66ea62ba94dc264e1e349b6db249",
+    "src/fem_toolbox/cfd/flow.py": "470aa8eaa94b7f7caec50430a4d0f9a05f288f2d98da8c5b6fa22a841f87238c",
+    "src/fem_toolbox/cfd/flow_config.py": "63592923497292cf5fa23ea00223e69b4520872871fdf8ea4cd537203200b49e",
+    "src/fem_toolbox/cfd/flow_model.py": "5833db2993bb582bb7ed2ae973e4c52a3e7d6ea6383942af08d52d167a191ca4",
+    "src/fem_toolbox/cfd/fluid_domain.py": "1c5c0426cfe5179b73137d765e4b1d6eb77e71b9cf34aac60517bcfb3a7ebf76",
+    "src/fem_toolbox/cfd/fluid_mesh.py": "1755a6dce46aeba1ea0e4c9a21804c4cbe8c23443dd80567131801906766bcca",
+    "src/fem_toolbox/cfd/mac.py": "cd1a46c78b25cb088535e76cadb22259a352e56f2ee4ce87d34953216ff29857",
+    "src/fem_toolbox/cfd/quad_flow.py": "81c341bc3d0891f0f68093492dc6f70b1c4a1df4d8540a50169bef3588203391",
+    "src/fem_toolbox/cfd/quad_fv.py": "102c06fe1beb5a5e986e42af598dde6e06debd849c21225923aa74c6200ccbcb",
+    "src/fem_toolbox/cfd/quad_system.py": "1cd16fce21e23a81d9b4fec9f7a9f135d0d4c858ef8bf20b7a069d7f701a3c2f",
+    "src/fem_toolbox/cfd/rans.py": "c61cbb19d9a52a1119cfdc35a1f040720a7250a6e568f30b47d84133bd279cb2",
+    "src/fem_toolbox/cfd/sa_model.py": "f2f721a4cf106e27b2e6b5d5479c0a1852624fc53e166221f0e98cbefe52dbe4",
+    "src/fem_toolbox/cfd/sa_transport.py": "d3ae9c36aefa890f201a0547394e9e6496d4fca7c82f4907773c1c7607cbc4a8",
+    "src/fem_toolbox/cfd/stokes.py": "a9cecfc17603d0ecafff140211244e00aeb9d4fdceb5284f869a8ffa38263e69",
+    "tests/convergence/test_rans_channel.py": "7a927749a895a9c35dde93bb6839db7c3fa6a9915e92c114be656980503956b9",
+    "tests/convergence/test_rans_dns.py": "824ccb902507f9f251e4ed70f481467ba288a4c2483102e2836544528f0e3d00",
+    "tests/convergence/test_sa_transport_convergence.py": "9be732b4fc04688e24733c0e1fa6d0b06ed2069cf3061dcd590656b78431e774",
+    "tests/convergence/test_tet10_transient_heat.py": "fbe72e74de56d3d2fe79f4008a729f6aa41a072f62ed3e396f02b07fd069fc72",
+    "tests/convergence/test_transient_heat_convergence.py": "874386701035fa218c931248196aedd1e66f3310de455d4469d5f9b28bb90491",
+    "tests/reference/dns_channel.py": "2d6db8d9b5b2ae2cef3ce3ec0f0f0e4994eeff8be44b2a48a6f3bdb7b67ffb49",
+    "tests/reference/rans_channel_mesh.py": "6643dfc6a3a1488443915fa0f4eeb76d18870a4d694170ea6d7c884a87232617",
+    "tests/reference/sa_channel_1d.py": "4ca1a8eb4445a000692ca3cd0ca552cf245bdd5479461150884b5f0e2200b881"
+  },
+  "runs": {
+    "sa_mms": [
+      {
+        "test": "test_sa_positive_mms_four_meshes",
+        "properties": {
+          "n16_relative_rms": "0.0009506167865971845",
+          "n16_iterations": "34",
+          "n32_relative_rms": "0.00024824457536951094",
+          "n32_iterations": "34",
+          "n64_relative_rms": "6.365853729951076e-05",
+          "n64_iterations": "34",
+          "n128_relative_rms": "1.6130350648670124e-05",
+          "n128_iterations": "35"
+        }
+      },
+      {
+        "test": "test_rans_predictor_accuracy_does_not_limit_fresh_sa_convergence",
+        "properties": {}
+      }
+    ],
+    "channel_matrix": [
+      {
+        "test": "test_rans_channel_four_wall_meshes",
+        "properties": {
+          "n32_relative_rms_u": "0.0034733460487655675",
+          "n32_bulk_velocity_m_s": "18.645018531894625",
+          "n32_relative_wall_force": "9.992007221626409e-16",
+          "n32_maximum_y_plus": "0.4980027209251395",
+          "n32_iterations": "167",
+          "n64_relative_rms_u": "0.0018737492049285835",
+          "n64_bulk_velocity_m_s": "18.61197666305312",
+          "n64_relative_wall_force": "1.2101430968414206e-14",
+          "n64_maximum_y_plus": "0.24025101111962244",
+          "n64_iterations": "215",
+          "n128_relative_rms_u": "0.000212284781032967",
+          "n128_bulk_velocity_m_s": "18.58073206626647",
+          "n128_relative_wall_force": "1.5298873279334657e-13",
+          "n128_maximum_y_plus": "0.11801414186676942",
+          "n128_iterations": "245",
+          "n256_relative_rms_u": "8.815298595072912e-05",
+          "n256_bulk_velocity_m_s": "18.578406186767268",
+          "n256_relative_wall_force": "1.7852386235972517e-13",
+          "n256_maximum_y_plus": "0.05848846745251423",
+          "n256_iterations": "267"
+        }
+      },
+      {
+        "test": "test_rans_channel_physical_viscosity_sensitivity[0.95]",
+        "properties": {
+          "relative_rms_u": "0.001911233006556085",
+          "bulk_velocity_m_s": "18.734282054195532",
+          "relative_wall_force": "3.552713678800501e-15",
+          "maximum_y_plus": "0.2528958011785484",
+          "iterations": "213"
+        }
+      },
+      {
+        "test": "test_rans_channel_physical_viscosity_sensitivity[1.05]",
+        "properties": {
+          "relative_rms_u": "0.0018411688159314546",
+          "bulk_velocity_m_s": "18.495979546140603",
+          "relative_wall_force": "5.084821452783217e-14",
+          "maximum_y_plus": "0.2288104867806013",
+          "iterations": "217"
+        }
+      },
+      {
+        "test": "test_rans_channel_wall_distribution_sensitivity",
+        "properties": {
+          "relative_bulk_change": "5.986964105186843e-05"
+        }
+      },
+      {
+        "test": "test_rans_channel_relaxation_repeat",
+        "properties": {
+          "relative_velocity_repeat_difference": "3.652872460680108e-12"
+        }
+      }
+    ],
+    "dns_model": [
+      {
+        "test": "test_rans_mkm_model_budget_and_last_mesh_change",
+        "properties": {
+          "dns_sha256": "878bc951794516b6136912f8f098cd6f2f96c4bbe7f21a8cea657ffb270d419d",
+          "dns_re_tau": "587.19",
+          "n128_relative_rms_velocity_plus": "0.010775052314662269",
+          "n128_relative_bulk_velocity": "0.003949298676612978",
+          "n128_bulk_velocity_m_s": "18.58073206626647",
+          "n128_dns_bulk_velocity_plus": "18.65440387881809",
+          "n128_reference_friction_velocity_m_s": "1.0",
+          "n256_relative_rms_velocity_plus": "0.010746473578390505",
+          "n256_relative_bulk_velocity": "0.004073981272439298",
+          "n256_bulk_velocity_m_s": "18.578406186767268",
+          "n256_dns_bulk_velocity_plus": "18.65440387881809",
+          "n256_reference_friction_velocity_m_s": "1.0",
+          "last_mesh_relative_profile_change": "0.00016276581951509645"
+        }
+      }
+    ],
+    "small_si": [
+      {
+        "test": "test_rans_small_si_channel_for_fsi_has_the_same_reference_branch",
+        "properties": {
+          "relative_rms_u": "0.00335946654005305",
+          "maximum_y_plus": "0.4980027209253227"
+        }
+      }
+    ]
+  },
+  "dns_source_manifest": "reference_sources.json"
+}

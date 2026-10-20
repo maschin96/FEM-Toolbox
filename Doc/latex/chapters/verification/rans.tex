@@ -1,0 +1,31 @@
+\chapter{M12: getrennte RANS-Code- und Modellprüfung}\label{vv:rans}
+Der vorab festgelegte Vertrag aus Dokument 71 trennt Punkt-/MMS-Verifikation,
+kontinuierliche Modellgleichungen und unabhängige DNS. Dokument 89 und das
+versionierte M12-Nachweisarchiv nennen Quellenhashes und sämtliche Messwerte.
+Die SA-MMS auf 16/32/64/128 Zellen erreicht relative Fehler
+\(9.506\cdot10^{-4},2.482\cdot10^{-4},6.366\cdot10^{-5},1.613\cdot10^{-5}\)
+und Ordnungen 1.937/1.963/1.981. Der virtuelle Wandabstand dient allein diesem Test.
+
+Ein unabhängig programmierter kontinuierlicher SA-Kanal-BVP liefert die
+Codevergleichslösung. Auf 32/64/128/256 Zellen je Halbkanal betragen die
+relativen RMS-U-Fehler 0.3473/0.1874/0.02123/0.00882 Prozent.
+Das feinste Gate von 0.5 Prozent ist erfüllt; Wandkraftfehler bleiben unter
+\(1.8\cdot10^{-13}\), maximales \(y^+\) sinkt von 0.498 auf 0.0585.
+Viskositätssensitivität, Wandverteilung und Relaxationswiederholung bestehen
+bei unveränderten Modellkonstanten und absoluten Feld-/Bilanzgates.
+
+Die unabhängige DNS von Moser/Kim/Mansour nutzt \(Re_\tau=587.19\),
+nicht den gerundeten Dateinamen 590. Auf 128/256 Halbkanalzellen betragen
+RMS-U+-Abweichungen 1.0775/1.0746 Prozent und Bulkabweichungen
+0.3949/0.4074 Prozent; die Grenzen sind jeweils 5 Prozent.
+Die letzte Profiländerung ist 0.01628 Prozent, kleiner als 1 Prozent und
+ein Fünftel des Modellbudgets. Keine Anpassung von SA-Konstanten.
+
+Das Quellenmanifest verlinkt Originaldaten und ihren SHA-256. Fehlende explizite
+Weitergabelizenz verhindert ihre Redistribution; CI lädt sie nur temporär.
+Die Profile sind DNS, keine experimentelle Messung. Dies ist eine begrenzte
+Modellbeurteilung für den glatten voll entwickelten Kanal und keine allgemeine
+RANS- oder FSI-Validierung. Ein anfänglicher Interpolationsfehler durch
+Koordinatenrundung ist mit unabhängigem parabolischem Regressionstest korrigiert;
+Solver, Originaldaten und Gates bleiben unverändert. Unabhängiges menschliches
+Fachreview liegt nicht vor. M12 ist weiterhin ein Entwicklungskandidat.
