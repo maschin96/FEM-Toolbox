@@ -470,12 +470,15 @@
         "QuadFVGeometry",
         "QuadFlowConvergenceError",
         "QuadFlowResult",
+        "RansConvergenceError",
+        "RansResult",
         "StationaryFlowResult",
         "StokesResult",
         "StressFlux",
         "WallQuality",
         "solve_channel",
         "solve_quad_flow",
+        "solve_rans",
         "solve_stationary_flow",
         "solve_stokes"
       ],
@@ -493,12 +496,15 @@
         "QuadFVGeometry": "fem_toolbox.cfd.quad_fv.QuadFVGeometry",
         "QuadFlowConvergenceError": "fem_toolbox.cfd.quad_flow.QuadFlowConvergenceError",
         "QuadFlowResult": "fem_toolbox.cfd.quad_flow.QuadFlowResult",
+        "RansConvergenceError": "fem_toolbox.cfd.rans.RansConvergenceError",
+        "RansResult": "fem_toolbox.cfd.rans.RansResult",
         "StationaryFlowResult": "fem_toolbox.cfd.flow.StationaryFlowResult",
         "StokesResult": "fem_toolbox.cfd.stokes.StokesResult",
         "StressFlux": "fem_toolbox.cfd.quad_fv.StressFlux",
         "WallQuality": "fem_toolbox.cfd.fluid_mesh.WallQuality",
         "solve_channel": "fem_toolbox.cfd.channel.solve_channel",
         "solve_quad_flow": "fem_toolbox.cfd.quad_flow.solve_quad_flow",
+        "solve_rans": "fem_toolbox.cfd.rans.solve_rans",
         "solve_stationary_flow": "fem_toolbox.cfd.flow.solve_stationary_flow",
         "solve_stokes": "fem_toolbox.cfd.stokes.solve_stokes"
       },
@@ -1633,6 +1639,276 @@
               "direct_raise_sites": []
             }
           }
+        }
+      },
+      "reexports": {},
+      "aliases": {}
+    },
+    "fem_toolbox.cfd.rans": {
+      "source": "src/fem_toolbox/cfd/rans.py",
+      "documentation": "Coupled stationary 2D SA-noft2/SIMPLE with fresh field and wall-resolution gates.",
+      "declared_exports": null,
+      "definitions": {
+        "RansConvergenceError": {
+          "kind": "class",
+          "bases": [
+            "ValidationError"
+          ],
+          "decorators": [],
+          "documentation": "Failed joint iteration with immutable last fields and complete history.",
+          "fields": {},
+          "methods": {
+            "__init__": {
+              "parameters": "self, reason: str, history: list[tuple[float, ...]], u: NDArray[np.float64], p: NDArray[np.float64], a: NDArray[np.float64]",
+              "returns": "None",
+              "decorators": [],
+              "documentation": null,
+              "direct_raise_sites": []
+            }
+          }
+        },
+        "RansResult": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True, slots=True)"
+          ],
+          "documentation": "Joint solution: flow, SA cell fields and actual wall-resolution diagnostics.\n\nHistory columns: max momentum N/m³, mass kg/(m³ s), SA m²/s²,\nglobal mass kg/s, max global momentum N, power W, accepted SA alpha.\nwall_y_plus follows domain.wall_quality.boundary_indices. No DNS/model or\nFSI qualification is implied by convergence of these discrete equations.",
+          "fields": {
+            "flow": {
+              "annotation": "QuadFlowResult",
+              "default": null
+            },
+            "nu_tilde_m2_s": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "eddy_viscosity_m2_s": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "effective_viscosity_Pa_s": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "boundary_effective_viscosity_Pa_s": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "sa_residual_m2_s2": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "sa_global_balance_m5_s2": {
+              "annotation": "float",
+              "default": null
+            },
+            "wall_y_plus": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "iterations": {
+              "annotation": "int",
+              "default": null
+            },
+            "residual_history": {
+              "annotation": "tuple[tuple[float, ...], ...]",
+              "default": null
+            },
+            "converged": {
+              "annotation": "bool",
+              "default": null
+            },
+            "provenance": {
+              "annotation": "RunProvenance",
+              "default": null
+            }
+          },
+          "methods": {}
+        },
+        "solve_rans": {
+          "kind": "function",
+          "parameters": "domain: FluidDomain, *, initial_nu_tilde_m2_s: ArrayLike, velocity_scale_m_s: float, length_scale_m: float, force_N_m3: ArrayLike=(0.0, 0.0), pressure_reference_Pa: float | None=None, convection_scheme: str='linear-upwind', velocity_relaxation: float=0.5, pressure_relaxation: float=0.5, sa_relaxation: float=0.5, max_iterations: int=500, max_simple_steps: int=500, max_unknowns: int=50000",
+          "returns": "RansResult",
+          "decorators": [],
+          "documentation": "Joint Picard iteration for physical wall-resolved SA-noft2 and momentum.\n\nOnly explicit SA-noft2 is solved: at least one initial cell must have a>0,\nall must be nonnegative; no inferred laminar mode or viscosity cap. Width,\nphysical BCs, positive SI scales and all inlet SA data come from the caller.\nThe same conservative Rhie-Chow mass flux transports momentum and SA.\nFrozen nonnegative destruction is implicit; all final coefficients,\nstresses, sources and field/balance residuals are recomputed at the accepted\njoint state. Positivity backtracking reduces U/p/a updates together.\nActual wall shear must satisfy y+<=1 and layer growth<=1.2. Failure retains\nthe last complete joint history and fields; no wall function is substituted.",
+          "direct_raise_sites": [
+            "RansConvergenceError"
+          ]
+        }
+      },
+      "reexports": {},
+      "aliases": {}
+    },
+    "fem_toolbox.cfd.sa_model": {
+      "source": "src/fem_toolbox/cfd/sa_model.py",
+      "documentation": "SI point terms for SA-noft2 with the Allmaras S modification (TMR note 1c).\n\nNo trip, ft2, negative-SA extension, viscosity cap or implicit laminar switch.\nThe model r cap is exactly ten; a zero modified vorticity uses that same cap.",
+      "declared_exports": null,
+      "definitions": {
+        "SATerms": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True, slots=True)"
+          ],
+          "documentation": "Immutable cell arrays; sources in m²/s², diffusivities in m²/s.\n\ndestruction_rate_s_inv times nu_tilde gives the nonnegative destruction\nsource. It is suitable for the frozen implicit sink in the scalar solve.\nr and wall_function are dimensionless; modified vorticity has unit 1/s.",
+          "fields": {
+            "eddy_viscosity_m2_s": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "diffusivity_m2_s": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "production_m2_s2": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "destruction_m2_s2": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "gradient_source_m2_s2": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "destruction_rate_s_inv": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "modified_vorticity_s_inv": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "r": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "wall_function": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            }
+          },
+          "methods": {}
+        },
+        "sa_terms": {
+          "kind": "function",
+          "parameters": "nu_tilde_m2_s: ArrayLike, *, velocity_gradient_s_inv: ArrayLike, gradient_nu_tilde_m_s: ArrayLike, wall_distance_m: ArrayLike, kinematic_viscosity_m2_s: float",
+          "returns": "SATerms",
+          "decorators": [],
+          "documentation": "Evaluate the complete SA-noft2 source law at positive-distance cells.\n\na is (ncell,), grad(U) is (ncell,2,2) with [component,derivative],\ngrad(a) is (ncell,2), d is scalar or (ncell,). Molecular nu is a positive\nscalar. Negative/nonfinite a, d<=0, boolean data and unrepresentable terms\nraise ValidationError; no input or output is clipped to hide a failure.\nWall Dirichlet values a=0 are imposed separately, never evaluated at d=0.",
+          "direct_raise_sites": [
+            "FloatingPointError"
+          ]
+        },
+        "positive_sa_update": {
+          "kind": "function",
+          "parameters": "previous_m2_s: ArrayLike, candidate_m2_s: ArrayLike, *, relaxation: float=0.5, max_attempts: int=20",
+          "returns": "tuple[NDArray[np.float64], float, int]",
+          "decorators": [],
+          "documentation": "One common relaxed step, halved until finite and nonnegative everywhere.\n\nReturns immutable state, accepted alpha and number of halvings. No component\nis clipped. Failure identifies the last minimum and its zero-based cell.",
+          "direct_raise_sites": []
+        }
+      },
+      "reexports": {},
+      "aliases": {}
+    },
+    "fem_toolbox.cfd.sa_transport": {
+      "source": "src/fem_toolbox/cfd/sa_transport.py",
+      "documentation": "Conservative stationary SA-noft2 scalar equation on the validated Quad-FV mesh.",
+      "declared_exports": null,
+      "definitions": {
+        "SAConvergenceError": {
+          "kind": "class",
+          "bases": [
+            "ValidationError"
+          ],
+          "decorators": [],
+          "documentation": "Nonconvergence retains the last nonnegative state and raw residual history.",
+          "fields": {},
+          "methods": {
+            "__init__": {
+              "parameters": "self, history: list[float], state: NDArray[np.float64], reason: str",
+              "returns": "None",
+              "decorators": [],
+              "documentation": null,
+              "direct_raise_sites": []
+            }
+          }
+        },
+        "SATransportResult": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True, slots=True)"
+          ],
+          "documentation": "Immutable scalar solution for prescribed conservative flow; not a RANS solve.\n\nArrays: a/residual/wall distance are cell fields, boundary a follows line2,\nand advective/diffusive fluxes follow mesh.faces (outward from owner).\nIntegrated fluxes and global balance have unit m^5/s². History is the\nmaximum absolute fresh cell residual in m²/s² at every accepted update.",
+          "fields": {
+            "nu_tilde_m2_s": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "boundary_nu_tilde_m2_s": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "wall_distance_m": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "residual_m2_s2": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "advective_flux_m5_s2": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "diffusive_flux_m5_s2": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "global_balance_m5_s2": {
+              "annotation": "float",
+              "default": null
+            },
+            "terms": {
+              "annotation": "SATerms",
+              "default": null
+            },
+            "iterations": {
+              "annotation": "int",
+              "default": null
+            },
+            "residual_history": {
+              "annotation": "tuple[float, ...]",
+              "default": null
+            },
+            "accepted_relaxations": {
+              "annotation": "tuple[float, ...]",
+              "default": null
+            },
+            "converged": {
+              "annotation": "bool",
+              "default": null
+            },
+            "provenance": {
+              "annotation": "RunProvenance",
+              "default": null
+            }
+          },
+          "methods": {}
+        },
+        "solve_sa_transport": {
+          "kind": "function",
+          "parameters": "domain: FluidDomain, *, mass_flux_kg_s: ArrayLike, velocity_gradient_s_inv: ArrayLike, initial_nu_tilde_m2_s: ArrayLike, velocity_scale_m_s: float, length_scale_m: float, boundary_values_m2_s: ArrayLike | None=None, wall_distance_m: ArrayLike | None=None, source_m2_s2: ArrayLike=0.0, convection_scheme: str='linear-upwind', relaxation: float=0.5, max_iterations: int=500, max_cells: int=50000",
+          "returns": "SATransportResult",
+          "decorators": [],
+          "documentation": "Solve SA for frozen conservative flow with full fresh nonlinear residuals.\n\nBoundary defaults: wall a=0, inlet explicit a, outlet/symmetry zero normal\nderivative and periodic paired trace. Optional boundary and distance fields\nare explicit manufactured-solution hooks, recorded as such in provenance;\nthey do not qualify physical wall resolution or a coupled RANS solution.\nDestruction is a frozen nonnegative implicit sink. A common positivity line\nsearch halves the relaxed candidate, at most twenty attempts, without state\nclipping. Failure carries the latest history, state, minimum and cell ID.",
+          "direct_raise_sites": [
+            "SAConvergenceError"
+          ]
         }
       },
       "reexports": {},

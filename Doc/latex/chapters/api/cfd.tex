@@ -2,7 +2,7 @@
 \label{api:cfd}
 Die Module unter \texttt{fem\_toolbox.cfd} sind Forschungs-APIs.
 MAC bleibt die unabhängige laminare Referenz; Quad-FV ergänzt körperangepasste
-ebene Netze. Der Stand enthält noch keine SA-Schließung oder FSI.
+ebene Netze. SA-noft2 ist als Forschungsentwicklung ergänzt; FSI ist noch offen.
 \texttt{FluidMesh2D} prüft SI-Punkte, konvexe Quad4-Zellen und Line2-Randgruppen.
 \texttt{FluidDomain.from\_file} liest ein Schema-1-JSON mit expliziter Breite,
 positiver Dichte/Viskosität und genau einer physikalischen Randbedingung je Face.
@@ -24,3 +24,16 @@ Die exakten Signaturen folgen im Inventar. Manuelle Detailverträge:
 \nolinkurl{Doc/72_FLUID_MESH_ADAPTER.md},
 \nolinkurl{Doc/73_QUAD_FV_OPERATORS.md} und
 \nolinkurl{Doc/74_QUAD_FV_SIMPLE.md}.
+
+\section{SA-noft2 und gemeinsame RANS-Iteration}
+\texttt{sa\_model.sa\_terms} wertet die vollständigen Punktterme mit
+Allmaras-S-Modifikation aus. \texttt{sa\_transport.solve\_sa\_transport}
+löst die skalare Gleichung bei vorgegebenem konservativem Massenstrom;
+explizite MMS-Rand-/Wandabstandsfelder sind als Verifikationsdaten markiert.
+\texttt{solve\_rans} koppelt U, p und a mit gemeinsamer Positivitäts-Schrittsuche.
+Alle Quellen, variable Spannungen und Residuen werden am akzeptierten Zustand
+neu rekonstruiert. Wandauflösung wird mit tatsächlicher Schubspannung geprüft.
+Felder und Fehlerhistorien sind unveränderlich. SI-Formen, Fehlerzustände,
+vorab gesetzte Gates und getrennte Code-/Modellabnahme stehen in
+\nolinkurl{Doc/88_SA_NOFT2_IMPLEMENTATION.md}. Keine FSI- oder allgemeine
+Turbulenzmodellfreigabe folgt allein aus einem konvergierten Lauf.

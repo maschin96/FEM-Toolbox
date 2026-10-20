@@ -409,3 +409,14 @@ Die Solver-API verlangt Uref/Lref und liefert immutable Felder, Faceflüsse,
 Wandtraktion und sämtliche diskreten Energieanteile mit Provenienz.
 FluidDomain bleibt Eingabeadapter, der MAC-Kern unabhängige Referenz.
 [Algorithmus und Nachweise](74_QUAD_FV_SIMPLE.md).
+
+### M12-Entwicklung: SA-noft2 und gemeinsame RANS-Iteration (#87)
+
+`cfd/sa_model.py` enthält die SI-Punktterme, `cfd/sa_transport.py` deren
+konservativen skalaren Operator und `cfd/rans.py` den gemeinsamen U/p/a-Ablauf.
+Feldresiduen und Bilanzen werden am aktualisierten vollständigen Zustand
+rekonstruiert. Geometrische Maps werden ausschließlich innerhalb derselben
+unveränderten FluidDomain geteilt; variable Spannungen werden neu aufgebaut.
+Netzbewegung verlangt einen neuen Geometrieaufbau. Physikmodule betreiben
+kein Datei-I/O; Modell-/Wand-/FSI-Abnahme bleiben getrennte Gates.
+[API, Nachweise und Grenzen](88_SA_NOFT2_IMPLEMENTATION.md).

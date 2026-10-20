@@ -1,6 +1,10 @@
 # M12-Vertrag: stationäre RANS und bidirektionale FSI (#84)
 
-Entscheidungsstand: 04.10.2026, ADR-049. Dieser Vertrag legt die Entwicklung
+Entscheidungsstand: 04.10.2026, ADR-049; Umfangsabgleich 20.10.2026 mit der
+Planungswelle vom 11.10.2026 und den aktualisierten Issues #84–#94.
+Der freizugebende M12-Umfang ist ausdrücklich auf ebene 2D-RANS und
+spannweiteninvariante extrudierte Kleinverformungsstruktur begrenzt.
+Dieser Vertrag legt die Entwicklung
 für #85, #226 und #87–#94 fest; er behauptet keine implementierte oder validierte
 RANS-/FSI-Funktion. Der bestehende [uniforme MAC-Kern](70_STATIONARY_FLOW_CORE.md)
 aus #86 bleibt eine unabhängige Referenz. Seine dokumentierten Resultate werden
@@ -410,17 +414,21 @@ stillschweigend zu verformen. Reihenfolge: #84 -> #85 -> #226 -> #87 -> #88;
 #89 nach #84/#85, #90 nach #85/#226, #91 nach #88/#89/#90,
 #92 -> #93 -> #94. Kein M11-Optimierer als Voraussetzung.
 
-Der langfristige M12-Milestone nennt 3D-Strömung. Die hier begrenzte ebene
-Abnahme hebt dieses Ziel nicht auf: #94 darf damit keinen vollständigen
-3D-Milestone behaupten. Verbindliche Fortsetzung vor einer solchen Freigabe:
+### Historische 3D-Fortsetzungsplanung; kein Gate der begrenzten M12-Freigabe
+
+Der ältere Produkthorizont nannte 3D-Strömung. Die Planungswelle vom
+11.10.2026 grenzt M12 in sämtlichen führenden Issues auf die hier beschriebene
+ebene RANS-/FSI-Stufe ein. #94 darf damit keine allgemeine 3D-Freigabe behaupten.
+Die folgende ursprünglich vorgesehene zweite Stufe ist eine spätere,
+gesondert zu beauftragende Erweiterung und kein Pflichtumfang des begrenzten M12:
 strukturierte konvexe Hex8-Fluidzellen und Quad4-Außenflächen, dieselbe
 kollokierte FV-/SA-Form in drei Raumrichtungen, Wandabstand zu triangulierten
 Flächen und unbeschränkte 3D-P1-Schnittstelleninterpolation. Alle Gleichungen
 und geometrischen Kriterien gelten dann dimensionsentsprechend; Face-Fläche,
 Zellvolumen, drei Impulsresiduen und Momente um alle drei Achsen ersetzen die
 Extrusionsreduktion. Kein Tet-CFD und keine neue Modellfamilie.
-Die Netz-/Operator-/FSI-Issues müssen diese zweite Stufe vor #94 separat
-abnehmen. Zusätzliche verpflichtende 3D-Referenz: divergencefreies
+Eine spätere 3D-Erweiterung benötigt eigene Netz-/Operator-/FSI-Issues und
+eine separate Abnahme. Dafür vorgesehene 3D-Referenz: divergencefreies
 U=curl(0,0,psi) mit psi=sin²(pi x)sin²(pi y)sin²(pi z),
 p=sin(2pi x)sin(2pi y)sin(2pi z) auf [0,1]³, rho=0.1 und mu=1 in SI;
 analytisch hergeleitete Quellen, vier Netze 8/16/32/64, feinste RMS-U-/p-Fehler

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.0.dev1] — M12-Entwicklungsstand, nicht freigegeben
+
+- SA-noft2-Punktterme mit expliziter Allmaras-S-Modifikation und Positivitätsdiagnosen.
+- Konservativer SA-Transport mit vollständigem frischem Residuum und separater Vier-Netz-MMS.
+- Gemeinsame Quad-FV-SIMPLE-/SA-Iteration mit tatsächlichem y+-Gate; Modell-/FSI-Abnahme bleibt offen.
+- M12-Umfang mit der Planungswelle vom 11.10.2026 auf ebene RANS und extrudierte Kleinverformungsstruktur synchronisiert.
+
 ## [1.6.0] - 2026-10-19
 
 - [Kurze SIMP-Einführung](Doc/86_SIMP_EINFUEHRUNG.md); [Release Notes](Doc/releases/v1.6.0.md).

@@ -1,5 +1,9 @@
 # FEM Toolbox
 
+**M12-Entwicklungsbranch: 1.7.0.dev1.** Der veröffentlichte stabile Stand ist
+weiterhin v1.6.0. Die [SA-noft2-Erweiterung](Doc/88_SA_NOFT2_IMPLEMENTATION.md)
+ist in Umsetzung; RANS-/FSI-Abnahme und Veröffentlichung sind noch offen.
+
 Eine wissenschaftlich ausgerichtete Python-Toolbox im Aufbau für lineare,
 dreidimensionale Finite-Elemente-Simulationen. Ziel sind verifizierte Modelle für
 Festkörpermechanik, Wärmeleitung, Elektrostatik und deren thermomechanische und
@@ -379,7 +383,9 @@ FSI, Zeitintegration und allgemeine 3D-/Tet-CFD-Netze gehören nicht zum Kern.
 
 Der [M12-RANS-/FSI-Zielvertrag](Doc/71_M12_RANS_FSI_CONTRACT.md) legt die
 SA-noft2-Schließung, körperangepasste Fluidnetze und begrenzte stationäre
-Kopplung für die Folgeissues fest. Diese Funktionen sind noch nicht verfügbar.
+Kopplung für die Folgeissues fest. Die SA-noft2-Implementierung ist im
+[M12-Entwicklungsstand](Doc/88_SA_NOFT2_IMPLEMENTATION.md) dokumentiert;
+vollständige Modellabnahme und FSI bleiben offen.
 
 Der experimentelle [Fluidnetzadapter (#85)](Doc/72_FLUID_MESH_ADAPTER.md)
 liest vorbereitete Quad4-JSON-Netze mit Randgruppen, prüft Wandabstände,
