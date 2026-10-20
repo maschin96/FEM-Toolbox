@@ -1,0 +1,31 @@
+schema_version = 1
+units = "SI"
+physics = "elasticity"
+
+[mesh]
+path = "body.msh"
+length_scale_to_m = 1.0
+length_unit = "m"
+
+[materials.u.solid]
+young = 100.0
+poisson = 0.0
+unit = "Pa"
+
+[regions.u]
+body = "solid"
+
+[loads.body_force]
+value = [-2.0, 0.0, 0.0]
+unit = "N/m^3"
+
+[[boundary.dirichlet]]
+field = "u"
+set = "left"
+value = [0.0, 0.0, 0.0]
+unit = "m"
+
+[[boundary.traction]]
+set = "right"
+value = [2.0, 0.0, 0.0]
+unit = "N/m^2"

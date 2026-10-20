@@ -1,0 +1,37 @@
+\chapter{Adaptive stationäre Wärme}\label{api:adaptive}
+\index{Adaptivität}\index{Kantenstern-Bisektion}
+Der additive M10-Vertrag gilt ausschließlich für stationäre Wärme auf affinen,
+konformen Tet4-Netzen. \path{HeatProblem} enthält ein Material oder eine geordnete
+Materialfolge je Zelle, Dirichlet-Werte je Facettenzeile und optional Quelle,
+Auswärtsflüsse und Robin-Daten. SI-Einheiten und Vorzeichen entsprechen dem
+stationären Wärmesolver. Kinder erben ihre Material-/Randzuordnung exakt;
+räumliche Callables werden an den neuen physikalischen Punkten ausgewertet.
+\path{AdaptiveOptions} validiert nichtnegative endliche Indikatortoleranz,
+positive ganze Schritt-/DOF-Budgets, Markierungsanteil und Stagnationskonfiguration.
+\begin{lstlisting}
+run = solve_adaptive_heat(mesh, problem, AdaptiveOptions(
+    tolerance=0.1, max_steps=8, max_dofs=20000, fraction=0.5))
+run.export("results/adaptive_heat.json")
+\end{lstlisting}
+Endstatus ist \path{tolerance}, \path{dof_budget}, \path{step_budget},
+\path{stagnation} oder \path{error}. Nach einem Solve gilt die Priorität Toleranz,
+Schrittbudget, Stagnation, dann Verfeinerungs-/DOF-Budget. Fehler bewahren alle
+bereits abgeschlossenen Stufen. Eine Indikatortoleranz ist keine garantierte
+Schranke des tatsächlichen Energiefehlers. Ungültige Optionen werfen
+\path{ValidationError}; unerwartete Softwarefehler dürfen nicht als Erfolg gelten.
+
+\path{AdaptiveStage} speichert Mesh, Rohresultat, Indikator, Markierung und
+Elternzeilen. Unveränderliche Arrays und kopierte Mappings verhindern nachträgliche
+Änderungen der Evidenz. JSON-Schema 1 enthält Optionen, Status, Netze samt
+Tags/Gruppen, SHA-256, DOFs, Felder, Reaktionen, Residuen, Bilanz und Provenienz.
+Zur erneuten Ausführung von Callables bleibt das Problemskript erforderlich.
+Export überschreibt den ausdrücklich angegebenen Pfad; eine Resume-Funktion
+oder TOML-Adaptivitätskonfiguration ist nicht zugesagt.
+
+\path{refine_tet4} teilt die längste Eingabekante jeder markierten Zelle,
+sortiert nach Knotenpaaren. Jeder vollständige Kantenstern und seine Randdreiecke
+teilen denselben Mittelpunkt; unmarkierte Nachbarn können mitverfeinert werden.
+\path{Refinement} liefert Kind-Eltern-Zeilen und verwirft externe IDs.
+Die Gruppen-/Geometrievalidatoren sind Forschungsbausteine, keine allgemeinen
+Schnittdetektoren. Keine formale gleichmäßige Formregularitätsgarantie,
+Koarsening-, Glättungs-, Tet10-, gekoppelte oder transiente Adaptivität.

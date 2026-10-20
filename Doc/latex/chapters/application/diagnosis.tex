@@ -1,0 +1,98 @@
+\chapter{Fehlerdiagnose und optionale PETSc-Umgebung}\label{sec:app-diagnosis}
+\index{Fehlerdiagnose}\index{PETSc}
+\section{Systematisch vom Eingang zur Bilanz prüfen}
+\begin{longtable}{p{.26\linewidth}p{.64\linewidth}}
+\toprule Beobachtung & Ursache prüfen und nächste Handlung\\\midrule\endhead
+Import schlägt fehl & Unterstützte Python-Version, verwendeten Interpreter,
+\path{pip check} und Installation desselben Wheels prüfen.
+\path{python -I} mit absolutem Beispielpfad ausführen; kein
+\path{PYTHONPATH}-Workaround als Artefaktnachweis.\\
+Modellpfad oder Schema ungültig & Dokumentpfad der \path{ModelSchemaError}
+lesen, TOML-Schlüssel gegen das zutreffende Schema vergleichen,
+relative Dateien innerhalb des Modellverzeichnisses halten.
+Keine stillschweigende Versionsmigration.\\
+Material nicht zulässig & Einheiten, Tensorform, Symmetrie/Positivität,
+Voigt-Reihenfolge und lokale Achsen kontrollieren. Negative Leitfähigkeit
+ist kein gültiger Testparameter für einen erfolgreichen Fall.\\
+Geometrie abgelehnt & Degenerierte Zellen, Außenflächenbesitz,
+Tet10-Kantenlage und Gmsh-Auswahlmengen prüfen; mm/m-Skala explizit setzen.\\
+Nullraum/Singularität & Komponenten einzeln kontrollieren: Wärmeanker,
+sechs mechanische Starrkörpermoden, elektrische Gauge. Schwebende
+Elektrode fixiert keine Referenz. Keine künstliche Stabilisierung, die
+unbemerkt das Problem verändert.\\
+Iterativer Solver konvergiert nicht & Originalresiduen je Feld,
+Randwerte, Konditionierung und Skalierung zuerst prüfen. Erst danach
+bewusst Iterationsbudget/Präkonditionierung ändern; Methode im Bericht
+festhalten. Kein automatischer SciPy-Fallback behauptet.\\
+Bilanz oder Energie falsch & Einheiten/Normalenvorzeichen,
+Volumen-/Flächenlast und zeitliche Speicherterme vergleichen.
+Relative Residuen ersetzen keine Bilanzprüfung.\\
+Ausgabeziel existiert & Bei normalen Exporten einen neuen Ordner oder
+Präfix wählen. Nur Study verwendet dasselbe Ziel zur kontrollierten
+Wiederaufnahme. Keine fremden Ergebnisse löschen.\\
+Abgebrochener Lauf & Study-Katalog erneut prüfen und denselben Auftrag
+fortsetzen. Zeitserienstatus \path{incomplete} bezeichnet lesbare Teilframes,
+keinen automatischen Neustart eines Zeitsolvers.\\
+Bericht/Surrogat inkompatibel & Schema, Einheiten, CSV-/VTU-/JSON-Hashes
+und Kandidatenversion abgleichen. Unvollständige Ausgabe nicht konsumieren;
+mit ursprünglichen Eingaben in neues Ziel neu erzeugen.\\
+Surrogat extrapoliert & Parameterbox und Spaltenreihenfolge kontrollieren.
+Außerhalb neue FEM-Fälle erzeugen oder ausdrücklich als Extrapolation
+kennzeichnen; keine allgemeine Unsicherheitszusage.\\\bottomrule
+\caption{Fehlerhilfe ohne unbemerkte Veränderung des physikalischen Modells.}
+\end{longtable}
+Fehlerbericht enthält minimalen Fall, Inputdateien/Hashes, Paket-/Python-
+und Dependency-Versionen, tatsächlichen Importpfad, erwarteten SI-Wert,
+Istwert und vorab definierte Toleranz. Private Daten und Zugangsdaten
+gehören nicht in öffentliche Issues. Bild und Solver-Status allein genügen
+zur Reproduktion nicht.
+
+\section{Native PETSc-Auswahl nur über die direkte API}
+\path{PetscBackend()} wählt PREONLY/LU, \path{PetscFieldSplitBackend()}
+FGMRES mit Rechtspräkonditionierung und FieldSplit/Schur für zwei Felder.
+Beide werden explizit mit \path{backend=...} an direkte Solver übergeben.
+\path{backend=None} bleibt SciPy; TOML-Modelle und Studien konfigurieren
+PETSc derzeit nicht. Die acht bestehenden Backend-Hooks ersetzen weder
+Mathematik noch Randbedingungen. Der Eigenwertlöser bleibt SciPy; PETSc kann
+bei Moden die elektrische lineare Elimination übernehmen.
+
+Geprüfte native Referenz ist der im Repository definierte Ubuntu-24.04-
+Container mit Python 3.12, PETSc/petsc4py 3.19.6 und getrennten
+\path{float64}/\path{complex128}-Runtimes. Ein Prozess verwendet
+\path{COMM_SELF}; MPI-Verteilung und Performancegewinne werden nicht
+zugesagt. Ein generischer pip-Installationsversuch ohne Scalar-/ABI-Vertrag
+ist keine verifizierte PETSc-Umgebung. Auf einem vollständigen Checkout:
+\begin{lstlisting}
+docker build -f ci/petsc.Dockerfile -t fem-toolbox-petsc:test .
+docker run --rm -v "$PWD:/work:ro" fem-toolbox-petsc:test python ci/run_petsc_tests.py --scalar real -q tests/petsc -p no:cacheprovider
+docker run --rm -v "$PWD:/work:ro" fem-toolbox-petsc:test python ci/run_petsc_tests.py --scalar complex -q tests/petsc -p no:cacheprovider
+\end{lstlisting}
+Diese Infrastruktur ist im Repository vorhanden, nicht Bestandteil des
+Handbuch-Beispielarchivs. Die CI führt beide nativen Varianten separat aus.
+Vor dem ersten Import wird ein Scalar-Runtime gewählt; ihn nicht im laufenden
+Prozess wechseln. Ein reeller Build verarbeitet komplexe Systeme über die
+verifizierte Realblockabbildung, ein komplexer direkt. Kein Imaginärteil
+wird verworfen. Fehlende oder inkompatible Installation wird erst beim
+Erzeugen des Backends diagnostiziert; der Core importiert ohne PETSc.
+
+FGMRES erhält explizite \path{rtol}, \path{atol},
+\path{max_iterations} und \path{restart}. Mehr als zwei nichtleere Felder
+sind nicht unterstützt; ein Feld nutzt native LU-Präkonditionierung.
+Methoden-/Konvergenzbericht und unskalierte Feldresiduen prüfen.
+Ein direkter LU-Bericht besitzt keine erfundene Iterationszahl.
+Nichtkonvergenz ist ein Fehler, keine stillschweigende Backend-Umschaltung.
+
+\section{Nachweise und Pflege des Benutzerbands}
+Die maschinenlesbare Workflowmatrix \path{recipes.json} verbindet jedes
+Programm mit Befehl, Eingaben, Ausgabe, Sollwert, Grenzen und Fehlerhilfe.
+Die vollständigen Originaldateien liegen im Quellenarchiv.
+\path{tests/unit/test_user_handbook_sources.py} prüft Inventar, Byteidentität,
+Hashes und Einbindung aller Programme im PDF. Bei einer Beispieländerung
+werden Kopie, Rezepttext und Nachweis im selben PR aktualisiert.
+Die nachvollziehbare Kandidatenprüfung steht in
+\path{Doc/latex/USER_VERIFICATION.md}; sie nennt ausgeführte Befehle,
+Versionen, isolierte Artefaktumgebung, Toleranzen und Prüflücken.
+Der Linux-Wheel-/sdist-CI-Lauf ist ein zusätzlicher unabhängiger Runtime,
+keine erfundene zweite Person. Redaktionelle Eigenprüfung ersetzt keine
+unabhängige Freigabe. API-/Entwicklungsband \#209, Nachweisband \#210 und
+Gesamtabnahme \#211 bleiben eigene Arbeitspakete.

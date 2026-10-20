@@ -39,11 +39,13 @@ Das Projekt verwendet [Semantic Versioning](https://semver.org/) in der Form
 | M6 — Transiente und dynamische Erweiterung | `v1.1.0` | transiente Wärme und lineare gekoppelte Dynamik |
 | M7 — Skalierung und weitere Elemente | `v1.2.0` | PETSc-Option, Tet10 und Genauigkeitserweiterungen |
 | M8 — Parameterstudien, Feldbilder und Surrogate | `v1.3.0`* | wiederholbare Mehrfallstudien, Tet4-Feldbilder/JPEG und geprüfte polynomiale Surrogate |
-| M9 — Experimentelle Validierung und Unsicherheit | `v1.4.0`* | abgegrenzter Messvergleich mit Unsicherheitsbudget |
+| M9 — Unsicherheitsworkflow und vollständige Dokumentation | `v1.4.0`* | verifizierte Unsicherheitsfortpflanzung und vier vollständig geprüfte Fachbände; keine experimentelle Fallfreigabe |
 | M10 — Kontrollierte adaptive Netzstudien | `v1.5.0`* | adaptiver stationärer Wärme-Workflow |
 
 *Vorläufige Zielversionen der [Planungswelle 2](13_PRODUCT_VISION.md).
-Keine Termine oder Freigabezusagen: M9 setzt geeignete Messdaten, M10 ein
+Keine Termine oder Freigabezusagen: Der experimentelle Folgeumfang #63/#65
+setzt weiterhin geeignete Messdaten voraus; M9 wurde am 10.10.2026 explizit
+auf Software und Dokumentation neu geplant (ADR-054). M10 setzt ein
 positives Machbarkeitsgate voraus. Bei veränderter Releasefolge wird die
 Versionszuordnung vor Veröffentlichung explizit neu entschieden.
 
@@ -52,10 +54,11 @@ inkompatible API-Änderung verlangt, wird die SemVer-Nummer vor Freigabe in eine
 Issue und in diesem Dokument korrigiert. Eine niedrigere Version als nach SemVer
 erforderlich ist nicht zulässig.
 
-M11 (Topologieoptimierung) und M12 (RANS-CFD mit Fluid-Struktur-Kopplung)
-sind zunächst reine Milestone-Beschreibungen ohne Zielversion oder Einzelissues.
-Für diese beiden Horizonte wird das Release-Issue erst bei der Detaillierung
-vor Umsetzung angelegt; vor einer Freigabe gelten alle folgenden Gates.
+M11 ist nach dem Eigentümerauftrag vom 19.10.2026 der nächste freizugebende
+Umfang nach M10 und erhält v1.6.0. Additive API und eigene M11-Ergebnisformate
+begründen einen kompatiblen Minor-Schritt; die ursprüngliche vorläufige
+Planungsfolge bis v1.9.0 wird für diesen Milestone nicht als Releasefolge benutzt.
+M12 und weitere Milestones behalten ihre separaten fachlichen Release-Gates.
 
 ## 4. Release-Gate
 
@@ -140,3 +143,36 @@ Ab M0 besitzt das Paket genau eine kanonische Versionsquelle. Build-Metadaten un
 Übereinstimmung von Paketversion, erwartetem Release-Tag und Release-Metadaten.
 Entwicklungsstände zwischen Releases werden als `X.Y.Z.devN` oder über lokale
 Build-Metadaten kenntlich gemacht und nicht als finale Version veröffentlicht.
+
+## Femantis-Namensmigration in M14 / v2.0.0 (#235)
+
+Die bereits geplante M14-Freigabe #113 erhält die Migration zu `femantis` als
+zusätzliches verpflichtendes Gate gemäß [ADR-053 und Vertrag](77_FEMANTIS_MIGRATION_CONTRACT.md).
+Es entsteht kein konkurrierendes v2.0-Release. Alle v2.x-Versionen behalten den
+Legacy-Importadapter; früheste Entfernung ist v3.0.0 nach separater Entscheidung.
+Namens-, Registry-, Rechte-, Altimport-, Datenkompatibilitäts- und numerische
+Paritätsnachweise gehören vor Veröffentlichung zum vollständigen Gate. Bereits veröffentlichte Releases und historische Artefakte bleiben unverändert.
+
+## Dokumentationsartefakte ab M9
+
+Vor dem Release-Merge müssen vier Fachbände und Gesamthandbuch gemäß
+[Gesamtabnahme](latex/ACCEPTANCE.md) inhaltlich und vollständig visuell geprüft
+sein. `python scripts/build_handbook.py --self-test` baut fünf PDFs, prüft
+API-/V&V-Drift, Abdeckung, Referenzen, Schriften, drei negative Dokumentfälle
+und den Nachbau aus dem tatsächlichen Quellenarchiv. Der Checkoutzustand
+muss für finale Artefakte sauber sein. Der ausdrückliche Modus
+`--release` lehnt schmutzige oder unvollständig zugeordnete Quellen ab und
+kennzeichnet PDFs und Manifest als Release. Commit und Version werden aus dem
+tatsächlichen geprüften main-Ziel gelesen.
+
+Das Release enthält `main.pdf`, `theory.pdf`, `application.pdf`, `api.pdf`,
+`verification.pdf`, `handbook-source.tar.gz`, `manifest.json` und
+`SHA256SUMS` zusätzlich zu Wheel und sdist. Das Manifest führt Eingabehashes,
+Toolchain, Quellzustand, Referenz-/Archivprüfungen und Layoutwarnungen auf.
+Eine zusätzliche Release-Prüfsummenliste umfasst auch beide Paketartefakte;
+Handbuch- und Paketprüfsummen werden nicht durch Umbenennung überschrieben.
+Titel/Metadaten sowie alle nach dem Kandidaten geänderten Seiten erneut prüfen.
+Quellenarchiv und PDFs werden aus demselben endgültigen Stand erzeugt.
+Keine Byteidentität über unterschiedliche Toolchains und keine ungeprüfte
+PDF/A- oder PDF/UA-Konformität behaupten. Experimentelle Validierung bleibt
+gemäß ADR-054 außerhalb der v1.4.0-Freigabe offen.

@@ -1,10 +1,50 @@
 # Changelog
 
+## [1.6.0] - 2026-10-19
+
+- [Kurze SIMP-Einführung](Doc/86_SIMP_EINFUEHRUNG.md); [Release Notes](Doc/releases/v1.6.0.md).
+
+- Gefilterte Tet4-SIMP-Mehrlastfalloptimierung mit Volumenrestriktion und vollständiger Gradientenkette.
+- Model-basierte TOML-Studien, deterministische SI-Provenienz, JSON-/VTU-Export und klare Abbruchstatus.
+- Getrennte Schwellen-/Verbindungsgeometrien mit unabhängiger Vollmaterial-Reanalyse.
+- Drei-Netze-/Zwei-Radien-Nachweis; keine experimentelle, Festigkeits- oder Fertigungsfreigabe.
+
 Alle wesentlichen Änderungen dieses Projekts werden hier dokumentiert. Das
 Format orientiert sich an [Keep a Changelog](https://keepachangelog.com/) und die
 Versionierung an [Semantic Versioning](https://semver.org/).
 
-## Unreleased
+## [1.5.0] - 2026-10-19
+
+### Added
+
+- Konforme lokale Tet4-Kantenverfeinerung mit Erhalt von Rand-/Materialtags und benannten Gruppen (#67).
+- Kontrollierter adaptiver stationärer Wärmeablauf mit Toleranz-, DOF-, Schritt-, Stagnations- und Fehlerstatus sowie deterministischem Stufenexport (#68).
+- Unabhängige glatte/lokalisierte Fehlervergleiche gegen uniforme Verfeinerung, analytische Materialgrenzen- und Randwertnachweise (#69).
+
+### Limits
+
+- Residualindikator ist heuristisch; ausschließlich affine Tet4 und stationäre Wärme.
+- Kompatible Minor-Erweiterung; vorhandene Solver- und Model-Verträge bleiben bestehen.
+- GitHub-gehostete Ubuntu-Runner prüfen Python 3.11–3.13, Wheel/sdist, Abhängigkeiten, PETSc und Handbücher.
+- [Release Notes](Doc/releases/v1.5.0.md); Veröffentlichungsnachweise werden in #70 verknüpft.
+
+## [1.4.0] - 2026-10-11
+
+### Added
+
+- Verifizierter generischer Unsicherheitsworkflow: explizite Verteilungen, gemeinsames Sampling, normale Korrelation, Statistik, lokale Sensitivität und stationäre FEM-Studien (#64).
+- Vollständige deutschsprachige LaTeX-Gesamtdokumentation mit vier Fachbänden, ausführbaren Rezepten, API-/Quellendriftprüfung und reproduzierbarem Quellenarchiv (#206–#211).
+
+### Compatibility and limits
+
+- Kompatible Minor-Erweiterung; bestehende Model-Schemata 1–3 und Solver bleiben bestehen. Versionsgebundene Studien werden beim Update bewusst neu gerechnet.
+- Experimentelle Validierung bleibt in #63/#65 außerhalb M9 offen gemäß ADR-054. Keine pauschale Validierungsfreigabe.
+- [Release Notes](Doc/releases/v1.4.0.md) und [Freigabebericht](Doc/68_M9_RELEASE_VERIFICATION.md).
+
+### Fixed
+
+- Rampen interpolieren große endliche Zeitgrenzen und Amplituden ohne stillen
+  Zwischenüberlauf; End-/Haltewerte und konstante Profile bleiben erhalten (#221).
 
 ## [1.3.0] - 2026-10-01
 

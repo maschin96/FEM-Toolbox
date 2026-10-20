@@ -1,0 +1,41 @@
+schema_version = 1
+units = "SI"
+physics = "piezoelectric"
+[mesh]
+path = "short.msh"
+length_scale_to_m = 1.0
+[materials.piezo.solid]
+stiffness = [[2000000000.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 2000000000.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 1000000000.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 500000000.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 500000000.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 500000000.0]]
+stress_coupling = [[0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 5.0, 0.0, 0.0, 0.0]]
+permittivity = [[1e-8,0,0],[0,1e-8,0],[0,0,1e-8]]
+[materials.piezo.solid.units]
+stiffness = "Pa"
+stress_coupling = "C/m^2"
+permittivity = "F/m"
+[regions.piezo]
+specimen = "solid"
+[[boundary.dirichlet]]
+field = "u"
+nodes = [0,1,2,3,4,5,6,7]
+components = ["x","y"]
+value = 0.0
+unit = "m"
+[[boundary.dirichlet]]
+field = "u"
+set = "bottom"
+components = ["z"]
+value = 0.0
+unit = "m"
+[[boundary.electrodes]]
+name = "ground"
+set = "bottom"
+potential = 0.0
+potential_unit = "V"
+[[boundary.electrodes]]
+name = "driven"
+set = "top"
+potential = 100.0
+potential_unit = "V"
+[solver]
+method = "direct"
+block_scaling = true

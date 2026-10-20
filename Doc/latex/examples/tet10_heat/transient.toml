@@ -1,0 +1,39 @@
+schema_version = 2
+units = "SI"
+physics = "transient_heat"
+
+[mesh]
+path = "body.msh"
+length_scale_to_m = 1.0
+length_unit = "m"
+
+[materials.synthetic]
+conductivity = 2.0
+density = 3.0
+specific_heat = 4.0
+[materials.synthetic.units]
+conductivity = "W/(m K)"
+density = "kg/m^3"
+specific_heat = "J/(kg K)"
+
+[regions]
+body = "synthetic"
+
+[time]
+values = [0.0, 0.25, 0.5, 1.0]
+unit = "s"
+
+[initial_temperature]
+value = 300.0
+unit = "K"
+
+[loads.source]
+value = 12.0
+unit = "W/m^3"
+
+[probes.interior]
+point = [0.2, 0.2, 0.2]
+
+[solver]
+method = "backward_euler"
+lumping = "consistent"

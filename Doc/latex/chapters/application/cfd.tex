@@ -1,0 +1,38 @@
+\chapter{Laminare CFD-Entwicklungsrezepte}
+\label{application:cfd}
+Diese Rezepte prüfen den vorhandenen M12-Kern. Sie sind keine RANS-/FSI-Abnahme. Vor dem Start das Paket installieren und das Verzeichnis results anlegen. Neue Ausgabeziele verwenden; bestehende Berichte werden abgelehnt.
+\section{cfd\_channel}
+\label{recipe:cfd-channel}
+Analytischer reduzierter Kanal: maximaler Geschwindigkeitsfehler <0.00025 m/s.
+\begin{lstlisting}
+python -I examples/cfd_channel/run.py
+\end{lstlisting}
+\lstinputlisting{examples/cfd_channel/run.py}
+\section{cfd\_pressure}
+\label{recipe:cfd-pressure}
+Unabhängige Stokes-MMS auf 8/16/32/64; U-Ordnung >1.8 und p-Ordnung >1.5.
+\begin{lstlisting}
+python -I examples/cfd_pressure/run.py
+\end{lstlisting}
+\lstinputlisting{examples/cfd_pressure/run.py}
+\section{cfd\_flow}
+\label{recipe:cfd-flow}
+Deklarativer MAC-Kanal: Geschwindigkeitsfehler <0.003 m/s und Masse <1e-9 kg/s.
+\begin{lstlisting}
+python -I examples/cfd_flow/run.py --output results/cfd-flow
+\end{lstlisting}
+\lstinputlisting{examples/cfd_flow/run.py}
+\section{fluid\_mesh}
+\label{recipe:fluid-mesh}
+Netz-/Randprüfung; solver\_status=not\_run und y+ noch nicht auswertbar.
+\begin{lstlisting}
+python -I examples/fluid_mesh/preflight.py --output results/fluid-preflight.json
+\end{lstlisting}
+\lstinputlisting{examples/fluid_mesh/preflight.py}
+\section{quad\_flow}
+\label{recipe:quad-flow}
+SIMPLE-Kanal mit frisch rekonstruierten SI-Residuen und Bilanzen.
+\begin{lstlisting}
+python -I examples/quad_flow/run.py --output results/quad-flow
+\end{lstlisting}
+\lstinputlisting{examples/quad_flow/run.py}

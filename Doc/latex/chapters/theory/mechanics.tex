@@ -1,0 +1,134 @@
+\chapter{Elastizität und sequenzielle Thermomechanik}\label{chap:mechanics}
+\section{Kleine Verzerrungen und virtuelle Arbeit}
+Unter quasistatischen Bedingungen ist
+\begin{equation}\label{eq:mechanical-strong}
+-\nabla\cdot\boldsymbol\sigma=\mathbf b,\qquad
+\boldsymbol\sigma\mathbf n=\bar{\mathbf t}\text{ auf }\Gamma_t,
+\qquad\mathbf u=\bar{\mathbf u}\text{ auf }\Gamma_u.
+\end{equation}
+Für $\mathbf v=0$ auf $\Gamma_u$ folgt mit der Symmetrie von $\sigma$
+\begin{equation}\label{eq:mechanical-weak}
+\int_\Omega\varepsilon_v(\mathbf v)^T\sigma_v\,\mathrm dV
+=\int_\Omega\mathbf v^T\mathbf b\,\mathrm dV+
+\int_{\Gamma_t}\mathbf v^T\bar{\mathbf t}\,\mathrm dA.
+\end{equation}
+Die Identität $\nabla\mathbf v:\sigma=\operatorname{sym}\nabla\mathbf v:\sigma$
+entfernt den antisymmetrischen Anteil. Ein isotropes Material erfüllt
+$\sigma=2\mu\varepsilon+\lambda\operatorname{tr}(\varepsilon)\mathbf I$ mit
+\begin{equation}\label{eq:lame}
+\lambda=\frac{E_Y\nu}{(1+\nu)(1-2\nu)},\qquad
+\mu=\frac{E_Y}{2(1+\nu)}.
+\end{equation}
+In der Engineering-Konvention sind die Normaldiagonalen $\lambda+2\mu$,
+die Normalkopplungen $\lambda$ und die drei Schubdiagonalen $\mu$, nicht $2\mu$.
+Anisotrope Daten werden als globale SPD-Matrix $\mathbf C$ eingegeben.
+Isotrope Eingaben benötigen $E_Y>0$, $-1<\nu<0{,}49$; das strengere obere Limit
+als die mathematische Grenze $0{,}5$ schützt die freigegebene
+Verschiebungsformulierung. Tet10 ist keine automatische Lösung des
+Inkompressibilitätslockings. Körperkräfte tragen N/m$^3$, Traktionen Pa.
+\index{Elastizität}\index{Starrkörpermode}
+
+\section{Diskrete Steifigkeit, Lasten und Lagerung}
+Mit der Matrix aus Gleichung~\ref{eq:B} folgen
+\begin{equation}\label{eq:mechanical-element}
+\mathbf K_u^e=\int_K\mathbf B^T\mathbf C\mathbf B\,\mathrm dV,
+\quad\mathbf f_b^e=\int_K(\mathbf N\otimes\mathbf I_3)^T\mathbf b\,\mathrm dV,
+\quad\mathbf f_t^F=\int_F(\mathbf N\otimes\mathbf I_3)^T\bar{\mathbf t}\,\mathrm dA.
+\end{equation}
+Tet4 liefert exakt $V\mathbf B^T\mathbf C\mathbf B$ und
+$V\mathbf b/4$ je Knoten für konstante Lasten. Globale Steifigkeit hat N/m,
+Lasten N. Punktlasten sind integrierte Kräfte auf ausgewählten DOFs; sie sind
+keine räumlich aufgelöste Kontakt- oder Spannungssingularitätsmodellierung.
+
+Ein unbelasteter freier Körper besitzt drei Translationen und drei Rotationen
+$\mathbf u=\mathbf c+\boldsymbol\omega\times\mathbf x$ mit $\varepsilon=0$.
+Die Lagerung muss alle verbleibenden Starrkörpermoden je Komponente entfernen;
+ein bloßes Zählen von sechs festgesetzten DOFs genügt nicht.
+Die Rangprüfung bezieht sich auf die geometrisch aufgebauten Moden.
+Ein Tet4 hat Steifigkeitsrang sechs bei zwölf DOFs, ein Tet10 Rang 24 bei 30
+DOFs für ein auflösbares positives Material. Globale Mechanismen und schlechte
+Kondition können trotzdem zusätzliche Diagnostik verlangen.
+
+Gespeicherte elastische Energie ist $U_m=\frac12\int\varepsilon_v^T\mathbf C
+\varepsilon_v$. Reaktionen sind die ursprünglichen Residuen auf festen DOFs.
+Für statisches Gleichgewicht schließen die Summe äußerer Kräfte und Reaktionen
+sowie deren Momente $\sum\mathbf x_i\times\mathbf F_i$.
+Ein kleines algebraisches Residuum ersetzt diese zwei physikalischen Bilanzen
+nicht. Die Reaktionsauswertung erfolgt vor einer Interpretation als
+Spannungsresultierende, nicht auf dem mit Einheitszeilen modifizierten System.
+
+\subsection{Handrechnung: affiner geklemmter Dehnungszustand}
+Im Einheits-Tet4 sei $E_Y=100$ Pa, $\nu=0{,}25$, also $\lambda=\mu=40$ Pa.
+$\mathbf u=(0{,}01x,0,0)$ m ergibt
+$\varepsilon_v=(0{,}01,0,0,0,0,0)$ und
+$\sigma_v=(1{,}2,0{,}4,0{,}4,0,0,0)$ Pa.
+Die transversalen Spannungen entstehen wegen der vorgegebenen Null-
+Querdehnungen; dies ist kein frei kontrahierender Zugstab.
+$U_m=(1/6)(0{,}01\cdot1{,}2)/2=10^{-3}$ J.
+Bei einem \emph{frei} kontrahierenden Zugstab wäre dagegen
+$u_x=Fx/(AE_Y)$ und $\varepsilon_{yy}=\varepsilon_{zz}=-\nu\varepsilon_{xx}$.
+Die Randbedingungen entscheiden, welche Referenz anwendbar ist.
+
+\section{Thermische Eigenverzerrung und Kopplungsrichtung}
+Für bekannte Temperatur lautet
+\begin{equation}\label{eq:thermal-strain}
+\varepsilon_{\rm th}=\alpha(T-T_{\rm ref}),\qquad
+\varepsilon_m=\varepsilon_v-\varepsilon_{\rm th},\qquad
+\sigma_v=\mathbf C\varepsilon_m.
+\end{equation}
+In Gleichung~\ref{eq:mechanical-weak} eingesetzt und den bekannten Anteil
+nach rechts verschoben ergibt
+\begin{equation}\label{eq:thermal-load}
+\mathbf K_u\mathbf u=\mathbf f_b+\mathbf f_t+\mathbf f_{\rm th},\qquad
+\mathbf f_{\rm th}^e=\int_K\mathbf B^T\mathbf C\alpha
+(\mathbf N\mathbf T_e-T_{{\rm ref},K})\,\mathrm dV.
+\end{equation}
+$\alpha$ und $T_{{\rm ref},K}$ dürfen regionsweise verschieden sein. Die
+Temperatur wird auf demselben Netz zuerst gelöst; Mechanik speist keine
+Wärmeleistung zurück. Es gibt keine reversible Entropie-/Trägheits-
+Thermokopplung und keine Wärmeproduktion durch mechanische Dissipation.
+\index{Thermomechanik}\index{Eigenverzerrung}
+
+Bei Tet4 sind $\mathbf B,\mathbf C,\alpha$ konstant. Daher ist die Last exakt
+mit $\bar T_K=\sum_a T_a/4$ und
+$\mathbf f_{\rm th}^e=V\mathbf B^T\mathbf C\alpha(\bar T_K-T_{{\rm ref},K})$.
+Der berichtete Tet4-Spannungszustand und die mechanische Zellenergie verwenden
+auch diese mittlere Eigenverzerrung. Für räumlich veränderliches $T$ ist die
+Lastmittelung exakt, die berichtete Energie aber die Energie dieses diskreten
+Zellmittelmodells. Die kontinuierliche Energie mit punktweiser Eigenverzerrung
+enthielte zusätzlich den temperaturabhängigen Varianzterm
+\begin{equation}\label{eq:thermal-variance}
+U_{m,\rm cont}-U_{m,\rm mean}
+=\frac V2\left(\overline{\varepsilon_{\rm th}^T\mathbf C\varepsilon_{\rm th}}
+-\bar\varepsilon_{\rm th}^T\mathbf C\bar\varepsilon_{\rm th}\right)\ge0.
+\end{equation}
+Dieser bekannte, von $\mathbf u$ unabhängige Term verändert die mechanische
+Gleichung nicht. Er wird nicht still als Bestandteil der Tet4-Ausgabe behauptet.
+Tet10 integriert Last und Energie mit $T_h$ an jedem Quadraturpunkt; die
+berichtete Spannung ist eine gesonderte Schwerpunktprobe.
+
+\subsection{Handrechnung: frei und vollständig behindert}
+Mit denselben elastischen Zahlen, $\alpha=(0{,}002,0,0,0,0,0)$/K und
+$T-T_{\rm ref}=10$ K gilt $\varepsilon_{\rm th,x}=0{,}02$.
+Bei frei möglicher Expansion ergibt $u_x=0{,}02x$ m, $\sigma=0$, $U_m=0$.
+Für vollständig vorgegebene $\mathbf u=0$ sind
+$\sigma_v=(-2{,}4,-0{,}8,-0{,}8,0,0,0)$ Pa und
+$U_m=(1/6)(0{,}02\cdot2{,}4)/2=0{,}004$ J.
+Der thermische Lastvektor ist positiv auf der rechten Seite, obwohl die
+behinderte Spannung negativ ist. Diese Vorzeichenprüfung verhindert die
+häufige Verwechslung zwischen Eigenverzerrung und äußerer Zuglast.
+
+\subsection*{Implementierung und unabhängige Nachweise.}
+{\small\raggedright
+\path{src/fem_toolbox/solvers/elasticity.py},
+\path{src/fem_toolbox/solvers/thermomechanics.py},
+\path{src/fem_toolbox/elements/quadratic.py};
+\path{tests/patch/test_elasticity_patch.py},
+\path{tests/patch/test_thermomechanics_patch.py},
+\path{tests/unit/test_thermal_expansion.py}.
+Die gedrehte thermische Expansion wird in einem unabhängigen Patch geprüft;
+Doc/14 beschreibt die gekoppelte Manufactured Solution auf vier Netzen.
+Tet10-Nachweise: \path{tests/convergence/test_tet10_elasticity.py} und
+\path{tests/convergence/test_tet10_thermomechanics.py}.
+
+\par}

@@ -1,0 +1,24 @@
+\chapter{Verifikation adaptiver stationärer Wärme}\label{vv:adaptive}
+Die glatte Referenz auf dem Einheitswürfel ist
+\(T=300+\sum_{j=1}^3 x_j(1-x_j)\), \(Q=6\) bei \(k=1\).
+Die lokalisierte Referenz lautet \(T=300+\exp(-80(x-0.5)^2)\),
+\(Q=(160-25600(x-0.5)^2)\exp(-80(x-0.5)^2)\).
+Alle Randtemperaturen sind exakt vorgegeben. Der tatsächliche Energiefehler
+\(\sqrt{\int_\Omega |\nabla(T-T_h)|^2\,dV}\) wird unabhängig vom Residualindikator
+mit Gauss-Duffy-Regeln Ordnung 6 und 7 integriert; relative Parität 2e-4 ist Gate.
+Tet4-Lastquadratur bleibt Grad 2 und trägt im Gaußfall ebenfalls zum Fehler bei.
+
+Je sieben adaptive und uniforme Stufen starten am identischen Netz mit 125 DOFs.
+Der glatte adaptive Fehler sinkt von 0.25 auf 0.07753 sqrt(W K), uniform auf 0.04724.
+Lokalisiert sinkt er adaptiv von 1.96263 auf 1.34228. Die nach Pilotexploration
+und vor dem finalen Wiederholungslauf fixierte Grenze 1.5 sqrt(W K) wird adaptiv
+mit 514, uniform mit 729 DOFs erstmals erreicht. 29.5 Prozent weniger DOFs sind
+fallspezifischer Nutzen; eine blind vor Pilotversuchen gewählte Grenze oder
+allgemeine Laufzeitgarantie wird nicht behauptet. Effektivität bleibt heuristisch.
+Uniform verfeinert dieselbe Kantenstrategie mit Markierungsanteil 1.
+
+Regressionen prüfen vier oder mehr Stufen, Fehlerabnahme und festen DOF-Vergleich.
+Weitere analytische Fälle prüfen eine Wärmeleitfähigkeitsgrenze mit stetigem
+Fluss und gemischte Fluss-/Robin-/Dirichlet-Ränder. Topologie, Gruppen, Bilanzen,
+identische Records und alle Abbruchgründe sind eigene Gates. Kein experimenteller
+Adaptivitätsnachweis und keine transiente oder gekoppelte Freigabe.

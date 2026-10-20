@@ -626,6 +626,32 @@ class Model:
             dict[str, Any], json.loads(json.dumps(self._document, sort_keys=True))
         )
 
+    def elasticity_inputs(self) -> dict[str, Any]:
+        """Snapshot validated static mechanics for additive design workflows.
+
+        Returns mesh, immutable per-cell materials, copied Dirichlet conditions,
+        constant SI body force and copied traction vectors. Only elasticity is
+        supported; this does not solve or change the Model document.
+        """
+        if self.physics != "elasticity":
+            raise ModelSchemaError(
+                path="physics", reason="elasticity snapshot requires static elasticity"
+            )
+        return {
+            "mesh": self.mesh,
+            "material": tuple(self.assignment.cell_materials),
+            "conditions": tuple(
+                Dirichlet(np.array(c.dofs, copy=True), np.array(c.values, copy=True))
+                for c in self._conditions
+            ),
+            "body_force": np.array(
+                self._load_value("body_force", (0.0, 0.0, 0.0)), copy=True
+            ),
+            "tractions": {
+                k: np.array(v, copy=True) for k, v in self._surface["traction"].items()
+            },
+        }
+
     def _dofs(self) -> DofMap:
         return {
             "heat": thermal_dofs,

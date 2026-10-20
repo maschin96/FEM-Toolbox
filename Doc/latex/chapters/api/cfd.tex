@@ -1,0 +1,26 @@
+\chapter{Experimenteller M12-Strömungskern}
+\label{api:cfd}
+Die Module unter \texttt{fem\_toolbox.cfd} sind Forschungs-APIs.
+MAC bleibt die unabhängige laminare Referenz; Quad-FV ergänzt körperangepasste
+ebene Netze. Der Stand enthält noch keine SA-Schließung oder FSI.
+\texttt{FluidMesh2D} prüft SI-Punkte, konvexe Quad4-Zellen und Line2-Randgruppen.
+\texttt{FluidDomain.from\_file} liest ein Schema-1-JSON mit expliziter Breite,
+positiver Dichte/Viskosität und genau einer physikalischen Randbedingung je Face.
+Einlass, Wand, Druckauslass, Symmetrie und kongruente periodische Paare sind
+getrennt; ohne Auslass ist genau eine Druckreferenzzelle nötig.
+
+\texttt{solve\_quad\_flow} benötigt positive Geschwindigkeits- und Längenskalen.
+Geschwindigkeit hat Form $(n_c,2)$ in m/s, Druck $(n_c)$ in Pa und Massenfluss
+$(n_f)$ in kg/s; die Normalen zeigen aus der Eigentümerzelle.
+Variable effektive Viskosität ist als Zell- und Randfeld zusammen zu liefern.
+Die vollen Newton-Spannungen bleiben erhalten. Ergebnisse und Provenienz sind
+unveränderlich. Rohresiduen, globale Masse/Impuls und diskrete Leistung werden
+nach dem Update frisch rekonstruiert. Kleine Iterandenänderung genügt nicht.
+Ungültige Geometrie, Rückströmung, Ressourcenlimit und Nichtkonvergenz führen
+zu konkreten Fehlern; kein stiller Ersatz durch einen einfacheren Solver.
+
+Die exakten Signaturen folgen im Inventar. Manuelle Detailverträge:
+\nolinkurl{Doc/70_STATIONARY_FLOW_CORE.md},
+\nolinkurl{Doc/72_FLUID_MESH_ADAPTER.md},
+\nolinkurl{Doc/73_QUAD_FV_OPERATORS.md} und
+\nolinkurl{Doc/74_QUAD_FV_SIMPLE.md}.

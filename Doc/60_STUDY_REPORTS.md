@@ -6,6 +6,10 @@ Katalogfall entsteht genau eine Zeile; archivierte `retired_cases` sind nicht
 Teil der aktuellen Studie. Fehlende/unterbrochene/ungültige/fehlgeschlagene Fälle
 bleiben sichtbar. Vor der Auswertung erfolgreicher Fälle werden beide
 Bündelhashes und die Provenienz gegen den Katalog geprüft.
+Dies umfasst die Fall-/Versuchspfade und die gespeicherte Studienzuordnung
+gegen Parameter, aufgelöstes Dokument, Fingerprints und Versionen (#219).
+Fremde Bündel und ältere Bündel ohne Studienzuordnung erhalten `invalid`
+mit Fehlergrund und fehlenden Kennwerten; Fortsetzung verwendet dieselbe Prüfung.
 
 ## API
 

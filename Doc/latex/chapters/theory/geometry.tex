@@ -1,0 +1,132 @@
+\chapter{Geometrie, Ansatz und Quadratur}\label{chap:geometry}
+\section{Affines Tetraeder und Orientierung}
+Mit vier Ecken $\mathbf x_a$ und Referenzkoordinaten
+$\boldsymbol\xi=(\xi,\eta,\zeta)$ auf
+$\hat K=\{\xi,\eta,\zeta\ge0:\xi+\eta+\zeta\le1\}$ gilt
+\begin{equation}\label{eq:affine}
+\mathbf x=\mathbf x_0+\mathbf J\boldsymbol\xi,\qquad
+\mathbf J=[\mathbf x_1-\mathbf x_0,\mathbf x_2-\mathbf x_0,
+\mathbf x_3-\mathbf x_0],\qquad V=|\det\mathbf J|/6.
+\end{equation}
+Die baryzentrischen Funktionen sind
+$L_0=1-\xi-\eta-\zeta$, $L_1=\xi$, $L_2=\eta$, $L_3=\zeta$.
+Aus der Kettenregel folgt $\mathbf J^T\nabla_x L_a=\nabla_\xi L_a$.
+Der Code löst dieses System; er bildet keine explizite Inverse.
+Negative Eingabeorientierung wird mit konsistenter Knotenumordnung korrigiert;
+Rohvorzeichen bleiben diagnostizierbar. Bei Tet10 werden alle Kantenknoten
+mitpermutiert. Die Feldoperatoren beziehen sich auf die ursprüngliche
+Eingabereihenfolge, nicht auf eine unbemerkte Umnummerierung der DOFs.
+
+Das maximale Kantenmaß $\ell_{\max}$ liefert
+$q_V=6\sqrt2 V/\ell_{\max}^3$. Die Standardgrenze $q_V\le10^{-12}$ verwirft
+entartete oder numerisch unauflösbare Zellen; $q_V=1$ für das reguläre
+Tetraeder. Die Größe ist translations-, rotations- und skaleninvariant.
+Ein zusätzlicher Konditionsindikator verwendet die zentrierten Eckkoordinaten.
+Gute Algebra ersetzt trotzdem keine physikalisch angemessene Netzauflösung.
+\index{Tet4}\index{Tet10}\index{Jacobiabbildung}
+
+\section{Lineare und quadratische Interpolation}
+Für Tet4 ist $N_a=L_a$; jedes skalare Feld hat vier, jede Verschiebung zwölf
+lokale DOFs. Partition der Eins und affine Reproduktion ergeben sich aus
+$\sum_a L_a=1$ und $\sum_a L_a\mathbf x_a=\mathbf x$.
+Für Tet10 lautet die quadratische nodale Lagrange-Basis
+\begin{align}\label{eq:tet10shape}
+N_i&=L_i(2L_i-1),&N_{ij}&=4L_iL_j,\\
+\nabla N_i&=(4L_i-1)\nabla L_i,&
+\nabla N_{ij}&=4(L_i\nabla L_j+L_j\nabla L_i).\nonumber
+\end{align}
+An den Ecken und Kantenmitten ist $N_a(\mathbf x_b)=\delta_{ab}$; damit folgt
+Eindeutigkeit der quadratischen Interpolation. Die Basis ist in
+\cite{defelement-p2} dargestellt. Die Toolbox-Reihenfolge ist eigene Konvention:
+Ecken 0--3, dann Kanten 01,12,20,03,13,23. Triangle6 verwendet drei Ecken
+und 01,12,20. Alle Mittelknoten müssen geometrische Kantenmitten sein
+(relative Toleranz $10^{-10}$). Das Feld ist quadratisch, die Geometrie bleibt
+affin. Gekrümmte, hybride Tet4/Tet10- oder nichtkonforme Übergänge sind gesperrt.
+
+Mit $\mathbf N=[N_0,\ldots,N_{n-1}]$ gilt
+\begin{equation}
+T_h=\mathbf N\mathbf T_e,\qquad
+\phi_h=\mathbf N\boldsymbol\phi_e,\qquad
+\mathbf u_h=\sum_a N_a\mathbf u_a.
+\end{equation}
+$\mathbf G=[\nabla N_0,\ldots,\nabla N_{n-1}]$ hat Größe 3$\times n$.
+Der Engineering-Verzerrungsblock je Knoten ist
+\begin{equation}\label{eq:B}
+\mathbf B_a=\begin{pmatrix}
+N_{a,x}&0&0\\0&N_{a,y}&0\\0&0&N_{a,z}\\
+0&N_{a,z}&N_{a,y}\\N_{a,z}&0&N_{a,x}\\N_{a,y}&N_{a,x}&0
+\end{pmatrix},\qquad\varepsilon_v=\mathbf B\mathbf u_e.
+\end{equation}
+$\mathbf B$ hat 6$\times12$ bzw. 6$\times30$ Einträge mit Einheit 1/m.
+Tet4-Gradienten sind konstant; Tet10-Gradienten hängen vom Integrationspunkt
+ab. Eine einzige Schwerpunktprobe ersetzt daher keine Tet10-Matrixintegration.
+
+\section{Volumen- und Randintegration}
+Auf dem Referenztetraeder folgt aus wiederholter Beta-Integration
+\begin{equation}\label{eq:simplex-moment}
+\int_K\prod_{i=0}^3L_i^{a_i}\,\mathrm dV
+=6V\frac{\prod_i a_i!}{(\sum_i a_i+3)!}.
+\end{equation}
+Die Dreiecksform hat $2A$ und Nenner $(\sum_i a_i+2)!$.
+Für $a_i=0$ liefert die Formel $V$ bzw. $A$; für $a_i=1$ an einer Ecke $V/4$.
+Sie ist eine unabhängige Quelle für Last- und Massenreferenzen.
+
+Der Tet4-Kern integriert konstante Steifigkeitsintegranden exakt. Seine
+Volumen- und Flächenlastregeln vom Grad zwei integrieren affine Lasten exakt,
+weil $N$ linear ist. Die Tet10-Referenz nutzt kollabierte Gaußprodukte:
+\begin{align}\label{eq:duffy}
+(a,b,c)&\mapsto(a,(1-a)b,(1-a)(1-b)c),&&J_D=(1-a)^2(1-b),\\
+(a,b)&\mapsto(a,(1-a)b),&&J_D=1-a.\nonumber
+\end{align}
+Ein eindimensionales $n$-Punkt-Gaußverfahren integriert bis Grad $2n-1$
+\cite{nist-quadrature}. Bei einem Simplexpolynom vom Gesamtgrad $d$ werden die
+Grade nach der Tetraederabbildung höchstens $d+2,d+1,d$.
+Vier Punkte je Richtung geben 64 positive Punkte und garantierten Gesamtgrad
+fünf; auf Flächen ergeben drei Punkte je Richtung neun Punkte und Grad vier.
+Die physischen Gewichte summieren sich auf $V$ bzw. $A$ und tragen m$^3$ bzw.
+m$^2$. Das ist ein verifizierbarer Referenzalgorithmus, keine minimale Regel.
+Produkte $N_aN_b$ sind Grad vier, Produkte zweier Gradienten Grad zwei.
+Nichtpolynomiale Lasten verlangen eine eigene Quadraturstudie.
+
+\section{Randtopologie und Lastmomente}
+Jede Außenfläche muss genau einem Volumenelement gehören. Die Normale wird
+gegen die gegenüberliegende Ecke nach außen orientiert. Eine umgekehrte
+importierte Dreiecksreihenfolge verändert deshalb keinen vorgegebenen äußeren
+Fluss. Innere, fremde und nichtmannigfaltige Flächen werden diagnostiziert;
+Teilrandnetze sind für Solves zulässig, der Wärmeindikator verlangt vollständige
+Randabdeckung. Konforme Materialinterfaces besitzen zwei äußere Normalen
+$\mathbf n_+=-\mathbf n_-$ und keine zusätzlichen Interface-DOFs.
+
+Eine konstante Triangle3-Last hat Gewicht $A/3$ je Ecke. Bei Triangle6 gilt
+$\int_F N_i=0$ an Ecken und $A/3$ an Kantenmitten. Dies folgt direkt aus
+Gleichung~\ref{eq:simplex-moment} in zwei Dimensionen. Null Ecklast bedeutet
+nicht, dass ein Eckknoten aus einer Elektrode entfernt werden darf.
+Volumenlasten auf Tet10 haben $-V/20$ je Ecke und $V/5$ je Kantenknoten;
+negative konsistente Einträge verletzen nicht die positive Gesamtlast.
+
+\section{Ausgearbeitetes Einheitsbeispiel}\label{sec:unit-tet}
+Für Ecken $(0,0,0),(1,0,0),(0,1,0),(0,0,1)$ in m ist $V=1/6$ m$^3$ und
+\begin{equation}\label{eq:unit-G}
+\mathbf G=\begin{pmatrix}-1&1&0&0\\-1&0&1&0\\-1&0&0&1\end{pmatrix}\ {\rm m}^{-1}.
+\end{equation}
+$T=x$ (numerische SI-Koordinaten) wird durch Tet4 exakt reproduziert.
+Für $k=2$ W/(m K) ist $\mathbf q=(-2,0,0)$ W/m$^2$ und
+$\mathbf T_e^T\mathbf K_T\mathbf T_e=1/3$ W K.
+Tet10 reproduziert $T=x^2$; dann
+$\int_K\nabla T^T\mathbf k\nabla T=8\int_K x^2=8/60=2/15$ W K.
+Die letzte Rechnung bezieht sich auf numerisch in Metern eingesetzte
+Koordinaten; die Polynomkoeffizienten haben die nötigen K/m bzw. K/m$^2$.
+Sie prüft quadratische Feldenergie statt nur einen Schwerpunktwert.
+
+\subsection*{Implementierung und Nachweis.}
+{\small\raggedright
+\path{src/fem_toolbox/elements/tet4.py},
+\path{src/fem_toolbox/elements/tet10.py},
+\path{src/fem_toolbox/elements/quadrature.py};
+\path{tests/unit/test_tet4_geometry.py},
+\path{tests/unit/test_tet10_geometry.py},
+\path{tests/unit/test_tet10_operators.py},
+\path{tests/convergence/test_tet10_interpolation.py}. Die unabhängige
+Monomintegration und alle 24 Eckpermutationen prüfen die Abbildung.
+
+\par}

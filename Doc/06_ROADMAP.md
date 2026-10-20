@@ -167,10 +167,16 @@ Für M6/M7 gilt nun der Entwicklungsplan vom 23.09.2026.
 | Milestone | Zielversion (vorläufig) | Ergebnis | Issues / Release-Gate |
 |---|---|---|---|
 | [M8](https://github.com/maschin96/FEM-Toolbox/milestone/9) | v1.3.0 | reproduzierbare stationäre Parameterstudien, Kennwertberichte, Tet4-Feldbilder/JPEG und polynomiale Surrogatmodelle | #59–#61, #189, #205 / #62 |
-| [M9](https://github.com/maschin96/FEM-Toolbox/milestone/10) | v1.4.0 | abgegrenzte experimentelle Validierung mit Unsicherheit | #63–#65 / #66 |
+| [M9](https://github.com/maschin96/FEM-Toolbox/milestone/10) | v1.4.0 | verifizierter Unsicherheitsworkflow und vollständige deutschsprachige Dokumentation | #64, #206–#211 / #66 |
 | [M10](https://github.com/maschin96/FEM-Toolbox/milestone/11) | v1.5.0 | kontrollierte adaptive stationäre Wärme auf Tet4 | #67–#69 / #70 |
 
-M8 setzt M5 voraus; M9 zusätzlich M8 und geeignete Messdaten. M10 setzt #36,
+M8 setzt M5 voraus; M9 setzt M8 voraus. Nach der ausdrücklichen
+Eigentümerentscheidung vom 10.10.2026 bleiben #63/#65 als experimenteller
+Folgeumfang offen und sind keine v1.4.0-Pflichtgates mehr. Die generische
+Unsicherheitssoftware wird mit analytischen Referenzen und klar bezeichneten
+synthetischen Lehrfällen verifiziert; keine experimentelle Freigabe wird
+behauptet. [Entscheidung und Recherche](66_M9_DATA_SEARCH_AND_RELEASE_OPTIONS.md).
+M10 setzt #36,
 M8 und ein positives Remeshing-Machbarkeitsgate voraus. Die Releasefolge bleibt
 vorläufig M7 → M8 → M9 → M10; fachlich unabhängige Vorbereitung ist möglich.
 Es werden keine Kalendertermine oder noch nicht belegten Validierungen zugesagt.
@@ -211,6 +217,32 @@ Zusätzlich auf Milestone-Ebene: Release-Issue abgeschlossen und Zielcommit auf
 Milestone-Release.
 
 M8-Pflichtumfang ist integriert und verifiziert. [Freigabestand v1.3.0](64_M8_RELEASE_VERIFICATION.md); keine transiente Studienausführung, Optimierung oder experimentelle Validierung.
+
+## M9 / v1.4.0
+
+Vier vollständige deutsche Fachbände und das Gesamthandbuch werden getrennt
+gebaut. [Gesamtabnahme und Herkunft](latex/ACCEPTANCE.md) ordnen die
+Quellenmatrix, Paket-/Rezeptprüfung und PDF-Eigenprüfung dem Kandidaten zu.
+[Finaler Freigabenachweis](68_M9_RELEASE_VERIFICATION.md) und Release-Issue #66
+verknüpfen Veröffentlichung und Artefakte; der experimentelle
+Folgeumfang #63/#65 bleibt unabhängig davon offen.
+
+## M10 / v1.5.0 — Kontrollierte adaptive Wärme
+
+`1.5.0` enthält konforme Tet4-Verfeinerung und kontrollierte stationäre
+Wärmeadaptivität (#67–#69). [Numerische Nachweise und Veröffentlichung](71_M10_RELEASE_VERIFICATION.md).
+Der endgültige Veröffentlichungsnachweis (main-CI, Tag und Artefakte) wird in
+[Release-Issue #70](https://github.com/maschin96/FEM-Toolbox/issues/70) verknüpft.
+
+## M11 — Struktur-Topologieoptimierung / v1.6.0
+
+Auf ausdrücklichen Eigentümerauftrag wurde M11 als nächster Umfang nach v1.5.0
+umgesetzt. Der verifizierte Stand enthält gefilterte SIMP-Mehrlastfalloptimierung,
+Volumenrestriktion, TOML-Studien und getrennte FEM-Geometrie-Reanalyse.
+[Vertrag](83_M11_TOPOLOGY_CONTRACT.md), [Workflow](84_M11_TOPOLOGY_WORKFLOW.md),
+[numerische Nachweise](85_M11_VERIFICATION.md),
+[finale Freigabe-/Veröffentlichungsnachweise](87_M11_RELEASE_VERIFICATION.md).
+Andere Milestones werden dadurch nicht als freigegeben behandelt.
 
 ## Experimenteller M12-Arbeitsstand (#86)
 

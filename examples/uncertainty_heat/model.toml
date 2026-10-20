@@ -1,0 +1,19 @@
+schema_version = 1
+units = "SI"
+physics = "heat"
+[mesh]
+path = "mesh.msh"
+length_scale_to_m = 1.0
+[materials.T.thermal]
+conductivity = 2.0
+unit = "W/(m K)"
+[regions.T]
+specimen = "thermal"
+[[boundary.dirichlet]]
+field = "T"
+nodes = [0, 2, 3]
+value = 300.0
+unit = "K"
+[loads.source]
+value = 8.0
+unit = "W/m^3"

@@ -1,0 +1,89 @@
+\chapter{Versionierte Eingaben und Ergebnisartefakte}
+\label{api:artifacts}\index{Schema}\index{Provenienz}\index{VTU}
+\begingroup\raggedright
+\section{Verträge und Beispieldateien}
+Ein Schema ist ein eigenständiger Vertrag. Paketversion 1.x, Model-Schema 1/2/3,
+Bundle-Schema 1/2 und Zeitserien-Schema 1/2 sind nicht austauschbar.
+Das Formatkapitel des Benutzerbands beschreibt vollständige TOML-/CSV-Rezepte;
+hier werden die maschinenlesbaren Beziehungen und Reader-Grenzen festgelegt.
+Änderungen der Signatur-/Typ-/Quellverträge erkennt das API-Inventar, die
+Rezeptmatrix bindet Beispiele bytegenau an Produktionsinputs. Die Tests lesen
+mit Model/Study/Surrogate-/Serienparsern, keinem eigens permissiven Testreader.
+
+Model-Schema 1: SI-Deklaration, stationäre Physik, mesh.path/length\_scale\_to\_m,
+Materialkatalog, Regionen, Randbedingungen/Lasten, Solveroptionen.
+Schema 2 ergänzt Zeitprofile, CSV-Referenzen, Anfangs-/Ausgabe-/Probedaten für
+Wärme. Schema 3 ergänzt mode/transient/harmonic und deren begrenzte
+piezoelektrische Daten. Kein fremder Schlüssel, undefinierter Pfad, unpassende
+Einheit oder ungültige Shape wird still angenommen. Ausführbare Quellen:
+\nolinkurl{examples/thermopiezoelectric/case.toml},
+\nolinkurl{examples/transient_heat/source.csv},
+\nolinkurl{examples/piezo_dynamics/drive.csv}.
+
+Study-Schema 1: relativ lokales Model und explizite parameter(name,target,unit,values).
+Persistierter Katalog enthält aktuelle/retired Fälle, Versuchszustand,
+Resultatpfade/-hashes, Solver-/Input-/Versionsfingerprints und Verlauf.
+Quantity-Tabelle Schema 1 enthält columns, rows, catalog\_sha256 und
+csv\_sha256; CSV-Spaltenreihenfolge wird aus dem Header gelesen, nicht aus
+sortierter JSON-Schlüsselreihenfolge. Status, Fehlgründe, Balance-/Solver-
+Verfügbarkeit und ungeprüfte Netzkonvergenz bleiben sichtbar.
+Surrogat-Schema 1 enthält Parameter/Ziele, Basis, Trainingsskalierung,
+Koeffizienten und Train/Test-Bericht samt Daten-/Versionsprovenienz.
+Uncertainty-/Sampling-Schema 1 bindet explizite Gesetze, gemeinsame Zeilen,
+RNG/Seed/Korrelation und numerische Budgets getrennt; siehe UQ-Abschnitt.
+
+\section{Gmsh und Ergebnisbündel}
+\texttt{read\_gmsh}: Gmsh 2.2/4.1 über meshio, explizite Länge-in-m-Skala,
+Mehrfachgruppen in benannten Sätzen. Nur unterstützte 3D-Zellen/Flächen;
+unsupported/geometrisch fehlerhafte Daten werden diagnostiziert.
+\texttt{read\_vtu} ist ein erreichbarer Forschungsadapter, keine zusätzliche
+stabile Datenmigrationszusage. \texttt{write\_vtu} nimmt point\_data[n,...]
+und je Zelltyp cell\_data[e,...] sowie Satzmasken; korrekte Zelltypformen
+und Felddefinitionen bleiben Aufgabe des Aufrufers.
+
+\texttt{export\_result\_bundle(path, mesh, result)} liefert VTU-/JSON-Pfade,
+überschreibt bestehende Ziele nicht und prüft Resultat-/Netzbindung.
+Schema 1 beschreibt Tet4; Schema 2 erweitert um Tet10/Zelltyp-/Feldpositions-
+metadaten. Primärfelder werden in Netzindexfolge mit Gültigkeitsmasken
+exportiert; inaktive Punkte sind Padding, keine gelösten Werte.
+Rohzellergebnisse bleiben in aktiver Volumenzellfolge, Facettenpads und
+Schwerpunktwerte sind ausdrücklich markiert. JSON hält Metriken,
+Feldbeschreibungen, SI-Einheiten, Komponenten und die VTU-Prüfsumme.
+RunProvenance Schema 1 bindet Eingabehash, Solverparameter und Versionen;
+es belegt effektive diskrete Inputs, keinen externen Callbackquelltext.
+Hashidentität ersetzt keine physikalische Bilanz, Konvergenz oder Validierung.
+
+\section{Zeitserien und komplexe Felder}
+HeatSeriesWriter/\texttt{export\_heat\_series} schreiben netzgebundene
+PVD-/VTU-Frames, Messpunkt-/Bilanz-CSV und Manifest. Piezo-Series benötigt
+Schema-3-ModelResult/PiezoDynamicResult und erhält Moden, Newmark oder Harmonik.
+Manifest Schema 1 Tet4 bzw. 2 Tet10 benennt collection coordinate ausdrücklich
+als time\_s, frequency\_hz oder mode\_index. Komplexe u/v/a/phi werden vor
+Amplitude-/Phasenauswertung interpoliert; Phasen rad, Spitzenamplituden SI.
+Nullamplitude hat phase=0 und phase\_valid=0. Reale Moden/Zeitläufe erzeugen
+keine fingierte Phase. Feld-/Zell-/Randmasken und Tet10-Schwerpunktmetadaten
+bleiben prüfbar; Messpunkte sind Netzindizes oder physische Punkte[3] m.
+
+Serienexport in neues Verzeichnis; abgebrochene Serien bleiben ausdrücklich
+unvollständig mit ihren tatsächlich fertig geschriebenen Frames.
+Ein vorhandenes Manifest ohne complete-Erfolg darf nicht als voller Lauf
+interpretiert werden. Exporter ersetzen keine Messdatenerhebung und keine
+fehlende Quellenlizenz. Reader/Tests:
+\nolinkurl{tests/unit/test_result_bundle.py},
+\nolinkurl{tests/unit/test_heat_series.py},
+\nolinkurl{tests/unit/test_piezo_series.py},
+\nolinkurl{tests/unit/test_study_reports.py},
+\nolinkurl{tests/unit/test_surrogates.py}.
+
+\section{Kompatibilität und Pflege}
+Stabile Minor-Releases sind additiv. Inkompatible Einheiten, Vorzeichen,
+Formen, Importpfade oder öffentliche Schemata verlangen die dokumentierte
+Versions- und Migrationsentscheidung. Kein stilles Lesen eines neuen inkompatiblen
+Schemas als altes. Deprecation braucht Warnung, dokumentierten Ersatz,
+Migrationsbeispiel und mindestens ein Minor-Release Übergang; Entfernung
+in Major. Unter \nolinkurl{Doc/09_RELEASE_PROCESS.md} stehen konkrete Gates.
+Generierte Signaturen werden mit \nolinkurl{scripts/api_contracts.py}
+aktualisiert, manuelle Fachverträge separat geprüft. Neue Exporte brauchen
+Inventar-/Matrixeintrag und Beispiel; Produktions-API wird nicht nur zur
+Vereinfachung der Dokumentation umgebaut.
+\endgroup

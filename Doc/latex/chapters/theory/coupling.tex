@@ -1,0 +1,180 @@
+\chapter{Piezoelektrizität und Thermopiezoelektrizität}\label{chap:coupling}
+\section{Stoffgesetz, Enthalpie und Variation}
+Das lineare Stress-Charge-Gesetz mit optionaler thermischer Eigenverzerrung ist
+\begin{equation}\label{eq:piezo-law}
+\sigma_v=\mathbf C^E\varepsilon_m-\mathbf e^T\mathbf E,\qquad
+\mathbf D=\mathbf e\varepsilon_c+\boldsymbol\kappa^S\mathbf E,
+\quad\varepsilon_c=\varepsilon_v-\chi\varepsilon_{\rm th}.
+\end{equation}
+$\chi=0$ entspricht der Standardwahl \texttt{electric\_thermal\_strain=False};
+$\chi=1$ dem ausdrücklich aktivierten Term. Mechanik verwendet immer
+$\varepsilon_m=\varepsilon_v-\varepsilon_{\rm th}$.
+Ein pyroelektrischer Term $\mathbf p\theta$ wird nicht hinzugefügt.
+\index{Piezoelektrizität}\index{Elektrische Enthalpie}
+
+Bei fest bekannter Temperatur ist die implementierte Enthalpiedichte
+\begin{equation}\label{eq:enthalpy}
+\mathcal h=\tfrac12\varepsilon_m^T\mathbf C^E\varepsilon_m
+-\varepsilon_c^T\mathbf e^T\mathbf E
+-\tfrac12\mathbf E^T\boldsymbol\kappa^S\mathbf E.
+\end{equation}
+$\partial\mathcal h/\partial\varepsilon_v=\sigma_v$ und
+$-\partial\mathcal h/\partial\mathbf E=\mathbf D$.
+Mit $\delta\mathbf E=-\nabla\delta\phi$ folgt
+\begin{equation}\label{eq:enthalpy-variation}
+\delta\mathcal H=\int_\Omega
+\varepsilon_v(\delta\mathbf u)^T\sigma_v+
+\nabla\delta\phi^T\mathbf D\,\mathrm dV.
+\end{equation}
+Die Variationen werden mit mechanischer Arbeit und der signierten elektrischen
+rechten Seite aus Gleichung~\ref{eq:electro-weak} gleichgesetzt.
+Daraus entstehen gleichzeitig mechanische und elektrische schwache Form.
+Der negative elektrische Energieanteil ist die Legendre-transformierte
+Enthalpie für Potentialvariablen; er bedeutet weder negative Permittivität
+noch eine negative gespeicherte Dielektrikumsenergie.
+Diese eigene Herleitung verwendet die Projektvorzeichen; die externe
+Theoriequelle \cite{comsol-piezo} dient nur zum Abgleich der Stoffgesetzformen.
+
+\section{Elementblöcke und Symmetrie}
+Durch $\varepsilon_v=\mathbf B\mathbf u_e$ und $\mathbf E=-\mathbf G\phi_e$ folgt
+\begin{align}\label{eq:piezo-blocks}
+\mathbf K_u^e&=\int_K\mathbf B^T\mathbf C^E\mathbf B,&
+\mathbf L^e&=\int_K\mathbf B^T\mathbf e^T\mathbf G,\\
+\mathbf D^e&=\int_K\mathbf G^T\boldsymbol\kappa^S\mathbf G,&
+\mathbf A^e&=\begin{pmatrix}\mathbf K_u^e&\mathbf L^e\\
+(\mathbf L^e)^T&-\mathbf D^e\end{pmatrix}.\nonumber
+\end{align}
+Die Maße sind $\mathrm dV$. Blöcke haben N/m, N/V (= C/m), F.
+Tet4 multipliziert die konstanten Integranden mit $V$, Tet10 integriert
+punktweise. Gleiche Quadratur für die Kopplungsblöcke erhält Reziprozität.
+Ein konstantes Potential hat $\mathbf G\mathbf 1=0$ und erzeugt keine Kraft.
+Der Sattelpunktoperator ist symmetrisch-indefinit; CG ist ungeeignet.
+
+Für die thermische rechte Seite gilt
+\begin{equation}\label{eq:piezo-thermal-rhs}
+\mathbf f_{\rm th}^e=\begin{pmatrix}
+\int_K\mathbf B^T\mathbf C^E\varepsilon_{\rm th}\,\mathrm dV\\
+\chi\int_K\mathbf G^T\mathbf e\varepsilon_{\rm th}\,\mathrm dV
+\end{pmatrix}.
+\end{equation}
+Der positive elektrische RHS folgt aus dem negativen bekannten D-Term;
+er darf nicht isoliert umgedreht werden. Unter einer einzigen gemeinsamen
+Referenztemperatur kann man den Ablauf schematisch als
+\begin{equation}\label{eq:triangular-coupling}
+\begin{pmatrix}
+\mathbf K_u&\mathbf K_{uT}&\mathbf L\\
+0&\mathbf K_T&0\\
+\mathbf L^T&\mathbf K_{\phi T}&-\mathbf D
+\end{pmatrix}
+\begin{pmatrix}\mathbf u\\\boldsymbol\theta\\\boldsymbol\phi\end{pmatrix}
+=\begin{pmatrix}\mathbf f_u\\\mathbf f_T\\\mathbf f_\phi\end{pmatrix},
+\end{equation}
+mit $\mathbf K_{uT}=-\int\mathbf B^T\mathbf C^E\alpha\mathbf N$ und
+$\mathbf K_{\phi T}=-\chi\int\mathbf G^T\mathbf e\alpha\mathbf N$ schreiben.
+Bei regionsweisen Referenztemperaturen wird kein globaler $\theta$-Vektor
+vorgegeben: Die Produktionspipeline löst absolute $T$ und bildet die bekannten
+zellweisen RHS-Terme. Die Nullblöcke in der Wärmezeile erklären
+$T\rightarrow(\mathbf u,\phi)$ und die fehlende thermische Rückwirkung.
+\index{Thermopiezoelektrizität}
+
+\begin{figure}[htbp]
+\centering
+\setlength{\unitlength}{1mm}
+\begin{picture}(125,32)
+\put(0,10){\framebox(28,14){Wärme $T$}}
+\put(28,17){\vector(1,0){28}}
+\put(32,21){\makebox(20,5){$\alpha\theta$}}
+\put(56,10){\framebox(30,14){Mechanik $u$}}
+\put(86,20){\vector(1,0){11}}
+\put(97,14){\vector(-1,0){11}}
+\put(91,25){\makebox(4,5){$e$}}
+\put(97,10){\framebox(28,14){Potential $\phi$}}
+\put(29,2){\makebox(95,5){Thermischer D-Term nur bei $\chi=1$}}
+\end{picture}
+\caption{Einseitiger Wärmeablauf und reziproke Piezo-Kopplung.
+Eigene schematische Darstellung; kein zusätzlicher thermischer Rückweg.}
+\label{fig:coupling-flow}
+\end{figure}
+
+\section{Energieberichte und Randbedingungen}
+Berichtet werden mechanische Energie, Kopplungsenthalpie und negative
+Dielektrikumsenthalpie getrennt. Ihre Summe ist $\mathcal H$ aus
+Gleichung~\ref{eq:enthalpy}. Eine indefinite Enthalpie darf nicht als Norm eines
+Diskretisierungsfehlers dienen; dafür werden positive entkoppelte
+Gradientennormen verwendet. Tet4 benutzt die Zellmittel-Eigendehnung gemäß
+Gleichung~\ref{eq:thermal-variance}; Tet10-Energien sind separate Integrale.
+
+Eine leitende feste Elektrode hat \emph{ein} Potential, eine schwebende Elektrode
+\emph{eine} vorgegebene Gesamtleiterladung. Punktweise $\mathbf D\cdot n=0$
+ist ein isolierter Rand und allgemein kein Leiter-Leerlauf. Die algebraische
+Kondensation in Kapitel~\ref{chap:algebra} sorgt für diese Unterscheidung.
+Mechanische Lagerung und elektrische Referenz sind pro Komponente notwendig.
+Eine reine Ladungsvorgabe erdet nicht implizit.
+
+\section{Handrechnung: affiner Piezo-Patch}
+Auf dem Einheits-Tet4 seien $C_{xx}=10$ Pa, $e_{xx}=2$ C/m$^2$,
+$\kappa_{xx}=3$ F/m, $\varepsilon_{xx}=0{,}2$ und
+$\partial_x\phi=0{,}3$ V/m. Ohne thermische Eigenverzerrung ist $E_x=-0{,}3$
+V/m. Aus Gleichung~\ref{eq:piezo-law} folgen
+\begin{equation}\label{eq:piezo-patch-example}
+\sigma_{xx}=2{,}6\ {\rm Pa},\qquad D_x=-0{,}5\ {\rm C/m^2}.
+\end{equation}
+Die Energieterme sind $1/30$ J, $1/50$ J und $-9/400$ J;
+$\mathcal H=37/1200$ J. Der mechanische Term ist $V C\varepsilon^2/2$,
+der Kopplungsterm $-V\varepsilon eE$ und der elektrische Term $-V\kappa E^2/2$.
+Eine analytische Randintegration der konstanten Traktion und des D-Flusses
+prüft die nodalen Residuen unabhängig von der Matrixassembly.
+
+\section{Handrechnung: geklemmter thermisch angeregter Grenzfall}
+$C_{xx}=10$ Pa, $e_{xx}=2$ C/m$^2$, $\kappa_{xx}=4$ F/m,
+$\alpha_x=0{,}01$/K, $T_{\rm ref}=300$ K, $T=310$ K.
+Alle mechanischen DOFs sind fest, also $\varepsilon=0$ und
+$\varepsilon_{{\rm th},x}=0{,}1$.
+Bei $\chi=1$ und Ladungsfreiheit folgt
+$0=2(-0{,}1)+4E_x$, somit $E_x=0{,}05$ V/m und bei
+$\phi(0)=0$ die freie Ecke $\phi(1)=-0{,}05$ V.
+Die Spannung ist $\sigma_x=-1{,}1$ Pa.
+Bei $\chi=0$ ist $E_x=0$, $\phi=0$ und $\sigma_x=-1$ Pa.
+Damit ist der elektrische Modellschalter beobachtbar und kein kosmetisches
+Postprocessing. Der Thermopiezo-Test prüft das Potential unabhängig bis
+$10^{-12}$ V.
+
+\section{d33-Stab: zwei Anregungen und Leerlauf}\label{sec:d33}
+Ein 1D-invarianter Stab in Polarisationsrichtung $z$ besitzt
+$L=0{,}02$ m, $A=10^{-4}$ m$^2$, $C=10^9$ Pa, $e=5$ C/m$^2$ und
+$\kappa=10^{-8}$ F/m. Die synthetischen diagonalen Tensoren und vorgegebenen
+Querverschiebungen erlauben genau diese Reduktion:
+$\sigma=Cu'+e\phi'$, $D=eu'-\kappa\phi'$, $\sigma'=D'=0$.
+Für freie Mechanik und $\phi(L)=V$ gilt
+\begin{equation}\label{eq:d33-voltage}
+u(L)=-\frac eC V,\quad
+Q_{L,\rm top}=\frac AL\left(\kappa+\frac{e^2}{C}\right)V,\quad
+\mathcal H=-\tfrac12Q_{L,\rm top}V.
+\end{equation}
+Bei $V=100$ V erhält man $u(L)=-5\cdot10^{-7}$ m,
+$Q_{L,\rm top}=1{,}75\cdot10^{-8}$ C, $\mathcal H=-8{,}75\cdot10^{-7}$ J.
+Kurzschluss und Kraft $F=10$ N ergeben
+$u(L)=FL/(AC)=2\cdot10^{-6}$ m und
+$Q_{L,\rm top}=-eF/C=-5\cdot10^{-8}$ C.
+Damit ist $u(L)/V=Q_{L,\rm top}/F=-e/C$, ein reziproker Cross-Compliance-Test.
+
+Im statischen 1D-Leerlauf $D=0$ ist $C_D=C+e^2/\kappa=3{,}5\cdot10^9$ Pa.
+Es folgen $u(L)=FL/(AC_D)=4\cdot10^{-6}/7$ m und
+$\phi(L)=eFL/(A\kappa C_D)=2000/7$ V.
+Nur in diesem invarianten Grenzfall ist eine punktweise Nullflussfläche von
+selbst equipotentiell. Allgemeine Leiter benötigen die Kondensation.
+
+\subsection*{Implementierung und unabhängige Nachweise.}
+{\small\raggedright
+\path{src/fem_toolbox/elements/piezoelectric.py},
+\path{src/fem_toolbox/solvers/piezoelectric.py},
+\path{src/fem_toolbox/solvers/thermopiezoelectric.py};
+\path{tests/patch/test_piezo_element_patch.py},
+\path{tests/patch/test_piezo_solver_patch.py},
+\path{tests/unit/test_thermopiezoelectric.py},
+\path{tests/regression/test_piezo_d33_benchmark.py} und die eigenständige
+1D-Referenz \path{tests/reference/piezo_bar_1d.py}.
+Diese Referenz importiert keine Produktionsoperatoren. Vier-Netze-Nachweise
+für Kopplungen und Tet10 sind in Kapitel~\ref{chap:evidence} zugeordnet.
+
+\par}

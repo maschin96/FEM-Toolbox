@@ -1,0 +1,89 @@
+\pdfobjcompresslevel=0
+\documentclass[11pt,a4paper,oneside]{book}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\input{glyphtounicode}
+\pdfgentounicode=1
+% Large integral glyphs otherwise extract as Latin Z in TeX Live 2022.
+\pdfglyphtounicode{integraldisplay}{222B}
+\pdfglyphtounicode{integraltext}{222B}
+\usepackage[ngerman]{babel}
+\usepackage{amsmath,amssymb,graphicx,booktabs,longtable,listings,xcolor,makeidx}
+\usepackage[margin=28mm]{geometry}
+\definecolor{navy}{HTML}{0B1F2A}
+\definecolor{accent}{HTML}{168557}
+\usepackage[unicode,colorlinks=true,linkcolor=navy,urlcolor=accent,citecolor=navy]{hyperref}
+% Permit line breaks in long repository paths without another TeX dependency.
+\expandafter\def\expandafter\UrlBreaks\expandafter{\UrlBreaks
+\do\a\do\b\do\c\do\d\do\e\do\f\do\g\do\h\do\i\do\j\do\k\do\l\do\m
+\do\n\do\o\do\p\do\q\do\r\do\s\do\t\do\u\do\v\do\w\do\x\do\y\do\z
+\do\A\do\B\do\C\do\D\do\E\do\F\do\G\do\H\do\I\do\J\do\K\do\L\do\M
+\do\N\do\O\do\P\do\Q\do\R\do\S\do\T\do\U\do\V\do\W\do\X\do\Y\do\Z}
+\input{metadata}
+\hypersetup{pdftitle={FEM Toolbox -- Handbuch},pdfauthor={FEM Toolbox},pdfsubject={Version \ToolboxVersion; Commit \SourceCommit; \PublicationLabel}}
+\lstset{basicstyle=\small\ttfamily,breaklines=true,frame=single,columns=fullflexible}
+\lstset{literate={²}{{$^2$}}1 {³}{{$^3$}}1 {µ}{{$\mu$}}1 {Δ}{{$\Delta$}}1 {α}{{$\alpha$}}1 {ε}{{$\varepsilon$}}1 {κ}{{$\kappa$}}1 {ᵀ}{{$^T$}}1}
+\makeatletter
+\renewcommand*\l@subsection{\@dottedtocline{2}{3.8em}{5.2em}}
+\makeatother
+\makeindex
+\newif\ifBookFigures
+\newif\ifBookTables
+\AtBeginDocument{\renewcommand{\indexname}{Sachregister}}
+\newcommand{\BookTitle}{Gesamthandbuch}
+\newcommand{\FrontMatter}{%
+\frontmatter
+\begin{titlepage}
+{\Huge\sffamily\bfseries FEM Toolbox\par}\vspace{12mm}
+{\LARGE\BookTitle\par}\vspace{8mm}
+{\Large \PublicationLabel\ -- \PublicationSubtitle\par}\vfill
+Version \ToolboxVersion\\[4mm]
+Quellcommit: {\small\ttfamily\SourceCommit}\\[4mm]
+Quellzustand: \SourceState\\[4mm]
+M0--M11. Vier Fachbände; adaptive Tet4-Wärme und Struktur-Topologieoptimierung ab M11.\\
+Keine experimentelle Validierungsfreigabe.\\[8mm]
+Deutschsprachige Referenz mit englischen API-Bezeichnern.
+\end{titlepage}
+\tableofcontents
+\ifBookFigures\listoffigures\fi
+\ifBookTables\listoftables\fi
+\chapter{Lesehinweise und Status}
+Die vier Fachbände behandeln Theorie, Anwendung, API/Entwicklung und
+Verifikation bis M11 für Struktur-Topologieoptimierung.
+Die M9-Einzelabnahmen 206--211 sind integriert; die M10-Erweiterung besitzt
+eigene API-, Theorie-, Rezept- und Verifikationskapitel. M11 ergänzt gefilterte
+Mehrlastfalloptimierung und getrennte Geometrie-Reanalyse. Die redaktionelle Gesamtabnahme wird im
+Quellenarchiv protokolliert.
+\ifReleasePublication
+Dieser Band gehört zum auf der Titelseite angegebenen Releaseumfang. Version, geprüfter
+Quellcommit und sauberer Quellenzustand stehen auf der Titelseite;
+Das jeweilige Release-Issue verknüpft den Veröffentlichungsnachweis.
+\else
+M10 ist als v1.5.0 veröffentlicht. Die endgültige M11-Veröffentlichung und
+finale Versionsmetadaten gehören zu Release-Issue 83; frühere Freigaben
+bleiben historische Herkunft.
+Der Kandidat bezeichnet den angegebenen Commit, nicht eine neue
+Veröffentlichung der auf der Titelseite genannten Paketversion.
+\fi
+
+Experimentelle Validierung bleibt gemäß der M9-Neuplanung offen. Spätere
+RANS/FSI, SPICE und die Femantis-Namensmigration gehören nicht
+zu diesem Funktionsstand. Historische Releaseberichte und Entwicklungspläne
+werden als Herkunft behandelt. Es liegt kein unabhängiges Fachreview vor;
+CI und eigene Quellen-/Layoutprüfung sind im Abnahmebericht getrennt benannt.
+\section{Symbole und Abkürzungen}
+\begin{tabular}{ll}
+$\Omega$ & Gebiet in drei Dimensionen\\
+$\mathbf n$ & äußere Einheitsnormale\\
+$T$ & absolute Temperatur, K\\
+$\mathbf q$ & Wärmestromdichte, W/m$^2$\\
+FEM & Finite-Elemente-Methode\\
+SI & Internationales Einheitensystem\\
+V\&V & Verifikation und Validierung
+\end{tabular}
+\mainmatter}
+\newcommand{\BackMatter}{%
+\backmatter
+\bibliographystyle{plain}\bibliography{references}
+\printindex}

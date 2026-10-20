@@ -1,0 +1,8 @@
+study_schema_version = 1
+model = "model.toml"
+[[parameters]]
+name = "source"
+target = "loads.source.value"
+unit = "W/m^3"
+# First six values train; final two are fixed holdout cases, chosen in advance.
+values = [0.0, 2.0, 4.0, 6.0, 8.0, 10.0, 3.0, 7.0]

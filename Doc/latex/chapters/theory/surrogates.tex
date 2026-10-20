@@ -1,0 +1,149 @@
+\chapter{Parameterstudien und polynomiale Surrogate}\label{chap:surrogates}
+\section{Abgegrenzter Daten- und Methodenvertrag}
+M8-Studien erzeugen stationäre FEM-Fälle mit deterministischen IDs und
+Model-/Netz-/Solver-Fingerprints. Wiederverwendung und Fortsetzung setzen
+passende Herkunft und vollständige erfolgreiche Ergebnisse voraus.
+Die Kennwerttabelle unterscheidet Einheiten, Rollen, Gültigkeit und
+Bilanzstatus. Ein Surrogat approximiert daraus reelle skalare Ziele;
+es löst bei Training oder Vorhersage selbst kein FEM-Modell.
+Es gibt keine neuronalen Netze, Feldrekonstruktion, POD/ROM, inverse
+Identifikation, Optimierung oder Unsicherheitsquantifizierung in dieser API.
+\index{Parameterstudie}\index{Surrogat}
+
+Der Datensatz besteht aus $\mathbf X\in\mathbb R^{n\times p}$,
+$\mathbf Y\in\mathbb R^{n\times q}$, eindeutigen Fall-IDs und
+Parameter-/Zielnamen mit Einheit und Definition. Eingaben sind endliche
+reelle numerische Werte; Boolesche, komplexe oder fehlende Werte werden nicht
+still kodiert oder imputiert. Bei Kennwerttabellen werden nicht erfolgreiche
+Fälle, fehlgeschlagene Solves/Bilanzen und ungültige ausgewählte Werte
+standardmäßig abgelehnt. Ein ausdrücklich erlaubter Ausschluss protokolliert
+jede ID und alle Gründe. Nicht geprüfte Qualität gilt nicht als bestanden.
+
+Trainings- und Test-IDs sind eine vollständige, disjunkte, nichtleere Partition.
+Identische numerische Parametervektoren dürfen die Splitgrenze nicht
+überschreiten. Duplikate in einer Gruppe zählen nicht als zusätzliche
+unabhängige Stützstellen. Optionales Seed-Sampling permutiert eindeutige
+Parametergruppen gemeinsam; gespeicherte endgültige IDs sind maßgeblich.
+Grad und Ridge-Gewicht legt der Aufrufer vorher fest. Wiederholte Auswahl am
+Testfehler verbraucht dessen Unabhängigkeit und verlangt neue Holdouts.
+
+\section{Train-only-Skalierung und vollständige Basis}
+Nur Trainingsdaten liefern Minima $l_j$ und Maxima $h_j$:
+\begin{equation}\label{eq:surrogate-scale}
+c_j=l_j/2+h_j/2,\qquad s_j=h_j/2-l_j/2,
+\qquad z_j=(x_j-c_j)/s_j.
+\end{equation}
+Damit liegen Trainingswerte je Spalte in $[-1,1]$; $z$ ist dimensionslos.
+Konstante oder numerisch nicht skalierbare Parameter sind Fehler und müssen
+fachlich begründet entfernt werden. Konstante Zielwerte sind dagegen zulässig.
+Center und Scale werden nicht aus Holdouts nachberechnet.
+
+Die Grad-1-Basis ist $(1,z_1,\ldots,z_p)$, die Grad-2-Basis ergänzt alle
+$z_i z_j$ mit $i\le j$ in lexikographischer Indexreihenfolge.
+Die Anzahl Basisterme ist
+\begin{equation}\label{eq:surrogate-basis}
+m_1=1+p,\qquad m_2=1+p+p(p+1)/2.
+\end{equation}
+Die Designmatrix hat $A_{ra}=z_r^{\alpha_a}$ für gespeicherte Exponenten.
+Mindestens $m$ verschiedene Trainingspunkte sind nötig, auch bei Ridge.
+Diese Anzahl ist notwendig, aber nicht hinreichend: Ein geometrisch
+kollineares Design kann trotzdem rangdefizient sein.
+
+\section{Least Squares, Ridge und Rang}
+Koeffizienten $\mathbf B\in\mathbb R^{m\times q}$ erfüllen
+\begin{equation}\label{eq:ridge}
+\min_{\mathbf B}\|\mathbf A\mathbf B-\mathbf Y_{\rm train}\|_F^2
++\lambda\|\mathbf B_{1:, :}\|_F^2,\qquad\lambda\ge0.
+\end{equation}
+Der konstante Term wird nicht bestraft. Mehrere Zielspalten werden unabhängig
+gelöst; der numerische Frobeniusausdruck ist kein dimensionsübergreifender
+physikalischer Gütewert. Koeffizienten je Ziel tragen dessen Einheit;
+Parameter-Einheiten sind in der Skalierung enthalten.
+Das Gewicht gilt für diese skalierte, nicht durch Fallzahl normalisierte
+Zielfunktion. Eine Verdopplung von Trainingszeilen verändert daher bei gleichem
+$\lambda$ die relative Regularisierungsstärke.
+\index{Ridge}\index{Least Squares}
+
+Mit $\mathbf R=\operatorname{diag}(0,1,\ldots,1)$ wird
+\begin{equation}\label{eq:augmented-lstsq}
+\begin{pmatrix}\mathbf A\\\sqrt\lambda\mathbf R\end{pmatrix}\mathbf B
+\simeq\begin{pmatrix}\mathbf Y_{\rm train}\\0\end{pmatrix}
+\end{equation}
+per \texttt{numpy.linalg.lstsq} gelöst, ohne Normalengleichungen.
+Die NumPy-Primärquelle \cite{numpy-lstsq} beschreibt Least-Squares-Lösung,
+Singulärwerte und numerischen Rang. Im Projekt gilt deren Standard-Rangtoleranz;
+es wird keine eigene versteckte Regularisierung gewählt.
+Unregularisierter Rangmangel ist ein Fehler; Ridge kann kollineare Designs
+stabilisieren, aber ein rangdefizientes erweitertes System wird ebenfalls
+abgelehnt. Extremes Gewicht oder nicht darstellbare Polynome sind ungültig.
+Eine Konditionsverbesserung ersetzt keine geeigneten Datenpunkte.
+
+\section{Vorhersage, Testfehler und Grenzen}
+Für eine neue Zeile berechnet man dieselbe Skalierung und Basis;
+$\hat{\mathbf y}=\mathbf a(z)^T\mathbf B$ in der gespeicherten Zielreihenfolge.
+Die Vorhersageausgabe hat immer Form $(n,q)$, auch bei einem einzigen Punkt.
+Die Trainingsbox ist $[l,h]$ mit inklusiven Grenzen. Außerhalb wird standardmäßig
+abgelehnt; ausdrücklich erlaubte Extrapolation bleibt zeilenweise markiert.
+Es gibt kein Clipping, keine stillen Einheitenumrechnungen und keine
+Toleranzerweiterung der Box.
+
+Die Box ist nicht die konvexe Hülle der Trainingspunkte und keine
+Genauigkeitsgarantie innerhalb des Bereichs. Datenlücken, Materialwechsel,
+Solverfehler und schlecht approximierte Nichtlinearität bleiben Risiken.
+Testpunkte außerhalb markieren den Bericht, vergrößern aber nicht die Box.
+Empirische Fehler je Ziel werden getrennt für Train/Test berechnet:
+\begin{equation}\label{eq:surrogate-errors}
+{\rm MAE}=\frac1n\sum_r|e_r|,\quad
+{\rm RMSE}=\sqrt{\frac1n\sum_r e_r^2},\quad
+{\rm maxabs}=\max_r|e_r|,\quad e_r=\hat y_r-y_r.
+\end{equation}
+Alle haben die Zieleinheit. Es werden keine bei Nullzielen undefinierten
+relativen Fehlerquotienten, Konfidenzintervalle oder garantierten
+Fehlerschranken ausgegeben. Surrogatfehler gegen diskrete FEM-Kennwerte,
+FEM-Diskretisierungsfehler und experimentelle Modellabweichung sind drei
+verschiedene Fehlerquellen.
+
+\section{Handrechnungen: lineare Skalierung und Ridge}
+Trainingspunkte $x=(-2,-1,0,1,2)$ m und Ziele $y=3+2x$ K (Koeffizient
+2 K/m) geben $c=0$, $s=2$ m, $z=x/2$ und $y=3+4z$.
+Die Koeffizienten sind $(3,4)$ K. Unabhängige Testpunkte $x=0{,}5$ und
+$1{,}5$ m geben exakt $4$ bzw. $6$ K. Ein zweiter Ausgang $y_2=7$ W
+bleibt konstant, obwohl konstante Eingabeparameter verboten sind.
+Der bestehende Test prüft diese Zahlen bis $10^{-12}$ absolut.
+
+Für ein symmetrisches Zwei-Punkt-Design $z=(-1,1)$ und $y=(1,5)$,
+$\lambda=2$ ist der Intercept $b_0=3$.
+Aus $\partial_{b_1}[(b_0-b_1-1)^2+(b_0+b_1-5)^2+2b_1^2]=0$
+folgt $b_1=1$ statt der unregularisierten Steigung 2.
+Ein zusätzlicher Testpunkt $z=0$ bleibt bei 3; der Intercept ist nicht
+gegen null geschrumpft. Das Beispiel erklärt die Wirkung eines ausdrücklich
+gewählten Gewichts, ohne eine automatische Modellwahl zu behaupten.
+
+Für Beispiel-Residuen $e=(1,-2)$ sind MAE $=1{,}5$,
+RMSE $=\sqrt{5/2}$ und Maximalfehler $=2$ in der Zieleinheit.
+Ein quadratisches Ziel wie $y=x^2$ kann durch eine unzureichende Grad-1-Basis
+sichtbare Holdoutfehler erzeugen; ein kleiner Trainingsfehler beweist keine
+allgemeine Vorhersagegüte.
+
+\section{Persistenz und Herkunft}
+Das JSON-Artefakt speichert Basis, Skalierung, Box, Koeffizienten,
+Metadaten für Parameter und Ziele, Quellnachweis und Prüfbericht.
+SHA-256 schützt gegen unbeabsichtigte Beschädigung, nicht absichtliche
+Manipulation. Strukturell gültiges Laden rekonstruiert keine historischen
+Trainingsnachweise. Die gespeicherten Train/Test-IDs, Seeds, Daten-/Tabellen-
+Fingerprints und Versionen machen die numerischen Entscheidungen prüfbar.
+Kein Pickle oder ausführbarer Modellcode wird deserialisiert.
+
+\subsection*{Implementierung und unabhängige Nachweise.}
+{\small\raggedright
+\path{src/fem_toolbox/studies.py},
+\path{src/fem_toolbox/study_reports.py},
+\path{src/fem_toolbox/surrogates.py};
+\path{tests/unit/test_surrogates.py},
+\path{tests/regression/test_surrogate_example.py},
+\path{examples/surrogate_heat/README.md}.
+Die echten Wärme-FEM-Fälle im Beispiel werden zuerst erzeugt und gegen
+unabhängige diskrete Erwartungen geprüft. Das Training selbst enthält
+keinen verdeckten FEM-Lauf. Doc/59--61 bleiben die kanonischen API-Verträge.
+
+\par}

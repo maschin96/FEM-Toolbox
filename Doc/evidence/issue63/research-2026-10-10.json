@@ -1,0 +1,83 @@
+{
+  "schema": 1,
+  "date": "2026-10-10",
+  "purpose": "Pre-acceptance screening; no experimental validation",
+  "decision": "No accepted dataset; existing gate unchanged",
+  "files": [
+    {
+      "kind": "metadata-excerpt",
+      "path": "Doc/evidence/issue63/screening-2026-10-10/greenpiezo-metadata-excerpt.json",
+      "sha256": "6388bc69e20731c3638103a6da9df7e894a6ae87a91a59ffcbb9da8fe06da4b9",
+      "source": "https://zenodo.org/api/records/7920056",
+      "complete_response_sha256": "58b59792b1bf1ee933904b846aa49e3e906c32bbfde7bcc9092eb0ed8aad7904"
+    },
+    {
+      "kind": "metadata-excerpt",
+      "path": "Doc/evidence/issue63/screening-2026-10-10/polaron-metadata-excerpt.json",
+      "sha256": "e95c43ea39da3ab498ffa0ee22f281db3baf90b67a870d2df6a218d275c7a11a",
+      "source": "https://zenodo.org/api/records/21454715",
+      "complete_response_sha256": "582ad7b93e6270a962364fdb2a06a30c4ccd5f04955be0d57e18e0b1b325e2ff"
+    },
+    {
+      "kind": "metadata-excerpt",
+      "path": "Doc/evidence/issue63/screening-2026-10-10/lightfilm-metadata-excerpt.json",
+      "sha256": "877710bdb779541935632cdd3407cd8cf71e1b0cc612f888cfe62bcc32c7eea9",
+      "source": "https://zenodo.org/api/records/15526822",
+      "complete_response_sha256": "1cf31f097882aae4ebdbf63ccd0b8bdd93ecee3f78c432185a58148e0c4d1b83"
+    },
+    {
+      "kind": "metadata-excerpt",
+      "path": "Doc/evidence/issue63/screening-2026-10-10/relaxor-metadata-excerpt.json",
+      "sha256": "93268955db88cf53bab6f05eb990a678fd0fc746a8f892b4d34538430f32e4f7",
+      "source": "https://api.figshare.com/v2/articles/19346039",
+      "complete_response_sha256": "4e8cca7f5b08919799105a6bd7419a0c15ab5e271b9a143f31c05ef6a9cb94c4"
+    },
+    {
+      "kind": "screened-original",
+      "original_name": "polaron-Fig3-A-displacement.csv",
+      "source": "https://zenodo.org/api/records/21454715/files/Fig3-A%20displacement.csv/content",
+      "size_bytes": 3893,
+      "sha256": "e0ec65b316b381d580f0217e9b75c2dfd6d3513d6d327eaa3cfdd409162b72e9",
+      "archived": true,
+      "path": "Doc/evidence/issue63/screening-2026-10-10/polaron-Fig3-A-displacement.csv",
+      "rows_including_headers": 170,
+      "maximum_columns": 3
+    },
+    {
+      "kind": "screened-original",
+      "original_name": "polaron-figS2-d33-U-f.csv",
+      "source": "https://zenodo.org/api/records/21454715/files/figS2-d33-U-f.csv/content",
+      "size_bytes": 651,
+      "sha256": "006390f53e1f74386257ad64ac8d483e87d17aa1bf731eaa1d18d67bb3cf1445",
+      "archived": true,
+      "path": "Doc/evidence/issue63/screening-2026-10-10/polaron-figS2-d33-U-f.csv",
+      "rows_including_headers": 17,
+      "maximum_columns": 11
+    },
+    {
+      "kind": "screened-original",
+      "original_name": "lightfilm-Figure_4d_540nm.txt",
+      "source": "https://zenodo.org/api/records/15526822/files/Figure_4d_540nm.txt/content",
+      "size_bytes": 8497,
+      "sha256": "e5cd0a44f82599934d66cf57e247d3000e1b276aaa6a4dfffc88f9babc020890",
+      "archived": true,
+      "path": "Doc/evidence/issue63/screening-2026-10-10/lightfilm-Figure_4d_540nm.txt"
+    },
+    {
+      "kind": "screened-original",
+      "original_name": "Source Data.xlsx",
+      "source": "https://ndownloader.figshare.com/files/34356314",
+      "size_bytes": 1553846,
+      "sha256": "4f862ef5e6f5709c3884ed8464db289b8ff5abae72219c5f75504d2063c6c55a",
+      "archived": false
+    },
+    {
+      "kind": "screened-original",
+      "original_name": "PMC12412497-fullTextXML",
+      "source": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12412497/fullTextXML",
+      "size_bytes": 93610,
+      "sha256": "6fec778491f879642fdf881286033480079b017a7674b5b4cbfb8bd95f145561",
+      "archived": false
+    }
+  ]
+}

@@ -1,0 +1,835 @@
+{
+  "schema": 1,
+  "version": "1.6.0",
+  "source_state": "local_release_preparation",
+  "implementation_commit": "8c79247e90c08448bd67d090ebf04bcfc11bcacf",
+  "source_sha256": {
+    "src/fem_toolbox/topology.py": "168e25ce01e3dc7bbe7662e6496f450ad65dbb6514c1ce9b24afc3f9e7703c0f",
+    "src/fem_toolbox/topology_optimization.py": "f8f84a6097a77f7192d713d27407ce21dc1da229eea1e68724c2fa7f1b37c661",
+    "src/fem_toolbox/topology_study.py": "346902c6793dedbcd31fd64fa4fb1c5f42dde9676bcf8ac3f66c0a9e55d1a672",
+    "src/fem_toolbox/topology_geometry.py": "2896a98d2fdc956d9aef983c0a405a1464c8079c3359af75452b64df62f3cac5",
+    "src/fem_toolbox/model.py": "def812194bb055930fbc868581cf37cd15c0f4396db792fd6e6ff88917201d99",
+    "src/fem_toolbox/solvers/elasticity.py": "9be107b637796ecc913835c5f95ce1959a5fbf3506b154dc0a38f8a2d218edcd",
+    "examples/topology/run.py": "9b096df55d8464455d3589c19990d609548b2ba8f55df80c3529f8b890aaca8e",
+    "examples/topology/prepare.py": "29e16c5730389b550a9824cf8657cd97919c44a9358979aaf5e312ecf89a6f86",
+    "examples/topology/verify.py": "2e9177ec552a28c88279974f3e7e759c34735ac230505a57a843e33746b26d48"
+  },
+  "local_tests": {
+    "passed": 868,
+    "optional_skipped": 83
+  },
+  "quality": {
+    "ruff": "passed",
+    "format": "passed",
+    "mypy_source_files": 74
+  },
+  "independent_human_review": "not_available",
+  "experimental_validation": "not_performed",
+  "candidate_reference": "Doc/evidence/m11/verification.json",
+  "candidate_reference_sha256": "c996a3454c2cf28954620f0d18dd473cdba341cdbd7a6cacfad93d9b15d2aa72",
+  "final_matrix": {
+    "schema": 1,
+    "complete_matrix": true,
+    "toolbox_version": "1.6.0",
+    "python": "3.13.5",
+    "numpy": "2.4.6",
+    "scipy": "1.18.1",
+    "repeat_relative_error": 0.0,
+    "gradient_steps": [
+      {
+        "step": 0.001,
+        "central_difference_J": -0.008046206131998024,
+        "adjoint_J": -0.008046205896894195,
+        "relative_error": 2.9219216085060138e-08,
+        "absolute_volume_derivative_error": 4.458239333260394e-15
+      },
+      {
+        "step": 0.0001,
+        "central_difference_J": -0.008046205897949132,
+        "adjoint_J": -0.008046205896894195,
+        "relative_error": 1.3110991701728357e-10,
+        "absolute_volume_derivative_error": 4.458239333260394e-15
+      },
+      {
+        "step": 1e-05,
+        "central_difference_J": -0.008046206030620784,
+        "adjoint_J": -0.008046205896894195,
+        "relative_error": 1.6619831824309884e-08,
+        "absolute_volume_derivative_error": 5.555574229820781e-12
+      }
+    ],
+    "single_load": {
+      "status": "converged",
+      "compliance_J": 0.03533093525839327,
+      "initial_compliance_J": 0.11127684033510228,
+      "volume_fraction": 0.5999999999999407
+    },
+    "gates_passed": true,
+    "rows": [
+      {
+        "name": "n2-r0.3",
+        "divisions": [
+          4,
+          2,
+          2
+        ],
+        "filter_radius_m": 0.3,
+        "cells": 96,
+        "seconds": 0.9939118750007765,
+        "compliance_J": 0.04067542667339966,
+        "initial_compliance_J": 0.11127684033510041,
+        "volume_fraction": 0.6000000000000003,
+        "gray_measure": 0.2661198825524798,
+        "intermediate_cell_volume_fraction": 0.375,
+        "maximum_relative_residual": 7.776484788419447e-17,
+        "maximum_force_balance_N": 2.007432919598233e-14,
+        "maximum_relative_work_energy_error": 1.569444481272076e-14,
+        "evaluations": 17,
+        "status": "converged",
+        "geometry_gate_passed": true,
+        "gate": "passed",
+        "result_sha256": "81fab17279ce1b3d834b863d9dfa676ce40d7671f5b8df57216b591567681815",
+        "geometry_thresholds": [
+          {
+            "threshold": 0.25,
+            "connection_repair": false,
+            "status": "invalid_geometry",
+            "reason": "disconnected threshold geometry"
+          },
+          {
+            "threshold": 0.35,
+            "connection_repair": false,
+            "status": "invalid_geometry",
+            "reason": "disconnected threshold geometry"
+          },
+          {
+            "threshold": 0.45,
+            "connection_repair": false,
+            "status": "invalid_geometry",
+            "reason": "disconnected threshold geometry"
+          },
+          {
+            "threshold": 0.25,
+            "connection_repair": true,
+            "added_original_cells": [
+              8,
+              16,
+              22,
+              46,
+              61,
+              66,
+              68,
+              74,
+              76,
+              80
+            ],
+            "status": "accepted",
+            "cells": 66,
+            "boundary_triangles": 122,
+            "compliance_J": 0.03044142874580706,
+            "density_compliance_ratio": 0.748398510733133,
+            "volume_fraction": 0.6875,
+            "maximum_von_mises_Pa": 7.4701911859876775,
+            "maximum_relative_residual": 8.361785037145703e-17,
+            "maximum_force_balance_N": 3.034160831164952e-14,
+            "maximum_moment_balance_N_m": 5.228682860014648e-14,
+            "limits": "raw Tet4 stress; no stress convergence or strength/manufacturing qualification",
+            "artifact": "geometry-3.vtu"
+          },
+          {
+            "threshold": 0.35,
+            "connection_repair": true,
+            "added_original_cells": [
+              8,
+              16,
+              22,
+              46,
+              61,
+              66,
+              68,
+              74,
+              76,
+              80
+            ],
+            "status": "accepted",
+            "cells": 66,
+            "boundary_triangles": 122,
+            "compliance_J": 0.03044142874580706,
+            "density_compliance_ratio": 0.748398510733133,
+            "volume_fraction": 0.6875,
+            "maximum_von_mises_Pa": 7.4701911859876775,
+            "maximum_relative_residual": 8.361785037145703e-17,
+            "maximum_force_balance_N": 3.034160831164952e-14,
+            "maximum_moment_balance_N_m": 5.228682860014648e-14,
+            "limits": "raw Tet4 stress; no stress convergence or strength/manufacturing qualification",
+            "artifact": "geometry-4.vtu"
+          },
+          {
+            "threshold": 0.45,
+            "connection_repair": true,
+            "added_original_cells": [
+              8,
+              16,
+              22,
+              46,
+              61,
+              66,
+              68,
+              74,
+              76,
+              80
+            ],
+            "status": "accepted",
+            "cells": 66,
+            "boundary_triangles": 122,
+            "compliance_J": 0.03044142874580706,
+            "density_compliance_ratio": 0.748398510733133,
+            "volume_fraction": 0.6875,
+            "maximum_von_mises_Pa": 7.4701911859876775,
+            "maximum_relative_residual": 8.361785037145703e-17,
+            "maximum_force_balance_N": 3.034160831164952e-14,
+            "maximum_moment_balance_N_m": 5.228682860014648e-14,
+            "limits": "raw Tet4 stress; no stress convergence or strength/manufacturing qualification",
+            "artifact": "geometry-5.vtu"
+          }
+        ]
+      },
+      {
+        "name": "n2-r0.6",
+        "divisions": [
+          4,
+          2,
+          2
+        ],
+        "filter_radius_m": 0.6,
+        "cells": 96,
+        "seconds": 1.1603530419997696,
+        "compliance_J": 0.06868461833584572,
+        "initial_compliance_J": 0.11758127227513068,
+        "volume_fraction": 0.600000000000005,
+        "gray_measure": 0.6125790749383583,
+        "intermediate_cell_volume_fraction": 0.75,
+        "maximum_relative_residual": 8.38974315760795e-17,
+        "maximum_force_balance_N": 2.5570105544426843e-14,
+        "maximum_relative_work_energy_error": 2.343790246944303e-14,
+        "evaluations": 17,
+        "status": "converged",
+        "geometry_gate_passed": true,
+        "gate": "passed",
+        "result_sha256": "662c9301c97147774b1c9f4f9967759f54d5065279cac41acf950c1d4809a65c",
+        "geometry_thresholds": [
+          {
+            "threshold": 0.25,
+            "connection_repair": false,
+            "added_original_cells": [],
+            "status": "accepted",
+            "cells": 80,
+            "boundary_triangles": 84,
+            "compliance_J": 0.026152309677265874,
+            "density_compliance_ratio": 0.38075933609166296,
+            "volume_fraction": 0.8333333333333334,
+            "maximum_von_mises_Pa": 6.494018588475387,
+            "maximum_relative_residual": 1.0009386979820727e-16,
+            "maximum_force_balance_N": 3.705469398547336e-14,
+            "maximum_moment_balance_N_m": 6.88502620697653e-14,
+            "limits": "raw Tet4 stress; no stress convergence or strength/manufacturing qualification",
+            "artifact": "geometry-0.vtu"
+          },
+          {
+            "threshold": 0.35,
+            "connection_repair": false,
+            "status": "invalid_geometry",
+            "reason": "disconnected threshold geometry"
+          },
+          {
+            "threshold": 0.45,
+            "connection_repair": false,
+            "status": "invalid_geometry",
+            "reason": "disconnected threshold geometry"
+          },
+          {
+            "threshold": 0.25,
+            "connection_repair": true,
+            "added_original_cells": [],
+            "status": "accepted",
+            "cells": 80,
+            "boundary_triangles": 84,
+            "compliance_J": 0.026152309677265874,
+            "density_compliance_ratio": 0.38075933609166296,
+            "volume_fraction": 0.8333333333333334,
+            "maximum_von_mises_Pa": 6.494018588475387,
+            "maximum_relative_residual": 1.0009386979820727e-16,
+            "maximum_force_balance_N": 3.705469398547336e-14,
+            "maximum_moment_balance_N_m": 6.88502620697653e-14,
+            "limits": "raw Tet4 stress; no stress convergence or strength/manufacturing qualification",
+            "artifact": "geometry-3.vtu"
+          },
+          {
+            "threshold": 0.35,
+            "connection_repair": true,
+            "added_original_cells": [
+              74
+            ],
+            "status": "accepted",
+            "cells": 75,
+            "boundary_triangles": 88,
+            "compliance_J": 0.028601427117305837,
+            "density_compliance_ratio": 0.4164167729294796,
+            "volume_fraction": 0.7812499999999999,
+            "maximum_von_mises_Pa": 7.048072819311397,
+            "maximum_relative_residual": 1.0615246172779747e-16,
+            "maximum_force_balance_N": 3.9457860180293785e-14,
+            "maximum_moment_balance_N_m": 7.077365511629818e-14,
+            "limits": "raw Tet4 stress; no stress convergence or strength/manufacturing qualification",
+            "artifact": "geometry-4.vtu"
+          },
+          {
+            "threshold": 0.45,
+            "connection_repair": true,
+            "added_original_cells": [
+              74,
+              80,
+              88
+            ],
+            "status": "accepted",
+            "cells": 65,
+            "boundary_triangles": 92,
+            "compliance_J": 0.03274011928154455,
+            "density_compliance_ratio": 0.4766732359413557,
+            "volume_fraction": 0.6770833333333334,
+            "maximum_von_mises_Pa": 7.9928672775735805,
+            "maximum_relative_residual": 8.393568904569326e-17,
+            "maximum_force_balance_N": 3.425286843693839e-14,
+            "maximum_moment_balance_N_m": 6.72283887945585e-14,
+            "limits": "raw Tet4 stress; no stress convergence or strength/manufacturing qualification",
+            "artifact": "geometry-5.vtu"
+          }
+        ]
+      },
+      {
+        "name": "n3-r0.3",
+        "divisions": [
+          6,
+          3,
+          3
+        ],
+        "filter_radius_m": 0.3,
+        "cells": 324,
+        "seconds": 4.698948540997662,
+        "compliance_J": 0.059572615556996604,
+        "initial_compliance_J": 0.1358098092238713,
+        "volume_fraction": 0.5999999990860702,
+        "gray_measure": 0.5027184901866223,
+        "intermediate_cell_volume_fraction": 0.654320987654321,
+        "maximum_relative_residual": 8.486970907937086e-17,
+        "maximum_force_balance_N": 1.6461608496722145e-14,
+        "maximum_relative_work_energy_error": 4.892072326182196e-15,
+        "evaluations": 22,
+        "status": "converged",
+        "geometry_gate_passed": true,
+        "gate": "passed",
+        "result_sha256": "e62629501ac4a28867b4c3d02373b1db4e4251929b78197f0ba2dabaa55cb60b",
+        "geometry_thresholds": [
+          {
+            "threshold": 0.25,
+            "connection_repair": false,
+            "added_original_cells": [],
+            "status": "accepted",
+            "cells": 248,
+            "boundary_triangles": 242,
+            "compliance_J": 0.03517049227152562,
+            "density_compliance_ratio": 0.5903801930246952,
+            "volume_fraction": 0.7654320987654321,
+            "maximum_von_mises_Pa": 10.771303700993839,
+            "maximum_relative_residual": 8.338610805966116e-17,
+            "maximum_force_balance_N": 2.8636680633837055e-14,
+            "maximum_moment_balance_N_m": 5.689614930929052e-14,
+            "limits": "raw Tet4 stress; no stress convergence or strength/manufacturing qualification",
+            "artifact": "geometry-0.vtu"
+          },
+          {
+            "threshold": 0.35,
+            "connection_repair": false,
+            "status": "invalid_geometry",
+            "reason": "disconnected threshold geometry"
+          },
+          {
+            "threshold": 0.45,
+            "connection_repair": false,
+            "status": "invalid_geometry",
+            "reason": "disconnected threshold geometry"
+          },
+          {
+            "threshold": 0.25,
+            "connection_repair": true,
+            "added_original_cells": [],
+            "status": "accepted",
+            "cells": 248,
+            "boundary_triangles": 242,
+            "compliance_J": 0.03517049227152562,
+            "density_compliance_ratio": 0.5903801930246952,
+            "volume_fraction": 0.7654320987654321,
+            "maximum_von_mises_Pa": 10.771303700993839,
+            "maximum_relative_residual": 8.338610805966116e-17,
+            "maximum_force_balance_N": 2.8636680633837055e-14,
+            "maximum_moment_balance_N_m": 5.689614930929052e-14,
+            "limits": "raw Tet4 stress; no stress convergence or strength/manufacturing qualification",
+            "artifact": "geometry-3.vtu"
+          },
+          {
+            "threshold": 0.35,
+            "connection_repair": true,
+            "added_original_cells": [
+              278,
+              284,
+              302,
+              316
+            ],
+            "status": "accepted",
+            "cells": 224,
+            "boundary_triangles": 262,
+            "compliance_J": 0.03738399799367324,
+            "density_compliance_ratio": 0.6275366230630882,
+            "volume_fraction": 0.691358024691358,
+            "maximum_von_mises_Pa": 10.270968527481841,
+            "maximum_relative_residual": 8.504003696287795e-17,
+            "maximum_force_balance_N": 2.5565451311491662e-14,
+            "maximum_moment_balance_N_m": 4.5543484980209397e-14,
+            "limits": "raw Tet4 stress; no stress convergence or strength/manufacturing qualification",
+            "artifact": "geometry-4.vtu"
+          },
+          {
+            "threshold": 0.45,
+            "connection_repair": true,
+            "added_original_cells": [
+              46,
+              272,
+              274,
+              278,
+              280,
+              284,
+              290,
+              302,
+              316
+            ],
+            "status": "accepted",
+            "cells": 203,
+            "boundary_triangles": 270,
+            "compliance_J": 0.040604680049413866,
+            "density_compliance_ratio": 0.6815997530033744,
+            "volume_fraction": 0.6265432098765432,
+            "maximum_von_mises_Pa": 10.677474492916154,
+            "maximum_relative_residual": 8.51106374712958e-17,
+            "maximum_force_balance_N": 2.501924693481155e-14,
+            "maximum_moment_balance_N_m": 4.2012960406580507e-14,
+            "limits": "raw Tet4 stress; no stress convergence or strength/manufacturing qualification",
+            "artifact": "geometry-5.vtu"
+          }
+        ]
+      },
+      {
+        "name": "n3-r0.6",
+        "divisions": [
+          6,
+          3,
+          3
+        ],
+        "filter_radius_m": 0.6,
+        "cells": 324,
+        "seconds": 4.914288541996939,
+        "compliance_J": 0.08951997380440052,
+        "initial_compliance_J": 0.13253531040770122,
+        "volume_fraction": 0.6000000000000044,
+        "gray_measure": 0.8115658640449269,
+        "intermediate_cell_volume_fraction": 0.888888888888889,
+        "maximum_relative_residual": 1.150866114273686e-16,
+        "maximum_force_balance_N": 1.833730163438916e-14,
+        "maximum_relative_work_energy_error": 2.0463231978084848e-14,
+        "evaluations": 28,
+        "status": "converged",
+        "geometry_gate_passed": true,
+        "gate": "passed",
+        "result_sha256": "8c31a8659cf22dfb9aa1ade6916cb51b86c4641574efb452250b39ad23666413",
+        "geometry_thresholds": [
+          {
+            "threshold": 0.25,
+            "connection_repair": false,
+            "added_original_cells": [],
+            "status": "gate_failed",
+            "cells": 324,
+            "boundary_triangles": 180,
+            "compliance_J": 0.02637832647846025,
+            "density_compliance_ratio": 0.29466414429584625,
+            "volume_fraction": 1.0,
+            "maximum_von_mises_Pa": 8.068098678178757,
+            "maximum_relative_residual": 9.402772538768858e-17,
+            "maximum_force_balance_N": 1.448605245129906e-14,
+            "maximum_moment_balance_N_m": 1.560535641570577e-14,
+            "limits": "raw Tet4 stress; no stress convergence or strength/manufacturing qualification",
+            "artifact": "geometry-0.vtu"
+          },
+          {
+            "threshold": 0.35,
+            "connection_repair": false,
+            "status": "invalid_geometry",
+            "reason": "disconnected threshold geometry"
+          },
+          {
+            "threshold": 0.45,
+            "connection_repair": false,
+            "status": "invalid_geometry",
+            "reason": "disconnected threshold geometry"
+          },
+          {
+            "threshold": 0.25,
+            "connection_repair": true,
+            "added_original_cells": [],
+            "status": "gate_failed",
+            "cells": 324,
+            "boundary_triangles": 180,
+            "compliance_J": 0.02637832647846025,
+            "density_compliance_ratio": 0.29466414429584625,
+            "volume_fraction": 1.0,
+            "maximum_von_mises_Pa": 8.068098678178757,
+            "maximum_relative_residual": 9.402772538768858e-17,
+            "maximum_force_balance_N": 1.448605245129906e-14,
+            "maximum_moment_balance_N_m": 1.560535641570577e-14,
+            "limits": "raw Tet4 stress; no stress convergence or strength/manufacturing qualification",
+            "artifact": "geometry-3.vtu"
+          },
+          {
+            "threshold": 0.35,
+            "connection_repair": true,
+            "added_original_cells": [
+              292
+            ],
+            "status": "gate_failed",
+            "cells": 303,
+            "boundary_triangles": 212,
+            "compliance_J": 0.02737152294852105,
+            "density_compliance_ratio": 0.30575883554576677,
+            "volume_fraction": 0.9351851851851852,
+            "maximum_von_mises_Pa": 8.079765342721759,
+            "maximum_relative_residual": 8.769755775255257e-17,
+            "maximum_force_balance_N": 1.5535935520548305e-14,
+            "maximum_moment_balance_N_m": 1.7758911135150767e-14,
+            "limits": "raw Tet4 stress; no stress convergence or strength/manufacturing qualification",
+            "artifact": "geometry-4.vtu"
+          },
+          {
+            "threshold": 0.45,
+            "connection_repair": true,
+            "added_original_cells": [
+              272,
+              274,
+              280,
+              284,
+              290,
+              292,
+              308,
+              309,
+              310,
+              316
+            ],
+            "status": "accepted",
+            "cells": 256,
+            "boundary_triangles": 242,
+            "compliance_J": 0.036698753255580974,
+            "density_compliance_ratio": 0.4099504467658477,
+            "volume_fraction": 0.7901234567901235,
+            "maximum_von_mises_Pa": 12.989121967211927,
+            "maximum_relative_residual": 1.0336904576327066e-16,
+            "maximum_force_balance_N": 3.5119886307456286e-14,
+            "maximum_moment_balance_N_m": 4.519675909366787e-14,
+            "limits": "raw Tet4 stress; no stress convergence or strength/manufacturing qualification",
+            "artifact": "geometry-5.vtu"
+          }
+        ]
+      },
+      {
+        "name": "n4-r0.3",
+        "divisions": [
+          8,
+          4,
+          4
+        ],
+        "filter_radius_m": 0.3,
+        "cells": 768,
+        "seconds": 23.93001995799932,
+        "compliance_J": 0.06628759323536948,
+        "initial_compliance_J": 0.14666601277270574,
+        "volume_fraction": 0.6000000000000001,
+        "gray_measure": 0.5857408393532935,
+        "intermediate_cell_volume_fraction": 0.7317708333333329,
+        "maximum_relative_residual": 1.0388300987181156e-16,
+        "maximum_force_balance_N": 5.897835167352644e-14,
+        "maximum_relative_work_energy_error": 4.2499520460536984e-14,
+        "evaluations": 29,
+        "status": "converged",
+        "geometry_gate_passed": true,
+        "gate": "passed",
+        "result_sha256": "6f79385954a1cd0b3ab4aa94c5d651be67479d3c4b0c1b9bb8fb03fe29feb76d",
+        "geometry_thresholds": [
+          {
+            "threshold": 0.25,
+            "connection_repair": false,
+            "added_original_cells": [],
+            "status": "accepted",
+            "cells": 630,
+            "boundary_triangles": 454,
+            "compliance_J": 0.03406558621555195,
+            "density_compliance_ratio": 0.5139059144083598,
+            "volume_fraction": 0.8203124999999999,
+            "maximum_von_mises_Pa": 10.041233875999591,
+            "maximum_relative_residual": 1.0159747670440714e-16,
+            "maximum_force_balance_N": 2.7855096057737347e-13,
+            "maximum_moment_balance_N_m": 4.1879926565645147e-13,
+            "limits": "raw Tet4 stress; no stress convergence or strength/manufacturing qualification",
+            "artifact": "geometry-0.vtu"
+          },
+          {
+            "threshold": 0.35,
+            "connection_repair": false,
+            "status": "invalid_geometry",
+            "reason": "disconnected threshold geometry"
+          },
+          {
+            "threshold": 0.45,
+            "connection_repair": false,
+            "status": "invalid_geometry",
+            "reason": "disconnected threshold geometry"
+          },
+          {
+            "threshold": 0.25,
+            "connection_repair": true,
+            "added_original_cells": [],
+            "status": "accepted",
+            "cells": 630,
+            "boundary_triangles": 454,
+            "compliance_J": 0.03406558621555195,
+            "density_compliance_ratio": 0.5139059144083598,
+            "volume_fraction": 0.8203124999999999,
+            "maximum_von_mises_Pa": 10.041233875999591,
+            "maximum_relative_residual": 1.0159747670440714e-16,
+            "maximum_force_balance_N": 2.7855096057737347e-13,
+            "maximum_moment_balance_N_m": 4.1879926565645147e-13,
+            "limits": "raw Tet4 stress; no stress convergence or strength/manufacturing qualification",
+            "artifact": "geometry-3.vtu"
+          },
+          {
+            "threshold": 0.35,
+            "connection_repair": true,
+            "added_original_cells": [
+              700
+            ],
+            "status": "accepted",
+            "cells": 581,
+            "boundary_triangles": 476,
+            "compliance_J": 0.03593408354644026,
+            "density_compliance_ratio": 0.5420936527118726,
+            "volume_fraction": 0.7565104166666666,
+            "maximum_von_mises_Pa": 10.460840575560566,
+            "maximum_relative_residual": 1.0351868536709648e-16,
+            "maximum_force_balance_N": 2.7599017289546907e-13,
+            "maximum_moment_balance_N_m": 4.173336983515514e-13,
+            "limits": "raw Tet4 stress; no stress convergence or strength/manufacturing qualification",
+            "artifact": "geometry-4.vtu"
+          },
+          {
+            "threshold": 0.45,
+            "connection_repair": true,
+            "added_original_cells": [
+              32,
+              674,
+              676,
+              682,
+              686,
+              688,
+              692,
+              698,
+              700,
+              722,
+              724,
+              736
+            ],
+            "status": "accepted",
+            "cells": 542,
+            "boundary_triangles": 528,
+            "compliance_J": 0.03751140558819922,
+            "density_compliance_ratio": 0.5658887848742112,
+            "volume_fraction": 0.7057291666666666,
+            "maximum_von_mises_Pa": 10.659194619977738,
+            "maximum_relative_residual": 1.0834663804836845e-16,
+            "maximum_force_balance_N": 1.7106866229869992e-13,
+            "maximum_moment_balance_N_m": 2.398438649325353e-13,
+            "limits": "raw Tet4 stress; no stress convergence or strength/manufacturing qualification",
+            "artifact": "geometry-5.vtu"
+          }
+        ]
+      },
+      {
+        "name": "n4-r0.6",
+        "divisions": [
+          8,
+          4,
+          4
+        ],
+        "filter_radius_m": 0.6,
+        "cells": 768,
+        "seconds": 25.901801792002516,
+        "compliance_J": 0.09605179853254156,
+        "initial_compliance_J": 0.14364792276406682,
+        "volume_fraction": 0.6000000000000053,
+        "gray_measure": 0.821557006219309,
+        "intermediate_cell_volume_fraction": 0.9166666666666654,
+        "maximum_relative_residual": 9.103703908458083e-17,
+        "maximum_force_balance_N": 3.750554011934067e-14,
+        "maximum_relative_work_energy_error": 4.1755393836790825e-14,
+        "evaluations": 29,
+        "status": "converged",
+        "geometry_gate_passed": true,
+        "gate": "passed",
+        "result_sha256": "1b16526aa538801769008bb25eebf50b1aa9b9835e295d45448a5914b644acce",
+        "geometry_thresholds": [
+          {
+            "threshold": 0.25,
+            "connection_repair": false,
+            "added_original_cells": [],
+            "status": "gate_failed",
+            "cells": 768,
+            "boundary_triangles": 320,
+            "compliance_J": 0.02977389329670249,
+            "density_compliance_ratio": 0.30997746790358477,
+            "volume_fraction": 1.0,
+            "maximum_von_mises_Pa": 9.232238684965433,
+            "maximum_relative_residual": 1.297667948065823e-16,
+            "maximum_force_balance_N": 3.766054020824563e-13,
+            "maximum_moment_balance_N_m": 5.61136594747902e-13,
+            "limits": "raw Tet4 stress; no stress convergence or strength/manufacturing qualification",
+            "artifact": "geometry-0.vtu"
+          },
+          {
+            "threshold": 0.35,
+            "connection_repair": false,
+            "status": "invalid_geometry",
+            "reason": "disconnected threshold geometry"
+          },
+          {
+            "threshold": 0.45,
+            "connection_repair": false,
+            "status": "invalid_geometry",
+            "reason": "disconnected threshold geometry"
+          },
+          {
+            "threshold": 0.25,
+            "connection_repair": true,
+            "added_original_cells": [],
+            "status": "gate_failed",
+            "cells": 768,
+            "boundary_triangles": 320,
+            "compliance_J": 0.02977389329670249,
+            "density_compliance_ratio": 0.30997746790358477,
+            "volume_fraction": 1.0,
+            "maximum_von_mises_Pa": 9.232238684965433,
+            "maximum_relative_residual": 1.297667948065823e-16,
+            "maximum_force_balance_N": 3.766054020824563e-13,
+            "maximum_moment_balance_N_m": 5.61136594747902e-13,
+            "limits": "raw Tet4 stress; no stress convergence or strength/manufacturing qualification",
+            "artifact": "geometry-3.vtu"
+          },
+          {
+            "threshold": 0.35,
+            "connection_repair": true,
+            "added_original_cells": [
+              686,
+              724,
+              736
+            ],
+            "status": "gate_failed",
+            "cells": 719,
+            "boundary_triangles": 382,
+            "compliance_J": 0.030904198746638002,
+            "density_compliance_ratio": 0.32174513355070505,
+            "volume_fraction": 0.9361979166666667,
+            "maximum_von_mises_Pa": 9.233800441219758,
+            "maximum_relative_residual": 1.2238143460807548e-16,
+            "maximum_force_balance_N": 2.2704390324063857e-13,
+            "maximum_moment_balance_N_m": 3.4251687029531485e-13,
+            "limits": "raw Tet4 stress; no stress convergence or strength/manufacturing qualification",
+            "artifact": "geometry-4.vtu"
+          },
+          {
+            "threshold": 0.45,
+            "connection_repair": true,
+            "added_original_cells": [
+              674,
+              676,
+              686,
+              688,
+              692,
+              694,
+              698,
+              700,
+              722,
+              724,
+              736,
+              740,
+              746,
+              748,
+              760,
+              766
+            ],
+            "status": "accepted",
+            "cells": 598,
+            "boundary_triangles": 450,
+            "compliance_J": 0.03707569529971209,
+            "density_compliance_ratio": 0.3859968877849918,
+            "volume_fraction": 0.7786458333333334,
+            "maximum_von_mises_Pa": 11.328336179493544,
+            "maximum_relative_residual": 1.0801774302578462e-16,
+            "maximum_force_balance_N": 1.4823867924843668e-13,
+            "maximum_moment_balance_N_m": 2.0262274618564103e-13,
+            "limits": "raw Tet4 stress; no stress convergence or strength/manufacturing qualification",
+            "artifact": "geometry-5.vtu"
+          }
+        ]
+      }
+    ]
+  },
+  "package_checks": {
+    "wheel": {
+      "artifact": "fem_toolbox-1.6.0-py3-none-any.whl",
+      "sha256": "df19c47522e368b61f9b8b492cf7fe3b52e4f4f963aba431be3750b886718796",
+      "installation": {
+        "package": "/private/tmp/fem-m11-final-wheel-env/lib/python3.13/site-packages/fem_toolbox/__init__.py",
+        "version": "1.6.0",
+        "numpy": "2.5.4",
+        "scipy": "1.18.1",
+        "license": "MIT",
+        "core_optional_dependencies_absent": true
+      },
+      "status": "converged",
+      "compliance_J": 0.04067542667339966,
+      "volume_fraction": 0.6000000000000003,
+      "geometry_gate_passed": true
+    },
+    "sdist": {
+      "artifact": "fem_toolbox-1.6.0.tar.gz",
+      "sha256": "9b3648bff8e7706deba85691ddfa0d3da02a5af2e1ba19c7cbfed0cf0d16eaf2",
+      "installation": {
+        "package": "/private/tmp/fem-m11-final-sdist-env/lib/python3.13/site-packages/fem_toolbox/__init__.py",
+        "version": "1.6.0",
+        "numpy": "2.5.4",
+        "scipy": "1.18.1",
+        "license": "MIT",
+        "core_optional_dependencies_absent": true
+      },
+      "status": "converged",
+      "compliance_J": 0.04067542667339966,
+      "volume_fraction": 0.6000000000000003,
+      "geometry_gate_passed": true
+    }
+  },
+  "maximum_compliance_change_from_candidate_J": 0.0,
+  "full_matrix_sha256": "603d7afecf7acfbb57110d709ef6497f8a3da30be2fc72257deff1951e00ab5f"
+}

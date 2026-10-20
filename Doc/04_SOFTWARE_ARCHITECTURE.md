@@ -336,6 +336,15 @@ Gesamt-Abnahme und Genauigkeits-/Kostenvergleiche bleiben offen.
 Der optionale Adapter `post.visualization` verwendet Matplotlib/Agg und
 vorhandene Tet4-Randtopologie. Solver bleiben unabhängig; [Vertrag](62_FIELD_VISUALIZATION.md).
 
+## Geplante Femantis-Migration (#235, ADR-053)
+
+Der [Migrationsvertrag](77_FEMANTIS_MIGRATION_CONTRACT.md) legt `femantis` als
+kanonischen Namespace der bestehenden M14-/v2.0-Freigabe fest. Altmodule bleiben
+bis Ende v2.x identische Adapter; Implementierung und numerische Verträge werden
+nicht dupliziert. Persistierte Kennungen bleiben kompatibel. Das ist eine
+Architekturentscheidung vor Umsetzung; der aktuelle Code liegt weiterhin unter
+`src/fem_toolbox/`.
+
 ## Experimenteller CFD-Einstieg
 
 `cfd/channel.py` enthält einen eigenständigen konservativen Kanaloperator.
