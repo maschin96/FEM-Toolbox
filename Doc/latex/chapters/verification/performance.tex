@@ -1,0 +1,83 @@
+\chapter{Historische Genauigkeit und Rechenkosten}
+\index{Benchmark}\index{Rechenkosten}
+\section{Messbestand und Umgebung}
+Der versionierte Bestand
+\path{benchmarks/baselines/m7-37c-linux-arm64.json} enthält 72 Läufe vom
+28. September 2026: zwei Fälle, zwei direkte Backends, zwei Elementordnungen,
+drei Netzgrößen und jeweils drei Wiederholungen. Daraus entstehen 24 Gruppen.
+Der historische Quellcommit ist
+\path{98ca442fe8954dcac15316cd1367f2b7819a21ab}.
+Die Originaldatei wird bytegleich in das Handbucharchiv übernommen; aktuelle
+Dokumentationsänderungen überschreiben diese Messungen nicht.
+
+Die Umgebung war Docker/Linux auf aarch64 auf einem Apple M4, mit zehn
+zugewiesenen logischen CPUs und 8\,217\,059\,328 Byte Container-RAM.
+Verwendet wurden Python 3.12.3, NumPy 1.26.4, SciPy 1.14.1 und
+PETSc 3.19.6 mit reellen 64-Bit-Skalaren, KSP \texttt{preonly} und PC
+\texttt{lu}. Die sechs dokumentierten Thread-Umgebungsvariablen wurden auf 1
+gesetzt; das ist eine angeforderte Begrenzung, keine Messung tatsächlich
+aktiver Threads. Vollständige Bibliotheks-/BLAS-Angaben bleiben im JSON erhalten.
+
+\section{Probleme und Messdefinition}
+Die Netze mit $N=2,4,6$ zerlegen jeden Würfel in sechs Tetraeder; Tet10 erhält
+gemeinsame Kantenmittelpunkte. Die Wärmequelle folgt aus
+\begin{equation}
+ T=1+x^4+\tfrac12y^4+\tfrac14z^4,\qquad
+ k=1,\qquad Q=-12(x^2+\tfrac12y^2+\tfrac14z^2).
+\end{equation}
+Der synthetische Biegungsfall verwendet $E=100$, $\nu=0$, $a=0.01$ und
+\begin{equation}
+ \mathbf u=(-3ax^2z,0,ax^3)^\mathsf T,\qquad
+ \mathbf b=(6Eaz,0,0)^\mathsf T.
+\end{equation}
+Beide Fälle sind analytisch hergestellte Lösungen, keine vermessenen Bauteile.
+Insbesondere ist der Biegungsfall kein realer Kragarmversuch.
+
+Die Zeit umfasst den ersten Solveraufruf einschließlich Randbedingungen,
+Materialverarbeitung, Assembly, Faktorisierung, Nachverarbeitung und Provenienz.
+Netzerzeugung, Imports, Backendinitialisierung, Export und unabhängige
+Fehlerquadratur sind ausgeschlossen. RSS ist das Prozessmaximum seit
+Prozessstart einschließlich Imports; es ist kein zusätzlicher Speicherbedarf
+einer einzelnen Assembly. Der relative $H^1$-Halbnormfehler wird mit der
+unabhängigen Duffy-Quadratur ermittelt.
+
+\section{Tabellen und Abbildungen}
+Ein eigenständiger Audit berechnet Median, Minimum, Maximum und
+Stichprobenstandardabweichung aller Zeiten sowie die ursprünglichen
+Budgetauswahlen erneut. Fehlende oder doppelte Läufe, nichtendliche Werte,
+verletzte Bilanzkriterien oder veränderte Zusammenfassungen brechen den Build ab.
+Die Tabelle zeigt Median $\pm$ Stichprobenstandardabweichung in s;
+RSS steht in MiB als SciPy/PETSc-Paar. Der Fehler ist der größte Wert des
+jeweiligen Backendpaares.
+
+{\scriptsize\input{chapters/verification/measured}}
+
+\begin{figure}[htbp]\centering
+\includegraphics[width=\textwidth]{assets/verification-accuracy-cost.pdf}
+\caption{Historische Genauigkeit gegen gemessene Erstlaufzeit. Linien verbinden
+die drei tatsächlich gemessenen Netze; sie sind keine Interpolation oder
+Leistungsprognose. Eigene Abbildung aus dem versionierten M7-Bestand.}
+\label{vv:cost}
+\end{figure}
+
+\section{Positive und negative Befunde}
+Die vorab gewählten relativen Genauigkeitsziele sind 0.5, 0.25 und 0.125.
+Kostenbudgets sind 1, 5 und 20 s bei maximal 512 MiB RSS. Es wird aus den
+gemessenen Kandidaten gewählt; kein fehlender größerer Tet4-Lauf wird geschätzt.
+Backendparität wird mit $\mathrm{rtol}=10^{-8}$ und absoluten Toleranzen
+$10^{-10}$ K bzw. $10^{-11}$ m geprüft. Residuen und Bilanzen müssen unter
+$10^{-9}$ in den jeweiligen SI-Einheiten liegen.
+
+Tet4 ist für die groben Ziele 0.5 und 0.25 in diesem Bestand schneller.
+Das Ziel 0.125 erreicht Tet4 bis $N=6$ in beiden Fällen und mit beiden Backends
+nicht: vier Auswahlen bleiben ausdrücklich \texttt{null}. Dafür wird kein
+Geschwindigkeitsverhältnis berechnet. Tet10 erzielt in den vorgegebenen
+Kostenbudgets kleinere Fehler. Ein ungemessener größerer Tet4-Lauf könnte die
+Abwägung verändern. PETSc zeigt hier keinen allgemeinen Zeitvorteil und einen
+höheren Prozess-RSS.
+
+Die Streuung aus drei Wiederholungen beschreibt lediglich diesen Messbestand.
+Hardware, Containerlimits, BLAS, Solveroptionen und Problemstruktur beeinflussen
+die Übertragbarkeit. Die Budgets sind Auswahlregeln für den Vergleich und keine
+zeitabhängigen CI-Abnahmeschranken. Die Abbildung begründet keine
+Skalierungsbehauptung für große oder verteilte Rechnungen.

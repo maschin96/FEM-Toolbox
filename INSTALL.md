@@ -1,7 +1,7 @@
 # Installation und erster Lauf
 
-Stand: 29. September 2026. Diese Anleitung richtet eine **Entwicklungsumgebung
-aus dem Repository** ein. Der M8-Release-Stand ist **v1.3.0**; der [Freigabebericht](Doc/64_M8_RELEASE_VERIFICATION.md) nennt den Veröffentlichungsstatus. Ein späterer
+Stand: 11. Oktober 2026. Diese Anleitung richtet eine **Entwicklungsumgebung
+aus dem Repository** ein. Der M9-Release-Stand ist **v1.4.0**; der [Freigabebericht](Doc/68_M9_RELEASE_VERIFICATION.md) nennt den Veröffentlichungsstatus. Ein späterer
 Checkout kann bereits weitere Entwicklungsänderungen enthalten.
 [Supportmatrix und Grenzen](Doc/57_M7_RELEASE_CANDIDATE.md).
 Ein PyPI-Release des aktuellen Checkouts wird hier nicht vorausgesetzt.
@@ -177,3 +177,21 @@ ausgewählt. Fehlendes PETSc wird beim Backendaufbau ausdrücklich diagnostizier
 
 `python -m pip install '.[visualization]'` ergänzt Matplotlib. Ohne dieses Extra
 bleiben Solver nutzbar. [API und Headless-Beispiel](Doc/62_FIELD_VISUALIZATION.md).
+
+## M10: adaptive stationäre Wärme
+
+Version `1.5.0` ergänzt adaptive stationäre
+Tet4-Wärme; v1.5.0 ist veröffentlicht.
+Nach Installation der Version kann das neue Beispiel mit
+`python examples/adaptive_heat/run_adaptive.py --steps 4 --output results/adaptive`
+ausgeführt werden. [Vertrag und Grenzen](Doc/70_ADAPTIVE_HEAT_WORKFLOW.md),
+[Veröffentlichungsnachweis](Doc/71_M10_RELEASE_VERIFICATION.md).
+
+## M11: Struktur-Topologieoptimierung ab v1.6.0
+
+Nach Installation aus dem freigegebenen Paket oder Checkout:
+`python -I examples/topology/run.py --output results/topology`.
+Das vorbereitete Beispielverzeichnis muss separat aus dem Repository oder
+Handbuch-Quellenarchiv vorliegen; es ist nicht Bestandteil des Python-Pakets.
+[SIMP-Einführung](Doc/86_SIMP_EINFUEHRUNG.md), [Workflow](Doc/84_M11_TOPOLOGY_WORKFLOW.md),
+[Freigabe und Artefakte](Doc/87_M11_RELEASE_VERIFICATION.md).

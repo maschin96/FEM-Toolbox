@@ -263,6 +263,7 @@ def test_resume_damaged_or_crashed_case(tmp_path: Path, damage: str) -> None:
         (output / record["result"]["fields"]).write_text("broken")
     else:
         record["status"] = "running"
+        record["result"] = None
         (output / "catalog.json").write_text(json.dumps(first))
     second = study.run(output)
     assert [c["attempts"] for c in second["cases"]] == [2, 1]
@@ -441,3 +442,128 @@ def test_malformed_base_tables_report_schema_error(tmp_path: Path, bad: str) -> 
     model.write_text(content)
     with pytest.raises(ModelSchemaError):
         Study(manifest, root=tmp_path).resolve()
+
+
+@pytest.mark.parametrize(
+    "field,value",
+    [
+        ("parameters", None),
+        ("document", None),
+        ("versions", None),
+        ("parameters.k.unit", 7),
+        ("parameters.k.value", {"bad": 1}),
+        ("fingerprints.mesh", []),
+        ("versions.numpy", 3),
+        ("result.manifest", []),
+        ("result.model_input_sha256", "bad"),
+        ("history", [None]),
+        ("error", {}),
+        ("attempt_directory", 7),
+        ("status", []),
+        ("attempts", True),
+        ("document.mesh", float("nan")),
+        ("result", None),
+    ],
+)
+def test_catalog_contract_rejected_without_writes(tmp_path, field, value):
+    from fem_toolbox.study_reports import export_study_table
+
+    runner = Study(inputs(tmp_path), root=tmp_path)
+    root = tmp_path / "runs"
+    catalog = runner.run(root)
+    parent = catalog["cases"][0]
+    parts = field.split(".")
+    for part in parts[:-1]:
+        parent = parent[part]
+    if field in {"parameters", "document", "versions"}:
+        del parent[parts[-1]]
+    else:
+        parent[parts[-1]] = value
+    path = root / "catalog.json"
+    path.write_text(json.dumps(catalog))
+    before = {
+        p.relative_to(root): p.read_bytes() for p in root.rglob("*") if p.is_file()
+    }
+    errors = []
+    for operation in [
+        lambda: runner.run(root),
+        lambda: export_study_table(path, tmp_path / "table", []),
+    ]:
+        with pytest.raises(ModelSchemaError) as caught:
+            operation()
+        errors.append(str(caught.value))
+        assert f"catalog.cases[0].{field}" in str(caught.value)
+        assert not (root / ".study.lock").exists()
+        assert {
+            p.relative_to(root): p.read_bytes() for p in root.rglob("*") if p.is_file()
+        } == before
+    assert errors[0] == errors[1]
+    assert not (tmp_path / "table").exists()
+
+
+@pytest.mark.parametrize(
+    "status", ["pending", "running", "failed", "interrupted", "invalid", "succeeded"]
+)
+def test_catalog_valid_states_history_and_retired_snapshots(tmp_path, status):
+    from copy import deepcopy
+
+    from fem_toolbox.studies import _load_catalog
+    from fem_toolbox.study_reports import export_study_table
+
+    runner = Study(inputs(tmp_path), root=tmp_path)
+    root = tmp_path / "runs"
+    catalog = runner.run(root)
+    case = catalog["cases"][0]
+    history = {
+        "status": "invalid",
+        "reason": "input fingerprint changed",
+        "fingerprints": deepcopy(case["fingerprints"]),
+        "result": deepcopy(case["result"]),
+        "attempts": 1,
+    }
+    case["status"] = status
+    case["history"] = [history]
+    if status != "succeeded":
+        case["result"] = None
+    case["error"] = (
+        "recorded cause" if status in {"failed", "interrupted", "invalid"} else None
+    )
+    if status == "pending":
+        case["attempts"] = 0
+        case["attempt_directory"] = None
+    # Retired snapshots can repeat identities across successive retirement cycles.
+    catalog["retired_cases"] = [deepcopy(case), deepcopy(case)]
+    path = root / "catalog.json"
+    path.write_text(json.dumps(catalog))
+    assert _load_catalog(path) == catalog
+    export_study_table(path, tmp_path / "table", [])
+    assert runner.run(root)["cases"][0]["status"] == "succeeded"
+
+
+@pytest.mark.parametrize(
+    "group,field,value",
+    [
+        ("cases", "parameters", []),
+        ("cases", "document", []),
+        ("cases", "versions", []),
+        ("cases", "status", "running"),
+        ("cases", "attempts", 0),
+        ("cases", "attempt_directory", None),
+        ("cases", "history", [{"status": "invalid"}]),
+        ("retired_cases", "versions", []),
+    ],
+)
+def test_catalog_nested_and_status_contract(tmp_path, group, field, value):
+    from fem_toolbox.studies import _load_catalog
+
+    runner = Study(inputs(tmp_path), root=tmp_path)
+    root = tmp_path / "runs"
+    catalog = runner.run(root)
+    if group == "retired_cases":
+        catalog[group] = [catalog["cases"].pop()]
+    catalog[group][0][field] = value
+    path = root / "catalog.json"
+    path.write_text(json.dumps(catalog))
+    expected = "result" if field == "status" else field
+    with pytest.raises(ModelSchemaError, match=rf"catalog\.{group}\[0\]\.{expected}"):
+        _load_catalog(path)

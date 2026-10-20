@@ -1,0 +1,19 @@
+\chapter{Konforme Verfeinerung und Fehlerkontrolle}\label{theory:adaptive}
+Ein affines Tetraeder wird an einer Kante \((a,b)\) durch den Mittelpunkt
+\(m=(a+b)/2\) in zwei Tetraeder geteilt. Je ein Kind ersetzt den Eckpunkt
+\(a\) beziehungsweise \(b\) durch \(m\). Beide Kinder liegen im Elternsimplex;
+ihre Volumina summieren sich zum Elternvolumen. Dieselbe Konstruktion gilt für
+Randdreiecke und ihre Flächen. Jeder vollständige Kantenstern erhält denselben
+Mittelpunkt. Auf einer gemeinsamen Fläche stimmen daher Teilkanten und Teilflächen
+überein: Es entstehen keine hängenden Knoten. Mehrere ausgewählte Kanten werden
+in gemeinsamer deterministischer Reihenfolge verarbeitet.
+
+Markierung verwendet das vorhandene Residualmaß \(\eta_K\) und die minimale
+Dörfler-Menge, deren quadrierte Summe mindestens \(\theta\sum_K\eta_K^2\) erreicht.
+Gleichstände werden nach Eingabezellzeilen entschieden. Die längste Kante jeder
+markierten Eingabezelle wird geteilt; der notwendige Sternabschluss kann auch
+unmarkierte Zellen betreffen. Dieser Vertrag liefert weder garantierte globale
+Formregularität noch zertifizierte Zuverlässigkeits-/Effizienzkonstanten des
+Indikators. Degeneration, verlorene Gruppen und ungültige Elterngeometrie sind
+Abbruchfehler. Die tatsächliche Genauigkeit muss durch unabhängige Referenzfälle
+und darf nicht allein durch abnehmendes \(\eta\) beurteilt werden.

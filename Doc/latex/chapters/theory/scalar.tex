@@ -1,0 +1,142 @@
+\chapter{Wärme und Elektrostatik}\label{chap:scalar}
+\section{Stationäre Wärme: starke und schwache Form}
+Fouriers Gesetz und stationäre Energiebilanz lauten
+\begin{equation}\label{eq:heat-strong}
+\mathbf q=-\mathbf k\nabla T,\qquad
+\nabla\cdot\mathbf q=Q,\qquad-\nabla\cdot(\mathbf k\nabla T)=Q.
+\end{equation}
+Auf $\Gamma_T$ ist $T=\bar T$, auf $\Gamma_q$ gilt
+$\mathbf q\cdot\mathbf n=\bar q$ und auf $\Gamma_h$
+$\mathbf q\cdot\mathbf n=h(T-T_\infty)$ mit $h\ge0$.
+Neumann-Fluss und Konvektion können auf derselben Fläche additiv wirken.
+Mit $w=0$ auf $\Gamma_T$ ergibt partielle Integration
+\begin{align}\label{eq:heat-weak}
+\int_\Omega\nabla w^T\mathbf k\nabla T
++\int_{\Gamma_h}whT
+=\int_\Omega wQ-\int_{\Gamma_q}w\bar q
++\int_{\Gamma_h}whT_\infty.
+\end{align}
+Maße $\mathrm dV,\mathrm dA$ werden in dieser Gleichung zur Lesbarkeit
+unterdrückt. Ein positiver äußerer Fluss \emph{entzieht} Wärme; das negative
+Lastvorzeichen ist keine frei wählbare Softwareoption.
+\index{Wärmeleitung}\index{Konvektion}
+
+Aus $T_h=\mathbf N\mathbf T_e$ folgt pro Zelle
+\begin{align}\label{eq:thermal-discrete}
+\mathbf K_T^e&=\int_K\mathbf G^T\mathbf k\mathbf G\,\mathrm dV,&
+\mathbf f_Q^e&=\int_K\mathbf N^T Q\,\mathrm dV,\\
+\mathbf H^F&=\int_F h\mathbf N^T\mathbf N\,\mathrm dA,&
+\mathbf f_{\infty}^F&=\int_F\mathbf N^ThT_\infty\,\mathrm dA,\nonumber\\
+\mathbf f_q^F&=-\int_F\mathbf N^T\bar q\,\mathrm dA.&&\nonumber
+\end{align}
+Global ist $(\mathbf K_T+\mathbf H)\mathbf T=\mathbf f_Q+\mathbf f_q+
+\mathbf f_\infty$. Steifigkeit und Robinmatrix tragen W/K; Lasten W.
+Konstantes Tet4-Material gibt $V\mathbf G^T\mathbf k\mathbf G$.
+Konstante Temperaturen liegen im Nullraum ohne Dirichlet/Robin-Bezug.
+Eine positive Robinfläche kann den thermischen Nullraum entfernen.
+Rein isolierte oder Neumann-Probleme benötigen kompatible Nettoleistung,
+bleiben aber ohne expliziten Bezug uneindeutig; die API wählt keinen Mittelwert.
+
+\subsection{Leistungsbilanz und Ergebnisfelder}
+Für die diskrete Einsfunktion fallen innere Leitbeiträge weg. Mit der
+Dirichlet-Reaktion als Zuflussleistung folgt
+\begin{equation}\label{eq:thermal-balance}
+P_Q+P_{D,\rm in}-P_{q,\rm out}-P_{h,\rm out}=0.
+\end{equation}
+$P_{D,\rm in}=\sum r_i$ über feste Temperatur-DOFs, während
+$P_{q,\rm out}=-\sum f_{q,i}$. Robinabfluss wird aus
+$\mathbf H\mathbf T-\mathbf f_\infty$ integriert.
+Die Bilanz verwendet Lasten/Reaktionen, nicht eine unbegründete Integration
+von unstetigen P1-Flussproben. Tet4-Flüsse sind elementkonstant; Tet10-Flüsse
+werden als Schwerpunktproben mit Auswerteort berichtet.
+
+\subsection{Handrechnung: Leitung und Konvektion}
+Ein 1-m-Quader mit $k=2$ W/(m K), $T(0)=400$ K, $Q=0$ und
+$h=4$ W/(m$^2$ K), $T_\infty=300$ K bei $x=1$ besitzt konstanten Fluss.
+Aus $T(x)=400-qx/k$ und $q=h(T(1)-300)$ folgt
+\begin{equation}\label{eq:thermal-example}
+q=\frac{100}{1/2+1/4}=\frac{400}{3}\ {\rm W/m^2},
+\qquad T(1)=\frac{1000}{3}\ {\rm K}.
+\end{equation}
+Bei Fläche 1 m$^2$ sind Zufluss und Konvektionsabfluss je $400/3$ W.
+Mit vorgeschriebenem Fluss 20 W/m$^2$ statt Robin gilt $T=400-10x$ K.
+Beide affinen Felder sind auf konformen Tet4/Tet10-Netzen exakt darstellbar.
+
+\section{Elektrostatik: Gauß-Gesetz und Vorzeichen}
+Für ein lineares Dielektrikum gilt
+\begin{equation}\label{eq:electro-strong}
+\mathbf E=-\nabla\phi,\qquad\mathbf D=\boldsymbol\kappa\mathbf E,
+\qquad\nabla\cdot\mathbf D=\rho_f.
+\end{equation}
+Potential ist auf $\Gamma_\phi$ vorgegeben, auf $\Gamma_\omega$
+$\mathbf D\cdot\mathbf n=\bar\omega$. Multiplizieren mit $\psi$, integrieren
+und Umstellen ergibt die Projektform
+\begin{equation}\label{eq:electro-weak}
+\int_\Omega\nabla\psi^T\mathbf D\,\mathrm dV
+=\int_{\Gamma_\omega}\psi\bar\omega\,\mathrm dA-
+\int_\Omega\psi\rho_f\,\mathrm dV.
+\end{equation}
+Daher ist $-\mathbf K_\phi\boldsymbol\phi=\mathbf f_\phi$ mit
+\begin{equation}\label{eq:dielectric}
+\mathbf K_\phi^e=\int_K\mathbf G^T\boldsymbol\kappa\mathbf G\,\mathrm dV,
+\quad\mathbf f_\phi=\mathbf f_\omega-\mathbf f_\rho,
+\quad\mathbf f_\rho^e=\int_K\mathbf N^T\rho_f\,\mathrm dV.
+\end{equation}
+$\mathbf K_\phi$ ist positiv semidefinit und hat Einheit F; das Minus steht
+im assemblierten Operator. Der Einzelfeldsolver multipliziert beide freien
+Gleichungsseiten gemeinsam mit $-1$ für ein positiv definites Solve-System.
+Reaktionen stammen weiterhin aus der ursprünglichen negativen Gleichung.
+Dieses Vorgehen erhält die spätere Piezo-Symmetrie.
+\index{Elektrostatik}\index{Gauge}
+
+Jede zusammenhängende Komponente braucht einen Potentialbezug. Für reine
+Ladungsdaten ist $\int\rho_f=\int\bar\omega$ nötig, aber die additive Konstante
+bleibt frei. Der Solver diagnostiziert kompatible bzw. inkompatible Daten
+und erdet nicht automatisch. Ein Potentialoffset verändert $\mathbf E$ nicht.
+
+\section{Ladung, Leiter und positive Feldenergie}
+Die Ladung des angrenzenden feldfreien Leiters ist das Negative des
+D-Flusses mit der \emph{Dielektrikumsnormalen}. Auf einem Potentialrand ist
+$Q_L=-\sum_i r_i$. Die diskrete Bilanz lautet
+\begin{equation}\label{eq:charge-balance}
+Q_{\omega,\rm prescribed}+Q_{D,\rm reaction}-Q_{\rho,\rm volume}=0.
+\end{equation}
+Die positive gespeicherte Dielektrikumsenergie ist
+\begin{equation}\label{eq:electric-energy}
+U_E=\tfrac12\int_\Omega\mathbf E^T\boldsymbol\kappa\mathbf E\,\mathrm dV
+=\tfrac12\boldsymbol\phi^T\mathbf K_\phi\boldsymbol\phi\ge0.
+\end{equation}
+Ohne Volumen-/vorgegebene Randladung ist $2U_E=\sum\phi_i Q_{L,i}$.
+Der negative Enthalpiebeitrag in der Piezoform darf damit nicht verwechselt
+werden (Kapitel~\ref{chap:coupling}).
+
+\subsection{Handrechnung: idealer Plattenkondensator}
+$L=0{,}002$ m, $A=0{,}03\cdot0{,}04=0{,}0012$ m$^2$,
+$\kappa=2\cdot10^{-11}$ F/m, $V=100$ V. Seiten sind D-flussfrei;
+Außenraum/Randfelder werden nicht modelliert. Dann
+\begin{equation}\label{eq:capacitor-example}
+C_{\rm cap}=\kappa A/L=12\ {\rm pF},\quad
+Q_{L,\rm high}=1{,}2\ {\rm nC},\quad U_E=60\ {\rm nJ}.
+\end{equation}
+$E_x=-50000$ V/m. Am linken Dielektrikumsrand ist $D\cdot n>0$,
+seine Leiterladung negativ; an der Hochpotentialplatte ist sie positiv.
+Zwei gleich dicke Schichten in Serie erfüllen
+$C_{\rm cap}^{-1}=L_1/(\kappa_1A)+L_2/(\kappa_2A)$.
+Das kontinuierliche D-Feld darf deshalb nicht durch Gleichheit der
+Gradienten an einer Materialgrenze ersetzt werden.
+
+\subsection*{Implementierung und unabhängige Nachweise.}
+{\small\raggedright
+\path{src/fem_toolbox/physics/heat.py},
+\path{src/fem_toolbox/physics/electrostatics.py},
+\path{src/fem_toolbox/solvers/heat.py},
+\path{src/fem_toolbox/solvers/electrostatics.py};
+\path{tests/patch/test_heat_patch.py},
+\path{tests/patch/test_electrostatics_patch.py},
+\path{tests/patch/test_material_interfaces.py}.
+Vier-Netze-Nachweise: \path{tests/convergence/test_heat_convergence.py},
+\path{tests/convergence/test_electrostatics_convergence.py} und die
+entsprechenden Tet10-Tests. Doc/11, Doc/12 und Doc/45--46 legen API und
+maßstabsabhängige absolute Toleranzen fest.
+
+\par}

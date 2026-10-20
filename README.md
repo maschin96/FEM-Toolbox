@@ -5,10 +5,10 @@ dreidimensionale Finite-Elemente-Simulationen. Ziel sind verifizierte Modelle f�
 Festkörpermechanik, Wärmeleitung, Elektrostatik und deren thermomechanische und
 piezoelektrische Kopplungen auf Basis linearer **Tet4** und geradkantiger quadratischer **Tet10**.
 
-**v1.3.0 — stationäre Parameterstudien, Feldbilder und Surrogatmodelle.**
-Release-Stand vom 01.10.2026; Veröffentlichungsstatus im [M8-Freigabebericht](Doc/64_M8_RELEASE_VERIFICATION.md).
-[Release-Nachweis](Doc/64_M8_RELEASE_VERIFICATION.md) ·
-[Release Notes](Doc/releases/v1.3.0.md) ·
+**v1.6.0 — verifizierte Struktur-Topologieoptimierung mit Geometrie-Reanalyse.**
+Version 1.6.0; Veröffentlichungsstatus in [#83](https://github.com/maschin96/FEM-Toolbox/issues/83).
+[Release-Nachweis](Doc/87_M11_RELEASE_VERIFICATION.md) ·
+[Release Notes](Doc/releases/v1.6.0.md) ·
 [Supportmatrix](Doc/57_M7_RELEASE_CANDIDATE.md).
 
 Neu gegenüber v1.0: [transiente Wärmeleitung](Doc/33_TRANSIENT_HEAT.md) mit
@@ -34,7 +34,7 @@ verifizierten Annahmen und numerischen Grenzen.
 
 ## Verfügbare Funktionen
 
-| Bereich | Umfang im Freigabestand v1.3.0 |
+| Bereich | Umfang in v1.6.0 |
 |---|---|
 | Netzmodell | Unveränderliche NumPy-Arrays für 3D-Punkte, Tet4/Tet10-Zellen und Triangle3/Triangle6-Flächen; validierte Indizes, externe IDs und Tags |
 | Auswahlsätze | Benannte Volumen- und Flächensätze, auch mit überlappenden Mitgliedschaften |
@@ -49,6 +49,9 @@ verifizierten Annahmen und numerischen Grenzen.
 | Piezoelektrizität | Stress-Charge-Materialdaten, Konversion und Achsrotation; gekoppelte Tet4/Tet10-Operatoren und monolithische Lösung mit SciPy oder optional PETSc mit feldweiser Skalierung, Reaktionen, Ladungs- und Energiebilanzen |
 | Thermopiezoelektrizität | Einseitiger stationärer Ablauf `T → (u, φ)` mit regionsweiser thermischer Eigenverzerrung und getrennten Wärme-, Kraft- und Ladungsbilanzen |
 | Transiente Wärme | Konstante rho/c-Daten, Backward Euler, Model-Schema 2, Zeitprofile, Speicherbilanz und PVD-/Messpunktserien |
+| Adaptive Wärme | Konforme Tet4-Verfeinerung, Rand-/Materialgruppenvererbung und kontrollierter Abbruch mit Stufenprovenienz; heuristischer Residualindikator |
+| Topologieoptimierung | Volumengewichteter Dichtefilter, SIMP und Mehrlastfall-Nachgiebigkeit auf Tet4; TOML-Studien, geprüfte Gradienten und getrennte Vollmaterial-Reanalyse diskreter Geometrien |
+| Unsicherheit | Explizite Normal-/Gleichverteilungen, gemeinsames Sampling, normale Korrelation, Stichprobenstatistik, lokale Sensitivität und stationäre M8-FEM-Studien; keine experimentelle Freigabe |
 | Piezo-Dynamik | Mechanische konsistente Masse, algebraisches Potential, Modal-/Newmark-/Harmonikanalyse, Model-Schema 3 und komplexe Feld-/Messpunktausgabe |
 
 Ein vollständiger deklarativer Lauf mit Gmsh-Eingabe, VTU-Feldern und
@@ -219,10 +222,10 @@ elektrisches Potential `phi` mit feldweiser Freiheitsgradverwaltung.
 | M6 | v1.1.0 | Transiente Wärme, Piezo-Dynamik/Harmonik (reziproke Thermoelastizität zurückgestellt) | Freigegeben |
 | M7 | v1.2.0 | PETSc-Backend, Tet10, Wärmeindikatoren und gemessene Skalierung | Freigegeben |
 | M8 | v1.3.0 | Parameterstudien, Visualisierung und Surrogatmodelle | Implementiert und verifiziert; Release-Abschluss siehe Freigabebericht |
-| M9 | v1.4.0* | Experimentelle Validierung und Unsicherheit | Geplant |
-| M10 | v1.5.0* | Kontrollierte adaptive Netzstudien | Geplant |
-| M11 | Offen | Topologieoptimierung | Grober Horizont |
-| M12 | Offen | RANS-CFD mit Fluid-Struktur-Kopplung | Experimenteller stationärer Kern (#86) |
+| M9 | v1.4.0 | Verifizierter Unsicherheitsworkflow und Gesamtdokumentation | Implementiert und verifiziert; Veröffentlichung siehe Freigabebericht |
+| M10 | v1.5.0 | Kontrollierte adaptive Netzstudien | Implementiert und verifiziert; Veröffentlichung siehe #70 |
+| M11 | v1.6.0 | Gefilterte Struktur-Topologieoptimierung und Geometrie-Reanalyse | Implementiert und verifiziert; Veröffentlichung siehe #83 |
+| M12 | Offen | RANS-CFD mit Fluid-Struktur-Kopplung | Laminarer Quad-FV-Kern integriert; RANS/FSI in Umsetzung |
 
 *Vorläufige Zielversionen ohne Terminzusage. Produktvision, Bestandsanalyse,
 Abhängigkeiten und Abnahmegates stehen in der
@@ -241,6 +244,12 @@ Arbeitspakete und Abnahmekriterien stehen in der
 [GitHub-Milestones](https://github.com/maschin96/FEM-Toolbox/milestones) verfolgt.
 
 ## Dokumentation
+
+Die neue Markenidentität **Femantis (bisher FEM Toolbox)** ist im
+[Corporate-Identity-Leitfaden](Doc/75_FEMANTIS_CORPORATE_IDENTITY.md) mit
+[Bildinventar](Doc/brand/README.md) dokumentiert. Der
+[vollständige Umbenennungsplan](Doc/76_FEMANTIS_RENAMING_PLAN.md) beschreibt die
+spätere technische Migration; Paketname und Python-Imports bleiben vorerst gültig.
 
 Der [Dokumentationsindex](Doc/README.md) führt durch die fachlichen und
 technischen Entwurfsdokumente.
@@ -320,6 +329,43 @@ Der optionale [Tet4-Feldbildadapter mit JPEG-Export](Doc/62_FIELD_VISUALIZATION.
 ergänzt den M8-Stand. Grenzen und Migration stehen in den Release Notes.
 
 [Zwei reproduzierbare Wärme-/Piezo-Studienrezepte](examples/study_recipes/README.md) und [Abnahmeprotokoll](Doc/63_STUDY_RECIPE_ACCEPTANCE.md) ergänzen den M8-Stand (#61).
+
+Das [deutschsprachige M9-Handbuch](Doc/latex/README.md) umfasst Theorie,
+Benutzerrezepte, vollständige API-/Entwicklerreferenz und Verifikation/Unsicherheit.
+Ein Befehl baut Gesamtband, vier Einzelbände, Quellenarchiv und Prüfsummen.
+[Gesamtabnahme und Grenzen](Doc/latex/ACCEPTANCE.md). Finale PDF-/Quellenartefakte
+bilden die v1.4.0-Abnahmebasis. M10 ergänzt Theorie, Anwendung,
+API und Verifikation für adaptive stationäre Wärme; Standardbuilds bleiben Kandidaten.
+Experimentelle Validierung ist weiterhin offen.
+
+## Adaptive stationäre Wärme (M10)
+
+`fem_toolbox.adaptive` bietet `HeatProblem`, `AdaptiveOptions` und
+`solve_adaptive_heat` für konforme Tet4-Verfeinerung. Material- und Randgruppen
+werden vererbt; Budgets, Stagnation und Fehler liefern eindeutige Endstatus.
+Die Indikatortoleranz ist keine garantierte Fehlerschranke.
+
+```sh
+python examples/adaptive_heat/run_adaptive.py --output results/adaptive_heat
+```
+
+Das Beispiel vergleicht sieben adaptive und uniforme Stufen mit zwei analytischen
+Referenzen. [Vertrag](Doc/69_ADAPTIVE_REMESHING_CONTRACT.md),
+[API und Verifikation](Doc/70_ADAPTIVE_HEAT_WORKFLOW.md).
+
+## Struktur-Topologieoptimierung (M11)
+
+Version 1.6.0 ergänzt gefilterte SIMP-Nachgiebigkeitsminimierung
+mit Volumenrestriktion, mehreren Lastfällen, geprüften Sensitivitäten und
+separater FEM-Reanalyse der abgeleiteten Geometrie. Die finale Integration, CI und Veröffentlichung sind in [#83](https://github.com/maschin96/FEM-Toolbox/issues/83) nachvollziehbar.
+
+```sh
+python -I examples/topology/run.py --output results/topology
+```
+
+[Vorbereitetes Beispiel](examples/topology/README.md) ·
+[API und Grenzen](Doc/84_M11_TOPOLOGY_WORKFLOW.md) ·
+[Nachweise und Release-Gate](Doc/85_M11_VERIFICATION.md).
 
 ## Experimenteller CFD-Kern (M12)
 

@@ -1,0 +1,95 @@
+\chapter{Model, Studien, Surrogate und Visualisierung}
+\label{api:workflows}\index{Model}\index{Study}\index{Surrogat}
+\begingroup\raggedright
+\section{Model und Preflight}
+\texttt{Model(mesh=..., document=...)} nimmt einen unabhängigen Dokumentstand,
+\texttt{from\_file(path)} liest TOML und relative Mesh-/CSV-Pfade.
+\texttt{to\_document()} liefert eine getrennte JSON-kompatible Kopie.
+Regionen, Materialien, Einheiten, Rand-/Last-Zuordnungen, Lagerung/Gauge und
+Elektroden werden vor Assembly geprüft; \texttt{solve()} erzeugt ModelResult
+mit Physikname, passendem field\_result und RunProvenance. Schema 1 stationär,
+Schema 2 transiente Wärme, Schema 3 Piezo-Moden/Newmark/Harmonik.
+Keine implizite Schema-Migration, Remoteausführung oder automatische Vernetzung.
+Schema-/Pfadfehler erhalten ModelSchemaError; physische Solverfehler bleiben
+diagnostische Unterklassen. Interne PiezoDynamicModel-/TransientHeatModel-
+Adapter sind keine zusätzlichen stabilen Anwender-Einstiegspunkte.
+Minimalbeispiele: \nolinkurl{examples/thermopiezoelectric/case.toml},
+\nolinkurl{examples/transient_heat/model.toml},
+\nolinkurl{examples/piezo_dynamics/model.toml}; Tests lesen die Produktionsparser.
+
+\section{Stationäre Parameterstudien und Mengen}
+\texttt{Study(manifest, root=...)} beziehungsweise \texttt{from\_file}
+hält detached Schema-1-Daten. Parameter: Name, vorhandener Zielpfad,
+passende SI-Einheit und endliche eindeutige Werte. Ganze Skalar-/Vektor-/Tensor-
+Eigenschaften, keine beliebigen Komponenten oder Ausdrücke. Parameter bilden
+ein kartesisches Produkt in Deklarationsfolge, letzter Parameter am schnellsten.
+Model/Netz müssen lokal innerhalb des Inputroots bleiben. \texttt{resolve()}
+liefert detached Fälle ohne Solve; IDs hashen benannte Werte/Einheiten/Ziele,
+Fingerprints zusätzlich effektives Modell, Meshbytes, Solver und Versionen.
+Geänderte Inputs invalidieren Übernahme, auch wenn Fall-ID gleich bleibt.
+
+\texttt{run(output, max\_cases=None)} arbeitet seriell mit Lock, persistiert
+Versuche/Fehler und übernimmt nur hash-/identitätsgeprüfte Erfolge. Ein
+Prozessabbruch hinterlässt Wiederaufnahmezustand; Teilversuche werden nicht
+als erfolgreich wiederverwendet. \texttt{max\_cases} begrenzt neue Versuche,
+nicht bereits erfolgreiche Übernahmen. Kein versteckter Multiprocessing-Dienst.
+Minimalbeispiel: \nolinkurl{examples/parameter_study/run.py}; Heat-/Piezo-
+Lebenszyklusfälle: \nolinkurl{examples/study_recipes/run.py}.
+
+\texttt{Quantity} definiert eindeutigen Namen, metric/point/cell-Quelle, Feld,
+SI-Einheit, fachliche Definition, Reduktion, Komponente und optionale Indizes.
+Reduktionen sind ungeglättete ungegewichtete Rohwertreduktionen, keine
+Flächen-/Volumenintegrale. \texttt{scalar} verlangt genau einen Wert;
+vector-Komponente über Metadatenname oder norm. Optionale absolute Toleranz
+bewertet den Betrag in derselben SI-Einheit, keine relativen Null-Bilanzen.
+\texttt{export\_study\_table} schreibt neue CSV/JSON/Markdown-Verzeichnisse,
+\texttt{read\_study\_table} prüft Schema, CSV-Hash und CSV-/JSON-Konsistenz.
+Alle Fälle bleiben sichtbar, fehlende Werte samt Ursache; keine Solverausführung
+beim Lesen. Export ersetzt kein Netzkonvergenz-/Messvalidierungsurteil.
+
+\section{Inspectierbare polynomiale Surrogate}
+\texttt{Variable} definiert Name/SI-Einheit/Definition.
+\texttt{SurrogateData(X[n,p],Y[n,q],case\_ids,parameters,targets,provenance=...)}
+kopiert endliche reelle Matrizen, eindeutige Fälle und Pflichtprovenienz auf
+readonly Speicher. \texttt{from\_table} nutzt überprüfte Mengen und
+prüft Fall-/Spalten-/Einheitenkonsistenz. Kein complex/bool/NaN oder stiller
+Ausschluss fehlgeschlagener Fälle. DataSplit bindet getrennte Trainings-/Test-
+IDs; \texttt{split\_cases} hält identische Eingabepunkte gruppiert und seeded.
+Testdaten bestimmen weder Skalierung noch Modellfit.
+
+\texttt{fit\_surrogate}: expliziter Grad/Ridge, Trainingsskalierung,
+polynomiale Basis und prüfbare Koeffizienten. Unterbestimmter Rang,
+inkonsistente IDs, Leakage und unzulässige Daten sind Fehler.
+PolynomialSurrogate liefert Prediction mit Werte[n,q], Zielmetadaten und
+Extrapolationsmaske[n]. Außerhalb der Trainingsbox wird standardmäßig
+abgelehnt; erlaubte Extrapolation bleibt markiert. Trainings-/Test-MAE,
+RMSE und Maximalfehler bleiben pro Ziel/SI-Einheit getrennt.
+Speichern ist atomar, standardmäßig ohne Überschreiben; Laden prüft Schema,
+Hash, Formen, Training/Test-Provenienz und tatsächliche Artefaktstruktur.
+Approximationsfehler ist keine experimentelle Eingabeunsicherheit oder
+FEM-Netzfehlergrenze. Beispiel: \nolinkurl{examples/surrogate_heat/run.py}.
+
+\section{Optionale Bilder und Wärmeindikatoren}
+\texttt{plot\_field(mesh, values, ...)} verarbeitet reelle rohe Tet4-
+Feldarrays mit \texttt{association=node/cell}, explizitem Namen/SI-Einheit,
+aktiven Knoten und optionaler xyz-/Voigt-Komponente oder vector magnitude.
+Tet10 und komplexe Felder werden abgelehnt. FieldPlot enthält owned Figure,
+Axes, Artist, Außenflächen-Indizes und tatsächliche Farbwerte.
+Knotenfarben sind arithmetische Flächenmittel nach Komponenten-/Normauswertung;
+Zellfarben kommen ungeglättet aus der owning volume cell. Keine automatische
+von-Mises-Größe. Explizite endliche wachsende Farblimits oder dokumentierte
+Erweiterung eines konstanten automatischen Bereichs.
+\texttt{save\_jpeg(plot, path, dpi=150, overwrite=False)} schreibt JPEG in
+ein bestehendes Verzeichnis; Pixelgröße ist figsize in Zoll mal DPI.
+Matplotlib ist ein separates Extra, erst bei Plotaufruf erforderlich.
+Aufrufer schließt Figuren; mutable Plotobjekte sind keine frozen Resultate.
+Kein pyplot-Registrieren, show, globaler Style- oder Backendwechsel.
+Beispiel: \nolinkurl{examples/field_visualization/run.py}.
+
+\texttt{heat\_indicator}/\texttt{mark\_bulk} sind Forschungs-API für stationäre
+Tet4-Wärme: Residualbeiträge, Flächensprünge und deterministische Markierung.
+Kein garantierter globaler Fehler, kein Remeshing und kein Tet10-Transfer.
+Definition/Skalierung stehen in Doc/43; niedrigste Assembly-/Element-/Physik-
+Helfer bleiben genauso Forschung oder interne Erweiterungsgrenzen.
+\endgroup
+\input{chapters/uncertainty-api}

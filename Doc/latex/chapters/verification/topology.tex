@@ -1,0 +1,27 @@
+\chapter{M11: Gradienten-, Netz- und Geometrienachweise}\label{vv:topology}
+Die Referenzgrenzen wurden vor den Läufen in Dokument 83 festgelegt.
+Vollmaterial wird mit dem bestehenden Mechaniksolver verglichen;
+Finitedifferenzen lösen jede gestörte Zustandsaufgabe neu. Schritte
+\(10^{-3},10^{-4},10^{-5}\) prüfen Einzel-/Mehrlastfälle, Randzellen,
+ungleiche Volumina, feste Regionen und nahezu leere/volle Entwürfe.
+Die Gradienten-Normgrenze beträgt \(2\cdot10^{-4}\), die absolute
+Volumenableitungsgrenze \(2\cdot10^{-9}\).
+
+Drei Netze mit 96, 324 und 768 Tet4 und zwei feste Radien 0.3/0.6 m
+prüfen Volumen, Nachgiebigkeit, Zustandsresiduen, Arbeit/Energie und
+Zwischenmaterial. Ein Wiederholungslauf und eine Einzellastvariante ergänzen
+die Matrix. Das frei transformierte SLSQP erreicht die ursprünglichen Budgets;
+Erstläufe ohne Koordinatenskalierung mit Budgetstopps bleiben als No-go
+archiviert. Die diskrete Passivmenge ist netzdefiniert; der Vergleich untersucht
+auch deren Diskretisierung und ist kein reiner kontinuierlicher h-Fehlernachweis.
+
+Reine Schwellen und ein ausdrücklich zusätzlicher Verbindungsweg werden
+getrennt berichtet. Eine akzeptierte Variante je Fall benötigt C-Verhältnis
+höchstens 2 und Geometrievolumen höchstens 0.9; die ursprüngliche Optimierung
+bleibt auf 0.6 begrenzt. Mehr Material nach Verbindung ist sichtbar.
+Spannungsspitzen werden lokalisiert, nicht als netzkonvergente zulässige
+Materialspannungen freigegeben. Quellen, vollständige Messmatrix und No-go-Fälle
+stehen in Dokument 85 und im versionierten M11-Nachweisarchiv.
+Die endgültigen Integrations-/CI-, Handbuch- und Release-Nachweise gehören
+zu Dokument 87 und Release-Issue 83. Unabhängiges menschliches Fachreview liegt
+nicht vor und wird durch diese numerischen Prüfungen nicht ersetzt.

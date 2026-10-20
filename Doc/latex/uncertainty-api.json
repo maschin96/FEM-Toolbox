@@ -1,0 +1,154 @@
+{
+  "schema": 1,
+  "exports": [
+    "Normal",
+    "SamplingPlan",
+    "UncertainParameter",
+    "UncertaintyStudy",
+    "Uniform",
+    "local_sensitivity",
+    "summarize_samples"
+  ],
+  "symbols": {
+    "Normal": {
+      "kind": "class",
+      "bases": [],
+      "decorators": [
+        "dataclass(frozen=True)"
+      ],
+      "fields": {
+        "mean": {
+          "annotation": "float",
+          "default": null
+        },
+        "standard_deviation": {
+          "annotation": "float",
+          "default": null
+        }
+      },
+      "methods": {}
+    },
+    "Uniform": {
+      "kind": "class",
+      "bases": [],
+      "decorators": [
+        "dataclass(frozen=True)"
+      ],
+      "fields": {
+        "lower": {
+          "annotation": "float",
+          "default": null
+        },
+        "upper": {
+          "annotation": "float",
+          "default": null
+        }
+      },
+      "methods": {}
+    },
+    "UncertainParameter": {
+      "kind": "class",
+      "bases": [],
+      "decorators": [
+        "dataclass(frozen=True)"
+      ],
+      "fields": {
+        "name": {
+          "annotation": "str",
+          "default": null
+        },
+        "target": {
+          "annotation": "str",
+          "default": null
+        },
+        "unit": {
+          "annotation": "str",
+          "default": null
+        },
+        "distribution": {
+          "annotation": "Normal | Uniform",
+          "default": null
+        },
+        "justification": {
+          "annotation": "str",
+          "default": null
+        }
+      },
+      "methods": {}
+    },
+    "SamplingPlan": {
+      "kind": "class",
+      "bases": [],
+      "decorators": [],
+      "fields": {},
+      "methods": {
+        "__init__": {
+          "parameters": "self, parameters: Sequence[UncertainParameter], *, size: int, seed: int, correlation: ArrayLike | None=None",
+          "returns": "None",
+          "decorators": []
+        },
+        "parameters": {
+          "parameters": "self",
+          "returns": "tuple[UncertainParameter, ...]",
+          "decorators": [
+            "property"
+          ]
+        },
+        "size": {
+          "parameters": "self",
+          "returns": "int",
+          "decorators": [
+            "property"
+          ]
+        },
+        "seed": {
+          "parameters": "self",
+          "returns": "int",
+          "decorators": [
+            "property"
+          ]
+        },
+        "to_document": {
+          "parameters": "self",
+          "returns": "dict[str, Any]",
+          "decorators": []
+        },
+        "sample": {
+          "parameters": "self",
+          "returns": "NDArray[np.float64]",
+          "decorators": []
+        }
+      }
+    },
+    "summarize_samples": {
+      "kind": "function",
+      "parameters": "values: ArrayLike, *, unit: str, numerical_error_bound: float | None, quantile_probabilities: Sequence[float]=(0.025, 0.5, 0.975)",
+      "returns": "dict[str, Any]",
+      "decorators": []
+    },
+    "local_sensitivity": {
+      "kind": "function",
+      "parameters": "evaluate: Callable[[NDArray[np.float64]], float], *, center: ArrayLike, steps: ArrayLike",
+      "returns": "dict[str, Any]",
+      "decorators": []
+    },
+    "UncertaintyStudy": {
+      "kind": "class",
+      "bases": [],
+      "decorators": [],
+      "fields": {},
+      "methods": {
+        "__init__": {
+          "parameters": "self, plan: SamplingPlan, *, model: str, root: str | Path",
+          "returns": "None",
+          "decorators": []
+        },
+        "run": {
+          "parameters": "self, output: str | Path, *, quantities: Sequence[Quantity], numerical_error_bounds: Mapping[str, float | None], sensitivity_center: ArrayLike | None=None, sensitivity_steps: ArrayLike | None=None",
+          "returns": "dict[str, Any]",
+          "decorators": []
+        }
+      }
+    }
+  }
+}

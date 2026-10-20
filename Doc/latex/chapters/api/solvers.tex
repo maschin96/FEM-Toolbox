@@ -1,0 +1,103 @@
+\chapter{Solver-, Ergebnis- und Zeitverträge}
+\label{api:solvers}\index{Solver}\index{Ergebnis}\index{Backend}
+\begingroup\raggedright
+\section{Stationäre direkte APIs}
+Die exakten Schlüsselwortargumente und Rückgabetypen stehen im Inventar.
+\texttt{solve\_heat}, \texttt{solve\_elasticity},
+\texttt{solve\_electrostatics}, \texttt{solve\_piezoelectric} nehmen Mesh,
+Material(e) und feldpassende Dirichlet-Daten; optional Lasten/Elektroden/
+thermische Eigenverzerrung gemäß Physik. Jeder DOF-Helfer liefert die passende
+DofMap, damit inaktive Netzpunkte nicht als aktive Freiheitsgrade erscheinen.
+\texttt{solve\_thermomechanics} und \texttt{solve\_thermopiezoelectric}
+übertragen zunächst $T$ auf Mechanik/Piezo auf demselben Netz. Keine
+reziproke Wärmeproduktion oder mechanisch-elektrische Temperaturantwort.
+Thermomechanik hat keinen separaten \texttt{Model.physics}-Modus.
+
+Sei $n$ die Anzahl aktiver Knoten, $e$ die Eingabezellzahl.
+HeatResult: temperature$[n]$ K, gradient$[e,3]$ K/m, heat\_flux$[e,3]$ W/m$^2$,
+reactions/residual$[n]$ W. ElasticResult: displacement$[n,3]$ m,
+strain$[e,6]$ dimensionslos, stress$[e,6]$ Pa, energy$[e]$ J,
+reactions/residual$[n,3]$ N, Kraftbilanz$[3]$ N, Momentbilanz$[3]$ N m.
+ElectrostaticResult: potential$[n]$ V, E$[e,3]$ V/m, D$[e,3]$ C/m$^2$,
+energy$[e]$ J, reactions/residual$[n]$ C. PiezoelectricResult kombiniert $u$
+und $\phi$ samt feldweisen Residuen, Kraft-/Moment-/Ladungsbilanz und
+Energiegrößen. Die Kopplungsergebnisse enthalten die beiden Teilresultate;
+keine ungekennzeichnete gemischte Bilanz.
+
+Tet4-Rohfelder sind zellweise konstant; Tet10-gradient/stress/E/D sind
+Schwerpunktwerte mit \texttt{field\_points[e,3]} in m, keine geglätteten
+Knotenfelder und keine überall konstanten quadratischen Felder. Ergebnisarrays
+sind owned/readonly; Bilanzen gehören zum tatsächlich diskreten Modell.
+Quasi-statische lineare kleine Deformationen; gültige Lagerung/Gauge,
+positive Materialblöcke und ausreichende Geometrie sind Voraussetzungen.
+Nullraum, Material-/Topologiefehler, fehlgeschlagene Residuen/Bilanzen und
+Backendfehler werden diagnostiziert; kein Ergebnis mit künstlichem Erfolg.
+Beispiele: \nolinkurl{examples/steady_heat.py},
+\nolinkurl{examples/elastic_tension.py}, \nolinkurl{examples/parallel_plate.py},
+\nolinkurl{examples/piezo_d33.py}, \nolinkurl{examples/thermopiezoelectric/run.py}.
+
+\section{Zeitprofile und Wärmezeitintegration}
+Step und Ramp beschreiben SI-Amplituden und Zeiten in s. Ramp ist außerhalb
+des Intervalls konstant, innerhalb linear; endliche Grenzen und steigender
+Zeitraum. TimeSeries nimmt times$[nt]$ und Werte derselben Zeilenanzahl,
+explizite lineare/previous-Interpolation sowie Events. Endliche Abfragezeiten,
+Ereignisseiten und keine still erfundene Extrapolation gelten laut Doc/33.
+\texttt{integration\_times} verlangt streng steigende endliche Raster und
+fügt erklärte Ereignisse ein; die robuste Rampen-Profilabfrage ist keine
+Zusage numerisch beliebig großer Integrationszeitschritte.
+
+\texttt{solve\_transient\_heat}: konstante positive Dichte/Wärmekapazität,
+Backward Euler, Temperaturbedingungen und zeitabhängige Quellen/Flächenlasten.
+TransientHeatResult bindet frames an Times in s; HeatFrame enthält aktive
+Temperaturen K, Zeit und Residualdaten. HeatBalance enthält Zeitschritt s und gespeicherte Energieänderung J; es trennt
+Speicherung, Quellen, vorgeschriebenen Abfluss, Konvektion und Dirichlet-Zufuhr
+in W. Anfangsfeld und Sprung-/Ereigniskonventionen sind explizit; kein eigener
+adaptive-Zeitintegration-/Temperaturmaterialanspruch. HeatSeriesWriter bindet
+an exakt passendes Mesh/Hash und schreibt VTU/PVD/CSV/Manifest.
+Minimalbeispiel: \nolinkurl{examples/transient_heat/run.py}.
+
+\section{Piezo-Moden, Newmark und Harmonik}
+\texttt{solve\_piezoelectric\_modes}: konsistente mechanische Masse,
+algebraisches elektrisches Feld, statische elektrische Kondensation,
+positive Moden und Massennormierung. Ergebnisfrequenzen rad/s und Hz;
+modaler $u$-Vektor ist massennormiert, keine willkürliche physische Amplitude.
+Keine Moden bei ungeprüften Starrkörper-/Gauge-Moden. Dichte erforderlich;
+Randbedingungen homogen in der Eigenwertanalyse. Referenz ist eine begrenzte
+dichte Analyse, nicht ein unbegrenzt skalierender Eigenwertdienst.
+
+\texttt{solve\_transient\_piezoelectric}: ungedämpfte Average-Acceleration-
+Newmark-DAE mit $u,v,a$ in m, m/s, m/s$^2$ und $\phi$ in V.
+Felder mechanical$[nt,n,3]$, potential$[nt,n]$; Originalresiduen enthalten
+Trägheit/Reaktionen. KinematicValues liefert konsistente vorgeschriebene
+Ableitungen; endliche Sprünge in $u/v$ sind nicht unterstützt. Energie J,
+Zeit s, feldweise Residuen und schwebende Elektrodenladung bleiben getrennt.
+\texttt{solve\_harmonic\_piezoelectric}: nichtnegative einzelne Frequenz in Hz
+(einschließlich DC), komplexe Spitzenwerte ohne Dämpfung; Resonanz und
+ill-konditionierte Systeme werden abgelehnt. Komplexe Ergebnisse folgen
+dem Inventarvertrag. Kein realer Export unter
+Verlust der Imaginärteile. PiezoDynamicResult bindet die Lösung an Mesh,
+Materialien und Provenienz, ModelResult an Physik/Schema.
+Beispiele: \nolinkurl{examples/piezo_dynamics/run.py},
+\nolinkurl{examples/tet10_modes/run.py},
+\nolinkurl{examples/tet10_newmark/run.py},
+\nolinkurl{examples/tet10_harmonic/run.py}; Grenzen siehe Doc/34,51,54,55.
+
+\section{Optionale Backends und interne Reduktionsgrenze}
+Der \texttt{backend}-Hook der Python-Solver ist eine experimentelle
+Erweiterungsgrenze; Model/TOML bleibt SciPy. LinearBackend faktorisiert das
+bereits reduzierte System, ohne selbst Lagerungen/Gauge/Elektroden zu ändern.
+Feldpartition, SI-Skalierung, $(n,)$ oder $(n,nrhs)$, real/complex und
+positive-definite/general müssen explizit passen. LinearSolution/SolveReport
+besitzen unskalierte Werte und feldweise Residuen; konvergenzfehlerhafte
+Lösungen werden nicht als Erfolg zurückgegeben. ScipyBackend, PetscBackend
+und PetscFieldSplitBackend werden im Forschungs-/Backendvertrag beschrieben,
+keine neue Stabilitätszusage für diese internen Adapter.
+
+PETSc ist optional und erst bei angefordertem Backend erforderlich. Reale und
+komplexe native Builds sind verschiedene Umgebungen. Zu kleines KSP-Budget,
+fehlende Dependency, inkompatibler Skalartyp oder fehlgeschlagener Schur-
+Preconditioner bleiben Fehler. Mathematische/physikalische Toleranzen kommen
+vom jeweiligen Solver, nicht von der KSP-Erfolgsmeldung allein.
+Minimalnachweise: \nolinkurl{tests/petsc/test_fieldsplit.py}
+und \nolinkurl{Doc/39_PETSC_FIELDSPLIT.md}.
+\endgroup

@@ -1,0 +1,122 @@
+\chapter{Globale Assembly, Elektroden und Auswertung}\label{chap:algebra}
+\section{Freiheitsgrade und Materialregionen}
+Ein skalares Feld trägt einen DOF pro aktivem Knoten, Mechanik drei in
+knotenweiser xyz-Reihenfolge. Piezo verwendet global $[\mathbf u,\boldsymbol\phi]$;
+die allgemeine Feldreihenfolge bei drei Feldern ist $[\mathbf u,T,\phi]$.
+Aktive Knoten sind die sortierten in Volumenzellen benutzten Knoten.
+Netzknotenindizes, kompakte DOF-Indizes und externe Entitäts-IDs sind
+verschiedene Mengen. Ein ungenutzter Netzpunkt erzeugt keinen Solver-DOF;
+Ergebnisarrays müssen über \texttt{node\_ids} zurückabgebildet werden.
+
+Mit der Extraktionsmatrix $\mathbf R_e$ gilt
+\begin{equation}\label{eq:assembly}
+\mathbf A=\sum_e\mathbf R_e^T\mathbf A_e\mathbf R_e,
+\qquad\mathbf b=\sum_e\mathbf R_e^T\mathbf b_e+\mathbf b_{\rm boundary}.
+\end{equation}
+COO-Einträge werden addiert und nach CSR/CSC überführt; gemeinsame Knoten
+summieren Beiträge. Jede aktive Zelle benötigt je Physik genau eine
+Materialzuordnung. Identische überlappende Zuordnungen sind zulässig,
+widersprüchliche Zuordnungen, Lücken und ungenutzte Definitionen nicht.
+Perfekte konforme Interfaces teilen Primär-DOFs; damit sind $T,\phi,\mathbf u$
+stetig, während Gradienten und Rohspannungen springen können.
+Die schwache Form erzwingt Interface-Fluss-/Traktionsgleichgewicht im
+Galerkin-Sinn, nicht punktweise Kontinuität jeder exportierten Probe.
+\index{Assembly}\index{Materialregion}
+
+\section{Symmetrieerhaltende Dirichlet-Elimination}
+$\mathbf P_f$ sei der diagonale Projektor auf freie DOFs, $\mathbf g$ habe
+vorgegebene Werte auf festen und null auf freien DOFs. Für eine reelle
+symmetrische Matrix ist die implementierte Vollraumform
+\begin{equation}\label{eq:dirichlet}
+\widetilde{\mathbf A}=\mathbf P_f\mathbf A\mathbf P_f+(\mathbf I-\mathbf P_f),
+\qquad\widetilde{\mathbf b}=\mathbf P_f(\mathbf b-\mathbf A\mathbf g)+\mathbf g.
+\end{equation}
+Die freien Gleichungen sind äquivalent zu
+$\mathbf A_{ff}\mathbf x_f=\mathbf b_f-\mathbf A_{fc}\mathbf g_c$.
+Symmetrie bleibt erhalten; ursprüngliche $\mathbf A,\mathbf b$ werden für
+Reaktionen bewahrt. Die Einheitszeilen sind algebraische Vorgaben und besitzen
+keine ursprüngliche physikalische Steifigkeitseinheit.
+Identische Mehrfachvorgaben sind erlaubt, widersprüchliche Werte Fehler.
+
+Eine Zwei-Feder-Kette liefert als Handrechnung
+\begin{equation}\label{eq:spring-example}
+\mathbf A=\begin{pmatrix}1&-1&0\\-1&2&-1\\0&-1&1\end{pmatrix},
+\quad\mathbf b=(0,0,3)^T,\quad x_0=2.
+\end{equation}
+Die freien Gleichungen geben $x_1=5$, $x_2=8$; das ursprüngliche Residuum
+ist $(-3,0,0)^T$. Die feste Einheitszeile hätte Residuum null und würde die
+Lagerreaktion verlieren. Zahlen gelten für Federsteifigkeit 1 N/m,
+Verschiebungen in m, Endlast 3 N; der Test ist algebraisch und kein
+Kleine-Verzerrungs-Experiment.
+\index{Dirichlet-Elimination}\index{Reaktion}
+
+\section{Equipotentiale Elektroden und Gesamtladung}
+Eine Inzidenzmatrix $\mathbf P_e$ bildet alle Potentialknoten einer schwebenden
+Elektrode auf genau einen Leiter-DOF ab. Mechanik und andere elektrische
+DOFs bleiben unverändert. Mit $\mathbf x=\mathbf P_e\mathbf y$ gilt
+\begin{equation}\label{eq:electrode-condensation}
+\mathbf A_r=\mathbf P_e^T\mathbf A\mathbf P_e,\qquad
+\mathbf b_r=\mathbf P_e^T\mathbf b-\mathbf q_L.
+\end{equation}
+$\mathbf q_L$ trägt die vorgegebene Gesamtleiterladung auf dem Leiter-DOF.
+Nach Rückabbildung $\mathbf r=\mathbf A\mathbf x-\mathbf b$ folgt
+$\sum_{i\in L}r_i=-Q_L$. Einzelne Elektrodenknoten dürfen Residuen besitzen;
+ihre Summe ist die freie elektrische Gleichung. Daher werden sie in der
+Auswertung nicht fälschlich wie voneinander unabhängige freie Potentiale
+behandelt. Alle sechs Triangle6-Knoten, auch Eckknoten mit verschwindender
+konstanter Last, gehören zur Elektrode.
+
+Die Kondensation erhält Symmetrie. Nachfolgende Dirichlet-Vorgaben fixieren
+feste Leiterpotentiale und den erforderlichen Bezug. Sich an einem Knoten
+berührende unterschiedliche Elektroden, doppelte Facetten, zusätzliche
+Potentialvorgaben auf Floating-Knoten und simultane D-Randflussvorgaben auf
+Leiterflächen sind widersprüchliche Daten. Der Solver lehnt sie ab.
+\index{Schwebende Elektrode}
+
+\subsection{Handrechnung mit vorgegebener Leiterladung}
+Ein 1-m-Quader, Fläche 1 m$^2$, $e=0{,}5$ C/m$^2$, $\kappa=2$ F/m und
+vorgegebene Dehnung $\varepsilon=0{,}1$ besitzt
+$D=0{,}05-2\phi'$, $Q_{L,\rm rechts}=-D$.
+Leerlauf $Q_L=0$ gibt $\phi(1)=0{,}025$ V; Kurzschluss gibt $D=0{,}05$
+C/m$^2$ und $Q_L=-0{,}05$ C. Mit $Q_L=1{,}95$ C ist
+$D=-1{,}95$ C/m$^2$ und $\phi(1)=1$ V. Das Vorzeichen der Leiterladung
+ist damit direkt nachrechenbar, ohne einen Solver als Referenz zu verwenden.
+
+\section{Feldrekonstruktion, Energien und Bilanzen}
+Primärfelder werden mit den ursprünglichen Formfunktionen interpoliert;
+Messpunkte sind keine Nächster-Knoten-Auswahl. Tet4 liefert konstante rohe
+Gradienten, Spannung, Fluss, E und D. Tet10 liefert rohe Schwerpunktproben
+mit explizitem Auswerteort. Auf konformen Netzen bleiben die Primärfelder
+stetig, die abgeleiteten Werte im Allgemeinen unstetig. Nodale Mittelung,
+Glättung oder Projektion darf nicht als Verbesserung der physikalischen
+Genauigkeit interpretiert werden.
+
+Zellenergie/-enthalpie ist bei Tet10 ein Quadraturintegral; Schwerpunktprobe
+mal Volumen ist im Allgemeinen falsch. Für $T=x^2$ in
+Abschnitt~\ref{sec:unit-tet} wäre die Schwerpunkt-Energiedichte $8(1/4)^2$
+und ihr Volumenprodukt $1/12$ W K statt $2/15$ W K.
+Tet4 verwendet die dokumentierte thermische Zellmittelkonvention.
+Komplexe Felder werden vor der Betrags-/Phasenbildung interpoliert;
+$|\sum N_a\hat u_a|$ ist nicht $\sum N_a|\hat u_a|$.
+Nullgefüllte inaktive Daten werden mit Gültigkeitsmasken von echten Nullwerten
+unterschieden.
+
+Freie Residuen, Reaktionen, Leiterladungen, Wärmeleistung, Kraft und Moment
+werden am ursprünglichen System rekonstruiert. Die Globalkontrollen aus
+Gleichungen~\ref{eq:thermal-balance} und \ref{eq:charge-balance} bleiben
+getrennt; ihre SI-Einheiten dürfen nicht in eine einzige unskalierte Norm
+vermengt werden. Eine Verletzung unterhalb eines numerisch begründeten
+Rundungsbudgets ist anders zu beurteilen als ein fehlender Bilanznachweis.
+
+\subsection*{Implementierung und Nachweise.}
+{\small\raggedright
+\path{src/fem_toolbox/assembly/__init__.py},
+\path{src/fem_toolbox/boundary/electrodes.py},
+\path{src/fem_toolbox/solvers/piezoelectric.py};
+\path{tests/unit/test_assembly.py},
+\path{tests/patch/test_electrodes.py},
+\path{tests/patch/test_material_interfaces.py},
+\path{tests/unit/test_tet10_piezoelectric_integration.py}.
+Die Quellen-/Nachweismatrix benennt die weitere Topologie- und Exportabdeckung.
+
+\par}

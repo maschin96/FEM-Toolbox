@@ -9,6 +9,7 @@ import os
 import re
 import tomllib
 from collections.abc import Mapping
+from dataclasses import replace
 from hashlib import sha256
 from importlib.metadata import version
 from pathlib import Path
@@ -433,6 +434,16 @@ class Study:
                     )
                 model = Model(mesh=mesh, document=document)
                 run = model.solve()
+                run = replace(
+                    run,
+                    provenance=replace(
+                        run.provenance,
+                        solver_parameters={
+                            **run.provenance.solver_parameters,
+                            "study_case": _result_identity(case),
+                        },
+                    ),
+                )
                 fields, manifest = export_result_bundle(
                     directory / "result", model.mesh, run
                 )
@@ -477,6 +488,170 @@ def _write_catalog(path: Path, catalog: dict[str, Any]) -> None:
             temporary.unlink(missing_ok=True)
 
 
+def _catalog_keys(value: Any, keys: set[str], path: str) -> None:
+    if not isinstance(value, dict):
+        _fail(path, "expected a table")
+    for key in sorted(keys - value.keys()):
+        _fail(f"{path}.{key}", "missing required field")
+    if value.keys() - keys:
+        _fail(path, "unexpected fields")
+
+
+def _catalog_string(value: Any, path: str, *, digest: bool = False) -> None:
+    if not isinstance(value, str) or not value.strip():
+        _fail(path, "expected a nonempty string")
+    if digest and not re.fullmatch("[0-9a-f]{64}", value):
+        _fail(path, "expected a lowercase SHA-256 digest")
+
+
+def _catalog_json(value: Any, path: str, *, mappings: bool = True) -> None:
+    if isinstance(value, dict) and mappings:
+        for key, nested in value.items():
+            _catalog_json(nested, f"{path}.{key}")
+    elif isinstance(value, list):
+        for index, nested in enumerate(value):
+            _catalog_json(nested, f"{path}[{index}]", mappings=mappings)
+    elif type(value) not in (str, bool, int, float) or (
+        isinstance(value, float) and not math.isfinite(value)
+    ):
+        _fail(path, "expected finite JSON values")
+
+
+def _catalog_fingerprints(value: Any, path: str) -> None:
+    _catalog_keys(value, {"model", "mesh", "solver", "input"}, path)
+    for key, digest in value.items():
+        _catalog_string(digest, f"{path}.{key}", digest=True)
+
+
+def _catalog_path(value: Any, path: str) -> None:
+    _catalog_string(value, path)
+    if Path(value).is_absolute() or ".." in Path(value).parts:
+        _fail(path, "expected a relative path without parent traversal")
+
+
+def _catalog_result(value: Any, path: str) -> None:
+    _catalog_keys(
+        value,
+        {
+            "manifest",
+            "fields",
+            "manifest_sha256",
+            "fields_sha256",
+            "model_input_sha256",
+        },
+        path,
+    )
+    for key in ("manifest", "fields"):
+        _catalog_path(value[key], f"{path}.{key}")
+    for key in ("manifest_sha256", "fields_sha256", "model_input_sha256"):
+        _catalog_string(value[key], f"{path}.{key}", digest=True)
+
+
+def _catalog_attempts(value: Any, path: str) -> None:
+    if type(value) is not int or value < 0:
+        _fail(path, "expected a nonnegative integer")
+
+
+def _validate_case(case: Any, path: str) -> None:
+    """Validate persisted structure, including failed inputs, without solving."""
+    _catalog_keys(
+        case,
+        {
+            "case_id",
+            "parameters",
+            "document",
+            "fingerprints",
+            "versions",
+            "status",
+            "attempts",
+            "error",
+            "result",
+            "attempt_directory",
+            "history",
+        },
+        path,
+    )
+    _catalog_string(case["case_id"], f"{path}.case_id", digest=True)
+    if not isinstance(case["parameters"], dict):
+        _fail(f"{path}.parameters", "expected a table")
+    for name, parameter in case["parameters"].items():
+        p = f"{path}.parameters.{name}"
+        if not re.fullmatch("[A-Za-z_][A-Za-z0-9_]*", name):
+            _fail(p, "invalid parameter name")
+        _catalog_keys(parameter, {"value", "unit", "target"}, p)
+        _catalog_json(parameter["value"], f"{p}.value", mappings=False)
+        for key in ("unit", "target"):
+            _catalog_string(parameter[key], f"{p}.{key}")
+    if not isinstance(case["document"], dict):
+        _fail(f"{path}.document", "expected a table")
+    _catalog_json(case["document"], f"{path}.document")
+    _catalog_fingerprints(case["fingerprints"], f"{path}.fingerprints")
+    versions = case["versions"]
+    _catalog_keys(
+        versions,
+        {"toolbox", "numpy", "scipy", "meshio", "provenance_schema", "study_revision"},
+        f"{path}.versions",
+    )
+    for key in ("toolbox", "numpy", "scipy", "meshio"):
+        _catalog_string(versions[key], f"{path}.versions.{key}")
+    for key in ("provenance_schema", "study_revision"):
+        if type(versions[key]) is not int or versions[key] < 1:
+            _fail(f"{path}.versions.{key}", "expected a positive integer")
+    status = case["status"]
+    if not isinstance(status, str) or status not in {
+        "pending",
+        "running",
+        "interrupted",
+        "succeeded",
+        "failed",
+        "invalid",
+    }:
+        _fail(f"{path}.status", "invalid case status")
+    _catalog_attempts(case["attempts"], f"{path}.attempts")
+    if case["error"] is not None:
+        _catalog_string(case["error"], f"{path}.error")
+    if case["attempt_directory"] is not None:
+        _catalog_path(case["attempt_directory"], f"{path}.attempt_directory")
+    if status == "succeeded":
+        _catalog_result(case["result"], f"{path}.result")
+        if case["attempts"] == 0:
+            _fail(f"{path}.attempts", "success requires an attempt")
+        if case["attempt_directory"] is None:
+            _fail(f"{path}.attempt_directory", "success requires a directory")
+        if case["error"] is not None:
+            _fail(f"{path}.error", "success cannot have an error")
+    elif case["result"] is not None:
+        _fail(f"{path}.result", "only succeeded cases may have a result")
+    if status in {"running", "failed", "interrupted"}:
+        if case["attempts"] == 0:
+            _fail(f"{path}.attempts", "attempted status requires an attempt")
+        if case["attempt_directory"] is None:
+            _fail(f"{path}.attempt_directory", "attempted status requires a directory")
+    if status == "pending":
+        if case["attempts"] != 0:
+            _fail(f"{path}.attempts", "pending case cannot have attempts")
+        if case["attempt_directory"] is not None:
+            _fail(f"{path}.attempt_directory", "pending case cannot have a directory")
+    if status in {"pending", "running"} and case["error"] is not None:
+        _fail(f"{path}.error", "unfailed status cannot have an error")
+    if status in {"failed", "interrupted", "invalid"} and case["error"] is None:
+        _fail(f"{path}.error", "status requires an error reason")
+    if not isinstance(case["history"], list):
+        _fail(f"{path}.history", "expected a history array")
+    for index, record in enumerate(case["history"]):
+        p = f"{path}.history[{index}]"
+        _catalog_keys(
+            record, {"status", "reason", "fingerprints", "result", "attempts"}, p
+        )
+        if record["status"] != "invalid":
+            _fail(f"{p}.status", "expected invalid")
+        _catalog_string(record["reason"], f"{p}.reason")
+        _catalog_fingerprints(record["fingerprints"], f"{p}.fingerprints")
+        _catalog_attempts(record["attempts"], f"{p}.attempts")
+        if record["result"] is not None:
+            _catalog_result(record["result"], f"{p}.result")
+
+
 def _load_catalog(path: Path) -> dict[str, Any]:
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
@@ -490,37 +665,30 @@ def _load_catalog(path: Path) -> dict[str, Any]:
             data["retired_cases"], list
         ):
             raise ValueError("invalid case lists")
-        ids = []
-        for c in data["cases"]:
-            if not isinstance(c, dict) or not re.fullmatch(
-                "[0-9a-f]{64}", c["case_id"]
-            ):
-                raise ValueError("invalid case ID")
-            ids.append(c["case_id"])
-            if c["status"] not in {
-                "pending",
-                "running",
-                "interrupted",
-                "succeeded",
-                "failed",
-                "invalid",
-            }:
-                raise ValueError("invalid case status")
-            if (
-                type(c["attempts"]) is not int
-                or c["attempts"] < 0
-                or not isinstance(c["history"], list)
-            ):
-                raise ValueError("invalid attempt history")
-            for key in ("fingerprints", "result", "error", "attempt_directory"):
-                c[key]
-        if len(set(ids)) != len(ids):
-            raise ValueError("duplicate case IDs")
+        for group in ("cases", "retired_cases"):
+            ids = []
+            for index, case in enumerate(data[group]):
+                _validate_case(case, f"catalog.{group}[{index}]")
+                ids.append(case["case_id"])
+            if group == "cases" and len(set(ids)) != len(ids):
+                _fail("catalog.cases", "duplicate case IDs")
         return dict(data)
+    except ModelSchemaError:
+        raise
     except (ValueError, KeyError, TypeError) as error:
         raise ModelSchemaError(
             path="catalog", reason=f"corrupt catalog: {error}"
         ) from error
+
+
+def _result_identity(case: dict[str, Any]) -> dict[str, Any]:
+    """Bind a bundle to its case and resolved inputs without host paths."""
+    return {
+        "case_id": _hash(case["parameters"]),
+        "document_sha256": _hash(case["document"]),
+        "fingerprints": case["fingerprints"],
+        "versions": case["versions"],
+    }
 
 
 def _valid_result(root: Path, case: dict[str, Any]) -> bool:
@@ -528,6 +696,16 @@ def _valid_result(root: Path, case: dict[str, Any]) -> bool:
         result = case["result"]
         manifest = _inside(root, result["manifest"])
         fields = _inside(root, result["fields"])
+        expected = _inside(
+            root, f"cases/{case['case_id']}/attempt-{case['attempts']:06d}"
+        )
+        if (
+            case["case_id"] != _hash(case["parameters"])
+            or _inside(root, case["attempt_directory"]) != expected
+            or manifest != expected / "result.json"
+            or fields != expected / "result.vtu"
+        ):
+            return False
         if sha256(manifest.read_bytes()).hexdigest() != result["manifest_sha256"]:
             return False
         if sha256(fields.read_bytes()).hexdigest() != result["fields_sha256"]:
@@ -538,6 +716,8 @@ def _valid_result(root: Path, case: dict[str, Any]) -> bool:
             and data["files"]["fields"] == fields.name
             and data["files"]["fields_sha256"] == result["fields_sha256"]
             and data["provenance"]["input_sha256"] == result["model_input_sha256"]
+            and data["provenance"]["solver"]["parameters"]["study_case"]
+            == _result_identity(case)
         )
     except (OSError, ValueError, KeyError, TypeError, ModelSchemaError):
         return False

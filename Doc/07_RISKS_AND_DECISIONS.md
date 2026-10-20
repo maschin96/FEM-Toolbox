@@ -612,6 +612,64 @@ pyplot-Registrierung. Tet4-Außenflächen mit nodalen Flächenmitteln oder
 Eigentümerzellwerten; keine implizite Materialglättung. Tet10 und komplexe
 Felder werden abgelehnt. [API, Grenzen und Nachweise](62_FIELD_VISUALIZATION.md).
 
+## ADR-053 — Femantis-Namespace und Kompatibilitätsvertrag (#235)
+
+05.10.2026: Der kanonische Produktname wird Femantis, Namespace und Distribution
+werden `femantis`, die Wortmarke bleibt FEMantis. Die Umsetzung wird in die
+bestehende M14-/v2.0.0-Freigabe #113 eingeordnet; kein unabhängiges zweites
+v2.0-Release und kein vorzeitiger Milestone-Branch. Die reine Planung ist
+Repositorypflege nach main, die Umsetzung folgt dem M14-Integrationsworkflow.
+
+Alle im Basisinventar vorhandenen Altmodule bleiben während sämtlicher v2.x-
+Releases als Adapter erreichbar. Entfernung frühestens v3.0.0 mit neuem
+Issue und Ankündigung. Kanonische und alte Imports liefern identische
+Modul-/Klassen-/Exceptionobjekte; keine doppelte Solverimplementierung.
+Eine gezielte DeprecationWarning entsteht am Legacy-Rootimport. Typdaten und
+optionale Abhängigkeiten behalten ihre dokumentierten Verträge.
+
+Die Umbenennung ändert keine persistierten Feldnamen oder Daten-Schemata.
+VTU-Präfixe und Wärme-Serienkennung bleiben erhalten; historische Provenienz,
+Fixtures, Referenzen und Tags werden nicht umgeschrieben. Neue Solverkennungen
+sind nur innerhalb vorhandener frei definierter Schemawerte zulässig.
+Neue persistierte Kennungen verlangen ein eigenes Schema-Issue.
+
+Die öffentlich abgefragten Zielnamen lieferten am Prüftag kein sichtbares
+Projekt-/Domainobjekt; das ist weder Reservierung noch Rechtsfreigabe.
+Registry-Zugriff, Marken-/Bildrechte und Eigentümerfreigaben sind vor externer
+Veröffentlichung nachzuweisen. Keine numerischen oder SI-Konventionen ändern
+sich. Unabhängiges Review dieser Entscheidung steht bis PR-Abnahme aus.
+[Inventar, Befunde und vollständiger Vertrag](77_FEMANTIS_MIGRATION_CONTRACT.md).
+
+## ADR-054 — M9 ohne unbelegten experimentellen Freigabeanspruch (10.10.2026)
+
+Der Eigentümer hat nach erneuter Recherche und Sichtung öffentlich
+lizenzierten Rohmaterials ausdrücklich „M9 wie vorgeschlagen neu planen“
+genehmigt. v1.4.0 umfasst den generischen verifizierten Unsicherheitsworkflow
+#64 und die vollständig abgenommenen vier Fachbände #206–#211. #63/#65 bleiben
+als experimenteller Folgeumfang offen; es gibt keine ausgewählten angenommenen
+Messdaten und keine experimentelle Fallfreigabe. Die bisherige Pflichtkopplung
+von #64 und Dokumentationsabschluss an einen erfolgreichen Messvergleich wird
+explizit aufgehoben, nicht als bestanden bezeichnet.
+
+Erwartung/Varianz, Sensitivität, Sampling-Konvergenz, Seeds, zulässige
+Parameter-/Korrelationsverträge, getrennte numerische Fehlerbudgets und
+reproduzierbare Artefakte sind weiterhin vorab zu verifizieren. Synthetische
+Lehrfälle werden ausdrücklich so bezeichnet; Quellen, Testfehler und
+Verifikationsnachweise werden nicht zu Messdaten umetikettiert. #66 benötigt
+nach wie vor erfolgreiche CI, integrierte Pflichtpakete, Artefaktinstallation,
+vollständige PDF-/Quellenabnahme und Zielcommitprüfung vor Release/Tag.
+[Befunde und vollständiger genehmigter Umfang](66_M9_DATA_SEARCH_AND_RELEASE_OPTIONS.md).
+
+## ADR-056 — M11: gefilterte SIMP-Nachgiebigkeit und SLSQP (19.10.2026)
+
+Für Tet4-Mehrlastfallmechanik werden ein volumengewichteter linearer
+Dichtefilter, positive SIMP-Untergrenze und vollständige adjungierte
+Sensitivitäten gewählt. SLSQP behandelt Volumen und Schranken mit analytischen
+Ableitungen. Keine harte Projektionsfunktion, globale Optimalitätsbehauptung
+oder Fertigungsfreigabe. Die Schwellengeometrie wird mit unverändertem
+Mechaniksolver erneut gerechnet; Reststeifigkeit zählt nicht als Geometrie.
+[Formeln, Alternativen und vorab festgelegte Gates](83_M11_TOPOLOGY_CONTRACT.md).
+
 ## ADR-046 — Zweiter Experimental-Branch: CFD-Kanaloperator
 
 01.10.2026: Auf Nutzerauftrag beginnt M12 unabhängig vom SPICE-Branch.

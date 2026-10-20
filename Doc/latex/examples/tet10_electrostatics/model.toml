@@ -1,0 +1,30 @@
+schema_version = 1
+units = "SI"
+physics = "electrostatics"
+
+[mesh]
+path = "body.msh"
+length_scale_to_m = 1.0
+length_unit = "m"
+
+[materials.phi.synthetic]
+permittivity = 2e-11
+unit = "F/m"
+
+[regions.phi]
+body = "synthetic"
+
+[loads.volume_charge]
+value = -4e-11
+unit = "C/m^3"
+
+[[boundary.dirichlet]]
+field = "phi"
+set = "left"
+value = 0.0
+unit = "V"
+
+[[boundary.surface_charge]]
+set = "right"
+value = -4e-11
+unit = "C/m^2"

@@ -1,0 +1,497 @@
+\chapter{Rezeptkatalog und vollständige Eingaben}\label{sec:app-recipes}
+
+Alle Pfade gelten ab dem entpackten Verzeichnis \path{handbook}. Jedes Python-Programm ist unverändert aus dem Kandidaten eingebettet. Die mitgelieferten Netze, TOML- und CSV-Dateien liegen daneben; keine Entwicklungsinstallation oder Netzgenerierung ist für diese Rezepte nötig. Python bezeichnet hier den Interpreter der separat eingerichteten Artefaktumgebung. Für PowerShell bleibt die Argumentliste gleich; den Interpreterpfad entsprechend anpassen. Fehler beenden ein Skript mit ungleich null. Ein abgeschlossener Prozess allein ist noch kein fachlicher Nachweis.
+
+\index{Rezeptkatalog}
+
+\section{steady-heat}\label{recipe:steady-heat}
+
+\textbf{Erwartung und SI-Einheiten.} Wärme mit Robin-Rand: T=400-40x K, 320 bis 400 K; q\_x=80 W/m$^2$; 960 W Abfluss, Bilanz $\leq$1e-10 W. Temperaturtoleranz 3e-12 K.
+
+\textbf{Grenzen.} Stationärer homogener Quader 2$\times$3$\times$4 m; kein Strahlungs- oder Temperaturabhängigkeitsmodell.
+
+\begin{lstlisting}
+
+python -I examples/steady_heat.py
+
+\end{lstlisting}
+
+\textbf{Dateien.} \path{steady_heat.vtu}.
+
+\textbf{Fehlerhilfe.} Neue Ausgabeziele verwenden; Eingaben unverändert lassen. Bei Schema-/Materialfehlern Kapitel Diagnose, bei Residuen/Bilanzen Kapitel Ergebnisse anwenden.
+
+\lstinputlisting{examples/steady_heat.py}
+
+\section{elastic-tension}\label{recipe:elastic-tension}
+
+\textbf{Erwartung und SI-Einheiten.} Zug: E=1000 Pa, $\nu$=0.25, Traktion 10 Pa. u=(0.01x,-0.0025y,-0.0025z) m; Energie 0.05 J. Verschiebungstoleranz 1e-15 m plus Skript-rtol, Kraftbilanz 1e-12 N.
+
+\textbf{Grenzen.} Lineare kleine Dehnungen; synthetisches Material; keine Kontakt- oder plastische Analyse.
+
+\begin{lstlisting}
+
+python -I examples/elastic_tension.py
+
+\end{lstlisting}
+
+\textbf{Dateien.} \path{elastic_tension.vtu}.
+
+\textbf{Fehlerhilfe.} Neue Ausgabeziele verwenden; Eingaben unverändert lassen. Bei Schema-/Materialfehlern Kapitel Diagnose, bei Residuen/Bilanzen Kapitel Ergebnisse anwenden.
+
+\lstinputlisting{examples/elastic_tension.py}
+
+\section{capacitor}\label{recipe:capacitor}
+
+\textbf{Erwartung und SI-Einheiten.} Kondensator: Abstand 0.002 m, Fläche 0.0012 m$^2$, $\kappa$=2e-11 F/m, Spannung 100 V; C=12 pF, Q=1.2 nC, U=60 nJ. Konkrete relative/absolute Assert-Toleranzen stehen im eingebetteten Skript.
+
+\textbf{Grenzen.} Seitlich D$\cdot$n=0, ohne Randfeldkorrektur; absolute Permittivität.
+
+\begin{lstlisting}
+
+python -I examples/parallel_plate.py
+
+\end{lstlisting}
+
+\textbf{Dateien.} \path{parallel_plate.vtu}.
+
+\textbf{Fehlerhilfe.} Neue Ausgabeziele verwenden; Eingaben unverändert lassen. Bei Schema-/Materialfehlern Kapitel Diagnose, bei Residuen/Bilanzen Kapitel Ergebnisse anwenden.
+
+\lstinputlisting{examples/parallel_plate.py}
+
+\section{expansion}\label{recipe:expansion}
+
+\textbf{Erwartung und SI-Einheiten.} Thermische Expansion bei 313.15 K: u=(0.0002x,0.0004y,0) m; freie Expansion spannungsfrei. Skript prüft Verschiebung, Spannung und Bilanzen mit expliziten Toleranzen.
+
+\textbf{Grenzen.} Stationäre Einwegkopplung Wärme $\rightarrow$ Mechanik, anisotrope synthetische Ausdehnung.
+
+\begin{lstlisting}
+
+python -I examples/thermal_expansion.py
+
+\end{lstlisting}
+
+\textbf{Dateien.} \path{thermal_expansion.vtu}.
+
+\textbf{Fehlerhilfe.} Neue Ausgabeziele verwenden; Eingaben unverändert lassen. Bei Schema-/Materialfehlern Kapitel Diagnose, bei Residuen/Bilanzen Kapitel Ergebnisse anwenden.
+
+\lstinputlisting{examples/thermal_expansion.py}
+
+\section{piezo-d33}\label{recipe:piezo-d33}
+
+\textbf{Erwartung und SI-Einheiten.} Piezo: L=0.02 m, A=1e-4 m$^2$, C33=1e9 Pa, e33=5 C/m$^2$, $\kappa$33=1e-8 F/m. Bei 100 V: u\_z=-0.5 $\mu$m, Q=17.5 nC. Bei 10 N/Kurzschluss: u\_z=2 $\mu$m, Q=-50 nC. Skript prüft beide Fälle und Reziprozität.
+
+\textbf{Grenzen.} Querbewegung gesperrt; Stress-Charge-Konvention, keine echte PZT-Kalibrierung.
+
+\begin{lstlisting}
+
+python -I examples/piezo_d33.py
+
+\end{lstlisting}
+
+\textbf{Dateien.} \path{piezo_d33.vtu}.
+
+\textbf{Fehlerhilfe.} Neue Ausgabeziele verwenden; Eingaben unverändert lassen. Bei Schema-/Materialfehlern Kapitel Diagnose, bei Residuen/Bilanzen Kapitel Ergebnisse anwenden.
+
+\lstinputlisting{examples/piezo_d33.py}
+
+\section{thermopiezo}\label{recipe:thermopiezo}
+
+\textbf{Erwartung und SI-Einheiten.} Ein Tet4: T=(300,310,300,300) K; u\_x=-9/440 m, $\phi$=5/22 V, q\_x=-20 W/m$^2$. Für u, $\phi$ und q gilt absolute SI-Toleranz 1e-12, rtol=0; globale Bilanzen $\leq$1e-10 in ihrer SI-Einheit.
+
+\textbf{Grenzen.} Alle Temperaturen vorgeschrieben, synthetische Tensoren; Bericht ist examplespezifisch und kein generisches Ergebnisbündel.
+
+\begin{lstlisting}
+
+python -I examples/thermopiezoelectric/run.py --output results/thermopiezo
+
+\end{lstlisting}
+
+\textbf{Dateien.} \path{results/thermopiezo/fields.vtu}, \path{results/thermopiezo/report.json}.
+
+\textbf{Fehlerhilfe.} Neue Ausgabeziele verwenden; Eingaben unverändert lassen. Bei Schema-/Materialfehlern Kapitel Diagnose, bei Residuen/Bilanzen Kapitel Ergebnisse anwenden.
+
+\lstinputlisting{examples/thermopiezoelectric/run.py}
+
+\section{transient-heat}\label{recipe:transient-heat}
+
+\textbf{Erwartung und SI-Einheiten.} Aluminium-Preset, T0=293.15 K, Zeitschritte 0.5 s bis 10 s; CSV-Quelle 0 bis 2e6 W/m$^3$; Umgebungssprung 298.15 K ab 5 s, h=20 W/(m$^2$ K). Zeit-/Bilanznachweis im Rezept-Prüflog; keine gemessene Endtemperatur vorgegeben.
+
+\textbf{Grenzen.} Impliziter Euler, konstante Stoffwerte; CSV ist synthetische Eingangskurve, keine unabhängige Messvalidierung.
+
+\begin{lstlisting}
+
+python -I examples/transient_heat/run.py
+
+\end{lstlisting}
+
+\textbf{Dateien.} \path{transient_heat_results/heat.pvd}, \path{transient_heat_results/probes.csv}.
+
+\textbf{Fehlerhilfe.} Neue Ausgabeziele verwenden; Eingaben unverändert lassen. Bei Schema-/Materialfehlern Kapitel Diagnose, bei Residuen/Bilanzen Kapitel Ergebnisse anwenden.
+
+\lstinputlisting{examples/transient_heat/run.py}
+
+\section{piezo-dynamics}\label{recipe:piezo-dynamics}
+
+\textbf{Erwartung und SI-Einheiten.} Tet4 mit C=10 Pa, e=2 C/m$^2$, $\kappa$=4 F/m, $\rho$=6 kg/m$^3$: ein Modus $\omega$=$\surd$(55/3) rad/s; normiertes u=$\surd$10, $\phi$=$\surd$10/2. Zusätzlich CSV-getriebenes Newmark und Frequenzgang. Modalvergleich rtol=1e-12.
+
+\textbf{Grenzen.} Kleiner dichter Referenzfall; keine experimentelle Resonanz oder Genauigkeitszusage für einen beliebigen Zeitschritt.
+
+\begin{lstlisting}
+
+python -I examples/piezo_dynamics/run.py --output results/dynamics
+
+\end{lstlisting}
+
+\textbf{Dateien.} \path{results/dynamics/transient/piezo.pvd}, \path{results/dynamics/harmonic/piezo.pvd}, \path{results/dynamics/modes/piezo.pvd}.
+
+\textbf{Fehlerhilfe.} Neue Ausgabeziele verwenden; Eingaben unverändert lassen. Bei Schema-/Materialfehlern Kapitel Diagnose, bei Residuen/Bilanzen Kapitel Ergebnisse anwenden.
+
+\lstinputlisting{examples/piezo_dynamics/run.py}
+
+\section{tet10-heat}\label{recipe:tet10-heat}
+
+\textbf{Erwartung und SI-Einheiten.} Gerader Tet10: T=300+x$^2$ K, q\_x=-4x W/m$^2$; instationär T=300+t K. Skript: 4e-12 K, 5e-12 W/m$^2$, stationäre Bilanz 2e-11 W, transiente 2e-10 W.
+
+\textbf{Grenzen.} Quadratischer Patch auf gerader Geometrie; keine Netzkonvergenzbehauptung.
+
+\begin{lstlisting}
+
+python -I examples/tet10_heat/run.py --output results/tet10-heat
+
+\end{lstlisting}
+
+\textbf{Dateien.} \path{results/tet10-heat/stationary.vtu}, \path{results/tet10-heat/transient/heat.pvd}.
+
+\textbf{Fehlerhilfe.} Neue Ausgabeziele verwenden; Eingaben unverändert lassen. Bei Schema-/Materialfehlern Kapitel Diagnose, bei Residuen/Bilanzen Kapitel Ergebnisse anwenden.
+
+\lstinputlisting{examples/tet10_heat/run.py}
+
+\section{tet10-electric}\label{recipe:tet10-electric}
+
+\textbf{Erwartung und SI-Einheiten.} $\phi$=x$^2$ V, E\_x=-2x V/m, D=2e-11 E C/m$^2$; U=4e-11/3 J. Skript: $\phi$ 2e-13 V, E 2e-12 V/m, D 1e-22 C/m$^2$; Energie 2e-24 J.
+
+\textbf{Grenzen.} Gerader Tet10, konstanter Dielektrizitätstensor.
+
+\begin{lstlisting}
+
+python -I examples/tet10_electrostatics/run.py --output results/tet10-electric
+
+\end{lstlisting}
+
+\textbf{Dateien.} \path{results/tet10-electric/electric.vtu}.
+
+\textbf{Fehlerhilfe.} Neue Ausgabeziele verwenden; Eingaben unverändert lassen. Bei Schema-/Materialfehlern Kapitel Diagnose, bei Residuen/Bilanzen Kapitel Ergebnisse anwenden.
+
+\lstinputlisting{examples/tet10_electrostatics/run.py}
+
+\section{tet10-elastic}\label{recipe:tet10-elastic}
+
+\textbf{Erwartung und SI-Einheiten.} u\_x=0.01x$^2$ m, $\sigma$\_xx=2x Pa, U=0.02/3 J; Toleranzen u 2e-14 m, $\sigma$ 2e-11 Pa, Energie 2e-15 J, Kraft/Moment 2e-12 SI.
+
+\textbf{Grenzen.} Kleine Dehnungen und synthetischer quadratischer Patch.
+
+\begin{lstlisting}
+
+python -I examples/tet10_elasticity/run.py --output results/tet10-elastic
+
+\end{lstlisting}
+
+\textbf{Dateien.} \path{results/tet10-elastic/solid.vtu}.
+
+\textbf{Fehlerhilfe.} Neue Ausgabeziele verwenden; Eingaben unverändert lassen. Bei Schema-/Materialfehlern Kapitel Diagnose, bei Residuen/Bilanzen Kapitel Ergebnisse anwenden.
+
+\lstinputlisting{examples/tet10_elasticity/run.py}
+
+\section{tet10-piezo}\label{recipe:tet10-piezo}
+
+\textbf{Erwartung und SI-Einheiten.} u\_x=-0.02x m, $\phi$=x V, $\sigma$=0; elektrische Enthalpie -1.52 J; Elektrodenladung 3.04 C. Skript: u 2e-13 m, $\phi$ 2e-12 V, H 2e-12 J, Ladung 2e-11 C.
+
+\textbf{Grenzen.} Äquipotentiale schwebende Elektrode; keine unabhängige Materialmessung.
+
+\begin{lstlisting}
+
+python -I examples/tet10_piezoelectric/run.py --output results/tet10-piezo
+
+\end{lstlisting}
+
+\textbf{Dateien.} \path{results/tet10-piezo/piezo.vtu}.
+
+\textbf{Fehlerhilfe.} Neue Ausgabeziele verwenden; Eingaben unverändert lassen. Bei Schema-/Materialfehlern Kapitel Diagnose, bei Residuen/Bilanzen Kapitel Ergebnisse anwenden.
+
+\lstinputlisting{examples/tet10_piezoelectric/run.py}
+
+\section{tet10-thermomechanics}\label{recipe:tet10-thermomechanics}
+
+\textbf{Erwartung und SI-Einheiten.} T=1+x$^2$ K, u\_x=0.01x$^2$ m, $\sigma$\_xx=2x-x$^2$ Pa; U=0.008/3 J. Skript: T 4e-12 K, u 1e-13 m, $\sigma$ 2e-11 Pa, Energie 2e-14 J.
+
+\textbf{Grenzen.} Direkte Python-API; kein eigenständiger thermomechanics-TOML-Modus; 1 K ist ein mathematischer Patch.
+
+\begin{lstlisting}
+
+python -I examples/tet10_thermomechanics/run.py --output results/tet10-expansion
+
+\end{lstlisting}
+
+\textbf{Dateien.} \path{results/tet10-expansion/coupled.vtu}.
+
+\textbf{Fehlerhilfe.} Neue Ausgabeziele verwenden; Eingaben unverändert lassen. Bei Schema-/Materialfehlern Kapitel Diagnose, bei Residuen/Bilanzen Kapitel Ergebnisse anwenden.
+
+\lstinputlisting{examples/tet10_thermomechanics/run.py}
+
+\section{tet10-thermopiezo}\label{recipe:tet10-thermopiezo}
+
+\textbf{Erwartung und SI-Einheiten.} T=1+x K, $\phi$=-0.01x$^2$/3 V, u=0, D=0, $\sigma$\_xx=-76x/75 Pa. Enthalpie 0.005/3+0.0002/9 J; Feldtoleranzen im Skript, H 2e-13 J.
+
+\textbf{Grenzen.} Einwegkopplung mit thermischem Beitrag zu D; keine Pyroelektrizitäts- oder Rückkopplungsanalyse.
+
+\begin{lstlisting}
+
+python -I examples/tet10_thermopiezoelectric/run.py --output results/tet10-thermopiezo
+
+\end{lstlisting}
+
+\textbf{Dateien.} \path{results/tet10-thermopiezo/coupled.vtu}.
+
+\textbf{Fehlerhilfe.} Neue Ausgabeziele verwenden; Eingaben unverändert lassen. Bei Schema-/Materialfehlern Kapitel Diagnose, bei Residuen/Bilanzen Kapitel Ergebnisse anwenden.
+
+\lstinputlisting{examples/tet10_thermopiezoelectric/run.py}
+
+\section{tet10-modes}\label{recipe:tet10-modes}
+
+\textbf{Erwartung und SI-Einheiten.} Ein freier Eck-DOF: m=6/420, k=(10+4/3)/10, $\omega$=$\surd$(238/3) rad/s; u=$\surd$70, $\phi$=(2/3)$\surd$70. Skript rtol=3e-14.
+
+\textbf{Grenzen.} Massennormierte Mode; Amplitude ist keine erzwungene physikalische Verschiebung.
+
+\begin{lstlisting}
+
+python -I examples/tet10_modes/run.py --output results/tet10-modes
+
+\end{lstlisting}
+
+\textbf{Dateien.} \path{results/tet10-modes/piezo.pvd}.
+
+\textbf{Fehlerhilfe.} Neue Ausgabeziele verwenden; Eingaben unverändert lassen. Bei Schema-/Materialfehlern Kapitel Diagnose, bei Residuen/Bilanzen Kapitel Ergebnisse anwenden.
+
+\lstinputlisting{examples/tet10_modes/run.py}
+
+\section{tet10-newmark}\label{recipe:tet10-newmark}
+
+\textbf{Erwartung und SI-Einheiten.} Freier Oszillator, $\Delta$t=0.01 s; u\_n=0.01 cos(2n arctan($\omega$$\Delta$t/2)) m, $\phi$=2u/3; Energie k$\cdot$0.01$^2$/2 J konstant, rtol=3e-12, u-atol=1e-14 m.
+
+\textbf{Grenzen.} Diskrete Newmark-Referenz statt behaupteter exakter kontinuierlicher Phase.
+
+\begin{lstlisting}
+
+python -I examples/tet10_newmark/run.py --output results/tet10-newmark
+
+\end{lstlisting}
+
+\textbf{Dateien.} \path{results/tet10-newmark/piezo.pvd}.
+
+\textbf{Fehlerhilfe.} Neue Ausgabeziele verwenden; Eingaben unverändert lassen. Bei Schema-/Materialfehlern Kapitel Diagnose, bei Residuen/Bilanzen Kapitel Ergebnisse anwenden.
+
+\lstinputlisting{examples/tet10_newmark/run.py}
+
+\section{tet10-harmonic}\label{recipe:tet10-harmonic}
+
+\textbf{Erwartung und SI-Einheiten.} Komplexe Antwort u=-0.05(1+2i)/(k-m$\omega$$^2$) m und $\phi$=2u/3; Skript rtol=3e-14; Auswertung e\textasciicircum{}(+i$\omega$t).
+
+\textbf{Grenzen.} Singuläre ungedämpfte Resonanz wird abgelehnt; Phasen sind Radiant, Frequenzen im Modell Hz.
+
+\begin{lstlisting}
+
+python -I examples/tet10_harmonic/run.py --output results/tet10-harmonic
+
+\end{lstlisting}
+
+\textbf{Dateien.} \path{results/tet10-harmonic/piezo.pvd}.
+
+\textbf{Fehlerhilfe.} Neue Ausgabeziele verwenden; Eingaben unverändert lassen. Bei Schema-/Materialfehlern Kapitel Diagnose, bei Residuen/Bilanzen Kapitel Ergebnisse anwenden.
+
+\lstinputlisting{examples/tet10_harmonic/run.py}
+
+\section{study-resume}\label{recipe:study-resume}
+
+\textbf{Erwartung und SI-Einheiten.} k=[2,4] W/(m K), Q=8 W/m$^3$, T\_max=300+2/k K: 301 und 300.5 K. Erst ein Fall, danach derselbe Befehl ohne --max-cases; dritter Aufruf übernimmt Ergebnisse. T-atol und Bilanz 1e-11 SI.
+
+\textbf{Grenzen.} Stationäre lokale sequenzielle Studie, kein Scheduler und kein PETSc-TOML.
+
+\begin{lstlisting}
+
+python -I examples/parameter_study/run.py --output results/study --max-cases 1
+
+\end{lstlisting}
+
+\textbf{Dateien.} \path{results/study/catalog.json}.
+
+\textbf{Fehlerhilfe.} Neue Ausgabeziele verwenden; Eingaben unverändert lassen. Bei Schema-/Materialfehlern Kapitel Diagnose, bei Residuen/Bilanzen Kapitel Ergebnisse anwenden.
+
+\lstinputlisting{examples/parameter_study/run.py}
+
+\section{study-report}\label{recipe:study-report}
+
+\textbf{Erwartung und SI-Einheiten.} Erst vollständige study-resume-Studie herstellen. Tabelle enthält T\_max=301/300.5 K und ausgeglichene Leistung (atol 1e-11 W). Lesen gespeicherter Resultate ohne erneuten Solve.
+
+\textbf{Grenzen.} Reduktion über aktive Knoten; fehlende/fehlgeschlagene Ergebnisse bleiben sichtbar, keine Nullersatzwerte.
+
+\begin{lstlisting}
+
+python -I examples/parameter_study/report.py --study results/study --output results/table
+
+\end{lstlisting}
+
+\textbf{Dateien.} \path{results/table/metadata.json}, \path{results/table/values.csv}.
+
+\textbf{Fehlerhilfe.} Neue Ausgabeziele verwenden; Eingaben unverändert lassen. Bei Schema-/Materialfehlern Kapitel Diagnose, bei Residuen/Bilanzen Kapitel Ergebnisse anwenden.
+
+\lstinputlisting{examples/parameter_study/report.py}
+
+\section{study-recipes}\label{recipe:study-recipes}
+
+\textbf{Erwartung und SI-Einheiten.} Heat und anschließend piezo mit eigenem Ausgabeziel: analytische Größen, unabhängiger Direktlauf, Wiederaufnahme ohne neue Versuche, Fingerprintänderungen sowie absichtlich fehlerhafte Materialien werden im Skript geprüft.
+
+\textbf{Grenzen.} Negativfälle gehören zum Nachweis; ein Fehlfall darf nicht als erfolgreicher Nullwert gezählt werden.
+
+\begin{lstlisting}
+
+python -I examples/study_recipes/run.py heat --output results/heat-study
+
+\end{lstlisting}
+
+\textbf{Dateien.} \path{results/heat-study/verification.json}, \path{results/heat-study/table/metadata.json}.
+
+\textbf{Fehlerhilfe.} Neue Ausgabeziele verwenden; Eingaben unverändert lassen. Bei Schema-/Materialfehlern Kapitel Diagnose, bei Residuen/Bilanzen Kapitel Ergebnisse anwenden.
+
+\lstinputlisting{examples/study_recipes/run.py}
+
+\section{surrogate}\label{recipe:surrogate}
+
+\textbf{Erwartung und SI-Einheiten.} k=2; Training Q=0,2,4,6,8,10 W/m$^3$, Test Q=3,7. T=300+Q/8 K, P=Q/6 W; geladenes Modell Q=5: [300.625 K,0.833333333333 W]. T-atol 1e-10 K, P-atol 1e-12 W.
+
+\textbf{Grenzen.} Grad 1, ridge=0; Parameterbox [0,10], Extrapolation standardmäßig verboten. Synthetischer Surrogatnachweis ohne Konfidenzintervall.
+
+\begin{lstlisting}
+
+python -I examples/surrogate_heat/run.py --output results/surrogate
+
+\end{lstlisting}
+
+\textbf{Dateien.} \path{results/surrogate/surrogate.json}, \path{results/surrogate/report.json}.
+
+\textbf{Fehlerhilfe.} Neue Ausgabeziele verwenden; Eingaben unverändert lassen. Bei Schema-/Materialfehlern Kapitel Diagnose, bei Residuen/Bilanzen Kapitel Ergebnisse anwenden.
+
+\lstinputlisting{examples/surrogate_heat/run.py}
+
+\section{field-images}\label{recipe:field-images}
+
+\textbf{Erwartung und SI-Einheiten.} Sechs JPG, je 1200$\times$900 Pixel; gemeinsame Temperaturskala 300–310 K für zwei Läufe; Einheiten in Titeln. Skript prüft Rohfelder und Figurenlebensdauer. Dateinamen siehe Skript.
+
+\textbf{Grenzen.} Matplotlib-Extra erforderlich; Flächenfarben sind Darstellungen, keine unabhängigen Bilanz- oder Genauigkeitsnachweise.
+
+\begin{lstlisting}
+
+python -I examples/field_visualization/run.py --output results/images
+
+\end{lstlisting}
+
+\textbf{Dateien.} \path{results/images/temperature.jpg}.
+
+\textbf{Fehlerhilfe.} Neue Ausgabeziele verwenden; Eingaben unverändert lassen. Bei Schema-/Materialfehlern Kapitel Diagnose, bei Residuen/Bilanzen Kapitel Ergebnisse anwenden.
+
+\lstinputlisting{examples/field_visualization/run.py}
+
+\chapter{Deklarative Modelle und Zeitkurven}\label{sec:app-inputs}
+
+Die folgenden Dateien ergänzen die Programmrezepte vollständig. Netzdateien werden im Quellenarchiv mitgeliefert; ihre vollständigen Bytes und SHA-256-Werte stehen in \path{recipes.json}. Die lokalen Physical Groups der Netze sind die im TOML referenzierten Namen, nicht automatisch erzeugte Knotenlisten.
+
+\section*{\path{examples/field_visualization/case.toml}}
+
+\lstinputlisting{examples/field_visualization/case.toml}
+
+\section*{\path{examples/parameter_study/model.toml}}
+
+\lstinputlisting{examples/parameter_study/model.toml}
+
+\section*{\path{examples/parameter_study/study.toml}}
+
+\lstinputlisting{examples/parameter_study/study.toml}
+
+\section*{\path{examples/piezo_dynamics/drive.csv}}
+
+\lstinputlisting{examples/piezo_dynamics/drive.csv}
+
+\section*{\path{examples/piezo_dynamics/model.toml}}
+
+\lstinputlisting{examples/piezo_dynamics/model.toml}
+
+\section*{\path{examples/study_recipes/heat/model.toml}}
+
+\lstinputlisting{examples/study_recipes/heat/model.toml}
+
+\section*{\path{examples/study_recipes/heat/study.toml}}
+
+\lstinputlisting{examples/study_recipes/heat/study.toml}
+
+\section*{\path{examples/study_recipes/piezo/model.toml}}
+
+\lstinputlisting{examples/study_recipes/piezo/model.toml}
+
+\section*{\path{examples/study_recipes/piezo/study.toml}}
+
+\lstinputlisting{examples/study_recipes/piezo/study.toml}
+
+\section*{\path{examples/surrogate_heat/model.toml}}
+
+\lstinputlisting{examples/surrogate_heat/model.toml}
+
+\section*{\path{examples/surrogate_heat/study.toml}}
+
+\lstinputlisting{examples/surrogate_heat/study.toml}
+
+\section*{\path{examples/tet10_elasticity/model.toml}}
+
+\lstinputlisting{examples/tet10_elasticity/model.toml}
+
+\section*{\path{examples/tet10_electrostatics/model.toml}}
+
+\lstinputlisting{examples/tet10_electrostatics/model.toml}
+
+\section*{\path{examples/tet10_harmonic/model.toml}}
+
+\lstinputlisting{examples/tet10_harmonic/model.toml}
+
+\section*{\path{examples/tet10_heat/stationary.toml}}
+
+\lstinputlisting{examples/tet10_heat/stationary.toml}
+
+\section*{\path{examples/tet10_heat/transient.toml}}
+
+\lstinputlisting{examples/tet10_heat/transient.toml}
+
+\section*{\path{examples/tet10_modes/model.toml}}
+
+\lstinputlisting{examples/tet10_modes/model.toml}
+
+\section*{\path{examples/tet10_newmark/model.toml}}
+
+\lstinputlisting{examples/tet10_newmark/model.toml}
+
+\section*{\path{examples/tet10_piezoelectric/model.toml}}
+
+\lstinputlisting{examples/tet10_piezoelectric/model.toml}
+
+\section*{\path{examples/tet10_thermopiezoelectric/model.toml}}
+
+\lstinputlisting{examples/tet10_thermopiezoelectric/model.toml}
+
+\section*{\path{examples/thermopiezoelectric/case.toml}}
+
+\lstinputlisting{examples/thermopiezoelectric/case.toml}
+
+\section*{\path{examples/transient_heat/model.toml}}
+
+\lstinputlisting{examples/transient_heat/model.toml}
+
+\section*{\path{examples/transient_heat/source.csv}}
+
+\lstinputlisting{examples/transient_heat/source.csv}

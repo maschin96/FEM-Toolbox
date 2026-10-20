@@ -1,0 +1,31 @@
+{
+  "python": "3.13.7 (v3.13.7:bcee1c32211, Aug 14 2025, 19:10:51) [Clang 16.0.0 (clang-1600.0.26.6)]",
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "numpy": "2.4.6",
+  "scipy": "1.18.1",
+  "toolbox_version": "1.5.0.dev1",
+  "baseline_commit": "baae07f088a87ce6e256af3c5855a3b110d0f17a",
+  "source_state": "uncommitted M10 candidate; exact numerical source hashes below",
+  "source_hashes": {
+    "src/fem_toolbox/adaptive.py": "2cb2f8738428a5ffd024041955e86be020f7dd3b94a711a93f7fbc3847d05800",
+    "src/fem_toolbox/mesh/refinement.py": "5bf30cc9420d611682c4f6ec1bb7200d36d816838fdedb75107eb822f30767e5",
+    "src/fem_toolbox/solvers/heat.py": "896e028f03d862a92e85ce346cee4390b72fb874cee96f8f1a68ccff1416cf34",
+    "src/fem_toolbox/post/heat_indicator.py": "f309f06cb2288c2f7640c62f2ae3a0dbf8b63fa27fad0e10ba1143c89290253b",
+    "src/fem_toolbox/solvers/thermal_elements.py": "0482426a85e7382cc7d0191dba8faf9d95697774243665e84d5126ec2331d00a",
+    "examples/adaptive_heat/run_adaptive.py": "aa0ecb18a856054b36ee012fc30684f6d205a38a795646c4b5fefc8fdd5416d8",
+    "pyproject.toml": "caa0c072e3ffd421a002ccaa9a54fb5b2f5078f747ea6af598e7a0099ce3d30c"
+  },
+  "strategy": "identical edge-star bisection, fractions 0.5 and 1.0",
+  "initial_subdivisions": 4,
+  "solved_levels": 7,
+  "localized_true_error_target": 1.5,
+  "target_origin": "fixed after pilot exploration, before final repeat and regression",
+  "timing_scope": "Solve, Estimate, Mark, Remesh, contract validation; excludes independent error integration and JSON export",
+  "files": {
+    "localized-adaptive.json": "dd9c83fca4d656aa0432a54c161c871be6dba289aa500007fd1aaa5e70474875",
+    "smooth-adaptive.json": "a5bed5e8d2217d49dfbcaa1ca623b3f19e9eb8818e32b81ca772e32efdbf0c83",
+    "smooth-uniform.json": "405c2d687c826fd9f06032fa748881db24a7ae08362913a9279f9753dc85a3ec",
+    "comparison.json": "63e50958c3b7cfecf299c89320eb3c427c7bdb1fa18857fe29ccc1d246a58c3f",
+    "localized-uniform.json": "290ba816b22bf7442d5fcfab3d30d8e7d1f2e8f0698a1539e9c0b3095bf1e006"
+  }
+}

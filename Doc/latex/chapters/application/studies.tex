@@ -1,0 +1,149 @@
+\chapter{Parameterstudien, Berichte und Surrogate}\label{sec:app-studies}
+\index{Study}\index{Wiederaufnahme}\index{Surrogat}
+\section{Eine Studie bewusst unterbrechen und fortsetzen}
+Studien-Schema 1 besitzt \path{study_schema_version}, \path{model} und
+\path{parameters}. Jede Parametertabelle enthält Name, vorhandenen Zielpfad,
+Einheit und eindeutige endliche Werte. Es wird das kartesische Produkt
+in deterministischer Reihenfolge ausgeführt; keine Zufallsziehung oder
+Zip-Semantik. Vektoren/Tensoren werden als Ganzes mit unveränderter Form
+ersetzt. Neue Felder/Topologien erzeugt ein Parameterpfad nicht.
+Nicht-SI-Ziele vor dem Studium explizit nach SI umrechnen; Solver-/Pfadwerte
+verwenden die dimensionslose Einheit \path{1}. Studien sind lokal und
+sequenziell, ausschließlich die unterstützten stationären Model-Physiken.
+
+\begin{lstlisting}
+python -I examples/parameter_study/run.py --output results/study --max-cases 1
+python -I examples/parameter_study/run.py --output results/study
+python -I examples/parameter_study/run.py --output results/study
+python -I examples/parameter_study/report.py --study results/study --output results/table
+\end{lstlisting}
+Der erste Aufruf begrenzt bewusst auf einen neuen Versuch. Der zweite beendet
+die zwei Fälle; der dritte prüft Wiederverwendung. Ein eigenes Resume-Flag
+gibt es nicht. Im \path{catalog.json} sollen nach Abschluss beide Fälle
+\path{succeeded} mit \path{attempts=1} stehen; der dritte Aufruf erhöht
+diese Zahl nicht. Erwartete Maximaltemperaturen sind 301 K und 300.5 K.
+Ein Kontrolllauf ohne \path{--max-cases} in einem frischen Ziel liefert
+unabhängig dieselben Größen.
+
+Fall-ID ist SHA-256 der kanonischen benannten Parameterwerte und Einheiten.
+Fingerprints binden aufgelöstes Modell, tatsächliche Netzbytes, Solveroptionen
+und Versionsvertrag. Ein Erfolg wird nur bei übereinstimmenden Fingerprints
+und gültigen Bündelhashes übernommen. Andere NumPy-/SciPy-/Toolbox-Versionen
+können Neuberechnung auslösen. Unveröffentlichte Solveränderungen benötigen
+einen neuen Vertrag oder ein neues Ausgabeziel. Änderungen am Basismodell
+invalidieren Hashes bei gleichbleibender Parameterfall-ID. Eingaben während
+eines Laufs unverändert lassen; ein neues Studienmanifest braucht ein neues
+\path{Study}-Objekt. Dateipfade bleiben innerhalb der erlaubten Modellbäume.
+
+Fehlfälle sind sichtbar mit Fehler und Versuchszahl; sie stoppen nicht
+sämtliche anderen Fälle. Nach einem Prozessabbruch erneut denselben Aufruf
+starten und den Katalog prüfen. Ein liegengebliebener laufender Versuch kann
+neu versucht werden; erfolgreiche geprüfte Bündel bleiben wiederverwendbar.
+Keine manuelle Katalogstatusänderung als Ersatz für gültige Artefakte.
+Die Wärme- und Piezorezepte \ref{recipe:study-recipes} prüfen zusätzlich
+Unterbrechung, zweiten unabhängigen Direktlauf, Fingerprintänderung und
+absichtlich unzulässige Materialien. Der Piezoaufruf lautet:
+\begin{lstlisting}
+python -I examples/study_recipes/run.py piezo --output results/piezo-study
+\end{lstlisting}
+Das jeweilige \path{verification.json} enthält Referenzen, Istwerte,
+Toleranzen, Runtime und tatsächlichen Paketimportpfad.
+
+\section{Berichte aus bestehenden Bündeln}
+\path{Quantity} definiert Namen, Rohfeld-/Metrikquelle, Einheit und
+gegebenenfalls Reduktion. Point-Reduktionen berücksichtigen aktive Knoten,
+nicht Exportfüllwerte. Für Bilanzprüfungen ist die absolute Toleranz explizit;
+kleine Werte werden nicht aus optischen Gründen auf null gesetzt.
+\path{export_study_table} liest den Katalog und die gesicherten Bündel,
+rechnet keine neue FEM-Lösung und erzeugt ein neues Zielverzeichnis mit
+\path{values.csv}, \path{metadata.json}, \path{report.md}.
+\path{read_study_table} prüft Schema, CSV-Hash, Einheiten und Metadaten.
+\path{table_schema_version=1} ist unabhängig vom Studien- und Bündelschema.
+
+Die Tabellen bewahren Fall-ID, Parameter, Status, fehlende Werte, Quellen-
+und Ergebnisfingerprints. Fehlende oder fehlgeschlagene Fälle werden nicht
+zu erfolgreichen Nullwerten. Der einfache Bericht enthält Maximaltemperatur
+in K und vorzeichenbehaftete Leistungsbilanz in W. Der Surrogatbericht
+zusätzlich Quellenleistung und Einheitenvertrag. Für einen eigenen Messpunkt
+oder ein Integralmittel zunächst eine passende, unterstützte \path{Quantity}
+festlegen; keine ungeprüfte Mittelung von Schwerpunkt- und Knotenwerten.
+
+\section{Surrogat trainieren, speichern, wieder laden}
+Rezept \ref{recipe:surrogate} erstellt acht FEM-Fälle eines Einheits-Tet4.
+Sechs Quellenwerte trainieren ein skaliertes Polynom Grad 1 mit
+\path{ridge=0}; die getrennten Testwerte 3 und 7 W/m$^3$ bleiben zurückgehalten.
+Die analytische Referenz lautet $T_{\max}=300+Q/8$ K und $P_Q=Q/6$ W.
+Das Skript prüft die FEM-Zielwerte und Vorhersagen an beiden Testfällen mit
+$10^{-10}$ K bzw. $10^{-12}$ W und lädt das gespeicherte JSON erneut.
+\begin{lstlisting}
+python -I examples/surrogate_heat/run.py --output results/surrogate
+python -I -c "from fem_toolbox.surrogates import PolynomialSurrogate; m=PolynomialSurrogate.load('results/surrogate/surrogate.json'); print(m.predict([5.0]).values.tolist())"
+\end{lstlisting}
+Erwartet werden \path{[[300.625, 0.8333333333333333]]} bis zu den angegebenen
+Rundungstoleranzen. Die Reihenfolge der Ziele folgt dem Datensatz, hier K
+und W; die Rohzahl trägt nicht automatisch eine beliebige physikalische Einheit.
+\path{SurrogateData.from_table} wählt explizite Parameter-/Zielspalten.
+\path{DataSplit} bindet Trainings-/Test-Fall-IDs ohne Überlappung;
+fehlgeschlagene Zeilen und ungültige Eingaben sind kein Trainingsmaterial.
+Der Bericht enthält Datenherkunft, Split, Skalierung und getrennte Fehler.
+\path{surrogate_schema_version=1} und Dateiintegrität werden beim Laden geprüft.
+
+Die Parameterbox ist $Q\in[0,10]$ W/m$^3$. Vorhersage außerhalb wird
+standardmäßig abgelehnt; \path{allow_extrapolation=True} muss bewusst gesetzt
+werden und kennzeichnet extrapolierte Zeilen. Ein kleiner Testfehler im
+Inneren liefert keine Extrapolationsgarantie. Konstant gewählte Eingänge,
+unzureichender Rang und inkonsistente Einheiten dürfen nicht durch geschönte
+Berichte verdeckt werden. Konstante Zielgrößen sind möglich; deren relative
+Fehlerinterpretation benötigt den dokumentierten Maßstab.
+
+\section{Explizite Eingabeunsicherheit (M9)}
+\index{Unsicherheit}\index{Monte Carlo}
+\texttt{fem\_toolbox.uncertainty} stellt den generischen Workflow bereit.
+Der Anwender begründet jede Verteilung selbst: \texttt{Normal} fordert
+Mittelwert und positive Standardabweichung, \texttt{Uniform} wachsende
+Intervallgrenzen. Ein Intervall allein begründet keine Gleichverteilung.
+\texttt{UncertainParameter} bindet Name, skalaren M8-Zielpfad, SI-Einheit,
+Gesetz und Begründung. \texttt{SamplingPlan} erhält Größe und Seed.
+Standardmäßig sind Eingaben unabhängig; nichttriviale Korrelation wird
+nur für ausschließlich normale Eingaben unterstützt. Gemeinsame
+Stichprobenzeilen bleiben erhalten, ohne kartesisches Produkt.
+
+\texttt{UncertaintyStudy.run} nutzt M8 für stationäre Modellläufe,
+Provenienz und Wiederaufnahme. Jede Zielgröße benötigt ein explizites
+numerisches Fehlerbudget in ihrer SI-Einheit oder \texttt{None}, wenn unbekannt.
+Geänderte Modelle invalidieren die Ergebnisübernahme. Fehlerfälle bleiben
+sichtbar und verhindern eine unbenannte Teilmengenstatistik.
+
+Mittel, unverzerrte Varianz, empirische Quantile und Präfixkonvergenz stehen
+in \texttt{uncertainty.json}. Ein Quantilband schätzt Ausgangswahrscheinlichkeiten
+unter den angenommenen Gesetzen; es ist kein Konfidenzintervall oder
+Netzfehlernachweis. Numerischer Fehler und Modellabweichung werden nicht
+zur Eingabevarianz addiert. Lokale zentrale Sensitivitäten benötigen explizite
+Zentren und positive Schritte; der Anwender prüft Schrittverfeinerung.
+Der Surrogat-Testfehler bleibt ein getrennter Approximationsfehler.
+
+\subsection{Synthetisches Wärmerezept}
+\label{recipe:uncertainty-heat}
+128 Zeilen mit Seed 64: Quelle $Q\sim U(4,12)$ W/m$^3$ und Randtemperatur
+$T_0\sim N(300,1)$ K, unabhängig. Konstante Leitfähigkeit 2 W/(m K).
+Für den diskreten Tet4-Fall gilt $T_{\max}=T_0+Q/8$,
+$\mathbb E[T_{\max}]=301$ K und $\operatorname{Var}(T_{\max})=13/12$ K$^2$.
+Dies ist eine ausdrücklich synthetische Lernannahme, keine Messunsicherheit.
+Der Kontinuums-Netzfehler bleibt unbekannt.
+\begin{lstlisting}
+python -I examples/uncertainty_heat/run.py --output uq-output
+\end{lstlisting}
+Das Skript prüft jede diskrete FEM-Antwort mit $10^{-11}$ K und lokale
+Ableitungen $[1/8,1]$ mit $2\cdot10^{-10}$ in den jeweiligen SI-Einheiten.
+\texttt{sampling.json} enthält Gesetze, Begründungen, Korrelation, Versionen,
+Generator und Seed. Kataloge, Tabellen und Ergebnisbündel bleiben prüfbar.
+Ein identischer Folgeaufruf übernimmt erfolgreiche FEM-Fälle; ein anderer
+Samplingplan benötigt ein neues Verzeichnis. Fehlende Größen und unphysikalische
+Fälle sind sichtbar, kein erfolgreicher Unsicherheitsnachweis.
+\lstinputlisting{examples/uncertainty_heat/run.py}
+\lstinputlisting{examples/uncertainty_heat/model.toml}
+
+Experimentelle Validierung bleibt in \#63/\#65 außerhalb M9 offen.
+Gemäß genehmigter Neuplanung vom 10.10.2026 ersetzt dieses Rezept keine Messung.
+Der vollständige API-/Artefaktvertrag steht im API-Band und in
+\nolinkurl{Doc/67_UNCERTAINTY_WORKFLOW.md}.

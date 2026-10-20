@@ -1,0 +1,68 @@
+name: Handbook
+on:
+  pull_request:
+    paths:
+      - 'Doc/**'
+      - 'README.md'
+      - 'INSTALL.md'
+      - 'pyproject.toml'
+      - 'src/**'
+      - 'scripts/build_handbook.py'
+      - 'scripts/api_contracts.py'
+      - 'scripts/verification_artifacts.py'
+      - 'tests/unit/test_verification_artifacts.py'
+      - 'tests/unit/test_api_contracts.py'
+      - 'tests/unit/test_handbook_build.py'
+      - 'tests/unit/test_user_handbook_sources.py'
+      - 'examples/**'
+      - '.github/workflows/handbook.yml'
+  push:
+    branches: [main, codex/milestone-m9]
+    paths:
+      - 'Doc/**'
+      - 'README.md'
+      - 'INSTALL.md'
+      - 'pyproject.toml'
+      - 'src/**'
+      - 'scripts/build_handbook.py'
+      - 'scripts/api_contracts.py'
+      - 'scripts/verification_artifacts.py'
+      - 'tests/unit/test_verification_artifacts.py'
+      - 'tests/unit/test_api_contracts.py'
+      - 'tests/unit/test_handbook_build.py'
+      - 'tests/unit/test_user_handbook_sources.py'
+      - 'examples/**'
+      - '.github/workflows/handbook.yml'
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+concurrency:
+  group: handbook-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  pdf:
+    name: Handbook / PDF and negative fixtures
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Build all candidates with strict diagnostics
+        run: |
+          if [ "$GITHUB_REF" = refs/heads/main ]; then
+            python3 scripts/build_handbook.py --self-test --release
+          else
+            python3 scripts/build_handbook.py --self-test
+          fi
+      - name: Upload PDF, source, manifest and diagnostic logs
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: handbook-candidate
+          path: build/handbook/
+          if-no-files-found: error
+          retention-days: 14

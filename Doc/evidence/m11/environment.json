@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "version": "1.6.0.dev1",
+  "python": "3.13.5",
+  "numpy": "2.4.6",
+  "scipy": "1.18.1",
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "source_sha256": {
+    "src/fem_toolbox/topology.py": "168e25ce01e3dc7bbe7662e6496f450ad65dbb6514c1ce9b24afc3f9e7703c0f",
+    "src/fem_toolbox/topology_optimization.py": "f8f84a6097a77f7192d713d27407ce21dc1da229eea1e68724c2fa7f1b37c661",
+    "src/fem_toolbox/topology_study.py": "346902c6793dedbcd31fd64fa4fb1c5f42dde9676bcf8ac3f66c0a9e55d1a672",
+    "src/fem_toolbox/topology_geometry.py": "2896a98d2fdc956d9aef983c0a405a1464c8079c3359af75452b64df62f3cac5",
+    "src/fem_toolbox/model.py": "def812194bb055930fbc868581cf37cd15c0f4396db792fd6e6ff88917201d99",
+    "src/fem_toolbox/solvers/elasticity.py": "9be107b637796ecc913835c5f95ce1959a5fbf3506b154dc0a38f8a2d218edcd",
+    "examples/topology/run.py": "9b096df55d8464455d3589c19990d609548b2ba8f55df80c3529f8b890aaca8e",
+    "examples/topology/prepare.py": "29e16c5730389b550a9824cf8657cd97919c44a9358979aaf5e312ecf89a6f86",
+    "examples/topology/verify.py": "2e9177ec552a28c88279974f3e7e759c34735ac230505a57a843e33746b26d48"
+  },
+  "evidence_sha256": {
+    "unscaled_no_go.json": "c557d188892f43f6783c7d768c3e2622f6d7e113e4fe5febc21801eeb5bfc4ce",
+    "verification.json": "c996a3454c2cf28954620f0d18dd473cdba341cdbd7a6cacfad93d9b15d2aa72",
+    "artifacts.json": "b0172b9ab3d19bddb2bd37db3e073009c8d9a18e82c18b7f4be4483a4fb42b94"
+  },
+  "independent_human_review": "not_available",
+  "experimental_validation": "not_performed"
+}

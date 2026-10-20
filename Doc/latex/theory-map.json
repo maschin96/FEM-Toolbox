@@ -1,0 +1,361 @@
+{
+  "schema": 1,
+  "issue": 207,
+  "scope": "Unchanged M0–M8 numerical contracts; M9 mathematical theory candidate",
+  "evidence_base": "6a1fd36",
+  "review": "Author self-review; independent review pending",
+  "areas": [
+    {
+      "id": "algebra",
+      "chapter": "Doc/latex/chapters/theory/algebra.tex",
+      "chapter_label": "chap:algebra",
+      "canonical_sources": [
+        "Doc/17_PIEZOELECTRIC_SOLVER.md",
+        "Doc/42_TET10_OPERATORS.md",
+        "Doc/21_MODEL_SCHEMA.md",
+        "Doc/20_ELECTRODES.md"
+      ],
+      "implementation": [
+        "src/fem_toolbox/assembly/__init__.py",
+        "src/fem_toolbox/boundary/electrodes.py",
+        "src/fem_toolbox/solvers/piezoelectric.py"
+      ],
+      "evidence": [
+        "tests/unit/test_assembly.py",
+        "tests/patch/test_electrodes.py",
+        "tests/patch/test_material_interfaces.py",
+        "tests/unit/test_tet10_piezoelectric_integration.py"
+      ],
+      "equations": [
+        "eq:assembly",
+        "eq:dirichlet",
+        "eq:spring-example",
+        "eq:electrode-condensation"
+      ],
+      "status": "documented-candidate"
+    },
+    {
+      "id": "conventions",
+      "chapter": "Doc/latex/chapters/theory/conventions.tex",
+      "chapter_label": "chap:conventions",
+      "canonical_sources": [
+        "Doc/15_PIEZOELECTRIC_MATERIAL.md",
+        "Doc/07_RISKS_AND_DECISIONS.md",
+        "Doc/16_PIEZOELECTRIC_ELEMENT.md",
+        "Doc/02_MATHEMATICAL_MODEL.md"
+      ],
+      "implementation": [
+        "src/fem_toolbox/conventions.py",
+        "src/fem_toolbox/materials/piezoelectric.py",
+        "src/fem_toolbox/materials/__init__.py"
+      ],
+      "evidence": [
+        "tests/unit/test_conventions.py",
+        "tests/unit/test_piezo_material.py",
+        "tests/unit/test_thermal_expansion.py"
+      ],
+      "equations": [
+        "eq:kinematics",
+        "eq:voigt",
+        "eq:rotation",
+        "eq:conversion"
+      ],
+      "status": "documented-candidate"
+    },
+    {
+      "id": "coupling",
+      "chapter": "Doc/latex/chapters/theory/coupling.tex",
+      "chapter_label": "chap:coupling",
+      "canonical_sources": [
+        "Doc/15_PIEZOELECTRIC_MATERIAL.md",
+        "Doc/25_THERMOPIEZO_CONVERGENCE.md",
+        "Doc/22_THERMOPIEZOELECTRIC.md",
+        "Doc/20_ELECTRODES.md"
+      ],
+      "implementation": [
+        "src/fem_toolbox/elements/piezoelectric.py",
+        "src/fem_toolbox/solvers/piezoelectric.py",
+        "src/fem_toolbox/solvers/thermopiezoelectric.py"
+      ],
+      "evidence": [
+        "tests/patch/test_piezo_element_patch.py",
+        "tests/patch/test_piezo_solver_patch.py",
+        "tests/unit/test_thermopiezoelectric.py",
+        "tests/regression/test_piezo_d33_benchmark.py",
+        "tests/reference/piezo_bar_1d.py"
+      ],
+      "equations": [
+        "eq:piezo-law",
+        "eq:enthalpy",
+        "eq:enthalpy-variation",
+        "eq:piezo-blocks",
+        "eq:piezo-thermal-rhs",
+        "eq:triangular-coupling",
+        "eq:piezo-patch-example",
+        "eq:d33-voltage"
+      ],
+      "status": "documented-candidate"
+    },
+    {
+      "id": "dynamics",
+      "chapter": "Doc/latex/chapters/theory/dynamics.tex",
+      "chapter_label": "chap:dynamics",
+      "canonical_sources": [
+        "Doc/35_M6_RELEASE_VERIFICATION.md",
+        "Doc/51_TET10_MODES.md",
+        "Doc/31_TET4_STORAGE.md",
+        "Doc/34_PIEZO_DYNAMICS.md",
+        "Doc/50_TET10_THERMOPIEZOELECTRIC.md",
+        "Doc/49_TET10_PIEZOELECTRIC.md",
+        "Doc/36_PERFORMANCE_BASELINE.md",
+        "Doc/52_TET10_NEWMARK.md",
+        "Doc/53_TET10_HARMONIC.md",
+        "Doc/33_TRANSIENT_HEAT.md"
+      ],
+      "implementation": [
+        "src/fem_toolbox/elements/storage.py",
+        "src/fem_toolbox/solvers/transient_heat.py",
+        "src/fem_toolbox/solvers/piezo_dynamics.py",
+        "src/fem_toolbox/solvers/piezo_transient.py",
+        "src/fem_toolbox/solvers/piezo_harmonic.py"
+      ],
+      "evidence": [
+        "tests/unit/test_storage.py",
+        "tests/unit/test_transient_heat.py",
+        "tests/unit/test_piezo_modal.py",
+        "tests/unit/test_piezo_newmark.py",
+        "tests/unit/test_piezo_harmonic.py"
+      ],
+      "equations": [
+        "eq:storage",
+        "eq:tet4-storage",
+        "eq:hrz",
+        "eq:heat-time",
+        "eq:backward-euler",
+        "eq:transient-balance",
+        "eq:dae",
+        "eq:dynamic-schur",
+        "eq:modes",
+        "eq:newmark",
+        "eq:newmark-solve",
+        "eq:newmark-stability",
+        "eq:dynamic-energy",
+        "eq:harmonic"
+      ],
+      "status": "documented-candidate"
+    },
+    {
+      "id": "evidence",
+      "chapter": "Doc/latex/chapters/theory/evidence.tex",
+      "chapter_label": "chap:evidence",
+      "canonical_sources": [
+        "Doc/25_THERMOPIEZO_CONVERGENCE.md",
+        "Doc/55_TET10_ACCEPTANCE.md",
+        "Doc/05_VERIFICATION_AND_VALIDATION.md"
+      ],
+      "implementation": [],
+      "evidence": [
+        "tests/unit/test_piezo_material.py",
+        "tests/unit/test_tet10_geometry.py",
+        "tests/unit/test_tet10_operators.py",
+        "tests/patch/test_heat_patch.py",
+        "tests/convergence/test_heat_convergence.py",
+        "tests/patch/test_electrostatics_patch.py",
+        "tests/convergence/test_electrostatics_convergence.py",
+        "tests/patch/test_elasticity_patch.py",
+        "tests/convergence/test_elasticity_convergence.py",
+        "tests/patch/test_thermomechanics_patch.py",
+        "tests/convergence/test_thermomechanics_convergence.py",
+        "tests/regression/test_piezo_d33_benchmark.py",
+        "tests/reference/piezo_bar_1d.py",
+        "tests/unit/test_thermopiezoelectric.py",
+        "tests/convergence/test_thermopiezo_model_convergence.py",
+        "tests/patch/test_electrodes.py",
+        "tests/unit/test_storage.py",
+        "tests/unit/test_transient_heat.py",
+        "tests/convergence/test_transient_heat_convergence.py",
+        "tests/unit/test_piezo_modal.py",
+        "tests/convergence/test_piezo_modal_convergence.py",
+        "tests/unit/test_piezo_newmark.py",
+        "tests/unit/test_piezo_harmonic.py",
+        "tests/convergence/test_tet10_modal.py",
+        "tests/convergence/test_tet10_harmonic_convergence.py",
+        "tests/unit/test_tet10_newmark.py",
+        "tests/petsc",
+        "tests/unit/test_heat_indicator.py",
+        "tests/convergence/test_heat_indicator_convergence.py",
+        "tests/unit/test_surrogates.py",
+        "tests/regression/test_surrogate_example.py"
+      ],
+      "equations": [],
+      "status": "documented-candidate"
+    },
+    {
+      "id": "geometry",
+      "chapter": "Doc/latex/chapters/theory/geometry.tex",
+      "chapter_label": "chap:geometry",
+      "canonical_sources": [
+        "Doc/41_TET10_GEOMETRY.md",
+        "Doc/42_TET10_OPERATORS.md",
+        "Doc/03_TET4_FORMULATION.md",
+        "Doc/16_PIEZOELECTRIC_ELEMENT.md"
+      ],
+      "implementation": [
+        "src/fem_toolbox/elements/tet4.py",
+        "src/fem_toolbox/elements/tet10.py",
+        "src/fem_toolbox/elements/quadrature.py"
+      ],
+      "evidence": [
+        "tests/unit/test_tet4_geometry.py",
+        "tests/unit/test_tet10_geometry.py",
+        "tests/unit/test_tet10_operators.py",
+        "tests/convergence/test_tet10_interpolation.py"
+      ],
+      "equations": [
+        "eq:affine",
+        "eq:tet10shape",
+        "eq:B",
+        "eq:simplex-moment",
+        "eq:duffy",
+        "eq:unit-G"
+      ],
+      "status": "documented-candidate"
+    },
+    {
+      "id": "mechanics",
+      "chapter": "Doc/latex/chapters/theory/mechanics.tex",
+      "chapter_label": "chap:mechanics",
+      "canonical_sources": [
+        "Doc/14_THERMOMECHANICS.md",
+        "Doc/11_STEADY_HEAT.md",
+        "Doc/02_MATHEMATICAL_MODEL.md"
+      ],
+      "implementation": [
+        "src/fem_toolbox/solvers/elasticity.py",
+        "src/fem_toolbox/solvers/thermomechanics.py",
+        "src/fem_toolbox/elements/quadratic.py"
+      ],
+      "evidence": [
+        "tests/patch/test_elasticity_patch.py",
+        "tests/patch/test_thermomechanics_patch.py",
+        "tests/unit/test_thermal_expansion.py",
+        "tests/convergence/test_tet10_elasticity.py",
+        "tests/convergence/test_tet10_thermomechanics.py"
+      ],
+      "equations": [
+        "eq:mechanical-strong",
+        "eq:mechanical-weak",
+        "eq:lame",
+        "eq:mechanical-element",
+        "eq:thermal-strain",
+        "eq:thermal-load",
+        "eq:thermal-variance"
+      ],
+      "status": "documented-candidate"
+    },
+    {
+      "id": "scalar",
+      "chapter": "Doc/latex/chapters/theory/scalar.tex",
+      "chapter_label": "chap:scalar",
+      "canonical_sources": [
+        "Doc/43_HEAT_INDICATOR.md",
+        "Doc/10_LINEAR_ELASTICITY.md",
+        "Doc/02_MATHEMATICAL_MODEL.md",
+        "Doc/12_ELECTROSTATICS.md"
+      ],
+      "implementation": [
+        "src/fem_toolbox/physics/heat.py",
+        "src/fem_toolbox/physics/electrostatics.py",
+        "src/fem_toolbox/solvers/heat.py",
+        "src/fem_toolbox/solvers/electrostatics.py"
+      ],
+      "evidence": [
+        "tests/patch/test_heat_patch.py",
+        "tests/patch/test_electrostatics_patch.py",
+        "tests/patch/test_material_interfaces.py",
+        "tests/convergence/test_heat_convergence.py",
+        "tests/convergence/test_electrostatics_convergence.py"
+      ],
+      "equations": [
+        "eq:heat-strong",
+        "eq:heat-weak",
+        "eq:thermal-discrete",
+        "eq:thermal-balance",
+        "eq:thermal-example",
+        "eq:electro-strong",
+        "eq:electro-weak",
+        "eq:dielectric",
+        "eq:charge-balance",
+        "eq:electric-energy",
+        "eq:capacitor-example"
+      ],
+      "status": "documented-candidate"
+    },
+    {
+      "id": "solvers",
+      "chapter": "Doc/latex/chapters/theory/solvers.tex",
+      "chapter_label": "chap:solvers",
+      "canonical_sources": [
+        "Doc/17_PIEZOELECTRIC_SOLVER.md",
+        "Doc/38_PETSC_BACKEND.md",
+        "Doc/39_PETSC_FIELDSPLIT.md",
+        "Doc/37_LINEAR_BACKEND.md",
+        "Doc/55_TET10_ACCEPTANCE.md",
+        "Doc/43_HEAT_INDICATOR.md",
+        "Doc/54_ACCURACY_COST_COMPARISON.md"
+      ],
+      "implementation": [
+        "src/fem_toolbox/solvers/linear_backend.py",
+        "src/fem_toolbox/solvers/petsc_backend.py",
+        "src/fem_toolbox/post/heat_indicator.py"
+      ],
+      "evidence": [
+        "benchmarks/baselines/m7-37c-linux-arm64.json",
+        "tests/unit/test_linear_backend.py",
+        "tests/unit/test_heat_indicator.py",
+        "tests/petsc",
+        "tests/convergence/test_heat_indicator_convergence.py",
+        "tests/regression/test_accuracy_cost.py"
+      ],
+      "equations": [
+        "eq:scale",
+        "eq:complex-embed",
+        "eq:schur-factor",
+        "eq:backward-error",
+        "eq:indicator"
+      ],
+      "status": "documented-candidate"
+    },
+    {
+      "id": "surrogates",
+      "chapter": "Doc/latex/chapters/theory/surrogates.tex",
+      "chapter_label": "chap:surrogates",
+      "canonical_sources": [
+        "Doc/58_M7_RELEASE_VERIFICATION.md",
+        "Doc/59_PARAMETER_STUDIES.md",
+        "Doc/60_STUDY_REPORTS.md",
+        "Doc/61_SURROGATE_MODELS.md",
+        "Doc/56_PERFORMANCE_ACCEPTANCE.md",
+        "Doc/57_M7_RELEASE_CANDIDATE.md"
+      ],
+      "implementation": [
+        "src/fem_toolbox/studies.py",
+        "src/fem_toolbox/study_reports.py",
+        "src/fem_toolbox/surrogates.py"
+      ],
+      "evidence": [
+        "tests/unit/test_surrogates.py",
+        "tests/regression/test_surrogate_example.py",
+        "examples/surrogate_heat/README.md"
+      ],
+      "equations": [
+        "eq:surrogate-scale",
+        "eq:surrogate-basis",
+        "eq:ridge",
+        "eq:augmented-lstsq",
+        "eq:surrogate-errors"
+      ],
+      "status": "documented-candidate"
+    }
+  ]
+}

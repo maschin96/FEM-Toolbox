@@ -99,6 +99,15 @@ Damit ist dieselbe Parameterkombination vor/nach Änderung nachvollziehbar.
 Erfolgreiche Ergebnisse werden nur übernommen, wenn Fingerprints **und**
 SHA-256 beider Bündeldateien stimmen, das Bündelschema unterstützt ist und
 Bündelreferenz, VTU-Hash sowie ursprüngliche Model-Provenienz konsistent sind.
+Zusätzlich müssen beide Dateien im erwarteten Fall-/Versuchsverzeichnis liegen.
+Die Bündelprovenienz enthält unter `solver.parameters.study_case` die unabhängig
+aus dem Fall geprüfte Parameteridentität, den Hash des aufgelösten Dokuments,
+Fingerprints und Versionen. So werden auch fremde, intern konsistente Bündel
+erkannt, die in den eigenen Versuchspfad kopiert wurden (#219). Die Prüfung
+benötigt keinen Solve und keine ursprünglichen Eingabedateien; vollständig
+kopierte Studienverzeichnisse bleiben wiederverwendbar. Frühere Bündel ohne
+diese Zuordnung werden konservativ als ungültig behandelt und beim nächsten
+Lauf mit erhaltener Historie neu berechnet; Berichte zeigen fehlende Kennwerte.
 Dies ist Integritätsprüfung gegen unbeabsichtigte Änderungen, keine kryptografische
 Authentifizierung eines fremd manipulierten Katalogs.
 
@@ -140,6 +149,23 @@ den Katalog atomar. Ein beschädigter/fremdversionierter Katalog führt zum Fehl
 nicht zum stillen Neubeginn. Alte Versuche bleiben zur Diagnose erhalten; kein
 automatischer Cleanup. Stromausfallgarantien jenseits der Dateisystemsemantik
 sind nicht zugesagt.
+
+Resume und Bericht validieren den vollständigen Schema-1-Fallrecord an derselben
+Lesegrenze (#220): Pflichtfelder, Parameterwerte/-metadaten, endliche
+Modelldokumentdaten, SHA-256-Fingerprints, Versionsangaben, relative Ergebnis-
+und Versuchspfade sowie Status-/Ergebniskombinationen. Erfolgreiche Fälle
+benötigen Ergebnis und Versuch; andere Zustände besitzen kein Ergebnis.
+`pending` hat noch keinen Versuch, `running` keinen Fehler; `failed`,
+`interrupted` und `invalid` nennen einen Fehlergrund. Historieneinträge sind
+Invalidierungssnapshots mit Grund, früheren Fingerprints, optionalem Ergebnis
+und Versuchszähler. Retired Records werden strukturell nach demselben Vertrag
+geprüft, ohne aktuelle Bündelgültigkeit zu behaupten; wiederholte archivierte
+Fall-IDs bleiben zulässig. Fachlich ungültige, aber strukturell lesbare
+Modelleingaben bleiben als Fehlfälle dokumentierbar.
+
+Vertragsverletzungen liefern `ModelSchemaError` mit konkretem Katalogfeldpfad.
+Dabei bleiben Katalog und Ergebnisdateien unverändert; Resume gibt die Lockdatei
+auch bei fehlgeschlagener Prüfung frei. Es gibt keine automatische Reparatur.
 
 `.study.lock` verhindert mehrere gleichzeitige Writer. Bei normalem Abschluss,
 Exceptions und Ctrl-C wird sie entfernt. Nach hartem Kill **erst prüfen, dass
