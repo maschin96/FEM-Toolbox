@@ -196,6 +196,8 @@ experimentelle Validierungsfreigabe wird nicht behauptet.
 
 ## M12 — Experimenteller CFD-Einstieg
 
+- [SA-noft2: Punktterme, konservativer Transport und gemeinsame RANS-Iteration (#87/#88)](88_SA_NOFT2_IMPLEMENTATION.md)
+
 - [Kanaloperator: Vertrag, Referenzen und Grenzen](68_EXPERIMENTAL_CFD_CORE.md)
 
 - [Experimentelle Stokes-Druckkopplung: Vertrag und Nachweise](69_CFD_PRESSURE_COUPLING.md)

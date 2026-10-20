@@ -325,12 +325,15 @@ Einordnung: research. Experimenteller M12-Kern: laminare Verifikation; keine RAN
 \noindent\nolinkurl{QuadFVGeometry} $\to$ \nolinkurl{fem_toolbox.cfd.quad_fv.QuadFVGeometry}\par
 \noindent\nolinkurl{QuadFlowConvergenceError} $\to$ \nolinkurl{fem_toolbox.cfd.quad_flow.QuadFlowConvergenceError}\par
 \noindent\nolinkurl{QuadFlowResult} $\to$ \nolinkurl{fem_toolbox.cfd.quad_flow.QuadFlowResult}\par
+\noindent\nolinkurl{RansConvergenceError} $\to$ \nolinkurl{fem_toolbox.cfd.rans.RansConvergenceError}\par
+\noindent\nolinkurl{RansResult} $\to$ \nolinkurl{fem_toolbox.cfd.rans.RansResult}\par
 \noindent\nolinkurl{StationaryFlowResult} $\to$ \nolinkurl{fem_toolbox.cfd.flow.StationaryFlowResult}\par
 \noindent\nolinkurl{StokesResult} $\to$ \nolinkurl{fem_toolbox.cfd.stokes.StokesResult}\par
 \noindent\nolinkurl{StressFlux} $\to$ \nolinkurl{fem_toolbox.cfd.quad_fv.StressFlux}\par
 \noindent\nolinkurl{WallQuality} $\to$ \nolinkurl{fem_toolbox.cfd.fluid_mesh.WallQuality}\par
 \noindent\nolinkurl{solve_channel} $\to$ \nolinkurl{fem_toolbox.cfd.channel.solve_channel}\par
 \noindent\nolinkurl{solve_quad_flow} $\to$ \nolinkurl{fem_toolbox.cfd.quad_flow.solve_quad_flow}\par
+\noindent\nolinkurl{solve_rans} $\to$ \nolinkurl{fem_toolbox.cfd.rans.solve_rans}\par
 \noindent\nolinkurl{solve_stationary_flow} $\to$ \nolinkurl{fem_toolbox.cfd.flow.solve_stationary_flow}\par
 \noindent\nolinkurl{solve_stokes} $\to$ \nolinkurl{fem_toolbox.cfd.stokes.solve_stokes}\par
 \section{fem\_toolbox.cfd.channel}
@@ -1090,6 +1093,202 @@ pressure_flux(self, diagonal: NDArray[np.float64]) -> Map
 \begin{lstlisting}
 transport(self, flux: NDArray[np.float64], u: NDArray[np.float64], scheme: str) -> tuple[Map, NDArray[np.float64]]
 \end{lstlisting}
+\section{fem\_toolbox.cfd.rans}
+\index{fem_toolbox.cfd.rans@cfd.\protect\allowbreak{}rans}
+Einordnung: research. M12-Entwicklung: SA-noft2-Punkt-/Transport-/RANS-API; getrennte Modell-/FSI-Abnahme erforderlich.
+\par Fachvertrag: \nolinkurl{Doc/88_SA_NOFT2_IMPLEMENTATION.md}. Beispiele/Tests:
+\nolinkurl{tests/unit/test_sa_model.py}.
+\nolinkurl{tests/unit/test_sa_transport.py}.
+\nolinkurl{tests/unit/test_rans.py}.
+\subsection{RansConvergenceError}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: ValidationError. Dekoratoren: keine.
+\begin{quote}
+Failed joint iteration with immutable last fields and complete history.
+\end{quote}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, reason: str, history: list[tuple[float, ...]], u: NDArray[np.float64], p: NDArray[np.float64], a: NDArray[np.float64]) -> None
+\end{lstlisting}
+\subsection{RansResult}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True).
+\begin{quote}
+Joint solution: flow, SA cell fields and actual wall-resolution diagnostics.\par History columns: max momentum N/m³, mass kg/(m³ s), SA m²/s², global mass kg/s, max global momentum N, power W, accepted SA alpha. wall\_y\_plus follows domain.wall\_quality.boundary\_indices. No DNS/model or FSI qualification is implied by convergence of these discrete equations.
+\end{quote}
+\begin{lstlisting}
+flow: QuadFlowResult
+\end{lstlisting}
+\begin{lstlisting}
+nu_tilde_m2_s: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+eddy_viscosity_m2_s: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+effective_viscosity_Pa_s: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+boundary_effective_viscosity_Pa_s: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+sa_residual_m2_s2: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+sa_global_balance_m5_s2: float
+\end{lstlisting}
+\begin{lstlisting}
+wall_y_plus: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+iterations: int
+\end{lstlisting}
+\begin{lstlisting}
+residual_history: tuple[tuple[float, ...], ...]
+\end{lstlisting}
+\begin{lstlisting}
+converged: bool
+\end{lstlisting}
+\begin{lstlisting}
+provenance: RunProvenance
+\end{lstlisting}
+\subsection{solve\_rans}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+solve_rans(domain: FluidDomain, *, initial_nu_tilde_m2_s: ArrayLike, velocity_scale_m_s: float, length_scale_m: float, force_N_m3: ArrayLike=(0.0, 0.0), pressure_reference_Pa: float | None=None, convection_scheme: str='linear-upwind', velocity_relaxation: float=0.5, pressure_relaxation: float=0.5, sa_relaxation: float=0.5, max_iterations: int=500, max_simple_steps: int=500, max_unknowns: int=50000) -> RansResult
+\end{lstlisting}
+\begin{quote}
+Joint Picard iteration for physical wall-resolved SA-noft2 and momentum.\par Only explicit SA-noft2 is solved: at least one initial cell must have a>0, all must be nonnegative; no inferred laminar mode or viscosity cap. Width, physical BCs, positive SI scales and all inlet SA data come from the caller. The same conservative Rhie-Chow mass flux transports momentum and SA. Frozen nonnegative destruction is implicit; all final coefficients, stresses, sources and field/balance residuals are recomputed at the accepted joint state. Positivity backtracking reduces U/p/a updates together. Actual wall shear must satisfy y+<=1 and layer growth<=1.2. Failure retains the last complete joint history and fields; no wall function is substituted.
+\end{quote}
+Direkte Raise-Stellen: RansConvergenceError; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.cfd.sa\_model}
+\index{fem_toolbox.cfd.sa_model@cfd.\protect\allowbreak{}sa\_\protect\allowbreak{}model}
+Einordnung: research. M12-Entwicklung: SA-noft2-Punkt-/Transport-/RANS-API; getrennte Modell-/FSI-Abnahme erforderlich.
+\par Fachvertrag: \nolinkurl{Doc/88_SA_NOFT2_IMPLEMENTATION.md}. Beispiele/Tests:
+\nolinkurl{tests/unit/test_sa_model.py}.
+\nolinkurl{tests/unit/test_sa_transport.py}.
+\nolinkurl{tests/unit/test_rans.py}.
+\subsection{SATerms}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True).
+\begin{quote}
+Immutable cell arrays; sources in m²/s², diffusivities in m²/s.\par destruction\_rate\_s\_inv times nu\_tilde gives the nonnegative destruction source. It is suitable for the frozen implicit sink in the scalar solve. r and wall\_function are dimensionless; modified vorticity has unit 1/s.
+\end{quote}
+\begin{lstlisting}
+eddy_viscosity_m2_s: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+diffusivity_m2_s: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+production_m2_s2: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+destruction_m2_s2: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+gradient_source_m2_s2: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+destruction_rate_s_inv: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+modified_vorticity_s_inv: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+r: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+wall_function: NDArray[np.float64]
+\end{lstlisting}
+\subsection{sa\_terms}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+sa_terms(nu_tilde_m2_s: ArrayLike, *, velocity_gradient_s_inv: ArrayLike, gradient_nu_tilde_m_s: ArrayLike, wall_distance_m: ArrayLike, kinematic_viscosity_m2_s: float) -> SATerms
+\end{lstlisting}
+\begin{quote}
+Evaluate the complete SA-noft2 source law at positive-distance cells.\par a is (ncell,), grad(U) is (ncell,2,2) with [component,derivative], grad(a) is (ncell,2), d is scalar or (ncell,). Molecular nu is a positive scalar. Negative/nonfinite a, d<=0, boolean data and unrepresentable terms raise ValidationError; no input or output is clipped to hide a failure. Wall Dirichlet values a=0 are imposed separately, never evaluated at d=0.
+\end{quote}
+Direkte Raise-Stellen: FloatingPointError; transitive Fehler siehe Fachvertrag.
+\subsection{positive\_sa\_update}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+positive_sa_update(previous_m2_s: ArrayLike, candidate_m2_s: ArrayLike, *, relaxation: float=0.5, max_attempts: int=20) -> tuple[NDArray[np.float64], float, int]
+\end{lstlisting}
+\begin{quote}
+One common relaxed step, halved until finite and nonnegative everywhere.\par Returns immutable state, accepted alpha and number of halvings. No component is clipped. Failure identifies the last minimum and its zero-based cell.
+\end{quote}
+\section{fem\_toolbox.cfd.sa\_transport}
+\index{fem_toolbox.cfd.sa_transport@cfd.\protect\allowbreak{}sa\_\protect\allowbreak{}transport}
+Einordnung: research. M12-Entwicklung: SA-noft2-Punkt-/Transport-/RANS-API; getrennte Modell-/FSI-Abnahme erforderlich.
+\par Fachvertrag: \nolinkurl{Doc/88_SA_NOFT2_IMPLEMENTATION.md}. Beispiele/Tests:
+\nolinkurl{tests/unit/test_sa_model.py}.
+\nolinkurl{tests/unit/test_sa_transport.py}.
+\nolinkurl{tests/unit/test_rans.py}.
+\subsection{SAConvergenceError}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: ValidationError. Dekoratoren: keine.
+\begin{quote}
+Nonconvergence retains the last nonnegative state and raw residual history.
+\end{quote}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, history: list[float], state: NDArray[np.float64], reason: str) -> None
+\end{lstlisting}
+\subsection{SATransportResult}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True).
+\begin{quote}
+Immutable scalar solution for prescribed conservative flow; not a RANS solve.\par Arrays: a/residual/wall distance are cell fields, boundary a follows line2, and advective/diffusive fluxes follow mesh.faces (outward from owner). Integrated fluxes and global balance have unit m\textasciicircum{}5/s². History is the maximum absolute fresh cell residual in m²/s² at every accepted update.
+\end{quote}
+\begin{lstlisting}
+nu_tilde_m2_s: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+boundary_nu_tilde_m2_s: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+wall_distance_m: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+residual_m2_s2: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+advective_flux_m5_s2: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+diffusive_flux_m5_s2: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+global_balance_m5_s2: float
+\end{lstlisting}
+\begin{lstlisting}
+terms: SATerms
+\end{lstlisting}
+\begin{lstlisting}
+iterations: int
+\end{lstlisting}
+\begin{lstlisting}
+residual_history: tuple[float, ...]
+\end{lstlisting}
+\begin{lstlisting}
+accepted_relaxations: tuple[float, ...]
+\end{lstlisting}
+\begin{lstlisting}
+converged: bool
+\end{lstlisting}
+\begin{lstlisting}
+provenance: RunProvenance
+\end{lstlisting}
+\subsection{solve\_sa\_transport}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+solve_sa_transport(domain: FluidDomain, *, mass_flux_kg_s: ArrayLike, velocity_gradient_s_inv: ArrayLike, initial_nu_tilde_m2_s: ArrayLike, velocity_scale_m_s: float, length_scale_m: float, boundary_values_m2_s: ArrayLike | None=None, wall_distance_m: ArrayLike | None=None, source_m2_s2: ArrayLike=0.0, convection_scheme: str='linear-upwind', relaxation: float=0.5, max_iterations: int=500, max_cells: int=50000) -> SATransportResult
+\end{lstlisting}
+\begin{quote}
+Solve SA for frozen conservative flow with full fresh nonlinear residuals.\par Boundary defaults: wall a=0, inlet explicit a, outlet/symmetry zero normal derivative and periodic paired trace. Optional boundary and distance fields are explicit manufactured-solution hooks, recorded as such in provenance; they do not qualify physical wall resolution or a coupled RANS solution. Destruction is a frozen nonnegative implicit sink. A common positivity line search halves the relaxed candidate, at most twenty attempts, without state clipping. Failure carries the latest history, state, minimum and cell ID.
+\end{quote}
+Direkte Raise-Stellen: SAConvergenceError; transitive Fehler siehe Fachvertrag.
 \section{fem\_toolbox.cfd.stokes}
 \index{fem_toolbox.cfd.stokes@cfd.\protect\allowbreak{}stokes}
 Einordnung: research. Experimenteller M12-Kern: laminare Verifikation; keine RANS-/FSI- oder stabile Releasezusage.

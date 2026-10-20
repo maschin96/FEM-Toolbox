@@ -17,6 +17,7 @@ from fem_toolbox.cfd.quad_flow import (
     solve_quad_flow,
 )
 from fem_toolbox.cfd.quad_fv import FaceGradient, QuadFVGeometry, StressFlux
+from fem_toolbox.cfd.rans import RansConvergenceError, RansResult, solve_rans
 from fem_toolbox.cfd.stokes import StokesResult, solve_stokes
 
 __all__ = [
@@ -32,12 +33,15 @@ __all__ = [
     "QuadFVGeometry",
     "QuadFlowConvergenceError",
     "QuadFlowResult",
+    "RansConvergenceError",
+    "RansResult",
     "StationaryFlowResult",
     "StokesResult",
     "StressFlux",
     "WallQuality",
     "solve_channel",
     "solve_quad_flow",
+    "solve_rans",
     "solve_stationary_flow",
     "solve_stokes",
 ]

@@ -3621,6 +3621,34 @@
       "target": "Doc/latex/chapters/api/cfd.tex",
       "owner": "M12 maintainers",
       "status": "open"
+    },
+    {
+      "source": "Doc/88_SA_NOFT2_IMPLEMENTATION.md",
+      "canonical": "Doc/88_SA_NOFT2_IMPLEMENTATION.md",
+      "target": "Doc/latex/chapters/api/cfd.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/cfd/rans.py",
+      "canonical": "src/fem_toolbox/cfd/rans.py",
+      "target": "Doc/latex/chapters/api/cfd.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/cfd/sa_model.py",
+      "canonical": "src/fem_toolbox/cfd/sa_model.py",
+      "target": "Doc/latex/chapters/api/cfd.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/cfd/sa_transport.py",
+      "canonical": "src/fem_toolbox/cfd/sa_transport.py",
+      "target": "Doc/latex/chapters/api/cfd.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
     }
   ],
   "planned": [

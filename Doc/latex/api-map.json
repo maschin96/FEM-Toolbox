@@ -169,6 +169,39 @@
         "tests/unit/test_quad_flow.py"
       ]
     },
+    "fem_toolbox.cfd.rans": {
+      "classification": "research",
+      "stable_symbols": [],
+      "rationale": "M12-Entwicklung: SA-noft2-Punkt-/Transport-/RANS-API; getrennte Modell-/FSI-Abnahme erforderlich.",
+      "contract": "Doc/88_SA_NOFT2_IMPLEMENTATION.md",
+      "examples": [
+        "tests/unit/test_sa_model.py",
+        "tests/unit/test_sa_transport.py",
+        "tests/unit/test_rans.py"
+      ]
+    },
+    "fem_toolbox.cfd.sa_model": {
+      "classification": "research",
+      "stable_symbols": [],
+      "rationale": "M12-Entwicklung: SA-noft2-Punkt-/Transport-/RANS-API; getrennte Modell-/FSI-Abnahme erforderlich.",
+      "contract": "Doc/88_SA_NOFT2_IMPLEMENTATION.md",
+      "examples": [
+        "tests/unit/test_sa_model.py",
+        "tests/unit/test_sa_transport.py",
+        "tests/unit/test_rans.py"
+      ]
+    },
+    "fem_toolbox.cfd.sa_transport": {
+      "classification": "research",
+      "stable_symbols": [],
+      "rationale": "M12-Entwicklung: SA-noft2-Punkt-/Transport-/RANS-API; getrennte Modell-/FSI-Abnahme erforderlich.",
+      "contract": "Doc/88_SA_NOFT2_IMPLEMENTATION.md",
+      "examples": [
+        "tests/unit/test_sa_model.py",
+        "tests/unit/test_sa_transport.py",
+        "tests/unit/test_rans.py"
+      ]
+    },
     "fem_toolbox.cfd.stokes": {
       "classification": "research",
       "stable_symbols": [],

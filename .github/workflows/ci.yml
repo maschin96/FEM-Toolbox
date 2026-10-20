@@ -132,7 +132,7 @@ jobs:
           package = Path(fem_toolbox.__file__).resolve()
           assert package.is_relative_to(Path(sys.prefix).resolve()), package
           dist = distribution("fem-toolbox")
-          assert dist.version == fem_toolbox.__version__ == "1.6.0"
+          assert dist.version == fem_toolbox.__version__ == "1.7.0.dev1"
           assert dist.metadata["License-Expression"] == "MIT"
           licenses = [f for f in dist.files if f.name == "LICENSE"]
           assert len(licenses) == 1, licenses
@@ -160,6 +160,21 @@ jobs:
           "$RUNNER_TEMP/artifact-env/bin/python" -I "$CANDIDATE_DIR/candidate/cfd_flow/run.py" --output cfd_flow_results
           "$RUNNER_TEMP/artifact-env/bin/python" -I "$CANDIDATE_DIR/candidate/fluid_mesh/preflight.py" --output fluid-preflight.json
           "$RUNNER_TEMP/artifact-env/bin/python" -I "$CANDIDATE_DIR/candidate/quad_flow/run.py" --output quad_flow_results
+          "$RUNNER_TEMP/artifact-env/bin/python" -I - "$CANDIDATE_DIR/candidate/quad_flow/domain.json" <<'PY'
+          import sys
+          import numpy as np
+          from fem_toolbox.cfd import FluidDomain, solve_rans
+          from fem_toolbox.cfd.sa_model import sa_terms
+
+          terms = sa_terms([0.0], velocity_gradient_s_inv=np.zeros((1,2,2)), gradient_nu_tilde_m_s=[[0,0]], wall_distance_m=1, kinematic_viscosity_m2_s=1)
+          assert terms.eddy_viscosity_m2_s[0] == 0
+          domain = FluidDomain.from_file(sys.argv[1])
+          nu = domain.fluid.viscosity_Pa_s / domain.fluid.density_kg_m3
+          result = solve_rans(domain, initial_nu_tilde_m2_s=3*nu, velocity_scale_m_s=1, length_scale_m=2)
+          assert result.converged and result.wall_y_plus.max() <= 1
+          assert abs(result.sa_residual_m2_s2).max() <= 1e-8*nu/2
+          print("Installed SA/RANS low-Re smoke:", result.iterations, result.wall_y_plus.max())
+          PY
           "$RUNNER_TEMP/artifact-env/bin/python" -I "$CANDIDATE_DIR/candidate/study_recipes/run.py" heat --output recipe_heat_results
           "$RUNNER_TEMP/artifact-env/bin/python" -I "$CANDIDATE_DIR/candidate/study_recipes/run.py" piezo --output recipe_piezo_results
           "$RUNNER_TEMP/artifact-env/bin/python" -I "$CANDIDATE_DIR/candidate/uncertainty_heat/run.py" --output uncertainty_heat_results
@@ -307,7 +322,7 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ["3.11", "3.12", "3.13"]
-        case: [poiseuille, central, linear-upwind, variable-mu]
+        case: [poiseuille, central, linear-upwind, variable-mu, sa-mms, sa-channel]
         include:
           - case: poiseuille
             node: test_quad_poiseuille_four_meshes
@@ -317,6 +332,10 @@ jobs:
             node: test_quad_nonlinear_mms_four_meshes[linear-upwind-1.0-0.1-0.7]
           - case: variable-mu
             node: test_quad_variable_mu_four_meshes
+          - case: sa-mms
+            node: sa-mms
+          - case: sa-channel
+            node: sa-channel
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -329,13 +348,17 @@ jobs:
       - name: Install project and test tools
         run: python -m pip install --disable-pip-version-check -e '.[test]'
       - name: Run complete four-mesh case with visible progress
-        run: >-
-          python -m pytest -vv -s --durations=5 -o junit_family=legacy
-          --junitxml=cfd-results.xml
-          "tests/convergence/test_quad_flow_convergence.py::$CFD_TEST_NODE"
+        run: |
+          if [ "$CFD_TEST_NODE" = "sa-mms" ]; then
+            python -m pytest -vv -s --durations=5 -o junit_family=legacy --junitxml=cfd-results.xml tests/convergence/test_sa_transport_convergence.py
+          elif [ "$CFD_TEST_NODE" = "sa-channel" ]; then
+            python -m pytest -vv -s --durations=5 -o junit_family=legacy --junitxml=cfd-results.xml tests/convergence/test_rans_channel.py
+          else
+            python -m pytest -vv -s --durations=5 -o junit_family=legacy --junitxml=cfd-results.xml "tests/convergence/test_quad_flow_convergence.py::$CFD_TEST_NODE"
+          fi
       - name: Retain numerical verification report
         if: always()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
           name: cfd-${{ matrix.python-version }}-${{ matrix.case }}
           path: cfd-results.xml

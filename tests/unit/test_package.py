@@ -12,9 +12,9 @@ def test_package_can_be_imported() -> None:
 
 
 def test_distribution_exposes_release_version() -> None:
-    """Installed metadata identifies the M11 release version."""
+    """Installed metadata identifies the explicit M12 development candidate."""
     distribution = metadata("fem-toolbox")
 
     assert distribution["Name"] == "fem-toolbox"
-    assert version("fem-toolbox") == "1.6.0"
+    assert version("fem-toolbox") == "1.7.0.dev1"
     assert import_module("fem_toolbox").__version__ == version("fem-toolbox")

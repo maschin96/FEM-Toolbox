@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from copy import copy
 from dataclasses import dataclass
 
 import numpy as np
@@ -92,25 +93,7 @@ class QuadSystem:
         self.gpf, self.gpf_average = self._face_gradient(
             self.gp, self.pf, velocity=False
         )
-        self.mu_cell = mu
-        self.mu_face = self.fv.face_values(mu, mub)
-        if np.any(self.mu_face <= 0):
-            _error("viscosity_Pa_s", "nonpositive reconstructed face viscosity")
-        r, c, d = [], [], []
-        for f, (nx, ny) in enumerate(self.mesh.face_normals):
-            for component, entries in enumerate(
-                ([(0, 2 * nx), (1, ny), (2, ny)], [(1, nx), (2, nx), (3, 2 * ny)])
-            ):
-                for axis, value in entries:
-                    r.append(2 * f + component)
-                    c.append(4 * f + axis)
-                    d.append(float(self.mu_face[f] * value))
-        self.viscous_traction = affine_product(
-            sparse(r, c, d, (2 * self.nf, 4 * self.nf)), self.guf
-        )
-        area = diags(np.repeat(self.fv.face_areas_m2, 2))
-        self.viscous_force = affine_product(area, self.viscous_traction)
-        self.diffusion = affine_product(-self.vector_balance, self.viscous_force)
+        self._set_viscosity(mu, mub)
         r, c, d = [], [], []
         for f, normal in enumerate(self.mesh.face_normals):
             for k in range(2):
@@ -134,6 +117,41 @@ class QuadSystem:
             self.uf,
         )
         self.mass_velocity = affine_product(self.balance, self.velocity_flux)
+
+    def _set_viscosity(self, mu: NDArray[np.float64], mub: NDArray[np.float64]) -> None:
+        """Fresh variable stress maps; geometry and reconstruction are independent."""
+        self.mu_cell = mu
+        self.mu_face = self.fv.face_values(mu, mub)
+        if np.any(self.mu_face <= 0):
+            _error("viscosity_Pa_s", "nonpositive reconstructed face viscosity")
+        r, c, d = [], [], []
+        for f, (nx, ny) in enumerate(self.mesh.face_normals):
+            for component, entries in enumerate(
+                ([(0, 2 * nx), (1, ny), (2, ny)], [(1, nx), (2, nx), (3, 2 * ny)])
+            ):
+                for axis, value in entries:
+                    r.append(2 * f + component)
+                    c.append(4 * f + axis)
+                    d.append(float(self.mu_face[f] * value))
+        self.viscous_traction = affine_product(
+            sparse(r, c, d, (2 * self.nf, 4 * self.nf)), self.guf
+        )
+        area = diags(np.repeat(self.fv.face_areas_m2, 2))
+        self.viscous_force = affine_product(area, self.viscous_traction)
+        self.diffusion = affine_product(-self.vector_balance, self.viscous_force)
+
+    def _with_viscosity(
+        self, mu: NDArray[np.float64], mub: NDArray[np.float64]
+    ) -> QuadSystem:
+        """Same immutable domain, new stresses; never reuse across mesh motion.
+
+        Shared affine maps are read-only inputs to all assembly operations.
+        Updating viscosity replaces every stress/force/diffusion map on a
+        separate assembly state; it never mutates an earlier iterand's maps.
+        """
+        updated = copy(self)
+        updated._set_viscosity(mu, mub)
+        return updated
 
     def _polynomial_reconstruction(self, *, velocity: bool) -> tuple[Map, Map]:
         """Consistent cubic cell and face reconstruction with BC constraints.
