@@ -11,6 +11,11 @@ from fem_toolbox.cfd.flow_model import (
 )
 from fem_toolbox.cfd.fluid_domain import FluidDomain
 from fem_toolbox.cfd.fluid_mesh import FluidMesh2D, WallQuality
+from fem_toolbox.cfd.mesh_motion import (
+    MeshMotionError,
+    MeshMotionResult,
+    move_fluid_domain,
+)
 from fem_toolbox.cfd.quad_flow import (
     QuadFlowConvergenceError,
     QuadFlowResult,
@@ -30,6 +35,8 @@ __all__ = [
     "FluidDomain",
     "FluidMesh2D",
     "IncompressibleFluid",
+    "MeshMotionError",
+    "MeshMotionResult",
     "QuadFVGeometry",
     "QuadFlowConvergenceError",
     "QuadFlowResult",
@@ -39,6 +46,7 @@ __all__ = [
     "StokesResult",
     "StressFlux",
     "WallQuality",
+    "move_fluid_domain",
     "solve_channel",
     "solve_quad_flow",
     "solve_rans",

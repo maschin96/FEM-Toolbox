@@ -3698,6 +3698,20 @@
       "target": "Doc/latex/chapters/api/fsi.tex",
       "owner": "M12 maintainers",
       "status": "open"
+    },
+    {
+      "source": "Doc/91_STATIONARY_MESH_MOTION.md",
+      "canonical": "Doc/91_STATIONARY_MESH_MOTION.md",
+      "target": "Doc/latex/chapters/api/fsi.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/cfd/mesh_motion.py",
+      "canonical": "src/fem_toolbox/cfd/mesh_motion.py",
+      "target": "Doc/latex/chapters/api/fsi.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
     }
   ],
   "planned": [
