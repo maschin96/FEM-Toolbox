@@ -1,4 +1,4 @@
-\chapter{M12: konservative Schnittstelle und einseitige Mechanik}\label{api:fsi}
+\chapter[M12: Fluid-Struktur-Schnittstelle]{M12: konservative Schnittstelle und einseitige Mechanik}\label{api:fsi}
 Das experimentelle Paket \texttt{fem\_toolbox.coupling} überträgt Lasten
 zwischen extrudierten 2D-Fluidsegmenten und äußeren Triangle3-Facetten
 einer Tet4-Struktur. Breite und Normalen sind explizit; strukturelle
@@ -45,3 +45,37 @@ prüfen alle Kräfte und Momente auf nicht passenden Netzen. Ein echter
 Fluiddrucklauf liefert beim geführten elastischen Block die analytische
 Verschiebung und ausgeglichene Lagerreaktionen. Dies ist noch kein
 bidirektionaler FSI-Nachweis; Netzbewegung und Kopplungsiteration folgen separat.
+
+\section{Stationäre harmonische Netzbewegung}
+Die experimentelle Funktion \texttt{move\_fluid\_domain} liegt im CFD-Paket.
+Sie löst zwei skalare Laplace-Probleme mit bilinearen Quad4-Elementen und
+2-mal-2-Gaußquadratur auf dem unveränderten Referenznetz. Ergebnis ist
+\[
+x_{current}=x_{reference}+d_{mesh}.
+\]
+Absolute Wege werden nie als vergangene Inkremente aufsummiert. FSI-Wände
+erhalten die geprüfte P1-Spur; andere feste Wände bleiben fest. Ein- und
+Auslassketten interpolieren ihre beiden Wandecken linear. Explizite periodische
+Partner teilen ihre Verschiebungsfreiheitsgrade. Widersprüchliche Ecken oder
+Partner führen zu konkreten Fehlern.
+
+Standardmäßig bleibt der integrierte Einlassvolumenstrom erhalten: Das
+ursprüngliche Geschwindigkeitsprofil wird mit dem Verhältnis alter zu neuer
+signierter Fläche skaliert. SA-Einlasswerte bleiben erhalten. Eine ausdrücklich
+andere Einlasspolitik wird mit ihren Einstellungen gehasht. Dies ersetzt keinen
+Fluidsolve und setzt keine analytischen Druckkräfte ein.
+
+Neue Geometrie bedeutet neue Flächen, Normalen, Wandabstände, Randprüfung und
+Überdeckungsabbildung. Konnektivität und benannte Rand- sowie Volumengruppen
+bleiben erhalten. Weggrenze 0.02, minimales Flächenverhältnis 0.5 und sämtliche
+Qualitätsgrenzen aus Dokument 71 gelten vor dem nächsten Fluidlauf; finales
+\(y^+\) benötigt dessen tatsächlichen Wandschub. Strukturgradientgrenzen bleiben
+zusätzlich Pflicht. Rohresiduen der freien Laplace-Aufgabe haben Einheit m;
+der relative Rückwärtsfehler muss höchstens \(10^{-12}\) sein.
+
+Dokument 91 beschreibt Formen, unveränderliche Ergebnisse, vollständige
+numerische Gebiets- und Spurhashes, Ressourcen sowie getrennte Fehlerstufen.
+Affine, gescherte und verzerrte Patches, periodische Bewegung, aktuelle
+Überdeckung nicht passender Netze und getrennte Qualitätsfehler bilden die
+Nachweise. Stationäre Iteration ist keine Zeit: keine Wandgeschwindigkeit und
+kein dynamischer ALE-Fluss. Der bidirektionale Fixpunkt bleibt ein eigener Nachweis.

@@ -322,6 +322,8 @@ Einordnung: research. Experimenteller M12-Kern: laminare Verifikation; keine RAN
 \noindent\nolinkurl{FluidDomain} $\to$ \nolinkurl{fem_toolbox.cfd.fluid_domain.FluidDomain}\par
 \noindent\nolinkurl{FluidMesh2D} $\to$ \nolinkurl{fem_toolbox.cfd.fluid_mesh.FluidMesh2D}\par
 \noindent\nolinkurl{IncompressibleFluid} $\to$ \nolinkurl{fem_toolbox.cfd.flow_model.IncompressibleFluid}\par
+\noindent\nolinkurl{MeshMotionError} $\to$ \nolinkurl{fem_toolbox.cfd.mesh_motion.MeshMotionError}\par
+\noindent\nolinkurl{MeshMotionResult} $\to$ \nolinkurl{fem_toolbox.cfd.mesh_motion.MeshMotionResult}\par
 \noindent\nolinkurl{QuadFVGeometry} $\to$ \nolinkurl{fem_toolbox.cfd.quad_fv.QuadFVGeometry}\par
 \noindent\nolinkurl{QuadFlowConvergenceError} $\to$ \nolinkurl{fem_toolbox.cfd.quad_flow.QuadFlowConvergenceError}\par
 \noindent\nolinkurl{QuadFlowResult} $\to$ \nolinkurl{fem_toolbox.cfd.quad_flow.QuadFlowResult}\par
@@ -331,6 +333,7 @@ Einordnung: research. Experimenteller M12-Kern: laminare Verifikation; keine RAN
 \noindent\nolinkurl{StokesResult} $\to$ \nolinkurl{fem_toolbox.cfd.stokes.StokesResult}\par
 \noindent\nolinkurl{StressFlux} $\to$ \nolinkurl{fem_toolbox.cfd.quad_fv.StressFlux}\par
 \noindent\nolinkurl{WallQuality} $\to$ \nolinkurl{fem_toolbox.cfd.fluid_mesh.WallQuality}\par
+\noindent\nolinkurl{move_fluid_domain} $\to$ \nolinkurl{fem_toolbox.cfd.mesh_motion.move_fluid_domain}\par
 \noindent\nolinkurl{solve_channel} $\to$ \nolinkurl{fem_toolbox.cfd.channel.solve_channel}\par
 \noindent\nolinkurl{solve_quad_flow} $\to$ \nolinkurl{fem_toolbox.cfd.quad_flow.solve_quad_flow}\par
 \noindent\nolinkurl{solve_rans} $\to$ \nolinkurl{fem_toolbox.cfd.rans.solve_rans}\par
@@ -815,6 +818,72 @@ linear_step(system: MACSystem, operator: Any, rhs: NDArray[np.float64]) -> tuple
 \end{lstlisting}
 Zusätzlich gilt der oben verknüpfte manuelle Fachvertrag; kein eigener Quell-Docstring.
 Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.cfd.mesh\_motion}
+\index{fem_toolbox.cfd.mesh_motion@cfd.\protect\allowbreak{}mesh\_\protect\allowbreak{}motion}
+Einordnung: research. M12-Entwicklung: absolute stationäre harmonische Quad4-Netzbewegung; keine dynamische ALE-Freigabe.
+\par Fachvertrag: \nolinkurl{Doc/91_STATIONARY_MESH_MOTION.md}. Beispiele/Tests:
+\nolinkurl{tests/unit/test_mesh_motion.py}.
+\subsection{MeshMotionError}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: ValidationError. Dekoratoren: keine.
+\begin{quote}
+Rejected stationary motion with stage, reference identity and last field.
+\end{quote}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, message: str, *, stage: str, reference_mesh_sha256: str, displacement_m: NDArray[np.float64]) -> None
+\end{lstlisting}
+\subsection{MeshMotionResult}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True).
+\begin{quote}
+New immutable domain and absolute harmonic displacement [npoint,2] m.\par Laplace residuals contain free reduced DOFs (periodic pairs share a DOF). Boundary group/connectivity identities are retained. Hashes distinguish reference/current meshes, full domains and prescribed interface traces.
+\end{quote}
+\begin{lstlisting}
+domain: FluidDomain
+\end{lstlisting}
+\begin{lstlisting}
+displacement_m: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+laplace_residual_m: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+maximum_relative_laplace_residual: float
+\end{lstlisting}
+\begin{lstlisting}
+minimum_area_ratio: float
+\end{lstlisting}
+\begin{lstlisting}
+reference_mesh_sha256: str
+\end{lstlisting}
+\begin{lstlisting}
+mesh_sha256: str
+\end{lstlisting}
+\begin{lstlisting}
+reference_domain_sha256: str
+\end{lstlisting}
+\begin{lstlisting}
+domain_sha256: str
+\end{lstlisting}
+\begin{lstlisting}
+interface_sha256: str
+\end{lstlisting}
+\begin{lstlisting}
+input_sha256: str
+\end{lstlisting}
+\begin{lstlisting}
+settings: Mapping[str, Any]
+\end{lstlisting}
+\subsection{move\_fluid\_domain}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+move_fluid_domain(reference: FluidDomain, interface_displacements_m: Mapping[str, ArrayLike], *, length_scale_m: float, preserve_inlet_flow: bool=True, max_nodes: int=50000) -> MeshMotionResult
+\end{lstlisting}
+\begin{quote}
+Harmonic absolute motion with prescribed FSI endpoint traces.\par Each explicitly marked FSI wall needs [nsegment,2 endpoints,2] metres, in its line2 endpoint order. Other walls stay fixed. Inlet/outlet chains interpolate their two wall-corner displacements; other open boundaries have natural zero normal gradient. Explicit periodic node pairs are tied. Fixed inlet volume flow is preserved by scaling each original velocity profile against its new signed face areas; original SA inlet values remain.\par Reject max|d|/Lref>0.02, inverted/poor-quality geometry, area ratios<0.5, conflicting corners, noncongruent periodic motion and resource exhaustion. The new FluidDomain rebuilds wall distances, growth and all BC preflight. Final y+ still requires a subsequent fluid solve, not a mesh-only estimate.
+\end{quote}
+Direkte Raise-Stellen: MeshMotionError; transitive Fehler siehe Fachvertrag.
 \section{fem\_toolbox.cfd.quad\_flow}
 \index{fem_toolbox.cfd.quad_flow@cfd.\protect\allowbreak{}quad\_\protect\allowbreak{}flow}
 Einordnung: research. Experimenteller M12-Kern: laminare Verifikation; keine RANS-/FSI- oder stabile Releasezusage.
