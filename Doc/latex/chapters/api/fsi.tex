@@ -1,0 +1,44 @@
+\chapter{M12: konservative Schnittstelle und einseitige Mechanik}\label{api:fsi}
+Das experimentelle Paket \texttt{fem\_toolbox.coupling} überträgt Lasten
+zwischen extrudierten 2D-Fluidsegmenten und äußeren Triangle3-Facetten
+einer Tet4-Struktur. Breite und Normalen sind explizit; strukturelle
+Normalen werden aus dem eindeutigen Volumeneigentümer gewonnen.
+Dokument 90 nennt Formen, Einheiten, Fehlerpfade und Reproduktion.
+
+Die Überdeckung entsteht durch konvexen Polygonclip. Eine symmetrische
+Dreipunktregel integriert auf jedem Teildreieck den Grad zwei exakt.
+Baryzentrische P1-Gewichte bilden die skalare Matrix \(W\); für Vektoren
+gilt \(H=W\otimes I_3\). Damit gehören Verschiebung und integrierte Kraft
+zum selben überprüfbaren Paar:
+\[
+ u_q=H u_s,\qquad F_s=H^T F_q,\qquad F_q=t_q A_q.
+\]
+Konstantenreproduktion erhält die Kraft, Koordinatenreproduktion das Moment;
+die Transposition erhält virtuelle Arbeit. Geprüfte Rohfehler haben Einheiten
+N, N m und J. Relatives Gate ist \(10^{-10}\), absolute Floors sind jeweils
+\(10^{-12}\) in der zugehörigen SI-Einheit.
+
+\texttt{build\_domain\_interface} verlangt eine benannte FSI-Wand und übernimmt
+ihre Breite aus der FluidDomain. \texttt{build\_interface\_map} nimmt die
+Geometrie direkt entgegen. Vollständige beidseitige Überdeckung, entgegengesetzte
+Normalen und Koordinatenreproduktion sind Pflicht. Lücken und Doppelungen
+werden auch dann abgelehnt, wenn ihre Gesamtflächen sich aufheben.
+Geometrische Toleranz ist \(10^{-10}L_{ref}\), relatives Flächengate
+\(10^{-10}\). Es gibt keine Extrapolation oder Nachbarpunktverteilung.
+
+Die Lastschnittstelle erwartet \(\sigma_f n_f\) in Pa und bildet
+\(t_s=-\sigma_f n_f-p_{external}n_f\). Fluid- und äußerer Druckanteil
+werden getrennt berichtet. Ein Druckdatumwechsel verlangt denselben Wechsel
+des äußeren Drucks. Ergebnisarrays sind unveränderlich; eine herausgegebene
+Matrix ist eine Kopie. Allgemeine virtuelle 3D-Wege dienen der Arbeitsprüfung.
+Physikalische Netzbewegung verlangt dagegen eine ebene spannweiteninvariante,
+von den Fluidsegmenten aufgelöste P1-Spur.
+
+\texttt{solve\_one\_way} übergibt konservative Knotenkräfte an den bestehenden
+statischen Struktursolver, einschließlich vorhandener Modelllasten und
+Randwerte. Grenzen sind \(\max|u|/L_{ref}\leq0.02\) und
+\(\max\|\nabla u\|_F\leq0.02\). Analytische konstante und affine Flächenlasten
+prüfen alle Kräfte und Momente auf nicht passenden Netzen. Ein echter
+Fluiddrucklauf liefert beim geführten elastischen Block die analytische
+Verschiebung und ausgeglichene Lagerreaktionen. Dies ist noch kein
+bidirektionaler FSI-Nachweis; Netzbewegung und Kopplungsiteration folgen separat.

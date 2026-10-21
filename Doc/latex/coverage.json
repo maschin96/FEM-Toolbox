@@ -3670,6 +3670,34 @@
       "target": "Doc/latex/chapters/verification/rans.tex",
       "owner": "M12 maintainers",
       "status": "open"
+    },
+    {
+      "source": "Doc/90_CONSERVATIVE_FSI_INTERFACE.md",
+      "canonical": "Doc/90_CONSERVATIVE_FSI_INTERFACE.md",
+      "target": "Doc/latex/chapters/api/fsi.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/coupling/__init__.py",
+      "canonical": "src/fem_toolbox/coupling/__init__.py",
+      "target": "Doc/latex/chapters/api/fsi.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/coupling/interface.py",
+      "canonical": "src/fem_toolbox/coupling/interface.py",
+      "target": "Doc/latex/chapters/api/fsi.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/coupling/structure.py",
+      "canonical": "src/fem_toolbox/coupling/structure.py",
+      "target": "Doc/latex/chapters/api/fsi.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
     }
   ],
   "planned": [

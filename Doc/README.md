@@ -213,3 +213,5 @@ experimentelle Validierungsfreigabe wird nicht behauptet.
 - [Stationärer laminarer Quad-FV-Solver: SIMPLE, Transport und Bilanzabnahme (#230)](74_QUAD_FV_SIMPLE.md)
 
 - [RANS-Codeverifikation und unabhängiger DNS-Modellvergleich (#88)](89_RANS_VERIFICATION.md)
+
+- [Konservative FSI-Schnittstelle und einseitige Strukturantwort (#89)](90_CONSERVATIVE_FSI_INTERFACE.md)

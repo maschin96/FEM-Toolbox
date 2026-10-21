@@ -1379,6 +1379,177 @@ Basistypen: IntEnum. Dekoratoren: keine.
 \begin{quote}
 Indices for engineering-strain and stress vectors in three dimensions.
 \end{quote}
+\section{fem\_toolbox.coupling}
+\index{fem_toolbox.coupling@coupling}
+Einordnung: research. M12-Entwicklung: konservative ebene FSI-Schnittstelle; bidirektionale Abnahme folgt separat.
+\par Fachvertrag: \nolinkurl{Doc/90_CONSERVATIVE_FSI_INTERFACE.md}. Beispiele/Tests:
+\nolinkurl{tests/unit/test_interface_map.py}.
+\subsection*{Reexportierte Einstiegspunkte}
+\noindent\nolinkurl{InterfaceLoads} $\to$ \nolinkurl{fem_toolbox.coupling.interface.InterfaceLoads}\par
+\noindent\nolinkurl{InterfaceMap} $\to$ \nolinkurl{fem_toolbox.coupling.interface.InterfaceMap}\par
+\noindent\nolinkurl{OneWayResult} $\to$ \nolinkurl{fem_toolbox.coupling.structure.OneWayResult}\par
+\noindent\nolinkurl{TransferAudit} $\to$ \nolinkurl{fem_toolbox.coupling.interface.TransferAudit}\par
+\noindent\nolinkurl{build_domain_interface} $\to$ \nolinkurl{fem_toolbox.coupling.interface.build_domain_interface}\par
+\noindent\nolinkurl{build_interface_map} $\to$ \nolinkurl{fem_toolbox.coupling.interface.build_interface_map}\par
+\noindent\nolinkurl{solve_one_way} $\to$ \nolinkurl{fem_toolbox.coupling.structure.solve_one_way}\par
+\section{fem\_toolbox.coupling.interface}
+\index{fem_toolbox.coupling.interface@coupling.\protect\allowbreak{}interface}
+Einordnung: research. M12-Entwicklung: konservative ebene FSI-Schnittstelle; bidirektionale Abnahme folgt separat.
+\par Fachvertrag: \nolinkurl{Doc/90_CONSERVATIVE_FSI_INTERFACE.md}. Beispiele/Tests:
+\nolinkurl{tests/unit/test_interface_map.py}.
+\subsection*{Datentypen und Konstanten}
+\begin{lstlisting}
+FloatArray = NDArray[np.float64]
+\end{lstlisting}
+\subsection{TransferAudit}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True).
+\begin{quote}
+Raw conservation errors (N, N m, J) and normalized project gate.
+\end{quote}
+\begin{lstlisting}
+force_error_N: FloatArray
+\end{lstlisting}
+\begin{lstlisting}
+moment_error_N_m: FloatArray
+\end{lstlisting}
+\begin{lstlisting}
+virtual_work_error_J: float
+\end{lstlisting}
+\begin{lstlisting}
+maximum_relative_error: float
+\end{lstlisting}
+\subsection{InterfaceLoads}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True).
+\begin{quote}
+Net structural nodal load, separated fluid/external contributions.
+\end{quote}
+\begin{lstlisting}
+nodal_forces_N: FloatArray
+\end{lstlisting}
+\begin{lstlisting}
+fluid_force_N: FloatArray
+\end{lstlisting}
+\begin{lstlisting}
+external_pressure_force_N: FloatArray
+\end{lstlisting}
+\begin{lstlisting}
+audit: TransferAudit
+\end{lstlisting}
+\subsection{InterfaceMap}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True).
+\begin{quote}
+Owned quadrature and scalar P1 matrix W; vector H=kron(W,I3).\par Build using :func:`build\_interface\_map`. The matrix property returns a copy; public numerical arrays use immutable bytes-backed storage. Arbitrary 3D virtual displacements may be used for work audits. Physical mesh motion additionally requires a span-invariant planar trace via the endpoint method.
+\end{quote}
+\begin{lstlisting}
+quadrature_points_m: FloatArray
+\end{lstlisting}
+\begin{lstlisting}
+quadrature_areas_m2: FloatArray
+\end{lstlisting}
+\begin{lstlisting}
+segment_indices: NDArray[np.int64]
+\end{lstlisting}
+\begin{lstlisting}
+structure_points_m: FloatArray
+\end{lstlisting}
+\begin{lstlisting}
+segments_m: FloatArray
+\end{lstlisting}
+\begin{lstlisting}
+fluid_normals: FloatArray
+\end{lstlisting}
+\begin{lstlisting}
+width_m: float
+\end{lstlisting}
+\begin{lstlisting}
+span_origin_m: float
+\end{lstlisting}
+\begin{lstlisting}
+length_scale_m: float
+\end{lstlisting}
+\begin{lstlisting}
+maximum_relative_coverage_error: float
+\end{lstlisting}
+\subsubsection*{interpolation\_matrix}
+\begin{lstlisting}
+interpolation_matrix(self) -> sparse.csr_matrix
+\end{lstlisting}
+Return an independent vector interpolation matrix H (3nq,3ns).
+\subsubsection*{interpolate}
+\begin{lstlisting}
+interpolate(self, displacement_m: ArrayLike) -> FloatArray
+\end{lstlisting}
+P1 structural displacement [nnode,3] to quadrature [nq,3], metres.
+\subsubsection*{transfer\_forces}
+\begin{lstlisting}
+transfer_forces(self, integrated_forces_N: ArrayLike) -> FloatArray
+\end{lstlisting}
+Apply H transpose to integrated quadrature forces [nq,3] in N.
+\subsubsection*{audit}
+\begin{lstlisting}
+audit(self, integrated_forces_N: ArrayLike, virtual_displacement_m: ArrayLike | None=None) -> TransferAudit
+\end{lstlisting}
+Check force, origin moments and optional virtual work, unchanged gates.\par Relative gate is 1e-10, with absolute floors 1e-12 N, N m and J. Normalization includes absolute summed contributions to handle cancellation.
+\subsubsection*{loads\_from\_fluid\_traction}
+\begin{lstlisting}
+loads_from_fluid_traction(self, traction_Pa: ArrayLike, *, external_pressure_Pa: float=0.0) -> InterfaceLoads
+\end{lstlisting}
+Convert sigma\_f*n\_f [nsegment,2] to net structural load.\par t\_structure=-t\_fluid-p\_external*n\_f; pressure is absolute relative to the same datum as p\_external. External pressure and fluid forces remain separate. Piecewise constant FV traction is integrated on overlap areas.
+\subsubsection*{segment\_endpoint\_displacements}
+\begin{lstlisting}
+segment_endpoint_displacements(self, displacement_m: ArrayLike) -> FloatArray
+\end{lstlisting}
+Return [nsegment,2 endpoints,2] supported planar displacement.\par Reject span dependence, out-of-plane motion and P1 kinks not resolved by the fluid segments. This keeps the reduced trace and adjoint loads consistent with exactly the same H, without nearest-point interpolation.
+\subsection{build\_interface\_map}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+build_interface_map(*, segments_m: ArrayLike, fluid_normals: ArrayLike, width_m: float, structure: Mesh, facet_set: str, length_scale_m: float, span_origin_m: float=0.0, max_quadrature_points: int=200000) -> InterfaceMap
+\end{lstlisting}
+\begin{quote}
+Build exact degree-two overlap quadrature and conservative P1 map.\par Fluid segments [n,2,2] extrude over [span\_origin,span\_origin+width]. Structure must have named exterior Triangle3 facets owned by Tet4 cells; outward structural normals must oppose the supplied fluid unit normals. Geometric tolerance is 1e-10 Lref, relative area gate 1e-10. Gaps, double coverage and unsupported geometry fail explicitly. No mesh generation/I/O.
+\end{quote}
+\subsection{build\_domain\_interface}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+build_domain_interface(domain: FluidDomain, *, wall_name: str, structure: Mesh, facet_set: str, length_scale_m: float, span_origin_m: float=0.0, max_quadrature_points: int=200000) -> InterfaceMap
+\end{lstlisting}
+\begin{quote}
+Build an overlap map from a named explicitly FSI-marked no-slip wall.\par Segment order equals domain.mesh.boundary\_sets[wall\_name]. Tractions must be selected from the solver's wall-row order into that same segment order. Width is taken from FluidDomain, never guessed from structural coordinates.
+\end{quote}
+\section{fem\_toolbox.coupling.structure}
+\index{fem_toolbox.coupling.structure@coupling.\protect\allowbreak{}structure}
+Einordnung: research. M12-Entwicklung: konservative ebene FSI-Schnittstelle; bidirektionale Abnahme folgt separat.
+\par Fachvertrag: \nolinkurl{Doc/90_CONSERVATIVE_FSI_INTERFACE.md}. Beispiele/Tests:
+\nolinkurl{tests/unit/test_interface_map.py}.
+\subsection{OneWayResult}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True).
+\begin{quote}
+Conservative loads and reference-geometry static structural response.
+\end{quote}
+\begin{lstlisting}
+loads: InterfaceLoads
+\end{lstlisting}
+\begin{lstlisting}
+structure: ElasticResult
+\end{lstlisting}
+\begin{lstlisting}
+maximum_displacement_ratio: float
+\end{lstlisting}
+\begin{lstlisting}
+maximum_displacement_gradient: float
+\end{lstlisting}
+\subsection{solve\_one\_way}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+solve_one_way(mapping: InterfaceMap, model: Model, traction_Pa: ArrayLike, *, external_pressure_Pa: float=0.0) -> OneWayResult
+\end{lstlisting}
+\begin{quote}
+Apply sigma\_f*n\_f [nsegment,2] to a validated elasticity Model.\par Existing body forces, tractions and prescribed displacements are preserved. Forces are added through existing point-load DOFs; there is no new element formulation. Structure mesh coordinates must equal the map coordinates. Small-displacement and gradient bounds are both 0.02, as in Doc/71.
+\end{quote}
 \section{fem\_toolbox.dynamic\_result}
 \index{fem_toolbox.dynamic_result@dynamic\_\protect\allowbreak{}result}
 Einordnung: stable. Stabile Einstiegspunkte gemäß Doc/29 und additiven M6–M9-Verträgen sind ausdrücklich aufgelistet; andere Symbole bleiben Forschung/intern.
