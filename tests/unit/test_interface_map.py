@@ -329,5 +329,5 @@ def test_span_peak_between_fluid_endpoints_cannot_hide_between_quadrature_sample
     u = np.zeros_like(solid.points)
     peak = np.isclose(solid.points[:, 0], 1.5) & np.isclose(solid.points[:, 2], 2)
     u[peak, 1] = 2.1e-8 * mapping.length_scale_m
-    with pytest.raises(ValidationError, match="span|trace"):
+    with pytest.raises(ValidationError, match=r"span|trace"):
         mapping.segment_endpoint_displacements(u)
