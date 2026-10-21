@@ -278,7 +278,13 @@ class InterfaceMap:
                 i, 1
             ]
             actual = self.interpolate(u)[rows, :2]
-            if np.max(np.linalg.norm(actual - linear, axis=1)) > tolerance:
+            # On each clipped P1 triangle the discrepancy is affine. Recover
+            # its three vertex values from the degree-two Gauss samples:
+            # G=I/2+J/6, G^-1=2I-J/3. Norm maxima lie at vertices, so a
+            # narrow span peak cannot hide between quadrature samples.
+            sampled = (actual - linear).reshape(-1, 3, 2)
+            vertices = 2 * sampled - sampled.sum(axis=1, keepdims=True) / 3
+            if np.max(np.linalg.norm(vertices, axis=2)) > tolerance:
                 _fail(
                     "unsupported span dependence or unresolved piecewise-linear trace"
                 )

@@ -70,7 +70,10 @@ Das Ergebnis enthält Strukturknotenkräfte in N, keine Druckwerte als Punktkrä
 `segment_endpoint_displacements` liefert ebene absolute Wege
 `[nsegment,2 endpoints,2]` in m. Es prüft z-Verschiebungen und
 Spannweitenvariation gegen 1e-8 Lref sowie die Darstellung der strukturellen
-Spur durch lineare Fluidsegmente. Nicht aufgelöste P1-Knicke werden abgelehnt;
+Spur durch lineare Fluidsegmente. Für jeden Überdeckungsteil werden aus den
+drei Gaußwerten die affinen Abweichungen an allen Ecken rekonstruiert;
+so können schmale Spitzen zwischen Quadraturpunkten nicht verborgen bleiben.
+Nicht aufgelöste P1-Knicke werden abgelehnt;
 eine beliebig gekrümmte verformte Schnittstelle wird nicht behauptet.
 `interpolate` bleibt für allgemeine virtuelle Arbeitsproben uneingeschränkt.
 Harmonische innere Netzbewegung ist das getrennte Arbeitspaket #90.
@@ -111,6 +114,9 @@ Versionierte Fälle stehen in `tests/unit/test_interface_map.py`:
 TDD: Zunächst fehlender Kopplungsimport; danach fehlende einseitige API und
 ein reproduzierter Nichtfehler bei symmetrischen Lücken/Doppelungen.
 Explizite Intervallüberlappungsprüfung behebt diesen Fehler. Alle 20 gezielten
-Tests bestehen. Unabhängiges menschliches Fachreview liegt nicht vor.
+Tests bestanden vor dem zusätzlichen Spitzentest. Dieser reproduzierte eine
+zwischen Proben verborgene Spannweitenspitze; die anschließende Eckprüfung
+behebt den Fehler. Alle 21 gezielten Tests bestehen.
+Unabhängiges menschliches Fachreview liegt nicht vor.
 Netzbewegung, bidirektionaler Fixpunkt, FSI-Netzfolgen und deklarative
 Release-Workflows bleiben separate verpflichtende Arbeitspakete.

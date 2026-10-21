@@ -34,10 +34,13 @@ Matrix ist eine Kopie. Allgemeine virtuelle 3D-Wege dienen der Arbeitsprüfung.
 Physikalische Netzbewegung verlangt dagegen eine ebene spannweiteninvariante,
 von den Fluidsegmenten aufgelöste P1-Spur.
 
-\texttt{solve\_one\_way} übergibt konservative Knotenkräfte an den bestehenden
-statischen Struktursolver, einschließlich vorhandener Modelllasten und
-Randwerte. Grenzen sind \(\max|u|/L_{ref}\leq0.02\) und
-\(\max\|\nabla u\|_F\leq0.02\). Analytische konstante und affine Flächenlasten
+Der Adapter \texttt{solve\_one\_way} verwendet den bestehenden statischen
+Mechaniksolver mit konservativen Knotenkräften, vorhandenen Lasten und
+Randwerten. Die Grenzen lauten
+\[
+\max|u|/L_{ref}\leq0.02,\qquad \max\|\nabla u\|_F\leq0.02.
+\]
+Analytische konstante und affine Flächenlasten
 prüfen alle Kräfte und Momente auf nicht passenden Netzen. Ein echter
 Fluiddrucklauf liefert beim geführten elastischen Block die analytische
 Verschiebung und ausgeglichene Lagerreaktionen. Dies ist noch kein
