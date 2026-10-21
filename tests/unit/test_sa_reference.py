@@ -40,3 +40,20 @@ def test_reference_dimensional_similarity_without_changing_model_constants():
     assert scaled.flow_per_span_m2_s == pytest.approx(
         0.0005 * base.flow_per_span_m2_s, rel=1e-9
     )
+
+
+def test_fixed_flow_height_change_keeps_reynolds_and_scalar_profile():
+    base = solve_channel_reference()
+    factor = 1.01
+    changed = solve_channel_reference(
+        half_height_m=factor, pressure_drive_N_m3=1 / factor**3
+    )
+    y = np.linspace(0, 2, 101)
+    u, a = base.evaluate(y)
+    uc, ac = changed.evaluate(factor * y)
+    np.testing.assert_allclose(uc, u / factor, rtol=1e-8, atol=1e-9)
+    np.testing.assert_allclose(ac, a, rtol=1e-8, atol=1e-10)
+    assert changed.flow_per_span_m2_s == pytest.approx(
+        base.flow_per_span_m2_s, rel=1e-8
+    )
+    assert changed.re_tau == pytest.approx(base.re_tau)

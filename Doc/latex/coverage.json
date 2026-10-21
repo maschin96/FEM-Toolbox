@@ -3649,6 +3649,27 @@
       "target": "Doc/latex/chapters/api/cfd.tex",
       "owner": "M12 maintainers",
       "status": "open"
+    },
+    {
+      "source": "Doc/89_RANS_VERIFICATION.md",
+      "canonical": "Doc/89_RANS_VERIFICATION.md",
+      "target": "Doc/latex/chapters/verification/rans.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "Doc/evidence/m12/reference_sources.json",
+      "canonical": "Doc/evidence/m12/reference_sources.json",
+      "target": "Doc/latex/chapters/verification/rans.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "Doc/evidence/m12/v1.7.0.dev1-rans-verification.json",
+      "canonical": "Doc/evidence/m12/v1.7.0.dev1-rans-verification.json",
+      "target": "Doc/latex/chapters/verification/rans.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
     }
   ],
   "planned": [

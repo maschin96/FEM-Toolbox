@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "retrieved_on": "2026-10-20",
+  "mkm_channel_590": {
+    "authors": ["Robert D. Moser", "John Kim", "Nagi N. Mansour"],
+    "reference_year": 1999,
+    "source_page": "https://turbulence.oden.utexas.edu/MKM_1999.html",
+    "url": "https://turbulence.oden.utexas.edu/data/MKM/chan590/profiles/chan590.means",
+    "sha256": "878bc951794516b6136912f8f098cd6f2f96c4bbe7f21a8cea657ffb270d419d",
+    "bytes": 12932,
+    "rows": 129,
+    "columns": 7,
+    "re_tau": 587.19,
+    "normalization": "U_tau, h",
+    "used_columns": {"y_over_delta": 0, "y_plus": 1, "velocity_plus": 2},
+    "reference_type": "independent_DNS_not_experimental_measurement",
+    "download_status": "public_download_from_authors_page",
+    "redistribution_license": "not_explicitly_stated_on_source_page",
+    "raw_data_redistributed": false,
+    "use": "External checksum-verified input; original data excluded from repository, packages, handbook archive and release assets."
+  },
+  "sa_model": {
+    "variant": "SA-noft2",
+    "s_modification": "Allmaras_2012_TMR_note_1c",
+    "equations_url": "https://tmbwg.github.io/turbmodels/spalart.html",
+    "paper_url": "https://www.iccfd.org/iccfd7/assets/pdf/papers/ICCFD7-1902_paper.pdf",
+    "implementation": "independently_authored_no_external_code_copied"
+  }
+}
