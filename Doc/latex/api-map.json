@@ -221,6 +221,33 @@
         "Doc/latex/examples/developer_extension.py"
       ]
     },
+    "fem_toolbox.coupling": {
+      "classification": "research",
+      "stable_symbols": [],
+      "rationale": "M12-Entwicklung: konservative ebene FSI-Schnittstelle; bidirektionale Abnahme folgt separat.",
+      "contract": "Doc/90_CONSERVATIVE_FSI_INTERFACE.md",
+      "examples": [
+        "tests/unit/test_interface_map.py"
+      ]
+    },
+    "fem_toolbox.coupling.interface": {
+      "classification": "research",
+      "stable_symbols": [],
+      "rationale": "M12-Entwicklung: konservative ebene FSI-Schnittstelle; bidirektionale Abnahme folgt separat.",
+      "contract": "Doc/90_CONSERVATIVE_FSI_INTERFACE.md",
+      "examples": [
+        "tests/unit/test_interface_map.py"
+      ]
+    },
+    "fem_toolbox.coupling.structure": {
+      "classification": "research",
+      "stable_symbols": [],
+      "rationale": "M12-Entwicklung: konservative ebene FSI-Schnittstelle; bidirektionale Abnahme folgt separat.",
+      "contract": "Doc/90_CONSERVATIVE_FSI_INTERFACE.md",
+      "examples": [
+        "tests/unit/test_interface_map.py"
+      ]
+    },
     "fem_toolbox.dynamic_result": {
       "classification": "stable",
       "stable_symbols": [

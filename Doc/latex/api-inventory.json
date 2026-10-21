@@ -2040,6 +2040,253 @@
         }
       }
     },
+    "fem_toolbox.coupling": {
+      "source": "src/fem_toolbox/coupling/__init__.py",
+      "documentation": "Experimental stationary planar fluid/structure interface operators.",
+      "declared_exports": [
+        "InterfaceLoads",
+        "InterfaceMap",
+        "OneWayResult",
+        "TransferAudit",
+        "build_domain_interface",
+        "build_interface_map",
+        "solve_one_way"
+      ],
+      "definitions": {},
+      "reexports": {
+        "InterfaceLoads": "fem_toolbox.coupling.interface.InterfaceLoads",
+        "InterfaceMap": "fem_toolbox.coupling.interface.InterfaceMap",
+        "OneWayResult": "fem_toolbox.coupling.structure.OneWayResult",
+        "TransferAudit": "fem_toolbox.coupling.interface.TransferAudit",
+        "build_domain_interface": "fem_toolbox.coupling.interface.build_domain_interface",
+        "build_interface_map": "fem_toolbox.coupling.interface.build_interface_map",
+        "solve_one_way": "fem_toolbox.coupling.structure.solve_one_way"
+      },
+      "aliases": {}
+    },
+    "fem_toolbox.coupling.interface": {
+      "source": "src/fem_toolbox/coupling/interface.py",
+      "documentation": "Conservative P1 overlap quadrature on extruded planar fluid segments.\n\nCoordinates are SI metres, traction Pa, integrated quadrature/nodal forces N.\nThe same interpolation matrix and its transpose define virtual-work pairing.\nNo nearest-neighbour assignment, extrapolation or geometry filling is used.",
+      "declared_exports": null,
+      "definitions": {
+        "TransferAudit": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True, slots=True)"
+          ],
+          "documentation": "Raw conservation errors (N, N m, J) and normalized project gate.",
+          "fields": {
+            "force_error_N": {
+              "annotation": "FloatArray",
+              "default": null
+            },
+            "moment_error_N_m": {
+              "annotation": "FloatArray",
+              "default": null
+            },
+            "virtual_work_error_J": {
+              "annotation": "float",
+              "default": null
+            },
+            "maximum_relative_error": {
+              "annotation": "float",
+              "default": null
+            }
+          },
+          "methods": {}
+        },
+        "InterfaceLoads": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True, slots=True)"
+          ],
+          "documentation": "Net structural nodal load, separated fluid/external contributions.",
+          "fields": {
+            "nodal_forces_N": {
+              "annotation": "FloatArray",
+              "default": null
+            },
+            "fluid_force_N": {
+              "annotation": "FloatArray",
+              "default": null
+            },
+            "external_pressure_force_N": {
+              "annotation": "FloatArray",
+              "default": null
+            },
+            "audit": {
+              "annotation": "TransferAudit",
+              "default": null
+            }
+          },
+          "methods": {}
+        },
+        "InterfaceMap": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True, slots=True)"
+          ],
+          "documentation": "Owned quadrature and scalar P1 matrix W; vector H=kron(W,I3).\n\nBuild using :func:`build_interface_map`. The matrix property returns a copy;\npublic numerical arrays use immutable bytes-backed storage. Arbitrary 3D\nvirtual displacements may be used for work audits. Physical mesh motion\nadditionally requires a span-invariant planar trace via the endpoint method.",
+          "fields": {
+            "quadrature_points_m": {
+              "annotation": "FloatArray",
+              "default": null
+            },
+            "quadrature_areas_m2": {
+              "annotation": "FloatArray",
+              "default": null
+            },
+            "segment_indices": {
+              "annotation": "NDArray[np.int64]",
+              "default": null
+            },
+            "structure_points_m": {
+              "annotation": "FloatArray",
+              "default": null
+            },
+            "segments_m": {
+              "annotation": "FloatArray",
+              "default": null
+            },
+            "fluid_normals": {
+              "annotation": "FloatArray",
+              "default": null
+            },
+            "width_m": {
+              "annotation": "float",
+              "default": null
+            },
+            "span_origin_m": {
+              "annotation": "float",
+              "default": null
+            },
+            "length_scale_m": {
+              "annotation": "float",
+              "default": null
+            },
+            "maximum_relative_coverage_error": {
+              "annotation": "float",
+              "default": null
+            }
+          },
+          "methods": {
+            "interpolation_matrix": {
+              "parameters": "self",
+              "returns": "sparse.csr_matrix",
+              "decorators": [
+                "property"
+              ],
+              "documentation": "Return an independent vector interpolation matrix H (3nq,3ns).",
+              "direct_raise_sites": []
+            },
+            "interpolate": {
+              "parameters": "self, displacement_m: ArrayLike",
+              "returns": "FloatArray",
+              "decorators": [],
+              "documentation": "P1 structural displacement [nnode,3] to quadrature [nq,3], metres.",
+              "direct_raise_sites": []
+            },
+            "transfer_forces": {
+              "parameters": "self, integrated_forces_N: ArrayLike",
+              "returns": "FloatArray",
+              "decorators": [],
+              "documentation": "Apply H transpose to integrated quadrature forces [nq,3] in N.",
+              "direct_raise_sites": []
+            },
+            "audit": {
+              "parameters": "self, integrated_forces_N: ArrayLike, virtual_displacement_m: ArrayLike | None=None",
+              "returns": "TransferAudit",
+              "decorators": [],
+              "documentation": "Check force, origin moments and optional virtual work, unchanged gates.\n\nRelative gate is 1e-10, with absolute floors 1e-12 N, N m and J.\nNormalization includes absolute summed contributions to handle cancellation.",
+              "direct_raise_sites": []
+            },
+            "loads_from_fluid_traction": {
+              "parameters": "self, traction_Pa: ArrayLike, *, external_pressure_Pa: float=0.0",
+              "returns": "InterfaceLoads",
+              "decorators": [],
+              "documentation": "Convert sigma_f*n_f [nsegment,2] to net structural load.\n\nt_structure=-t_fluid-p_external*n_f; pressure is absolute relative to\nthe same datum as p_external. External pressure and fluid forces remain\nseparate. Piecewise constant FV traction is integrated on overlap areas.",
+              "direct_raise_sites": []
+            },
+            "segment_endpoint_displacements": {
+              "parameters": "self, displacement_m: ArrayLike",
+              "returns": "FloatArray",
+              "decorators": [],
+              "documentation": "Return [nsegment,2 endpoints,2] supported planar displacement.\n\nReject span dependence, out-of-plane motion and P1 kinks not resolved\nby the fluid segments. This keeps the reduced trace and adjoint loads\nconsistent with exactly the same H, without nearest-point interpolation.",
+              "direct_raise_sites": []
+            }
+          }
+        },
+        "build_interface_map": {
+          "kind": "function",
+          "parameters": "*, segments_m: ArrayLike, fluid_normals: ArrayLike, width_m: float, structure: Mesh, facet_set: str, length_scale_m: float, span_origin_m: float=0.0, max_quadrature_points: int=200000",
+          "returns": "InterfaceMap",
+          "decorators": [],
+          "documentation": "Build exact degree-two overlap quadrature and conservative P1 map.\n\nFluid segments [n,2,2] extrude over [span_origin,span_origin+width].\nStructure must have named exterior Triangle3 facets owned by Tet4 cells;\noutward structural normals must oppose the supplied fluid unit normals.\nGeometric tolerance is 1e-10 Lref, relative area gate 1e-10. Gaps, double\ncoverage and unsupported geometry fail explicitly. No mesh generation/I/O.",
+          "direct_raise_sites": []
+        },
+        "build_domain_interface": {
+          "kind": "function",
+          "parameters": "domain: FluidDomain, *, wall_name: str, structure: Mesh, facet_set: str, length_scale_m: float, span_origin_m: float=0.0, max_quadrature_points: int=200000",
+          "returns": "InterfaceMap",
+          "decorators": [],
+          "documentation": "Build an overlap map from a named explicitly FSI-marked no-slip wall.\n\nSegment order equals domain.mesh.boundary_sets[wall_name]. Tractions must\nbe selected from the solver's wall-row order into that same segment order.\nWidth is taken from FluidDomain, never guessed from structural coordinates.",
+          "direct_raise_sites": []
+        }
+      },
+      "reexports": {},
+      "aliases": {
+        "FloatArray": {
+          "value": "NDArray[np.float64]"
+        }
+      }
+    },
+    "fem_toolbox.coupling.structure": {
+      "source": "src/fem_toolbox/coupling/structure.py",
+      "documentation": "One-way interface load adapter to the existing verified Tet4 mechanics.",
+      "declared_exports": null,
+      "definitions": {
+        "OneWayResult": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True, slots=True)"
+          ],
+          "documentation": "Conservative loads and reference-geometry static structural response.",
+          "fields": {
+            "loads": {
+              "annotation": "InterfaceLoads",
+              "default": null
+            },
+            "structure": {
+              "annotation": "ElasticResult",
+              "default": null
+            },
+            "maximum_displacement_ratio": {
+              "annotation": "float",
+              "default": null
+            },
+            "maximum_displacement_gradient": {
+              "annotation": "float",
+              "default": null
+            }
+          },
+          "methods": {}
+        },
+        "solve_one_way": {
+          "kind": "function",
+          "parameters": "mapping: InterfaceMap, model: Model, traction_Pa: ArrayLike, *, external_pressure_Pa: float=0.0",
+          "returns": "OneWayResult",
+          "decorators": [],
+          "documentation": "Apply sigma_f*n_f [nsegment,2] to a validated elasticity Model.\n\nExisting body forces, tractions and prescribed displacements are preserved.\nForces are added through existing point-load DOFs; there is no new element\nformulation. Structure mesh coordinates must equal the map coordinates.\nSmall-displacement and gradient bounds are both 0.02, as in Doc/71.",
+          "direct_raise_sites": []
+        }
+      },
+      "reexports": {},
+      "aliases": {}
+    },
     "fem_toolbox.dynamic_result": {
       "source": "src/fem_toolbox/dynamic_result.py",
       "documentation": "Mesh-bound dynamic model result; keeps material/field export associations.",
