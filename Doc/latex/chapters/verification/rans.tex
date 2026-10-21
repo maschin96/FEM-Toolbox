@@ -2,17 +2,28 @@
 Der vorab festgelegte Vertrag aus Dokument 71 trennt Punkt-/MMS-Verifikation,
 kontinuierliche Modellgleichungen und unabhängige DNS. Dokument 89 und das
 versionierte M12-Nachweisarchiv nennen Quellenhashes und sämtliche Messwerte.
-Die SA-MMS auf 16/32/64/128 Zellen erreicht relative Fehler
+Die SA-MMS auf 16, 32, 64 und 128 Zellen erreicht relative Fehler
 \(9.506\cdot10^{-4},2.482\cdot10^{-4},6.366\cdot10^{-5},1.613\cdot10^{-5}\)
-und Ordnungen 1.937/1.963/1.981. Der virtuelle Wandabstand dient allein diesem Test.
+und Ordnungen 1.937, 1.963 und 1.981. Der virtuelle Wandabstand dient allein diesem Test.
 
 Ein unabhängig programmierter kontinuierlicher SA-Kanal-BVP liefert die
-Codevergleichslösung. Auf 32/64/128/256 Zellen je Halbkanal betragen die
-relativen RMS-U-Fehler 0.3473/0.1874/0.02123/0.00882 Prozent.
+Codevergleichslösung. Die Netzfolge liefert folgende relative RMS-U-Fehler:
+\begin{center}
+\begin{tabular}{rr}
+\toprule
+Zellen je Halbkanal & Fehler [Prozent] \\
+\midrule
+32 & 0.3473 \\
+64 & 0.1874 \\
+128 & 0.02123 \\
+256 & 0.00882 \\
+\bottomrule
+\end{tabular}
+\end{center}
 Das feinste Gate von 0.5 Prozent ist erfüllt; Wandkraftfehler bleiben unter
 \(1.8\cdot10^{-13}\), maximales \(y^+\) sinkt von 0.498 auf 0.0585.
 Viskositätssensitivität, Wandverteilung und Relaxationswiederholung bestehen
-bei unveränderten Modellkonstanten und absoluten Feld-/Bilanzgates.
+bei unveränderten Modellkonstanten und absoluten Feld- und Bilanzgates.
 
 Die unabhängige DNS von Moser/Kim/Mansour nutzt \(Re_\tau=587.19\),
 nicht den gerundeten Dateinamen 590. Auf 128/256 Halbkanalzellen betragen
