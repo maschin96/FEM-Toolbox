@@ -120,3 +120,10 @@ enthalten Fehler- und Kostenbudgets sowie die Grenzen der Messung.
 
 Der [Gesamtabgleich für #37](../Doc/56_PERFORMANCE_ACCEPTANCE.md) ordnet alle
 Messreihen den Abnahmekriterien zu und dokumentiert den erneuten Rohdatenabgleich.
+
+## Randtopologie großer Netze (#287)
+
+`boundary_topology.py` vergleicht die eingefrorene v1.4.0-Referenz mit dem
+vektorisierten Pfad in getrennten Prozessen für ungefähr 10⁴/10⁵/10⁶ Zellen.
+Aufruf, Messgrenzen, Paritätsprüfung und archivierte Rohdaten stehen im
+[Nachweis zu #287](issue287.md).

@@ -1,0 +1,79 @@
+{
+  "python": "3.13.7 (v3.13.7:bcee1c32211, Aug 14 2025, 19:10:51) [Clang 16.0.0 (clang-1600.0.26.6)]",
+  "numpy": "2.4.6",
+  "platform": "macOS-27.2-arm64-arm-64bit-Mach-O",
+  "processor": "arm",
+  "repeats": 1,
+  "base_commit": "8820e0075be9c0a3d6db0660cfa6cfa8949ab604",
+  "source_sha256": "da545ee3401b1437f7576515dc8dacfe7cbc9e924c7f66315bb6cf287f1e3494",
+  "oracle_sha256": "2a0380b417f8e58265ceefdb29681bb5097a0a257c69adf38dd4fc1a25b814fd",
+  "samples": [
+    {
+      "n": 12,
+      "cells": 10368,
+      "mode": "scalar",
+      "seconds": 1.0480629159974342,
+      "peak_rss": 74973184,
+      "peak_rss_unit": "bytes",
+      "incidence_sha256": "7c61aa7e87b16e422ccb9df6a1f142d3e1a5f88eae6e6764728706daf1f14ece",
+      "exterior_faces": 1728,
+      "total_area": 6.0
+    },
+    {
+      "n": 12,
+      "cells": 10368,
+      "mode": "vectorized",
+      "seconds": 0.044488291001471225,
+      "peak_rss": 60391424,
+      "peak_rss_unit": "bytes",
+      "incidence_sha256": "7c61aa7e87b16e422ccb9df6a1f142d3e1a5f88eae6e6764728706daf1f14ece",
+      "exterior_faces": 1728,
+      "total_area": 6.0
+    },
+    {
+      "n": 26,
+      "cells": 105456,
+      "mode": "scalar",
+      "seconds": 11.639660374999949,
+      "peak_rss": 443613184,
+      "peak_rss_unit": "bytes",
+      "incidence_sha256": "14c0c22b1e5a9e4d8d1f822200aa7db080396c01a6f4c9e85453fb8acd2e6e02",
+      "exterior_faces": 8112,
+      "total_area": 6.0
+    },
+    {
+      "n": 26,
+      "cells": 105456,
+      "mode": "vectorized",
+      "seconds": 0.48571604099925025,
+      "peak_rss": 264486912,
+      "peak_rss_unit": "bytes",
+      "incidence_sha256": "14c0c22b1e5a9e4d8d1f822200aa7db080396c01a6f4c9e85453fb8acd2e6e02",
+      "exterior_faces": 8112,
+      "total_area": 6.0
+    },
+    {
+      "n": 55,
+      "cells": 998250,
+      "mode": "scalar",
+      "seconds": 115.19492220800021,
+      "peak_rss": 3705946112,
+      "peak_rss_unit": "bytes",
+      "incidence_sha256": "3256675b382753ae0c5117d2930a56888d2f749c0a9af5e08c11ec812b243081",
+      "exterior_faces": 36300,
+      "total_area": 6.0
+    },
+    {
+      "n": 55,
+      "cells": 998250,
+      "mode": "vectorized",
+      "seconds": 5.322230708999996,
+      "peak_rss": 1870266368,
+      "peak_rss_unit": "bytes",
+      "incidence_sha256": "3256675b382753ae0c5117d2930a56888d2f749c0a9af5e08c11ec812b243081",
+      "exterior_faces": 36300,
+      "total_area": 6.0
+    }
+  ],
+  "measurement_note": "Scalar samples retain unchanged v1.4.0 oracle timings; vectorized samples repeated after final tolerance-boundary guard."
+}
