@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 import numpy as np
-from numpy.typing import ArrayLike
+from numpy.typing import ArrayLike, NDArray
 
 from fem_toolbox.coupling.interface import InterfaceLoads, InterfaceMap, _fail
 from fem_toolbox.elements import Tet4Geometry
@@ -37,22 +37,39 @@ def solve_one_way(
     formulation. Structure mesh coordinates must equal the map coordinates.
     Small-displacement and gradient bounds are both 0.02, as in Doc/71.
     """
-    inputs = model.elasticity_inputs()
-    mesh = inputs["mesh"]
+    _check_coordinates(mapping, model)
+    loads = mapping.loads_from_fluid_traction(
+        traction_Pa, external_pressure_Pa=external_pressure_Pa
+    )
+    result, _, ratio, gradient = _solve_structure(
+        model, loads.nodal_forces_N, mapping.length_scale_m
+    )
+    return OneWayResult(loads, result, ratio, gradient)
+
+
+def _check_coordinates(mapping: InterfaceMap, model: Model) -> None:
+    mesh = model.elasticity_inputs()["mesh"]
     if mesh.points.shape != mapping.structure_points_m.shape or not np.array_equal(
         mesh.points, mapping.structure_points_m
     ):
         _fail("structural Model and interface map coordinates do not match")
-    loads = mapping.loads_from_fluid_traction(
-        traction_Pa, external_pressure_Pa=external_pressure_Pa
-    )
-    point_loads = {
-        int(n): f for n, f in enumerate(loads.nodal_forces_N) if np.any(f != 0)
-    }
+
+
+def _solve_structure(
+    model: Model, nodal_forces_N: NDArray[np.float64], length_scale_m: float
+) -> tuple[ElasticResult, NDArray[np.float64], float, float]:
+    """Static reference-geometry response to added nodal forces [nnode,3] N.
+
+    Returns the result, the full displacement [nnode,3] m (zero at inactive
+    nodes) and the small-deformation measures; all Doc/71 gates are enforced.
+    """
+    inputs = model.elasticity_inputs()
+    mesh = inputs["mesh"]
+    point_loads = {int(n): f for n, f in enumerate(nodal_forces_N) if np.any(f != 0)}
     result = solve_elasticity(**inputs, point_loads=point_loads)
     displacement = np.zeros_like(mesh.points)
     displacement[result.node_ids] = result.displacement
-    ratio = float(np.max(np.linalg.norm(displacement, axis=1)) / mapping.length_scale_m)
+    ratio = float(np.max(np.linalg.norm(displacement, axis=1)) / length_scale_m)
     gradient = max(
         float(
             np.linalg.norm(
@@ -67,4 +84,4 @@ def solve_one_way(
         )
     if result.relative_residual > 1e-10:
         _fail(f"structure equilibrium gate failed: {result.relative_residual}")
-    return OneWayResult(loads, result, ratio, gradient)
+    return result, displacement, ratio, gradient

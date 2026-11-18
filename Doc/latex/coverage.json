@@ -3712,6 +3712,20 @@
       "target": "Doc/latex/chapters/api/fsi.tex",
       "owner": "M12 maintainers",
       "status": "open"
+    },
+    {
+      "source": "Doc/92_STATIONARY_FSI_COUPLING.md",
+      "canonical": "Doc/92_STATIONARY_FSI_COUPLING.md",
+      "target": "Doc/latex/chapters/api/fsi.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/coupling/fsi.py",
+      "canonical": "src/fem_toolbox/coupling/fsi.py",
+      "target": "Doc/latex/chapters/api/fsi.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
     }
   ],
   "planned": [

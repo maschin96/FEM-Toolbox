@@ -217,3 +217,5 @@ experimentelle Validierungsfreigabe wird nicht behauptet.
 - [Konservative FSI-Schnittstelle und einseitige Strukturantwort (#89)](90_CONSERVATIVE_FSI_INTERFACE.md)
 
 - [Stationäre harmonische Fluidnetzbewegung (#90)](91_STATIONARY_MESH_MOTION.md)
+
+- [Stationäre bidirektionale FSI-Kopplung (#91)](92_STATIONARY_FSI_COUPLING.md)

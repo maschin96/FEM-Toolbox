@@ -79,3 +79,25 @@ Affine, gescherte und verzerrte Patches, periodische Bewegung, aktuelle
 Überdeckung nicht passender Netze und getrennte Qualitätsfehler bilden die
 Nachweise. Stationäre Iteration ist keine Zeit: keine Wandgeschwindigkeit und
 kein dynamischer ALE-Fluss. Der bidirektionale Fixpunkt bleibt ein eigener Nachweis.
+
+\section{Stationäre partitionierte Kopplung}
+\texttt{solve\_stationary\_fsi} verbindet Netzbewegung, Fluidlösung,
+konservative Lastübertragung und lineare Struktur in einer
+Dirichlet-Neumann-Iteration mit konstanter Relaxation \(\omega=0.2\):
+\[
+r_d=d_{solved}-d^k,\qquad d^{k+1}=d^k+\omega\,r_d .
+\]
+Jeder Schritt baut die Fluidgeometrie aus absoluten Wegen neu auf, löst das
+Fluid vollständig und überträgt die aktuelle Traktion über die neu aufgebaute
+Überdeckung. Erfolg verlangt im selben Schritt
+\(\max|r_d|\le 10^{-8}L_{ref}\) und
+\(\max|F^k-F^{k-1}|\le 10^{-6}\rho U_{ref}^2 bL_{ref}\) sowie sämtliche
+Fluid-, Netz-, Transfer- und Strukturprüfungen. Eine kleine relaxierte
+Änderung allein genügt nicht; höchstens 200 Schritte.
+
+Abbrüche tragen eine Fehlerart (Eingabe, Schnittstelle, Netz, Fluid,
+Struktur, Divergenz, Budget), die vollständige Iterationstabelle und das
+letzte Iterat. Dokument 92 beschreibt Ergebnisfelder und Nachweise:
+konstante Druckbelastung mit exakt geometrischer Kontraktion und ein
+hydrostatischer Deckel mit analytischem Rückkopplungsfixpunkt. Die
+verpflichtenden Deckelreferenzen auf vier Netzstufen bleiben ein eigener Nachweis.
