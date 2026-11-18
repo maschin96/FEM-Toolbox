@@ -1450,17 +1450,200 @@ Indices for engineering-strain and stress vectors in three dimensions.
 \end{quote}
 \section{fem\_toolbox.coupling}
 \index{fem_toolbox.coupling@coupling}
-Einordnung: research. M12-Entwicklung: konservative ebene FSI-Schnittstelle; bidirektionale Abnahme folgt separat.
+Einordnung: research. M12-Entwicklung: konservative ebene FSI-Schnittstelle und stationäre Kopplungsiteration; Abnahme \#92 folgt separat.
 \par Fachvertrag: \nolinkurl{Doc/90_CONSERVATIVE_FSI_INTERFACE.md}. Beispiele/Tests:
 \nolinkurl{tests/unit/test_interface_map.py}.
 \subsection*{Reexportierte Einstiegspunkte}
+\noindent\nolinkurl{FsiCouplingError} $\to$ \nolinkurl{fem_toolbox.coupling.fsi.FsiCouplingError}\par
+\noindent\nolinkurl{FsiIteration} $\to$ \nolinkurl{fem_toolbox.coupling.fsi.FsiIteration}\par
 \noindent\nolinkurl{InterfaceLoads} $\to$ \nolinkurl{fem_toolbox.coupling.interface.InterfaceLoads}\par
 \noindent\nolinkurl{InterfaceMap} $\to$ \nolinkurl{fem_toolbox.coupling.interface.InterfaceMap}\par
 \noindent\nolinkurl{OneWayResult} $\to$ \nolinkurl{fem_toolbox.coupling.structure.OneWayResult}\par
+\noindent\nolinkurl{StationaryFsiProblem} $\to$ \nolinkurl{fem_toolbox.coupling.fsi.StationaryFsiProblem}\par
+\noindent\nolinkurl{StationaryFsiResult} $\to$ \nolinkurl{fem_toolbox.coupling.fsi.StationaryFsiResult}\par
 \noindent\nolinkurl{TransferAudit} $\to$ \nolinkurl{fem_toolbox.coupling.interface.TransferAudit}\par
 \noindent\nolinkurl{build_domain_interface} $\to$ \nolinkurl{fem_toolbox.coupling.interface.build_domain_interface}\par
 \noindent\nolinkurl{build_interface_map} $\to$ \nolinkurl{fem_toolbox.coupling.interface.build_interface_map}\par
 \noindent\nolinkurl{solve_one_way} $\to$ \nolinkurl{fem_toolbox.coupling.structure.solve_one_way}\par
+\noindent\nolinkurl{solve_stationary_fsi} $\to$ \nolinkurl{fem_toolbox.coupling.fsi.solve_stationary_fsi}\par
+\section{fem\_toolbox.coupling.fsi}
+\index{fem_toolbox.coupling.fsi@coupling.\protect\allowbreak{}fsi}
+Einordnung: research. M12-Entwicklung: stationäre partitionierte Dirichlet-Neumann-FSI mit konstanter Relaxation; keine M12-Freigabe ohne \#92.
+\par Fachvertrag: \nolinkurl{Doc/92_STATIONARY_FSI_COUPLING.md}. Beispiele/Tests:
+\nolinkurl{tests/unit/test_stationary_fsi.py}.
+\subsection*{Datentypen und Konstanten}
+\begin{lstlisting}
+FSI_SCHEMA_VERSION = 1
+\end{lstlisting}
+\begin{lstlisting}
+FLUID_MODELS = ('laminar', 'sa-noft2')
+\end{lstlisting}
+\begin{lstlisting}
+FAILURE_KINDS = ('input', 'interface', 'mesh', 'fluid', 'structure', 'divergence', 'budget')
+\end{lstlisting}
+\begin{lstlisting}
+FloatArray = NDArray[np.float64]
+\end{lstlisting}
+\subsection{FsiIteration}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True).
+\begin{quote}
+One complete coupling step on geometry d\textasciicircum{}k.\par displacement\_residual\_m is max nodal |d\_solved-d\textasciicircum{}k| (unrelaxed); load\_change\_N is max nodal |F\textasciicircum{}k-F\textasciicircum{}(k-1)| (inf at k=0). Forces are sums over structure nodes; transfer errors are the raw conservation audit of the current map.
+\end{quote}
+\begin{lstlisting}
+iteration: int
+\end{lstlisting}
+\begin{lstlisting}
+displacement_residual_m: float
+\end{lstlisting}
+\begin{lstlisting}
+relative_displacement_residual: float
+\end{lstlisting}
+\begin{lstlisting}
+load_change_N: float
+\end{lstlisting}
+\begin{lstlisting}
+fluid_force_N: FloatArray
+\end{lstlisting}
+\begin{lstlisting}
+external_pressure_force_N: FloatArray
+\end{lstlisting}
+\begin{lstlisting}
+structure_reaction_N: FloatArray
+\end{lstlisting}
+\begin{lstlisting}
+transfer_force_error_N: FloatArray
+\end{lstlisting}
+\begin{lstlisting}
+transfer_moment_error_N_m: FloatArray
+\end{lstlisting}
+\begin{lstlisting}
+transfer_relative_error: float
+\end{lstlisting}
+\begin{lstlisting}
+maximum_displacement_ratio: float
+\end{lstlisting}
+\begin{lstlisting}
+maximum_displacement_gradient: float
+\end{lstlisting}
+\begin{lstlisting}
+minimum_area_ratio: float
+\end{lstlisting}
+\begin{lstlisting}
+fluid_iterations: int
+\end{lstlisting}
+\subsection{FsiCouplingError}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: ValidationError. Dekoratoren: keine.
+\begin{quote}
+Controlled stop with kind, complete history and last iterate d\textasciicircum{}k [nnode,3].
+\end{quote}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, kind: str, reason: str, history: list[FsiIteration], displacement_m: FloatArray) -> None
+\end{lstlisting}
+\subsection{StationaryFsiProblem}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True).
+\begin{quote}
+Explicit inputs of one stationary bidirectional coupling.\par fluid\_domain is the unchanged reference domain; wall\_name must be an fsi=true wall whose segments are covered by structure facet\_set. The structure is a validated static elasticity Model on the reference mesh; its Dirichlet data, body forces and tractions are kept. Pressure loads use p - external\_pressure\_Pa. fluid\_options pass unchanged to solve\_quad\_flow (laminar) or solve\_rans (sa-noft2), except the reserved scale/model keys. Default relaxation 0.2 and budget 200 follow Doc/71; no adaptive omega.
+\end{quote}
+\begin{lstlisting}
+fluid_domain: FluidDomain
+\end{lstlisting}
+\begin{lstlisting}
+wall_name: str
+\end{lstlisting}
+\begin{lstlisting}
+structure: Model
+\end{lstlisting}
+\begin{lstlisting}
+facet_set: str
+\end{lstlisting}
+\begin{lstlisting}
+length_scale_m: float
+\end{lstlisting}
+\begin{lstlisting}
+velocity_scale_m_s: float
+\end{lstlisting}
+\begin{lstlisting}
+fluid_model: str = 'laminar'
+\end{lstlisting}
+\begin{lstlisting}
+initial_nu_tilde_m2_s: ArrayLike | None = None
+\end{lstlisting}
+\begin{lstlisting}
+fluid_options: Mapping[str, Any] = field(default_factory=dict)
+\end{lstlisting}
+\begin{lstlisting}
+external_pressure_Pa: float = 0.0
+\end{lstlisting}
+\begin{lstlisting}
+relaxation: float = 0.2
+\end{lstlisting}
+\begin{lstlisting}
+max_coupling_iterations: int = 200
+\end{lstlisting}
+\begin{lstlisting}
+divergence_window: int = 10
+\end{lstlisting}
+\begin{lstlisting}
+span_origin_m: float = 0.0
+\end{lstlisting}
+\begin{lstlisting}
+preserve_inlet_flow: bool = True
+\end{lstlisting}
+\subsection{StationaryFsiResult}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True).
+\begin{quote}
+Accepted stationary state with the full iteration table.\par geometry\_displacement\_m is d\textasciicircum{}k used for the final fluid geometry; the structure\_displacement\_m solves the final loads, max difference <=1e-8 Lref. Fluid, loads and structure were all freshly computed on that final geometry; no stale loads are reported. fsi\_schema\_version is in settings.
+\end{quote}
+\begin{lstlisting}
+fluid: QuadFlowResult | RansResult
+\end{lstlisting}
+\begin{lstlisting}
+mesh_motion: MeshMotionResult
+\end{lstlisting}
+\begin{lstlisting}
+interface: InterfaceMap
+\end{lstlisting}
+\begin{lstlisting}
+loads: InterfaceLoads
+\end{lstlisting}
+\begin{lstlisting}
+structure: ElasticResult
+\end{lstlisting}
+\begin{lstlisting}
+geometry_displacement_m: FloatArray
+\end{lstlisting}
+\begin{lstlisting}
+structure_displacement_m: FloatArray
+\end{lstlisting}
+\begin{lstlisting}
+iterations: int
+\end{lstlisting}
+\begin{lstlisting}
+history: tuple[FsiIteration, ...]
+\end{lstlisting}
+\begin{lstlisting}
+converged: bool
+\end{lstlisting}
+\begin{lstlisting}
+settings: Mapping[str, Any]
+\end{lstlisting}
+\begin{lstlisting}
+input_sha256: str
+\end{lstlisting}
+\subsection{solve\_stationary\_fsi}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+solve_stationary_fsi(problem: StationaryFsiProblem) -> StationaryFsiResult
+\end{lstlisting}
+\begin{quote}
+Run the Doc/71 partitioned stationary coupling with constant relaxation.\par Stops successfully only when max|r\_d| <= 1e-8 Lref AND the nodal load change max|F\textasciicircum{}k-F\textasciicircum{}(k-1)| <= 1e-6 rho U\_ref\textasciicircum{}2 (b Lref), with every fluid, mesh, transfer and structure gate passed on the same final geometry. A small relaxed update alone is never success. Failures raise FsiCouplingError with kind in FAILURE\_KINDS and the full history.
+\end{quote}
+Direkte Raise-Stellen: fail; transitive Fehler siehe Fachvertrag.
 \section{fem\_toolbox.coupling.interface}
 \index{fem_toolbox.coupling.interface@coupling.\protect\allowbreak{}interface}
 Einordnung: research. M12-Entwicklung: konservative ebene FSI-Schnittstelle; bidirektionale Abnahme folgt separat.

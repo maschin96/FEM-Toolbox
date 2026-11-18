@@ -2146,25 +2146,291 @@
       "source": "src/fem_toolbox/coupling/__init__.py",
       "documentation": "Experimental stationary planar fluid/structure interface operators.",
       "declared_exports": [
+        "FsiCouplingError",
+        "FsiIteration",
         "InterfaceLoads",
         "InterfaceMap",
         "OneWayResult",
+        "StationaryFsiProblem",
+        "StationaryFsiResult",
         "TransferAudit",
         "build_domain_interface",
         "build_interface_map",
-        "solve_one_way"
+        "solve_one_way",
+        "solve_stationary_fsi"
       ],
       "definitions": {},
       "reexports": {
+        "FsiCouplingError": "fem_toolbox.coupling.fsi.FsiCouplingError",
+        "FsiIteration": "fem_toolbox.coupling.fsi.FsiIteration",
         "InterfaceLoads": "fem_toolbox.coupling.interface.InterfaceLoads",
         "InterfaceMap": "fem_toolbox.coupling.interface.InterfaceMap",
         "OneWayResult": "fem_toolbox.coupling.structure.OneWayResult",
+        "StationaryFsiProblem": "fem_toolbox.coupling.fsi.StationaryFsiProblem",
+        "StationaryFsiResult": "fem_toolbox.coupling.fsi.StationaryFsiResult",
         "TransferAudit": "fem_toolbox.coupling.interface.TransferAudit",
         "build_domain_interface": "fem_toolbox.coupling.interface.build_domain_interface",
         "build_interface_map": "fem_toolbox.coupling.interface.build_interface_map",
-        "solve_one_way": "fem_toolbox.coupling.structure.solve_one_way"
+        "solve_one_way": "fem_toolbox.coupling.structure.solve_one_way",
+        "solve_stationary_fsi": "fem_toolbox.coupling.fsi.solve_stationary_fsi"
       },
       "aliases": {}
+    },
+    "fem_toolbox.coupling.fsi": {
+      "source": "src/fem_toolbox/coupling/fsi.py",
+      "documentation": "Stationary partitioned Dirichlet-Neumann fluid/structure iteration (#91).\n\nDoc/71 section 5: d^k -> harmonic fluid geometry -> full fluid solve ->\nconservative loads on the current overlap -> linear structure on the\nunchanged reference mesh -> r_d = d_solved - d^k -> d^(k+1) = d^k + omega r_d.\nIteration numbers are no physical time; there is no wall velocity or ALE flux.",
+      "declared_exports": [
+        "FAILURE_KINDS",
+        "FLUID_MODELS",
+        "FSI_SCHEMA_VERSION",
+        "FsiCouplingError",
+        "FsiIteration",
+        "StationaryFsiProblem",
+        "StationaryFsiResult",
+        "solve_stationary_fsi"
+      ],
+      "definitions": {
+        "FsiIteration": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True, slots=True)"
+          ],
+          "documentation": "One complete coupling step on geometry d^k.\n\ndisplacement_residual_m is max nodal |d_solved-d^k| (unrelaxed); load_change_N\nis max nodal |F^k-F^(k-1)| (inf at k=0). Forces are sums over structure\nnodes; transfer errors are the raw conservation audit of the current map.",
+          "fields": {
+            "iteration": {
+              "annotation": "int",
+              "default": null
+            },
+            "displacement_residual_m": {
+              "annotation": "float",
+              "default": null
+            },
+            "relative_displacement_residual": {
+              "annotation": "float",
+              "default": null
+            },
+            "load_change_N": {
+              "annotation": "float",
+              "default": null
+            },
+            "fluid_force_N": {
+              "annotation": "FloatArray",
+              "default": null
+            },
+            "external_pressure_force_N": {
+              "annotation": "FloatArray",
+              "default": null
+            },
+            "structure_reaction_N": {
+              "annotation": "FloatArray",
+              "default": null
+            },
+            "transfer_force_error_N": {
+              "annotation": "FloatArray",
+              "default": null
+            },
+            "transfer_moment_error_N_m": {
+              "annotation": "FloatArray",
+              "default": null
+            },
+            "transfer_relative_error": {
+              "annotation": "float",
+              "default": null
+            },
+            "maximum_displacement_ratio": {
+              "annotation": "float",
+              "default": null
+            },
+            "maximum_displacement_gradient": {
+              "annotation": "float",
+              "default": null
+            },
+            "minimum_area_ratio": {
+              "annotation": "float",
+              "default": null
+            },
+            "fluid_iterations": {
+              "annotation": "int",
+              "default": null
+            }
+          },
+          "methods": {}
+        },
+        "FsiCouplingError": {
+          "kind": "class",
+          "bases": [
+            "ValidationError"
+          ],
+          "decorators": [],
+          "documentation": "Controlled stop with kind, complete history and last iterate d^k [nnode,3].",
+          "fields": {},
+          "methods": {
+            "__init__": {
+              "parameters": "self, kind: str, reason: str, history: list[FsiIteration], displacement_m: FloatArray",
+              "returns": "None",
+              "decorators": [],
+              "documentation": null,
+              "direct_raise_sites": []
+            }
+          }
+        },
+        "StationaryFsiProblem": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True, slots=True)"
+          ],
+          "documentation": "Explicit inputs of one stationary bidirectional coupling.\n\nfluid_domain is the unchanged reference domain; wall_name must be an\nfsi=true wall whose segments are covered by structure facet_set. The\nstructure is a validated static elasticity Model on the reference mesh;\nits Dirichlet data, body forces and tractions are kept. Pressure loads use\np - external_pressure_Pa. fluid_options pass unchanged to solve_quad_flow\n(laminar) or solve_rans (sa-noft2), except the reserved scale/model keys.\nDefault relaxation 0.2 and budget 200 follow Doc/71; no adaptive omega.",
+          "fields": {
+            "fluid_domain": {
+              "annotation": "FluidDomain",
+              "default": null
+            },
+            "wall_name": {
+              "annotation": "str",
+              "default": null
+            },
+            "structure": {
+              "annotation": "Model",
+              "default": null
+            },
+            "facet_set": {
+              "annotation": "str",
+              "default": null
+            },
+            "length_scale_m": {
+              "annotation": "float",
+              "default": null
+            },
+            "velocity_scale_m_s": {
+              "annotation": "float",
+              "default": null
+            },
+            "fluid_model": {
+              "annotation": "str",
+              "default": "'laminar'"
+            },
+            "initial_nu_tilde_m2_s": {
+              "annotation": "ArrayLike | None",
+              "default": "None"
+            },
+            "fluid_options": {
+              "annotation": "Mapping[str, Any]",
+              "default": "field(default_factory=dict)"
+            },
+            "external_pressure_Pa": {
+              "annotation": "float",
+              "default": "0.0"
+            },
+            "relaxation": {
+              "annotation": "float",
+              "default": "0.2"
+            },
+            "max_coupling_iterations": {
+              "annotation": "int",
+              "default": "200"
+            },
+            "divergence_window": {
+              "annotation": "int",
+              "default": "10"
+            },
+            "span_origin_m": {
+              "annotation": "float",
+              "default": "0.0"
+            },
+            "preserve_inlet_flow": {
+              "annotation": "bool",
+              "default": "True"
+            }
+          },
+          "methods": {}
+        },
+        "StationaryFsiResult": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True, slots=True)"
+          ],
+          "documentation": "Accepted stationary state with the full iteration table.\n\ngeometry_displacement_m is d^k used for the final fluid geometry; the\nstructure_displacement_m solves the final loads, max difference <=1e-8 Lref.\nFluid, loads and structure were all freshly computed on that final\ngeometry; no stale loads are reported. fsi_schema_version is in settings.",
+          "fields": {
+            "fluid": {
+              "annotation": "QuadFlowResult | RansResult",
+              "default": null
+            },
+            "mesh_motion": {
+              "annotation": "MeshMotionResult",
+              "default": null
+            },
+            "interface": {
+              "annotation": "InterfaceMap",
+              "default": null
+            },
+            "loads": {
+              "annotation": "InterfaceLoads",
+              "default": null
+            },
+            "structure": {
+              "annotation": "ElasticResult",
+              "default": null
+            },
+            "geometry_displacement_m": {
+              "annotation": "FloatArray",
+              "default": null
+            },
+            "structure_displacement_m": {
+              "annotation": "FloatArray",
+              "default": null
+            },
+            "iterations": {
+              "annotation": "int",
+              "default": null
+            },
+            "history": {
+              "annotation": "tuple[FsiIteration, ...]",
+              "default": null
+            },
+            "converged": {
+              "annotation": "bool",
+              "default": null
+            },
+            "settings": {
+              "annotation": "Mapping[str, Any]",
+              "default": null
+            },
+            "input_sha256": {
+              "annotation": "str",
+              "default": null
+            }
+          },
+          "methods": {}
+        },
+        "solve_stationary_fsi": {
+          "kind": "function",
+          "parameters": "problem: StationaryFsiProblem",
+          "returns": "StationaryFsiResult",
+          "decorators": [],
+          "documentation": "Run the Doc/71 partitioned stationary coupling with constant relaxation.\n\nStops successfully only when max|r_d| <= 1e-8 Lref AND the nodal load\nchange max|F^k-F^(k-1)| <= 1e-6 rho U_ref^2 (b Lref), with every fluid,\nmesh, transfer and structure gate passed on the same final geometry. A\nsmall relaxed update alone is never success. Failures raise\nFsiCouplingError with kind in FAILURE_KINDS and the full history.",
+          "direct_raise_sites": [
+            "fail"
+          ]
+        }
+      },
+      "reexports": {},
+      "aliases": {
+        "FSI_SCHEMA_VERSION": {
+          "value": "1"
+        },
+        "FLUID_MODELS": {
+          "value": "('laminar', 'sa-noft2')"
+        },
+        "FAILURE_KINDS": {
+          "value": "('input', 'interface', 'mesh', 'fluid', 'structure', 'divergence', 'budget')"
+        },
+        "FloatArray": {
+          "value": "NDArray[np.float64]"
+        }
+      }
     },
     "fem_toolbox.coupling.interface": {
       "source": "src/fem_toolbox/coupling/interface.py",

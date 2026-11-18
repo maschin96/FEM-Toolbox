@@ -233,10 +233,19 @@
     "fem_toolbox.coupling": {
       "classification": "research",
       "stable_symbols": [],
-      "rationale": "M12-Entwicklung: konservative ebene FSI-Schnittstelle; bidirektionale Abnahme folgt separat.",
+      "rationale": "M12-Entwicklung: konservative ebene FSI-Schnittstelle und stationäre Kopplungsiteration; Abnahme #92 folgt separat.",
       "contract": "Doc/90_CONSERVATIVE_FSI_INTERFACE.md",
       "examples": [
         "tests/unit/test_interface_map.py"
+      ]
+    },
+    "fem_toolbox.coupling.fsi": {
+      "classification": "research",
+      "stable_symbols": [],
+      "rationale": "M12-Entwicklung: stationäre partitionierte Dirichlet-Neumann-FSI mit konstanter Relaxation; keine M12-Freigabe ohne #92.",
+      "contract": "Doc/92_STATIONARY_FSI_COUPLING.md",
+      "examples": [
+        "tests/unit/test_stationary_fsi.py"
       ]
     },
     "fem_toolbox.coupling.interface": {
