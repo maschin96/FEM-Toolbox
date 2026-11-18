@@ -15,14 +15,14 @@ from fem_toolbox.coupling import StationaryFsiProblem, solve_stationary_fsi
 
 result = solve_stationary_fsi(
     StationaryFsiProblem(
-        fluid_domain=reference_domain,   # unveränderte FluidDomain
-        wall_name="top",                 # genau eine Wand mit fsi=true
-        structure=model,                 # validiertes statisches Elastizitätsmodell
-        facet_set="wet",                 # benannter Triangle3-Satz
+        fluid_domain=reference_domain,  # unveränderte FluidDomain
+        wall_name="top",  # genau eine Wand mit fsi=true
+        structure=model,  # validiertes statisches Elastizitätsmodell
+        facet_set="wet",  # benannter Triangle3-Satz
         length_scale_m=1.0,
         velocity_scale_m_s=1.0,
-        fluid_model="laminar",           # oder "sa-noft2" mit initial_nu_tilde_m2_s
-        fluid_options={...},             # unverändert an solve_quad_flow/solve_rans
+        fluid_model="laminar",  # oder "sa-noft2" mit initial_nu_tilde_m2_s
+        fluid_options={...},  # unverändert an solve_quad_flow/solve_rans
         external_pressure_Pa=0.0,
         relaxation=0.2,
         max_coupling_iterations=200,
