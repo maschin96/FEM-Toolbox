@@ -66,7 +66,20 @@ Release-PR bringen M12 auf den stabilen main-Stand (v1.6.0 und #287).
 
 ## Finale lokale Prüfung von Version 1.7.0
 
-LOCAL_CHECKS
+Aus einem sauberen `git archive` des Release-Commits, frische Umgebung,
+Python 3.13, macOS arm64:
+
+- Suite ohne die CI-Konvergenzjobs: **1205 bestanden, 83 optionale Tests
+  übersprungen**. Drei Baseline-Worker benötigen `git rev-parse` und laufen
+  nur im Repository (CI); zwei Handbuch-Abdeckungsfehler für die neuen
+  Releasedokumente wurden behoben.
+- Ruff, Formatprüfung, striktes mypy über 95 Quelldateien und API-Vertragsprüfung bestanden.
+- Wheel und sdist getrennt frisch installiert: isolierter Import, Version
+  1.7.0, MIT, NumPy 2.5.5/SciPy 1.18.1; beide `examples/fsi_lid`-Fälle
+  konvergieren aus der Installation.
+- Konvergenzstudien (#88, #92) und DNS-Vergleich laufen als eigene CI-Jobs.
+- [Lokale Belege mit Quellhashes](evidence/m12/v1.7.0-local-verification.json).
+  Vorabprüfungen, nicht die später aus main erzeugten Veröffentlichungsartefakte.
 
 ## Bekannte Grenzen
 

@@ -1,0 +1,85 @@
+{
+  "schema": 1,
+  "version": "1.7.0",
+  "source_state": "local_release_preparation",
+  "implementation_commit": "a6801ff (codex/milestone-m12 after PR #296) merged with main 95de00e",
+  "source_sha256": {
+    "src/fem_toolbox/cfd/__init__.py": "4e568a7de7f830bd8d16a705142e267e3b2b436c44aa00af545ea617d2bbd1d8",
+    "src/fem_toolbox/cfd/channel.py": "29b57dedbefebf3df41896a1953b1d7a5acb66ea62ba94dc264e1e349b6db249",
+    "src/fem_toolbox/cfd/flow.py": "470aa8eaa94b7f7caec50430a4d0f9a05f288f2d98da8c5b6fa22a841f87238c",
+    "src/fem_toolbox/cfd/flow_config.py": "63592923497292cf5fa23ea00223e69b4520872871fdf8ea4cd537203200b49e",
+    "src/fem_toolbox/cfd/flow_model.py": "5833db2993bb582bb7ed2ae973e4c52a3e7d6ea6383942af08d52d167a191ca4",
+    "src/fem_toolbox/cfd/fluid_domain.py": "1c5c0426cfe5179b73137d765e4b1d6eb77e71b9cf34aac60517bcfb3a7ebf76",
+    "src/fem_toolbox/cfd/fluid_mesh.py": "1755a6dce46aeba1ea0e4c9a21804c4cbe8c23443dd80567131801906766bcca",
+    "src/fem_toolbox/cfd/mac.py": "cd1a46c78b25cb088535e76cadb22259a352e56f2ee4ce87d34953216ff29857",
+    "src/fem_toolbox/cfd/mesh_motion.py": "23e369ffc938d9e58046f727ec0819b9c6c682b94e5485fa2ae3a42e96f88d4b",
+    "src/fem_toolbox/cfd/quad_flow.py": "81c341bc3d0891f0f68093492dc6f70b1c4a1df4d8540a50169bef3588203391",
+    "src/fem_toolbox/cfd/quad_fv.py": "102c06fe1beb5a5e986e42af598dde6e06debd849c21225923aa74c6200ccbcb",
+    "src/fem_toolbox/cfd/quad_system.py": "1cd16fce21e23a81d9b4fec9f7a9f135d0d4c858ef8bf20b7a069d7f701a3c2f",
+    "src/fem_toolbox/cfd/rans.py": "c61cbb19d9a52a1119cfdc35a1f040720a7250a6e568f30b47d84133bd279cb2",
+    "src/fem_toolbox/cfd/sa_model.py": "f2f721a4cf106e27b2e6b5d5479c0a1852624fc53e166221f0e98cbefe52dbe4",
+    "src/fem_toolbox/cfd/sa_transport.py": "d3ae9c36aefa890f201a0547394e9e6496d4fca7c82f4907773c1c7607cbc4a8",
+    "src/fem_toolbox/cfd/stokes.py": "a9cecfc17603d0ecafff140211244e00aeb9d4fdceb5284f869a8ffa38263e69",
+    "src/fem_toolbox/coupling/__init__.py": "b6e08e91cfa75e33057a8742b70b758216851f26c746399db57ef5c6c033c7b9",
+    "src/fem_toolbox/coupling/fsi.py": "ea2d8b0eaca6d846a3d33fb942ba94f27f15606c30a74b8494605e8b111558f4",
+    "src/fem_toolbox/coupling/fsi_config.py": "aca834ba6b0d56df9a9d688c361ae223477ab7a38fc291cf1fe7d44a6938b788",
+    "src/fem_toolbox/coupling/interface.py": "46d01c9c2392ea06204c6cbebcc22c313a66bd75cba854b28cb8ec07abe17225",
+    "src/fem_toolbox/coupling/structure.py": "0e81aab4529d0b6ceb195515fe09dcd4c6ddb8db4409a300c64b8a5d425a6d11"
+  },
+  "local_tests": {
+    "selection": "-m 'not cfd_convergence'",
+    "passed": 1205,
+    "optional_skipped": 83,
+    "environment_failures": {
+      "tests/regression/test_performance_baseline.py": "3 workers need git rev-parse; clean git-archive export has no repository",
+      "tests/unit/test_handbook_build.py": "2 failures fixed by coverage entries for the new release documents"
+    }
+  },
+  "quality": {
+    "ruff": "passed",
+    "format": "passed",
+    "mypy_source_files": 95,
+    "api_contracts": "passed"
+  },
+  "independent_human_review": "not_available",
+  "experimental_validation": "not_performed",
+  "api_classification": {
+    "fem_toolbox.cfd": "research",
+    "fem_toolbox.coupling": "research"
+  },
+  "package_checks": {
+    "wheel": {
+      "artifact": "fem_toolbox-1.7.0-py3-none-any.whl",
+      "sha256": "1554f4e75f208bbe1160b95ac8cafa9ef5392e6265425e85e9530b94e554f6e2",
+      "installation": {
+        "python": "3.13",
+        "version": "1.7.0",
+        "license": "MIT",
+        "numpy": "2.5.5",
+        "scipy": "1.18.1",
+        "isolated_import": true
+      },
+      "examples": {
+        "fsi_lid laminar": "converged",
+        "fsi_lid sa": "converged"
+      }
+    },
+    "sdist": {
+      "artifact": "fem_toolbox-1.7.0.tar.gz",
+      "sha256": "2aec8e5bf39c52d1ad6e6db87ae815d4ef9ba6515437147c884642aa224a8edf",
+      "installation": {
+        "python": "3.13",
+        "version": "1.7.0",
+        "license": "MIT",
+        "numpy": "2.5.5",
+        "scipy": "1.18.1",
+        "isolated_import": true
+      },
+      "examples": {
+        "fsi_lid laminar": "converged",
+        "fsi_lid sa": "converged"
+      }
+    }
+  },
+  "note": "Local pre-checks from a clean git archive on macOS arm64; not the release artifacts later built from main."
+}
