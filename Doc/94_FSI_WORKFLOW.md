@@ -81,8 +81,9 @@ existiert. Die Versionen stammen aus dem tatsächlich importierten Code.
 
 `examples/fsi_lid/` enthält beide Deckelfälle als vorbereitete Dateien
 (gröbstes #92-Netzpaar). Sie werden mit `tests/reference/fsi_lid.py` erzeugt;
-ein Test prüft Byte-Gleichheit, damit Netz, Randbedingungen und Parameter
-rekonstruierbar bleiben.
+ein Test prüft Byte-Gleichheit (JSON-Zahlen relativ 1e-12, weil das
+SA-Profil aus einer libm-abhängigen Randwertlösung stammt), damit Netz,
+Randbedingungen und Parameter rekonstruierbar bleiben.
 
 ```sh
 python examples/fsi_lid/run.py laminar --output fsi_laminar_results

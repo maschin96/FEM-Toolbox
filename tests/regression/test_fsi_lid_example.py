@@ -3,6 +3,7 @@
 Reference values are the coarsest #92 mesh pairs (Doc/93). The coupling stops
 at max|r_d| <= 1e-8 Lref = 1e-9 m, so an independent repetition, also via
 the Gmsh/JSON round trip, must reproduce the lid displacement within 2e-9 m.
+Regenerated JSON inputs agree to 1e-12 (the SA BVP is libm dependent).
 Repeating the identical files on the same platform must reproduce the
 history exactly, because every solver step is a deterministic direct solve.
 """
@@ -105,6 +106,28 @@ def test_versioned_inputs_are_reproducible_from_the_reference_generator(case, tm
     names = sorted(p.name for p in (EXAMPLE / case).iterdir())
     assert names == sorted(p.name for p in generated.iterdir())
     for name in names:
-        assert (generated / name).read_bytes() == (
-            EXAMPLE / case / name
-        ).read_bytes(), name
+        produced, versioned = generated / name, EXAMPLE / case / name
+        if name.endswith(".json"):
+            # The SA inlet profile and start field come from a BVP solve whose
+            # last bit depends on the platform libm; compare numbers to 1e-12.
+            assert_same_json(
+                json.loads(produced.read_text()), json.loads(versioned.read_text())
+            )
+        else:
+            assert produced.read_bytes() == versioned.read_bytes(), name
+
+
+def assert_same_json(produced, versioned, path="$"):
+    if isinstance(versioned, dict):
+        assert isinstance(produced, dict) and produced.keys() == versioned.keys(), path
+        for key in versioned:
+            assert_same_json(produced[key], versioned[key], f"{path}.{key}")
+    elif isinstance(versioned, list):
+        assert isinstance(produced, list) and len(produced) == len(versioned), path
+        for index, (a, b) in enumerate(zip(produced, versioned, strict=True)):
+            assert_same_json(a, b, f"{path}[{index}]")
+    elif isinstance(versioned, float):
+        assert isinstance(produced, float), path
+        assert produced == pytest.approx(versioned, rel=1e-12, abs=1e-300), path
+    else:
+        assert type(produced) is type(versioned) and produced == versioned, path
