@@ -219,3 +219,5 @@ experimentelle Validierungsfreigabe wird nicht behauptet.
 - [Stationäre harmonische Fluidnetzbewegung (#90)](91_STATIONARY_MESH_MOTION.md)
 
 - [Stationäre bidirektionale FSI-Kopplung (#91)](92_STATIONARY_FSI_COUPLING.md)
+
+- [Verifikation der stationären bidirektionalen FSI (#92)](93_STATIONARY_FSI_VERIFICATION.md)

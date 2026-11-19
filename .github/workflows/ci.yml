@@ -312,7 +312,8 @@ jobs:
   cfd-convergence:
     name: CFD / Python ${{ matrix.python-version }} / ${{ matrix.case }}
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    # The four-level wall-resolved SA lid runs about ten coupled RANS solves.
+    timeout-minutes: ${{ matrix.case == 'fsi-sa-lid' && 40 || 20 }}
     env:
       OPENBLAS_NUM_THREADS: "1"
       OMP_NUM_THREADS: "1"
@@ -322,7 +323,7 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ["3.11", "3.12", "3.13"]
-        case: [poiseuille, central, linear-upwind, variable-mu, sa-mms, sa-channel, sa-dns]
+        case: [poiseuille, central, linear-upwind, variable-mu, sa-mms, sa-channel, sa-dns, fsi-laminar-lid, fsi-sa-lid]
         include:
           - case: poiseuille
             node: test_quad_poiseuille_four_meshes
@@ -338,6 +339,10 @@ jobs:
             node: sa-channel
           - case: sa-dns
             node: sa-dns
+          - case: fsi-laminar-lid
+            node: tests/convergence/test_stationary_fsi_lid.py::test_laminar_guided_lid_four_mesh_pairs
+          - case: fsi-sa-lid
+            node: tests/convergence/test_stationary_fsi_lid.py::test_sa_guided_lid_four_mesh_pairs
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -358,6 +363,8 @@ jobs:
           elif [ "$CFD_TEST_NODE" = "sa-dns" ]; then
             curl --fail --location --retry 3 --output "$RUNNER_TEMP/m12-chan590.means" https://turbulence.oden.utexas.edu/data/MKM/chan590/profiles/chan590.means
             M12_DNS_PROFILE="$RUNNER_TEMP/m12-chan590.means" python -m pytest -vv -s --durations=5 -o junit_family=legacy --junitxml=cfd-results.xml tests/convergence/test_rans_dns.py
+          elif [[ "$CFD_TEST_NODE" == tests/* ]]; then
+            python -m pytest -vv -s --durations=5 -o junit_family=legacy --junitxml=cfd-results.xml "$CFD_TEST_NODE"
           else
             python -m pytest -vv -s --durations=5 -o junit_family=legacy --junitxml=cfd-results.xml "tests/convergence/test_quad_flow_convergence.py::$CFD_TEST_NODE"
           fi
