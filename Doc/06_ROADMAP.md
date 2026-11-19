@@ -244,7 +244,15 @@ Volumenrestriktion, TOML-Studien und getrennte FEM-Geometrie-Reanalyse.
 [finale Freigabe-/Veröffentlichungsnachweise](87_M11_RELEASE_VERIFICATION.md).
 Andere Milestones werden dadurch nicht als freigegeben behandelt.
 
-## Experimenteller M12-Arbeitsstand (#86)
+## M12 — Ebene RANS-CFD und stationäre FSI / v1.7.0
+
+Quad-FV/SIMPLE, SA-noft2 mit aufgelöster Wand, konservative Lastübertragung,
+harmonische Netzbewegung und stationäre bidirektionale FSI mit deklarativem
+Workflow sind integriert und gegen vorab festgelegte Gates geprüft.
+[Freigabenachweis](95_M12_RELEASE_VERIFICATION.md); der Veröffentlichungsstatus
+steht in #94. Unabhängiges Fachreview liegt nicht vor.
+
+## Historischer M12-Arbeitsstand (#86)
 
 Der ausgewählte uniforme 2D-MAC-Kern besitzt konservative Konvektion,
 monolithische Druckkopplung, Picard-Iteration und offene Kanalgrenzen.

@@ -58,7 +58,10 @@ M11 ist nach dem Eigentümerauftrag vom 19.10.2026 der nächste freizugebende
 Umfang nach M10 und erhält v1.6.0. Additive API und eigene M11-Ergebnisformate
 begründen einen kompatiblen Minor-Schritt; die ursprüngliche vorläufige
 Planungsfolge bis v1.9.0 wird für diesen Milestone nicht als Releasefolge benutzt.
-M12 und weitere Milestones behalten ihre separaten fachlichen Release-Gates.
+M12 folgt auf v1.6.0 und erhält v1.7.0 (Entscheidung 19.11.2026, #94):
+ausschließlich additive `cfd`-/`coupling`-API und eigene neue Schemata; das
+vorläufige Planungsziel v1.11.0 setzte eine andere Releasefolge voraus.
+Weitere Milestones behalten ihre separaten fachlichen Release-Gates.
 
 ## 4. Release-Gate
 

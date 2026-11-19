@@ -16,5 +16,5 @@ def test_distribution_exposes_release_version() -> None:
     distribution = metadata("fem-toolbox")
 
     assert distribution["Name"] == "fem-toolbox"
-    assert version("fem-toolbox") == "1.7.0.dev1"
+    assert version("fem-toolbox") == "1.7.0"
     assert import_module("fem_toolbox").__version__ == version("fem-toolbox")

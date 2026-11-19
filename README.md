@@ -1,8 +1,11 @@
 # FEM Toolbox
 
-**M12-Entwicklungsbranch: 1.7.0.dev1.** Der veröffentlichte stabile Stand ist
-weiterhin v1.6.0. Die [SA-noft2-Erweiterung](Doc/88_SA_NOFT2_IMPLEMENTATION.md)
-ist in Umsetzung; RANS-/FSI-Abnahme und Veröffentlichung sind noch offen.
+**v1.7.0 — ebene RANS-CFD und stationäre Fluid-Struktur-Kopplung.**
+Version 1.7.0; Veröffentlichungsstatus in [#94](https://github.com/maschin96/FEM-Toolbox/issues/94).
+[Release-Nachweis](Doc/95_M12_RELEASE_VERIFICATION.md) ·
+[Release Notes](Doc/releases/v1.7.0.md) ·
+[FSI-Workflow](Doc/94_FSI_WORKFLOW.md) ·
+[Beispiele](examples/fsi_lid/README.md).
 
 Eine wissenschaftlich ausgerichtete Python-Toolbox im Aufbau für lineare,
 dreidimensionale Finite-Elemente-Simulationen. Ziel sind verifizierte Modelle für
