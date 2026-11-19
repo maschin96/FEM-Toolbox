@@ -3747,6 +3747,27 @@
       "target": "Doc/latex/chapters/api/fsi.tex",
       "owner": "M12 maintainers",
       "status": "open"
+    },
+    {
+      "source": "Doc/94_FSI_WORKFLOW.md",
+      "canonical": "Doc/94_FSI_WORKFLOW.md",
+      "target": "Doc/latex/chapters/api/fsi.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/coupling/fsi_config.py",
+      "canonical": "src/fem_toolbox/coupling/fsi_config.py",
+      "target": "Doc/latex/chapters/api/fsi.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "examples/fsi_lid/README.md",
+      "canonical": "examples/fsi_lid/README.md",
+      "target": "Doc/latex/chapters/api/fsi.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
     }
   ],
   "planned": [

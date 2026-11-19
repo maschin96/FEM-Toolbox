@@ -248,6 +248,16 @@
         "tests/unit/test_stationary_fsi.py"
       ]
     },
+    "fem_toolbox.coupling.fsi_config": {
+      "classification": "research",
+      "stable_symbols": [],
+      "rationale": "M12-Entwicklung: strikte fsi_schema_version=1-TOML und reproduzierbare Laufartefakte; keine M12-Freigabe ohne #94.",
+      "contract": "Doc/94_FSI_WORKFLOW.md",
+      "examples": [
+        "examples/fsi_lid/run.py",
+        "tests/regression/test_fsi_lid_example.py"
+      ]
+    },
     "fem_toolbox.coupling.interface": {
       "classification": "research",
       "stable_symbols": [],

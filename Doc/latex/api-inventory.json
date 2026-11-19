@@ -2432,6 +2432,81 @@
         }
       }
     },
+    "fem_toolbox.coupling.fsi_config": {
+      "source": "src/fem_toolbox/coupling/fsi_config.py",
+      "documentation": "Strict fsi_schema_version=1 TOML adapter and run artifacts (#93).\n\nFile I/O stays in this adapter; the coupling solver itself reads no files.\nThe TOML references an existing FluidDomain JSON and an existing elasticity\nModel TOML (Gmsh mesh), both relative to the configuration directory. Every\ncoupling value is mandatory; there are no silent defaults.",
+      "declared_exports": [
+        "FsiConfig",
+        "load_fsi_config",
+        "run_fsi_config",
+        "write_fsi_artifacts"
+      ],
+      "definitions": {
+        "FsiConfig": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True, slots=True)"
+          ],
+          "documentation": "Validated problem plus the exact input files and their SHA-256.",
+          "fields": {
+            "problem": {
+              "annotation": "StationaryFsiProblem",
+              "default": null
+            },
+            "source": {
+              "annotation": "Path",
+              "default": null
+            },
+            "document": {
+              "annotation": "Mapping[str, Any]",
+              "default": null
+            },
+            "input_files": {
+              "annotation": "Mapping[str, str]",
+              "default": null
+            }
+          },
+          "methods": {}
+        },
+        "load_fsi_config": {
+          "kind": "function",
+          "parameters": "path: str | Path",
+          "returns": "FsiConfig",
+          "decorators": [],
+          "documentation": "Read a strict fsi_schema_version=1 TOML and build the coupling problem.",
+          "direct_raise_sites": [
+            "ModelSchemaError"
+          ]
+        },
+        "write_fsi_artifacts": {
+          "kind": "function",
+          "parameters": "output: str | Path, config: FsiConfig, outcome: StationaryFsiResult | FsiCouplingError",
+          "returns": "Path",
+          "decorators": [],
+          "documentation": "Write report.json, history.csv and, on success, field JSON files.\n\nThe output directory must not exist. All quantities carry SI unit suffixes.\nA failed run still records kind, reason, history and the last iterate.",
+          "direct_raise_sites": [
+            "FileExistsError"
+          ]
+        },
+        "run_fsi_config": {
+          "kind": "function",
+          "parameters": "path: str | Path, output: str | Path",
+          "returns": "StationaryFsiResult",
+          "decorators": [],
+          "documentation": "Load, refuse an existing output, solve and always write artifacts.\n\nA coupling stop writes its failure artifacts and is then re-raised.",
+          "direct_raise_sites": [
+            "FileExistsError"
+          ]
+        }
+      },
+      "reexports": {},
+      "aliases": {
+        "HISTORY_COLUMNS": {
+          "value": "(('iteration', 'iteration'), ('displacement_residual_m', 'displacement_residual_m'), ('relative_displacement_residual', 'relative_displacement_residual'), ('load_change_N', 'load_change_N'), ('fluid_force_y_N', None), ('external_pressure_force_y_N', None), ('structure_reaction_y_N', None), ('transfer_relative_error', 'transfer_relative_error'), ('maximum_displacement_ratio', 'maximum_displacement_ratio'), ('maximum_displacement_gradient', 'maximum_displacement_gradient'), ('minimum_area_ratio', 'minimum_area_ratio'), ('fluid_iterations', 'fluid_iterations'))"
+        }
+      }
+    },
     "fem_toolbox.coupling.interface": {
       "source": "src/fem_toolbox/coupling/interface.py",
       "documentation": "Conservative P1 overlap quadrature on extruded planar fluid segments.\n\nCoordinates are SI metres, traction Pa, integrated quadrature/nodal forces N.\nThe same interpolation matrix and its transpose define virtual-work pairing.\nNo nearest-neighbour assignment, extrapolation or geometry filling is used.",

@@ -87,7 +87,19 @@
     "examples/fluid_mesh/preflight.py": "3b4e0a4c530b8b6eb7cbe4bc05ec2a76a9dbeb83c88a1b38fd6e4948a42ee499",
     "examples/quad_flow/domain.json": "c1de67f72758a684033d147f274d409e3d4166fdae1026d75c74a323bd73e60b",
     "examples/quad_flow/mesh.json": "dad45179f04946d0208211b0966e9e6022ccdeac8e02036b7ba84e0cc004f820",
-    "examples/quad_flow/run.py": "cdb9bad2ab127d6be12dff8c1d221d4f71d1cb5c4ef4f2e57846e0a708164f17"
+    "examples/quad_flow/run.py": "cdb9bad2ab127d6be12dff8c1d221d4f71d1cb5c4ef4f2e57846e0a708164f17",
+    "examples/fsi_lid/laminar/domain.json": "7778a948615b294f1cafcce70dcd873ad6c218ef1bc52b8d9d6cf9ea0cc357d8",
+    "examples/fsi_lid/laminar/fsi.toml": "7c8cf304013f0719cce5b44ecb9678e9a8d9afdcfd109586ba84f3a5c02c8a77",
+    "examples/fsi_lid/laminar/mesh.json": "80334aef5ae2a85e8bd4ee848955308e163995c7834cbf038e6f45533ad3dbb6",
+    "examples/fsi_lid/laminar/structure.msh": "6c10393cbbf767e79f759e3570f75dfc9a7f53885a215ef6dc7323fc1403274d",
+    "examples/fsi_lid/laminar/structure.toml": "5e361623a511668ca3ac4e99cda3a45702cbb9bdf58b8d762f733b0b67ea00a6",
+    "examples/fsi_lid/run.py": "9548a0125100f24cb8fc93977dddec59a5426314cdbf31d17f496f0a316a9cdf",
+    "examples/fsi_lid/sa/domain.json": "693d5b2dbf1765782f569270b9d8d5696dbc7336a6d9f1bc1d787e9a0cf79f22",
+    "examples/fsi_lid/sa/fsi.toml": "687ca5ea1d9a6b4b3b0cd83dd654f09b071f717f63b8c02e52113ed5a717be7a",
+    "examples/fsi_lid/sa/mesh.json": "1fe0c253e6596af55cc84511a6aafaa4ea20b37aa4ef6e9431ee3aa9057d5881",
+    "examples/fsi_lid/sa/nu_tilde.json": "f77b4b8121acad7430e27aae2d8d7346a99281b92fd99fced4d217a18a271c9f",
+    "examples/fsi_lid/sa/structure.msh": "503a227b19ec3dcdccf32f4d9b847d6a82513b25c955264727aba35f5e4c7c9b",
+    "examples/fsi_lid/sa/structure.toml": "486461d6f47c16cf2e42cbec83e68d9f2c5b827f3d9265da12d2e9527d2c2e07"
   },
   "recipes": [
     {
@@ -888,6 +900,56 @@
       "expectation": "SIMPLE-Kanal mit frisch rekonstruierten SI-Residuen und Bilanzen.",
       "limits": "Laminarer Forschungsstand; keine SA-, FSI- oder 3D-Freigabe.",
       "troubleshooting": "Frisches Ausgabeziel, SI-Daten und Netz-/Randgruppen prüfen; Konvergenzfehler nicht als Erfolg werten."
+    },
+    {
+      "id": "fsi-lid",
+      "script": "examples/fsi_lid/run.py",
+      "command": [
+        "python",
+        "-I",
+        "examples/fsi_lid/run.py",
+        "laminar",
+        "--output",
+        "results/fsi-lid-laminar"
+      ],
+      "continuation_commands": [
+        [
+          "python",
+          "-I",
+          "examples/fsi_lid/run.py",
+          "sa",
+          "--output",
+          "results/fsi-lid-sa"
+        ]
+      ],
+      "inputs": [
+        "examples/fsi_lid/laminar/domain.json",
+        "examples/fsi_lid/laminar/fsi.toml",
+        "examples/fsi_lid/laminar/mesh.json",
+        "examples/fsi_lid/laminar/structure.msh",
+        "examples/fsi_lid/laminar/structure.toml",
+        "examples/fsi_lid/run.py",
+        "examples/fsi_lid/sa/domain.json",
+        "examples/fsi_lid/sa/fsi.toml",
+        "examples/fsi_lid/sa/mesh.json",
+        "examples/fsi_lid/sa/nu_tilde.json",
+        "examples/fsi_lid/sa/structure.msh",
+        "examples/fsi_lid/sa/structure.toml"
+      ],
+      "runtime_budget_seconds": 90,
+      "artifacts": [
+        "results/fsi-lid-laminar/report.json",
+        "results/fsi-lid-laminar/history.csv",
+        "results/fsi-lid-laminar/fluid_fields.json",
+        "results/fsi-lid-laminar/structure_fields.json",
+        "results/fsi-lid-sa/report.json",
+        "results/fsi-lid-sa/history.csv",
+        "results/fsi-lid-sa/fluid_fields.json",
+        "results/fsi-lid-sa/structure_fields.json"
+      ],
+      "expectation": "Stationäre Deckel-FSI aus fsi_schema_version=1 konvergiert; Deckelweg laminar 5.71964e-4 m, SA 9.64275e-4 m (±2e-9 m), Kopplungsgates erfüllt.",
+      "limits": "Experimentelle 2D-Kopplung, Dirichlet–Neumann mit konstanter Relaxation; kein Fachreview, keine M12-Freigabe.",
+      "troubleshooting": "Frisches Ausgabeziel wählen; Exitcode 2 bedeutet kontrollierten Abbruch, Fehlerart und letztes Iterat stehen in report.json; Eingabe-Hashes prüfen."
     }
   ],
   "follow_up": {

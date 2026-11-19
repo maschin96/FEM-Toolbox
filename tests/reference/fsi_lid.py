@@ -322,3 +322,146 @@ class SaLid:
         u, a = base.evaluate(y.ravel())
         u, a = u.reshape(y.shape) @ w / 2, a.reshape(y.shape) @ w / 2
         return np.column_stack([u, np.zeros_like(u)]), a
+
+
+def _gmsh_structure(path, *, nx, height_m, lid_thickness_m=0.1, spring_height_m=0.1):
+    """Gmsh 2.2: volumes lid/spring, disjoint facets wet/top/side."""
+    xs = np.linspace(0, 1.0, nx + 1)
+    ys = height_m + np.array([0.0, lid_thickness_m, lid_thickness_m + spring_height_m])
+    points, cells, boundary = box_tetra(xs, ys, [0.0, 1.0])
+    lines = ["$MeshFormat", "2.2 0 8", "$EndMeshFormat", "$PhysicalNames", "5"]
+    lines += ['3 1 "lid"', '3 2 "spring"', '2 3 "wet"', '2 4 "top"', '2 5 "side"']
+    lines += ["$EndPhysicalNames", "$Nodes", str(len(points))]
+    lines += [
+        f"{i + 1} {p[0]:.17g} {p[1]:.17g} {p[2]:.17g}" for i, p in enumerate(points)
+    ]
+    lines += ["$EndNodes", "$Elements", str(len(cells) + len(boundary))]
+    for i, cell in enumerate(cells):
+        tag = 1 if points[cell, 1].mean() < ys[1] else 2
+        lines.append(f"{i + 1} 4 2 {tag} {tag} " + " ".join(str(n + 1) for n in cell))
+    for j, face in enumerate(sorted(map(tuple, boundary))):
+        y = points[list(face), 1]
+        tag = 3 if np.all(y == ys[0]) else 4 if np.all(y == ys[-1]) else 5
+        lines.append(
+            f"{len(cells) + j + 1} 2 2 {tag} {tag} "
+            + " ".join(str(n + 1) for n in face)
+        )
+    lines.append("$EndElements")
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def _structure_toml(spring_stiffness_N_m, spring_height_m=0.1):
+    spring = spring_stiffness_N_m * spring_height_m
+    lid = STIFFNESS_RATIO * spring
+    guide = "".join(
+        f"""[[boundary.dirichlet]]
+field = "u"
+set = "{name}"
+components = {components}
+value = 0.0
+unit = "m"
+"""
+        for name, components in (
+            ("wet", '["x", "z"]'),
+            ("side", '["x", "z"]'),
+            ("top", '["x", "y", "z"]'),
+        )
+    )
+    return f"""schema_version = 1
+units = "SI"
+physics = "elasticity"
+[mesh]
+path = "structure.msh"
+length_scale_to_m = 1.0
+[materials.u.lid]
+young = {lid!r}
+poisson = 0.0
+unit = "Pa"
+[materials.u.spring]
+young = {spring!r}
+poisson = 0.0
+unit = "Pa"
+[regions.u]
+lid = "lid"
+spring = "spring"
+{guide}"""
+
+
+EXAMPLES = {
+    # Fast installation-level cases: the coarsest #92 mesh pair of each lid.
+    "laminar": {"reference": LaminarLid, "nx": 10, "ny": 4, "uref": 1.0},
+    "sa": {"reference": SaLid, "nx": 4, "cells_per_half": 32, "uref": 0.2},
+}
+
+
+def write_example(directory, case):
+    """Write the prepared, versioned example inputs of one lid case."""
+    import json
+    from pathlib import Path
+
+    from fem_toolbox.cfd.mesh_motion import _domain_document
+
+    spec = EXAMPLES[case]
+    reference = spec["reference"]()
+    target = Path(directory)
+    target.mkdir(parents=True, exist_ok=False)
+    if case == "laminar":
+        y = np.linspace(0, reference.height_m, spec["ny"] + 1)
+        viscosity = reference.viscosity_Pa_s
+    else:
+        y = graded_wall_nodes(spec["cells_per_half"], reference.height_m)
+        viscosity = reference.density_kg_m3 * reference.kinematic_viscosity_m2_s
+    domain = lid_channel(
+        nx=spec["nx"],
+        y_nodes_m=y,
+        inlet_profile=reference.inlet_profile,
+        viscosity_Pa_s=viscosity,
+    )
+    document = _domain_document(domain)
+    document["mesh"] = "mesh.json"
+
+    def dump(name, value):
+        (target / name).write_text(
+            json.dumps(value, indent=1, allow_nan=False) + "\n", encoding="utf-8"
+        )
+
+    dump("mesh.json", domain.mesh.to_document())
+    dump("domain.json", document)
+    _gmsh_structure(
+        target / "structure.msh", nx=spec["nx"], height_m=reference.height_m
+    )
+    (target / "structure.toml").write_text(
+        _structure_toml(reference.spring_stiffness_N_m), encoding="utf-8"
+    )
+    fluid = 'domain = "domain.json"\nmodel = "laminar"\n'
+    if case == "sa":
+        nu = reference.kinematic_viscosity_m2_s
+        start = np.maximum(
+            reference.base.evaluate(domain.mesh.cell_centres_m[:, 1])[1], 3 * nu
+        )
+        dump("nu_tilde.json", {"nu_tilde_m2_s": start.tolist()})
+        fluid = (
+            'domain = "domain.json"\nmodel = "sa-noft2"\n'
+            'initial_nu_tilde = "nu_tilde.json"\n'
+            "[fluid.options]\nsa_relaxation = 0.1\n"
+        )
+    (target / "fsi.toml").write_text(
+        f"""fsi_schema_version = 1
+[fluid]
+{fluid}[structure]
+model = "structure.toml"
+facet_set = "wet"
+[coupling]
+wall = "top"
+length_scale_m = {reference.height_m!r}
+velocity_scale_m_s = {spec["uref"]!r}
+external_pressure_Pa = 0.0
+relaxation = 1.0
+max_coupling_iterations = 200
+divergence_window = 10
+span_origin_m = 0.0
+preserve_inlet_flow = true
+""",
+        encoding="utf-8",
+    )
+    return target / "fsi.toml"
