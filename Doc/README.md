@@ -5,8 +5,9 @@ FEM Toolbox. Bei Widersprüchen haben die expliziten Konventionen in der
 mathematischen Modellbeschreibung Vorrang; Änderungen daran benötigen einen
 Eintrag im Entscheidungsprotokoll.
 
-[Aktueller M11-Freigabestand v1.6.0](87_M11_RELEASE_VERIFICATION.md) ·
-[Release Notes](releases/v1.6.0.md). Experimentelle Validierung bleibt offen.
+[Aktueller M12-Freigabestand v1.7.0](95_M12_RELEASE_VERIFICATION.md) ·
+[Release Notes](releases/v1.7.0.md); vorher
+[M11 / v1.6.0](87_M11_RELEASE_VERIFICATION.md). Experimentelle Validierung bleibt offen.
 
 ## Lesereihenfolge
 
@@ -187,6 +188,7 @@ experimentelle Validierungsfreigabe wird nicht behauptet.
 ## M11 — Struktur-Topologieoptimierung
 
 - [SIMP verständlich erklärt: kurze Einführung](86_SIMP_EINFUEHRUNG.md)
+- [Release Notes v1.7.0](releases/v1.7.0.md)
 - [Release Notes v1.6.0](releases/v1.6.0.md)
 
 - [Mathematik, Sensitivität und vorab definierte Gates (#76)](83_M11_TOPOLOGY_CONTRACT.md)
@@ -194,7 +196,9 @@ experimentelle Validierungsfreigabe wird nicht behauptet.
 - [Numerische Nachweise](85_M11_VERIFICATION.md)
 - [Freigabenachweis und Veröffentlichungsstatus (#83)](87_M11_RELEASE_VERIFICATION.md)
 
-## M12 — Experimenteller CFD-Einstieg
+## M12 — Ebene RANS-CFD und stationäre FSI (v1.7.0)
+
+- [Freigabenachweis v1.7.0 (#94)](95_M12_RELEASE_VERIFICATION.md)
 
 - [SA-noft2: Punktterme, konservativer Transport und gemeinsame RANS-Iteration (#87/#88)](88_SA_NOFT2_IMPLEMENTATION.md)
 

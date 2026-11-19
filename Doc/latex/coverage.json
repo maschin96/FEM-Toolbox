@@ -3768,6 +3768,27 @@
       "target": "Doc/latex/chapters/api/fsi.tex",
       "owner": "M12 maintainers",
       "status": "open"
+    },
+    {
+      "source": "Doc/releases/v1.7.0.md",
+      "target": "Doc/latex/chapters/verification/fsi.tex",
+      "canonical": "Doc/releases/v1.7.0.md",
+      "owner": "M12 release maintainers",
+      "status": "open"
+    },
+    {
+      "source": "Doc/95_M12_RELEASE_VERIFICATION.md",
+      "target": "Doc/latex/chapters/verification/fsi.tex",
+      "canonical": "Doc/95_M12_RELEASE_VERIFICATION.md",
+      "owner": "M12 release maintainers",
+      "status": "open"
+    },
+    {
+      "source": "Doc/evidence/m12/v1.7.0-local-verification.json",
+      "target": "Doc/latex/chapters/verification/fsi.tex",
+      "canonical": "Doc/95_M12_RELEASE_VERIFICATION.md",
+      "owner": "M12 release maintainers",
+      "status": "open"
     }
   ],
   "planned": [
