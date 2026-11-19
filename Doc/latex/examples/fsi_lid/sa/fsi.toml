@@ -1,0 +1,20 @@
+fsi_schema_version = 1
+[fluid]
+domain = "domain.json"
+model = "sa-noft2"
+initial_nu_tilde = "nu_tilde.json"
+[fluid.options]
+sa_relaxation = 0.1
+[structure]
+model = "structure.toml"
+facet_set = "wet"
+[coupling]
+wall = "top"
+length_scale_m = 0.1
+velocity_scale_m_s = 0.2
+external_pressure_Pa = 0.0
+relaxation = 1.0
+max_coupling_iterations = 200
+divergence_window = 10
+span_origin_m = 0.0
+preserve_inlet_flow = true

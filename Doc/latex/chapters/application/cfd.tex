@@ -36,3 +36,12 @@ SIMPLE-Kanal mit frisch rekonstruierten SI-Residuen und Bilanzen.
 python -I examples/quad_flow/run.py --output results/quad-flow
 \end{lstlisting}
 \lstinputlisting{examples/quad_flow/run.py}
+\section{fsi\_lid}
+\label{recipe:fsi-lid}
+Stationäre Deckel-FSI (laminar und SA-noft2) aus einer strikten
+\texttt{fsi\_schema\_version=1}-Datei mit Bericht, Verlauf und Feldexporten.
+\begin{lstlisting}
+python -I examples/fsi_lid/run.py laminar --output results/fsi-lid-laminar
+python -I examples/fsi_lid/run.py sa --output results/fsi-lid-sa
+\end{lstlisting}
+\lstinputlisting{examples/fsi_lid/run.py}

@@ -101,3 +101,16 @@ letzte Iterat. Dokument 92 beschreibt Ergebnisfelder und Nachweise:
 konstante Druckbelastung mit exakt geometrischer Kontraktion und ein
 hydrostatischer Deckel mit analytischem Rückkopplungsfixpunkt. Die
 verpflichtenden Deckelreferenzen auf vier Netzstufen bleiben ein eigener Nachweis.
+
+\section{Deklarativer FSI-Workflow}
+\texttt{fem\_toolbox.coupling.fsi\_config} liest eine strikte TOML-Datei mit
+\texttt{fsi\_schema\_version = 1}. Sie verweist auf eine bestehende
+FluidDomain-JSON und ein bestehendes Elastizitätsmodell mit Gmsh-Netz; alle
+Kopplungswerte sind Pflicht. Pfade bleiben relativ zum Konfigurationsverzeichnis,
+Ganzzahlen und Wahrheitswerte werden typstreng geprüft, Fehler nennen den
+Dokumentpfad. Der Lauf schreibt Bericht, Iterationstabelle sowie Fluid- und
+Strukturfelder mit SI-Einheiten im Schlüssel; der Bericht enthält
+SHA-256 aller Eingabedateien, Versionen, Gates, Netzhashes und Bilanzen.
+Kontrollierte Abbrüche hinterlassen Fehlerart, Historie und letztes Iterat.
+Dokument 94 beschreibt Schema und Artefakte; die Beispiele unter
+\texttt{examples/fsi\_lid} laufen aus Wheel und sdist.

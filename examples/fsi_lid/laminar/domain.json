@@ -1,0 +1,50 @@
+{
+ "fluid_domain_schema_version": 1,
+ "mesh": "mesh.json",
+ "width_m": 1.0,
+ "fluid": {
+  "density_kg_m3": 1.0,
+  "viscosity_Pa_s": 1.0
+ },
+ "boundaries": {
+  "bottom": {
+   "type": "wall",
+   "fsi": false
+  },
+  "top": {
+   "type": "wall",
+   "fsi": true
+  },
+  "left": {
+   "type": "inlet",
+   "velocity_m_s": [
+    [
+     0.006249999999999993,
+     0.0
+    ],
+    [
+     0.013750000000000007,
+     0.0
+    ],
+    [
+     0.013749999999999998,
+     0.0
+    ],
+    [
+     0.00625,
+     0.0
+    ]
+   ],
+   "nu_tilde_m2_s": [
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "right": {
+   "type": "pressure_outlet",
+   "pressure_Pa": 0.0
+  }
+ }
+}

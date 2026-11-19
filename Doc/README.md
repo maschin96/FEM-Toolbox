@@ -221,3 +221,5 @@ experimentelle Validierungsfreigabe wird nicht behauptet.
 - [Stationäre bidirektionale FSI-Kopplung (#91)](92_STATIONARY_FSI_COUPLING.md)
 
 - [Verifikation der stationären bidirektionalen FSI (#92)](93_STATIONARY_FSI_VERIFICATION.md)
+
+- [Deklarativer stationärer FSI-Workflow (#93)](94_FSI_WORKFLOW.md)

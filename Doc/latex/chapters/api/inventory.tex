@@ -1644,6 +1644,61 @@ solve_stationary_fsi(problem: StationaryFsiProblem) -> StationaryFsiResult
 Run the Doc/71 partitioned stationary coupling with constant relaxation.\par Stops successfully only when max|r\_d| <= 1e-8 Lref AND the nodal load change max|F\textasciicircum{}k-F\textasciicircum{}(k-1)| <= 1e-6 rho U\_ref\textasciicircum{}2 (b Lref), with every fluid, mesh, transfer and structure gate passed on the same final geometry. A small relaxed update alone is never success. Failures raise FsiCouplingError with kind in FAILURE\_KINDS and the full history.
 \end{quote}
 Direkte Raise-Stellen: fail; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.coupling.fsi\_config}
+\index{fem_toolbox.coupling.fsi_config@coupling.\protect\allowbreak{}fsi\_\protect\allowbreak{}config}
+Einordnung: research. M12-Entwicklung: strikte fsi\_schema\_version=1-TOML und reproduzierbare Laufartefakte; keine M12-Freigabe ohne \#94.
+\par Fachvertrag: \nolinkurl{Doc/94_FSI_WORKFLOW.md}. Beispiele/Tests:
+\nolinkurl{examples/fsi_lid/run.py}.
+\nolinkurl{tests/regression/test_fsi_lid_example.py}.
+\subsection*{Datentypen und Konstanten}
+\begin{lstlisting}
+HISTORY_COLUMNS = (('iteration', 'iteration'), ('displacement_residual_m', 'displacement_residual_m'), ('relative_displacement_residual', 'relative_displacement_residual'), ('load_change_N', 'load_change_N'), ('fluid_force_y_N', None), ('external_pressure_force_y_N', None), ('structure_reaction_y_N', None), ('transfer_relative_error', 'transfer_relative_error'), ('maximum_displacement_ratio', 'maximum_displacement_ratio'), ('maximum_displacement_gradient', 'maximum_displacement_gradient'), ('minimum_area_ratio', 'minimum_area_ratio'), ('fluid_iterations', 'fluid_iterations'))
+\end{lstlisting}
+\subsection{FsiConfig}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True).
+\begin{quote}
+Validated problem plus the exact input files and their SHA-256.
+\end{quote}
+\begin{lstlisting}
+problem: StationaryFsiProblem
+\end{lstlisting}
+\begin{lstlisting}
+source: Path
+\end{lstlisting}
+\begin{lstlisting}
+document: Mapping[str, Any]
+\end{lstlisting}
+\begin{lstlisting}
+input_files: Mapping[str, str]
+\end{lstlisting}
+\subsection{load\_fsi\_config}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+load_fsi_config(path: str | Path) -> FsiConfig
+\end{lstlisting}
+\begin{quote}
+Read a strict fsi\_schema\_version=1 TOML and build the coupling problem.
+\end{quote}
+Direkte Raise-Stellen: ModelSchemaError; transitive Fehler siehe Fachvertrag.
+\subsection{write\_fsi\_artifacts}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+write_fsi_artifacts(output: str | Path, config: FsiConfig, outcome: StationaryFsiResult | FsiCouplingError) -> Path
+\end{lstlisting}
+\begin{quote}
+Write report.json, history.csv and, on success, field JSON files.\par The output directory must not exist. All quantities carry SI unit suffixes. A failed run still records kind, reason, history and the last iterate.
+\end{quote}
+Direkte Raise-Stellen: FileExistsError; transitive Fehler siehe Fachvertrag.
+\subsection{run\_fsi\_config}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+run_fsi_config(path: str | Path, output: str | Path) -> StationaryFsiResult
+\end{lstlisting}
+\begin{quote}
+Load, refuse an existing output, solve and always write artifacts.\par A coupling stop writes its failure artifacts and is then re-raised.
+\end{quote}
+Direkte Raise-Stellen: FileExistsError; transitive Fehler siehe Fachvertrag.
 \section{fem\_toolbox.coupling.interface}
 \index{fem_toolbox.coupling.interface@coupling.\protect\allowbreak{}interface}
 Einordnung: research. M12-Entwicklung: konservative ebene FSI-Schnittstelle; bidirektionale Abnahme folgt separat.
