@@ -3672,6 +3672,27 @@
       "status": "open"
     },
     {
+      "source": "Doc/93_STATIONARY_FSI_VERIFICATION.md",
+      "canonical": "Doc/93_STATIONARY_FSI_VERIFICATION.md",
+      "target": "Doc/latex/chapters/verification/fsi.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "tests/convergence/test_stationary_fsi_lid.py",
+      "canonical": "tests/convergence/test_stationary_fsi_lid.py",
+      "target": "Doc/latex/chapters/verification/fsi.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "tests/reference/fsi_lid.py",
+      "canonical": "tests/reference/fsi_lid.py",
+      "target": "Doc/latex/chapters/verification/fsi.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
       "source": "Doc/90_CONSERVATIVE_FSI_INTERFACE.md",
       "canonical": "Doc/90_CONSERVATIVE_FSI_INTERFACE.md",
       "target": "Doc/latex/chapters/api/fsi.tex",
