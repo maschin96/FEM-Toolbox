@@ -1,8 +1,8 @@
 # FEM Toolbox
 
 **v1.7.0 — ebene RANS-CFD und stationäre Fluid-Struktur-Kopplung.**
-Version 1.7.0; Veröffentlichungsstatus in [#94](https://github.com/maschin96/FEM-Toolbox/issues/94).
-[Release-Nachweis](Doc/95_M12_RELEASE_VERIFICATION.md) ·
+Veröffentlicht am 20.11.2026 als [GitHub-Release v1.7.0](https://github.com/maschin96/FEM-Toolbox/releases/tag/v1.7.0)
+mit Wheel, sdist und Handbüchern. [Release-Nachweis](Doc/95_M12_RELEASE_VERIFICATION.md) ·
 [Release Notes](Doc/releases/v1.7.0.md) ·
 [FSI-Workflow](Doc/94_FSI_WORKFLOW.md) ·
 [Beispiele](examples/fsi_lid/README.md).
@@ -12,8 +12,12 @@ dreidimensionale Finite-Elemente-Simulationen. Ziel sind verifizierte Modelle f�
 Festkörpermechanik, Wärmeleitung, Elektrostatik und deren thermomechanische und
 piezoelektrische Kopplungen auf Basis linearer **Tet4** und geradkantiger quadratischer **Tet10**.
 
-**v1.6.0 — verifizierte Struktur-Topologieoptimierung mit Geometrie-Reanalyse.**
-Version 1.6.0; Veröffentlichungsstatus in [#83](https://github.com/maschin96/FEM-Toolbox/issues/83).
+Zusätzlich gibt es ab v1.7.0 einen begrenzten ebenen Strömungszweig: stationäre
+inkompressible Quad-FV/SIMPLE-Strömung, SA-noft2-RANS mit aufgelöster Wand und
+stationäre bidirektionale Fluid-Struktur-Kopplung mit der Tet4-Elastizität.
+`fem_toolbox.cfd` und `fem_toolbox.coupling` sind Forschungs-API.
+
+Vorherige Freigabe: **v1.6.0 — Struktur-Topologieoptimierung** ·
 [Release-Nachweis](Doc/87_M11_RELEASE_VERIFICATION.md) ·
 [Release Notes](Doc/releases/v1.6.0.md) ·
 [Supportmatrix](Doc/57_M7_RELEASE_CANDIDATE.md).
@@ -41,7 +45,7 @@ verifizierten Annahmen und numerischen Grenzen.
 
 ## Verfügbare Funktionen
 
-| Bereich | Umfang in v1.6.0 |
+| Bereich | Umfang in v1.7.0 |
 |---|---|
 | Netzmodell | Unveränderliche NumPy-Arrays für 3D-Punkte, Tet4/Tet10-Zellen und Triangle3/Triangle6-Flächen; validierte Indizes, externe IDs und Tags |
 | Auswahlsätze | Benannte Volumen- und Flächensätze, auch mit überlappenden Mitgliedschaften |
@@ -60,6 +64,8 @@ verifizierten Annahmen und numerischen Grenzen.
 | Topologieoptimierung | Volumengewichteter Dichtefilter, SIMP und Mehrlastfall-Nachgiebigkeit auf Tet4; TOML-Studien, geprüfte Gradienten und getrennte Vollmaterial-Reanalyse diskreter Geometrien |
 | Unsicherheit | Explizite Normal-/Gleichverteilungen, gemeinsames Sampling, normale Korrelation, Stichprobenstatistik, lokale Sensitivität und stationäre M8-FEM-Studien; keine experimentelle Freigabe |
 | Piezo-Dynamik | Mechanische konsistente Masse, algebraisches Potential, Modal-/Newmark-/Harmonikanalyse, Model-Schema 3 und komplexe Feld-/Messpunktausgabe |
+| Ebene Strömung (Forschungs-API) | Quad4-Fluidnetze mit Wand-/Randbedingungs-Preflight, stationäre inkompressible Quad-FV/SIMPLE-Strömung, SA-noft2 mit aufgelöster Wand (y⁺ ≤ 1); MAC-Kern als Referenz |
+| Stationäre FSI (Forschungs-API) | Konservative Lastübertragung, harmonische Fluidnetzbewegung, Dirichlet–Neumann-Kopplung mit festen Gates, spannweiteninvariante Tet4-Kleinverformung; strikte TOML `fsi_schema_version = 1` mit Bericht, Verlauf und Feldern |
 
 Ein vollständiger deklarativer Lauf mit Gmsh-Eingabe, VTU-Feldern und
 Provenienzbericht steht unter [examples/thermopiezoelectric](examples/thermopiezoelectric/README.md).
@@ -228,11 +234,11 @@ elektrisches Potential `phi` mit feldweiser Freiheitsgradverwaltung.
 | M5 | v1.0.0 | Elektroden, Modellformat und vollständiger stationärer Workflow | Freigegeben |
 | M6 | v1.1.0 | Transiente Wärme, Piezo-Dynamik/Harmonik (reziproke Thermoelastizität zurückgestellt) | Freigegeben |
 | M7 | v1.2.0 | PETSc-Backend, Tet10, Wärmeindikatoren und gemessene Skalierung | Freigegeben |
-| M8 | v1.3.0 | Parameterstudien, Visualisierung und Surrogatmodelle | Implementiert und verifiziert; Release-Abschluss siehe Freigabebericht |
-| M9 | v1.4.0 | Verifizierter Unsicherheitsworkflow und Gesamtdokumentation | Implementiert und verifiziert; Veröffentlichung siehe Freigabebericht |
-| M10 | v1.5.0 | Kontrollierte adaptive Netzstudien | Implementiert und verifiziert; Veröffentlichung siehe #70 |
-| M11 | v1.6.0 | Gefilterte Struktur-Topologieoptimierung und Geometrie-Reanalyse | Implementiert und verifiziert; Veröffentlichung siehe #83 |
-| M12 | Offen | RANS-CFD mit Fluid-Struktur-Kopplung | Laminarer Quad-FV-Kern integriert; RANS/FSI in Umsetzung |
+| M8 | v1.3.0 | Parameterstudien, Visualisierung und Surrogatmodelle | Freigegeben |
+| M9 | v1.4.0 | Verifizierter Unsicherheitsworkflow und Gesamtdokumentation | Freigegeben |
+| M10 | v1.5.0 | Kontrollierte adaptive Netzstudien | Freigegeben |
+| M11 | v1.6.0 | Gefilterte Struktur-Topologieoptimierung und Geometrie-Reanalyse | Freigegeben |
+| M12 | v1.7.0 | Ebene stationäre RANS-CFD (SA-noft2) und stationäre Fluid-Struktur-Kopplung | Freigegeben (Forschungs-API, ohne unabhängiges Fachreview) |
 
 *Vorläufige Zielversionen ohne Terminzusage. Produktvision, Bestandsanalyse,
 Abhängigkeiten und Abnahmegates stehen in der
@@ -278,8 +284,8 @@ technischen Entwurfsdokumente.
 
 Der Python-Code liegt unter `src/fem_toolbox/`. Die [Teststruktur](tests/README.md)
 unterscheidet Unit-, Patch-, Konvergenz- und Regressionstests;
-[examples/](examples/README.md) enthält drei Einzelfeldbeispiele und ein
-reproduzierbares Thermomechanik-Beispiel.
+[examples/](examples/README.md) enthält ausführbare Referenzbeispiele für alle
+freigegebenen Abläufe, von Einzelfeldern bis zur stationären FSI.
 
 Aus dem Repository-Root mit aktivierter Entwicklungsumgebung prüfen:
 
@@ -374,30 +380,38 @@ python -I examples/topology/run.py --output results/topology
 [API und Grenzen](Doc/84_M11_TOPOLOGY_WORKFLOW.md) ·
 [Nachweise und Release-Gate](Doc/85_M11_VERIFICATION.md).
 
-## Experimenteller CFD-Kern (M12)
+## Ebene RANS-CFD und stationäre FSI (M12, v1.7.0)
 
-Der eigenständige uniforme 2D-MAC-Kern bietet stationäre inkompressible
-Strömung mit konservativer Konvektion, Druck-Geschwindigkeits-Kopplung,
-Picard-Iteration und expliziten Wand-/Einlass-/Druckauslassbedingungen.
-[Vertrag, Verifikation und Grenzen](Doc/70_STATIONARY_FLOW_CORE.md),
-[ausführbarer TOML-Kanallauf](examples/cfd_flow/README.md).
-Dieser M12-Entwicklungsumfang ist kein v1.3-Release-Feature; Turbulenzschließung,
-FSI, Zeitintegration und allgemeine 3D-/Tet-CFD-Netze gehören nicht zum Kern.
+v1.7.0 ergänzt einen begrenzten ebenen Strömungs- und Kopplungszweig. Alle
+Einstiegspunkte unter `fem_toolbox.cfd` und `fem_toolbox.coupling` sind
+Forschungs-API ohne stabile SemVer-Zusage; versioniert sind ihre Dateischemata.
 
-Der [M12-RANS-/FSI-Zielvertrag](Doc/71_M12_RANS_FSI_CONTRACT.md) legt die
-SA-noft2-Schließung, körperangepasste Fluidnetze und begrenzte stationäre
-Kopplung für die Folgeissues fest. Die SA-noft2-Implementierung ist im
-[M12-Entwicklungsstand](Doc/88_SA_NOFT2_IMPLEMENTATION.md) dokumentiert;
-vollständige Modellabnahme und FSI bleiben offen.
+```sh
+python -I examples/fsi_lid/run.py laminar --output results/fsi-lid-laminar
+python -I examples/fsi_lid/run.py sa --output results/fsi-lid-sa
+```
 
-Der experimentelle [Fluidnetzadapter (#85)](Doc/72_FLUID_MESH_ADAPTER.md)
-liest vorbereitete Quad4-JSON-Netze mit Randgruppen, prüft Wandabstände,
-Netzqualität und SI-Randbedingungen. [Kanaleingabe und Preflight](examples/fluid_mesh/README.md)
-führen noch keinen RANS-/FSI-Solve aus.
+Das [Deckelbeispiel](examples/fsi_lid/README.md) koppelt eine Kanalströmung
+(laminar oder SA-noft2) mit einem elastisch gelagerten Tet4-Deckel und schreibt
+`report.json`, `history.csv` und Feldexporte mit Eingabehashes.
 
-[Konservative Quad-FV-Grundoperatoren (#229)](Doc/73_QUAD_FV_OPERATORS.md)
-ergänzen linear-exakte Gradienten, volle variable Spannungen und kompakte
-Druck-/Rhie-Chow-Bausteine. Der [laminare Quad-FV-Solver (#230)](Doc/74_QUAD_FV_SIMPLE.md)
-ergänzt SIMPLE mit GMRES-Beschleunigung, konservativen Transport und explizite
-SI-Bilanzen. Ein [vorbereiteter Dateikanal](examples/quad_flow/README.md)
-exportiert Felder und Provenienz; der MAC-Kern bleibt die unabhängige Referenz.
+- [Fluidnetzadapter und Preflight (#85)](Doc/72_FLUID_MESH_ADAPTER.md) ·
+  [Beispiel](examples/fluid_mesh/README.md)
+- [Quad-FV-Grundoperatoren (#229)](Doc/73_QUAD_FV_OPERATORS.md) und
+  [SIMPLE-Solver (#230)](Doc/74_QUAD_FV_SIMPLE.md) ·
+  [Beispiel](examples/quad_flow/README.md); der
+  [MAC-Kern](Doc/70_STATIONARY_FLOW_CORE.md) bleibt unabhängige Referenz ·
+  [Beispiel](examples/cfd_flow/README.md)
+- [SA-noft2](Doc/88_SA_NOFT2_IMPLEMENTATION.md) und
+  [RANS-Verifikation mit DNS-Vergleich](Doc/89_RANS_VERIFICATION.md)
+- [Lastübertragung](Doc/90_CONSERVATIVE_FSI_INTERFACE.md),
+  [Netzbewegung](Doc/91_STATIONARY_MESH_MOTION.md),
+  [Kopplung](Doc/92_STATIONARY_FSI_COUPLING.md),
+  [FSI-Nachweis](Doc/93_STATIONARY_FSI_VERIFICATION.md),
+  [Workflow](Doc/94_FSI_WORKFLOW.md)
+- [Vertrag](Doc/71_M12_RANS_FSI_CONTRACT.md) ·
+  [Freigabenachweis](Doc/95_M12_RELEASE_VERIFICATION.md)
+
+Grenzen: nur 2D, stationär, inkompressibel, isotherm; aufgelöste Wand ohne
+Wandfunktionen; kleine Verformungen und spannweiteninvariante Struktur. Keine
+allgemeine 3D-Fluid-, URANS-, dynamische FSI- oder experimentelle Freigabe.
