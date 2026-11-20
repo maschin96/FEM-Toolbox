@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.7.0] - 2026-11-19
+
+- [Release Notes](Doc/releases/v1.7.0.md); [Freigabenachweis](Doc/95_M12_RELEASE_VERIFICATION.md).
+
+### Added
+
+- Quad4-Fluidnetzadapter mit Wandqualitäts- und SI-/Randbedingungs-Preflight (#85); stationärer MAC-Referenzkern (#86).
+- Konservativer Quad-FV/SIMPLE-Solver für ebene stationäre inkompressible Strömung mit frischen Residuen und Bilanzen (#226, #229, #230).
+- SA-noft2 mit konservativem Transport, gemeinsamer RANS-Iteration und y+-Gate (#87); BVP-Codeverifikation und DNS-Modellvergleich (#88).
+- Konservative Fluid-Struktur-Lastübertragung (#89), harmonische Fluidnetzbewegung mit Geometrieprüfung (#90).
+- Stationäre bidirektionale Dirichlet–Neumann-FSI mit festen Gates und typisierten Abbrüchen (#91), Deckel-Benchmark laminar und SA (#92).
+- Strikte `fsi_schema_version = 1`-TOML, Bericht/Verlauf/Felder mit Provenienz und Beispiele `examples/fsi_lid` (#93).
+
+### Limits
+
+- Nur 2D, stationär, inkompressibel, isotherm, aufgelöste Wand, kleine Verformungen; keine 3D-Fluid-, URANS- oder dynamische FSI-Freigabe.
+- Kompatible Minor-Erweiterung; `cfd`/`coupling` sind Forschungs-API, nicht stabile SemVer-Oberfläche. Bestehende Verträge bleiben bestehen. Kein unabhängiges Fachreview.
+
 ## [1.6.0] - 2026-10-19
 
 - [Kurze SIMP-Einführung](Doc/86_SIMP_EINFUEHRUNG.md); [Release Notes](Doc/releases/v1.6.0.md).

@@ -13,7 +13,7 @@ def test_handbook_inputs_are_complete_and_identical_to_versioned_examples():
     originals = {
         str(path.relative_to(ROOT))
         for path in (ROOT / "examples").rglob("*")
-        if path.is_file() and path.suffix in {".py", ".toml", ".msh", ".csv"}
+        if path.is_file() and path.suffix in {".py", ".toml", ".msh", ".csv", ".json"}
     }
     assert set(manifest["inputs"]) == originals
     for source, digest in manifest["inputs"].items():

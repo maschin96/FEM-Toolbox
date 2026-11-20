@@ -3488,6 +3488,307 @@
       "canonical": "Doc/87_M11_RELEASE_VERIFICATION.md",
       "owner": "M11 release maintainers",
       "status": "open"
+    },
+    {
+      "source": "Doc/68_EXPERIMENTAL_CFD_CORE.md",
+      "canonical": "Doc/68_EXPERIMENTAL_CFD_CORE.md",
+      "target": "Doc/latex/chapters/api/cfd.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "Doc/69_CFD_PRESSURE_COUPLING.md",
+      "canonical": "Doc/69_CFD_PRESSURE_COUPLING.md",
+      "target": "Doc/latex/chapters/api/cfd.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "Doc/70_STATIONARY_FLOW_CORE.md",
+      "canonical": "Doc/70_STATIONARY_FLOW_CORE.md",
+      "target": "Doc/latex/chapters/api/cfd.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "Doc/71_M12_RANS_FSI_CONTRACT.md",
+      "canonical": "Doc/71_M12_RANS_FSI_CONTRACT.md",
+      "target": "Doc/latex/chapters/api/cfd.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "Doc/72_FLUID_MESH_ADAPTER.md",
+      "canonical": "Doc/72_FLUID_MESH_ADAPTER.md",
+      "target": "Doc/latex/chapters/api/cfd.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "Doc/73_QUAD_FV_OPERATORS.md",
+      "canonical": "Doc/73_QUAD_FV_OPERATORS.md",
+      "target": "Doc/latex/chapters/api/cfd.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "Doc/74_QUAD_FV_SIMPLE.md",
+      "canonical": "Doc/74_QUAD_FV_SIMPLE.md",
+      "target": "Doc/latex/chapters/api/cfd.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/cfd/__init__.py",
+      "canonical": "src/fem_toolbox/cfd/__init__.py",
+      "target": "Doc/latex/chapters/api/cfd.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/cfd/channel.py",
+      "canonical": "src/fem_toolbox/cfd/channel.py",
+      "target": "Doc/latex/chapters/api/cfd.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/cfd/flow.py",
+      "canonical": "src/fem_toolbox/cfd/flow.py",
+      "target": "Doc/latex/chapters/api/cfd.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/cfd/flow_config.py",
+      "canonical": "src/fem_toolbox/cfd/flow_config.py",
+      "target": "Doc/latex/chapters/api/cfd.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/cfd/flow_model.py",
+      "canonical": "src/fem_toolbox/cfd/flow_model.py",
+      "target": "Doc/latex/chapters/api/cfd.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/cfd/fluid_domain.py",
+      "canonical": "src/fem_toolbox/cfd/fluid_domain.py",
+      "target": "Doc/latex/chapters/api/cfd.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/cfd/fluid_mesh.py",
+      "canonical": "src/fem_toolbox/cfd/fluid_mesh.py",
+      "target": "Doc/latex/chapters/api/cfd.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/cfd/mac.py",
+      "canonical": "src/fem_toolbox/cfd/mac.py",
+      "target": "Doc/latex/chapters/api/cfd.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/cfd/quad_flow.py",
+      "canonical": "src/fem_toolbox/cfd/quad_flow.py",
+      "target": "Doc/latex/chapters/api/cfd.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/cfd/quad_fv.py",
+      "canonical": "src/fem_toolbox/cfd/quad_fv.py",
+      "target": "Doc/latex/chapters/api/cfd.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/cfd/quad_system.py",
+      "canonical": "src/fem_toolbox/cfd/quad_system.py",
+      "target": "Doc/latex/chapters/api/cfd.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/cfd/stokes.py",
+      "canonical": "src/fem_toolbox/cfd/stokes.py",
+      "target": "Doc/latex/chapters/api/cfd.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "Doc/88_SA_NOFT2_IMPLEMENTATION.md",
+      "canonical": "Doc/88_SA_NOFT2_IMPLEMENTATION.md",
+      "target": "Doc/latex/chapters/api/cfd.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/cfd/rans.py",
+      "canonical": "src/fem_toolbox/cfd/rans.py",
+      "target": "Doc/latex/chapters/api/cfd.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/cfd/sa_model.py",
+      "canonical": "src/fem_toolbox/cfd/sa_model.py",
+      "target": "Doc/latex/chapters/api/cfd.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/cfd/sa_transport.py",
+      "canonical": "src/fem_toolbox/cfd/sa_transport.py",
+      "target": "Doc/latex/chapters/api/cfd.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "Doc/89_RANS_VERIFICATION.md",
+      "canonical": "Doc/89_RANS_VERIFICATION.md",
+      "target": "Doc/latex/chapters/verification/rans.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "Doc/evidence/m12/reference_sources.json",
+      "canonical": "Doc/evidence/m12/reference_sources.json",
+      "target": "Doc/latex/chapters/verification/rans.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "Doc/evidence/m12/v1.7.0.dev1-rans-verification.json",
+      "canonical": "Doc/evidence/m12/v1.7.0.dev1-rans-verification.json",
+      "target": "Doc/latex/chapters/verification/rans.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "Doc/93_STATIONARY_FSI_VERIFICATION.md",
+      "canonical": "Doc/93_STATIONARY_FSI_VERIFICATION.md",
+      "target": "Doc/latex/chapters/verification/fsi.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "tests/convergence/test_stationary_fsi_lid.py",
+      "canonical": "tests/convergence/test_stationary_fsi_lid.py",
+      "target": "Doc/latex/chapters/verification/fsi.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "tests/reference/fsi_lid.py",
+      "canonical": "tests/reference/fsi_lid.py",
+      "target": "Doc/latex/chapters/verification/fsi.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "Doc/90_CONSERVATIVE_FSI_INTERFACE.md",
+      "canonical": "Doc/90_CONSERVATIVE_FSI_INTERFACE.md",
+      "target": "Doc/latex/chapters/api/fsi.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/coupling/__init__.py",
+      "canonical": "src/fem_toolbox/coupling/__init__.py",
+      "target": "Doc/latex/chapters/api/fsi.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/coupling/interface.py",
+      "canonical": "src/fem_toolbox/coupling/interface.py",
+      "target": "Doc/latex/chapters/api/fsi.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/coupling/structure.py",
+      "canonical": "src/fem_toolbox/coupling/structure.py",
+      "target": "Doc/latex/chapters/api/fsi.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "Doc/91_STATIONARY_MESH_MOTION.md",
+      "canonical": "Doc/91_STATIONARY_MESH_MOTION.md",
+      "target": "Doc/latex/chapters/api/fsi.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/cfd/mesh_motion.py",
+      "canonical": "src/fem_toolbox/cfd/mesh_motion.py",
+      "target": "Doc/latex/chapters/api/fsi.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "Doc/92_STATIONARY_FSI_COUPLING.md",
+      "canonical": "Doc/92_STATIONARY_FSI_COUPLING.md",
+      "target": "Doc/latex/chapters/api/fsi.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/coupling/fsi.py",
+      "canonical": "src/fem_toolbox/coupling/fsi.py",
+      "target": "Doc/latex/chapters/api/fsi.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "Doc/94_FSI_WORKFLOW.md",
+      "canonical": "Doc/94_FSI_WORKFLOW.md",
+      "target": "Doc/latex/chapters/api/fsi.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "src/fem_toolbox/coupling/fsi_config.py",
+      "canonical": "src/fem_toolbox/coupling/fsi_config.py",
+      "target": "Doc/latex/chapters/api/fsi.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "examples/fsi_lid/README.md",
+      "canonical": "examples/fsi_lid/README.md",
+      "target": "Doc/latex/chapters/api/fsi.tex",
+      "owner": "M12 maintainers",
+      "status": "open"
+    },
+    {
+      "source": "Doc/releases/v1.7.0.md",
+      "target": "Doc/latex/chapters/verification/fsi.tex",
+      "canonical": "Doc/releases/v1.7.0.md",
+      "owner": "M12 release maintainers",
+      "status": "open"
+    },
+    {
+      "source": "Doc/95_M12_RELEASE_VERIFICATION.md",
+      "target": "Doc/latex/chapters/verification/fsi.tex",
+      "canonical": "Doc/95_M12_RELEASE_VERIFICATION.md",
+      "owner": "M12 release maintainers",
+      "status": "open"
+    },
+    {
+      "source": "Doc/evidence/m12/v1.7.0-local-verification.json",
+      "target": "Doc/latex/chapters/verification/fsi.tex",
+      "canonical": "Doc/95_M12_RELEASE_VERIFICATION.md",
+      "owner": "M12 release maintainers",
+      "status": "open"
     }
   ],
   "planned": [

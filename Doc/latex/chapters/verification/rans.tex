@@ -1,0 +1,42 @@
+\chapter{M12: getrennte RANS-Code- und Modellprüfung}\label{vv:rans}
+Der vorab festgelegte Vertrag aus Dokument 71 trennt Punkt-/MMS-Verifikation,
+kontinuierliche Modellgleichungen und unabhängige DNS. Dokument 89 und das
+versionierte M12-Nachweisarchiv nennen Quellenhashes und sämtliche Messwerte.
+Die SA-MMS auf 16, 32, 64 und 128 Zellen erreicht relative Fehler
+\(9.506\cdot10^{-4},2.482\cdot10^{-4},6.366\cdot10^{-5},1.613\cdot10^{-5}\)
+und Ordnungen 1.937, 1.963 und 1.981. Der virtuelle Wandabstand dient allein diesem Test.
+
+Ein unabhängiger kontinuierlicher Randwertlöser für den SA-Kanal liefert
+die Codevergleichslösung. Die Netzfolge liefert relative RMS-U-Fehler:
+\begin{center}
+\begin{tabular}{rr}
+\toprule
+Zellen je Halbkanal & Fehler [Prozent] \\
+\midrule
+32 & 0.3473 \\
+64 & 0.1874 \\
+128 & 0.02123 \\
+256 & 0.00882 \\
+\bottomrule
+\end{tabular}
+\end{center}
+Das feinste Gate von 0.5 Prozent ist erfüllt; Wandkraftfehler bleiben unter
+\(1.8\cdot10^{-13}\), maximales \(y^+\) sinkt von 0.498 auf 0.0585.
+Viskositätssensitivität, Wandverteilung und Relaxationswiederholung bestehen
+bei unveränderten Modellkonstanten und absoluten Feld- und Bilanzgates.
+
+Die unabhängige DNS von Moser/Kim/Mansour nutzt \(Re_\tau=587.19\),
+nicht den gerundeten Dateinamen 590. Auf 128/256 Halbkanalzellen betragen
+RMS-U+-Abweichungen 1.0775/1.0746 Prozent und Bulkabweichungen
+0.3949/0.4074 Prozent; die Grenzen sind jeweils 5 Prozent.
+Die letzte Profiländerung ist 0.01628 Prozent, kleiner als 1 Prozent und
+ein Fünftel des Modellbudgets. Keine Anpassung von SA-Konstanten.
+
+Das Quellenmanifest verlinkt Originaldaten und ihren SHA-256. Fehlende explizite
+Weitergabelizenz verhindert ihre Redistribution; CI lädt sie nur temporär.
+Die Profile sind DNS, keine experimentelle Messung. Dies ist eine begrenzte
+Modellbeurteilung für den glatten voll entwickelten Kanal und keine allgemeine
+RANS- oder FSI-Validierung. Ein anfänglicher Interpolationsfehler durch
+Koordinatenrundung ist mit unabhängigem parabolischem Regressionstest korrigiert;
+Solver, Originaldaten und Gates bleiben unverändert. Unabhängiges menschliches
+Fachreview liegt nicht vor. M12 ist weiterhin ein Entwicklungskandidat.

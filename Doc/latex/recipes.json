@@ -77,7 +77,29 @@
     "examples/topology/reference/z.toml": "1c102c2a0befaae2c87d7439c54ef3b513ad39504be59edf9dfb7dda14dcec24",
     "examples/topology/reference/mesh.msh": "2088906ad5b3fce37dd10aed4f758767ee7124b5ff6d6071fbd0bc32c114ac97",
     "examples/topology/reference/study.toml": "08aae25c7f5446fb23a9ceef9cbf96c7ce6404e8d0a8ec54fdae4a831f1c32a2",
-    "examples/topology/reference/y.toml": "2e453d7bcaa018989d425576440059b0d0cfe08953cd376c73b93c64dd3bd544"
+    "examples/topology/reference/y.toml": "2e453d7bcaa018989d425576440059b0d0cfe08953cd376c73b93c64dd3bd544",
+    "examples/cfd_channel/run.py": "67c2754b6a80062c3accea0e04d8c8bec0908c88fb3eeddd2a7e8805c087788d",
+    "examples/cfd_pressure/run.py": "4ef8c50162f0f68e036a53bc36b8afe2b9ca28fe1a02aca7a124f4d82fff187d",
+    "examples/cfd_flow/flow.toml": "6e086370c4ca18c8f4ca8a33bea2464ed8369faf9336d179e13cc13eff8fce7d",
+    "examples/cfd_flow/run.py": "561c86ad89b0ee3228b7f3fd34058537f7d7189667eb1ee0767c7a140db20b2b",
+    "examples/fluid_mesh/domain.json": "32e4185522280fea99e84dc6a5f1bf3ca91423cc9c2c07bacf5d927a4f90bd4d",
+    "examples/fluid_mesh/mesh.json": "dad45179f04946d0208211b0966e9e6022ccdeac8e02036b7ba84e0cc004f820",
+    "examples/fluid_mesh/preflight.py": "3b4e0a4c530b8b6eb7cbe4bc05ec2a76a9dbeb83c88a1b38fd6e4948a42ee499",
+    "examples/quad_flow/domain.json": "c1de67f72758a684033d147f274d409e3d4166fdae1026d75c74a323bd73e60b",
+    "examples/quad_flow/mesh.json": "dad45179f04946d0208211b0966e9e6022ccdeac8e02036b7ba84e0cc004f820",
+    "examples/quad_flow/run.py": "cdb9bad2ab127d6be12dff8c1d221d4f71d1cb5c4ef4f2e57846e0a708164f17",
+    "examples/fsi_lid/laminar/domain.json": "7778a948615b294f1cafcce70dcd873ad6c218ef1bc52b8d9d6cf9ea0cc357d8",
+    "examples/fsi_lid/laminar/fsi.toml": "7c8cf304013f0719cce5b44ecb9678e9a8d9afdcfd109586ba84f3a5c02c8a77",
+    "examples/fsi_lid/laminar/mesh.json": "80334aef5ae2a85e8bd4ee848955308e163995c7834cbf038e6f45533ad3dbb6",
+    "examples/fsi_lid/laminar/structure.msh": "6c10393cbbf767e79f759e3570f75dfc9a7f53885a215ef6dc7323fc1403274d",
+    "examples/fsi_lid/laminar/structure.toml": "5e361623a511668ca3ac4e99cda3a45702cbb9bdf58b8d762f733b0b67ea00a6",
+    "examples/fsi_lid/run.py": "9548a0125100f24cb8fc93977dddec59a5426314cdbf31d17f496f0a316a9cdf",
+    "examples/fsi_lid/sa/domain.json": "693d5b2dbf1765782f569270b9d8d5696dbc7336a6d9f1bc1d787e9a0cf79f22",
+    "examples/fsi_lid/sa/fsi.toml": "687ca5ea1d9a6b4b3b0cd83dd654f09b071f717f63b8c02e52113ed5a717be7a",
+    "examples/fsi_lid/sa/mesh.json": "1fe0c253e6596af55cc84511a6aafaa4ea20b37aa4ef6e9431ee3aa9057d5881",
+    "examples/fsi_lid/sa/nu_tilde.json": "f77b4b8121acad7430e27aae2d8d7346a99281b92fd99fced4d217a18a271c9f",
+    "examples/fsi_lid/sa/structure.msh": "503a227b19ec3dcdccf32f4d9b847d6a82513b25c955264727aba35f5e4c7c9b",
+    "examples/fsi_lid/sa/structure.toml": "486461d6f47c16cf2e42cbec83e68d9f2c5b827f3d9265da12d2e9527d2c2e07"
   },
   "recipes": [
     {
@@ -768,6 +790,166 @@
       "expectation": "Deterministic Tet4 mechanics, feasible density volume and explicit geometry diagnostics; verify --quick is smoke only",
       "limits": "No global optimum, fixed minimum wall thickness, CAD/manufacturing or experimental qualification",
       "troubleshooting": "Use new output directories; inspect status, volume feasibility, force balances and geometry No-go records"
+    },
+    {
+      "id": "cfd-channel",
+      "script": "examples/cfd_channel/run.py",
+      "command": [
+        "python",
+        "-I",
+        "examples/cfd_channel/run.py"
+      ],
+      "inputs": [
+        "examples/cfd_channel/run.py"
+      ],
+      "runtime_budget_seconds": 90,
+      "artifacts": [
+        "stdout:velocity error and balances"
+      ],
+      "expectation": "Analytischer reduzierter Kanal: maximaler Geschwindigkeitsfehler <0.00025 m/s.",
+      "limits": "Laminarer Forschungsstand; keine SA-, FSI- oder 3D-Freigabe.",
+      "troubleshooting": "Frisches Ausgabeziel, SI-Daten und Netz-/Randgruppen prüfen; Konvergenzfehler nicht als Erfolg werten."
+    },
+    {
+      "id": "cfd-pressure",
+      "script": "examples/cfd_pressure/run.py",
+      "command": [
+        "python",
+        "-I",
+        "examples/cfd_pressure/run.py"
+      ],
+      "inputs": [
+        "examples/cfd_pressure/run.py"
+      ],
+      "runtime_budget_seconds": 90,
+      "artifacts": [
+        "stdout:four-grid RMS errors and orders"
+      ],
+      "expectation": "Unabhängige Stokes-MMS auf 8/16/32/64; U-Ordnung >1.8 und p-Ordnung >1.5.",
+      "limits": "Laminarer Forschungsstand; keine SA-, FSI- oder 3D-Freigabe.",
+      "troubleshooting": "Frisches Ausgabeziel, SI-Daten und Netz-/Randgruppen prüfen; Konvergenzfehler nicht als Erfolg werten."
+    },
+    {
+      "id": "cfd-flow",
+      "script": "examples/cfd_flow/run.py",
+      "command": [
+        "python",
+        "-I",
+        "examples/cfd_flow/run.py",
+        "--output",
+        "results/cfd-flow"
+      ],
+      "inputs": [
+        "examples/cfd_flow/flow.toml",
+        "examples/cfd_flow/run.py"
+      ],
+      "runtime_budget_seconds": 90,
+      "artifacts": [
+        "results/cfd-flow/report.json",
+        "results/cfd-flow/velocity.csv",
+        "results/cfd-flow/pressure.csv"
+      ],
+      "expectation": "Deklarativer MAC-Kanal: Geschwindigkeitsfehler <0.003 m/s und Masse <1e-9 kg/s.",
+      "limits": "Laminarer Forschungsstand; keine SA-, FSI- oder 3D-Freigabe.",
+      "troubleshooting": "Frisches Ausgabeziel, SI-Daten und Netz-/Randgruppen prüfen; Konvergenzfehler nicht als Erfolg werten."
+    },
+    {
+      "id": "fluid-mesh",
+      "script": "examples/fluid_mesh/preflight.py",
+      "command": [
+        "python",
+        "-I",
+        "examples/fluid_mesh/preflight.py",
+        "--output",
+        "results/fluid-preflight.json"
+      ],
+      "inputs": [
+        "examples/fluid_mesh/domain.json",
+        "examples/fluid_mesh/mesh.json",
+        "examples/fluid_mesh/preflight.py"
+      ],
+      "runtime_budget_seconds": 90,
+      "artifacts": [
+        "results/fluid-preflight.json"
+      ],
+      "expectation": "Netz-/Randprüfung; solver_status=not_run und y+ noch nicht auswertbar.",
+      "limits": "Laminarer Forschungsstand; keine SA-, FSI- oder 3D-Freigabe.",
+      "troubleshooting": "Frisches Ausgabeziel, SI-Daten und Netz-/Randgruppen prüfen; Konvergenzfehler nicht als Erfolg werten."
+    },
+    {
+      "id": "quad-flow",
+      "script": "examples/quad_flow/run.py",
+      "command": [
+        "python",
+        "-I",
+        "examples/quad_flow/run.py",
+        "--output",
+        "results/quad-flow"
+      ],
+      "inputs": [
+        "examples/quad_flow/domain.json",
+        "examples/quad_flow/mesh.json",
+        "examples/quad_flow/run.py"
+      ],
+      "runtime_budget_seconds": 90,
+      "artifacts": [
+        "results/quad-flow/report.json",
+        "results/quad-flow/fields.json",
+        "results/quad-flow/residuals.csv"
+      ],
+      "expectation": "SIMPLE-Kanal mit frisch rekonstruierten SI-Residuen und Bilanzen.",
+      "limits": "Laminarer Forschungsstand; keine SA-, FSI- oder 3D-Freigabe.",
+      "troubleshooting": "Frisches Ausgabeziel, SI-Daten und Netz-/Randgruppen prüfen; Konvergenzfehler nicht als Erfolg werten."
+    },
+    {
+      "id": "fsi-lid",
+      "script": "examples/fsi_lid/run.py",
+      "command": [
+        "python",
+        "-I",
+        "examples/fsi_lid/run.py",
+        "laminar",
+        "--output",
+        "results/fsi-lid-laminar"
+      ],
+      "continuation_commands": [
+        [
+          "python",
+          "-I",
+          "examples/fsi_lid/run.py",
+          "sa",
+          "--output",
+          "results/fsi-lid-sa"
+        ]
+      ],
+      "inputs": [
+        "examples/fsi_lid/laminar/domain.json",
+        "examples/fsi_lid/laminar/fsi.toml",
+        "examples/fsi_lid/laminar/mesh.json",
+        "examples/fsi_lid/laminar/structure.msh",
+        "examples/fsi_lid/laminar/structure.toml",
+        "examples/fsi_lid/run.py",
+        "examples/fsi_lid/sa/domain.json",
+        "examples/fsi_lid/sa/fsi.toml",
+        "examples/fsi_lid/sa/mesh.json",
+        "examples/fsi_lid/sa/nu_tilde.json",
+        "examples/fsi_lid/sa/structure.msh",
+        "examples/fsi_lid/sa/structure.toml"
+      ],
+      "runtime_budget_seconds": 90,
+      "artifacts": [
+        "results/fsi-lid-laminar/report.json",
+        "results/fsi-lid-laminar/history.csv",
+        "results/fsi-lid-laminar/fluid_fields.json",
+        "results/fsi-lid-laminar/structure_fields.json",
+        "results/fsi-lid-sa/report.json",
+        "results/fsi-lid-sa/history.csv",
+        "results/fsi-lid-sa/fluid_fields.json",
+        "results/fsi-lid-sa/structure_fields.json"
+      ],
+      "expectation": "Stationäre Deckel-FSI aus fsi_schema_version=1 konvergiert; Deckelweg laminar 5.71964e-4 m, SA 9.64275e-4 m (±2e-9 m), Kopplungsgates erfüllt.",
+      "limits": "Experimentelle 2D-Kopplung, Dirichlet–Neumann mit konstanter Relaxation; kein Fachreview, keine M12-Freigabe.",
+      "troubleshooting": "Frisches Ausgabeziel wählen; Exitcode 2 bedeutet kontrollierten Abbruch, Fehlerart und letztes Iterat stehen in report.json; Eingabe-Hashes prüfen."
     }
   ],
   "follow_up": {

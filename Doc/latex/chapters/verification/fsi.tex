@@ -1,0 +1,31 @@
+\chapter{M12: stationäre bidirektionale FSI}\label{vv:fsi}
+Dokument 93 legt den elastisch geführten Kanaldeckel aus Dokument 71 fest:
+Höhe \(H_0=0.1\) m, Länge und Breite 1 m, fester Volumenstrom über ein
+entwickeltes Einlassprofil, Druckauslass. Ein Tet4-Deckel mit dem
+\(10^9\)-fachen Modul liegt auf einer einachsigen Federschicht; damit gilt
+\(k_s=E_s bL/h_s\) exakt. Für den starren Deckel folgt
+\[
+d\,(H_0+d)^3=\frac{6\mu L^2 Q}{k_s}.
+\]
+Im SA-Fall liefert der unabhängige Randwertlöser aus Kapitel~\ref{vv:rans}
+den festen Volumenstrom bei \(Re_\tau=587.19\). Bei festem Volumenstrom bleibt
+\(Re_\tau\) erhalten, also \(\Delta p\propto H^{-3}\); der Test prüft dies mit
+dem Randwertlöser an der finalen Höhe bis \(10^{-6}\).
+
+\begin{center}
+\begin{tabular}{lrrrr}
+\toprule
+Fall & Netzpaare & Fehler fein [Prozent] & letzte Änderung [Prozent] & Effekt [Prozent] \\
+\midrule
+laminar & 4 & 0.048 & 0.144 & 1.747 (1.748) \\
+SA-noft2 & 4 & 0.119 & 0.112 & 2.855 (2.859) \\
+\bottomrule
+\end{tabular}
+\end{center}
+Grenzen: laminar 1 und 0.2 Prozent, SA 2 und 0.4 Prozent. Der Effekt ist der
+gemessene bidirektionale Unterschied zur Einweglösung, in Klammern der
+analytische Wert. Jedes Netzpaar erreicht beide Kopplungsgates in fünf
+Schritten; Transferaudit und virtuelle Schnittstellenarbeit bleiben unter
+\(3\cdot10^{-15}\), maximales \(y^+\) sinkt von 0.498 auf 0.158. Der Nachweis
+gilt für den geführten Deckel in voll entwickelter Kanalströmung und ist keine
+experimentelle Validierung. Unabhängiges menschliches Fachreview liegt nicht vor.

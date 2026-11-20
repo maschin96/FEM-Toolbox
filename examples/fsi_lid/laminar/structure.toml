@@ -1,0 +1,35 @@
+schema_version = 1
+units = "SI"
+physics = "elasticity"
+[mesh]
+path = "structure.msh"
+length_scale_to_m = 1.0
+[materials.u.lid]
+young = 1000000000000.0
+poisson = 0.0
+unit = "Pa"
+[materials.u.spring]
+young = 1000.0
+poisson = 0.0
+unit = "Pa"
+[regions.u]
+lid = "lid"
+spring = "spring"
+[[boundary.dirichlet]]
+field = "u"
+set = "wet"
+components = ["x", "z"]
+value = 0.0
+unit = "m"
+[[boundary.dirichlet]]
+field = "u"
+set = "side"
+components = ["x", "z"]
+value = 0.0
+unit = "m"
+[[boundary.dirichlet]]
+field = "u"
+set = "top"
+components = ["x", "y", "z"]
+value = 0.0
+unit = "m"

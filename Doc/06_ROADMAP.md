@@ -186,14 +186,16 @@ Es werden keine Kalendertermine oder noch nicht belegten Validierungen zugesagt.
 | Milestone | Zielbild | Planungsstand |
 |---|---|---|
 | [M11 — Topologieoptimierung](https://github.com/maschin96/FEM-Toolbox/milestone/12) | Optimierer auf verifizierter FEM-Basis, zunächst lineare Strukturmechanik mit Volumenrestriktion, geprüften Sensitivitäten und Kontrolle der Netzabhängigkeit | Beschreibung ohne Einzelissues, Version oder Termin |
-| [M12 — RANS-CFD und Fluid-Struktur-Kopplung](https://github.com/maschin96/FEM-Toolbox/milestone/13) | Ausschließlich RANS-Strömungsmodelle mit Turbulenzschließung und bidirektionaler Strukturkopplung; zunächst stationär, inkompressibel und isotherm | Beschreibung ohne Einzelissues, Version oder Termin |
+| [M12 — RANS-CFD und Fluid-Struktur-Kopplung](https://github.com/maschin96/FEM-Toolbox/milestone/13) | Ausschließlich RANS-Strömungsmodelle mit Turbulenzschließung und bidirektionaler Strukturkopplung; zunächst stationär, inkompressibel und isotherm | #84 RANS-/FSI-Vertrag, #85 ebener Netzadapter implementiert, #226 Quad-FV-Operator, #86 MAC-Kern integriert, #87–#94 Nachweise/Kopplung/Release offen; Version und Termin offen |
 
 Die [Milestone-Beschreibungen](13_PRODUCT_VISION.md) halten groben Umfang,
 Abhängigkeiten, Nachweise und Grenzen fest. M12 schließt DNS, LES und hybride
 Verfahren aus; dynamische FSI/URANS benötigt eine spätere Umfangsentscheidung.
 Die Reihenfolge M10 → M11 → M12 ist ein Produkthorizont, keine technische
 Abhängigkeit der CFD-Erweiterung vom Optimierer. Detaillierung, Architektur-
-entscheidungen und Release-Issues folgen erst vor der jeweiligen Umsetzung.
+entscheidungen werden issueweise umgesetzt. Für M12 legt
+[der Vertrag #84](71_M12_RANS_FSI_CONTRACT.md) SA-noft2, die Quad-FV-Erweiterung
+und stationäre FSI samt Reihenfolge und Abnahmegates fest; er ist kein Release-Nachweis.
 
 ## Definition of Done für jedes Arbeitspaket
 
@@ -241,3 +243,30 @@ Volumenrestriktion, TOML-Studien und getrennte FEM-Geometrie-Reanalyse.
 [numerische Nachweise](85_M11_VERIFICATION.md),
 [finale Freigabe-/Veröffentlichungsnachweise](87_M11_RELEASE_VERIFICATION.md).
 Andere Milestones werden dadurch nicht als freigegeben behandelt.
+
+## M12 — Ebene RANS-CFD und stationäre FSI / v1.7.0
+
+Quad-FV/SIMPLE, SA-noft2 mit aufgelöster Wand, konservative Lastübertragung,
+harmonische Netzbewegung und stationäre bidirektionale FSI mit deklarativem
+Workflow sind integriert und gegen vorab festgelegte Gates geprüft.
+[Freigabenachweis](95_M12_RELEASE_VERIFICATION.md); der Veröffentlichungsstatus
+steht in #94. Unabhängiges Fachreview liegt nicht vor.
+
+## Historischer M12-Arbeitsstand (#86)
+
+Der ausgewählte uniforme 2D-MAC-Kern besitzt konservative Konvektion,
+monolithische Druckkopplung, Picard-Iteration und offene Kanalgrenzen.
+Die [Akzeptanzmatrix #86](70_STATIONARY_FLOW_CORE.md) führt die numerischen
+Nachweise und Grenzen. #84/#85 bleiben für den übergreifenden RANS-/FSI-Vertrag
+und weitere Netzadapter separat; #87 ergänzt erst die Turbulenzschließung.
+Die RANS-/FSI-Freigabe M12 und #94 sind dadurch nicht abgeschlossen.
+
+[Der ebene Fluidnetzadapter #85](72_FLUID_MESH_ADAPTER.md) liefert importierbare
+Quad4-Geometrie, Wandqualität und BC-/SI-Preflight. Der neue
+[laminare Quad-FV-Solver #230](74_QUAD_FV_SIMPLE.md) ergänzt die stationäre
+Strömungsorchestrierung; RANS #87 bleibt die nächste separate Schließung.
+
+#226 ist in [Grundoperatoren #229](73_QUAD_FV_OPERATORS.md) und
+[SIMPLE-/Strömungsabnahme #230](https://github.com/maschin96/FEM-Toolbox/issues/230)
+geteilt. #87 beginnt erst nach geprüfter Integration beider Pakete;
+ursprüngliche Vier-Netz-/Bilanzgates bleiben für #230 verbindlich.

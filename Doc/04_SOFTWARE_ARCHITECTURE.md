@@ -344,3 +344,79 @@ bis Ende v2.x identische Adapter; Implementierung und numerische Verträge werde
 nicht dupliziert. Persistierte Kennungen bleiben kompatibel. Das ist eine
 Architekturentscheidung vor Umsetzung; der aktuelle Code liegt weiterhin unter
 `src/fem_toolbox/`.
+
+## Experimenteller CFD-Einstieg
+
+`cfd/channel.py` enthält einen eigenständigen konservativen Kanaloperator.
+Keine Abhängigkeit von Festkörper-Elementoperatoren oder der Model-API.
+[Vertrag und Grenzen](68_EXPERIMENTAL_CFD_CORE.md).
+
+## Experimentelle Druck-Geschwindigkeits-Kopplung
+
+`cfd/stokes.py` besitzt den uniformen 2D-MAC-Operator, das monolithische
+Sparse-Sattelpunktsystem und getrennte Feld-/Bilanzrekonstruktion.
+API und Grenzen sind in [Doc/69](69_CFD_PRESSURE_COUPLING.md) dokumentiert.
+
+## Vollständiger stationärer CFD-Referenzkern (#86)
+
+`cfd/flow_model.py` besitzt validierte uniforme Netze, SI-Fluid und Randtypen.
+`mac.py` assembliert Diffusion/Divergenz/Gradient, konservative Transportflüsse
+und Oseen-Schritte. `flow.py` besitzt die nichtlineare Iteration und finale
+feldweise Rekonstruktion. `flow_config.py` ist der strikte TOML-Adapter.
+Die experimentelle Python-API bleibt außerhalb der stabilen FEM-Model-API.
+[Vertrag, Grenzen und Referenzen](70_STATIONARY_FLOW_CORE.md).
+
+## M12: RANS-/FSI-Entwicklungsarchitektur (#84, ADR-049)
+
+Die geplante körperangepasste Quad4-Finite-Volumen-API bleibt getrennt vom
+uniformen MAC-Referenzkern und vom stabilen FEM-Model-Schema. Zellzentrierte
+RANS-Felder verwenden konservierte Face-Massenströme, SIMPLE und Rhie-Chow;
+#85 liefert Import/Preflight; #226 verifiziert den neuen Netzoperator.
+SA-noft2, InterfaceMap, harmonische MeshMotion und partitionierte stationäre
+Kopplung besitzen getrennte Zuständigkeiten. Die Struktur verwendet weiterhin
+den verifizierten Kleinverformungssolver auf ihrem Referenznetz.
+[Ziel-API, Datenformen, Adapter, Provenienz und Gates](71_M12_RANS_FSI_CONTRACT.md)
+sind beschlossen, noch nicht verfügbar. NumPy/SciPy/meshio bleiben die
+Abhängigkeitsbasis; keine externe CFD-/Kopplungsbibliothek wird eingebettet.
+
+## Fluidnetz-/Randadapter (#85)
+
+`cfd/fluid_mesh.py` besitzt immutable Quad4-Geometrie, Face-Eigentümer,
+Wandsegmentabstände und Netz-/y+-Gates. `cfd/fluid_domain.py` validiert die
+SI-Domäne, vollständige BC-Zuordnung, Einlassfluss und periodische Paarung.
+JSON-I/O ist eine getrennte Factory-Grenze; Geometrie/Preflight rechnen ohne
+Dateizugriff. Kein neuer Solver, keine neue Bibliothek, keine FSI-Netzbewegung.
+[API, Formate und Grenzen](72_FLUID_MESH_ADAPTER.md).
+
+## Quad-FV-Grundoperatoren (#229 / #226a)
+
+`cfd/quad_fv.py` besitzt SI-FV-Geometrie, periodische gemeinsame Faces,
+gewichtete Least-Squares-Gradienten, nichtorthogonale Facekorrektur, volle
+variable Spannung und kompakte Druck-/Rhie-Chow-Operatoren. Reine Feldoperationen
+und Sparse-Assembly ohne I/O oder PDE-Orchestrierung. #230 ergänzt SIMPLE,
+BC-Rekonstruktion, Transport und vollständige finale Solverdiagnostik;
+#226 bleibt bis zur Abnahme beider Arbeitspakete offen.
+[API, Vorzeichen und Operatornachweise](73_QUAD_FV_OPERATORS.md).
+
+## Stationärer Quad-FV-Solver (#230 / #226b)
+
+`cfd/quad_system.py` stellt die affine konservative Rekonstruktion und volle
+Spannungs-/Transportblöcke bereit. `cfd/quad_flow.py` orchestriert Picard,
+Krylov-beschleunigte SIMPLE-Korrekturen und frische SI-Feld-/Bilanzprüfung.
+Eine konsistente kubische Zell-/Face-Rekonstruktion vermeidet Randübergangsfehler;
+der kompakte Anteil der inneren Normalableitung bleibt erhalten.
+Die Solver-API verlangt Uref/Lref und liefert immutable Felder, Faceflüsse,
+Wandtraktion und sämtliche diskreten Energieanteile mit Provenienz.
+FluidDomain bleibt Eingabeadapter, der MAC-Kern unabhängige Referenz.
+[Algorithmus und Nachweise](74_QUAD_FV_SIMPLE.md).
+
+### M12-Entwicklung: SA-noft2 und gemeinsame RANS-Iteration (#87)
+
+`cfd/sa_model.py` enthält die SI-Punktterme, `cfd/sa_transport.py` deren
+konservativen skalaren Operator und `cfd/rans.py` den gemeinsamen U/p/a-Ablauf.
+Feldresiduen und Bilanzen werden am aktualisierten vollständigen Zustand
+rekonstruiert. Geometrische Maps werden ausschließlich innerhalb derselben
+unveränderten FluidDomain geteilt; variable Spannungen werden neu aufgebaut.
+Netzbewegung verlangt einen neuen Geometrieaufbau. Physikmodule betreiben
+kein Datei-I/O; Modell-/Wand-/FSI-Abnahme bleiben getrennte Gates.
+[API, Nachweise und Grenzen](88_SA_NOFT2_IMPLEMENTATION.md).

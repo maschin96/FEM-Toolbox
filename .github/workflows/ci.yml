@@ -40,6 +40,10 @@ jobs:
           cp -R examples/transient_heat dist/transient_heat
           cp -R examples/piezo_dynamics dist/piezo_dynamics
           cp -R examples/study_recipes dist/study_recipes
+          cp -R examples/cfd_flow dist/cfd_flow
+          cp -R examples/fluid_mesh dist/fluid_mesh
+          cp -R examples/quad_flow dist/quad_flow
+          cp -R examples/fsi_lid dist/fsi_lid
           cp -R examples/parameter_study dist/parameter_study
           cp -R examples/surrogate_heat dist/surrogate_heat
           cp -R examples/uncertainty_heat dist/uncertainty_heat
@@ -56,7 +60,7 @@ jobs:
           cp -R examples/tet10_newmark dist/tet10_newmark
           cp -R examples/tet10_harmonic dist/tet10_harmonic
           cd dist
-          sha256sum *.whl *.tar.gz *.py thermopiezoelectric/* transient_heat/* piezo_dynamics/* tet10_heat/* tet10_electrostatics/* tet10_elasticity/* tet10_thermomechanics/* tet10_piezoelectric/* tet10_thermopiezoelectric/* tet10_modes/* tet10_newmark/* tet10_harmonic/* parameter_study/* surrogate_heat/* uncertainty_heat/* adaptive_heat/* field_visualization/* study_recipes/*.py study_recipes/*.md study_recipes/heat/* study_recipes/piezo/* topology/*.py topology/*.md topology/reference/* > SHA256SUMS
+          sha256sum *.whl *.tar.gz *.py thermopiezoelectric/* transient_heat/* piezo_dynamics/* tet10_heat/* tet10_electrostatics/* tet10_elasticity/* tet10_thermomechanics/* tet10_piezoelectric/* tet10_thermopiezoelectric/* tet10_modes/* tet10_newmark/* tet10_harmonic/* parameter_study/* surrogate_heat/* uncertainty_heat/* adaptive_heat/* field_visualization/* study_recipes/*.py study_recipes/*.md study_recipes/heat/* study_recipes/piezo/* topology/*.py topology/*.md topology/reference/* cfd_flow/* fluid_mesh/* quad_flow/* fsi_lid/*.py fsi_lid/*.md fsi_lid/laminar/* fsi_lid/sa/* > SHA256SUMS
       - name: Transfer artifacts and standalone solver example
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
@@ -129,7 +133,7 @@ jobs:
           package = Path(fem_toolbox.__file__).resolve()
           assert package.is_relative_to(Path(sys.prefix).resolve()), package
           dist = distribution("fem-toolbox")
-          assert dist.version == fem_toolbox.__version__ == "1.6.0"
+          assert dist.version == fem_toolbox.__version__ == "1.7.0"
           assert dist.metadata["License-Expression"] == "MIT"
           licenses = [f for f in dist.files if f.name == "LICENSE"]
           assert len(licenses) == 1, licenses
@@ -154,6 +158,27 @@ jobs:
           print(package, dist.version, dist.metadata["Requires-Python"])
           PY
           cd "$RUNNER_TEMP"
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$CANDIDATE_DIR/candidate/cfd_flow/run.py" --output cfd_flow_results
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$CANDIDATE_DIR/candidate/fluid_mesh/preflight.py" --output fluid-preflight.json
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$CANDIDATE_DIR/candidate/quad_flow/run.py" --output quad_flow_results
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$CANDIDATE_DIR/candidate/fsi_lid/run.py" laminar --output fsi_laminar_results
+          "$RUNNER_TEMP/artifact-env/bin/python" -I "$CANDIDATE_DIR/candidate/fsi_lid/run.py" sa --output fsi_sa_results
+          test -s fsi_laminar_results/report.json && test -s fsi_sa_results/structure_fields.json
+          "$RUNNER_TEMP/artifact-env/bin/python" -I - "$CANDIDATE_DIR/candidate/quad_flow/domain.json" <<'PY'
+          import sys
+          import numpy as np
+          from fem_toolbox.cfd import FluidDomain, solve_rans
+          from fem_toolbox.cfd.sa_model import sa_terms
+
+          terms = sa_terms([0.0], velocity_gradient_s_inv=np.zeros((1,2,2)), gradient_nu_tilde_m_s=[[0,0]], wall_distance_m=1, kinematic_viscosity_m2_s=1)
+          assert terms.eddy_viscosity_m2_s[0] == 0
+          domain = FluidDomain.from_file(sys.argv[1])
+          nu = domain.fluid.viscosity_Pa_s / domain.fluid.density_kg_m3
+          result = solve_rans(domain, initial_nu_tilde_m2_s=3*nu, velocity_scale_m_s=1, length_scale_m=2)
+          assert result.converged and result.wall_y_plus.max() <= 1
+          assert abs(result.sa_residual_m2_s2).max() <= 1e-8*nu/2
+          print("Installed SA/RANS low-Re smoke:", result.iterations, result.wall_y_plus.max())
+          PY
           "$RUNNER_TEMP/artifact-env/bin/python" -I "$CANDIDATE_DIR/candidate/study_recipes/run.py" heat --output recipe_heat_results
           "$RUNNER_TEMP/artifact-env/bin/python" -I "$CANDIDATE_DIR/candidate/study_recipes/run.py" piezo --output recipe_piezo_results
           "$RUNNER_TEMP/artifact-env/bin/python" -I "$CANDIDATE_DIR/candidate/uncertainty_heat/run.py" --output uncertainty_heat_results
@@ -249,6 +274,10 @@ jobs:
     container:
       image: ${{ matrix.python-image }}
     timeout-minutes: 15
+    env:
+      OPENBLAS_NUM_THREADS: "1"
+      OMP_NUM_THREADS: "1"
+      MKL_NUM_THREADS: "1"
     strategy:
       fail-fast: false
       matrix:
@@ -281,8 +310,76 @@ jobs:
       - name: Install project and test tools
         run: python -m pip install --disable-pip-version-check -e '.[test,visualization]'
 
-      - name: Run tests
-        run: python -m pytest
+      - name: Run tests (CFD four-mesh verification runs in mandatory separate jobs)
+        run: python -m pytest -m "not cfd_convergence" --durations=10
+
+  cfd-convergence:
+    name: CFD / Python ${{ matrix.python-version }} / ${{ matrix.case }}
+    runs-on: ubuntu-latest
+    # The four-level wall-resolved SA lid runs about ten coupled RANS solves.
+    timeout-minutes: ${{ matrix.case == 'fsi-sa-lid' && 40 || 20 }}
+    env:
+      OPENBLAS_NUM_THREADS: "1"
+      OMP_NUM_THREADS: "1"
+      MKL_NUM_THREADS: "1"
+      CFD_TEST_NODE: ${{ matrix.node }}
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+        case: [poiseuille, central, linear-upwind, variable-mu, sa-mms, sa-channel, sa-dns, fsi-laminar-lid, fsi-sa-lid]
+        include:
+          - case: poiseuille
+            node: test_quad_poiseuille_four_meshes
+          - case: central
+            node: test_quad_nonlinear_mms_four_meshes[central-0.1-0.01-1.8]
+          - case: linear-upwind
+            node: test_quad_nonlinear_mms_four_meshes[linear-upwind-1.0-0.1-0.7]
+          - case: variable-mu
+            node: test_quad_variable_mu_four_meshes
+          - case: sa-mms
+            node: sa-mms
+          - case: sa-channel
+            node: sa-channel
+          - case: sa-dns
+            node: sa-dns
+          - case: fsi-laminar-lid
+            node: tests/convergence/test_stationary_fsi_lid.py::test_laminar_guided_lid_four_mesh_pairs
+          - case: fsi-sa-lid
+            node: tests/convergence/test_stationary_fsi_lid.py::test_sa_guided_lid_four_mesh_pairs
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: pyproject.toml
+      - name: Install project and test tools
+        run: python -m pip install --disable-pip-version-check -e '.[test]'
+      - name: Run complete four-mesh case with visible progress
+        run: |
+          if [ "$CFD_TEST_NODE" = "sa-mms" ]; then
+            python -m pytest -vv -s --durations=5 -o junit_family=legacy --junitxml=cfd-results.xml tests/convergence/test_sa_transport_convergence.py
+          elif [ "$CFD_TEST_NODE" = "sa-channel" ]; then
+            python -m pytest -vv -s --durations=5 -o junit_family=legacy --junitxml=cfd-results.xml tests/convergence/test_rans_channel.py
+          elif [ "$CFD_TEST_NODE" = "sa-dns" ]; then
+            curl --fail --location --retry 3 --output "$RUNNER_TEMP/m12-chan590.means" https://turbulence.oden.utexas.edu/data/MKM/chan590/profiles/chan590.means
+            M12_DNS_PROFILE="$RUNNER_TEMP/m12-chan590.means" python -m pytest -vv -s --durations=5 -o junit_family=legacy --junitxml=cfd-results.xml tests/convergence/test_rans_dns.py
+          elif [[ "$CFD_TEST_NODE" == tests/* ]]; then
+            python -m pytest -vv -s --durations=5 -o junit_family=legacy --junitxml=cfd-results.xml "$CFD_TEST_NODE"
+          else
+            python -m pytest -vv -s --durations=5 -o junit_family=legacy --junitxml=cfd-results.xml "tests/convergence/test_quad_flow_convergence.py::$CFD_TEST_NODE"
+          fi
+      - name: Retain numerical verification report
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: cfd-${{ matrix.python-version }}-${{ matrix.case }}
+          path: cfd-results.xml
+          if-no-files-found: warn
+          retention-days: 7
 
   compatibility:
     name: Compatibility / Python ${{ matrix.python-version }} / ${{ matrix.dependency_set }}
@@ -338,7 +435,7 @@ jobs:
           python -c 'import fem_toolbox, meshio, numpy, scipy; print(f"fem_toolbox={fem_toolbox.__file__} meshio={meshio.__version__} numpy={numpy.__version__} scipy={scipy.__version__}")'
 
       - name: Smoke numerical solvers and mesh I/O
-        run: python -m pytest tests/regression/test_piezo_d33_benchmark.py tests/regression/test_thermopiezo_example.py tests/unit/test_mesh_io.py tests/unit/test_studies.py tests/unit/test_study_reports.py tests/unit/test_surrogates.py tests/unit/test_uncertainty.py tests/regression/test_uncertainty_study.py
+        run: python -m pytest tests/regression/test_piezo_d33_benchmark.py tests/regression/test_thermopiezo_example.py tests/unit/test_mesh_io.py tests/unit/test_studies.py tests/unit/test_study_reports.py tests/unit/test_surrogates.py tests/unit/test_uncertainty.py tests/regression/test_uncertainty_study.py tests/unit/test_cfd_channel.py tests/unit/test_cfd_stokes.py tests/unit/test_cfd_flow.py tests/unit/test_cfd_flow_config.py tests/unit/test_cfd_convection.py tests/regression/test_cfd_flow_example.py tests/unit/test_fluid_mesh.py tests/regression/test_fluid_mesh_example.py tests/unit/test_quad_fv.py tests/convergence/test_quad_fv_reconstruction.py tests/unit/test_quad_flow.py tests/unit/test_quad_flow_diagnostics.py tests/regression/test_quad_flow_example.py
 
   petsc:
     name: PETSc / Python 3.12 / ${{ matrix.scalar }}

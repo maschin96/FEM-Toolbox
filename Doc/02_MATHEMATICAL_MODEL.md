@@ -176,3 +176,35 @@ Intern gilt SI:
 
 Andere Einheitensysteme sind nur über einen vorgeschalteten, getesteten
 Konverter zulässig.
+
+## Experimenteller CFD-Operator
+
+Der reduzierte Kanaloperator, SI-Vorzeichen und Erhaltungsbilanzen sind in
+[Doc/68](68_EXPERIMENTAL_CFD_CORE.md) festgelegt; kein allgemeiner RANS-Solver.
+
+## Experimentelle Stokes-Druckkopplung
+
+Für den geschlossenen 2D-MAC-Schnitt gelten -mu Laplace(u)+grad(p)=f und
+div(u)=0 mit G=-D^T und explizitem Druck-Gauge.
+[Vorzeichen, Randwerte und Bilanzkonventionen](69_CFD_PRESSURE_COUPLING.md).
+
+## Stationärer inkompressibler MAC-Kern
+
+Konservative Konvektion, Picard/Oseen-Schritte, gewichtete Druckadjungiertheit
+und der Geschwindigkeitseinlass/Druckauslass ergänzen den Stokes-Vertrag.
+[Mathematik und Akzeptanz #86](70_STATIONARY_FLOW_CORE.md).
+
+## M12: RANS-/FSI-Zielvertrag (#84, ADR-049)
+
+Die nächste Schließung ist stationäres inkompressibles SA-noft2 mit expliziter
+S-Modifikation und aufgelöster Wand. Für variable Wirbelviskosität gilt
+`sigma_f=-p I+2(mu+rho nu_t)S(U)` und
+`rho div(U tensor U)-div(sigma_f)=f`, `div(U)=0`; ein skalares
+Viskositäts-Laplaceprodukt ersetzt diesen Spannungstensor nicht.
+Auf der FSI-Schnittstelle ist die Strukturtraktion `-sigma_f n_f` mit
+entgegengesetzten Fluid-/Strukturnormalen. Eine transponierte Lastabbildung
+zur Verschiebungsinterpolation erhält Kräfte, Momente und virtuelle Arbeit.
+[Der vollständige Vertrag](71_M12_RANS_FSI_CONTRACT.md) enthält schwache Formen,
+SA-Gleichung/Konstanten, Wandabstand, Druckreferenz, externe Drucklast,
+SI-/Breitenkonventionen, Netzgrenzen und unabhängige Abnahmegates.
+Dies ist eine Entwicklungsentscheidung; RANS und FSI sind noch nicht implementiert.

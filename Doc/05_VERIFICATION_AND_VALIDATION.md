@@ -124,3 +124,13 @@ Ein Meilenstein wird nur freigegeben, wenn:
 3. mindestens ein Benchmark unabhängig bestätigt ist;
 4. keine unerklärte Verschlechterung der Konvergenzordnung vorliegt;
 5. die Beispielrechnung aus frischer Umgebung reproduzierbar ist.
+
+## M12: getrennte Code-, Modell- und Kopplungsnachweise
+
+[Der RANS-/FSI-Vertrag #84](71_M12_RANS_FSI_CONTRACT.md) setzt vor Umsetzung
+separate Gates für die neue FV-Druckkopplung, variable Viskosität, SA-Terme,
+Wandabstände, nicht passende Schnittstellen und stationäre Netzbewegung.
+Der unabhängige 1D-SA-Codevergleich prüft Modellimplementation; der DNS-Kanal
+prüft den Modellfehler und ist keine experimentelle Validierung. Laminarer
+und SA-Deckeltest sind beide für RANS-FSI erforderlich. Neue Gates werden
+erst nach tatsächlich dokumentierter Prüfung als bestanden bezeichnet.

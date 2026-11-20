@@ -669,3 +669,141 @@ Ableitungen. Keine harte Projektionsfunktion, globale Optimalitätsbehauptung
 oder Fertigungsfreigabe. Die Schwellengeometrie wird mit unverändertem
 Mechaniksolver erneut gerechnet; Reststeifigkeit zählt nicht als Geometrie.
 [Formeln, Alternativen und vorab festgelegte Gates](83_M11_TOPOLOGY_CONTRACT.md).
+
+## ADR-046 — Zweiter Experimental-Branch: CFD-Kanaloperator
+
+01.10.2026: Auf Nutzerauftrag beginnt M12 unabhängig vom SPICE-Branch.
+Ein zellzentrierter Finite-Volumen-Diffusionsoperator auf ebenen Kanalzellen
+verifiziert den viskosen Impulsanteil. Konstante Viskosität, vorgegebener
+Druckgradient und zwei Wandgeschwindigkeiten begrenzen den ersten Schnitt.
+Allgemeine Druckkopplung, RANS-Modellentscheidung und FSI bleiben offen;
+#84–#86 werden dadurch nicht abgeschlossen. Keine neue Abhängigkeit.
+[Konventionen und Nachweise](68_EXPERIMENTAL_CFD_CORE.md).
+
+## ADR-047 — Monolithische MAC-Druckkopplung (01.10.2026)
+
+Auf Nutzerauftrag wird #86 um einen geschlossenen 2D-Stokes-Schnitt ergänzt.
+Versetzte Freiheitsgrade, konservative Divergenz und adjungierter Gradient
+verhindern einen entkoppelten Druckmodus. Druckreferenz am ersten Zellzentrum;
+die ausgelassene Kontinuitätszeile wird anschließend wieder geprüft.
+Sparse-LU mit Äquilibrierung ist die Referenz, keine Strafkompressibilität.
+Die starke und diskrete Form sowie Rand- und Leistungskonventionen stehen
+in [Doc/69](69_CFD_PRESSURE_COUPLING.md). Offene Randbedingungen, Konvektion,
+RANS und skalierbare iterative Solver bleiben nachfolgende Arbeit.
+
+## ADR-048 — Stationärer MAC-Kern mit Konvektion und offenen Grenzen
+
+01.10.2026: Auf Auftrag zur vollständigen Umsetzung von #86 ergänzt der
+uniforme 2D-MAC-Referenzkern konservative Konvektion, gedämpfte Picard-Iteration
+und linken Geschwindigkeitseinlass/rechten Druckauslass. Der Auslass-u-DOF
+hat ein halbes Dualvolumen; Druckgradient und Divergenz sind volumengewichtet
+adjungiert. Rückströmung ist ein expliziter Fehler, kein stiller Randwechsel.
+Donor-Cell ist Standard; zentrale Konvektion erfordert |Pe|<2. Minmod-begrenzte
+Linear-Upwind-Rekonstruktion ist ein gesondertes explizites Verfahren mit
+verzögerter Korrektur, dessen nichtlineares Residuum erneut rekonstruiert wird.
+Abbruch verlangt lokale/globale Masse, feldweisen Impuls und Arbeit, nicht nur
+Iterandenänderung. TOML-Schema 1 beschreibt ausschließlich die unterstützten
+uniformen Rechtecke. RANS-Schließung und FSI sind Folgeissues; keine allgemeine
+Tet-CFD- oder 3D-Unterstützung und keine neue Abhängigkeit behauptet.
+[Vertrag und wissenschaftliche Nachweise](70_STATIONARY_FLOW_CORE.md).
+
+## ADR-049 — Stationäre SA-noft2 und begrenzte bidirektionale FSI (#84)
+
+04.10.2026: Gewählt wird eine wandaufgelöste SA-noft2-Schließung mit der
+Allmaras/Johnson/Spalart-S-Modifikation, ohne Transition, Wandfunktion oder
+stilles Positivitätsclipping. Der volle variable viskose Spannungstensor ist
+Pflicht. Der vorhandene uniforme MAC-Kern bleibt Referenz; für gedehnte und
+verformte strukturierte Quad-Netze wird eine separate konservative kollokierte
+FV-Diskretisierung mit SIMPLE/Rhie-Chow gewählt. #226 übernimmt das gesonderte
+Operator-/Druckstabilitätsgate nach dem Netzadapter #85. Ein verformtes Netz
+darf nicht mit unveränderten uniformen MAC-Koeffizienten gelöst werden.
+
+Erste FSI-Abnahme: ebene Fluidströmung und explizit extrudierte, spannweiten-
+invariante lineare 3D-Struktur mit Triangle3-Schnittstelle. Gemeinsame Quadratur
+und transponierte Interpolation übertragen Kräfte und virtuelle Arbeit;
+Fluidnetzbewegung ist harmonisch, absolut vom Referenznetz und stationär.
+Keine künstliche Zeit-/Wandgeschwindigkeit aus Kopplungsiterationen.
+Unrelaxierte Verschiebungsreste, Laständerung und alle inneren Feldbilanzen
+sind gemeinsame Abbruchbedingungen. Große Verformung, schlechte Netzqualität,
+fehlende Wandauflösung oder Nichtkonvergenz führen zu konkreten Fehlern.
+
+Risiken: SA-Modellfehler trotz kleinem Codefehler, Druckschachbrettmodus der
+neuen Diskretisierung, nichtorthogonale Korrektur und anisotrope Wandzellen,
+inkonsistente variable Scherterme, fehlende Breiten-/Druckreferenz, Mapping-
+momentfehler und divergente Partitionierung. Deshalb getrennte MMS-/MAC-/1D-
+Codevergleiche, DNS-Kanal-Modellvergleich sowie laminare und SA-Deckelreferenzen
+mit vorab gesetzten Budgets. Keine allgemeine 3D-RANS-/FSI-Freigabe oder
+experimentelle Validierung; keine neue Laufzeitabhängigkeit.
+[Vertrag, Quellen, Fehlergrenzen und Go/no-go-Gates](71_M12_RANS_FSI_CONTRACT.md).
+Diese Entscheidung erweitert den geplanten Umfang, keine bestandenen Nachweise.
+
+## ADR-050 — Quad4-Fluidnetz und SI-Preflight (#85)
+
+04.10.2026: Der erste Adapter des ADR-049 liest strikt versionierte JSON-
+Netze und eine separate Domain-JSON. Optionale volume_sets sind benannte
+Auswahlen ohne mehrere Fluidmaterialien. Line2-Zeilen bleiben unverändert,
+Normalen stammen aus CCW-Zelleigentümern. Vollständige konforme Randtopologie,
+positive Quad-Geometrie, Überlappung/T-Knoten und FV-Winkel-/Skewness-Gates
+werden vor Nutzung geprüft. Der erste Adapter verlangt eine zusammenhängende
+Domäne; disconnected Komponenten/Hex8 folgen gesondert. Große wandnormal
+anisotrope Seitenverhältnisse sind allein kein Fehler.
+
+Wandentfernung ist exakt zu den ausgewählten Segmenten einschließlich Endpunkten;
+Schichtwachstum wird auf den strukturierten gegenüberliegenden Quad-Faces
+verfolgt. Finale y+-Prüfung verlangt tatsächliche Wandschubwerte und darf aus
+einem Import nicht als bestanden gelten. Extrusionsbreite ist Pflicht zur
+korrekten Massenstromeinheit. Periodische Segmente werden reziprok nach
+Translation gematcht; äußere Normalen sind dabei entgegengesetzt, gespeicherte
+line2-Endpunktreihenfolge darf abweichen. Dies präzisiert die geometrische
+Orientierungsaussage in ADR-049, keine Änderung physikalischer Vorzeichen.
+Keine neue Dependency: NumPy/SciPy einschließlich cKDTree sind vorhanden.
+[Vertrag und Prüfungen](72_FLUID_MESH_ADAPTER.md).
+
+## ADR-051 — Quad-FV-Operatorabnahme vor SIMPLE (05.10.2026)
+
+**Status:** Angenommen als Umsetzung des unveränderten ADR-049-Vertrags.
+Das große #226 erhält zwei unabhängig prüfbare Issues: #229 für konservative
+Geometrie-/Gradienten-/Spannungs-/Druckbausteine, #230 für SIMPLE, Transport,
+BC-Rekonstruktion und die vollständigen Strömungs-/Bilanzgates. #226 bleibt
+bis zur Abnahme beider Beiträge offen; neue RANS-Schließung darf nicht allein
+auf einen Operatorpatch aufbauen. Vorab definierter zusätzlicher
+Gradienten-Vier-Netz-Test ersetzt keines der ursprünglichen Fehlerbudgets.
+
+Die reine Operator-API fordert alle Rand-Samples explizit und besitzt keine
+Gauge-Elimination oder Relaxationsrückrechnung. Gewichtete lineare Least Squares,
+Face-Extrapolationen und over-relaxed nichtorthogonale Korrektur verwenden
+gemeinsame Eigentümerdistanzen. Die Druckmobilität V/a verlangt unrelaxierte
+integrierte Impulsdiagonalen. Periodische Facepaare speichern einen gemeinsamen
+Fluss mit exakten Gegenvorzeichen, keine zwei separat akzeptierten Flüsse.
+Der kompakte Druckblock hat ausschließlich den konstanten Nullraum; der
+Rhie-Chow-Zusatz annihiliert hingegen absichtlich affine Druckfelder. Diese
+zwei Aussagen werden nicht als derselbe Nullraumtest ausgegeben.
+[Formeln, API und unabhängige Nachweise](73_QUAD_FV_OPERATORS.md).
+
+## ADR-052 — Konsistente Quad-FV-Rekonstruktion und SIMPLE-Abnahme (#230)
+
+05.10.2026: Die laminare Orchestrierung verwendet GMRES-beschleunigte SIMPLE-
+Schritte mit getrennten Impuls-/kompakten Druck-LU-Blöcken. Kein produktiver
+gekoppelter LU-Solve; die innere Fehlerschranke wird aus den unveränderten
+volumenbezogenen SI-Gates bestimmt. Komponentenweise V/a wird entlang der
+Facenormalen kontrahiert; Relaxation verändert nicht die Mobilitätsdefinition.
+
+Die ursprüngliche lineare Innenrekonstruktion mit gesonderter Randableitung
+verfehlte Druckfehler und Verfeinerungsrate der MMS. Die Orchestrierung
+verwendet deshalb konsistente kubische Zell-/Face-Polynome, zwei innere bzw.
+drei äußere Nachbarringe, explizite BC-Samples und einen kubisch konsistenten
+kompakten Normalgradienten. Ein unabhängiger kubischer Diffusionspatch
+reproduzierte zunächst künstliche Quellen in den Randzellen. Die gemeinsame
+Facekraft wird weiterhin konservativ bilanziert; Defizienz führt zum Fehler,
+keine lineare Ersatzrekonstruktion. Die Grundoperator-API aus #229 bleibt als
+linear-exakte Referenz vorhanden. Keine neue Laufzeitabhängigkeit.
+
+Leistungsabnahme prüft die diskrete Facearbeitsbilanz und legt ihre Differenzen
+zu 2mu S:S, Druckrandarbeit und konvektivem Randtransport getrennt offen.
+Ein kleines diskretes Restmaß beweist keine genaue Kontinuumsdissipation.
+Polynomexakte uniforme Referenzen werden auf allen ursprünglichen Netzstufen
+mit einem strengeren absoluten Fehlernachweis geprüft; eine zusätzliche glatt
+verformte Vier-Netz-Familie desselben analytischen Problems misst die
+unveränderte Mindestordnung. Diese Interpretation benötigt unabhängiges Review
+vor Integration. Turbulenzschließung, y+- und FSI-Abnahme bleiben Folgeissues.
+[API, Algorithmus, Nachweise und Grenzen](74_QUAD_FV_SIMPLE.md).

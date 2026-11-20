@@ -306,6 +306,1112 @@ charge: float
 \begin{lstlisting}
 prescribed_charge: float | None
 \end{lstlisting}
+\section{fem\_toolbox.cfd}
+\index{fem_toolbox.cfd@cfd}
+Einordnung: research. Experimenteller M12-Kern: laminare Verifikation; keine RANS-/FSI- oder stabile Releasezusage.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/cfd.tex}. Beispiele/Tests:
+\nolinkurl{examples/quad_flow/run.py}.
+\nolinkurl{tests/unit/test_quad_flow.py}.
+\subsection*{Reexportierte Einstiegspunkte}
+\noindent\nolinkurl{CartesianFluidGrid} $\to$ \nolinkurl{fem_toolbox.cfd.flow_model.CartesianFluidGrid}\par
+\noindent\nolinkurl{ChannelBoundary} $\to$ \nolinkurl{fem_toolbox.cfd.flow_model.ChannelBoundary}\par
+\noindent\nolinkurl{ChannelResult} $\to$ \nolinkurl{fem_toolbox.cfd.channel.ChannelResult}\par
+\noindent\nolinkurl{ClosedWalls} $\to$ \nolinkurl{fem_toolbox.cfd.flow_model.ClosedWalls}\par
+\noindent\nolinkurl{FaceGradient} $\to$ \nolinkurl{fem_toolbox.cfd.quad_fv.FaceGradient}\par
+\noindent\nolinkurl{FlowProblem} $\to$ \nolinkurl{fem_toolbox.cfd.flow_config.FlowProblem}\par
+\noindent\nolinkurl{FluidDomain} $\to$ \nolinkurl{fem_toolbox.cfd.fluid_domain.FluidDomain}\par
+\noindent\nolinkurl{FluidMesh2D} $\to$ \nolinkurl{fem_toolbox.cfd.fluid_mesh.FluidMesh2D}\par
+\noindent\nolinkurl{IncompressibleFluid} $\to$ \nolinkurl{fem_toolbox.cfd.flow_model.IncompressibleFluid}\par
+\noindent\nolinkurl{MeshMotionError} $\to$ \nolinkurl{fem_toolbox.cfd.mesh_motion.MeshMotionError}\par
+\noindent\nolinkurl{MeshMotionResult} $\to$ \nolinkurl{fem_toolbox.cfd.mesh_motion.MeshMotionResult}\par
+\noindent\nolinkurl{QuadFVGeometry} $\to$ \nolinkurl{fem_toolbox.cfd.quad_fv.QuadFVGeometry}\par
+\noindent\nolinkurl{QuadFlowConvergenceError} $\to$ \nolinkurl{fem_toolbox.cfd.quad_flow.QuadFlowConvergenceError}\par
+\noindent\nolinkurl{QuadFlowResult} $\to$ \nolinkurl{fem_toolbox.cfd.quad_flow.QuadFlowResult}\par
+\noindent\nolinkurl{RansConvergenceError} $\to$ \nolinkurl{fem_toolbox.cfd.rans.RansConvergenceError}\par
+\noindent\nolinkurl{RansResult} $\to$ \nolinkurl{fem_toolbox.cfd.rans.RansResult}\par
+\noindent\nolinkurl{StationaryFlowResult} $\to$ \nolinkurl{fem_toolbox.cfd.flow.StationaryFlowResult}\par
+\noindent\nolinkurl{StokesResult} $\to$ \nolinkurl{fem_toolbox.cfd.stokes.StokesResult}\par
+\noindent\nolinkurl{StressFlux} $\to$ \nolinkurl{fem_toolbox.cfd.quad_fv.StressFlux}\par
+\noindent\nolinkurl{WallQuality} $\to$ \nolinkurl{fem_toolbox.cfd.fluid_mesh.WallQuality}\par
+\noindent\nolinkurl{move_fluid_domain} $\to$ \nolinkurl{fem_toolbox.cfd.mesh_motion.move_fluid_domain}\par
+\noindent\nolinkurl{solve_channel} $\to$ \nolinkurl{fem_toolbox.cfd.channel.solve_channel}\par
+\noindent\nolinkurl{solve_quad_flow} $\to$ \nolinkurl{fem_toolbox.cfd.quad_flow.solve_quad_flow}\par
+\noindent\nolinkurl{solve_rans} $\to$ \nolinkurl{fem_toolbox.cfd.rans.solve_rans}\par
+\noindent\nolinkurl{solve_stationary_flow} $\to$ \nolinkurl{fem_toolbox.cfd.flow.solve_stationary_flow}\par
+\noindent\nolinkurl{solve_stokes} $\to$ \nolinkurl{fem_toolbox.cfd.stokes.solve_stokes}\par
+\section{fem\_toolbox.cfd.channel}
+\index{fem_toolbox.cfd.channel@cfd.\protect\allowbreak{}channel}
+Einordnung: research. Experimenteller M12-Kern: laminare Verifikation; keine RANS-/FSI- oder stabile Releasezusage.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/cfd.tex}. Beispiele/Tests:
+\nolinkurl{examples/quad_flow/run.py}.
+\nolinkurl{tests/unit/test_quad_flow.py}.
+\subsection{ChannelResult}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True).
+\begin{quote}
+Cell velocities and face shear; flow per unit span, power per wall area.
+\end{quote}
+\begin{lstlisting}
+centers_m: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+velocity_m_s: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+shear_Pa: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+cell_momentum_residual_Pa: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+flow_rate_m2_s: float
+\end{lstlisting}
+\begin{lstlisting}
+momentum_balance_Pa: float
+\end{lstlisting}
+\begin{lstlisting}
+dissipation_W_m2: float
+\end{lstlisting}
+\begin{lstlisting}
+power_balance_W_m2: float
+\end{lstlisting}
+\subsection{solve\_channel}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+solve_channel(*, faces_m: ArrayLike, viscosity_Pa_s: float, pressure_gradient_Pa_m: float, wall_velocities_m_s: tuple[float, float]=(0.0, 0.0)) -> ChannelResult
+\end{lstlisting}
+\begin{quote}
+Solve -(mu u')'=-dp/dx with two prescribed wall velocities.\par faces\_m has shape (n+1,), strictly increasing finite positions in m. Constant viscosity is positive (Pa s); pressure gradient may have either sign (Pa/m). Wall velocities are ordered lower/upper (m/s). Reject invalid data or numerically unresolved conservation with ValidationError. This is a reduced verification operator, not a RANS solver.
+\end{quote}
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.cfd.flow}
+\index{fem_toolbox.cfd.flow@cfd.\protect\allowbreak{}flow}
+Einordnung: research. Experimenteller M12-Kern: laminare Verifikation; keine RANS-/FSI- oder stabile Releasezusage.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/cfd.tex}. Beispiele/Tests:
+\nolinkurl{examples/quad_flow/run.py}.
+\nolinkurl{tests/unit/test_quad_flow.py}.
+\subsection{StationaryFlowResult}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True).
+\begin{quote}
+Immutable MAC solution and independently reconstructed SI diagnostics.\par u[ny,nx+1], v[ny+1,nx], p/divergence[ny,nx]. Momentum residuals live on free velocity faces; mass/power quantities are per unit span.
+\end{quote}
+\begin{lstlisting}
+pressure_Pa: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+u_m_s: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+v_m_s: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+divergence_s_inv: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+cell_mass_balance_kg_s: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+momentum_x_residual_N_m3: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+momentum_y_residual_N_m3: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+inlet_mass_flow_kg_s: float
+\end{lstlisting}
+\begin{lstlisting}
+outlet_mass_flow_kg_s: float
+\end{lstlisting}
+\begin{lstlisting}
+global_mass_balance_kg_s: float
+\end{lstlisting}
+\begin{lstlisting}
+global_momentum_balance_N_m: tuple[float, float]
+\end{lstlisting}
+\begin{lstlisting}
+dissipation_W_m: float
+\end{lstlisting}
+\begin{lstlisting}
+convective_power_W_m: float
+\end{lstlisting}
+\begin{lstlisting}
+pressure_power_W_m: float
+\end{lstlisting}
+\begin{lstlisting}
+power_balance_W_m: float
+\end{lstlisting}
+\begin{lstlisting}
+iterations: int
+\end{lstlisting}
+\begin{lstlisting}
+residual_history: tuple[float, ...]
+\end{lstlisting}
+\begin{lstlisting}
+converged: bool
+\end{lstlisting}
+\begin{lstlisting}
+provenance: RunProvenance
+\end{lstlisting}
+\subsection{solve\_stationary\_flow}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+solve_stationary_flow(grid: CartesianFluidGrid, fluid: IncompressibleFluid, boundary: ChannelBoundary | ClosedWalls, *, force_x_N_m3: ArrayLike=0.0, force_y_N_m3: ArrayLike=0.0, pressure_reference_Pa: float | None=None, relaxation: float=0.7, convection_scheme: str='donor-cell', max_iterations: int=200, relative_tolerance: float=1e-10, momentum_tolerance_N_m3: float=1e-12, mass_tolerance_kg_s: float=1e-12, power_tolerance_W_m: float=1e-12, max_unknowns: int=50000) -> StationaryFlowResult
+\end{lstlisting}
+\begin{quote}
+Solve conservative steady 2D incompressible flow in SI units.\par Select donor-cell, linear-upwind (minmod deferred correction), or central (face Peclet <2). Constant material, monolithic pressure coupling and underrelaxed Picard iteration. ClosedWalls use p[0,0] as gauge (default 0). ChannelBoundary uses prescribed outlet pressure and rejects any extra gauge. Forces: scalar or free-face arrays u:(ny,nx-1) closed/(ny,nx) channel, v:(ny-1,nx). Gates test final nonlinear momentum, local/global mass and work. Raise ValidationError on unsupported backflow, invalid data, unresolved scales, linear solve failure or nonconvergence (with last residual).
+\end{quote}
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.cfd.flow\_config}
+\index{fem_toolbox.cfd.flow_config@cfd.\protect\allowbreak{}flow\_\protect\allowbreak{}config}
+Einordnung: research. Experimenteller M12-Kern: laminare Verifikation; keine RANS-/FSI- oder stabile Releasezusage.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/cfd.tex}. Beispiele/Tests:
+\nolinkurl{examples/quad_flow/run.py}.
+\nolinkurl{tests/unit/test_quad_flow.py}.
+\subsection{FlowProblem}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True).
+\begin{quote}
+Validated grid, fluid and boundary data; reproducible zero-body-force run.
+\end{quote}
+\begin{lstlisting}
+grid: CartesianFluidGrid
+\end{lstlisting}
+\begin{lstlisting}
+fluid: IncompressibleFluid
+\end{lstlisting}
+\begin{lstlisting}
+boundary: ChannelBoundary | ClosedWalls
+\end{lstlisting}
+\subsubsection*{from\_document}
+\begin{lstlisting}
+from_document(cls, document: Mapping[str, object]) -> 'FlowProblem'
+\end{lstlisting}
+Direkte Raise-Stellen: ModelSchemaError; transitive Fehler siehe Fachvertrag.
+\subsubsection*{from\_file}
+\begin{lstlisting}
+from_file(cls, path: str | Path) -> 'FlowProblem'
+\end{lstlisting}
+Read UTF-8 TOML and diagnose unreadable files/syntax as schema errors.
+Direkte Raise-Stellen: ModelSchemaError; transitive Fehler siehe Fachvertrag.
+\subsubsection*{to\_document}
+\begin{lstlisting}
+to_document(self) -> dict[str, Any]
+\end{lstlisting}
+Detached schema-1 data; values and field names explicitly use SI.
+\subsubsection*{solve}
+\begin{lstlisting}
+solve(self) -> StationaryFlowResult
+\end{lstlisting}
+Solve with documented default controls; custom controls use Python API.
+\section{fem\_toolbox.cfd.flow\_model}
+\index{fem_toolbox.cfd.flow_model@cfd.\protect\allowbreak{}flow\_\protect\allowbreak{}model}
+Einordnung: research. Experimenteller M12-Kern: laminare Verifikation; keine RANS-/FSI- oder stabile Releasezusage.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/cfd.tex}. Beispiele/Tests:
+\nolinkurl{examples/quad_flow/run.py}.
+\nolinkurl{tests/unit/test_quad_flow.py}.
+\subsection{CartesianFluidGrid}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True).
+\begin{quote}
+Uniform rectangle: cells=(nx,ny)>=2, size\_m=(Lx,Ly)>0 in metres.
+\end{quote}
+\begin{lstlisting}
+cells: tuple[int, int]
+\end{lstlisting}
+\begin{lstlisting}
+size_m: tuple[float, float]
+\end{lstlisting}
+\subsection{IncompressibleFluid}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True).
+\begin{quote}
+Constant density kg/m³ and dynamic viscosity Pa s, both positive.
+\end{quote}
+\begin{lstlisting}
+density_kg_m3: float
+\end{lstlisting}
+\begin{lstlisting}
+viscosity_Pa_s: float
+\end{lstlisting}
+\subsection{ClosedWalls}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True).
+\begin{quote}
+Zero normal speed; constant bottom/top/left/right tangential speeds m/s.
+\end{quote}
+\begin{lstlisting}
+tangential_velocities_m_s: tuple[float, float, float, float] = (0, 0, 0, 0)
+\end{lstlisting}
+\subsection{ChannelBoundary}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True, init=False).
+\begin{quote}
+Left u(y)>=0 inlet, v=0; right prescribed pressure and zero du/dn.\par Profile shape is (ny,), owned and read-only; top/bottom are no-slip. Reverse flow at the right outlet is unsupported and explicitly rejected.
+\end{quote}
+\begin{lstlisting}
+inlet_velocity_m_s: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+outlet_pressure_Pa: float
+\end{lstlisting}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, inlet_velocity_m_s: ArrayLike, outlet_pressure_Pa: float=0) -> None
+\end{lstlisting}
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.cfd.fluid\_domain}
+\index{fem_toolbox.cfd.fluid_domain@cfd.\protect\allowbreak{}fluid\_\protect\allowbreak{}domain}
+Einordnung: research. Experimenteller M12-Kern: laminare Verifikation; keine RANS-/FSI- oder stabile Releasezusage.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/cfd.tex}. Beispiele/Tests:
+\nolinkurl{examples/quad_flow/run.py}.
+\nolinkurl{tests/unit/test_quad_flow.py}.
+\subsection{FluidDomain}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True, init=False).
+\begin{quote}
+Immutable SI mesh/material/BC preflight, not a RANS solve.\par Boundary indices refer to input line2 rows. Inlet velocity=(2,) or (nselection,2) m/s; nu\_tilde scalar or (nselection,) m²/s. Periodic translations and pressure drops are paired with opposite signs. A single connected mesh needs one outlet group or one pressure gauge. Width is explicit for conversion of planar fluxes to kg/s.
+\end{quote}
+\begin{lstlisting}
+mesh: FluidMesh2D
+\end{lstlisting}
+\begin{lstlisting}
+fluid: IncompressibleFluid
+\end{lstlisting}
+\begin{lstlisting}
+boundaries: Mapping[str, Mapping[str, Any]]
+\end{lstlisting}
+\begin{lstlisting}
+wall_quality: WallQuality
+\end{lstlisting}
+\begin{lstlisting}
+inlet_mass_flow_kg_s: float
+\end{lstlisting}
+\begin{lstlisting}
+pressure_reference_cell: int | None
+\end{lstlisting}
+\begin{lstlisting}
+width_m: float
+\end{lstlisting}
+\begin{lstlisting}
+periodic_partners: Mapping[int, int]
+\end{lstlisting}
+\subsubsection*{from\_document}
+\begin{lstlisting}
+from_document(cls, document: Mapping[str, Any], *, mesh: FluidMesh2D) -> FluidDomain
+\end{lstlisting}
+\subsubsection*{from\_file}
+\begin{lstlisting}
+from_file(cls, path: str | Path) -> FluidDomain
+\end{lstlisting}
+Read schema-1 JSON domain and mesh confined to the same input tree.
+Direkte Raise-Stellen: ModelSchemaError; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.cfd.fluid\_mesh}
+\index{fem_toolbox.cfd.fluid_mesh@cfd.\protect\allowbreak{}fluid\_\protect\allowbreak{}mesh}
+Einordnung: research. Experimenteller M12-Kern: laminare Verifikation; keine RANS-/FSI- oder stabile Releasezusage.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/cfd.tex}. Beispiele/Tests:
+\nolinkurl{examples/quad_flow/run.py}.
+\nolinkurl{tests/unit/test_quad_flow.py}.
+\subsection{WallQuality}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True).
+\begin{quote}
+Distances in metres; boundary rows and growth refer to selected wall faces.
+\end{quote}
+\begin{lstlisting}
+boundary_indices: NDArray[np.int64]
+\end{lstlisting}
+\begin{lstlisting}
+wall_distance_m: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+first_cell_distance_m: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+layer_growth: NDArray[np.float64]
+\end{lstlisting}
+\subsubsection*{y\_plus}
+\begin{lstlisting}
+y_plus(self, *, density_kg_m3: float, viscosity_Pa_s: float, wall_shear_Pa: ArrayLike) -> NDArray[np.float64]
+\end{lstlisting}
+Evaluate actual wall shear, reject y+>1; no estimated shear default.
+\subsection{FluidMesh2D}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True, init=False).
+\begin{quote}
+Owned SI Quad4 mesh; complete boundary rows, immutable named selections.\par points=(n,2) metres, quad4=(nc,4) CCW, line2=(nb,2). Indices are zero-based. Boundary row order is preserved; normals use cell ownership. Validates positive geometry, conformity, overlap and ADR-049 FV gates. This is a reference adapter, with no fluid solver or mesh motion.
+\end{quote}
+\begin{lstlisting}
+points: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+quad4: NDArray[np.int64]
+\end{lstlisting}
+\begin{lstlisting}
+line2: NDArray[np.int64]
+\end{lstlisting}
+\begin{lstlisting}
+boundary_sets: Mapping[str, NDArray[np.int64]]
+\end{lstlisting}
+\begin{lstlisting}
+volume_sets: Mapping[str, NDArray[np.int64]]
+\end{lstlisting}
+\begin{lstlisting}
+cell_areas_m2: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+cell_aspect_ratio: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+cell_centres_m: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+faces: NDArray[np.int64]
+\end{lstlisting}
+\begin{lstlisting}
+face_owners: NDArray[np.int64]
+\end{lstlisting}
+\begin{lstlisting}
+face_neighbours: NDArray[np.int64]
+\end{lstlisting}
+\begin{lstlisting}
+face_centres_m: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+face_normals: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+face_lengths_m: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+boundary_face_indices: NDArray[np.int64]
+\end{lstlisting}
+\begin{lstlisting}
+nonorthogonality_deg: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+skewness: NDArray[np.float64]
+\end{lstlisting}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, points: ArrayLike, quad4: ArrayLike, line2: ArrayLike, boundary_sets: Mapping[str, ArrayLike], volume_sets: Mapping[str, ArrayLike] | None=None) -> None
+\end{lstlisting}
+\subsubsection*{boundary\_normals}
+\begin{lstlisting}
+boundary_normals(self) -> NDArray[np.float64]
+\end{lstlisting}
+Outward normals in the input line2 row order.
+\subsubsection*{max\_nonorthogonality\_deg}
+\begin{lstlisting}
+max_nonorthogonality_deg(self) -> float
+\end{lstlisting}
+\subsubsection*{max\_skewness}
+\begin{lstlisting}
+max_skewness(self) -> float
+\end{lstlisting}
+\subsubsection*{from\_document}
+\begin{lstlisting}
+from_document(cls, document: Mapping[str, Any]) -> FluidMesh2D
+\end{lstlisting}
+\subsubsection*{from\_file}
+\begin{lstlisting}
+from_file(cls, path: str | Path) -> FluidMesh2D
+\end{lstlisting}
+Read UTF-8 schema-1 JSON; no implicit unit conversion or repair.
+Direkte Raise-Stellen: ModelSchemaError; transitive Fehler siehe Fachvertrag.
+\subsubsection*{to\_document}
+\begin{lstlisting}
+to_document(self) -> dict[str, Any]
+\end{lstlisting}
+Return detached JSON-ready input data, preserving group order/indices.
+\subsubsection*{wall\_quality}
+\begin{lstlisting}
+wall_quality(self, wall_groups: Sequence[str]) -> WallQuality
+\end{lstlisting}
+Compute exact segment distances and opposite-face layer growth.\par At least one named wall selection is required. For the selected structured Quad4 rows, trace opposite faces to the domain boundary; outward normal layer growth greater than 1.2 is rejected with wall ID.
+\section{fem\_toolbox.cfd.mac}
+\index{fem_toolbox.cfd.mac@cfd.\protect\allowbreak{}mac}
+Einordnung: research. Experimenteller M12-Kern: laminare Verifikation; keine RANS-/FSI- oder stabile Releasezusage.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/cfd.tex}. Beispiele/Tests:
+\nolinkurl{examples/quad_flow/run.py}.
+\nolinkurl{tests/unit/test_quad_flow.py}.
+\subsection{MACSystem}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass.
+\begin{quote}
+Private assembly state: free velocity maps, boundary values and volumes.
+\end{quote}
+\begin{lstlisting}
+grid: CartesianFluidGrid
+\end{lstlisting}
+\begin{lstlisting}
+boundary: ChannelBoundary | ClosedWalls
+\end{lstlisting}
+\begin{lstlisting}
+mu: float
+\end{lstlisting}
+\begin{lstlisting}
+uid: NDArray[np.int64]
+\end{lstlisting}
+\begin{lstlisting}
+vid: NDArray[np.int64]
+\end{lstlisting}
+\begin{lstlisting}
+u_boundary: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+weights: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+diffusion: Any
+\end{lstlisting}
+\begin{lstlisting}
+divergence: Any
+\end{lstlisting}
+\begin{lstlisting}
+gradient: Any
+\end{lstlisting}
+\begin{lstlisting}
+boundary_rhs: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+mass_rhs: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+edges: list[tuple[int, int, float]]
+\end{lstlisting}
+\begin{lstlisting}
+contacts: list[tuple[int, float, float]]
+\end{lstlisting}
+\subsubsection*{spacing}
+\begin{lstlisting}
+spacing(self) -> tuple[float, float]
+\end{lstlisting}
+\subsubsection*{nu}
+\begin{lstlisting}
+nu(self) -> int
+\end{lstlisting}
+\subsubsection*{fields}
+\begin{lstlisting}
+fields(self, q: NDArray[np.float64]) -> tuple[NDArray[np.float64], NDArray[np.float64]]
+\end{lstlisting}
+\subsection{assemble}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+assemble(grid: CartesianFluidGrid, boundary: ChannelBoundary | ClosedWalls, mu: float) -> MACSystem
+\end{lstlisting}
+Zusätzlich gilt der oben verknüpfte manuelle Fachvertrag; kein eigener Quell-Docstring.
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\subsection{convection}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+convection(system: MACSystem, q: NDArray[np.float64], rho: float, scheme: str='donor-cell') -> tuple[Any, NDArray[np.float64]]
+\end{lstlisting}
+\begin{quote}
+Freeze shared dual-face mass fluxes and upwind donor values.
+\end{quote}
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\subsection{linear\_step}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+linear_step(system: MACSystem, operator: Any, rhs: NDArray[np.float64]) -> tuple[NDArray[np.float64], NDArray[np.float64]]
+\end{lstlisting}
+Zusätzlich gilt der oben verknüpfte manuelle Fachvertrag; kein eigener Quell-Docstring.
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.cfd.mesh\_motion}
+\index{fem_toolbox.cfd.mesh_motion@cfd.\protect\allowbreak{}mesh\_\protect\allowbreak{}motion}
+Einordnung: research. M12-Entwicklung: absolute stationäre harmonische Quad4-Netzbewegung; keine dynamische ALE-Freigabe.
+\par Fachvertrag: \nolinkurl{Doc/91_STATIONARY_MESH_MOTION.md}. Beispiele/Tests:
+\nolinkurl{tests/unit/test_mesh_motion.py}.
+\subsection{MeshMotionError}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: ValidationError. Dekoratoren: keine.
+\begin{quote}
+Rejected stationary motion with stage, reference identity and last field.
+\end{quote}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, message: str, *, stage: str, reference_mesh_sha256: str, displacement_m: NDArray[np.float64]) -> None
+\end{lstlisting}
+\subsection{MeshMotionResult}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True).
+\begin{quote}
+New immutable domain and absolute harmonic displacement [npoint,2] m.\par Laplace residuals contain free reduced DOFs (periodic pairs share a DOF). Boundary group/connectivity identities are retained. Hashes distinguish reference/current meshes, full domains and prescribed interface traces.
+\end{quote}
+\begin{lstlisting}
+domain: FluidDomain
+\end{lstlisting}
+\begin{lstlisting}
+displacement_m: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+laplace_residual_m: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+maximum_relative_laplace_residual: float
+\end{lstlisting}
+\begin{lstlisting}
+minimum_area_ratio: float
+\end{lstlisting}
+\begin{lstlisting}
+reference_mesh_sha256: str
+\end{lstlisting}
+\begin{lstlisting}
+mesh_sha256: str
+\end{lstlisting}
+\begin{lstlisting}
+reference_domain_sha256: str
+\end{lstlisting}
+\begin{lstlisting}
+domain_sha256: str
+\end{lstlisting}
+\begin{lstlisting}
+interface_sha256: str
+\end{lstlisting}
+\begin{lstlisting}
+input_sha256: str
+\end{lstlisting}
+\begin{lstlisting}
+settings: Mapping[str, Any]
+\end{lstlisting}
+\subsection{move\_fluid\_domain}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+move_fluid_domain(reference: FluidDomain, interface_displacements_m: Mapping[str, ArrayLike], *, length_scale_m: float, preserve_inlet_flow: bool=True, max_nodes: int=50000) -> MeshMotionResult
+\end{lstlisting}
+\begin{quote}
+Harmonic absolute motion with prescribed FSI endpoint traces.\par Each explicitly marked FSI wall needs [nsegment,2 endpoints,2] metres, in its line2 endpoint order. Other walls stay fixed. Inlet/outlet chains interpolate their two wall-corner displacements; other open boundaries have natural zero normal gradient. Explicit periodic node pairs are tied. Fixed inlet volume flow is preserved by scaling each original velocity profile against its new signed face areas; original SA inlet values remain.\par Reject max|d|/Lref>0.02, inverted/poor-quality geometry, area ratios<0.5, conflicting corners, noncongruent periodic motion and resource exhaustion. The new FluidDomain rebuilds wall distances, growth and all BC preflight. Final y+ still requires a subsequent fluid solve, not a mesh-only estimate.
+\end{quote}
+Direkte Raise-Stellen: MeshMotionError; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.cfd.quad\_flow}
+\index{fem_toolbox.cfd.quad_flow@cfd.\protect\allowbreak{}quad\_\protect\allowbreak{}flow}
+Einordnung: research. Experimenteller M12-Kern: laminare Verifikation; keine RANS-/FSI- oder stabile Releasezusage.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/cfd.tex}. Beispiele/Tests:
+\nolinkurl{examples/quad_flow/run.py}.
+\nolinkurl{tests/unit/test_quad_flow.py}.
+\subsection{QuadFlowConvergenceError}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: ValidationError. Dekoratoren: keine.
+\begin{quote}
+Nonconvergence with immutable complete outer residual history.
+\end{quote}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, history: list[tuple[float, ...]]) -> None
+\end{lstlisting}
+\subsection{QuadFlowResult}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True).
+\begin{quote}
+Immutable cell/face SI fields and freshly reconstructed diagnostics.\par U[ncell,2], p[ncell], mass\_flux[nface] in mesh.faces order. Pressure is the periodic part plus gauge, if periodic driving is present. History rows contain momentum, continuity, global mass, global momentum, power.
+\end{quote}
+\begin{lstlisting}
+velocity_m_s: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+pressure_Pa: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+mass_flux_kg_s: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+face_velocity_m_s: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+mass_residual_kg_m3_s: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+momentum_residual_N_m3: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+nonorthogonal_correction_residual_N_m3: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+global_mass_balance_kg_s: float
+\end{lstlisting}
+\begin{lstlisting}
+global_momentum_balance_N: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+inlet_mass_flow_kg_s: float
+\end{lstlisting}
+\begin{lstlisting}
+outlet_mass_flow_kg_s: float
+\end{lstlisting}
+\begin{lstlisting}
+wall_traction_Pa: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+viscous_dissipation_W: float
+\end{lstlisting}
+\begin{lstlisting}
+gradient_dissipation_W: float
+\end{lstlisting}
+\begin{lstlisting}
+viscous_discretization_power_W: float
+\end{lstlisting}
+\begin{lstlisting}
+convective_power_W: float
+\end{lstlisting}
+\begin{lstlisting}
+numerical_transport_power_W: float
+\end{lstlisting}
+\begin{lstlisting}
+pressure_boundary_power_W: float
+\end{lstlisting}
+\begin{lstlisting}
+pressure_interpolation_power_W: float
+\end{lstlisting}
+\begin{lstlisting}
+body_power_W: float
+\end{lstlisting}
+\begin{lstlisting}
+viscous_boundary_power_W: float
+\end{lstlisting}
+\begin{lstlisting}
+power_balance_W: float
+\end{lstlisting}
+\begin{lstlisting}
+iterations: int
+\end{lstlisting}
+\begin{lstlisting}
+simple_steps: int
+\end{lstlisting}
+\begin{lstlisting}
+residual_history: tuple[tuple[float, ...], ...]
+\end{lstlisting}
+\begin{lstlisting}
+converged: bool
+\end{lstlisting}
+\begin{lstlisting}
+provenance: RunProvenance
+\end{lstlisting}
+\subsection{solve\_quad\_flow}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+solve_quad_flow(domain: FluidDomain, *, velocity_scale_m_s: float, length_scale_m: float, force_N_m3: ArrayLike=(0.0, 0.0), viscosity_Pa_s: ArrayLike | None=None, boundary_viscosity_Pa_s: ArrayLike | None=None, pressure_reference_Pa: float | None=None, convection_scheme: str='donor-cell', velocity_relaxation: float=0.5, pressure_relaxation: float=0.5, max_iterations: int=500, max_simple_steps: int=500, max_unknowns: int=50000, model: str='laminar') -> QuadFlowResult
+\end{lstlisting}
+\begin{quote}
+Solve explicit laminar incompressible Quad-FV flow (not SA/RANS/FSI).\par Scales U\_ref,L\_ref are mandatory positive SI. Force is (2,) or (nc,2). Optional positive mu/mub fields must be provided together, shapes (nc,)/(nb,) or scalar. FluidDomain supplies fixed rho, width and physical boundaries. Full variable symmetric stress, component pressure mobility, donor-cell, central (|Pe|<2) or bounded linear-upwind; no implicit scheme substitution. Sparse LU block solves with GMRES-accelerated SIMPLE pressure corrections. Final absolute gates are those of Doc/71, no relaxed tolerance fallback. ValidationError covers backflow, nonconvergence, scales and resource limits.
+\end{quote}
+Direkte Raise-Stellen: QuadFlowConvergenceError; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.cfd.quad\_fv}
+\index{fem_toolbox.cfd.quad_fv@cfd.\protect\allowbreak{}quad\_\protect\allowbreak{}fv}
+Einordnung: research. Experimenteller M12-Kern: laminare Verifikation; keine RANS-/FSI- oder stabile Releasezusage.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/cfd.tex}. Beispiele/Tests:
+\nolinkurl{examples/quad_flow/run.py}.
+\nolinkurl{tests/unit/test_quad_flow.py}.
+\subsection{FaceGradient}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True).
+\begin{quote}
+Full corrected gradient and its compact/nonorthogonal normal parts.\par Scalar: gradient[nface,2], normal parts[nface]. Vector: gradient[nface,k,2], normal parts[nface,k]. Gradient last axis is spatial x/y.
+\end{quote}
+\begin{lstlisting}
+gradient: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+compact_normal: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+nonorthogonal_normal: NDArray[np.float64]
+\end{lstlisting}
+\subsection{StressFlux}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True).
+\begin{quote}
+sigma=-pI+mu*(grad U+grad U\textasciicircum{}T); traction is outward from fluid.\par stress\_Pa[nface,2,2], traction\_Pa[nface,2], face\_force\_N[nface,2], cell\_force\_N[ncell,2]=integrated div(sigma). No body/convection terms. Force on a structure is the negative fluid traction times face area.
+\end{quote}
+\begin{lstlisting}
+stress_Pa: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+traction_Pa: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+face_force_N: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+cell_force_N: NDArray[np.float64]
+\end{lstlisting}
+\subsection{QuadFVGeometry}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True, init=False).
+\begin{quote}
+Immutable operators on a validated mesh, width in metres.\par All face arrays follow mesh.faces; boundary arrays follow mesh.line2. Periodic values must already represent the same periodic field (pressure means its periodic part); affine pressure drops belong in the body force. One periodic face is active, its partner stores the opposite flux. No PDE solver, pressure gauge elimination or physical BC defaults.
+\end{quote}
+\begin{lstlisting}
+mesh: FluidMesh2D
+\end{lstlisting}
+\begin{lstlisting}
+width_m: float
+\end{lstlisting}
+\begin{lstlisting}
+cell_volumes_m3: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+face_areas_m2: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+neighbours: NDArray[np.int64]
+\end{lstlisting}
+\begin{lstlisting}
+active_faces: NDArray[np.int64]
+\end{lstlisting}
+\begin{lstlisting}
+periodic_partners: Mapping[int, int]
+\end{lstlisting}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, mesh: FluidMesh2D, *, width_m: float, periodic_pairs: Mapping[int, int] | None=None, max_cells: int=50000) -> None
+\end{lstlisting}
+\subsubsection*{from\_domain}
+\begin{lstlisting}
+from_domain(cls, domain: FluidDomain, *, max_cells: int=50000) -> QuadFVGeometry
+\end{lstlisting}
+Use validated domain width and boundary-row periodic partners only.
+\subsubsection*{gradient}
+\begin{lstlisting}
+gradient(self, values: ArrayLike, boundary_values: ArrayLike) -> NDArray[np.float64]
+\end{lstlisting}
+Linear-exact cell gradient from centre and prescribed face samples.\par Scalar input (nc,)/(nb,) -> (nc,2); k components -> (nc,k,2). All boundary rows are supplied; periodic rows are validated but ignored.
+\subsubsection*{face\_values}
+\begin{lstlisting}
+face_values(self, values: ArrayLike, boundary_values: ArrayLike) -> NDArray[np.float64]
+\end{lstlisting}
+Interpolate centre-to-face extrapolations; exact for affine fields.
+\subsubsection*{face\_gradient}
+\begin{lstlisting}
+face_gradient(self, values: ArrayLike, boundary_values: ArrayLike) -> FaceGradient
+\end{lstlisting}
+Over-relaxed directional correction with the same geometry as pressure.\par g\_face = g\_bar + n*(delta\_phi - g\_bar dot delta\_x)/(delta\_x dot n). Normal part is delta\_phi/d\_n - g\_bar dot(delta\_x-d\_n*n)/d\_n.
+\subsubsection*{cell\_balance}
+\begin{lstlisting}
+cell_balance(self, face_flux: ArrayLike) -> NDArray[np.float64]
+\end{lstlisting}
+Integrated outward balance, scalar or k-vector flux per mesh face.\par Periodic alias must carry the exact negative master flux. No division by volume: mass flux kg/s -> kg/s; face force N -> cell force N.
+\subsubsection*{stress\_flux}
+\begin{lstlisting}
+stress_flux(self, velocity_m_s: ArrayLike, boundary_velocity_m_s: ArrayLike, *, viscosity_Pa_s: ArrayLike, boundary_viscosity_Pa_s: ArrayLike, pressure_Pa: ArrayLike | None=None, boundary_pressure_Pa: ArrayLike | None=None) -> StressFlux
+\end{lstlisting}
+Full symmetric Newton stress with linear-exact face mu and pressure.\par U:(nc,2), Ub:(nb,2). mu: positive scalar/(nc,), mub:(nb,). Both pressure arrays are optional together, default zero viscous-only. No scalar Laplacian replacement; cross/shear terms retained.
+\subsubsection*{pressure\_correction\_matrix}
+\begin{lstlisting}
+pressure_correction_matrix(self, *, momentum_diagonal_kg_s: ArrayLike, density_kg_m3: float, pressure_boundary_indices: ArrayLike=()) -> csr_matrix
+\end{lstlisting}
+Positive compact -div(rho*d*grad(pc)) block (kg/(Pa s)).\par d=V/a from the *unrelaxed integrated* momentum diagonal (kg/s). a accepts scalar, (ncell,) or component (ncell,2) diagonals; the latter uses n.T @ diag(V/a) @ n for the common normal mobility. No gauge: closed/periodic block has exactly the constant null mode. Selected boundary line rows mean prescribed pc=0; other outer fluxes fixed. Nonorthogonal correction is explicit through FaceGradient. Returned sparse matrix is a detached mutable object.
+\subsubsection*{rhie\_chow\_flux}
+\begin{lstlisting}
+rhie_chow_flux(self, velocity_m_s: ArrayLike, boundary_velocity_m_s: ArrayLike, pressure_Pa: ArrayLike, boundary_pressure_Pa: ArrayLike, *, momentum_diagonal_kg_s: ArrayLike, density_kg_m3: float, pressure_boundary_indices: ArrayLike=()) -> NDArray[np.float64]
+\end{lstlisting}
+Common face mass flux rho*A*(Uf + df*(gbar\_p-gface\_p)) dot n.\par U (nc,2), p (nc,), explicit face boundary samples. Fixed outer fluxes use prescribed U; only selected pressure boundaries receive RC coupling. No relaxation applied here. Caller must supply consistent unrelaxed a.
+\section{fem\_toolbox.cfd.quad\_system}
+\index{fem_toolbox.cfd.quad_system@cfd.\protect\allowbreak{}quad\_\protect\allowbreak{}system}
+Einordnung: research. Experimenteller M12-Kern: laminare Verifikation; keine RANS-/FSI- oder stabile Releasezusage.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/cfd.tex}. Beispiele/Tests:
+\nolinkurl{examples/quad_flow/run.py}.
+\nolinkurl{tests/unit/test_quad_flow.py}.
+\subsection{Map}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass.
+\begin{quote}
+Private affine field map; caller supplies already validated arrays.
+\end{quote}
+\begin{lstlisting}
+matrix: csr_matrix
+\end{lstlisting}
+\begin{lstlisting}
+constant: NDArray[np.float64]
+\end{lstlisting}
+\subsubsection*{apply}
+\begin{lstlisting}
+apply(self, value: NDArray[np.float64]) -> NDArray[np.float64]
+\end{lstlisting}
+\subsection{sparse}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+sparse(rows: list[int], cols: list[int], data: list[float], shape: tuple[int, int]) -> csr_matrix
+\end{lstlisting}
+Zusätzlich gilt der oben verknüpfte manuelle Fachvertrag; kein eigener Quell-Docstring.
+\subsection{affine\_product}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+affine_product(matrix: csr_matrix, mapping: Map) -> Map
+\end{lstlisting}
+Zusätzlich gilt der oben verknüpfte manuelle Fachvertrag; kein eigener Quell-Docstring.
+\subsection{QuadSystem}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: keine.
+\begin{quote}
+Internal maps preserve common face states, full stress and BC constraints.
+\end{quote}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, domain: FluidDomain, mu: NDArray[np.float64], mub: NDArray[np.float64]) -> None
+\end{lstlisting}
+\subsubsection*{alias\_flux}
+\begin{lstlisting}
+alias_flux(self, value: NDArray[np.float64]) -> NDArray[np.float64]
+\end{lstlisting}
+\subsubsection*{pressure\_flux}
+\begin{lstlisting}
+pressure_flux(self, diagonal: NDArray[np.float64]) -> Map
+\end{lstlisting}
+\subsubsection*{transport}
+\begin{lstlisting}
+transport(self, flux: NDArray[np.float64], u: NDArray[np.float64], scheme: str) -> tuple[Map, NDArray[np.float64]]
+\end{lstlisting}
+\section{fem\_toolbox.cfd.rans}
+\index{fem_toolbox.cfd.rans@cfd.\protect\allowbreak{}rans}
+Einordnung: research. M12-Entwicklung: SA-noft2-Punkt-/Transport-/RANS-API; getrennte Modell-/FSI-Abnahme erforderlich.
+\par Fachvertrag: \nolinkurl{Doc/88_SA_NOFT2_IMPLEMENTATION.md}. Beispiele/Tests:
+\nolinkurl{tests/unit/test_sa_model.py}.
+\nolinkurl{tests/unit/test_sa_transport.py}.
+\nolinkurl{tests/unit/test_rans.py}.
+\subsection{RansConvergenceError}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: ValidationError. Dekoratoren: keine.
+\begin{quote}
+Failed joint iteration with immutable last fields and complete history.
+\end{quote}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, reason: str, history: list[tuple[float, ...]], u: NDArray[np.float64], p: NDArray[np.float64], a: NDArray[np.float64]) -> None
+\end{lstlisting}
+\subsection{RansResult}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True).
+\begin{quote}
+Joint solution: flow, SA cell fields and actual wall-resolution diagnostics.\par History columns: max momentum N/m³, mass kg/(m³ s), SA m²/s², global mass kg/s, max global momentum N, power W, accepted SA alpha. wall\_y\_plus follows domain.wall\_quality.boundary\_indices. No DNS/model or FSI qualification is implied by convergence of these discrete equations.
+\end{quote}
+\begin{lstlisting}
+flow: QuadFlowResult
+\end{lstlisting}
+\begin{lstlisting}
+nu_tilde_m2_s: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+eddy_viscosity_m2_s: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+effective_viscosity_Pa_s: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+boundary_effective_viscosity_Pa_s: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+sa_residual_m2_s2: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+sa_global_balance_m5_s2: float
+\end{lstlisting}
+\begin{lstlisting}
+wall_y_plus: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+iterations: int
+\end{lstlisting}
+\begin{lstlisting}
+residual_history: tuple[tuple[float, ...], ...]
+\end{lstlisting}
+\begin{lstlisting}
+converged: bool
+\end{lstlisting}
+\begin{lstlisting}
+provenance: RunProvenance
+\end{lstlisting}
+\subsection{solve\_rans}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+solve_rans(domain: FluidDomain, *, initial_nu_tilde_m2_s: ArrayLike, velocity_scale_m_s: float, length_scale_m: float, force_N_m3: ArrayLike=(0.0, 0.0), pressure_reference_Pa: float | None=None, convection_scheme: str='linear-upwind', velocity_relaxation: float=0.5, pressure_relaxation: float=0.5, sa_relaxation: float=0.5, max_iterations: int=500, max_simple_steps: int=500, max_unknowns: int=50000) -> RansResult
+\end{lstlisting}
+\begin{quote}
+Joint Picard iteration for physical wall-resolved SA-noft2 and momentum.\par Only explicit SA-noft2 is solved: at least one initial cell must have a>0, all must be nonnegative; no inferred laminar mode or viscosity cap. Width, physical BCs, positive SI scales and all inlet SA data come from the caller. The same conservative Rhie-Chow mass flux transports momentum and SA. Frozen nonnegative destruction is implicit; all final coefficients, stresses, sources and field/balance residuals are recomputed at the accepted joint state. Positivity backtracking reduces U/p/a updates together. Actual wall shear must satisfy y+<=1 and layer growth<=1.2. Failure retains the last complete joint history and fields; no wall function is substituted.
+\end{quote}
+Direkte Raise-Stellen: RansConvergenceError; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.cfd.sa\_model}
+\index{fem_toolbox.cfd.sa_model@cfd.\protect\allowbreak{}sa\_\protect\allowbreak{}model}
+Einordnung: research. M12-Entwicklung: SA-noft2-Punkt-/Transport-/RANS-API; getrennte Modell-/FSI-Abnahme erforderlich.
+\par Fachvertrag: \nolinkurl{Doc/88_SA_NOFT2_IMPLEMENTATION.md}. Beispiele/Tests:
+\nolinkurl{tests/unit/test_sa_model.py}.
+\nolinkurl{tests/unit/test_sa_transport.py}.
+\nolinkurl{tests/unit/test_rans.py}.
+\subsection{SATerms}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True).
+\begin{quote}
+Immutable cell arrays; sources in m²/s², diffusivities in m²/s.\par destruction\_rate\_s\_inv times nu\_tilde gives the nonnegative destruction source. It is suitable for the frozen implicit sink in the scalar solve. r and wall\_function are dimensionless; modified vorticity has unit 1/s.
+\end{quote}
+\begin{lstlisting}
+eddy_viscosity_m2_s: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+diffusivity_m2_s: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+production_m2_s2: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+destruction_m2_s2: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+gradient_source_m2_s2: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+destruction_rate_s_inv: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+modified_vorticity_s_inv: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+r: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+wall_function: NDArray[np.float64]
+\end{lstlisting}
+\subsection{sa\_terms}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+sa_terms(nu_tilde_m2_s: ArrayLike, *, velocity_gradient_s_inv: ArrayLike, gradient_nu_tilde_m_s: ArrayLike, wall_distance_m: ArrayLike, kinematic_viscosity_m2_s: float) -> SATerms
+\end{lstlisting}
+\begin{quote}
+Evaluate the complete SA-noft2 source law at positive-distance cells.\par a is (ncell,), grad(U) is (ncell,2,2) with [component,derivative], grad(a) is (ncell,2), d is scalar or (ncell,). Molecular nu is a positive scalar. Negative/nonfinite a, d<=0, boolean data and unrepresentable terms raise ValidationError; no input or output is clipped to hide a failure. Wall Dirichlet values a=0 are imposed separately, never evaluated at d=0.
+\end{quote}
+Direkte Raise-Stellen: FloatingPointError; transitive Fehler siehe Fachvertrag.
+\subsection{positive\_sa\_update}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+positive_sa_update(previous_m2_s: ArrayLike, candidate_m2_s: ArrayLike, *, relaxation: float=0.5, max_attempts: int=20) -> tuple[NDArray[np.float64], float, int]
+\end{lstlisting}
+\begin{quote}
+One common relaxed step, halved until finite and nonnegative everywhere.\par Returns immutable state, accepted alpha and number of halvings. No component is clipped. Failure identifies the last minimum and its zero-based cell.
+\end{quote}
+\section{fem\_toolbox.cfd.sa\_transport}
+\index{fem_toolbox.cfd.sa_transport@cfd.\protect\allowbreak{}sa\_\protect\allowbreak{}transport}
+Einordnung: research. M12-Entwicklung: SA-noft2-Punkt-/Transport-/RANS-API; getrennte Modell-/FSI-Abnahme erforderlich.
+\par Fachvertrag: \nolinkurl{Doc/88_SA_NOFT2_IMPLEMENTATION.md}. Beispiele/Tests:
+\nolinkurl{tests/unit/test_sa_model.py}.
+\nolinkurl{tests/unit/test_sa_transport.py}.
+\nolinkurl{tests/unit/test_rans.py}.
+\subsection{SAConvergenceError}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: ValidationError. Dekoratoren: keine.
+\begin{quote}
+Nonconvergence retains the last nonnegative state and raw residual history.
+\end{quote}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, history: list[float], state: NDArray[np.float64], reason: str) -> None
+\end{lstlisting}
+\subsection{SATransportResult}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True).
+\begin{quote}
+Immutable scalar solution for prescribed conservative flow; not a RANS solve.\par Arrays: a/residual/wall distance are cell fields, boundary a follows line2, and advective/diffusive fluxes follow mesh.faces (outward from owner). Integrated fluxes and global balance have unit m\textasciicircum{}5/s². History is the maximum absolute fresh cell residual in m²/s² at every accepted update.
+\end{quote}
+\begin{lstlisting}
+nu_tilde_m2_s: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+boundary_nu_tilde_m2_s: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+wall_distance_m: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+residual_m2_s2: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+advective_flux_m5_s2: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+diffusive_flux_m5_s2: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+global_balance_m5_s2: float
+\end{lstlisting}
+\begin{lstlisting}
+terms: SATerms
+\end{lstlisting}
+\begin{lstlisting}
+iterations: int
+\end{lstlisting}
+\begin{lstlisting}
+residual_history: tuple[float, ...]
+\end{lstlisting}
+\begin{lstlisting}
+accepted_relaxations: tuple[float, ...]
+\end{lstlisting}
+\begin{lstlisting}
+converged: bool
+\end{lstlisting}
+\begin{lstlisting}
+provenance: RunProvenance
+\end{lstlisting}
+\subsection{solve\_sa\_transport}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+solve_sa_transport(domain: FluidDomain, *, mass_flux_kg_s: ArrayLike, velocity_gradient_s_inv: ArrayLike, initial_nu_tilde_m2_s: ArrayLike, velocity_scale_m_s: float, length_scale_m: float, boundary_values_m2_s: ArrayLike | None=None, wall_distance_m: ArrayLike | None=None, source_m2_s2: ArrayLike=0.0, convection_scheme: str='linear-upwind', relaxation: float=0.5, max_iterations: int=500, max_cells: int=50000) -> SATransportResult
+\end{lstlisting}
+\begin{quote}
+Solve SA for frozen conservative flow with full fresh nonlinear residuals.\par Boundary defaults: wall a=0, inlet explicit a, outlet/symmetry zero normal derivative and periodic paired trace. Optional boundary and distance fields are explicit manufactured-solution hooks, recorded as such in provenance; they do not qualify physical wall resolution or a coupled RANS solution. Destruction is a frozen nonnegative implicit sink. A common positivity line search halves the relaxed candidate, at most twenty attempts, without state clipping. Failure carries the latest history, state, minimum and cell ID.
+\end{quote}
+Direkte Raise-Stellen: SAConvergenceError; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.cfd.stokes}
+\index{fem_toolbox.cfd.stokes@cfd.\protect\allowbreak{}stokes}
+Einordnung: research. Experimenteller M12-Kern: laminare Verifikation; keine RANS-/FSI- oder stabile Releasezusage.
+\par Fachvertrag: \nolinkurl{Doc/latex/chapters/api/cfd.tex}. Beispiele/Tests:
+\nolinkurl{examples/quad_flow/run.py}.
+\nolinkurl{tests/unit/test_quad_flow.py}.
+\subsection{StokesResult}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True).
+\begin{quote}
+Immutable SI fields; residuals include the omitted gauge-cell equation.
+\end{quote}
+\begin{lstlisting}
+pressure_Pa: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+u_m_s: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+v_m_s: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+divergence_s_inv: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+cell_flow_balance_m2_s: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+momentum_x_residual_N_m3: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+momentum_y_residual_N_m3: NDArray[np.float64]
+\end{lstlisting}
+\begin{lstlisting}
+dissipation_W_m: float
+\end{lstlisting}
+\begin{lstlisting}
+power_balance_W_m: float
+\end{lstlisting}
+\begin{lstlisting}
+relative_residual: float
+\end{lstlisting}
+\begin{lstlisting}
+converged: bool
+\end{lstlisting}
+\subsection{solve\_stokes}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+solve_stokes(*, cells: tuple[int, int], size_m: tuple[float, float], viscosity_Pa_s: float, force_x_N_m3: ArrayLike=0.0, force_y_N_m3: ArrayLike=0.0, tangential_wall_velocities_m_s: tuple[float, float, float, float]=(0, 0, 0, 0), pressure_reference_Pa: float=0.0, relative_tolerance: float=1e-10, max_unknowns: int=50000) -> StokesResult
+\end{lstlisting}
+\begin{quote}
+Solve -mu Laplace(u)+grad(p)=f and div(u)=0 on a closed rectangle.\par cells=(nx,ny), each >=2; size\_m=(Lx,Ly)>0. Normal wall velocity is zero. Tangential wall values are bottom/top/left/right in m/s. Forces are finite scalars or interior-face arrays (ny,nx-1)/(ny-1,nx) in N/m³. Pin p[0,0] to pressure\_reference\_Pa; this does not impose outlet pressure. Return MAC fields u[ny,nx+1], v[ny+1,nx], p[ny,nx], including zero normal boundaries. ValidationError diagnoses inputs, singular/range failures or failed residual/conservation gates. No convection or turbulence model.
+\end{quote}
+Direkte Raise-Stellen: ValidationError; transitive Fehler siehe Fachvertrag.
 \section{fem\_toolbox.conventions}
 \index{fem_toolbox.conventions@conventions}
 Einordnung: research. Erreichbarer mathematischer/technischer Baustein; gemäß Doc/29 keine stabile Anwender-API. Formen und Fachregeln im verknüpften Kapitel.
@@ -341,6 +1447,415 @@ Forschung/intern; keine stabile Anwenderzusage.
 Basistypen: IntEnum. Dekoratoren: keine.
 \begin{quote}
 Indices for engineering-strain and stress vectors in three dimensions.
+\end{quote}
+\section{fem\_toolbox.coupling}
+\index{fem_toolbox.coupling@coupling}
+Einordnung: research. M12-Entwicklung: konservative ebene FSI-Schnittstelle und stationäre Kopplungsiteration; Abnahme \#92 folgt separat.
+\par Fachvertrag: \nolinkurl{Doc/90_CONSERVATIVE_FSI_INTERFACE.md}. Beispiele/Tests:
+\nolinkurl{tests/unit/test_interface_map.py}.
+\subsection*{Reexportierte Einstiegspunkte}
+\noindent\nolinkurl{FsiCouplingError} $\to$ \nolinkurl{fem_toolbox.coupling.fsi.FsiCouplingError}\par
+\noindent\nolinkurl{FsiIteration} $\to$ \nolinkurl{fem_toolbox.coupling.fsi.FsiIteration}\par
+\noindent\nolinkurl{InterfaceLoads} $\to$ \nolinkurl{fem_toolbox.coupling.interface.InterfaceLoads}\par
+\noindent\nolinkurl{InterfaceMap} $\to$ \nolinkurl{fem_toolbox.coupling.interface.InterfaceMap}\par
+\noindent\nolinkurl{OneWayResult} $\to$ \nolinkurl{fem_toolbox.coupling.structure.OneWayResult}\par
+\noindent\nolinkurl{StationaryFsiProblem} $\to$ \nolinkurl{fem_toolbox.coupling.fsi.StationaryFsiProblem}\par
+\noindent\nolinkurl{StationaryFsiResult} $\to$ \nolinkurl{fem_toolbox.coupling.fsi.StationaryFsiResult}\par
+\noindent\nolinkurl{TransferAudit} $\to$ \nolinkurl{fem_toolbox.coupling.interface.TransferAudit}\par
+\noindent\nolinkurl{build_domain_interface} $\to$ \nolinkurl{fem_toolbox.coupling.interface.build_domain_interface}\par
+\noindent\nolinkurl{build_interface_map} $\to$ \nolinkurl{fem_toolbox.coupling.interface.build_interface_map}\par
+\noindent\nolinkurl{solve_one_way} $\to$ \nolinkurl{fem_toolbox.coupling.structure.solve_one_way}\par
+\noindent\nolinkurl{solve_stationary_fsi} $\to$ \nolinkurl{fem_toolbox.coupling.fsi.solve_stationary_fsi}\par
+\section{fem\_toolbox.coupling.fsi}
+\index{fem_toolbox.coupling.fsi@coupling.\protect\allowbreak{}fsi}
+Einordnung: research. M12-Entwicklung: stationäre partitionierte Dirichlet-Neumann-FSI mit konstanter Relaxation; keine M12-Freigabe ohne \#92.
+\par Fachvertrag: \nolinkurl{Doc/92_STATIONARY_FSI_COUPLING.md}. Beispiele/Tests:
+\nolinkurl{tests/unit/test_stationary_fsi.py}.
+\subsection*{Datentypen und Konstanten}
+\begin{lstlisting}
+FSI_SCHEMA_VERSION = 1
+\end{lstlisting}
+\begin{lstlisting}
+FLUID_MODELS = ('laminar', 'sa-noft2')
+\end{lstlisting}
+\begin{lstlisting}
+FAILURE_KINDS = ('input', 'interface', 'mesh', 'fluid', 'structure', 'divergence', 'budget')
+\end{lstlisting}
+\begin{lstlisting}
+FloatArray = NDArray[np.float64]
+\end{lstlisting}
+\subsection{FsiIteration}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True).
+\begin{quote}
+One complete coupling step on geometry d\textasciicircum{}k.\par displacement\_residual\_m is max nodal |d\_solved-d\textasciicircum{}k| (unrelaxed); load\_change\_N is max nodal |F\textasciicircum{}k-F\textasciicircum{}(k-1)| (inf at k=0). Forces are sums over structure nodes; transfer errors are the raw conservation audit of the current map.
+\end{quote}
+\begin{lstlisting}
+iteration: int
+\end{lstlisting}
+\begin{lstlisting}
+displacement_residual_m: float
+\end{lstlisting}
+\begin{lstlisting}
+relative_displacement_residual: float
+\end{lstlisting}
+\begin{lstlisting}
+load_change_N: float
+\end{lstlisting}
+\begin{lstlisting}
+fluid_force_N: FloatArray
+\end{lstlisting}
+\begin{lstlisting}
+external_pressure_force_N: FloatArray
+\end{lstlisting}
+\begin{lstlisting}
+structure_reaction_N: FloatArray
+\end{lstlisting}
+\begin{lstlisting}
+transfer_force_error_N: FloatArray
+\end{lstlisting}
+\begin{lstlisting}
+transfer_moment_error_N_m: FloatArray
+\end{lstlisting}
+\begin{lstlisting}
+transfer_relative_error: float
+\end{lstlisting}
+\begin{lstlisting}
+maximum_displacement_ratio: float
+\end{lstlisting}
+\begin{lstlisting}
+maximum_displacement_gradient: float
+\end{lstlisting}
+\begin{lstlisting}
+minimum_area_ratio: float
+\end{lstlisting}
+\begin{lstlisting}
+fluid_iterations: int
+\end{lstlisting}
+\subsection{FsiCouplingError}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: ValidationError. Dekoratoren: keine.
+\begin{quote}
+Controlled stop with kind, complete history and last iterate d\textasciicircum{}k [nnode,3].
+\end{quote}
+\subsubsection*{Konstruktor}
+\begin{lstlisting}
+__init__(self, kind: str, reason: str, history: list[FsiIteration], displacement_m: FloatArray) -> None
+\end{lstlisting}
+\subsection{StationaryFsiProblem}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True).
+\begin{quote}
+Explicit inputs of one stationary bidirectional coupling.\par fluid\_domain is the unchanged reference domain; wall\_name must be an fsi=true wall whose segments are covered by structure facet\_set. The structure is a validated static elasticity Model on the reference mesh; its Dirichlet data, body forces and tractions are kept. Pressure loads use p - external\_pressure\_Pa. fluid\_options pass unchanged to solve\_quad\_flow (laminar) or solve\_rans (sa-noft2), except the reserved scale/model keys. Default relaxation 0.2 and budget 200 follow Doc/71; no adaptive omega.
+\end{quote}
+\begin{lstlisting}
+fluid_domain: FluidDomain
+\end{lstlisting}
+\begin{lstlisting}
+wall_name: str
+\end{lstlisting}
+\begin{lstlisting}
+structure: Model
+\end{lstlisting}
+\begin{lstlisting}
+facet_set: str
+\end{lstlisting}
+\begin{lstlisting}
+length_scale_m: float
+\end{lstlisting}
+\begin{lstlisting}
+velocity_scale_m_s: float
+\end{lstlisting}
+\begin{lstlisting}
+fluid_model: str = 'laminar'
+\end{lstlisting}
+\begin{lstlisting}
+initial_nu_tilde_m2_s: ArrayLike | None = None
+\end{lstlisting}
+\begin{lstlisting}
+fluid_options: Mapping[str, Any] = field(default_factory=dict)
+\end{lstlisting}
+\begin{lstlisting}
+external_pressure_Pa: float = 0.0
+\end{lstlisting}
+\begin{lstlisting}
+relaxation: float = 0.2
+\end{lstlisting}
+\begin{lstlisting}
+max_coupling_iterations: int = 200
+\end{lstlisting}
+\begin{lstlisting}
+divergence_window: int = 10
+\end{lstlisting}
+\begin{lstlisting}
+span_origin_m: float = 0.0
+\end{lstlisting}
+\begin{lstlisting}
+preserve_inlet_flow: bool = True
+\end{lstlisting}
+\subsection{StationaryFsiResult}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True).
+\begin{quote}
+Accepted stationary state with the full iteration table.\par geometry\_displacement\_m is d\textasciicircum{}k used for the final fluid geometry; the structure\_displacement\_m solves the final loads, max difference <=1e-8 Lref. Fluid, loads and structure were all freshly computed on that final geometry; no stale loads are reported. fsi\_schema\_version is in settings.
+\end{quote}
+\begin{lstlisting}
+fluid: QuadFlowResult | RansResult
+\end{lstlisting}
+\begin{lstlisting}
+mesh_motion: MeshMotionResult
+\end{lstlisting}
+\begin{lstlisting}
+interface: InterfaceMap
+\end{lstlisting}
+\begin{lstlisting}
+loads: InterfaceLoads
+\end{lstlisting}
+\begin{lstlisting}
+structure: ElasticResult
+\end{lstlisting}
+\begin{lstlisting}
+geometry_displacement_m: FloatArray
+\end{lstlisting}
+\begin{lstlisting}
+structure_displacement_m: FloatArray
+\end{lstlisting}
+\begin{lstlisting}
+iterations: int
+\end{lstlisting}
+\begin{lstlisting}
+history: tuple[FsiIteration, ...]
+\end{lstlisting}
+\begin{lstlisting}
+converged: bool
+\end{lstlisting}
+\begin{lstlisting}
+settings: Mapping[str, Any]
+\end{lstlisting}
+\begin{lstlisting}
+input_sha256: str
+\end{lstlisting}
+\subsection{solve\_stationary\_fsi}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+solve_stationary_fsi(problem: StationaryFsiProblem) -> StationaryFsiResult
+\end{lstlisting}
+\begin{quote}
+Run the Doc/71 partitioned stationary coupling with constant relaxation.\par Stops successfully only when max|r\_d| <= 1e-8 Lref AND the nodal load change max|F\textasciicircum{}k-F\textasciicircum{}(k-1)| <= 1e-6 rho U\_ref\textasciicircum{}2 (b Lref), with every fluid, mesh, transfer and structure gate passed on the same final geometry. A small relaxed update alone is never success. Failures raise FsiCouplingError with kind in FAILURE\_KINDS and the full history.
+\end{quote}
+Direkte Raise-Stellen: fail; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.coupling.fsi\_config}
+\index{fem_toolbox.coupling.fsi_config@coupling.\protect\allowbreak{}fsi\_\protect\allowbreak{}config}
+Einordnung: research. M12-Entwicklung: strikte fsi\_schema\_version=1-TOML und reproduzierbare Laufartefakte; keine M12-Freigabe ohne \#94.
+\par Fachvertrag: \nolinkurl{Doc/94_FSI_WORKFLOW.md}. Beispiele/Tests:
+\nolinkurl{examples/fsi_lid/run.py}.
+\nolinkurl{tests/regression/test_fsi_lid_example.py}.
+\subsection*{Datentypen und Konstanten}
+\begin{lstlisting}
+HISTORY_COLUMNS = (('iteration', 'iteration'), ('displacement_residual_m', 'displacement_residual_m'), ('relative_displacement_residual', 'relative_displacement_residual'), ('load_change_N', 'load_change_N'), ('fluid_force_y_N', None), ('external_pressure_force_y_N', None), ('structure_reaction_y_N', None), ('transfer_relative_error', 'transfer_relative_error'), ('maximum_displacement_ratio', 'maximum_displacement_ratio'), ('maximum_displacement_gradient', 'maximum_displacement_gradient'), ('minimum_area_ratio', 'minimum_area_ratio'), ('fluid_iterations', 'fluid_iterations'))
+\end{lstlisting}
+\subsection{FsiConfig}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True).
+\begin{quote}
+Validated problem plus the exact input files and their SHA-256.
+\end{quote}
+\begin{lstlisting}
+problem: StationaryFsiProblem
+\end{lstlisting}
+\begin{lstlisting}
+source: Path
+\end{lstlisting}
+\begin{lstlisting}
+document: Mapping[str, Any]
+\end{lstlisting}
+\begin{lstlisting}
+input_files: Mapping[str, str]
+\end{lstlisting}
+\subsection{load\_fsi\_config}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+load_fsi_config(path: str | Path) -> FsiConfig
+\end{lstlisting}
+\begin{quote}
+Read a strict fsi\_schema\_version=1 TOML and build the coupling problem.
+\end{quote}
+Direkte Raise-Stellen: ModelSchemaError; transitive Fehler siehe Fachvertrag.
+\subsection{write\_fsi\_artifacts}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+write_fsi_artifacts(output: str | Path, config: FsiConfig, outcome: StationaryFsiResult | FsiCouplingError) -> Path
+\end{lstlisting}
+\begin{quote}
+Write report.json, history.csv and, on success, field JSON files.\par The output directory must not exist. All quantities carry SI unit suffixes. A failed run still records kind, reason, history and the last iterate.
+\end{quote}
+Direkte Raise-Stellen: FileExistsError; transitive Fehler siehe Fachvertrag.
+\subsection{run\_fsi\_config}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+run_fsi_config(path: str | Path, output: str | Path) -> StationaryFsiResult
+\end{lstlisting}
+\begin{quote}
+Load, refuse an existing output, solve and always write artifacts.\par A coupling stop writes its failure artifacts and is then re-raised.
+\end{quote}
+Direkte Raise-Stellen: FileExistsError; transitive Fehler siehe Fachvertrag.
+\section{fem\_toolbox.coupling.interface}
+\index{fem_toolbox.coupling.interface@coupling.\protect\allowbreak{}interface}
+Einordnung: research. M12-Entwicklung: konservative ebene FSI-Schnittstelle; bidirektionale Abnahme folgt separat.
+\par Fachvertrag: \nolinkurl{Doc/90_CONSERVATIVE_FSI_INTERFACE.md}. Beispiele/Tests:
+\nolinkurl{tests/unit/test_interface_map.py}.
+\subsection*{Datentypen und Konstanten}
+\begin{lstlisting}
+FloatArray = NDArray[np.float64]
+\end{lstlisting}
+\subsection{TransferAudit}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True).
+\begin{quote}
+Raw conservation errors (N, N m, J) and normalized project gate.
+\end{quote}
+\begin{lstlisting}
+force_error_N: FloatArray
+\end{lstlisting}
+\begin{lstlisting}
+moment_error_N_m: FloatArray
+\end{lstlisting}
+\begin{lstlisting}
+virtual_work_error_J: float
+\end{lstlisting}
+\begin{lstlisting}
+maximum_relative_error: float
+\end{lstlisting}
+\subsection{InterfaceLoads}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True).
+\begin{quote}
+Net structural nodal load, separated fluid/external contributions.
+\end{quote}
+\begin{lstlisting}
+nodal_forces_N: FloatArray
+\end{lstlisting}
+\begin{lstlisting}
+fluid_force_N: FloatArray
+\end{lstlisting}
+\begin{lstlisting}
+external_pressure_force_N: FloatArray
+\end{lstlisting}
+\begin{lstlisting}
+audit: TransferAudit
+\end{lstlisting}
+\subsection{InterfaceMap}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True).
+\begin{quote}
+Owned quadrature and scalar P1 matrix W; vector H=kron(W,I3).\par Build using :func:`build\_interface\_map`. The matrix property returns a copy; public numerical arrays use immutable bytes-backed storage. Arbitrary 3D virtual displacements may be used for work audits. Physical mesh motion additionally requires a span-invariant planar trace via the endpoint method.
+\end{quote}
+\begin{lstlisting}
+quadrature_points_m: FloatArray
+\end{lstlisting}
+\begin{lstlisting}
+quadrature_areas_m2: FloatArray
+\end{lstlisting}
+\begin{lstlisting}
+segment_indices: NDArray[np.int64]
+\end{lstlisting}
+\begin{lstlisting}
+structure_points_m: FloatArray
+\end{lstlisting}
+\begin{lstlisting}
+segments_m: FloatArray
+\end{lstlisting}
+\begin{lstlisting}
+fluid_normals: FloatArray
+\end{lstlisting}
+\begin{lstlisting}
+width_m: float
+\end{lstlisting}
+\begin{lstlisting}
+span_origin_m: float
+\end{lstlisting}
+\begin{lstlisting}
+length_scale_m: float
+\end{lstlisting}
+\begin{lstlisting}
+maximum_relative_coverage_error: float
+\end{lstlisting}
+\subsubsection*{interpolation\_matrix}
+\begin{lstlisting}
+interpolation_matrix(self) -> sparse.csr_matrix
+\end{lstlisting}
+Return an independent vector interpolation matrix H (3nq,3ns).
+\subsubsection*{interpolate}
+\begin{lstlisting}
+interpolate(self, displacement_m: ArrayLike) -> FloatArray
+\end{lstlisting}
+P1 structural displacement [nnode,3] to quadrature [nq,3], metres.
+\subsubsection*{transfer\_forces}
+\begin{lstlisting}
+transfer_forces(self, integrated_forces_N: ArrayLike) -> FloatArray
+\end{lstlisting}
+Apply H transpose to integrated quadrature forces [nq,3] in N.
+\subsubsection*{audit}
+\begin{lstlisting}
+audit(self, integrated_forces_N: ArrayLike, virtual_displacement_m: ArrayLike | None=None) -> TransferAudit
+\end{lstlisting}
+Check force, origin moments and optional virtual work, unchanged gates.\par Relative gate is 1e-10, with absolute floors 1e-12 N, N m and J. Normalization includes absolute summed contributions to handle cancellation.
+\subsubsection*{loads\_from\_fluid\_traction}
+\begin{lstlisting}
+loads_from_fluid_traction(self, traction_Pa: ArrayLike, *, external_pressure_Pa: float=0.0) -> InterfaceLoads
+\end{lstlisting}
+Convert sigma\_f*n\_f [nsegment,2] to net structural load.\par t\_structure=-t\_fluid-p\_external*n\_f; pressure is absolute relative to the same datum as p\_external. External pressure and fluid forces remain separate. Piecewise constant FV traction is integrated on overlap areas.
+\subsubsection*{segment\_endpoint\_displacements}
+\begin{lstlisting}
+segment_endpoint_displacements(self, displacement_m: ArrayLike) -> FloatArray
+\end{lstlisting}
+Return [nsegment,2 endpoints,2] supported planar displacement.\par Reject span dependence, out-of-plane motion and P1 kinks not resolved by the fluid segments. This keeps the reduced trace and adjoint loads consistent with exactly the same H, without nearest-point interpolation.
+\subsection{build\_interface\_map}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+build_interface_map(*, segments_m: ArrayLike, fluid_normals: ArrayLike, width_m: float, structure: Mesh, facet_set: str, length_scale_m: float, span_origin_m: float=0.0, max_quadrature_points: int=200000) -> InterfaceMap
+\end{lstlisting}
+\begin{quote}
+Build exact degree-two overlap quadrature and conservative P1 map.\par Fluid segments [n,2,2] extrude over [span\_origin,span\_origin+width]. Structure must have named exterior Triangle3 facets owned by Tet4 cells; outward structural normals must oppose the supplied fluid unit normals. Geometric tolerance is 1e-10 Lref, relative area gate 1e-10. Gaps, double coverage and unsupported geometry fail explicitly. No mesh generation/I/O.
+\end{quote}
+\subsection{build\_domain\_interface}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+build_domain_interface(domain: FluidDomain, *, wall_name: str, structure: Mesh, facet_set: str, length_scale_m: float, span_origin_m: float=0.0, max_quadrature_points: int=200000) -> InterfaceMap
+\end{lstlisting}
+\begin{quote}
+Build an overlap map from a named explicitly FSI-marked no-slip wall.\par Segment order equals domain.mesh.boundary\_sets[wall\_name]. Tractions must be selected from the solver's wall-row order into that same segment order. Width is taken from FluidDomain, never guessed from structural coordinates.
+\end{quote}
+\section{fem\_toolbox.coupling.structure}
+\index{fem_toolbox.coupling.structure@coupling.\protect\allowbreak{}structure}
+Einordnung: research. M12-Entwicklung: konservative ebene FSI-Schnittstelle; bidirektionale Abnahme folgt separat.
+\par Fachvertrag: \nolinkurl{Doc/90_CONSERVATIVE_FSI_INTERFACE.md}. Beispiele/Tests:
+\nolinkurl{tests/unit/test_interface_map.py}.
+\subsection{OneWayResult}
+Forschung/intern; keine stabile Anwenderzusage.
+Basistypen: object. Dekoratoren: dataclass(frozen=True, slots=True).
+\begin{quote}
+Conservative loads and reference-geometry static structural response.
+\end{quote}
+\begin{lstlisting}
+loads: InterfaceLoads
+\end{lstlisting}
+\begin{lstlisting}
+structure: ElasticResult
+\end{lstlisting}
+\begin{lstlisting}
+maximum_displacement_ratio: float
+\end{lstlisting}
+\begin{lstlisting}
+maximum_displacement_gradient: float
+\end{lstlisting}
+\subsection{solve\_one\_way}
+Forschung/intern; keine stabile Anwenderzusage.
+\begin{lstlisting}
+solve_one_way(mapping: InterfaceMap, model: Model, traction_Pa: ArrayLike, *, external_pressure_Pa: float=0.0) -> OneWayResult
+\end{lstlisting}
+\begin{quote}
+Apply sigma\_f*n\_f [nsegment,2] to a validated elasticity Model.\par Existing body forces, tractions and prescribed displacements are preserved. Forces are added through existing point-load DOFs; there is no new element formulation. Structure mesh coordinates must equal the map coordinates. Small-displacement and gradient bounds are both 0.02, as in Doc/71.
 \end{quote}
 \section{fem\_toolbox.dynamic\_result}
 \index{fem_toolbox.dynamic_result@dynamic\_\protect\allowbreak{}result}

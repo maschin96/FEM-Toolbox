@@ -454,6 +454,1642 @@
       "reexports": {},
       "aliases": {}
     },
+    "fem_toolbox.cfd": {
+      "source": "src/fem_toolbox/cfd/__init__.py",
+      "documentation": "Experimental CFD operators, separate from the stable FEM Model API.",
+      "declared_exports": [
+        "CartesianFluidGrid",
+        "ChannelBoundary",
+        "ChannelResult",
+        "ClosedWalls",
+        "FaceGradient",
+        "FlowProblem",
+        "FluidDomain",
+        "FluidMesh2D",
+        "IncompressibleFluid",
+        "MeshMotionError",
+        "MeshMotionResult",
+        "QuadFVGeometry",
+        "QuadFlowConvergenceError",
+        "QuadFlowResult",
+        "RansConvergenceError",
+        "RansResult",
+        "StationaryFlowResult",
+        "StokesResult",
+        "StressFlux",
+        "WallQuality",
+        "move_fluid_domain",
+        "solve_channel",
+        "solve_quad_flow",
+        "solve_rans",
+        "solve_stationary_flow",
+        "solve_stokes"
+      ],
+      "definitions": {},
+      "reexports": {
+        "CartesianFluidGrid": "fem_toolbox.cfd.flow_model.CartesianFluidGrid",
+        "ChannelBoundary": "fem_toolbox.cfd.flow_model.ChannelBoundary",
+        "ChannelResult": "fem_toolbox.cfd.channel.ChannelResult",
+        "ClosedWalls": "fem_toolbox.cfd.flow_model.ClosedWalls",
+        "FaceGradient": "fem_toolbox.cfd.quad_fv.FaceGradient",
+        "FlowProblem": "fem_toolbox.cfd.flow_config.FlowProblem",
+        "FluidDomain": "fem_toolbox.cfd.fluid_domain.FluidDomain",
+        "FluidMesh2D": "fem_toolbox.cfd.fluid_mesh.FluidMesh2D",
+        "IncompressibleFluid": "fem_toolbox.cfd.flow_model.IncompressibleFluid",
+        "MeshMotionError": "fem_toolbox.cfd.mesh_motion.MeshMotionError",
+        "MeshMotionResult": "fem_toolbox.cfd.mesh_motion.MeshMotionResult",
+        "QuadFVGeometry": "fem_toolbox.cfd.quad_fv.QuadFVGeometry",
+        "QuadFlowConvergenceError": "fem_toolbox.cfd.quad_flow.QuadFlowConvergenceError",
+        "QuadFlowResult": "fem_toolbox.cfd.quad_flow.QuadFlowResult",
+        "RansConvergenceError": "fem_toolbox.cfd.rans.RansConvergenceError",
+        "RansResult": "fem_toolbox.cfd.rans.RansResult",
+        "StationaryFlowResult": "fem_toolbox.cfd.flow.StationaryFlowResult",
+        "StokesResult": "fem_toolbox.cfd.stokes.StokesResult",
+        "StressFlux": "fem_toolbox.cfd.quad_fv.StressFlux",
+        "WallQuality": "fem_toolbox.cfd.fluid_mesh.WallQuality",
+        "move_fluid_domain": "fem_toolbox.cfd.mesh_motion.move_fluid_domain",
+        "solve_channel": "fem_toolbox.cfd.channel.solve_channel",
+        "solve_quad_flow": "fem_toolbox.cfd.quad_flow.solve_quad_flow",
+        "solve_rans": "fem_toolbox.cfd.rans.solve_rans",
+        "solve_stationary_flow": "fem_toolbox.cfd.flow.solve_stationary_flow",
+        "solve_stokes": "fem_toolbox.cfd.stokes.solve_stokes"
+      },
+      "aliases": {}
+    },
+    "fem_toolbox.cfd.channel": {
+      "source": "src/fem_toolbox/cfd/channel.py",
+      "documentation": "Conservative fully developed channel momentum operator in SI units.",
+      "declared_exports": null,
+      "definitions": {
+        "ChannelResult": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True, slots=True)"
+          ],
+          "documentation": "Cell velocities and face shear; flow per unit span, power per wall area.",
+          "fields": {
+            "centers_m": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "velocity_m_s": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "shear_Pa": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "cell_momentum_residual_Pa": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "flow_rate_m2_s": {
+              "annotation": "float",
+              "default": null
+            },
+            "momentum_balance_Pa": {
+              "annotation": "float",
+              "default": null
+            },
+            "dissipation_W_m2": {
+              "annotation": "float",
+              "default": null
+            },
+            "power_balance_W_m2": {
+              "annotation": "float",
+              "default": null
+            }
+          },
+          "methods": {}
+        },
+        "solve_channel": {
+          "kind": "function",
+          "parameters": "*, faces_m: ArrayLike, viscosity_Pa_s: float, pressure_gradient_Pa_m: float, wall_velocities_m_s: tuple[float, float]=(0.0, 0.0)",
+          "returns": "ChannelResult",
+          "decorators": [],
+          "documentation": "Solve -(mu u')'=-dp/dx with two prescribed wall velocities.\n\nfaces_m has shape (n+1,), strictly increasing finite positions in m.\nConstant viscosity is positive (Pa s); pressure gradient may have either\nsign (Pa/m). Wall velocities are ordered lower/upper (m/s).\nReject invalid data or numerically unresolved conservation with\nValidationError. This is a reduced verification operator, not a RANS solver.",
+          "direct_raise_sites": [
+            "ValidationError"
+          ]
+        }
+      },
+      "reexports": {},
+      "aliases": {}
+    },
+    "fem_toolbox.cfd.flow": {
+      "source": "src/fem_toolbox/cfd/flow.py",
+      "documentation": "Stationary incompressible Navier-Stokes reference with Oseen/Picard steps.",
+      "declared_exports": null,
+      "definitions": {
+        "StationaryFlowResult": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True, slots=True)"
+          ],
+          "documentation": "Immutable MAC solution and independently reconstructed SI diagnostics.\n\nu[ny,nx+1], v[ny+1,nx], p/divergence[ny,nx]. Momentum residuals live\non free velocity faces; mass/power quantities are per unit span.",
+          "fields": {
+            "pressure_Pa": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "u_m_s": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "v_m_s": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "divergence_s_inv": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "cell_mass_balance_kg_s": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "momentum_x_residual_N_m3": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "momentum_y_residual_N_m3": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "inlet_mass_flow_kg_s": {
+              "annotation": "float",
+              "default": null
+            },
+            "outlet_mass_flow_kg_s": {
+              "annotation": "float",
+              "default": null
+            },
+            "global_mass_balance_kg_s": {
+              "annotation": "float",
+              "default": null
+            },
+            "global_momentum_balance_N_m": {
+              "annotation": "tuple[float, float]",
+              "default": null
+            },
+            "dissipation_W_m": {
+              "annotation": "float",
+              "default": null
+            },
+            "convective_power_W_m": {
+              "annotation": "float",
+              "default": null
+            },
+            "pressure_power_W_m": {
+              "annotation": "float",
+              "default": null
+            },
+            "power_balance_W_m": {
+              "annotation": "float",
+              "default": null
+            },
+            "iterations": {
+              "annotation": "int",
+              "default": null
+            },
+            "residual_history": {
+              "annotation": "tuple[float, ...]",
+              "default": null
+            },
+            "converged": {
+              "annotation": "bool",
+              "default": null
+            },
+            "provenance": {
+              "annotation": "RunProvenance",
+              "default": null
+            }
+          },
+          "methods": {}
+        },
+        "solve_stationary_flow": {
+          "kind": "function",
+          "parameters": "grid: CartesianFluidGrid, fluid: IncompressibleFluid, boundary: ChannelBoundary | ClosedWalls, *, force_x_N_m3: ArrayLike=0.0, force_y_N_m3: ArrayLike=0.0, pressure_reference_Pa: float | None=None, relaxation: float=0.7, convection_scheme: str='donor-cell', max_iterations: int=200, relative_tolerance: float=1e-10, momentum_tolerance_N_m3: float=1e-12, mass_tolerance_kg_s: float=1e-12, power_tolerance_W_m: float=1e-12, max_unknowns: int=50000",
+          "returns": "StationaryFlowResult",
+          "decorators": [],
+          "documentation": "Solve conservative steady 2D incompressible flow in SI units.\n\nSelect donor-cell, linear-upwind (minmod deferred correction), or central\n(face Peclet <2). Constant material, monolithic pressure coupling and\nunderrelaxed Picard iteration. ClosedWalls use p[0,0] as gauge (default 0).\nChannelBoundary uses prescribed outlet pressure and rejects any extra gauge.\nForces: scalar or free-face arrays u:(ny,nx-1) closed/(ny,nx) channel,\nv:(ny-1,nx). Gates test final nonlinear momentum, local/global mass and work.\nRaise ValidationError on unsupported backflow, invalid data, unresolved\nscales, linear solve failure or nonconvergence (with last residual).",
+          "direct_raise_sites": [
+            "ValidationError"
+          ]
+        }
+      },
+      "reexports": {},
+      "aliases": {}
+    },
+    "fem_toolbox.cfd.flow_config": {
+      "source": "src/fem_toolbox/cfd/flow_config.py",
+      "documentation": "Strict versioned TOML for the supported uniform stationary-flow contract.",
+      "declared_exports": null,
+      "definitions": {
+        "FlowProblem": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True, slots=True)"
+          ],
+          "documentation": "Validated grid, fluid and boundary data; reproducible zero-body-force run.",
+          "fields": {
+            "grid": {
+              "annotation": "CartesianFluidGrid",
+              "default": null
+            },
+            "fluid": {
+              "annotation": "IncompressibleFluid",
+              "default": null
+            },
+            "boundary": {
+              "annotation": "ChannelBoundary | ClosedWalls",
+              "default": null
+            }
+          },
+          "methods": {
+            "from_document": {
+              "parameters": "cls, document: Mapping[str, object]",
+              "returns": "'FlowProblem'",
+              "decorators": [
+                "classmethod"
+              ],
+              "documentation": null,
+              "direct_raise_sites": [
+                "ModelSchemaError"
+              ]
+            },
+            "from_file": {
+              "parameters": "cls, path: str | Path",
+              "returns": "'FlowProblem'",
+              "decorators": [
+                "classmethod"
+              ],
+              "documentation": "Read UTF-8 TOML and diagnose unreadable files/syntax as schema errors.",
+              "direct_raise_sites": [
+                "ModelSchemaError"
+              ]
+            },
+            "to_document": {
+              "parameters": "self",
+              "returns": "dict[str, Any]",
+              "decorators": [],
+              "documentation": "Detached schema-1 data; values and field names explicitly use SI.",
+              "direct_raise_sites": []
+            },
+            "solve": {
+              "parameters": "self",
+              "returns": "StationaryFlowResult",
+              "decorators": [],
+              "documentation": "Solve with documented default controls; custom controls use Python API.",
+              "direct_raise_sites": []
+            }
+          }
+        }
+      },
+      "reexports": {},
+      "aliases": {}
+    },
+    "fem_toolbox.cfd.flow_model": {
+      "source": "src/fem_toolbox/cfd/flow_model.py",
+      "documentation": "Validated uniform fluid mesh, SI material and explicit boundary contracts.",
+      "declared_exports": null,
+      "definitions": {
+        "CartesianFluidGrid": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True, slots=True)"
+          ],
+          "documentation": "Uniform rectangle: cells=(nx,ny)>=2, size_m=(Lx,Ly)>0 in metres.",
+          "fields": {
+            "cells": {
+              "annotation": "tuple[int, int]",
+              "default": null
+            },
+            "size_m": {
+              "annotation": "tuple[float, float]",
+              "default": null
+            }
+          },
+          "methods": {}
+        },
+        "IncompressibleFluid": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True, slots=True)"
+          ],
+          "documentation": "Constant density kg/m³ and dynamic viscosity Pa s, both positive.",
+          "fields": {
+            "density_kg_m3": {
+              "annotation": "float",
+              "default": null
+            },
+            "viscosity_Pa_s": {
+              "annotation": "float",
+              "default": null
+            }
+          },
+          "methods": {}
+        },
+        "ClosedWalls": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True, slots=True)"
+          ],
+          "documentation": "Zero normal speed; constant bottom/top/left/right tangential speeds m/s.",
+          "fields": {
+            "tangential_velocities_m_s": {
+              "annotation": "tuple[float, float, float, float]",
+              "default": "(0, 0, 0, 0)"
+            }
+          },
+          "methods": {}
+        },
+        "ChannelBoundary": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True, slots=True, init=False)"
+          ],
+          "documentation": "Left u(y)>=0 inlet, v=0; right prescribed pressure and zero du/dn.\n\nProfile shape is (ny,), owned and read-only; top/bottom are no-slip.\nReverse flow at the right outlet is unsupported and explicitly rejected.",
+          "fields": {
+            "inlet_velocity_m_s": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "outlet_pressure_Pa": {
+              "annotation": "float",
+              "default": null
+            }
+          },
+          "methods": {
+            "__init__": {
+              "parameters": "self, inlet_velocity_m_s: ArrayLike, outlet_pressure_Pa: float=0",
+              "returns": "None",
+              "decorators": [],
+              "documentation": null,
+              "direct_raise_sites": [
+                "ValidationError"
+              ]
+            }
+          }
+        }
+      },
+      "reexports": {},
+      "aliases": {}
+    },
+    "fem_toolbox.cfd.fluid_domain": {
+      "source": "src/fem_toolbox/cfd/fluid_domain.py",
+      "documentation": "Experimental mesh/BC/material preflight, deliberately without a CFD solver.",
+      "declared_exports": null,
+      "definitions": {
+        "FluidDomain": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True, slots=True, init=False)"
+          ],
+          "documentation": "Immutable SI mesh/material/BC preflight, not a RANS solve.\n\nBoundary indices refer to input line2 rows. Inlet velocity=(2,) or\n(nselection,2) m/s; nu_tilde scalar or (nselection,) m²/s. Periodic\ntranslations and pressure drops are paired with opposite signs.\nA single connected mesh needs one outlet group or one pressure gauge.\nWidth is explicit for conversion of planar fluxes to kg/s.",
+          "fields": {
+            "mesh": {
+              "annotation": "FluidMesh2D",
+              "default": null
+            },
+            "fluid": {
+              "annotation": "IncompressibleFluid",
+              "default": null
+            },
+            "boundaries": {
+              "annotation": "Mapping[str, Mapping[str, Any]]",
+              "default": null
+            },
+            "wall_quality": {
+              "annotation": "WallQuality",
+              "default": null
+            },
+            "inlet_mass_flow_kg_s": {
+              "annotation": "float",
+              "default": null
+            },
+            "pressure_reference_cell": {
+              "annotation": "int | None",
+              "default": null
+            },
+            "width_m": {
+              "annotation": "float",
+              "default": null
+            },
+            "periodic_partners": {
+              "annotation": "Mapping[int, int]",
+              "default": null
+            }
+          },
+          "methods": {
+            "from_document": {
+              "parameters": "cls, document: Mapping[str, Any], *, mesh: FluidMesh2D",
+              "returns": "FluidDomain",
+              "decorators": [
+                "classmethod"
+              ],
+              "documentation": null,
+              "direct_raise_sites": []
+            },
+            "from_file": {
+              "parameters": "cls, path: str | Path",
+              "returns": "FluidDomain",
+              "decorators": [
+                "classmethod"
+              ],
+              "documentation": "Read schema-1 JSON domain and mesh confined to the same input tree.",
+              "direct_raise_sites": [
+                "ModelSchemaError"
+              ]
+            }
+          }
+        }
+      },
+      "reexports": {},
+      "aliases": {}
+    },
+    "fem_toolbox.cfd.fluid_mesh": {
+      "source": "src/fem_toolbox/cfd/fluid_mesh.py",
+      "documentation": "Experimental conforming 2D Quad4 fluid geometry and wall-resolution gates.",
+      "declared_exports": null,
+      "definitions": {
+        "WallQuality": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True, slots=True)"
+          ],
+          "documentation": "Distances in metres; boundary rows and growth refer to selected wall faces.",
+          "fields": {
+            "boundary_indices": {
+              "annotation": "NDArray[np.int64]",
+              "default": null
+            },
+            "wall_distance_m": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "first_cell_distance_m": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "layer_growth": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            }
+          },
+          "methods": {
+            "y_plus": {
+              "parameters": "self, *, density_kg_m3: float, viscosity_Pa_s: float, wall_shear_Pa: ArrayLike",
+              "returns": "NDArray[np.float64]",
+              "decorators": [],
+              "documentation": "Evaluate actual wall shear, reject y+>1; no estimated shear default.",
+              "direct_raise_sites": []
+            }
+          }
+        },
+        "FluidMesh2D": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True, slots=True, init=False)"
+          ],
+          "documentation": "Owned SI Quad4 mesh; complete boundary rows, immutable named selections.\n\npoints=(n,2) metres, quad4=(nc,4) CCW, line2=(nb,2). Indices are\nzero-based. Boundary row order is preserved; normals use cell ownership.\nValidates positive geometry, conformity, overlap and ADR-049 FV gates.\nThis is a reference adapter, with no fluid solver or mesh motion.",
+          "fields": {
+            "points": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "quad4": {
+              "annotation": "NDArray[np.int64]",
+              "default": null
+            },
+            "line2": {
+              "annotation": "NDArray[np.int64]",
+              "default": null
+            },
+            "boundary_sets": {
+              "annotation": "Mapping[str, NDArray[np.int64]]",
+              "default": null
+            },
+            "volume_sets": {
+              "annotation": "Mapping[str, NDArray[np.int64]]",
+              "default": null
+            },
+            "cell_areas_m2": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "cell_aspect_ratio": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "cell_centres_m": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "faces": {
+              "annotation": "NDArray[np.int64]",
+              "default": null
+            },
+            "face_owners": {
+              "annotation": "NDArray[np.int64]",
+              "default": null
+            },
+            "face_neighbours": {
+              "annotation": "NDArray[np.int64]",
+              "default": null
+            },
+            "face_centres_m": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "face_normals": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "face_lengths_m": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "boundary_face_indices": {
+              "annotation": "NDArray[np.int64]",
+              "default": null
+            },
+            "nonorthogonality_deg": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "skewness": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            }
+          },
+          "methods": {
+            "__init__": {
+              "parameters": "self, points: ArrayLike, quad4: ArrayLike, line2: ArrayLike, boundary_sets: Mapping[str, ArrayLike], volume_sets: Mapping[str, ArrayLike] | None=None",
+              "returns": "None",
+              "decorators": [],
+              "documentation": null,
+              "direct_raise_sites": []
+            },
+            "boundary_normals": {
+              "parameters": "self",
+              "returns": "NDArray[np.float64]",
+              "decorators": [
+                "property"
+              ],
+              "documentation": "Outward normals in the input line2 row order.",
+              "direct_raise_sites": []
+            },
+            "max_nonorthogonality_deg": {
+              "parameters": "self",
+              "returns": "float",
+              "decorators": [
+                "property"
+              ],
+              "documentation": null,
+              "direct_raise_sites": []
+            },
+            "max_skewness": {
+              "parameters": "self",
+              "returns": "float",
+              "decorators": [
+                "property"
+              ],
+              "documentation": null,
+              "direct_raise_sites": []
+            },
+            "from_document": {
+              "parameters": "cls, document: Mapping[str, Any]",
+              "returns": "FluidMesh2D",
+              "decorators": [
+                "classmethod"
+              ],
+              "documentation": null,
+              "direct_raise_sites": []
+            },
+            "from_file": {
+              "parameters": "cls, path: str | Path",
+              "returns": "FluidMesh2D",
+              "decorators": [
+                "classmethod"
+              ],
+              "documentation": "Read UTF-8 schema-1 JSON; no implicit unit conversion or repair.",
+              "direct_raise_sites": [
+                "ModelSchemaError"
+              ]
+            },
+            "to_document": {
+              "parameters": "self",
+              "returns": "dict[str, Any]",
+              "decorators": [],
+              "documentation": "Return detached JSON-ready input data, preserving group order/indices.",
+              "direct_raise_sites": []
+            },
+            "wall_quality": {
+              "parameters": "self, wall_groups: Sequence[str]",
+              "returns": "WallQuality",
+              "decorators": [],
+              "documentation": "Compute exact segment distances and opposite-face layer growth.\n\nAt least one named wall selection is required. For the selected\nstructured Quad4 rows, trace opposite faces to the domain boundary;\noutward normal layer growth greater than 1.2 is rejected with wall ID.",
+              "direct_raise_sites": []
+            }
+          }
+        }
+      },
+      "reexports": {},
+      "aliases": {}
+    },
+    "fem_toolbox.cfd.mac": {
+      "source": "src/fem_toolbox/cfd/mac.py",
+      "documentation": "Sparse MAC operators with conservative convection and pressure outlet.",
+      "declared_exports": null,
+      "definitions": {
+        "MACSystem": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass"
+          ],
+          "documentation": "Private assembly state: free velocity maps, boundary values and volumes.",
+          "fields": {
+            "grid": {
+              "annotation": "CartesianFluidGrid",
+              "default": null
+            },
+            "boundary": {
+              "annotation": "ChannelBoundary | ClosedWalls",
+              "default": null
+            },
+            "mu": {
+              "annotation": "float",
+              "default": null
+            },
+            "uid": {
+              "annotation": "NDArray[np.int64]",
+              "default": null
+            },
+            "vid": {
+              "annotation": "NDArray[np.int64]",
+              "default": null
+            },
+            "u_boundary": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "weights": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "diffusion": {
+              "annotation": "Any",
+              "default": null
+            },
+            "divergence": {
+              "annotation": "Any",
+              "default": null
+            },
+            "gradient": {
+              "annotation": "Any",
+              "default": null
+            },
+            "boundary_rhs": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "mass_rhs": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "edges": {
+              "annotation": "list[tuple[int, int, float]]",
+              "default": null
+            },
+            "contacts": {
+              "annotation": "list[tuple[int, float, float]]",
+              "default": null
+            }
+          },
+          "methods": {
+            "spacing": {
+              "parameters": "self",
+              "returns": "tuple[float, float]",
+              "decorators": [
+                "property"
+              ],
+              "documentation": null,
+              "direct_raise_sites": []
+            },
+            "nu": {
+              "parameters": "self",
+              "returns": "int",
+              "decorators": [
+                "property"
+              ],
+              "documentation": null,
+              "direct_raise_sites": []
+            },
+            "fields": {
+              "parameters": "self, q: NDArray[np.float64]",
+              "returns": "tuple[NDArray[np.float64], NDArray[np.float64]]",
+              "decorators": [],
+              "documentation": null,
+              "direct_raise_sites": []
+            }
+          }
+        },
+        "assemble": {
+          "kind": "function",
+          "parameters": "grid: CartesianFluidGrid, boundary: ChannelBoundary | ClosedWalls, mu: float",
+          "returns": "MACSystem",
+          "decorators": [],
+          "documentation": null,
+          "direct_raise_sites": [
+            "ValidationError"
+          ]
+        },
+        "convection": {
+          "kind": "function",
+          "parameters": "system: MACSystem, q: NDArray[np.float64], rho: float, scheme: str='donor-cell'",
+          "returns": "tuple[Any, NDArray[np.float64]]",
+          "decorators": [],
+          "documentation": "Freeze shared dual-face mass fluxes and upwind donor values.",
+          "direct_raise_sites": [
+            "ValidationError"
+          ]
+        },
+        "linear_step": {
+          "kind": "function",
+          "parameters": "system: MACSystem, operator: Any, rhs: NDArray[np.float64]",
+          "returns": "tuple[NDArray[np.float64], NDArray[np.float64]]",
+          "decorators": [],
+          "documentation": null,
+          "direct_raise_sites": [
+            "ValidationError"
+          ]
+        }
+      },
+      "reexports": {},
+      "aliases": {}
+    },
+    "fem_toolbox.cfd.mesh_motion": {
+      "source": "src/fem_toolbox/cfd/mesh_motion.py",
+      "documentation": "Stationary harmonic mesh displacement on a fixed Quad4 reference domain.\n\nThis solves two scalar Laplace problems, never a physical time/ALE equation.\nAll displacements are absolute SI metres relative to the supplied reference.",
+      "declared_exports": null,
+      "definitions": {
+        "MeshMotionError": {
+          "kind": "class",
+          "bases": [
+            "ValidationError"
+          ],
+          "decorators": [],
+          "documentation": "Rejected stationary motion with stage, reference identity and last field.",
+          "fields": {},
+          "methods": {
+            "__init__": {
+              "parameters": "self, message: str, *, stage: str, reference_mesh_sha256: str, displacement_m: NDArray[np.float64]",
+              "returns": "None",
+              "decorators": [],
+              "documentation": null,
+              "direct_raise_sites": []
+            }
+          }
+        },
+        "MeshMotionResult": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True, slots=True)"
+          ],
+          "documentation": "New immutable domain and absolute harmonic displacement [npoint,2] m.\n\nLaplace residuals contain free reduced DOFs (periodic pairs share a DOF).\nBoundary group/connectivity identities are retained. Hashes distinguish\nreference/current meshes, full domains and prescribed interface traces.",
+          "fields": {
+            "domain": {
+              "annotation": "FluidDomain",
+              "default": null
+            },
+            "displacement_m": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "laplace_residual_m": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "maximum_relative_laplace_residual": {
+              "annotation": "float",
+              "default": null
+            },
+            "minimum_area_ratio": {
+              "annotation": "float",
+              "default": null
+            },
+            "reference_mesh_sha256": {
+              "annotation": "str",
+              "default": null
+            },
+            "mesh_sha256": {
+              "annotation": "str",
+              "default": null
+            },
+            "reference_domain_sha256": {
+              "annotation": "str",
+              "default": null
+            },
+            "domain_sha256": {
+              "annotation": "str",
+              "default": null
+            },
+            "interface_sha256": {
+              "annotation": "str",
+              "default": null
+            },
+            "input_sha256": {
+              "annotation": "str",
+              "default": null
+            },
+            "settings": {
+              "annotation": "Mapping[str, Any]",
+              "default": null
+            }
+          },
+          "methods": {}
+        },
+        "move_fluid_domain": {
+          "kind": "function",
+          "parameters": "reference: FluidDomain, interface_displacements_m: Mapping[str, ArrayLike], *, length_scale_m: float, preserve_inlet_flow: bool=True, max_nodes: int=50000",
+          "returns": "MeshMotionResult",
+          "decorators": [],
+          "documentation": "Harmonic absolute motion with prescribed FSI endpoint traces.\n\nEach explicitly marked FSI wall needs [nsegment,2 endpoints,2] metres,\nin its line2 endpoint order. Other walls stay fixed. Inlet/outlet chains\ninterpolate their two wall-corner displacements; other open boundaries\nhave natural zero normal gradient. Explicit periodic node pairs are tied.\nFixed inlet volume flow is preserved by scaling each original velocity\nprofile against its new signed face areas; original SA inlet values remain.\n\nReject max|d|/Lref>0.02, inverted/poor-quality geometry, area ratios<0.5,\nconflicting corners, noncongruent periodic motion and resource exhaustion.\nThe new FluidDomain rebuilds wall distances, growth and all BC preflight.\nFinal y+ still requires a subsequent fluid solve, not a mesh-only estimate.",
+          "direct_raise_sites": [
+            "MeshMotionError"
+          ]
+        }
+      },
+      "reexports": {},
+      "aliases": {}
+    },
+    "fem_toolbox.cfd.quad_flow": {
+      "source": "src/fem_toolbox/cfd/quad_flow.py",
+      "documentation": "Stationary laminar Quad-FV flow with Krylov-accelerated SIMPLE steps.",
+      "declared_exports": null,
+      "definitions": {
+        "QuadFlowConvergenceError": {
+          "kind": "class",
+          "bases": [
+            "ValidationError"
+          ],
+          "decorators": [],
+          "documentation": "Nonconvergence with immutable complete outer residual history.",
+          "fields": {},
+          "methods": {
+            "__init__": {
+              "parameters": "self, history: list[tuple[float, ...]]",
+              "returns": "None",
+              "decorators": [],
+              "documentation": null,
+              "direct_raise_sites": []
+            }
+          }
+        },
+        "QuadFlowResult": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True, slots=True)"
+          ],
+          "documentation": "Immutable cell/face SI fields and freshly reconstructed diagnostics.\n\nU[ncell,2], p[ncell], mass_flux[nface] in mesh.faces order. Pressure is\nthe periodic part plus gauge, if periodic driving is present. History\nrows contain momentum, continuity, global mass, global momentum, power.",
+          "fields": {
+            "velocity_m_s": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "pressure_Pa": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "mass_flux_kg_s": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "face_velocity_m_s": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "mass_residual_kg_m3_s": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "momentum_residual_N_m3": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "nonorthogonal_correction_residual_N_m3": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "global_mass_balance_kg_s": {
+              "annotation": "float",
+              "default": null
+            },
+            "global_momentum_balance_N": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "inlet_mass_flow_kg_s": {
+              "annotation": "float",
+              "default": null
+            },
+            "outlet_mass_flow_kg_s": {
+              "annotation": "float",
+              "default": null
+            },
+            "wall_traction_Pa": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "viscous_dissipation_W": {
+              "annotation": "float",
+              "default": null
+            },
+            "gradient_dissipation_W": {
+              "annotation": "float",
+              "default": null
+            },
+            "viscous_discretization_power_W": {
+              "annotation": "float",
+              "default": null
+            },
+            "convective_power_W": {
+              "annotation": "float",
+              "default": null
+            },
+            "numerical_transport_power_W": {
+              "annotation": "float",
+              "default": null
+            },
+            "pressure_boundary_power_W": {
+              "annotation": "float",
+              "default": null
+            },
+            "pressure_interpolation_power_W": {
+              "annotation": "float",
+              "default": null
+            },
+            "body_power_W": {
+              "annotation": "float",
+              "default": null
+            },
+            "viscous_boundary_power_W": {
+              "annotation": "float",
+              "default": null
+            },
+            "power_balance_W": {
+              "annotation": "float",
+              "default": null
+            },
+            "iterations": {
+              "annotation": "int",
+              "default": null
+            },
+            "simple_steps": {
+              "annotation": "int",
+              "default": null
+            },
+            "residual_history": {
+              "annotation": "tuple[tuple[float, ...], ...]",
+              "default": null
+            },
+            "converged": {
+              "annotation": "bool",
+              "default": null
+            },
+            "provenance": {
+              "annotation": "RunProvenance",
+              "default": null
+            }
+          },
+          "methods": {}
+        },
+        "solve_quad_flow": {
+          "kind": "function",
+          "parameters": "domain: FluidDomain, *, velocity_scale_m_s: float, length_scale_m: float, force_N_m3: ArrayLike=(0.0, 0.0), viscosity_Pa_s: ArrayLike | None=None, boundary_viscosity_Pa_s: ArrayLike | None=None, pressure_reference_Pa: float | None=None, convection_scheme: str='donor-cell', velocity_relaxation: float=0.5, pressure_relaxation: float=0.5, max_iterations: int=500, max_simple_steps: int=500, max_unknowns: int=50000, model: str='laminar'",
+          "returns": "QuadFlowResult",
+          "decorators": [],
+          "documentation": "Solve explicit laminar incompressible Quad-FV flow (not SA/RANS/FSI).\n\nScales U_ref,L_ref are mandatory positive SI. Force is (2,) or (nc,2).\nOptional positive mu/mub fields must be provided together, shapes (nc,)/(nb,)\nor scalar. FluidDomain supplies fixed rho, width and physical boundaries.\nFull variable symmetric stress, component pressure mobility, donor-cell,\ncentral (|Pe|<2) or bounded linear-upwind; no implicit scheme substitution.\nSparse LU block solves with GMRES-accelerated SIMPLE pressure corrections.\nFinal absolute gates are those of Doc/71, no relaxed tolerance fallback.\nValidationError covers backflow, nonconvergence, scales and resource limits.",
+          "direct_raise_sites": [
+            "QuadFlowConvergenceError"
+          ]
+        }
+      },
+      "reexports": {},
+      "aliases": {}
+    },
+    "fem_toolbox.cfd.quad_fv": {
+      "source": "src/fem_toolbox/cfd/quad_fv.py",
+      "documentation": "Conservative SI Quad-FV primitives; no flow solve or boundary orchestration.",
+      "declared_exports": null,
+      "definitions": {
+        "FaceGradient": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True, slots=True)"
+          ],
+          "documentation": "Full corrected gradient and its compact/nonorthogonal normal parts.\n\nScalar: gradient[nface,2], normal parts[nface]. Vector: gradient[nface,k,2],\nnormal parts[nface,k]. Gradient last axis is spatial x/y.",
+          "fields": {
+            "gradient": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "compact_normal": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "nonorthogonal_normal": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            }
+          },
+          "methods": {}
+        },
+        "StressFlux": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True, slots=True)"
+          ],
+          "documentation": "sigma=-pI+mu*(grad U+grad U^T); traction is outward from fluid.\n\nstress_Pa[nface,2,2], traction_Pa[nface,2], face_force_N[nface,2],\ncell_force_N[ncell,2]=integrated div(sigma). No body/convection terms.\nForce on a structure is the negative fluid traction times face area.",
+          "fields": {
+            "stress_Pa": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "traction_Pa": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "face_force_N": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "cell_force_N": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            }
+          },
+          "methods": {}
+        },
+        "QuadFVGeometry": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True, slots=True, init=False)"
+          ],
+          "documentation": "Immutable operators on a validated mesh, width in metres.\n\nAll face arrays follow mesh.faces; boundary arrays follow mesh.line2.\nPeriodic values must already represent the same periodic field (pressure\nmeans its periodic part); affine pressure drops belong in the body force.\nOne periodic face is active, its partner stores the opposite flux.\nNo PDE solver, pressure gauge elimination or physical BC defaults.",
+          "fields": {
+            "mesh": {
+              "annotation": "FluidMesh2D",
+              "default": null
+            },
+            "width_m": {
+              "annotation": "float",
+              "default": null
+            },
+            "cell_volumes_m3": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "face_areas_m2": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "neighbours": {
+              "annotation": "NDArray[np.int64]",
+              "default": null
+            },
+            "active_faces": {
+              "annotation": "NDArray[np.int64]",
+              "default": null
+            },
+            "periodic_partners": {
+              "annotation": "Mapping[int, int]",
+              "default": null
+            }
+          },
+          "methods": {
+            "__init__": {
+              "parameters": "self, mesh: FluidMesh2D, *, width_m: float, periodic_pairs: Mapping[int, int] | None=None, max_cells: int=50000",
+              "returns": "None",
+              "decorators": [],
+              "documentation": null,
+              "direct_raise_sites": []
+            },
+            "from_domain": {
+              "parameters": "cls, domain: FluidDomain, *, max_cells: int=50000",
+              "returns": "QuadFVGeometry",
+              "decorators": [
+                "classmethod"
+              ],
+              "documentation": "Use validated domain width and boundary-row periodic partners only.",
+              "direct_raise_sites": []
+            },
+            "gradient": {
+              "parameters": "self, values: ArrayLike, boundary_values: ArrayLike",
+              "returns": "NDArray[np.float64]",
+              "decorators": [],
+              "documentation": "Linear-exact cell gradient from centre and prescribed face samples.\n\nScalar input (nc,)/(nb,) -> (nc,2); k components -> (nc,k,2).\nAll boundary rows are supplied; periodic rows are validated but ignored.",
+              "direct_raise_sites": []
+            },
+            "face_values": {
+              "parameters": "self, values: ArrayLike, boundary_values: ArrayLike",
+              "returns": "NDArray[np.float64]",
+              "decorators": [],
+              "documentation": "Interpolate centre-to-face extrapolations; exact for affine fields.",
+              "direct_raise_sites": []
+            },
+            "face_gradient": {
+              "parameters": "self, values: ArrayLike, boundary_values: ArrayLike",
+              "returns": "FaceGradient",
+              "decorators": [],
+              "documentation": "Over-relaxed directional correction with the same geometry as pressure.\n\ng_face = g_bar + n*(delta_phi - g_bar dot delta_x)/(delta_x dot n).\nNormal part is delta_phi/d_n - g_bar dot(delta_x-d_n*n)/d_n.",
+              "direct_raise_sites": []
+            },
+            "cell_balance": {
+              "parameters": "self, face_flux: ArrayLike",
+              "returns": "NDArray[np.float64]",
+              "decorators": [],
+              "documentation": "Integrated outward balance, scalar or k-vector flux per mesh face.\n\nPeriodic alias must carry the exact negative master flux. No division\nby volume: mass flux kg/s -> kg/s; face force N -> cell force N.",
+              "direct_raise_sites": []
+            },
+            "stress_flux": {
+              "parameters": "self, velocity_m_s: ArrayLike, boundary_velocity_m_s: ArrayLike, *, viscosity_Pa_s: ArrayLike, boundary_viscosity_Pa_s: ArrayLike, pressure_Pa: ArrayLike | None=None, boundary_pressure_Pa: ArrayLike | None=None",
+              "returns": "StressFlux",
+              "decorators": [],
+              "documentation": "Full symmetric Newton stress with linear-exact face mu and pressure.\n\nU:(nc,2), Ub:(nb,2). mu: positive scalar/(nc,), mub:(nb,).\nBoth pressure arrays are optional together, default zero viscous-only.\nNo scalar Laplacian replacement; cross/shear terms retained.",
+              "direct_raise_sites": []
+            },
+            "pressure_correction_matrix": {
+              "parameters": "self, *, momentum_diagonal_kg_s: ArrayLike, density_kg_m3: float, pressure_boundary_indices: ArrayLike=()",
+              "returns": "csr_matrix",
+              "decorators": [],
+              "documentation": "Positive compact -div(rho*d*grad(pc)) block (kg/(Pa s)).\n\nd=V/a from the *unrelaxed integrated* momentum diagonal (kg/s).\na accepts scalar, (ncell,) or component (ncell,2) diagonals; the latter\nuses n.T @ diag(V/a) @ n for the common normal mobility.\nNo gauge: closed/periodic block has exactly the constant null mode.\nSelected boundary line rows mean prescribed pc=0; other outer fluxes\nfixed. Nonorthogonal correction is explicit through FaceGradient.\nReturned sparse matrix is a detached mutable object.",
+              "direct_raise_sites": []
+            },
+            "rhie_chow_flux": {
+              "parameters": "self, velocity_m_s: ArrayLike, boundary_velocity_m_s: ArrayLike, pressure_Pa: ArrayLike, boundary_pressure_Pa: ArrayLike, *, momentum_diagonal_kg_s: ArrayLike, density_kg_m3: float, pressure_boundary_indices: ArrayLike=()",
+              "returns": "NDArray[np.float64]",
+              "decorators": [],
+              "documentation": "Common face mass flux rho*A*(Uf + df*(gbar_p-gface_p)) dot n.\n\nU (nc,2), p (nc,), explicit face boundary samples. Fixed outer fluxes\nuse prescribed U; only selected pressure boundaries receive RC coupling.\nNo relaxation applied here. Caller must supply consistent unrelaxed a.",
+              "direct_raise_sites": []
+            }
+          }
+        }
+      },
+      "reexports": {},
+      "aliases": {}
+    },
+    "fem_toolbox.cfd.quad_system": {
+      "source": "src/fem_toolbox/cfd/quad_system.py",
+      "documentation": "Sparse affine field maps and conservative Oseen/SIMPLE block assembly.",
+      "declared_exports": null,
+      "definitions": {
+        "Map": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass"
+          ],
+          "documentation": "Private affine field map; caller supplies already validated arrays.",
+          "fields": {
+            "matrix": {
+              "annotation": "csr_matrix",
+              "default": null
+            },
+            "constant": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            }
+          },
+          "methods": {
+            "apply": {
+              "parameters": "self, value: NDArray[np.float64]",
+              "returns": "NDArray[np.float64]",
+              "decorators": [],
+              "documentation": null,
+              "direct_raise_sites": []
+            }
+          }
+        },
+        "sparse": {
+          "kind": "function",
+          "parameters": "rows: list[int], cols: list[int], data: list[float], shape: tuple[int, int]",
+          "returns": "csr_matrix",
+          "decorators": [],
+          "documentation": null,
+          "direct_raise_sites": []
+        },
+        "affine_product": {
+          "kind": "function",
+          "parameters": "matrix: csr_matrix, mapping: Map",
+          "returns": "Map",
+          "decorators": [],
+          "documentation": null,
+          "direct_raise_sites": []
+        },
+        "QuadSystem": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [],
+          "documentation": "Internal maps preserve common face states, full stress and BC constraints.",
+          "fields": {},
+          "methods": {
+            "__init__": {
+              "parameters": "self, domain: FluidDomain, mu: NDArray[np.float64], mub: NDArray[np.float64]",
+              "returns": "None",
+              "decorators": [],
+              "documentation": null,
+              "direct_raise_sites": []
+            },
+            "alias_flux": {
+              "parameters": "self, value: NDArray[np.float64]",
+              "returns": "NDArray[np.float64]",
+              "decorators": [],
+              "documentation": null,
+              "direct_raise_sites": []
+            },
+            "pressure_flux": {
+              "parameters": "self, diagonal: NDArray[np.float64]",
+              "returns": "Map",
+              "decorators": [],
+              "documentation": null,
+              "direct_raise_sites": []
+            },
+            "transport": {
+              "parameters": "self, flux: NDArray[np.float64], u: NDArray[np.float64], scheme: str",
+              "returns": "tuple[Map, NDArray[np.float64]]",
+              "decorators": [],
+              "documentation": null,
+              "direct_raise_sites": []
+            }
+          }
+        }
+      },
+      "reexports": {},
+      "aliases": {}
+    },
+    "fem_toolbox.cfd.rans": {
+      "source": "src/fem_toolbox/cfd/rans.py",
+      "documentation": "Coupled stationary 2D SA-noft2/SIMPLE with fresh field and wall-resolution gates.",
+      "declared_exports": null,
+      "definitions": {
+        "RansConvergenceError": {
+          "kind": "class",
+          "bases": [
+            "ValidationError"
+          ],
+          "decorators": [],
+          "documentation": "Failed joint iteration with immutable last fields and complete history.",
+          "fields": {},
+          "methods": {
+            "__init__": {
+              "parameters": "self, reason: str, history: list[tuple[float, ...]], u: NDArray[np.float64], p: NDArray[np.float64], a: NDArray[np.float64]",
+              "returns": "None",
+              "decorators": [],
+              "documentation": null,
+              "direct_raise_sites": []
+            }
+          }
+        },
+        "RansResult": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True, slots=True)"
+          ],
+          "documentation": "Joint solution: flow, SA cell fields and actual wall-resolution diagnostics.\n\nHistory columns: max momentum N/m³, mass kg/(m³ s), SA m²/s²,\nglobal mass kg/s, max global momentum N, power W, accepted SA alpha.\nwall_y_plus follows domain.wall_quality.boundary_indices. No DNS/model or\nFSI qualification is implied by convergence of these discrete equations.",
+          "fields": {
+            "flow": {
+              "annotation": "QuadFlowResult",
+              "default": null
+            },
+            "nu_tilde_m2_s": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "eddy_viscosity_m2_s": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "effective_viscosity_Pa_s": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "boundary_effective_viscosity_Pa_s": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "sa_residual_m2_s2": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "sa_global_balance_m5_s2": {
+              "annotation": "float",
+              "default": null
+            },
+            "wall_y_plus": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "iterations": {
+              "annotation": "int",
+              "default": null
+            },
+            "residual_history": {
+              "annotation": "tuple[tuple[float, ...], ...]",
+              "default": null
+            },
+            "converged": {
+              "annotation": "bool",
+              "default": null
+            },
+            "provenance": {
+              "annotation": "RunProvenance",
+              "default": null
+            }
+          },
+          "methods": {}
+        },
+        "solve_rans": {
+          "kind": "function",
+          "parameters": "domain: FluidDomain, *, initial_nu_tilde_m2_s: ArrayLike, velocity_scale_m_s: float, length_scale_m: float, force_N_m3: ArrayLike=(0.0, 0.0), pressure_reference_Pa: float | None=None, convection_scheme: str='linear-upwind', velocity_relaxation: float=0.5, pressure_relaxation: float=0.5, sa_relaxation: float=0.5, max_iterations: int=500, max_simple_steps: int=500, max_unknowns: int=50000",
+          "returns": "RansResult",
+          "decorators": [],
+          "documentation": "Joint Picard iteration for physical wall-resolved SA-noft2 and momentum.\n\nOnly explicit SA-noft2 is solved: at least one initial cell must have a>0,\nall must be nonnegative; no inferred laminar mode or viscosity cap. Width,\nphysical BCs, positive SI scales and all inlet SA data come from the caller.\nThe same conservative Rhie-Chow mass flux transports momentum and SA.\nFrozen nonnegative destruction is implicit; all final coefficients,\nstresses, sources and field/balance residuals are recomputed at the accepted\njoint state. Positivity backtracking reduces U/p/a updates together.\nActual wall shear must satisfy y+<=1 and layer growth<=1.2. Failure retains\nthe last complete joint history and fields; no wall function is substituted.",
+          "direct_raise_sites": [
+            "RansConvergenceError"
+          ]
+        }
+      },
+      "reexports": {},
+      "aliases": {}
+    },
+    "fem_toolbox.cfd.sa_model": {
+      "source": "src/fem_toolbox/cfd/sa_model.py",
+      "documentation": "SI point terms for SA-noft2 with the Allmaras S modification (TMR note 1c).\n\nNo trip, ft2, negative-SA extension, viscosity cap or implicit laminar switch.\nThe model r cap is exactly ten; a zero modified vorticity uses that same cap.",
+      "declared_exports": null,
+      "definitions": {
+        "SATerms": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True, slots=True)"
+          ],
+          "documentation": "Immutable cell arrays; sources in m²/s², diffusivities in m²/s.\n\ndestruction_rate_s_inv times nu_tilde gives the nonnegative destruction\nsource. It is suitable for the frozen implicit sink in the scalar solve.\nr and wall_function are dimensionless; modified vorticity has unit 1/s.",
+          "fields": {
+            "eddy_viscosity_m2_s": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "diffusivity_m2_s": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "production_m2_s2": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "destruction_m2_s2": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "gradient_source_m2_s2": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "destruction_rate_s_inv": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "modified_vorticity_s_inv": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "r": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "wall_function": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            }
+          },
+          "methods": {}
+        },
+        "sa_terms": {
+          "kind": "function",
+          "parameters": "nu_tilde_m2_s: ArrayLike, *, velocity_gradient_s_inv: ArrayLike, gradient_nu_tilde_m_s: ArrayLike, wall_distance_m: ArrayLike, kinematic_viscosity_m2_s: float",
+          "returns": "SATerms",
+          "decorators": [],
+          "documentation": "Evaluate the complete SA-noft2 source law at positive-distance cells.\n\na is (ncell,), grad(U) is (ncell,2,2) with [component,derivative],\ngrad(a) is (ncell,2), d is scalar or (ncell,). Molecular nu is a positive\nscalar. Negative/nonfinite a, d<=0, boolean data and unrepresentable terms\nraise ValidationError; no input or output is clipped to hide a failure.\nWall Dirichlet values a=0 are imposed separately, never evaluated at d=0.",
+          "direct_raise_sites": [
+            "FloatingPointError"
+          ]
+        },
+        "positive_sa_update": {
+          "kind": "function",
+          "parameters": "previous_m2_s: ArrayLike, candidate_m2_s: ArrayLike, *, relaxation: float=0.5, max_attempts: int=20",
+          "returns": "tuple[NDArray[np.float64], float, int]",
+          "decorators": [],
+          "documentation": "One common relaxed step, halved until finite and nonnegative everywhere.\n\nReturns immutable state, accepted alpha and number of halvings. No component\nis clipped. Failure identifies the last minimum and its zero-based cell.",
+          "direct_raise_sites": []
+        }
+      },
+      "reexports": {},
+      "aliases": {}
+    },
+    "fem_toolbox.cfd.sa_transport": {
+      "source": "src/fem_toolbox/cfd/sa_transport.py",
+      "documentation": "Conservative stationary SA-noft2 scalar equation on the validated Quad-FV mesh.",
+      "declared_exports": null,
+      "definitions": {
+        "SAConvergenceError": {
+          "kind": "class",
+          "bases": [
+            "ValidationError"
+          ],
+          "decorators": [],
+          "documentation": "Nonconvergence retains the last nonnegative state and raw residual history.",
+          "fields": {},
+          "methods": {
+            "__init__": {
+              "parameters": "self, history: list[float], state: NDArray[np.float64], reason: str",
+              "returns": "None",
+              "decorators": [],
+              "documentation": null,
+              "direct_raise_sites": []
+            }
+          }
+        },
+        "SATransportResult": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True, slots=True)"
+          ],
+          "documentation": "Immutable scalar solution for prescribed conservative flow; not a RANS solve.\n\nArrays: a/residual/wall distance are cell fields, boundary a follows line2,\nand advective/diffusive fluxes follow mesh.faces (outward from owner).\nIntegrated fluxes and global balance have unit m^5/s². History is the\nmaximum absolute fresh cell residual in m²/s² at every accepted update.",
+          "fields": {
+            "nu_tilde_m2_s": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "boundary_nu_tilde_m2_s": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "wall_distance_m": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "residual_m2_s2": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "advective_flux_m5_s2": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "diffusive_flux_m5_s2": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "global_balance_m5_s2": {
+              "annotation": "float",
+              "default": null
+            },
+            "terms": {
+              "annotation": "SATerms",
+              "default": null
+            },
+            "iterations": {
+              "annotation": "int",
+              "default": null
+            },
+            "residual_history": {
+              "annotation": "tuple[float, ...]",
+              "default": null
+            },
+            "accepted_relaxations": {
+              "annotation": "tuple[float, ...]",
+              "default": null
+            },
+            "converged": {
+              "annotation": "bool",
+              "default": null
+            },
+            "provenance": {
+              "annotation": "RunProvenance",
+              "default": null
+            }
+          },
+          "methods": {}
+        },
+        "solve_sa_transport": {
+          "kind": "function",
+          "parameters": "domain: FluidDomain, *, mass_flux_kg_s: ArrayLike, velocity_gradient_s_inv: ArrayLike, initial_nu_tilde_m2_s: ArrayLike, velocity_scale_m_s: float, length_scale_m: float, boundary_values_m2_s: ArrayLike | None=None, wall_distance_m: ArrayLike | None=None, source_m2_s2: ArrayLike=0.0, convection_scheme: str='linear-upwind', relaxation: float=0.5, max_iterations: int=500, max_cells: int=50000",
+          "returns": "SATransportResult",
+          "decorators": [],
+          "documentation": "Solve SA for frozen conservative flow with full fresh nonlinear residuals.\n\nBoundary defaults: wall a=0, inlet explicit a, outlet/symmetry zero normal\nderivative and periodic paired trace. Optional boundary and distance fields\nare explicit manufactured-solution hooks, recorded as such in provenance;\nthey do not qualify physical wall resolution or a coupled RANS solution.\nDestruction is a frozen nonnegative implicit sink. A common positivity line\nsearch halves the relaxed candidate, at most twenty attempts, without state\nclipping. Failure carries the latest history, state, minimum and cell ID.",
+          "direct_raise_sites": [
+            "SAConvergenceError"
+          ]
+        }
+      },
+      "reexports": {},
+      "aliases": {}
+    },
+    "fem_toolbox.cfd.stokes": {
+      "source": "src/fem_toolbox/cfd/stokes.py",
+      "documentation": "Monolithic pressure/velocity coupling on a uniform closed 2D MAC grid.",
+      "declared_exports": null,
+      "definitions": {
+        "StokesResult": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True, slots=True)"
+          ],
+          "documentation": "Immutable SI fields; residuals include the omitted gauge-cell equation.",
+          "fields": {
+            "pressure_Pa": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "u_m_s": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "v_m_s": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "divergence_s_inv": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "cell_flow_balance_m2_s": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "momentum_x_residual_N_m3": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "momentum_y_residual_N_m3": {
+              "annotation": "NDArray[np.float64]",
+              "default": null
+            },
+            "dissipation_W_m": {
+              "annotation": "float",
+              "default": null
+            },
+            "power_balance_W_m": {
+              "annotation": "float",
+              "default": null
+            },
+            "relative_residual": {
+              "annotation": "float",
+              "default": null
+            },
+            "converged": {
+              "annotation": "bool",
+              "default": null
+            }
+          },
+          "methods": {}
+        },
+        "solve_stokes": {
+          "kind": "function",
+          "parameters": "*, cells: tuple[int, int], size_m: tuple[float, float], viscosity_Pa_s: float, force_x_N_m3: ArrayLike=0.0, force_y_N_m3: ArrayLike=0.0, tangential_wall_velocities_m_s: tuple[float, float, float, float]=(0, 0, 0, 0), pressure_reference_Pa: float=0.0, relative_tolerance: float=1e-10, max_unknowns: int=50000",
+          "returns": "StokesResult",
+          "decorators": [],
+          "documentation": "Solve -mu Laplace(u)+grad(p)=f and div(u)=0 on a closed rectangle.\n\ncells=(nx,ny), each >=2; size_m=(Lx,Ly)>0. Normal wall velocity is zero.\nTangential wall values are bottom/top/left/right in m/s. Forces are finite\nscalars or interior-face arrays (ny,nx-1)/(ny-1,nx) in N/m³.\nPin p[0,0] to pressure_reference_Pa; this does not impose outlet pressure.\nReturn MAC fields u[ny,nx+1], v[ny+1,nx], p[ny,nx], including zero normal\nboundaries. ValidationError diagnoses inputs, singular/range failures or\nfailed residual/conservation gates. No convection or turbulence model.",
+          "direct_raise_sites": [
+            "ValidationError"
+          ]
+        }
+      },
+      "reexports": {},
+      "aliases": {}
+    },
     "fem_toolbox.conventions": {
       "source": "src/fem_toolbox/conventions.py",
       "documentation": "Project-wide mathematical, component-ordering, and SI-unit conventions.\n\nThese values are executable counterparts of ``Doc/02_MATHEMATICAL_MODEL.md``.\nChanging one is an architecture decision and requires corresponding documentation\nand verification updates.",
@@ -505,6 +2141,594 @@
           "value": "MappingProxyType({'length': 'm', 'displacement': 'm', 'density': 'kg/m^3', 'stress': 'Pa', 'young_modulus': 'Pa', 'temperature_difference': 'K', 'thermal_conductivity': 'W/(m K)', 'specific_heat': 'J/(kg K)', 'electric_potential': 'V', 'electric_field': 'V/m', 'electric_displacement': 'C/m^2', 'permittivity': 'F/m', 'piezoelectric_stress': 'C/m^2'})"
         }
       }
+    },
+    "fem_toolbox.coupling": {
+      "source": "src/fem_toolbox/coupling/__init__.py",
+      "documentation": "Experimental stationary planar fluid/structure interface operators.",
+      "declared_exports": [
+        "FsiCouplingError",
+        "FsiIteration",
+        "InterfaceLoads",
+        "InterfaceMap",
+        "OneWayResult",
+        "StationaryFsiProblem",
+        "StationaryFsiResult",
+        "TransferAudit",
+        "build_domain_interface",
+        "build_interface_map",
+        "solve_one_way",
+        "solve_stationary_fsi"
+      ],
+      "definitions": {},
+      "reexports": {
+        "FsiCouplingError": "fem_toolbox.coupling.fsi.FsiCouplingError",
+        "FsiIteration": "fem_toolbox.coupling.fsi.FsiIteration",
+        "InterfaceLoads": "fem_toolbox.coupling.interface.InterfaceLoads",
+        "InterfaceMap": "fem_toolbox.coupling.interface.InterfaceMap",
+        "OneWayResult": "fem_toolbox.coupling.structure.OneWayResult",
+        "StationaryFsiProblem": "fem_toolbox.coupling.fsi.StationaryFsiProblem",
+        "StationaryFsiResult": "fem_toolbox.coupling.fsi.StationaryFsiResult",
+        "TransferAudit": "fem_toolbox.coupling.interface.TransferAudit",
+        "build_domain_interface": "fem_toolbox.coupling.interface.build_domain_interface",
+        "build_interface_map": "fem_toolbox.coupling.interface.build_interface_map",
+        "solve_one_way": "fem_toolbox.coupling.structure.solve_one_way",
+        "solve_stationary_fsi": "fem_toolbox.coupling.fsi.solve_stationary_fsi"
+      },
+      "aliases": {}
+    },
+    "fem_toolbox.coupling.fsi": {
+      "source": "src/fem_toolbox/coupling/fsi.py",
+      "documentation": "Stationary partitioned Dirichlet-Neumann fluid/structure iteration (#91).\n\nDoc/71 section 5: d^k -> harmonic fluid geometry -> full fluid solve ->\nconservative loads on the current overlap -> linear structure on the\nunchanged reference mesh -> r_d = d_solved - d^k -> d^(k+1) = d^k + omega r_d.\nIteration numbers are no physical time; there is no wall velocity or ALE flux.",
+      "declared_exports": [
+        "FAILURE_KINDS",
+        "FLUID_MODELS",
+        "FSI_SCHEMA_VERSION",
+        "FsiCouplingError",
+        "FsiIteration",
+        "StationaryFsiProblem",
+        "StationaryFsiResult",
+        "solve_stationary_fsi"
+      ],
+      "definitions": {
+        "FsiIteration": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True, slots=True)"
+          ],
+          "documentation": "One complete coupling step on geometry d^k.\n\ndisplacement_residual_m is max nodal |d_solved-d^k| (unrelaxed); load_change_N\nis max nodal |F^k-F^(k-1)| (inf at k=0). Forces are sums over structure\nnodes; transfer errors are the raw conservation audit of the current map.",
+          "fields": {
+            "iteration": {
+              "annotation": "int",
+              "default": null
+            },
+            "displacement_residual_m": {
+              "annotation": "float",
+              "default": null
+            },
+            "relative_displacement_residual": {
+              "annotation": "float",
+              "default": null
+            },
+            "load_change_N": {
+              "annotation": "float",
+              "default": null
+            },
+            "fluid_force_N": {
+              "annotation": "FloatArray",
+              "default": null
+            },
+            "external_pressure_force_N": {
+              "annotation": "FloatArray",
+              "default": null
+            },
+            "structure_reaction_N": {
+              "annotation": "FloatArray",
+              "default": null
+            },
+            "transfer_force_error_N": {
+              "annotation": "FloatArray",
+              "default": null
+            },
+            "transfer_moment_error_N_m": {
+              "annotation": "FloatArray",
+              "default": null
+            },
+            "transfer_relative_error": {
+              "annotation": "float",
+              "default": null
+            },
+            "maximum_displacement_ratio": {
+              "annotation": "float",
+              "default": null
+            },
+            "maximum_displacement_gradient": {
+              "annotation": "float",
+              "default": null
+            },
+            "minimum_area_ratio": {
+              "annotation": "float",
+              "default": null
+            },
+            "fluid_iterations": {
+              "annotation": "int",
+              "default": null
+            }
+          },
+          "methods": {}
+        },
+        "FsiCouplingError": {
+          "kind": "class",
+          "bases": [
+            "ValidationError"
+          ],
+          "decorators": [],
+          "documentation": "Controlled stop with kind, complete history and last iterate d^k [nnode,3].",
+          "fields": {},
+          "methods": {
+            "__init__": {
+              "parameters": "self, kind: str, reason: str, history: list[FsiIteration], displacement_m: FloatArray",
+              "returns": "None",
+              "decorators": [],
+              "documentation": null,
+              "direct_raise_sites": []
+            }
+          }
+        },
+        "StationaryFsiProblem": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True, slots=True)"
+          ],
+          "documentation": "Explicit inputs of one stationary bidirectional coupling.\n\nfluid_domain is the unchanged reference domain; wall_name must be an\nfsi=true wall whose segments are covered by structure facet_set. The\nstructure is a validated static elasticity Model on the reference mesh;\nits Dirichlet data, body forces and tractions are kept. Pressure loads use\np - external_pressure_Pa. fluid_options pass unchanged to solve_quad_flow\n(laminar) or solve_rans (sa-noft2), except the reserved scale/model keys.\nDefault relaxation 0.2 and budget 200 follow Doc/71; no adaptive omega.",
+          "fields": {
+            "fluid_domain": {
+              "annotation": "FluidDomain",
+              "default": null
+            },
+            "wall_name": {
+              "annotation": "str",
+              "default": null
+            },
+            "structure": {
+              "annotation": "Model",
+              "default": null
+            },
+            "facet_set": {
+              "annotation": "str",
+              "default": null
+            },
+            "length_scale_m": {
+              "annotation": "float",
+              "default": null
+            },
+            "velocity_scale_m_s": {
+              "annotation": "float",
+              "default": null
+            },
+            "fluid_model": {
+              "annotation": "str",
+              "default": "'laminar'"
+            },
+            "initial_nu_tilde_m2_s": {
+              "annotation": "ArrayLike | None",
+              "default": "None"
+            },
+            "fluid_options": {
+              "annotation": "Mapping[str, Any]",
+              "default": "field(default_factory=dict)"
+            },
+            "external_pressure_Pa": {
+              "annotation": "float",
+              "default": "0.0"
+            },
+            "relaxation": {
+              "annotation": "float",
+              "default": "0.2"
+            },
+            "max_coupling_iterations": {
+              "annotation": "int",
+              "default": "200"
+            },
+            "divergence_window": {
+              "annotation": "int",
+              "default": "10"
+            },
+            "span_origin_m": {
+              "annotation": "float",
+              "default": "0.0"
+            },
+            "preserve_inlet_flow": {
+              "annotation": "bool",
+              "default": "True"
+            }
+          },
+          "methods": {}
+        },
+        "StationaryFsiResult": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True, slots=True)"
+          ],
+          "documentation": "Accepted stationary state with the full iteration table.\n\ngeometry_displacement_m is d^k used for the final fluid geometry; the\nstructure_displacement_m solves the final loads, max difference <=1e-8 Lref.\nFluid, loads and structure were all freshly computed on that final\ngeometry; no stale loads are reported. fsi_schema_version is in settings.",
+          "fields": {
+            "fluid": {
+              "annotation": "QuadFlowResult | RansResult",
+              "default": null
+            },
+            "mesh_motion": {
+              "annotation": "MeshMotionResult",
+              "default": null
+            },
+            "interface": {
+              "annotation": "InterfaceMap",
+              "default": null
+            },
+            "loads": {
+              "annotation": "InterfaceLoads",
+              "default": null
+            },
+            "structure": {
+              "annotation": "ElasticResult",
+              "default": null
+            },
+            "geometry_displacement_m": {
+              "annotation": "FloatArray",
+              "default": null
+            },
+            "structure_displacement_m": {
+              "annotation": "FloatArray",
+              "default": null
+            },
+            "iterations": {
+              "annotation": "int",
+              "default": null
+            },
+            "history": {
+              "annotation": "tuple[FsiIteration, ...]",
+              "default": null
+            },
+            "converged": {
+              "annotation": "bool",
+              "default": null
+            },
+            "settings": {
+              "annotation": "Mapping[str, Any]",
+              "default": null
+            },
+            "input_sha256": {
+              "annotation": "str",
+              "default": null
+            }
+          },
+          "methods": {}
+        },
+        "solve_stationary_fsi": {
+          "kind": "function",
+          "parameters": "problem: StationaryFsiProblem",
+          "returns": "StationaryFsiResult",
+          "decorators": [],
+          "documentation": "Run the Doc/71 partitioned stationary coupling with constant relaxation.\n\nStops successfully only when max|r_d| <= 1e-8 Lref AND the nodal load\nchange max|F^k-F^(k-1)| <= 1e-6 rho U_ref^2 (b Lref), with every fluid,\nmesh, transfer and structure gate passed on the same final geometry. A\nsmall relaxed update alone is never success. Failures raise\nFsiCouplingError with kind in FAILURE_KINDS and the full history.",
+          "direct_raise_sites": [
+            "fail"
+          ]
+        }
+      },
+      "reexports": {},
+      "aliases": {
+        "FSI_SCHEMA_VERSION": {
+          "value": "1"
+        },
+        "FLUID_MODELS": {
+          "value": "('laminar', 'sa-noft2')"
+        },
+        "FAILURE_KINDS": {
+          "value": "('input', 'interface', 'mesh', 'fluid', 'structure', 'divergence', 'budget')"
+        },
+        "FloatArray": {
+          "value": "NDArray[np.float64]"
+        }
+      }
+    },
+    "fem_toolbox.coupling.fsi_config": {
+      "source": "src/fem_toolbox/coupling/fsi_config.py",
+      "documentation": "Strict fsi_schema_version=1 TOML adapter and run artifacts (#93).\n\nFile I/O stays in this adapter; the coupling solver itself reads no files.\nThe TOML references an existing FluidDomain JSON and an existing elasticity\nModel TOML (Gmsh mesh), both relative to the configuration directory. Every\ncoupling value is mandatory; there are no silent defaults.",
+      "declared_exports": [
+        "FsiConfig",
+        "load_fsi_config",
+        "run_fsi_config",
+        "write_fsi_artifacts"
+      ],
+      "definitions": {
+        "FsiConfig": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True, slots=True)"
+          ],
+          "documentation": "Validated problem plus the exact input files and their SHA-256.",
+          "fields": {
+            "problem": {
+              "annotation": "StationaryFsiProblem",
+              "default": null
+            },
+            "source": {
+              "annotation": "Path",
+              "default": null
+            },
+            "document": {
+              "annotation": "Mapping[str, Any]",
+              "default": null
+            },
+            "input_files": {
+              "annotation": "Mapping[str, str]",
+              "default": null
+            }
+          },
+          "methods": {}
+        },
+        "load_fsi_config": {
+          "kind": "function",
+          "parameters": "path: str | Path",
+          "returns": "FsiConfig",
+          "decorators": [],
+          "documentation": "Read a strict fsi_schema_version=1 TOML and build the coupling problem.",
+          "direct_raise_sites": [
+            "ModelSchemaError"
+          ]
+        },
+        "write_fsi_artifacts": {
+          "kind": "function",
+          "parameters": "output: str | Path, config: FsiConfig, outcome: StationaryFsiResult | FsiCouplingError",
+          "returns": "Path",
+          "decorators": [],
+          "documentation": "Write report.json, history.csv and, on success, field JSON files.\n\nThe output directory must not exist. All quantities carry SI unit suffixes.\nA failed run still records kind, reason, history and the last iterate.",
+          "direct_raise_sites": [
+            "FileExistsError"
+          ]
+        },
+        "run_fsi_config": {
+          "kind": "function",
+          "parameters": "path: str | Path, output: str | Path",
+          "returns": "StationaryFsiResult",
+          "decorators": [],
+          "documentation": "Load, refuse an existing output, solve and always write artifacts.\n\nA coupling stop writes its failure artifacts and is then re-raised.",
+          "direct_raise_sites": [
+            "FileExistsError"
+          ]
+        }
+      },
+      "reexports": {},
+      "aliases": {
+        "HISTORY_COLUMNS": {
+          "value": "(('iteration', 'iteration'), ('displacement_residual_m', 'displacement_residual_m'), ('relative_displacement_residual', 'relative_displacement_residual'), ('load_change_N', 'load_change_N'), ('fluid_force_y_N', None), ('external_pressure_force_y_N', None), ('structure_reaction_y_N', None), ('transfer_relative_error', 'transfer_relative_error'), ('maximum_displacement_ratio', 'maximum_displacement_ratio'), ('maximum_displacement_gradient', 'maximum_displacement_gradient'), ('minimum_area_ratio', 'minimum_area_ratio'), ('fluid_iterations', 'fluid_iterations'))"
+        }
+      }
+    },
+    "fem_toolbox.coupling.interface": {
+      "source": "src/fem_toolbox/coupling/interface.py",
+      "documentation": "Conservative P1 overlap quadrature on extruded planar fluid segments.\n\nCoordinates are SI metres, traction Pa, integrated quadrature/nodal forces N.\nThe same interpolation matrix and its transpose define virtual-work pairing.\nNo nearest-neighbour assignment, extrapolation or geometry filling is used.",
+      "declared_exports": null,
+      "definitions": {
+        "TransferAudit": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True, slots=True)"
+          ],
+          "documentation": "Raw conservation errors (N, N m, J) and normalized project gate.",
+          "fields": {
+            "force_error_N": {
+              "annotation": "FloatArray",
+              "default": null
+            },
+            "moment_error_N_m": {
+              "annotation": "FloatArray",
+              "default": null
+            },
+            "virtual_work_error_J": {
+              "annotation": "float",
+              "default": null
+            },
+            "maximum_relative_error": {
+              "annotation": "float",
+              "default": null
+            }
+          },
+          "methods": {}
+        },
+        "InterfaceLoads": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True, slots=True)"
+          ],
+          "documentation": "Net structural nodal load, separated fluid/external contributions.",
+          "fields": {
+            "nodal_forces_N": {
+              "annotation": "FloatArray",
+              "default": null
+            },
+            "fluid_force_N": {
+              "annotation": "FloatArray",
+              "default": null
+            },
+            "external_pressure_force_N": {
+              "annotation": "FloatArray",
+              "default": null
+            },
+            "audit": {
+              "annotation": "TransferAudit",
+              "default": null
+            }
+          },
+          "methods": {}
+        },
+        "InterfaceMap": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True, slots=True)"
+          ],
+          "documentation": "Owned quadrature and scalar P1 matrix W; vector H=kron(W,I3).\n\nBuild using :func:`build_interface_map`. The matrix property returns a copy;\npublic numerical arrays use immutable bytes-backed storage. Arbitrary 3D\nvirtual displacements may be used for work audits. Physical mesh motion\nadditionally requires a span-invariant planar trace via the endpoint method.",
+          "fields": {
+            "quadrature_points_m": {
+              "annotation": "FloatArray",
+              "default": null
+            },
+            "quadrature_areas_m2": {
+              "annotation": "FloatArray",
+              "default": null
+            },
+            "segment_indices": {
+              "annotation": "NDArray[np.int64]",
+              "default": null
+            },
+            "structure_points_m": {
+              "annotation": "FloatArray",
+              "default": null
+            },
+            "segments_m": {
+              "annotation": "FloatArray",
+              "default": null
+            },
+            "fluid_normals": {
+              "annotation": "FloatArray",
+              "default": null
+            },
+            "width_m": {
+              "annotation": "float",
+              "default": null
+            },
+            "span_origin_m": {
+              "annotation": "float",
+              "default": null
+            },
+            "length_scale_m": {
+              "annotation": "float",
+              "default": null
+            },
+            "maximum_relative_coverage_error": {
+              "annotation": "float",
+              "default": null
+            }
+          },
+          "methods": {
+            "interpolation_matrix": {
+              "parameters": "self",
+              "returns": "sparse.csr_matrix",
+              "decorators": [
+                "property"
+              ],
+              "documentation": "Return an independent vector interpolation matrix H (3nq,3ns).",
+              "direct_raise_sites": []
+            },
+            "interpolate": {
+              "parameters": "self, displacement_m: ArrayLike",
+              "returns": "FloatArray",
+              "decorators": [],
+              "documentation": "P1 structural displacement [nnode,3] to quadrature [nq,3], metres.",
+              "direct_raise_sites": []
+            },
+            "transfer_forces": {
+              "parameters": "self, integrated_forces_N: ArrayLike",
+              "returns": "FloatArray",
+              "decorators": [],
+              "documentation": "Apply H transpose to integrated quadrature forces [nq,3] in N.",
+              "direct_raise_sites": []
+            },
+            "audit": {
+              "parameters": "self, integrated_forces_N: ArrayLike, virtual_displacement_m: ArrayLike | None=None",
+              "returns": "TransferAudit",
+              "decorators": [],
+              "documentation": "Check force, origin moments and optional virtual work, unchanged gates.\n\nRelative gate is 1e-10, with absolute floors 1e-12 N, N m and J.\nNormalization includes absolute summed contributions to handle cancellation.",
+              "direct_raise_sites": []
+            },
+            "loads_from_fluid_traction": {
+              "parameters": "self, traction_Pa: ArrayLike, *, external_pressure_Pa: float=0.0",
+              "returns": "InterfaceLoads",
+              "decorators": [],
+              "documentation": "Convert sigma_f*n_f [nsegment,2] to net structural load.\n\nt_structure=-t_fluid-p_external*n_f; pressure is absolute relative to\nthe same datum as p_external. External pressure and fluid forces remain\nseparate. Piecewise constant FV traction is integrated on overlap areas.",
+              "direct_raise_sites": []
+            },
+            "segment_endpoint_displacements": {
+              "parameters": "self, displacement_m: ArrayLike",
+              "returns": "FloatArray",
+              "decorators": [],
+              "documentation": "Return [nsegment,2 endpoints,2] supported planar displacement.\n\nReject span dependence, out-of-plane motion and P1 kinks not resolved\nby the fluid segments. This keeps the reduced trace and adjoint loads\nconsistent with exactly the same H, without nearest-point interpolation.",
+              "direct_raise_sites": []
+            }
+          }
+        },
+        "build_interface_map": {
+          "kind": "function",
+          "parameters": "*, segments_m: ArrayLike, fluid_normals: ArrayLike, width_m: float, structure: Mesh, facet_set: str, length_scale_m: float, span_origin_m: float=0.0, max_quadrature_points: int=200000",
+          "returns": "InterfaceMap",
+          "decorators": [],
+          "documentation": "Build exact degree-two overlap quadrature and conservative P1 map.\n\nFluid segments [n,2,2] extrude over [span_origin,span_origin+width].\nStructure must have named exterior Triangle3 facets owned by Tet4 cells;\noutward structural normals must oppose the supplied fluid unit normals.\nGeometric tolerance is 1e-10 Lref, relative area gate 1e-10. Gaps, double\ncoverage and unsupported geometry fail explicitly. No mesh generation/I/O.",
+          "direct_raise_sites": []
+        },
+        "build_domain_interface": {
+          "kind": "function",
+          "parameters": "domain: FluidDomain, *, wall_name: str, structure: Mesh, facet_set: str, length_scale_m: float, span_origin_m: float=0.0, max_quadrature_points: int=200000",
+          "returns": "InterfaceMap",
+          "decorators": [],
+          "documentation": "Build an overlap map from a named explicitly FSI-marked no-slip wall.\n\nSegment order equals domain.mesh.boundary_sets[wall_name]. Tractions must\nbe selected from the solver's wall-row order into that same segment order.\nWidth is taken from FluidDomain, never guessed from structural coordinates.",
+          "direct_raise_sites": []
+        }
+      },
+      "reexports": {},
+      "aliases": {
+        "FloatArray": {
+          "value": "NDArray[np.float64]"
+        }
+      }
+    },
+    "fem_toolbox.coupling.structure": {
+      "source": "src/fem_toolbox/coupling/structure.py",
+      "documentation": "One-way interface load adapter to the existing verified Tet4 mechanics.",
+      "declared_exports": null,
+      "definitions": {
+        "OneWayResult": {
+          "kind": "class",
+          "bases": [],
+          "decorators": [
+            "dataclass(frozen=True, slots=True)"
+          ],
+          "documentation": "Conservative loads and reference-geometry static structural response.",
+          "fields": {
+            "loads": {
+              "annotation": "InterfaceLoads",
+              "default": null
+            },
+            "structure": {
+              "annotation": "ElasticResult",
+              "default": null
+            },
+            "maximum_displacement_ratio": {
+              "annotation": "float",
+              "default": null
+            },
+            "maximum_displacement_gradient": {
+              "annotation": "float",
+              "default": null
+            }
+          },
+          "methods": {}
+        },
+        "solve_one_way": {
+          "kind": "function",
+          "parameters": "mapping: InterfaceMap, model: Model, traction_Pa: ArrayLike, *, external_pressure_Pa: float=0.0",
+          "returns": "OneWayResult",
+          "decorators": [],
+          "documentation": "Apply sigma_f*n_f [nsegment,2] to a validated elasticity Model.\n\nExisting body forces, tractions and prescribed displacements are preserved.\nForces are added through existing point-load DOFs; there is no new element\nformulation. Structure mesh coordinates must equal the map coordinates.\nSmall-displacement and gradient bounds are both 0.02, as in Doc/71.",
+          "direct_raise_sites": []
+        }
+      },
+      "reexports": {},
+      "aliases": {}
     },
     "fem_toolbox.dynamic_result": {
       "source": "src/fem_toolbox/dynamic_result.py",

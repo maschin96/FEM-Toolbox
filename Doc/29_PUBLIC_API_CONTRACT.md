@@ -201,3 +201,22 @@ Mesh, unveränderlichen Materialtensoren, kopierten Dirichlet-Daten, Körperkraf
 und Traktionen. Er ist nur für stationäre Elastizität gültig und verändert
 weder Model noch Dokument. M11 erweitert keine existierenden
 Persistenzkennungen; seine Schema-1-Dateien sind eigenständig.
+
+## M12-Forschungsoberfläche ab v1.7.0
+
+`fem_toolbox.cfd` und `fem_toolbox.coupling` samt Untermodulen werden mit
+v1.7.0 ausgeliefert, sind aber als **Forschungsbausteine** klassifiziert
+(`Doc/latex/api-map.json`) und nicht Teil der stabilen SemVer-Oberfläche.
+Signaturen dürfen sich in späteren Minor-Versionen ändern; Änderungen werden
+in den Release Notes beschrieben. Versioniert und geprüft sind dagegen die
+Dateiformate FluidMesh-/FluidDomain-/FlowProblem-Schema 1 und
+`fsi_schema_version = 1`: Eine inkompatible Änderung erhält eine neue
+Schemaversion.
+
+- Netz und Ränder: `FluidMesh2D`, `FluidDomain`, `FlowProblem`, `WallQuality` (Dokument 72).
+- Strömung: `solve_quad_flow` (Quad-FV/SIMPLE, Dokument 74), `solve_rans` (SA-noft2, Dokument 88/89), MAC-Referenz `solve_stationary_flow` (Dokument 70).
+- Netzbewegung: `move_fluid_domain` (Dokument 91).
+- Kopplung: `build_interface_map`, `build_domain_interface`, `solve_one_way` (Dokument 90), `solve_stationary_fsi` (Dokument 92), `fem_toolbox.coupling.fsi_config` (Dokument 94).
+
+M12 verändert keine stabilen Solver, Model-Schemata 1–3 oder bestehenden
+Persistenzkennungen.

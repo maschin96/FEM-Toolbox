@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fem-toolbox"
-version = "1.6.0"
+version = "1.7.0"
 description = "Verified 3D multiphysics finite-element research toolbox"
 readme = "README.md"
 license = "MIT"
@@ -59,6 +59,9 @@ addopts = [
   "--strict-markers",
 ]
 testpaths = ["tests"]
+markers = [
+  "cfd_convergence: expensive four-mesh Quad-FV verification (mandatory separate CI jobs)",
+]
 
 [tool.ruff]
 target-version = "py311"

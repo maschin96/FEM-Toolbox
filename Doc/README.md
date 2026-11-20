@@ -5,8 +5,9 @@ FEM Toolbox. Bei Widersprüchen haben die expliziten Konventionen in der
 mathematischen Modellbeschreibung Vorrang; Änderungen daran benötigen einen
 Eintrag im Entscheidungsprotokoll.
 
-[Aktueller M11-Freigabestand v1.6.0](87_M11_RELEASE_VERIFICATION.md) ·
-[Release Notes](releases/v1.6.0.md). Experimentelle Validierung bleibt offen.
+[Aktueller M12-Freigabestand v1.7.0](95_M12_RELEASE_VERIFICATION.md) ·
+[Release Notes](releases/v1.7.0.md); vorher
+[M11 / v1.6.0](87_M11_RELEASE_VERIFICATION.md). Experimentelle Validierung bleibt offen.
 
 ## Lesereihenfolge
 
@@ -187,9 +188,42 @@ experimentelle Validierungsfreigabe wird nicht behauptet.
 ## M11 — Struktur-Topologieoptimierung
 
 - [SIMP verständlich erklärt: kurze Einführung](86_SIMP_EINFUEHRUNG.md)
+- [Release Notes v1.7.0](releases/v1.7.0.md)
 - [Release Notes v1.6.0](releases/v1.6.0.md)
 
 - [Mathematik, Sensitivität und vorab definierte Gates (#76)](83_M11_TOPOLOGY_CONTRACT.md)
 - [Studienworkflow, API, Einheiten und Geometrie-Reanalyse](84_M11_TOPOLOGY_WORKFLOW.md)
 - [Numerische Nachweise](85_M11_VERIFICATION.md)
 - [Freigabenachweis und Veröffentlichungsstatus (#83)](87_M11_RELEASE_VERIFICATION.md)
+
+## M12 — Ebene RANS-CFD und stationäre FSI (v1.7.0)
+
+- [Freigabenachweis v1.7.0 (#94)](95_M12_RELEASE_VERIFICATION.md)
+
+- [SA-noft2: Punktterme, konservativer Transport und gemeinsame RANS-Iteration (#87/#88)](88_SA_NOFT2_IMPLEMENTATION.md)
+
+- [Kanaloperator: Vertrag, Referenzen und Grenzen](68_EXPERIMENTAL_CFD_CORE.md)
+
+- [Experimentelle Stokes-Druckkopplung: Vertrag und Nachweise](69_CFD_PRESSURE_COUPLING.md)
+
+- [Stationärer inkompressibler Kern: Konvektion, Picard, Ein-/Auslass und Abnahme #86](70_STATIONARY_FLOW_CORE.md)
+
+- [M12: vollständiger RANS-/FSI-Zielvertrag und unabhängige Abnahmegates (#84)](71_M12_RANS_FSI_CONTRACT.md)
+
+- [Fluidnetzadapter: Quad4-Geometrie, Wandauflösung und BC-Preflight (#85)](72_FLUID_MESH_ADAPTER.md)
+
+- [Konservative Quad-FV-Grundoperatoren: Gradienten, Spannungen und Druckkopplungsbausteine (#229)](73_QUAD_FV_OPERATORS.md)
+
+- [Stationärer laminarer Quad-FV-Solver: SIMPLE, Transport und Bilanzabnahme (#230)](74_QUAD_FV_SIMPLE.md)
+
+- [RANS-Codeverifikation und unabhängiger DNS-Modellvergleich (#88)](89_RANS_VERIFICATION.md)
+
+- [Konservative FSI-Schnittstelle und einseitige Strukturantwort (#89)](90_CONSERVATIVE_FSI_INTERFACE.md)
+
+- [Stationäre harmonische Fluidnetzbewegung (#90)](91_STATIONARY_MESH_MOTION.md)
+
+- [Stationäre bidirektionale FSI-Kopplung (#91)](92_STATIONARY_FSI_COUPLING.md)
+
+- [Verifikation der stationären bidirektionalen FSI (#92)](93_STATIONARY_FSI_VERIFICATION.md)
+
+- [Deklarativer stationärer FSI-Workflow (#93)](94_FSI_WORKFLOW.md)

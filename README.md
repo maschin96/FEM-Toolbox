@@ -1,5 +1,12 @@
 # FEM Toolbox
 
+**v1.7.0 — ebene RANS-CFD und stationäre Fluid-Struktur-Kopplung.**
+Version 1.7.0; Veröffentlichungsstatus in [#94](https://github.com/maschin96/FEM-Toolbox/issues/94).
+[Release-Nachweis](Doc/95_M12_RELEASE_VERIFICATION.md) ·
+[Release Notes](Doc/releases/v1.7.0.md) ·
+[FSI-Workflow](Doc/94_FSI_WORKFLOW.md) ·
+[Beispiele](examples/fsi_lid/README.md).
+
 Eine wissenschaftlich ausgerichtete Python-Toolbox im Aufbau für lineare,
 dreidimensionale Finite-Elemente-Simulationen. Ziel sind verifizierte Modelle für
 Festkörpermechanik, Wärmeleitung, Elektrostatik und deren thermomechanische und
@@ -225,7 +232,7 @@ elektrisches Potential `phi` mit feldweiser Freiheitsgradverwaltung.
 | M9 | v1.4.0 | Verifizierter Unsicherheitsworkflow und Gesamtdokumentation | Implementiert und verifiziert; Veröffentlichung siehe Freigabebericht |
 | M10 | v1.5.0 | Kontrollierte adaptive Netzstudien | Implementiert und verifiziert; Veröffentlichung siehe #70 |
 | M11 | v1.6.0 | Gefilterte Struktur-Topologieoptimierung und Geometrie-Reanalyse | Implementiert und verifiziert; Veröffentlichung siehe #83 |
-| M12 | Offen | RANS-CFD mit Fluid-Struktur-Kopplung | Grober Horizont |
+| M12 | Offen | RANS-CFD mit Fluid-Struktur-Kopplung | Laminarer Quad-FV-Kern integriert; RANS/FSI in Umsetzung |
 
 *Vorläufige Zielversionen ohne Terminzusage. Produktvision, Bestandsanalyse,
 Abhängigkeiten und Abnahmegates stehen in der
@@ -366,3 +373,31 @@ python -I examples/topology/run.py --output results/topology
 [Vorbereitetes Beispiel](examples/topology/README.md) ·
 [API und Grenzen](Doc/84_M11_TOPOLOGY_WORKFLOW.md) ·
 [Nachweise und Release-Gate](Doc/85_M11_VERIFICATION.md).
+
+## Experimenteller CFD-Kern (M12)
+
+Der eigenständige uniforme 2D-MAC-Kern bietet stationäre inkompressible
+Strömung mit konservativer Konvektion, Druck-Geschwindigkeits-Kopplung,
+Picard-Iteration und expliziten Wand-/Einlass-/Druckauslassbedingungen.
+[Vertrag, Verifikation und Grenzen](Doc/70_STATIONARY_FLOW_CORE.md),
+[ausführbarer TOML-Kanallauf](examples/cfd_flow/README.md).
+Dieser M12-Entwicklungsumfang ist kein v1.3-Release-Feature; Turbulenzschließung,
+FSI, Zeitintegration und allgemeine 3D-/Tet-CFD-Netze gehören nicht zum Kern.
+
+Der [M12-RANS-/FSI-Zielvertrag](Doc/71_M12_RANS_FSI_CONTRACT.md) legt die
+SA-noft2-Schließung, körperangepasste Fluidnetze und begrenzte stationäre
+Kopplung für die Folgeissues fest. Die SA-noft2-Implementierung ist im
+[M12-Entwicklungsstand](Doc/88_SA_NOFT2_IMPLEMENTATION.md) dokumentiert;
+vollständige Modellabnahme und FSI bleiben offen.
+
+Der experimentelle [Fluidnetzadapter (#85)](Doc/72_FLUID_MESH_ADAPTER.md)
+liest vorbereitete Quad4-JSON-Netze mit Randgruppen, prüft Wandabstände,
+Netzqualität und SI-Randbedingungen. [Kanaleingabe und Preflight](examples/fluid_mesh/README.md)
+führen noch keinen RANS-/FSI-Solve aus.
+
+[Konservative Quad-FV-Grundoperatoren (#229)](Doc/73_QUAD_FV_OPERATORS.md)
+ergänzen linear-exakte Gradienten, volle variable Spannungen und kompakte
+Druck-/Rhie-Chow-Bausteine. Der [laminare Quad-FV-Solver (#230)](Doc/74_QUAD_FV_SIMPLE.md)
+ergänzt SIMPLE mit GMRES-Beschleunigung, konservativen Transport und explizite
+SI-Bilanzen. Ein [vorbereiteter Dateikanal](examples/quad_flow/README.md)
+exportiert Felder und Provenienz; der MAC-Kern bleibt die unabhängige Referenz.

@@ -1,0 +1,116 @@
+\chapter[M12: Fluid-Struktur-Schnittstelle]{M12: konservative Schnittstelle und einseitige Mechanik}\label{api:fsi}
+Das experimentelle Paket \texttt{fem\_toolbox.coupling} überträgt Lasten
+zwischen extrudierten 2D-Fluidsegmenten und äußeren Triangle3-Facetten
+einer Tet4-Struktur. Breite und Normalen sind explizit; strukturelle
+Normalen werden aus dem eindeutigen Volumeneigentümer gewonnen.
+Dokument 90 nennt Formen, Einheiten, Fehlerpfade und Reproduktion.
+
+Die Überdeckung entsteht durch konvexen Polygonclip. Eine symmetrische
+Dreipunktregel integriert auf jedem Teildreieck den Grad zwei exakt.
+Baryzentrische P1-Gewichte bilden die skalare Matrix \(W\); für Vektoren
+gilt \(H=W\otimes I_3\). Damit gehören Verschiebung und integrierte Kraft
+zum selben überprüfbaren Paar:
+\[
+ u_q=H u_s,\qquad F_s=H^T F_q,\qquad F_q=t_q A_q.
+\]
+Konstantenreproduktion erhält die Kraft, Koordinatenreproduktion das Moment;
+die Transposition erhält virtuelle Arbeit. Geprüfte Rohfehler haben Einheiten
+N, N m und J. Relatives Gate ist \(10^{-10}\), absolute Floors sind jeweils
+\(10^{-12}\) in der zugehörigen SI-Einheit.
+
+\texttt{build\_domain\_interface} verlangt eine benannte FSI-Wand und übernimmt
+ihre Breite aus der FluidDomain. \texttt{build\_interface\_map} nimmt die
+Geometrie direkt entgegen. Vollständige beidseitige Überdeckung, entgegengesetzte
+Normalen und Koordinatenreproduktion sind Pflicht. Lücken und Doppelungen
+werden auch dann abgelehnt, wenn ihre Gesamtflächen sich aufheben.
+Geometrische Toleranz ist \(10^{-10}L_{ref}\), relatives Flächengate
+\(10^{-10}\). Es gibt keine Extrapolation oder Nachbarpunktverteilung.
+
+Die Lastschnittstelle erwartet \(\sigma_f n_f\) in Pa und bildet
+\(t_s=-\sigma_f n_f-p_{external}n_f\). Fluid- und äußerer Druckanteil
+werden getrennt berichtet. Ein Druckdatumwechsel verlangt denselben Wechsel
+des äußeren Drucks. Ergebnisarrays sind unveränderlich; eine herausgegebene
+Matrix ist eine Kopie. Allgemeine virtuelle 3D-Wege dienen der Arbeitsprüfung.
+Physikalische Netzbewegung verlangt dagegen eine ebene spannweiteninvariante,
+von den Fluidsegmenten aufgelöste P1-Spur.
+
+Der Adapter \texttt{solve\_one\_way} verwendet den bestehenden statischen
+Mechaniksolver mit konservativen Knotenkräften, vorhandenen Lasten und
+Randwerten. Die Grenzen lauten
+\[
+\max|u|/L_{ref}\leq0.02,\qquad \max\|\nabla u\|_F\leq0.02.
+\]
+Analytische konstante und affine Flächenlasten
+prüfen alle Kräfte und Momente auf nicht passenden Netzen. Ein echter
+Fluiddrucklauf liefert beim geführten elastischen Block die analytische
+Verschiebung und ausgeglichene Lagerreaktionen. Dies ist noch kein
+bidirektionaler FSI-Nachweis; Netzbewegung und Kopplungsiteration folgen separat.
+
+\section{Stationäre harmonische Netzbewegung}
+Die experimentelle Funktion \texttt{move\_fluid\_domain} liegt im CFD-Paket.
+Sie löst zwei skalare Laplace-Probleme mit bilinearen Quad4-Elementen und
+2-mal-2-Gaußquadratur auf dem unveränderten Referenznetz. Ergebnis ist
+\[
+x_{current}=x_{reference}+d_{mesh}.
+\]
+Absolute Wege werden nie als vergangene Inkremente aufsummiert. FSI-Wände
+erhalten die geprüfte P1-Spur; andere feste Wände bleiben fest. Ein- und
+Auslassketten interpolieren ihre beiden Wandecken linear. Explizite periodische
+Partner teilen ihre Verschiebungsfreiheitsgrade. Widersprüchliche Ecken oder
+Partner führen zu konkreten Fehlern.
+
+Standardmäßig bleibt der integrierte Einlassvolumenstrom erhalten: Das
+ursprüngliche Geschwindigkeitsprofil wird mit dem Verhältnis alter zu neuer
+signierter Fläche skaliert. SA-Einlasswerte bleiben erhalten. Eine ausdrücklich
+andere Einlasspolitik wird mit ihren Einstellungen gehasht. Dies ersetzt keinen
+Fluidsolve und setzt keine analytischen Druckkräfte ein.
+
+Neue Geometrie bedeutet neue Flächen, Normalen, Wandabstände, Randprüfung und
+Überdeckungsabbildung. Konnektivität und benannte Rand- sowie Volumengruppen
+bleiben erhalten. Weggrenze 0.02, minimales Flächenverhältnis 0.5 und sämtliche
+Qualitätsgrenzen aus Dokument 71 gelten vor dem nächsten Fluidlauf; finales
+\(y^+\) benötigt dessen tatsächlichen Wandschub. Strukturgradientgrenzen bleiben
+zusätzlich Pflicht. Rohresiduen der freien Laplace-Aufgabe haben Einheit m;
+der relative Rückwärtsfehler muss höchstens \(10^{-12}\) sein.
+
+Dokument 91 beschreibt Formen, unveränderliche Ergebnisse, vollständige
+numerische Gebiets- und Spurhashes, Ressourcen sowie getrennte Fehlerstufen.
+Affine, gescherte und verzerrte Patches, periodische Bewegung, aktuelle
+Überdeckung nicht passender Netze und getrennte Qualitätsfehler bilden die
+Nachweise. Stationäre Iteration ist keine Zeit: keine Wandgeschwindigkeit und
+kein dynamischer ALE-Fluss. Der bidirektionale Fixpunkt bleibt ein eigener Nachweis.
+
+\section{Stationäre partitionierte Kopplung}
+\texttt{solve\_stationary\_fsi} verbindet Netzbewegung, Fluidlösung,
+konservative Lastübertragung und lineare Struktur in einer
+Dirichlet-Neumann-Iteration mit konstanter Relaxation \(\omega=0.2\):
+\[
+r_d=d_{solved}-d^k,\qquad d^{k+1}=d^k+\omega\,r_d .
+\]
+Jeder Schritt baut die Fluidgeometrie aus absoluten Wegen neu auf, löst das
+Fluid vollständig und überträgt die aktuelle Traktion über die neu aufgebaute
+Überdeckung. Erfolg verlangt im selben Schritt
+\(\max|r_d|\le 10^{-8}L_{ref}\) und
+\(\max|F^k-F^{k-1}|\le 10^{-6}\rho U_{ref}^2 bL_{ref}\) sowie sämtliche
+Fluid-, Netz-, Transfer- und Strukturprüfungen. Eine kleine relaxierte
+Änderung allein genügt nicht; höchstens 200 Schritte.
+
+Abbrüche tragen eine Fehlerart (Eingabe, Schnittstelle, Netz, Fluid,
+Struktur, Divergenz, Budget), die vollständige Iterationstabelle und das
+letzte Iterat. Dokument 92 beschreibt Ergebnisfelder und Nachweise:
+konstante Druckbelastung mit exakt geometrischer Kontraktion und ein
+hydrostatischer Deckel mit analytischem Rückkopplungsfixpunkt. Die
+verpflichtenden Deckelreferenzen auf vier Netzstufen bleiben ein eigener Nachweis.
+
+\section{Deklarativer FSI-Workflow}
+\texttt{fem\_toolbox.coupling.fsi\_config} liest eine strikte TOML-Datei mit
+\texttt{fsi\_schema\_version = 1}. Sie verweist auf eine bestehende
+FluidDomain-JSON und ein bestehendes Elastizitätsmodell mit Gmsh-Netz; alle
+Kopplungswerte sind Pflicht. Pfade bleiben relativ zum Konfigurationsverzeichnis,
+Ganzzahlen und Wahrheitswerte werden typstreng geprüft, Fehler nennen den
+Dokumentpfad. Der Lauf schreibt Bericht, Iterationstabelle sowie Fluid- und
+Strukturfelder mit SI-Einheiten im Schlüssel; der Bericht enthält
+SHA-256 aller Eingabedateien, Versionen, Gates, Netzhashes und Bilanzen.
+Kontrollierte Abbrüche hinterlassen Fehlerart, Historie und letztes Iterat.
+Dokument 94 beschreibt Schema und Artefakte; die Beispiele unter
+\texttt{examples/fsi\_lid} laufen aus Wheel und sdist.
